@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/events/sales.sale.completed.v1.schema.json",
+  "title": "sales.sale.completed.v1",
+  "allOf": [
+    {
+      "$ref": "event-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": { "const": "sales.sale.completed.v1" },
+        "schema_version": { "const": 1 },
+        "producer": { "const": "sales-pos" },
+        "aggregate_type": { "const": "sale" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sale_id",
+            "warehouse_id",
+            "cash_shift_id",
+            "device_id",
+            "user_id",
+            "occurred_at",
+            "business_date",
+            "currency",
+            "total",
+            "lines",
+            "payments",
+            "offline"
+          ],
+          "properties": {
+            "sale_id": { "type": "string", "format": "uuid" },
+            "warehouse_id": { "type": "string", "format": "uuid" },
+            "cash_shift_id": { "type": "string", "format": "uuid" },
+            "device_id": { "type": "string", "format": "uuid" },
+            "user_id": { "type": "string", "format": "uuid" },
+            "customer_id": { "type": ["string", "null"], "format": "uuid" },
+            "occurred_at": { "type": "string", "format": "date-time" },
+            "business_date": { "type": "string", "format": "date" },
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+            "total": { "$ref": "#/$defs/decimal" },
+            "lines": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["line_id", "product_id", "presentation_id", "quantity", "net_amount"],
+                "properties": {
+                  "line_id": { "type": "string", "format": "uuid" },
+                  "product_id": { "type": "string", "format": "uuid" },
+                  "presentation_id": { "type": "string", "format": "uuid" },
+                  "quantity": { "$ref": "#/$defs/decimal" },
+                  "net_amount": { "$ref": "#/$defs/decimal" },
+                  "lot_allocations": {
+                    "type": "array",
+                    "default": [],
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["lot_id", "quantity"],
+                      "properties": {
+                        "lot_id": { "type": "string", "format": "uuid" },
+                        "quantity": { "$ref": "#/$defs/decimal" }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "payments": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["payment_id", "method", "amount"],
+                "properties": {
+                  "payment_id": { "type": "string", "format": "uuid" },
+                  "method": {
+                    "type": "string",
+                    "enum": ["cash", "card", "transfer", "check", "customer_account", "other"]
+                  },
+                  "amount": { "$ref": "#/$defs/decimal" },
+                  "external_reference": { "type": ["string", "null"] }
+                }
+              }
+            },
+            "offline": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["was_offline", "emergency_mode"],
+              "properties": {
+                "was_offline": { "type": "boolean" },
+                "emergency_mode": { "type": "boolean" },
+                "permit_id": { "type": ["string", "null"], "format": "uuid" },
+                "device_sequence": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "decimal": {
+      "type": "string",
+      "pattern": "^-?[0-9]+(\\.[0-9]+)?$"
+    }
+  }
+}

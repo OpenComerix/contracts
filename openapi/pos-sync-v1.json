@@ -1,0 +1,409 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "OpenComerix POS Synchronization API",
+    "version": "1.0.0",
+    "description": "Contrato público para preparar un POS, obtener cambios incrementales y entregar operaciones offline."
+  },
+  "servers": [
+    {
+      "url": "https://api.opencomerix.example/api/v1",
+      "description": "URL ilustrativa; cada ambiente publica su propia URL."
+    }
+  ],
+  "security": [
+    { "bearerAuth": [] }
+  ],
+  "paths": {
+    "/pos/bootstrap": {
+      "get": {
+        "operationId": "getPosBootstrap",
+        "summary": "Obtiene la proyección inicial y las credenciales offline del POS",
+        "parameters": [
+          { "$ref": "#/components/parameters/BranchId" },
+          { "$ref": "#/components/parameters/PosId" },
+          { "$ref": "#/components/parameters/DeviceId" }
+        ],
+        "responses": {
+          "200": {
+            "description": "Snapshot consistente listo para instalar localmente.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BootstrapResponse" }
+              }
+            }
+          },
+          "403": {
+            "description": "El dispositivo no está aprobado para el ámbito solicitado.",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/Problem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pos/changes": {
+      "get": {
+        "operationId": "getPosChanges",
+        "summary": "Obtiene cambios posteriores al cursor confirmado",
+        "parameters": [
+          { "$ref": "#/components/parameters/Cursor" },
+          { "$ref": "#/components/parameters/DeviceId" },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 1000, "default": 250 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Página ordenada de cambios incrementales.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ChangesResponse" }
+              }
+            }
+          },
+          "410": {
+            "description": "El cursor expiró; el cliente debe instalar un nuevo bootstrap.",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/Problem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/pos/sync-batches": {
+      "post": {
+        "operationId": "submitPosSyncBatch",
+        "summary": "Entrega operaciones locales con confirmación individual",
+        "parameters": [
+          { "$ref": "#/components/parameters/DeviceId" },
+          { "$ref": "#/components/parameters/IdempotencyKey" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/SyncBatchRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado individual para cada operación del lote.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SyncBatchResponse" }
+              }
+            }
+          },
+          "409": {
+            "description": "El lote no coincide con un reintento previo o rompe la secuencia declarada.",
+            "content": {
+              "application/problem+json": {
+                "schema": { "$ref": "#/components/schemas/Problem" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "parameters": {
+      "BranchId": {
+        "name": "branch_id",
+        "in": "query",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/Uuid" }
+      },
+      "PosId": {
+        "name": "pos_id",
+        "in": "query",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/Uuid" }
+      },
+      "DeviceId": {
+        "name": "X-Device-Id",
+        "in": "header",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/Uuid" }
+      },
+      "Cursor": {
+        "name": "cursor",
+        "in": "query",
+        "required": true,
+        "schema": { "type": "string", "minLength": 1 }
+      },
+      "IdempotencyKey": {
+        "name": "Idempotency-Key",
+        "in": "header",
+        "required": true,
+        "schema": { "$ref": "#/components/schemas/Uuid" }
+      }
+    },
+    "schemas": {
+      "Uuid": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "BootstrapResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "snapshot_id",
+          "cursor",
+          "generated_at",
+          "organization_id",
+          "branch_id",
+          "warehouse_id",
+          "pos_id",
+          "device_id",
+          "offline_permit",
+          "datasets"
+        ],
+        "properties": {
+          "snapshot_id": { "$ref": "#/components/schemas/Uuid" },
+          "cursor": { "type": "string", "minLength": 1 },
+          "generated_at": { "type": "string", "format": "date-time" },
+          "organization_id": { "$ref": "#/components/schemas/Uuid" },
+          "branch_id": { "$ref": "#/components/schemas/Uuid" },
+          "warehouse_id": { "$ref": "#/components/schemas/Uuid" },
+          "pos_id": { "$ref": "#/components/schemas/Uuid" },
+          "device_id": { "$ref": "#/components/schemas/Uuid" },
+          "offline_permit": { "$ref": "#/components/schemas/OfflinePermit" },
+          "fiscal_assignment": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/FiscalAssignment" },
+              { "type": "null" }
+            ]
+          },
+          "datasets": {
+            "type": "array",
+            "minItems": 1,
+            "items": { "$ref": "#/components/schemas/SnapshotDataset" }
+          }
+        }
+      },
+      "OfflinePermit": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["permit_id", "issued_at", "expires_at", "policy_version", "signed_token"],
+        "properties": {
+          "permit_id": { "$ref": "#/components/schemas/Uuid" },
+          "issued_at": { "type": "string", "format": "date-time" },
+          "expires_at": { "type": "string", "format": "date-time" },
+          "policy_version": { "type": "integer", "minimum": 1 },
+          "signed_token": { "type": "string", "minLength": 1 }
+        }
+      },
+      "FiscalAssignment": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["assignment_id", "valid_from", "valid_until", "fiscal_pos", "signed_bundle"],
+        "properties": {
+          "assignment_id": { "$ref": "#/components/schemas/Uuid" },
+          "valid_from": { "type": "string", "format": "date-time" },
+          "valid_until": { "type": "string", "format": "date-time" },
+          "fiscal_pos": { "type": "integer", "minimum": 1 },
+          "signed_bundle": { "type": "string", "minLength": 1 }
+        }
+      },
+      "SnapshotDataset": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "schema_version", "dataset_version", "checksum", "records"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "catalog",
+              "prices",
+              "promotions",
+              "tax_rules",
+              "payment_methods",
+              "customers",
+              "inventory_projection",
+              "users_and_permissions",
+              "pos_configuration"
+            ]
+          },
+          "schema_version": { "type": "integer", "minimum": 1 },
+          "dataset_version": { "type": "integer", "minimum": 1 },
+          "checksum": { "type": "string", "minLength": 1 },
+          "records": {
+            "type": "array",
+            "items": { "type": "object" }
+          }
+        }
+      },
+      "ChangesResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["cursor", "next_cursor", "has_more", "changes"],
+        "properties": {
+          "cursor": { "type": "string" },
+          "next_cursor": { "type": "string" },
+          "has_more": { "type": "boolean" },
+          "changes": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ProjectionChange" }
+          }
+        }
+      },
+      "ProjectionChange": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["change_id", "dataset", "entity_id", "operation", "entity_version", "changed_at"],
+        "properties": {
+          "change_id": { "$ref": "#/components/schemas/Uuid" },
+          "dataset": { "type": "string", "minLength": 1 },
+          "entity_id": { "$ref": "#/components/schemas/Uuid" },
+          "operation": { "type": "string", "enum": ["upsert", "delete"] },
+          "entity_version": { "type": "integer", "minimum": 1 },
+          "changed_at": { "type": "string", "format": "date-time" },
+          "data": {
+            "oneOf": [
+              { "type": "object" },
+              { "type": "null" }
+            ]
+          }
+        }
+      },
+      "SyncBatchRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["batch_id", "device_id", "from_sequence", "to_sequence", "operations"],
+        "properties": {
+          "batch_id": { "$ref": "#/components/schemas/Uuid" },
+          "device_id": { "$ref": "#/components/schemas/Uuid" },
+          "from_sequence": { "type": "integer", "minimum": 1 },
+          "to_sequence": { "type": "integer", "minimum": 1 },
+          "operations": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": { "$ref": "#/components/schemas/SignedOperation" }
+          }
+        }
+      },
+      "SignedOperation": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation_id",
+          "device_sequence",
+          "command_type",
+          "occurred_at",
+          "user_id",
+          "permit_id",
+          "emergency_mode",
+          "payload",
+          "canonical_hash",
+          "signature"
+        ],
+        "properties": {
+          "operation_id": { "$ref": "#/components/schemas/Uuid" },
+          "device_sequence": { "type": "integer", "minimum": 1 },
+          "command_type": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*(\\.[a-z][a-z0-9-]*)+\\.v[1-9][0-9]*$"
+          },
+          "occurred_at": { "type": "string", "format": "date-time" },
+          "user_id": { "$ref": "#/components/schemas/Uuid" },
+          "supervisor_user_id": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Uuid" },
+              { "type": "null" }
+            ]
+          },
+          "permit_id": { "$ref": "#/components/schemas/Uuid" },
+          "emergency_mode": { "type": "boolean" },
+          "payload": { "type": "object" },
+          "canonical_hash": { "type": "string", "minLength": 1 },
+          "signature": { "type": "string", "minLength": 1 }
+        }
+      },
+      "SyncBatchResponse": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["batch_id", "received_at", "highest_contiguous_sequence", "results"],
+        "properties": {
+          "batch_id": { "$ref": "#/components/schemas/Uuid" },
+          "received_at": { "type": "string", "format": "date-time" },
+          "highest_contiguous_sequence": { "type": "integer", "minimum": 0 },
+          "changes_cursor": { "type": ["string", "null"] },
+          "results": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OperationResult" }
+          }
+        }
+      },
+      "OperationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["operation_id", "device_sequence", "status", "warnings"],
+        "properties": {
+          "operation_id": { "$ref": "#/components/schemas/Uuid" },
+          "device_sequence": { "type": "integer", "minimum": 1 },
+          "status": {
+            "type": "string",
+            "enum": ["accepted", "duplicate", "attention_required", "quarantined"]
+          },
+          "resource_id": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Uuid" },
+              { "type": "null" }
+            ]
+          },
+          "warnings": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Warning" }
+          },
+          "problem": {
+            "oneOf": [
+              { "$ref": "#/components/schemas/Problem" },
+              { "type": "null" }
+            ]
+          }
+        }
+      },
+      "Warning": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["code", "message", "review_required"],
+        "properties": {
+          "code": { "type": "string" },
+          "message": { "type": "string" },
+          "review_required": { "type": "boolean" }
+        }
+      },
+      "Problem": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["type", "title", "status", "code", "trace_id"],
+        "properties": {
+          "type": { "type": "string", "format": "uri-reference" },
+          "title": { "type": "string" },
+          "status": { "type": "integer", "minimum": 400, "maximum": 599 },
+          "code": { "type": "string" },
+          "detail": { "type": "string" },
+          "trace_id": { "type": "string" }
+        }
+      }
+    }
+  }
+}

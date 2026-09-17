@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/events/fiscal.external-contingency.linked.v1.schema.json",
+  "title": "fiscal.external-contingency.linked.v1",
+  "allOf": [
+    { "$ref": "event-envelope-v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": { "const": "fiscal.external-contingency.linked.v1" },
+        "schema_version": { "const": 1 },
+        "producer": { "const": "fiscal-arca" },
+        "aggregate_type": { "const": "fiscal_document" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["document_id", "sale_id", "method", "document_type", "document_class", "fiscal_pos", "number", "issued_at", "recorded_by"],
+          "properties": {
+            "document_id": { "type": "string", "format": "uuid" },
+            "sale_id": { "type": "string", "format": "uuid" },
+            "method": { "type": "string", "enum": ["arca_online", "mobile_invoicing", "fiscal_controller", "cai_manual", "other_authorized"] },
+            "document_type": { "type": "string", "enum": ["invoice", "credit_note", "debit_note"] },
+            "document_class": { "type": "string", "enum": ["A", "B", "C"] },
+            "fiscal_pos": { "type": "integer", "minimum": 1 },
+            "number": { "type": "integer", "minimum": 1 },
+            "issued_at": { "type": "string", "format": "date-time" },
+            "authorization": { "type": ["string", "null"] },
+            "recorded_by": { "type": "string", "format": "uuid" },
+            "evidence_uri": { "type": ["string", "null"], "format": "uri" }
+          }
+        }
+      }
+    }
+  ]
+}

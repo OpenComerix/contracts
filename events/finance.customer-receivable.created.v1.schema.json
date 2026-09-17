@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/events/finance.customer-receivable.created.v1.schema.json",
+  "title": "finance.customer-receivable.created.v1",
+  "allOf": [
+    { "$ref": "event-envelope-v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": { "const": "finance.customer-receivable.created.v1" },
+        "schema_version": { "const": 1 },
+        "producer": { "const": "finance" },
+        "aggregate_type": { "const": "customer_receivable" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["receivable_id", "sale_id", "customer_id", "currency", "amount", "created_at", "credit_exception"],
+          "properties": {
+            "receivable_id": { "type": "string", "format": "uuid" },
+            "sale_id": { "type": "string", "format": "uuid" },
+            "customer_id": { "type": "string", "format": "uuid" },
+            "currency": { "type": "string", "pattern": "^[A-Z]{3}$" },
+            "amount": { "$ref": "sale-flow-common-v1.schema.json#/$defs/decimal" },
+            "created_at": { "type": "string", "format": "date-time" },
+            "due_date": { "type": ["string", "null"], "format": "date" },
+            "credit_exception": { "type": "boolean" },
+            "exception_reason": { "type": ["string", "null"] }
+          }
+        }
+      }
+    }
+  ]
+}

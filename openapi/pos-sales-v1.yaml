@@ -1,0 +1,379 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix POS Sales API
+  version: 1.0.0
+  description: Contrato público inicial para finalizar y consultar ventas minoristas.
+servers:
+  - url: https://api.opencomerix.example/api/v1
+    description: URL ilustrativa; cada ambiente publica su propia URL.
+security:
+  - bearerAuth: []
+paths:
+  /sales/finalizations:
+    post:
+      operationId: finalizeSale
+      summary: Finaliza una venta de manera idempotente
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/DeviceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaleFinalizationRequest'
+      responses:
+        '201':
+          description: Venta creada.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleStatus'
+        '200':
+          description: Reintento idempotente; devuelve el resultado existente.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleStatus'
+        '409':
+          description: La clave idempotente fue utilizada con otro contenido.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+        '422':
+          description: La operación no supera las validaciones previas a la confirmación.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /sales/{saleId}:
+    get:
+      operationId: getSale
+      summary: Consulta una venta y el estado de cada dominio
+      parameters:
+        - $ref: '#/components/parameters/SaleId'
+      responses:
+        '200':
+          description: Estado consolidado de la venta.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleStatus'
+        '404':
+          description: Venta inexistente o no visible en el ámbito autenticado.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+  /sales/{saleId}/fiscal-contingency-references:
+    post:
+      operationId: linkFiscalContingency
+      summary: Vincula un comprobante alternativo habilitado con una venta
+      parameters:
+        - $ref: '#/components/parameters/SaleId'
+        - $ref: '#/components/parameters/IdempotencyKey'
+        - $ref: '#/components/parameters/DeviceId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FiscalContingencyReference'
+      responses:
+        '200':
+          description: Referencia vinculada o reintento idempotente confirmado.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SaleStatus'
+        '409':
+          description: Conflicto de identidad fiscal o idempotencia.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    DeviceId:
+      name: X-Device-Id
+      in: header
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+    SaleId:
+      name: saleId
+      in: path
+      required: true
+      schema:
+        $ref: '#/components/schemas/Uuid'
+  schemas:
+    Uuid:
+      type: string
+      format: uuid
+    Decimal:
+      type: string
+      pattern: '^-?[0-9]+(\.[0-9]+)?$'
+    SaleFinalizationRequest:
+      type: object
+      additionalProperties: false
+      required:
+        - operation_id
+        - sale_id
+        - organization_id
+        - branch_id
+        - warehouse_id
+        - pos_id
+        - cash_shift_id
+        - device_id
+        - device_sequence
+        - occurred_at
+        - business_date
+        - lines
+        - totals
+        - payments
+        - fiscal_intent
+        - offline_context
+      properties:
+        operation_id: { $ref: '#/components/schemas/Uuid' }
+        sale_id: { $ref: '#/components/schemas/Uuid' }
+        organization_id: { $ref: '#/components/schemas/Uuid' }
+        branch_id: { $ref: '#/components/schemas/Uuid' }
+        warehouse_id: { $ref: '#/components/schemas/Uuid' }
+        pos_id: { $ref: '#/components/schemas/Uuid' }
+        cash_shift_id: { $ref: '#/components/schemas/Uuid' }
+        device_id: { $ref: '#/components/schemas/Uuid' }
+        device_sequence:
+          type: integer
+          minimum: 1
+        occurred_at:
+          type: string
+          format: date-time
+        business_date:
+          type: string
+          format: date
+        customer_id:
+          oneOf:
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
+        lines:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/SaleLine'
+        applied_promotions:
+          type: array
+          default: []
+          items:
+            $ref: '#/components/schemas/AppliedPromotion'
+        totals:
+          $ref: '#/components/schemas/SaleTotals'
+        payments:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/Payment'
+        fiscal_intent:
+          $ref: '#/components/schemas/FiscalIntent'
+        offline_context:
+          $ref: '#/components/schemas/OfflineContext'
+    SaleLine:
+      type: object
+      additionalProperties: false
+      required:
+        - line_id
+        - product_id
+        - presentation_id
+        - quantity
+        - unit_price
+        - gross_amount
+        - discount_amount
+        - net_amount
+      properties:
+        line_id: { $ref: '#/components/schemas/Uuid' }
+        product_id: { $ref: '#/components/schemas/Uuid' }
+        presentation_id: { $ref: '#/components/schemas/Uuid' }
+        barcode:
+          type: [string, 'null']
+        quantity: { $ref: '#/components/schemas/Decimal' }
+        weight_source:
+          type: [string, 'null']
+          enum: [manual, scale_label, direct_scale, null]
+        unit_price: { $ref: '#/components/schemas/Decimal' }
+        gross_amount: { $ref: '#/components/schemas/Decimal' }
+        discount_amount: { $ref: '#/components/schemas/Decimal' }
+        net_amount: { $ref: '#/components/schemas/Decimal' }
+        tax_snapshot:
+          type: object
+          additionalProperties: true
+        lot_allocations:
+          type: array
+          default: []
+          items:
+            type: object
+            additionalProperties: false
+            required: [lot_id, quantity]
+            properties:
+              lot_id: { $ref: '#/components/schemas/Uuid' }
+              quantity: { $ref: '#/components/schemas/Decimal' }
+    AppliedPromotion:
+      type: object
+      additionalProperties: false
+      required: [promotion_id, rule_version, discount_amount]
+      properties:
+        promotion_id: { $ref: '#/components/schemas/Uuid' }
+        rule_version: { type: integer, minimum: 1 }
+        discount_amount: { $ref: '#/components/schemas/Decimal' }
+    SaleTotals:
+      type: object
+      additionalProperties: false
+      required: [gross, discount, tax, total, currency]
+      properties:
+        gross: { $ref: '#/components/schemas/Decimal' }
+        discount: { $ref: '#/components/schemas/Decimal' }
+        tax: { $ref: '#/components/schemas/Decimal' }
+        total: { $ref: '#/components/schemas/Decimal' }
+        currency:
+          type: string
+          pattern: '^[A-Z]{3}$'
+    Payment:
+      type: object
+      additionalProperties: false
+      required: [payment_id, method, amount]
+      properties:
+        payment_id: { $ref: '#/components/schemas/Uuid' }
+        method:
+          type: string
+          enum: [cash, card, transfer, check, customer_account, other]
+        amount: { $ref: '#/components/schemas/Decimal' }
+        external_reference:
+          type: [string, 'null']
+    FiscalIntent:
+      type: object
+      additionalProperties: false
+      required: [document_class, document_type, strategy]
+      properties:
+        document_class:
+          type: string
+          enum: [A, B, C]
+        document_type:
+          type: string
+          enum: [invoice, credit_note, debit_note]
+        strategy:
+          type: string
+          enum: [cae, caea, external_contingency]
+        customer_tax_snapshot:
+          type: [object, 'null']
+          additionalProperties: true
+    OfflineContext:
+      type: object
+      additionalProperties: false
+      required: [was_offline, emergency_mode, pricing_version]
+      properties:
+        was_offline: { type: boolean }
+        emergency_mode: { type: boolean, default: false }
+        permit_id:
+          oneOf:
+            - $ref: '#/components/schemas/Uuid'
+            - type: 'null'
+        catalog_cursor:
+          type: [string, 'null']
+        pricing_version:
+          type: integer
+          minimum: 1
+        customer_credit_observed_at:
+          type: [string, 'null']
+          format: date-time
+        customer_credit_observed_balance:
+          oneOf:
+            - $ref: '#/components/schemas/Decimal'
+            - type: 'null'
+    FiscalContingencyReference:
+      type: object
+      additionalProperties: false
+      required: [operation_id, method, document_type, document_class, point_of_sale, number, issued_at, recorded_by]
+      properties:
+        operation_id: { $ref: '#/components/schemas/Uuid' }
+        method:
+          type: string
+          enum: [arca_online, mobile_invoicing, fiscal_controller, cai_manual, other_authorized]
+        document_type:
+          type: string
+          enum: [invoice, credit_note, debit_note]
+        document_class:
+          type: string
+          enum: [A, B, C]
+        point_of_sale:
+          type: integer
+          minimum: 1
+        number:
+          type: integer
+          minimum: 1
+        issued_at:
+          type: string
+          format: date-time
+        authorization:
+          type: [string, 'null']
+        recorded_by: { $ref: '#/components/schemas/Uuid' }
+        evidence_uri:
+          type: [string, 'null']
+          format: uri
+    SaleStatus:
+      type: object
+      additionalProperties: false
+      required: [sale_id, commercial_status, payment_status, inventory_status, fiscal_status, sync_status, warnings]
+      properties:
+        sale_id: { $ref: '#/components/schemas/Uuid' }
+        commercial_status:
+          type: string
+          enum: [draft, completed, reversed]
+        payment_status:
+          type: string
+          enum: [pending, paid, receivable, attention_required]
+        inventory_status:
+          type: string
+          enum: [pending, posted, reconciliation_required]
+        fiscal_status:
+          type: string
+          enum: [pending, authorized_cae, authorized_caea, external_contingency, rejected, not_applicable]
+        sync_status:
+          type: string
+          enum: [local_pending, sending, synced, attention_required]
+        warnings:
+          type: array
+          items:
+            $ref: '#/components/schemas/Warning'
+        links:
+          type: object
+          additionalProperties:
+            type: string
+    Warning:
+      type: object
+      additionalProperties: false
+      required: [code, message, review_required]
+      properties:
+        code: { type: string }
+        message: { type: string }
+        review_required: { type: boolean }
+    Problem:
+      type: object
+      additionalProperties: true
+      required: [type, title, status, code, trace_id]
+      properties:
+        type: { type: string, format: uri-reference }
+        title: { type: string }
+        status: { type: integer, minimum: 400, maximum: 599 }
+        code: { type: string }
+        detail: { type: string }
+        trace_id: { type: string }

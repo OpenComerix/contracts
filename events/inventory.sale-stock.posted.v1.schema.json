@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/events/inventory.sale-stock.posted.v1.schema.json",
+  "title": "inventory.sale-stock.posted.v1",
+  "allOf": [
+    { "$ref": "event-envelope-v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": { "const": "inventory.sale-stock.posted.v1" },
+        "schema_version": { "const": 1 },
+        "producer": { "const": "inventory" },
+        "aggregate_type": { "const": "stock_movement" },
+        "payload": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sale_id", "movement_id", "warehouse_id", "posted_at", "lines"],
+          "properties": {
+            "sale_id": { "type": "string", "format": "uuid" },
+            "movement_id": { "type": "string", "format": "uuid" },
+            "warehouse_id": { "type": "string", "format": "uuid" },
+            "posted_at": { "type": "string", "format": "date-time" },
+            "lines": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "$ref": "sale-flow-common-v1.schema.json#/$defs/saleLineQuantity" }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
