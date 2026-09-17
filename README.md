@@ -19,7 +19,7 @@ El pipeline raíz ejecuta tres controles independientes:
 - validación semántica de OpenAPI 3.1 con Redocly CLI;
 - validación de los JSON Schema Draft 2020-12 contra su metaesquema con Sourcemeta JSON Schema CLI.
 
-Las versiones de Node y de las herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. Esta automatización se trasladará junto con los contratos al repositorio dedicado cuando se cree.
+Las versiones de Node y de las herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. `opencomerix.cmd contracts` reproduce los tres controles con Docker, sin exigir una instalación local de Node. Esta automatización se trasladará junto con los contratos al repositorio dedicado cuando se cree.
 
 ## Reglas de compatibilidad
 
