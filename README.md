@@ -9,17 +9,17 @@ Este directorio contiene los contratos versionados que deben validar productores
 - `events/sales.sale.completed.v1.schema.json`: evento inmutable de venta completada.
 - Los demás archivos `*.v1.schema.json` formalizan reversión, inventario, reconciliación, pagos, cuenta corriente y resultados fiscales.
 
-Las decisiones funcionales se explican en `docs/arquitectura/CONTRATO_VENTA_V1.md`. Los contratos de esta carpeta son la representación validable de esas decisiones.
+Las decisiones funcionales completas se mantienen en la documentación de arquitectura del launcher. Este repositorio contiene su representación pública y validable.
 
 ## Validación automática
 
-El pipeline raíz ejecuta tres controles independientes:
+El pipeline ejecuta tres controles independientes:
 
 - lectura de todos los contratos JSON y resolución de cada referencia local mediante `scripts/validate-contract-refs.mjs`;
 - validación semántica de OpenAPI 3.1 con Redocly CLI;
 - validación de los JSON Schema Draft 2020-12 contra su metaesquema con Sourcemeta JSON Schema CLI.
 
-Las versiones de Node y de las herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. `opencomerix.cmd contracts` reproduce los tres controles con Docker, sin exigir una instalación local de Node. Esta automatización se trasladará junto con los contratos al repositorio dedicado cuando se cree.
+Las versiones de Node y de las herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. El launcher reproduce los tres controles con Docker, sin exigir una instalación local de Node.
 
 ## Reglas de compatibilidad
 

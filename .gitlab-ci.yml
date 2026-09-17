@@ -1,0 +1,27 @@
+stages:
+  - validate
+
+default:
+  image: node:24.21.0-bookworm-slim
+  interruptible: true
+
+validate:contract-references:
+  stage: validate
+  script:
+    - node scripts/validate-contract-refs.mjs
+
+validate:openapi:
+  stage: validate
+  variables:
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  script:
+    - npx --yes @redocly/cli@2.53.3 lint openapi/pos-sales-v1.yaml openapi/pos-sync-v1.json
+
+validate:json-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  script:
+    - jsonschema metaschema events --verbose
