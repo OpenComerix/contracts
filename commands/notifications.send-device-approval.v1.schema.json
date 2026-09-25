@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/commands/notifications.send-device-approval.v1.schema.json",
+  "title": "notifications.send-device-approval.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["command_id", "command_type", "schema_version", "requested_at", "producer", "target", "correlation_id", "organization_id", "payload"],
+  "properties": {
+    "command_id": {"type":"string","format":"uuid"},
+    "command_type": {"const":"notifications.send-device-approval.v1"},
+    "schema_version": {"const":1},
+    "requested_at": {"type":"string","format":"date-time"},
+    "producer": {"const":"identity-tenancy"},
+    "target": {"const":"notifications"},
+    "correlation_id": {"type":"string","format":"uuid"},
+    "causation_id": {"type":["string","null"],"format":"uuid"},
+    "organization_id": {"type":"string","format":"uuid"},
+    "payload": {
+      "type":"object","additionalProperties":false,
+      "required":["notification_intent_id","approval_request_id","account_id","organization_id","device_id","delivery_material_id","purpose","template_key","locale","expires_at","deduplication_key"],
+      "properties": {
+        "notification_intent_id":{"type":"string","format":"uuid"},
+        "approval_request_id":{"type":"string","format":"uuid"},
+        "account_id":{"type":"string","format":"uuid"},
+        "organization_id":{"type":"string","format":"uuid"},
+        "device_id":{"type":"string","format":"uuid"},
+        "delivery_material_id":{"type":"string","format":"uuid"},
+        "purpose":{"const":"owner_device_self_approval"},
+        "template_key":{"const":"identity_owner_device_approval_v1"},
+        "locale":{"type":"string","const":"es-AR"},
+        "expires_at":{"type":"string","format":"date-time"},
+        "deduplication_key":{"type":"string","minLength":1,"maxLength":200}
+      }
+    }
+  }
+}

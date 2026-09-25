@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/commands/notifications.send-device-approval.result.v1.schema.json",
+  "title": "notifications.send-device-approval.result.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["result_id","command_id","result_type","schema_version","occurred_at","producer","correlation_id","causation_id","status","retryable","payload"],
+  "properties": {
+    "result_id":{"type":"string","format":"uuid"},
+    "command_id":{"type":"string","format":"uuid"},
+    "result_type":{"const":"notifications.send-device-approval.result.v1"},
+    "schema_version":{"const":1},
+    "occurred_at":{"type":"string","format":"date-time"},
+    "producer":{"const":"notifications"},
+    "correlation_id":{"type":"string","format":"uuid"},
+    "causation_id":{"type":"string","format":"uuid"},
+    "status":{"enum":["succeeded","failed"]},
+    "retryable":{"type":"boolean"},
+    "error_code":{"type":"string","pattern":"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"},
+    "payload":{"type":"object","additionalProperties":false,"required":["notification_intent_id","delivery_id","organization_id","device_id","delivery_status"],"properties":{"notification_intent_id":{"type":"string","format":"uuid"},"delivery_id":{"type":"string","format":"uuid"},"organization_id":{"type":"string","format":"uuid"},"device_id":{"type":"string","format":"uuid"},"delivery_status":{"enum":["scheduled","queued","sending","accepted_by_provider","delivered","bounced","complained","failed","cancelled"]},"failure_code":{"type":"string","pattern":"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"}}}
+  },
+  "allOf":[
+    {"if":{"properties":{"status":{"const":"succeeded"}}},"then":{"properties":{"retryable":{"const":false},"payload":{"properties":{"delivery_status":{"const":"queued"}}}},"not":{"required":["error_code"]}}},
+    {"if":{"properties":{"status":{"const":"failed"}}},"then":{"required":["error_code"],"properties":{"retryable":{"const":true},"payload":{"required":["failure_code"],"properties":{"delivery_status":{"const":"failed"}}}}}}
+  ]
+}

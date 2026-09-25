@@ -17,11 +17,36 @@ validate:openapi:
     REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
   script:
     - npx --yes @redocly/cli@2.53.3 lint openapi/pos-sales-v1.yaml openapi/pos-sync-v1.json
+    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-onboarding-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs
+    - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v1.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v1.bundle.json
+    - node scripts/prepare-identity-rest-fixtures.mjs /tmp/identity-onboarding-v1.bundle.json .ci-artifacts/identity-rest-fixtures --self-test
+  artifacts:
+    paths:
+      - .ci-artifacts/identity-rest-fixtures/
+    expire_in: 1 day
 
 validate:json-schema:
   stage: validate
   image:
     name: ghcr.io/sourcemeta/jsonschema:v16.10.0
     entrypoint: [""]
+  needs:
+    - job: validate:openapi
+      artifacts: true
   script:
-    - jsonschema metaschema events --verbose
+    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json errors/error-catalog-v1.schema.json --verbose
+    - jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
+    - jsonschema validate openapi/device-proof-v1-vectors.schema.json openapi/device-proof-v1-vectors.json --verbose
+    - jsonschema validate commands/notifications.send-email-verification.v1.schema.json commands/examples/notifications.send-email-verification.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
+    - jsonschema validate commands/notifications.send-email-verification.result.v1.schema.json commands/examples/notifications.send-email-verification.result.succeeded.v1.example.json commands/examples/notifications.send-email-verification.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
+    - jsonschema validate commands/notifications.send-device-approval.v1.schema.json commands/examples/notifications.send-device-approval.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
+    - jsonschema validate commands/notifications.send-device-approval.result.v1.schema.json commands/examples/notifications.send-device-approval.result.succeeded.v1.example.json commands/examples/notifications.send-device-approval.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
+    - sh scripts/validate-identity-rest-fixtures.sh .ci-artifacts/identity-rest-fixtures
+
+validate:identity-checklist:
+  stage: validate
+  script:
+    - node scripts/validate-contract-refs.mjs --self-test
+    - node scripts/validate-identity-onboarding.mjs --self-test
+    - node scripts/validate-device-proof-vectors.mjs

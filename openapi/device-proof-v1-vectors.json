@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/device-proof-v1-vectors.json",
+  "title": "OpenComerix device proof v1 interoperability vectors",
+  "algorithm": "ECDSA_P256",
+  "hash": "SHA-256",
+  "signature_encoding": "WebCrypto IEEE-P1363 r||s, 64 bytes, base64url without padding",
+  "challenge_id": "018f0000-0000-7000-8000-000000000901",
+  "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+  "signing_message_utf8": "OpenComerix/device-proof/v1\n018f0000-0000-7000-8000-000000000901\nAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE\n",
+  "public_key_jwk": {
+    "kty": "EC",
+    "crv": "P-256",
+    "x": "ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw",
+    "y": "jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA"
+  },
+  "signature": "J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw",
+  "bindings": {
+    "account_id": "018f0000-0000-7000-8000-000000000902",
+    "session_id": "018f0000-0000-7000-8000-000000000903",
+    "device_id": "018f0000-0000-7000-8000-000000000904",
+    "purpose": "registration",
+    "organization_id": null
+  },
+  "negative_vectors": [
+    { "name": "altered_signature", "signature": "A7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw", "expected": "reject_cryptographic_verification" },
+    { "name": "altered_nonce", "challenge": "AgEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE", "expected": "reject_cryptographic_verification" },
+    { "name": "wrong_purpose", "purpose": "activate_session", "expected": "reject_server_side_binding" },
+    { "name": "wrong_device", "device_id": "018f0000-0000-7000-8000-000000000905", "expected": "reject_server_side_binding" },
+    { "name": "wrong_organization", "organization_id": "018f0000-0000-7000-8000-000000000906", "expected": "reject_server_side_binding" }
+  ],
+  "note": "These fixtures prove wire-format interoperability and negative challenge/binding behavior in this contract validator. JSON Schema checks only shape; F1-04 service tests must reject a well-formed but mathematically incorrect signature. No private key is included."
+}

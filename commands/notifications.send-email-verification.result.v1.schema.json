@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/commands/notifications.send-email-verification.result.v1.schema.json",
+  "title": "notifications.send-email-verification.result.v1",
+  "examples": [
+    {"result_id":"018f0000-0000-7000-8000-000000000201","command_id":"018f0000-0000-7000-8000-000000000101","result_type":"notifications.send-email-verification.result.v1","schema_version":1,"occurred_at":"2026-09-25T12:00:05Z","producer":"notifications","correlation_id":"018f0000-0000-7000-8000-000000000102","causation_id":"018f0000-0000-7000-8000-000000000101","status":"succeeded","retryable":false,"payload":{"notification_intent_id":"018f0000-0000-7000-8000-000000000103","delivery_id":"018f0000-0000-7000-8000-000000000202","delivery_status":"queued"}},
+    {"result_id":"018f0000-0000-7000-8000-000000000203","command_id":"018f0000-0000-7000-8000-000000000101","result_type":"notifications.send-email-verification.result.v1","schema_version":1,"occurred_at":"2026-09-25T12:00:05Z","producer":"notifications","correlation_id":"018f0000-0000-7000-8000-000000000102","causation_id":"018f0000-0000-7000-8000-000000000101","status":"failed","retryable":true,"error_code":"notifications_dependency_unavailable","payload":{"notification_intent_id":"018f0000-0000-7000-8000-000000000103","delivery_id":"018f0000-0000-7000-8000-000000000204","delivery_status":"failed","failure_code":"notifications_dependency_unavailable"}}
+  ],
+  "allOf": [
+    {"$ref":"command-result-envelope-v1.schema.json"},
+    {
+      "type":"object",
+      "properties": {
+        "result_type":{"const":"notifications.send-email-verification.result.v1"},
+        "schema_version":{"const":1},
+        "producer":{"const":"notifications"},
+        "payload": {
+          "type":"object","additionalProperties":false,
+          "required":["notification_intent_id","delivery_id","delivery_status"],
+          "properties": {
+            "notification_intent_id":{"type":"string","format":"uuid"},
+            "delivery_id":{"type":"string","format":"uuid"},
+            "delivery_status":{"type":"string","enum":["scheduled","queued","sending","accepted_by_provider","delivered","bounced","complained","failed","cancelled"]},
+            "provider_message_id":{"type":"string","minLength":1},
+            "failure_code":{"type":"string","pattern":"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"}
+          },
+          "allOf":[
+            {"if":{"properties":{"delivery_status":{"const":"failed"}}},"then":{"required":["failure_code"]}},
+            {"if":{"properties":{"delivery_status":{"enum":["scheduled","queued","sending","accepted_by_provider","delivered","bounced","complained","cancelled"]}}},"then":{"not":{"required":["failure_code"]}}}
+          ]
+        }
+      },
+      "allOf":[
+        {"if":{"properties":{"status":{"const":"succeeded"}}},"then":{"properties":{"payload":{"properties":{"delivery_status":{"enum":["scheduled","queued"]}}}}}},
+        {"if":{"properties":{"status":{"const":"failed"}}},"then":{"properties":{"payload":{"properties":{"delivery_status":{"const":"failed"}},"required":["failure_code"]}}}}
+      ]
+    }
+  ]
+}

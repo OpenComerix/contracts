@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/device-proof-v1-vectors.schema.json",
+  "title": "OpenComerix device proof interoperability vectors v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "$id", "title", "algorithm", "hash", "signature_encoding", "challenge_id", "challenge", "signing_message_utf8", "public_key_jwk", "signature", "bindings", "negative_vectors", "note"],
+  "properties": {
+    "$schema": {"const": "https://json-schema.org/draft/2020-12/schema"},
+    "$id": {"const": "https://contracts.opencomerix.example/openapi/device-proof-v1-vectors.json"},
+    "title": {"type": "string", "minLength": 1},
+    "algorithm": {"const": "ECDSA_P256"},
+    "hash": {"const": "SHA-256"},
+    "signature_encoding": {"const": "WebCrypto IEEE-P1363 r||s, 64 bytes, base64url without padding"},
+    "challenge_id": {"type": "string", "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "challenge": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"},
+    "signing_message_utf8": {"type": "string", "minLength": 1},
+    "public_key_jwk": {
+      "type": "object", "additionalProperties": false, "required": ["kty", "crv", "x", "y"],
+      "properties": {"kty": {"const": "EC"}, "crv": {"const": "P-256"}, "x": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}, "y": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}}
+    },
+    "signature": {"type": "string", "pattern": "^[A-Za-z0-9_-]{86}$"},
+    "bindings": {
+      "type": "object", "additionalProperties": false, "required": ["account_id", "session_id", "device_id", "purpose", "organization_id"],
+      "properties": {"account_id": {"type": "string", "format": "uuid"}, "session_id": {"type": "string", "format": "uuid"}, "device_id": {"type": "string", "format": "uuid"}, "purpose": {"type": "string", "minLength": 1}, "organization_id": {"type": ["string", "null"], "format": "uuid"}}
+    },
+    "negative_vectors": {
+      "type": "array", "minItems": 5, "items": {
+        "type": "object", "additionalProperties": false, "required": ["name", "expected"],
+        "properties": {"name": {"type": "string", "enum": ["altered_signature", "altered_nonce", "wrong_purpose", "wrong_device", "wrong_organization"]}, "signature": {"type": "string", "pattern": "^[A-Za-z0-9_-]{86}$"}, "challenge": {"type": "string", "pattern": "^[A-Za-z0-9_-]{43}$"}, "purpose": {"type": "string"}, "device_id": {"type": "string", "format": "uuid"}, "organization_id": {"type": "string", "format": "uuid"}, "expected": {"type": "string", "enum": ["reject_cryptographic_verification", "reject_server_side_binding"]}}
+      }
+    },
+    "note": {"type": "string", "minLength": 1}
+  }
+}

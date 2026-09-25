@@ -1,0 +1,1002 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/identity-rest-fixtures-v1.json",
+  "title": "OpenComerix Identity REST v1 examples",
+  "description": "Versioned REST examples tied to exact operation, HTTP status, and schema pointers in the dereferenced OpenAPI bundle. Invalid requests are explicit static instances; the validator never synthesizes examples from schemas.",
+  "operations": [
+    {
+      "operation_id": "registerGlobalAccount",
+      "method": "POST",
+      "path": "/identity/registrations",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1registrations/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1registrations/post/requestBody/content/application~1json/examples/valid/value",
+        "invalid": {
+          "unexpected_field": true
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1registrations/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "status": "accepted",
+          "next_actions": [
+            "verify_email"
+          ]
+        }
+      },
+      "error": {
+        "status": 400,
+        "code": "identity_invalid_request",
+        "schema_pointer": "/paths/~1identity~1registrations/post/responses/400/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_invalid_request",
+          "title": "Solicitud inválida",
+          "status": 400,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000901",
+          "code": "identity_invalid_request",
+          "trace_id": "018f0000-0000-7000-8000-000000000902",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "verifyEmail",
+      "method": "POST",
+      "path": "/identity/email-verifications",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1email-verifications/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1email-verifications/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "token": ""
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1email-verifications/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "status": "verified",
+          "next_actions": [
+            "enroll_mfa",
+            "register_device",
+            "create_organization"
+          ]
+        }
+      },
+      "error": {
+        "status": 422,
+        "code": "identity_email_verification_invalid",
+        "schema_pointer": "/paths/~1identity~1email-verifications/post/responses/422/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_email_verification_invalid",
+          "title": "Estado no válido",
+          "status": 422,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000903",
+          "code": "identity_email_verification_invalid",
+          "trace_id": "018f0000-0000-7000-8000-000000000904",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "createSession",
+      "method": "POST",
+      "path": "/identity/sessions",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1sessions/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1sessions/post/requestBody/content/application~1json/examples/valid/value",
+        "invalid": {
+          "email": "persona@example.invalid",
+          "password": ""
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1sessions/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "status": "mfa_pending",
+          "challenge_id": "018f0000-0000-7000-8000-000000000004",
+          "challenge_expires_at": "2026-09-25T12:05:00Z",
+          "next_actions": [
+            "complete_mfa"
+          ]
+        }
+      },
+      "error": {
+        "status": 401,
+        "code": "identity_invalid_credentials",
+        "schema_pointer": "/paths/~1identity~1sessions/post/responses/401/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_invalid_credentials",
+          "title": "No autenticado",
+          "status": 401,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000905",
+          "code": "identity_invalid_credentials",
+          "trace_id": "018f0000-0000-7000-8000-000000000906",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "getCurrentSession",
+      "method": "GET",
+      "path": "/identity/session",
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1session/get/responses/200/content/application~1json/schema",
+        "fixture": {
+          "account": {
+            "account_id": "018f0000-0000-7000-8000-000000000101",
+            "email_status": "verified"
+          },
+          "session": {
+            "status": "active",
+            "expires_at": "2026-09-26T00:00:00Z"
+          },
+          "mfa": {
+            "status": "enrolled"
+          },
+          "device": {
+            "device_id": "018f0000-0000-7000-8000-000000000104",
+            "status": "approved"
+          },
+          "active_organization": null,
+          "active_membership": null,
+          "permissions": [],
+          "scopes": [],
+          "next_actions": [
+            "create_organization"
+          ]
+        }
+      },
+      "error": {
+        "status": 401,
+        "code": "identity_session_invalid_or_expired",
+        "schema_pointer": "/paths/~1identity~1session/get/responses/401/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_session_invalid_or_expired",
+          "title": "No autenticado",
+          "status": 401,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000907",
+          "code": "identity_session_invalid_or_expired",
+          "trace_id": "018f0000-0000-7000-8000-000000000908",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "logoutCurrentSession",
+      "method": "DELETE",
+      "path": "/identity/session",
+      "success": {
+        "status": 204,
+        "no_body": true
+      },
+      "error": {
+        "status": 401,
+        "code": "identity_session_invalid_or_expired",
+        "schema_pointer": "/paths/~1identity~1session/delete/responses/401/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_session_invalid_or_expired",
+          "title": "No autenticado",
+          "status": 401,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000909",
+          "code": "identity_session_invalid_or_expired",
+          "trace_id": "018f0000-0000-7000-8000-000000000910",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "revokeOtherSessions",
+      "method": "POST",
+      "path": "/identity/session-revocations",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1session-revocations/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1session-revocations/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "except_current": true,
+          "expected_security_version": 0
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1session-revocations/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "revoked_count": 3,
+          "security_version": 4
+        }
+      },
+      "error": {
+        "status": 409,
+        "code": "identity_state_or_version_conflict",
+        "schema_pointer": "/paths/~1identity~1session-revocations/post/responses/409/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_state_or_version_conflict",
+          "title": "Conflicto de estado",
+          "status": 409,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000911",
+          "code": "identity_state_or_version_conflict",
+          "trace_id": "018f0000-0000-7000-8000-000000000912",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "beginTotpEnrollment",
+      "method": "POST",
+      "path": "/identity/mfa/totp-enrollments",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1mfa~1totp-enrollments/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "unexpected_field": true
+        }
+      },
+      "success": {
+        "status": 201,
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments/post/responses/201/content/application~1json/schema",
+        "fixture": {
+          "status": "issued",
+          "enrollment_id": "018f0000-0000-7000-8000-000000000003",
+          "secret": "NOT-A-REAL-TOTP-SECRET",
+          "otpauth_uri": "otpauth://totp/OpenComerix:persona@example.invalid?secret=REDACTED&issuer=OpenComerix",
+          "expires_at": "2026-09-25T12:10:00Z"
+        }
+      },
+      "error": {
+        "status": 409,
+        "code": "identity_state_or_version_conflict",
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments/post/responses/409/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_state_or_version_conflict",
+          "title": "Conflicto de estado",
+          "status": 409,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000913",
+          "code": "identity_state_or_version_conflict",
+          "trace_id": "018f0000-0000-7000-8000-000000000914",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "confirmTotpEnrollment",
+      "method": "POST",
+      "path": "/identity/mfa/totp-enrollments/{enrollmentId}/confirmations",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments~1{enrollmentId}~1confirmations/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1mfa~1totp-enrollments~1{enrollmentId}~1confirmations/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "code": "ABC123"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments~1{enrollmentId}~1confirmations/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "status": "issued",
+          "mfa_status": "enrolled",
+          "recovery_codes": [
+            "RECOVERY-CODE-OMITIDO"
+          ]
+        }
+      },
+      "error": {
+        "status": 422,
+        "code": "identity_mfa_invalid",
+        "schema_pointer": "/paths/~1identity~1mfa~1totp-enrollments~1{enrollmentId}~1confirmations/post/responses/422/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_mfa_invalid",
+          "title": "Código no válido",
+          "status": 422,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000915",
+          "code": "identity_mfa_invalid",
+          "trace_id": "018f0000-0000-7000-8000-000000000916",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "completeMfaChallenge",
+      "method": "POST",
+      "path": "/identity/mfa/challenges",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1mfa~1challenges/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1mfa~1challenges/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "challenge_id": "invalid",
+          "code": "123456"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1mfa~1challenges/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "account": {
+            "account_id": "018f0000-0000-7000-8000-000000000101",
+            "email_status": "verified"
+          },
+          "session": {
+            "status": "restricted",
+            "expires_at": "2026-09-26T00:00:00Z"
+          },
+          "mfa": {
+            "status": "enrolled"
+          },
+          "device": {
+            "device_id": "018f0000-0000-7000-8000-000000000104",
+            "status": "pending_approval"
+          },
+          "active_organization": null,
+          "active_membership": null,
+          "permissions": [],
+          "scopes": [],
+          "next_actions": [
+            "approve_device"
+          ]
+        }
+      },
+      "error": {
+        "status": 422,
+        "code": "identity_mfa_invalid",
+        "schema_pointer": "/paths/~1identity~1mfa~1challenges/post/responses/422/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_mfa_invalid",
+          "title": "Código no válido",
+          "status": 422,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000917",
+          "code": "identity_mfa_invalid",
+          "trace_id": "018f0000-0000-7000-8000-000000000918",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "createDeviceRegistrationChallenge",
+      "method": "POST",
+      "path": "/identity/device-registration-challenges",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1device-registration-challenges/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1device-registration-challenges/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "key_algorithm": "Ed25519"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1device-registration-challenges/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "challenge_id": "018f0000-0000-7000-8000-000000000901",
+          "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+          "key_algorithm": "ECDSA_P256",
+          "purpose": "registration",
+          "expires_at": "2026-09-25T12:05:00Z"
+        }
+      },
+      "error": {
+        "status": 400,
+        "code": "identity_invalid_request",
+        "schema_pointer": "/paths/~1identity~1device-registration-challenges/post/responses/400/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_invalid_request",
+          "title": "Solicitud inválida",
+          "status": 400,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000919",
+          "code": "identity_invalid_request",
+          "trace_id": "018f0000-0000-7000-8000-000000000920",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "createRegisteredDeviceAuthenticationChallenge",
+      "method": "POST",
+      "path": "/identity/device-authentication-challenges",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1device-authentication-challenges/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1device-authentication-challenges/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "device_id": "invalid",
+          "purpose": "activate_session"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1device-authentication-challenges/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "challenge_id": "018f0000-0000-7000-8000-000000000911",
+          "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+          "key_algorithm": "ECDSA_P256",
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "purpose": "activate_session",
+          "expires_at": "2026-09-25T12:05:00Z"
+        }
+      },
+      "error": {
+        "status": 403,
+        "code": "identity_device_not_approved",
+        "schema_pointer": "/paths/~1identity~1device-authentication-challenges/post/responses/403/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_device_not_approved",
+          "title": "Operación no permitida",
+          "status": 403,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000921",
+          "code": "identity_device_not_approved",
+          "trace_id": "018f0000-0000-7000-8000-000000000922",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "proveRegisteredDevicePossession",
+      "method": "POST",
+      "path": "/identity/device-authentications",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1device-authentications/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1device-authentications/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "challenge_id": "018f0000-0000-7000-8000-000000000911",
+          "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "signature": "bad"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1device-authentications/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "account": {
+            "account_id": "018f0000-0000-7000-8000-000000000101",
+            "email_status": "verified"
+          },
+          "session": {
+            "status": "restricted",
+            "expires_at": "2026-09-26T00:00:00Z"
+          },
+          "mfa": {
+            "status": "enrolled"
+          },
+          "device": {
+            "device_id": "018f0000-0000-7000-8000-000000000104",
+            "status": "pending_approval"
+          },
+          "active_organization": null,
+          "active_membership": null,
+          "permissions": [],
+          "scopes": [],
+          "next_actions": [
+            "approve_device"
+          ]
+        }
+      },
+      "error": {
+        "status": 409,
+        "code": "identity_state_or_version_conflict",
+        "schema_pointer": "/paths/~1identity~1device-authentications/post/responses/409/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_state_or_version_conflict",
+          "title": "Desafío ya consumido",
+          "status": 409,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000923",
+          "code": "identity_state_or_version_conflict",
+          "trace_id": "018f0000-0000-7000-8000-000000000924",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "registerWebDevice",
+      "method": "POST",
+      "path": "/identity/devices",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1devices/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1devices/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "challenge_id": "018f0000-0000-7000-8000-000000000901",
+          "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+          "public_key": {
+            "kty": "EC",
+            "crv": "P-256",
+            "x": "ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw",
+            "y": "jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA",
+            "d": "private"
+          },
+          "signature": "J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw",
+          "device_name": "Navegador de prueba",
+          "platform": "web"
+        }
+      },
+      "success": {
+        "status": 201,
+        "schema_pointer": "/paths/~1identity~1devices/post/responses/201/content/application~1json/schema",
+        "fixture": {
+          "device_id": "018f0000-0000-7000-8000-000000000007",
+          "status": "pending_approval",
+          "version": 1
+        }
+      },
+      "error": {
+        "status": 409,
+        "code": "identity_state_or_version_conflict",
+        "schema_pointer": "/paths/~1identity~1devices/post/responses/409/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_state_or_version_conflict",
+          "title": "El desafío no coincide con el estado actual",
+          "status": 409,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000925",
+          "code": "identity_state_or_version_conflict",
+          "trace_id": "018f0000-0000-7000-8000-000000000926",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "requestDeviceApproval",
+      "method": "POST",
+      "path": "/identity/devices/{deviceId}/approval-requests",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1approval-requests/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1devices~1{deviceId}~1approval-requests/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "organization_id": "invalid"
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1approval-requests/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "device_id": "018f0000-0000-7000-8000-000000000007",
+          "organization_id": "018f0000-0000-7000-8000-000000000006",
+          "status": "pending_approval",
+          "version": 1
+        }
+      },
+      "error": {
+        "status": 404,
+        "code": "tenancy_organization_not_selectable",
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1approval-requests/post/responses/404/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:tenancy_organization_not_selectable",
+          "title": "Organización no seleccionable",
+          "status": 404,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000927",
+          "code": "tenancy_organization_not_selectable",
+          "trace_id": "018f0000-0000-7000-8000-000000000928",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "decideDeviceApproval",
+      "method": "POST",
+      "path": "/identity/device-approvals",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1device-approvals/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1device-approvals/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "device_id": "invalid",
+          "organization_id": "018f0000-0000-7000-8000-000000000006",
+          "decision": "maybe",
+          "expected_version": 1
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1device-approvals/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "device_id": "018f0000-0000-7000-8000-000000000007",
+          "organization_id": "018f0000-0000-7000-8000-000000000006",
+          "status": "approved",
+          "version": 2
+        }
+      },
+      "error": {
+        "status": 409,
+        "code": "identity_state_or_version_conflict",
+        "schema_pointer": "/paths/~1identity~1device-approvals/post/responses/409/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_state_or_version_conflict",
+          "title": "La versión del dispositivo cambió",
+          "status": 409,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000929",
+          "code": "identity_state_or_version_conflict",
+          "trace_id": "018f0000-0000-7000-8000-000000000930",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "requestOwnerDeviceSelfApproval",
+      "method": "POST",
+      "path": "/identity/devices/{deviceId}/owner-approval-requests",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1owner-approval-requests/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1devices~1{deviceId}~1owner-approval-requests/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "organization_id": "018f0000-0000-7000-8000-000000000906",
+          "challenge_id": "018f0000-0000-7000-8000-000000000921",
+          "challenge": "bad",
+          "signature": "bad",
+          "expected_membership_version": 2
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1owner-approval-requests/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "approval_request_id": "018f0000-0000-7000-8000-000000000922",
+          "organization_id": "018f0000-0000-7000-8000-000000000906",
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "status": "pending_approval",
+          "expires_at": "2026-09-25T12:30:00Z",
+          "version": 1
+        }
+      },
+      "error": {
+        "status": 403,
+        "code": "identity_mfa_required",
+        "schema_pointer": "/paths/~1identity~1devices~1{deviceId}~1owner-approval-requests/post/responses/403/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_mfa_required",
+          "title": "Se requiere MFA reciente",
+          "status": 403,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000931",
+          "code": "identity_mfa_required",
+          "trace_id": "018f0000-0000-7000-8000-000000000932",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "confirmOwnerDeviceSelfApproval",
+      "method": "POST",
+      "path": "/identity/device-approval-confirmations",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1device-approval-confirmations/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1device-approval-confirmations/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "approval_request_id": "018f0000-0000-7000-8000-000000000922",
+          "organization_id": "018f0000-0000-7000-8000-000000000906",
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "token": "",
+          "challenge_id": "018f0000-0000-7000-8000-000000000931",
+          "challenge": "AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE",
+          "signature": "Fdd2lpVdE4Vj4McJ44QyzV72wD2pAB1FWpqBDJjyh30EHygwRWR0dsKVv_MZdDGeUfydvpuGxWI7MsQGNHQ1fQ",
+          "expected_membership_version": 2
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1device-approval-confirmations/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "organization_id": "018f0000-0000-7000-8000-000000000906",
+          "status": "approved",
+          "version": 2
+        }
+      },
+      "error": {
+        "status": 422,
+        "code": "identity_mfa_invalid",
+        "schema_pointer": "/paths/~1identity~1device-approval-confirmations/post/responses/422/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_mfa_invalid",
+          "title": "Token o prueba no válidos",
+          "status": 422,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000933",
+          "code": "identity_mfa_invalid",
+          "trace_id": "018f0000-0000-7000-8000-000000000934",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "createInitialOrganization",
+      "method": "POST",
+      "path": "/tenancy/organization-onboardings",
+      "request": {
+        "schema_pointer": "/paths/~1tenancy~1organization-onboardings/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1tenancy~1organization-onboardings/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "organization_name": "Comercio de ejemplo",
+          "branch_name": "Casa central",
+          "pos_name": "Caja 1",
+          "locale": "es-AR",
+          "device_id": "018f0000-0000-7000-8000-000000000904",
+          "device_challenge_id": "018f0000-0000-7000-8000-000000000941",
+          "device_challenge": "bad",
+          "device_signature": "bad",
+          "expected_device_version": 1
+        }
+      },
+      "success": {
+        "status": 201,
+        "schema_pointer": "/paths/~1tenancy~1organization-onboardings/post/responses/201/content/application~1json/schema",
+        "fixture": {
+          "organization": {
+            "organization_id": "018f0000-0000-7000-8000-000000000011",
+            "name": "Comercio de ejemplo",
+            "version": 1
+          },
+          "branch": {
+            "branch_id": "018f0000-0000-7000-8000-000000000012",
+            "name": "Casa central",
+            "version": 1
+          },
+          "pos": {
+            "pos_id": "018f0000-0000-7000-8000-000000000013",
+            "name": "Caja 1",
+            "version": 1
+          },
+          "membership": {
+            "membership_id": "018f0000-0000-7000-8000-000000000014",
+            "membership_type": "INTERNAL",
+            "role": "OWNER",
+            "version": 1
+          },
+          "device_approval": {
+            "device_id": "018f0000-0000-7000-8000-000000000904",
+            "status": "approved",
+            "version": 1
+          },
+          "version": 1
+        }
+      },
+      "error": {
+        "status": 403,
+        "code": "identity_mfa_required",
+        "schema_pointer": "/paths/~1tenancy~1organization-onboardings/post/responses/403/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_mfa_required",
+          "title": "Se requiere MFA reciente",
+          "status": 403,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000935",
+          "code": "identity_mfa_required",
+          "trace_id": "018f0000-0000-7000-8000-000000000936",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "listMyMemberships",
+      "method": "GET",
+      "path": "/tenancy/memberships",
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1tenancy~1memberships/get/responses/200/content/application~1json/schema",
+        "fixture": {
+          "items": [
+            {
+              "membership_id": "018f0000-0000-7000-8000-000000000014",
+              "organization_id": "018f0000-0000-7000-8000-000000000011",
+              "membership_type": "INTERNAL",
+              "status": "active",
+              "roles": [
+                "OWNER"
+              ],
+              "version": 1
+            }
+          ],
+          "page": {
+            "next_cursor": null,
+            "has_more": false,
+            "limit": 50
+          }
+        }
+      },
+      "error": {
+        "status": 401,
+        "code": "identity_session_invalid_or_expired",
+        "schema_pointer": "/paths/~1tenancy~1memberships/get/responses/401/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_session_invalid_or_expired",
+          "title": "No autenticado",
+          "status": 401,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000937",
+          "code": "identity_session_invalid_or_expired",
+          "trace_id": "018f0000-0000-7000-8000-000000000938",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "selectActiveOrganization",
+      "method": "POST",
+      "path": "/tenancy/context-selections",
+      "request": {
+        "schema_pointer": "/paths/~1tenancy~1context-selections/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1tenancy~1context-selections/post/requestBody/content/application~1json/example",
+        "invalid": {
+          "membership_id": "invalid",
+          "expected_version": 0
+        }
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1tenancy~1context-selections/post/responses/200/content/application~1json/schema",
+        "fixture": {
+          "account": {
+            "account_id": "018f0000-0000-7000-8000-000000000101",
+            "email_status": "verified"
+          },
+          "session": {
+            "status": "active",
+            "expires_at": "2026-09-26T00:00:00Z"
+          },
+          "mfa": {
+            "status": "enrolled"
+          },
+          "device": {
+            "device_id": "018f0000-0000-7000-8000-000000000104",
+            "status": "approved"
+          },
+          "active_organization": {
+            "organization_id": "018f0000-0000-7000-8000-000000000011",
+            "name": "Comercio de ejemplo",
+            "version": 1
+          },
+          "active_membership": {
+            "membership_id": "018f0000-0000-7000-8000-000000000014",
+            "organization_id": "018f0000-0000-7000-8000-000000000011",
+            "membership_type": "INTERNAL",
+            "status": "active",
+            "roles": [
+              "OWNER"
+            ],
+            "version": 1
+          },
+          "permissions": [
+            "tenancy.context.select"
+          ],
+          "scopes": [
+            {
+              "scope_type": "organization",
+              "scope_id": "018f0000-0000-7000-8000-000000000011"
+            }
+          ],
+          "next_actions": []
+        }
+      },
+      "error": {
+        "status": 404,
+        "code": "tenancy_organization_not_selectable",
+        "schema_pointer": "/paths/~1tenancy~1context-selections/post/responses/404/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:tenancy_organization_not_selectable",
+          "title": "Organización no seleccionable",
+          "status": 404,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000939",
+          "code": "tenancy_organization_not_selectable",
+          "trace_id": "018f0000-0000-7000-8000-000000000940",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "getActiveTenantContext",
+      "method": "GET",
+      "path": "/tenancy/context",
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1tenancy~1context/get/responses/200/content/application~1json/schema",
+        "fixture": {
+          "account": {
+            "account_id": "018f0000-0000-7000-8000-000000000101",
+            "email_status": "verified"
+          },
+          "session": {
+            "status": "active",
+            "expires_at": "2026-09-26T00:00:00Z"
+          },
+          "mfa": {
+            "status": "enrolled"
+          },
+          "device": {
+            "device_id": "018f0000-0000-7000-8000-000000000104",
+            "status": "approved"
+          },
+          "active_organization": {
+            "organization_id": "018f0000-0000-7000-8000-000000000011",
+            "name": "Comercio de ejemplo",
+            "version": 1
+          },
+          "active_membership": {
+            "membership_id": "018f0000-0000-7000-8000-000000000014",
+            "organization_id": "018f0000-0000-7000-8000-000000000011",
+            "membership_type": "INTERNAL",
+            "status": "active",
+            "roles": [
+              "OWNER"
+            ],
+            "version": 1
+          },
+          "permissions": [
+            "tenancy.context.select"
+          ],
+          "scopes": [
+            {
+              "scope_type": "organization",
+              "scope_id": "018f0000-0000-7000-8000-000000000011"
+            }
+          ],
+          "next_actions": []
+        }
+      },
+      "error": {
+        "status": 401,
+        "code": "identity_session_invalid_or_expired",
+        "schema_pointer": "/paths/~1tenancy~1context/get/responses/401/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:identity_session_invalid_or_expired",
+          "title": "No autenticado",
+          "status": 401,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000941",
+          "code": "identity_session_invalid_or_expired",
+          "trace_id": "018f0000-0000-7000-8000-000000000942",
+          "retryable": false
+        }
+      }
+    },
+    {
+      "operation_id": "getEmailVerificationDeliveryMaterial",
+      "method": "GET",
+      "path": "/internal/identity/email-verification-delivery-material/{deliveryMaterialId}",
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1internal~1identity~1email-verification-delivery-material~1{deliveryMaterialId}/get/responses/200/content/application~1json/schema",
+        "fixture": {
+          "recipient": "persona@example.invalid",
+          "verification_url": "https://identity.opencomerix.example/verify?token=REDACTED-NONFUNCTIONAL",
+          "expires_at": "2026-09-26T12:00:00Z",
+          "locale": "es-AR",
+          "template_parameters": {
+            "display_name": "Ana"
+          }
+        }
+      },
+      "error": {
+        "status": 503,
+        "code": "platform_dependency_unavailable",
+        "schema_pointer": "/paths/~1internal~1identity~1email-verification-delivery-material~1{deliveryMaterialId}/get/responses/503/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:platform_dependency_unavailable",
+          "title": "Servicio no disponible",
+          "status": 503,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000943",
+          "code": "platform_dependency_unavailable",
+          "trace_id": "018f0000-0000-7000-8000-000000000944",
+          "retryable": true
+        }
+      }
+    },
+    {
+      "operation_id": "getOwnerDeviceApprovalDeliveryMaterial",
+      "method": "GET",
+      "path": "/internal/identity/device-approval-delivery-material/{deliveryMaterialId}",
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1internal~1identity~1device-approval-delivery-material~1{deliveryMaterialId}/get/responses/200/content/application~1json/schema",
+        "fixture": {
+          "recipient": "persona@example.invalid",
+          "approval_url": "https://identity.opencomerix.example/device-approval?token=REDACTED-NONFUNCTIONAL",
+          "expires_at": "2026-09-25T12:30:00Z",
+          "locale": "es-AR"
+        }
+      },
+      "error": {
+        "status": 503,
+        "code": "platform_dependency_unavailable",
+        "schema_pointer": "/paths/~1internal~1identity~1device-approval-delivery-material~1{deliveryMaterialId}/get/responses/503/content/application~1problem+json/schema",
+        "fixture": {
+          "type": "urn:opencomerix:problem:platform_dependency_unavailable",
+          "title": "Servicio no disponible",
+          "status": 503,
+          "instance": "urn:uuid:018f0000-0000-7000-8000-000000000945",
+          "code": "platform_dependency_unavailable",
+          "trace_id": "018f0000-0000-7000-8000-000000000946",
+          "retryable": true
+        }
+      }
+    }
+  ]
+}

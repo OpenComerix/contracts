@@ -1,0 +1,498 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity and Onboarding API
+  version: 1.0.0
+  description: >-
+    Contrato público v1 para cuenta global, sesión web, MFA TOTP, aprobación
+    de dispositivo y onboarding inicial de organización. Las mutaciones usan
+    Idempotency-Key cuando se indica; el replay con el mismo payload devuelve
+    el resultado original y con otro payload produce identity_idempotency_key_reused.
+    Cada request/response admite correlation_id; se propagan causation_id
+    cuando existe y traceparent conforme a W3C Trace Context. Rate limits se
+    aplican por cuenta, IP y propósito; sus límites concretos son configuración
+    del servicio. Respuestas autenticadas llevan Cache-Control: no-store.
+    La cookie __Host-oc_session es Secure, HttpOnly, SameSite=Lax, Path=/ y sin
+    Domain; vence tras 12 horas de inactividad y 30 días absolutos. Cada
+    mutación autenticada requiere X-CSRF-Token y Origin validado. Correlation
+    ID se propaga como X-Correlation-Id (o se genera uno) y se incluye en
+    Problem Details; causation_id se conserva cuando hay causal previa.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://api.opencomerix.example/api/v1
+    description: URL ilustrativa por ambiente.
+security: []
+paths:
+  /identity/registrations:
+    post:
+      tags: [IdentityOnboarding]
+      security: []
+      operationId: registerGlobalAccount
+      summary: Registra una cuenta global y solicita verificar su email
+      description: Crea una cuenta global con los datos de perfil requeridos y solicita verificar el email. Responde de forma generica para evitar enumerar cuentas; la contrasena solo se acepta en el request y nunca se devuelve ni registra.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/RegistrationRequest'}
+            examples:
+              valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real', first_name: Ana, last_name: Pérez, birth_date: '1990-01-02', country: AR, province: Buenos Aires, locality: La Plata, postal_code: '1900', address: 'Calle de ejemplo 123'}}
+      responses:
+        '200': {description: Solicitud aceptada con respuesta genérica, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/RegistrationAccepted'}}}}
+        '400': {description: 'Solicitud inválida, incluido un campo requerido ausente.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_request', title: Solicitud inválida, status: 400, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_request, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+        '409': {$ref: '#/components/responses/IdempotencyConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+        '500': {$ref: '#/components/responses/InternalError'}
+  /identity/email-verifications:
+    post:
+      tags: [IdentityOnboarding]
+      security: []
+      operationId: verifyEmail
+      summary: Verifica el email con un token de un solo uso
+      description: Consume un token de verificacion de email de un solo uso. Un token invalido, vencido o ya utilizado produce una respuesta indistinguible y no revela el estado de una cuenta.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/EmailVerificationRequest'}, example: {token: 'valor-ejemplo-no-funcional'}}}}
+      responses:
+        '200': {description: Verificación completada o respuesta genérica, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/EmailVerificationResponse'}, examples: {verified: {value: {status: verified, next_actions: [enroll_mfa, register_device, create_organization]}}, expired_or_used: {value: {status: not_verified, next_actions: [verify_email]}}}}}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '409': {$ref: '#/components/responses/IdempotencyConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+        '500': {$ref: '#/components/responses/InternalError'}
+  /identity/sessions:
+    post:
+      tags: [IdentityOnboarding]
+      security: []
+      operationId: createSession
+      summary: Inicia sesión
+      description: Autentica la cuenta global con email y contrasena. Si TOTP esta enrolado devuelve challenge_id, vencimiento y cookie opaca temporal restringida; solo POST /identity/mfa/challenges consume el challenge. Sin TOTP, la sesion restringida permite unicamente enrolamiento/confirmacion MFA, registro del dispositivo y bootstrap inicial aplicable. Ningun estado restringido o MFA pendiente permite operaciones tenant. Credenciales invalidas no revelan si la cuenta existe; replay idempotente no crea sesiones adicionales.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/LoginRequest'}, examples: {valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real'}}, invalid_credentials: {value: {email: desconocido@example.invalid, password: 'credencial-ejemplo'}}}}}}
+      responses:
+        '200': {description: Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No autoriza tenant hasta completar MFA y prueba/aprobación del dispositivo., headers: {Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/LoginResponse'}, examples: {authenticated_restricted: {value: {status: restricted, session_expires_at: '2026-09-25T12:05:00Z', next_actions: [enroll_mfa, register_device, create_organization]}}, mfa_pending: {value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-09-25T12:05:00Z', next_actions: [complete_mfa]}}}}}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '401': {description: Credenciales inválidas; respuesta indistinguible para cuenta ausente, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_credentials', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_credentials, trace_id: '018f0000-0000-7000-8000-000000000002', retryable: false}}}}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+        '500': {$ref: '#/components/responses/InternalError'}
+  /identity/session:
+    get:
+      tags: [IdentityOnboarding]
+      operationId: getCurrentSession
+      summary: Consulta el contexto de sesión actual
+      description: Devuelve el estado vigente de la cuenta, sesion, email, MFA, dispositivo y contexto autorizado sin incluir la credencial de sesion.
+      security: [{sessionCookie: []}]
+      responses:
+        '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+    delete:
+      tags: [IdentityOnboarding]
+      operationId: logoutCurrentSession
+      description: Revoca la sesion autenticada actual y expira la cookie segura del navegador; requiere proteccion CSRF y no crea una sesion nueva.
+      summary: Cierra la sesión actual
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/Traceparent'}]
+      responses:
+        '204': {description: Sesión revocada y cookie expirada., headers: {Set-Cookie: {schema: {type: string}, description: Expira __Host-oc_session con atributos seguros.}, Cache-Control: {schema: {type: string}, example: no-store}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+  /identity/session-revocations:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: revokeOtherSessions
+      summary: Revoca las demás sesiones de la cuenta
+      description: Revoca las demas sesiones de la cuenta conservando la actual. Requiere version de seguridad esperada y clave de idempotencia; los conflictos de version no se aplican parcialmente.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/SessionRevocationRequest'}, example: {except_current: true, expected_security_version: 3}}}}
+      responses:
+        '200': {description: Resultado de revocación., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionRevocationResponse'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/mfa/totp-enrollments:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: beginTotpEnrollment
+      summary: Inicia el enrolamiento TOTP
+      description: Inicia el enrolamiento TOTP de la cuenta autenticada. Secreto y URI solo aparecen en la primera respuesta; un replay exacto indica already_issued sin volver a exponer material sensible.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/TotpEnrollmentRequest'}, example: {label: navegador-principal}}}}
+      responses:
+        '201': {description: 'Primera emisión del material TOTP temporal; no registrar ni cachear.', headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/mfa/totp-enrollments/018f0000-0000-7000-8000-000000000003}, Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: false}}, content: {application/json: {schema: {$ref: '#/components/schemas/TotpEnrollmentFirstResponse'}, example: {status: issued, enrollment_id: '018f0000-0000-7000-8000-000000000003', secret: 'SECRETO-OMITIDO', otpauth_uri: 'otpauth://totp/OpenComerix:ejemplo?secret=OMITIDO&issuer=OpenComerix', expires_at: '2026-09-25T12:10:00Z'}}}}
+        '200': {description: 'Replay exacto: no regenera ni recupera secreto o URI.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: true}}, content: {application/json: {schema: {$ref: '#/components/schemas/SensitiveMaterialReplay'}, example: {status: already_issued}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/mfa/totp-enrollments/{enrollmentId}/confirmations:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: confirmTotpEnrollment
+      summary: Confirma TOTP y emite códigos de recuperación una sola vez
+      description: Confirma el enrolamiento con un codigo TOTP vigente y emite codigos de recuperacion una sola vez. Un replay exacto indica already_issued sin repetirlos.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/EnrollmentId'}, {$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/TotpConfirmationRequest'}, example: {code: '000000'}}}}
+      responses:
+        '200': {description: 'Primera emisión: Idempotency-Replayed false, con códigos de recuperación de un solo uso. Replay exacto: Idempotency-Replayed true y status already_issued, sin volver a exponer códigos.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, description: 'false para primera emisión; true para replay exacto already_issued.'}}, content: {application/json: {schema: {oneOf: [{$ref: '#/components/schemas/TotpConfirmationResponse'}, {$ref: '#/components/schemas/SensitiveMaterialReplay'}]}, examples: {first_issuance: {summary: 'Primera emisión (Idempotency-Replayed: false)', value: {status: issued, mfa_status: enrolled, recovery_codes: [RECOVERY-CODE-OMITIDO]}}, replay: {summary: 'Replay (Idempotency-Replayed: true)', value: {status: already_issued}}}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/mfa/challenges:
+    post:
+      tags: [IdentityOnboarding]
+      security: []
+      operationId: completeMfaChallenge
+      summary: Completa el desafío MFA de login
+      description: Verifica el codigo TOTP o de recuperacion de un challenge_id pendiente de login y completa la autenticacion. Un challenge pendiente no equivale a una sesion operativa.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/MfaChallengeRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000004', code: '000000'}}}}
+      responses:
+        '200': {description: Sesión emitida en cookie segura; nunca en JSON., headers: {Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/device-registration-challenges:
+    post:
+      tags: [IdentityOnboarding]
+      security: [{sessionCookie: [], csrfToken: []}]
+      operationId: createDeviceRegistrationChallenge
+      summary: Emite un desafío efímero para probar posesión de clave de dispositivo
+      description: Emite un desafío aleatorio de 32 bytes para una sesión autenticada con email verificado y MFA completo. El servidor lo vincula a cuenta, sesión restringida, propósito registration y vencimiento. El navegador genera con WebCrypto ECDSA P-256/SHA-256 una clave privada no exportable y firma exactamente UTF-8 de `OpenComerix/device-proof/v1\n` + challenge_id + `\n` + challenge + `\n`; firma raw `r || s` de 64 bytes. En POST /identity/devices la firma se verifica con la JWK candidata antes de guardar la clave y el desafío se consume atómicamente una sola vez. La sesión restringida solo permite registrar el dispositivo y solicitar aprobación; no concede acceso tenant ni activa un POS físico.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256}}}}
+      responses:
+        '200': {description: Desafío efímero para purpose registration; devuelve resultado sin crear un recurso navegable., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeResponse'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, purpose: registration, expires_at: '2026-09-25T12:05:00Z'}}}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/device-authentication-challenges:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: createRegisteredDeviceAuthenticationChallenge
+      summary: Emite un desafío de posesión para activar o renovar una sesión
+      description: Emite un desafío aleatorio de 32 bytes con ECDSA_P256/SHA-256 para una sesión restringida o activa. El servidor lo vincula a cuenta, sesión, device_id, propósito, organization_id cuando corresponda y vencimiento. El navegador firma la serialización UTF-8 canónica del contrato; solo la clave registrada de ese dispositivo puede probar posesión. El desafío se consume atómicamente una vez. Esta prueba no concede permisos tenant; al consumirla se revalidan MFA y aprobación vigente para la organización.
+      security: [{sessionCookie: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DeviceAuthenticationChallengeRequest'}
+            example: {device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, organization_id: '018f0000-0000-7000-8000-000000000906'}
+      responses:
+        '200': {description: 'Desafío temporal vinculado a sesión, dispositivo y propósito; devuelve resultado sin crear un recurso navegable.', headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceAuthenticationChallenge'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, expires_at: '2026-09-25T12:05:00Z'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/device-authentications:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: proveRegisteredDevicePossession
+      summary: Presenta firma del dispositivo y rota la cookie de sesión
+      description: Verifica y consume una firma de desafío de un solo uso para el dispositivo registrado vinculado. La cookie se rota; solo queda activa cuando MFA está completo y el dispositivo tiene aprobación para la organización solicitada. Un dispositivo pendiente solo conserva sesión restringida.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DeviceAuthenticationProof'}
+            example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_id: '018f0000-0000-7000-8000-000000000904', signature: zJV_UX1p1bikqQiRtIgX4HoYaKf2R4uiua4ggfE089s9o2WXaAO59WI7IQ5UwIYPSlHD4yZ4S7I13-lpbw5mAg}
+      responses:
+        '200': {description: 'Posesión probada y cookie rotada; estado no operativo si falta aprobación tenant.', headers: {Set-Cookie: {schema: {type: string}, description: 'Cookie opaca rotada con atributos Secure, HttpOnly y SameSite=Lax.'}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/devices:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: registerWebDevice
+      summary: Registra clave pública de dispositivo y prueba de posesión
+      description: Registra solo una JWK pública EC P-256 mínima y comprueba posesión verificando la firma raw de 64 bytes contra la clave candidata. La clave privada WebCrypto es no exportable y permanece local. Cuenta, sesión, propósito registration, ID/nonce y vencimiento deben coincidir con el desafío autenticado; el servidor consume ese desafío atómicamente antes de persistir la clave. El dispositivo nuevo queda en pending_approval sin aprobación tenant y sin habilitar un POS físico.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceRegistrationRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}, signature: J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw, device_name: Navegador principal, platform: web}}}}
+      responses:
+        '201': {description: Dispositivo creado en estado pending_approval., headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/devices/018f0000-0000-7000-8000-000000000007}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/Device'}, example: {device_id: '018f0000-0000-7000-8000-000000000007', status: pending_approval, version: 1}}}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/devices/{deviceId}/approval-requests:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: requestDeviceApproval
+      summary: Solicita aprobación del dispositivo en una organización
+      description: Solicita aprobacion de un dispositivo registrado para una organizacion seleccionable por la cuenta. La solicitud no concede acceso tenant mientras siga pendiente.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/DeviceId'}, {$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalRequest'}, example: {organization_id: '018f0000-0000-7000-8000-000000000006'}}}}
+      responses:
+        '200': {description: Solicitud pendiente o respuesta equivalente anti-enumeración., content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {description: 'Organización inexistente o no seleccionable para la cuenta.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:tenancy_organization_not_selectable', title: Organización no seleccionable, status: 404, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: tenancy_organization_not_selectable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/device-approvals:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: decideDeviceApproval
+      summary: Aprueba o rechaza un dispositivo dentro de una organización
+      description: Aprueba o rechaza el dispositivo para la organizacion indicada tras validar permiso del aprobador y version esperada; la decision queda limitada a ese tenant.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalDecision'}, example: {device_id: '018f0000-0000-7000-8000-000000000007', organization_id: '018f0000-0000-7000-8000-000000000006', decision: approved, expected_version: 1}}}}
+      responses:
+        '200': {description: Decisión registrada con control optimista., content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+  /identity/devices/{deviceId}/owner-approval-requests:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: requestOwnerDeviceSelfApproval
+      summary: Solicita autoaprobación de un dispositivo nuevo del Propietario
+      description: Para cuenta y email verificados, membresía OWNER vigente en organization_id, sesión restringida, MFA/reautenticación recientes y dispositivo nuevo registrado en pending_approval. Requiere la firma ECDSA P-256 del desafío vinculado server-side a esa cuenta, sesión, dispositivo, propósito owner_device_approval, organización y vencimiento; la verificación y consumo son atómicos. Emite material aleatorio de un uso que vence en 30 minutos; reemitir invalida el anterior. La solicitud no aprueba el dispositivo ni concede acceso tenant.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/DeviceId'}, {$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OwnerDeviceApprovalRequest'}
+            example: {organization_id: '018f0000-0000-7000-8000-000000000906', challenge_id: '018f0000-0000-7000-8000-000000000921', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: jP1Ovmzd3abt71RKc2c69tH_P8UPhKAeeaQTLK8HWwdFaYg3S-JPeUGXoI6HiDNW6GtJMYIx3lR_fJE-PaBSUw, expected_membership_version: 2}
+      responses:
+        '200': {description: Solicitud registrada en estado pendiente; el token no se devuelve., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OwnerDeviceApprovalPending'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/device-approval-confirmations:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: confirmOwnerDeviceSelfApproval
+      summary: Confirma autoaprobación con token de email y firma del dispositivo
+      description: Exige conjuntamente token de un uso recibido por email verificado, sesión restringida, OWNER vigente para la organización, MFA/reautenticación recientes y firma ECDSA P-256 válida del dispositivo pendiente. El servidor comprueba que desafío y firma correspondan a la cuenta, sesión, dispositivo, propósito owner_device_approval, organization_id, versión vigente y vencimiento; consume el desafío y el token una sola vez de manera atómica. Solo identity-tenancy concede aprobación para esa organización y registra auditoría; ni el token ni un resultado de notifications bastan por sí solos. La aprobación web no activa un POS físico.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/OwnerDeviceApprovalConfirmation'}
+            example: {approval_request_id: '018f0000-0000-7000-8000-000000000922', organization_id: '018f0000-0000-7000-8000-000000000906', device_id: '018f0000-0000-7000-8000-000000000904', token: 'TOKEN-EJEMPLO-NO-FUNCIONAL', challenge_id: '018f0000-0000-7000-8000-000000000931', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: Fdd2lpVdE4Vj4McJ44QyzV72wD2pAB1FWpqBDJjyh30EHygwRWR0dsKVv_MZdDGeUfydvpuGxWI7MsQGNHQ1fQ, expected_membership_version: 2}
+      responses:
+        '200': {description: Aprobación tenant-scoped registrada; session y dispositivo confirmados en el resultado., headers: {Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '409': {$ref: '#/components/responses/StateConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+  /tenancy/organization-onboardings:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: createInitialOrganization
+      summary: Crea atómicamente organización, sucursal, POS lógico y membresía OWNER
+      description: Solo para el primer Propietario sin membresías previas, con email verificado, sesión restringida con MFA/reautenticación recientes y dispositivo registrado cuya posesión se prueba aquí. La firma ECDSA P-256 del desafío server-side debe vincular cuenta, sesión, device_id, propósito bootstrap_organization, nonce, vencimiento y versión del dispositivo. identity-tenancy verifica y consume el desafío atómicamente dentro de la misma transacción que crea organización, sucursal, POS lógico, membresía INTERNAL OWNER y aprobación del dispositivo para la organización nueva; registra auditoría y rota la cookie. Un fallo no deja aprobación ni recursos parciales. No asigna licencia, POS físico, fiscalidad ni permiso offline; el cliente no declara autoridad por organization_id.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingRequest'}, example: {organization_name: Comercio de ejemplo, branch_name: Casa central, pos_name: Caja 1, locale: es-AR, device_id: '018f0000-0000-7000-8000-000000000904', device_challenge_id: '018f0000-0000-7000-8000-000000000941', device_challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_signature: NSoukx7aU-44gJIUs2rkv7eDlxNMeLe5janDqK2957GEUDCLgDPmZ5HO9dvHzqEw4_tMSRZJhaQsRhXaxXPSYg, expected_device_version: 1}}}}
+      responses:
+        '201': {description: 'Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización.', headers: {Location: {schema: {type: string, format: uri-reference}}, Set-Cookie: {schema: {type: string}, description: Cookie rotada y segura.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}, example: {organization: {organization_id: '018f0000-0000-7000-8000-000000000011', name: Comercio de ejemplo, version: 1}, branch: {branch_id: '018f0000-0000-7000-8000-000000000012', name: Casa central, version: 1}, pos: {pos_id: '018f0000-0000-7000-8000-000000000013', name: Caja 1, version: 1}, membership: {membership_id: '018f0000-0000-7000-8000-000000000014', membership_type: INTERNAL, role: OWNER, version: 1}, device_approval: {device_id: '018f0000-0000-7000-8000-000000000007', status: approved, version: 1}, version: 1}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '409': {$ref: '#/components/responses/IdempotencyConflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+        '500': {$ref: '#/components/responses/InternalError'}
+  /tenancy/memberships:
+    get:
+      tags: [IdentityOnboarding]
+      operationId: listMyMemberships
+      summary: Lista membresías de la cuenta global autenticada
+      description: Lista las membresias visibles de la cuenta global con limit y cursor opaco. Cada pagina vuelve a validar autorizacion; el cursor no es credencial ni prueba de pertenencia.
+      security: [{sessionCookie: []}]
+      responses:
+        '200': {description: Membresías visibles de la cuenta., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/MembershipList'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+  /tenancy/context-selections:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: selectActiveOrganization
+      summary: Selecciona organización activa validando la membresía vigente
+      description: Selecciona una membresia activa y actualiza el contexto tras revalidar autorizacion. La preferencia recordada por el dispositivo no demuestra acceso.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ContextSelectionRequest'}, example: {membership_id: '018f0000-0000-7000-8000-000000000008', expected_version: 2}}}}
+      responses:
+        '200': {description: Contexto actualizado, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {description: 'Membresía inexistente o no seleccionable para la cuenta.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:tenancy_organization_not_selectable', title: Organización no seleccionable, status: 404, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: tenancy_organization_not_selectable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+        '409': {$ref: '#/components/responses/StateConflict'}
+  /tenancy/context:
+    get:
+      tags: [IdentityOnboarding]
+      operationId: getActiveTenantContext
+      summary: Consulta identidad global, membresía y contexto tenant efectivo
+      description: Consulta la identidad global y, cuando exista, la organizacion activa, membresia, permisos efectivos y scopes derivados de autorizaciones vigentes.
+      security: [{sessionCookie: []}]
+      responses:
+        '200': {description: Contexto derivado de autorizaciones vigentes, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+  /internal/identity/email-verification-delivery-material/{deliveryMaterialId}:
+    get:
+      tags: [Internal]
+      x-internal: true
+      operationId: getEmailVerificationDeliveryMaterial
+      summary: Recupera internamente el material mínimo para construir el email
+      description: Permite a un workload autenticado service-to-service recuperar unicamente el material minimo de entrega asociado al identificador opaco. No se publica al gateway y los parametros/respuesta sensibles no se registran.
+      security: [{serviceToService: []}]
+      parameters: [{$ref: '#/components/parameters/DeliveryMaterialId'}]
+      responses:
+        '200': {description: Material de entrega temporal; no registrar ni cachear., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeliveryMaterial'}, example: {recipient: persona@example.invalid, verification_url: 'https://identity.opencomerix.example/verify?token=REDACTED-NONFUNCTIONAL', expires_at: '2026-09-26T12:00:00Z', locale: es-AR, template_parameters: {display_name: Ana}}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '410': {$ref: '#/components/responses/Expired'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+  /internal/identity/device-approval-delivery-material/{deliveryMaterialId}:
+    get:
+      tags: [Internal]
+      x-internal: true
+      operationId: getOwnerDeviceApprovalDeliveryMaterial
+      summary: Recupera material mínimo para correo de autoaprobación
+      description: Operación interna no publicada al gateway. Workload notifications autentica service-to-service y usa el identificador opaco para obtener destinatario, enlace con token y expiración; la respuesta sensible no se cachea ni registra y el material expira en 30 minutos.
+      security: [{serviceToService: []}]
+      parameters:
+        - {name: deliveryMaterialId, in: path, required: true, description: Identificador opaco del material temporal., schema: {$ref: '#/components/schemas/Uuid'}}
+      responses:
+        '200': {description: Material mínimo de entrega no registrable., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalDeliveryMaterial'}, example: {recipient: persona@example.invalid, approval_url: 'https://identity.opencomerix.example/device-approval?token=REDACTED-NONFUNCTIONAL', expires_at: '2026-09-25T12:30:00Z', locale: es-AR}}}}
+        '401': {$ref: '#/components/responses/Unauthorized'}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '404': {$ref: '#/components/responses/NotFound'}
+        '410': {$ref: '#/components/responses/Expired'}
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
+components:
+  securitySchemes:
+    sessionCookie: {type: apiKey, in: cookie, name: __Host-oc_session, description: 'Cookie Secure, HttpOnly, SameSite=Lax, Path=/, sin Domain; no se devuelve en JSON.'}
+    csrfToken: {type: apiKey, in: header, name: X-CSRF-Token, description: Token vinculado a la sesión; mutaciones autenticadas validan además Origin.}
+    serviceToService: {type: http, scheme: bearer, bearerFormat: JWT, description: Identidad de workload con issuer/audience/type/expiry/jti verificados; audience restringida al recurso interno.}
+  parameters:
+    IdempotencyKey: {name: Idempotency-Key, in: header, required: true, description: UUIDv7; retención de siete días. Replay exacto devuelve resultado estable; payload distinto produce identity_idempotency_key_reused y operación en curso produce identity_idempotency_request_in_progress., schema: {type: string, format: uuid, pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'}}
+    Traceparent: {name: traceparent, in: header, required: false, schema: {type: string, pattern: '^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$'}}
+    EnrollmentId: {name: enrollmentId, in: path, required: true, schema: {$ref: '#/components/schemas/Uuid'}}
+    DeviceId: {name: deviceId, in: path, required: true, schema: {$ref: '#/components/schemas/Uuid'}}
+    DeliveryMaterialId: {name: deliveryMaterialId, in: path, required: true, schema: {$ref: '#/components/schemas/Uuid'}}
+  responses:
+    InvalidRequest: {description: Solicitud inválida., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_request', title: Solicitud inválida, status: 400, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_request, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    Unauthorized: {description: 'Sesión o autenticación ausente, inválida o expirada.', headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_session_invalid_or_expired', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_session_invalid_or_expired, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    Forbidden: {description: 'Operación no permitida por estado de cuenta, MFA, dispositivo, permiso o scope.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_device_not_approved', title: Operación no permitida, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_device_not_approved, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    NotFound: {description: Recurso inexistente o no visible en el ámbito autenticado., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    IdempotencyConflict: {description: Clave de idempotencia reutilizada con otro payload., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_idempotency_key_reused', title: Conflicto de idempotencia, status: 409, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_idempotency_key_reused, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    StateConflict: {description: Conflicto de estado o versión esperada., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    Unprocessable: {description: 'Credencial, token, MFA o datos semánticamente inválidos.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_email_verification_invalid', title: Estado no válido, status: 422, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_email_verification_invalid, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    RateLimited: {description: Límite temporal excedido., headers: {Retry-After: {schema: {type: integer, minimum: 1}}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_rate_limited', title: Demasiadas solicitudes, status: 429, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_rate_limited, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
+    Unavailable: {description: Dependencia temporalmente no disponible., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_dependency_unavailable', title: Servicio no disponible, status: 503, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_dependency_unavailable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
+    Expired: {description: Material temporal expirado o consumido., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    InternalError: {description: 'Error interno inesperado, sin detalles sensibles.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_internal_error', title: Error interno, status: 500, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_internal_error, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+  schemas:
+    Uuid: {type: string, format: uuid, pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', description: UUIDv7 canónico en minúsculas.}
+    LoginResponse:
+      oneOf:
+        - {type: object, additionalProperties: false, required: [status, session_expires_at, next_actions], properties: {status: {const: restricted}, session_expires_at: {type: string, format: date-time}, next_actions: {type: array, items: {type: string}}}}
+        - {type: object, additionalProperties: false, required: [status, challenge_id, challenge_expires_at, next_actions], properties: {status: {const: mfa_pending}, challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge_expires_at: {type: string, format: date-time}, next_actions: {type: array, const: [complete_mfa]}}}
+    DeviceAuthenticationChallengeRequest: {type: object, additionalProperties: false, required: [device_id, purpose], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, purpose: {type: string, enum: [activate_session, renew_session, bootstrap_organization, owner_device_approval]}, organization_id: {oneOf: [{$ref: '#/components/schemas/Uuid'}, {type: 'null'}]}}}
+    DeviceAuthenticationChallenge: {type: object, additionalProperties: false, required: [challenge_id, challenge, key_algorithm, device_id, purpose, expires_at], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, key_algorithm: {const: ECDSA_P256}, device_id: {$ref: '#/components/schemas/Uuid'}, purpose: {type: string, enum: [activate_session, renew_session, bootstrap_organization, owner_device_approval]}, expires_at: {type: string, format: date-time}}}
+    DeviceAuthenticationProof: {type: object, additionalProperties: false, required: [challenge_id, challenge, device_id, signature], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, device_id: {$ref: '#/components/schemas/Uuid'}, signature: {$ref: '#/components/schemas/DeviceProofSignature', writeOnly: true, description: 'Firma ECDSA P-256/SHA-256 de bytes UTF-8 `OpenComerix/device-proof/v1\\n` + challenge_id + `\\n` + challenge + `\\n`; WebCrypto raw r || s de 64 bytes, base64url sin relleno, no DER. El servidor verifica los vínculos almacenados y consume el desafío atómicamente.'}}}
+    OwnerDeviceApprovalRequest: {type: object, additionalProperties: false, required: [organization_id, challenge_id, challenge, signature, expected_membership_version], properties: {organization_id: {$ref: '#/components/schemas/Uuid'}, challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, signature: {$ref: '#/components/schemas/DeviceProofSignature', writeOnly: true}, expected_membership_version: {type: integer, minimum: 1}}}
+    OwnerDeviceApprovalPending: {type: object, additionalProperties: false, required: [approval_request_id, organization_id, device_id, status, expires_at, version], properties: {approval_request_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, device_id: {$ref: '#/components/schemas/Uuid'}, status: {const: pending_approval}, expires_at: {type: string, format: date-time}, version: {type: integer, minimum: 1}}}
+    OwnerDeviceApprovalConfirmation: {type: object, additionalProperties: false, required: [approval_request_id, organization_id, device_id, token, challenge_id, challenge, signature, expected_membership_version], properties: {approval_request_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, device_id: {$ref: '#/components/schemas/Uuid'}, token: {type: string, minLength: 1, writeOnly: true, description: Token aleatorio de un uso recibido por email confirmado; no aprueba sin las demás precondiciones.}, challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, signature: {$ref: '#/components/schemas/DeviceProofSignature', writeOnly: true}, expected_membership_version: {type: integer, minimum: 1}}}
+    DeviceApprovalDeliveryMaterial: {type: object, additionalProperties: false, required: [recipient, approval_url, expires_at, locale], properties: {recipient: {type: string, format: email}, approval_url: {type: string, format: uri, description: 'URL sensible con token de un uso; no registrar ni cachear.'}, expires_at: {type: string, format: date-time}, locale: {type: string, const: es-AR}}}
+    RegistrationRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password, first_name, last_name, birth_date, country, province, locality, postal_code, address]
+      properties:
+        email: {type: string, format: email, maxLength: 254, description: 'Se normaliza antes de comparar.'}
+        password: {type: string, minLength: 8, maxLength: 128, writeOnly: true, description: 'Unicode NFC; nunca se devuelve, almacena en claro ni registra.'}
+        first_name: {type: string, minLength: 1, maxLength: 100}
+        last_name: {type: string, minLength: 1, maxLength: 100}
+        birth_date: {type: string, format: date}
+        country: {type: string, minLength: 2, maxLength: 2}
+        province: {type: string, minLength: 1, maxLength: 120}
+        locality: {type: string, minLength: 1, maxLength: 120}
+        postal_code: {type: string, minLength: 1, maxLength: 24}
+        address: {type: string, minLength: 1, maxLength: 240}
+    RegistrationAccepted: {type: object, additionalProperties: false, required: [status, next_actions], properties: {status: {type: string, enum: [accepted]}, next_actions: {type: array, items: {type: string, enum: [verify_email]}}}}
+    EmailVerificationRequest: {type: object, additionalProperties: false, required: [token], properties: {token: {type: string, minLength: 1, writeOnly: true, description: 'Token sensible, se procesa aquí y jamás se devuelve o registra.'}}}
+    EmailVerificationResponse: {type: object, additionalProperties: false, required: [status, next_actions], properties: {status: {type: string, enum: [verified, not_verified]}, next_actions: {type: array, items: {type: string, enum: [verify_email, enroll_mfa, complete_mfa, register_device, approve_device, create_organization, select_organization]}}}}
+    LoginRequest: {type: object, additionalProperties: false, required: [email, password], properties: {email: {type: string, format: email}, password: {type: string, minLength: 1, maxLength: 128, writeOnly: true}}}
+    SessionContext:
+      type: object
+      additionalProperties: false
+      required: [account, session, mfa, device, active_organization, active_membership, permissions, scopes, next_actions]
+      properties:
+        account: {type: object, additionalProperties: false, required: [account_id, email_status], properties: {account_id: {$ref: '#/components/schemas/Uuid'}, email_status: {type: string, enum: [pending, verified]}}}
+        session: {type: object, additionalProperties: false, required: [status, expires_at], properties: {status: {type: string, enum: [active, restricted, mfa_pending, revoked, expired]}, expires_at: {type: string, format: date-time}}}
+        mfa: {type: object, additionalProperties: false, required: [status], properties: {status: {type: string, enum: [not_enrolled, enrollment_pending, required, challenge_pending, enrolled]}}}
+        device: {type: object, additionalProperties: false, required: [status], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, status: {type: string, enum: [not_registered, pending_approval, approved, rejected, revoked]}}}
+        active_organization: {oneOf: [{$ref: '#/components/schemas/OrganizationRef'}, {type: 'null'}]}
+        active_membership: {oneOf: [{$ref: '#/components/schemas/MembershipRef'}, {type: 'null'}]}
+        permissions: {type: array, items: {type: string}}
+        scopes: {type: array, items: {$ref: '#/components/schemas/Scope'}}
+        next_actions: {type: array, uniqueItems: true, items: {type: string, enum: [verify_email, enroll_mfa, complete_mfa, register_device, approve_device, create_organization, select_organization]}}
+    OrganizationRef: {type: object, additionalProperties: false, required: [organization_id, name, version], properties: {organization_id: {$ref: '#/components/schemas/Uuid'}, name: {type: string}, version: {type: integer, minimum: 1}}}
+    MembershipRef: {type: object, additionalProperties: false, required: [membership_id, organization_id, membership_type, status, roles, version], properties: {membership_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, membership_type: {type: string, enum: [INTERNAL, EXTERNAL]}, status: {type: string, enum: [active, suspended, revoked]}, roles: {type: array, items: {type: string}}, version: {type: integer, minimum: 1}}}
+    Scope: {type: object, additionalProperties: false, required: [scope_type, scope_id], properties: {scope_type: {type: string, enum: [organization, branch, location, pos]}, scope_id: {$ref: '#/components/schemas/Uuid'}}}
+    SessionRevocationRequest: {type: object, additionalProperties: false, required: [except_current, expected_security_version], properties: {except_current: {type: boolean, const: true}, expected_security_version: {type: integer, minimum: 1}}}
+    SessionRevocationResponse: {type: object, additionalProperties: false, required: [revoked_count, security_version], properties: {revoked_count: {type: integer, minimum: 0}, security_version: {type: integer, minimum: 1}}}
+    TotpEnrollmentRequest: {type: object, additionalProperties: false, properties: {label: {type: string, maxLength: 80}}}
+    TotpEnrollmentFirstResponse: {type: object, additionalProperties: false, required: [status, enrollment_id, secret, otpauth_uri, expires_at], properties: {status: {const: issued}, enrollment_id: {$ref: '#/components/schemas/Uuid'}, secret: {type: string, description: 'Secreto sensible; solo primera respuesta, no registrar.', x-sensitive: true}, otpauth_uri: {type: string, format: uri, description: 'URI sensible; solo primera respuesta, no registrar.', x-sensitive: true}, expires_at: {type: string, format: date-time}}}
+    SensitiveMaterialReplay: {type: object, additionalProperties: false, required: [status], properties: {status: {const: already_issued}}}
+    TotpConfirmationRequest: {type: object, additionalProperties: false, required: [code], properties: {code: {type: string, pattern: '^[0-9]{6,8}$', writeOnly: true}}}
+    TotpConfirmationResponse: {type: object, additionalProperties: false, required: [status, mfa_status, recovery_codes], properties: {status: {const: issued}, mfa_status: {type: string, const: enrolled}, recovery_codes: {type: array, minItems: 1, uniqueItems: true, description: 'Entregados una sola vez; el servidor almacena solo hashes y no los registra.', x-sensitive: true, items: {type: string}}}}
+    MfaChallengeRequest: {type: object, additionalProperties: false, required: [challenge_id, code], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, code: {type: string, minLength: 6, maxLength: 128, writeOnly: true, description: Código TOTP o de recuperación de un uso. Replay y fuerza bruta se bloquean y limitan.}}}
+    DeviceChallengeRequest: {type: object, additionalProperties: false, required: [key_algorithm], properties: {key_algorithm: {type: string, const: ECDSA_P256}}}
+    DeviceProofNonce: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: 32 bytes aleatorios codificados en base64url sin relleno.}
+    DeviceProofSignature: {type: string, pattern: '^[A-Za-z0-9_-]{86}$', description: Firma WebCrypto ECDSA P-256/SHA-256 raw r || s de 64 bytes codificada en base64url sin relleno; nunca DER.}
+    DevicePublicJwk: {type: object, additionalProperties: false, required: [kty, crv, x, y], properties: {kty: {type: string, const: EC}, crv: {type: string, const: P-256}, x: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: Coordenada X de 32 bytes en base64url sin relleno.}, y: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: Coordenada Y de 32 bytes en base64url sin relleno.}}}
+    DeviceChallengeResponse: {type: object, additionalProperties: false, required: [challenge_id, challenge, key_algorithm, purpose, expires_at], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, key_algorithm: {const: ECDSA_P256}, purpose: {type: string, enum: [registration, activate_session, renew_session, bootstrap_organization, owner_device_approval]}, expires_at: {type: string, format: date-time}}}
+    DeviceRegistrationRequest: {type: object, additionalProperties: false, required: [challenge_id, challenge, public_key, signature, device_name, platform], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, public_key: {$ref: '#/components/schemas/DevicePublicJwk'}, signature: {$ref: '#/components/schemas/DeviceProofSignature', writeOnly: true}, device_name: {type: string, minLength: 1, maxLength: 100}, platform: {type: string, const: web}}}
+    Device: {type: object, additionalProperties: false, required: [device_id, status, version], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, status: {type: string, enum: [pending_approval, approved, rejected, revoked]}, version: {type: integer, minimum: 1}}}
+    DeviceApprovalRequest: {type: object, additionalProperties: false, required: [organization_id], properties: {organization_id: {$ref: '#/components/schemas/Uuid'}}}
+    DeviceApprovalDecision: {type: object, additionalProperties: false, required: [device_id, organization_id, decision, expected_version], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, decision: {type: string, enum: [approved, rejected]}, expected_version: {type: integer, minimum: 1}}}
+    DeviceApprovalStatus: {type: object, additionalProperties: false, required: [device_id, organization_id, status, version], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, status: {type: string, enum: [pending_approval, approved, rejected, revoked]}, version: {type: integer, minimum: 1}}}
+    OrganizationOnboardingRequest: {type: object, additionalProperties: false, required: [organization_name, branch_name, pos_name, locale, device_id, device_challenge_id, device_challenge, device_signature, expected_device_version], properties: {organization_name: {type: string, minLength: 1, maxLength: 160}, branch_name: {type: string, minLength: 1, maxLength: 160}, pos_name: {type: string, minLength: 1, maxLength: 100}, locale: {type: string, const: es-AR}, device_id: {$ref: '#/components/schemas/Uuid'}, device_challenge_id: {$ref: '#/components/schemas/Uuid'}, device_challenge: {$ref: '#/components/schemas/DeviceProofNonce'}, device_signature: {$ref: '#/components/schemas/DeviceProofSignature', writeOnly: true}, expected_device_version: {type: integer, minimum: 1}}}
+    OrganizationOnboardingResponse: {type: object, additionalProperties: false, required: [organization, branch, pos, membership, device_approval, version], properties: {organization: {$ref: '#/components/schemas/OrganizationRef'}, branch: {type: object, additionalProperties: false, required: [branch_id, name, version], properties: {branch_id: {$ref: '#/components/schemas/Uuid'}, name: {type: string}, version: {type: integer, minimum: 1}}}, pos: {type: object, additionalProperties: false, required: [pos_id, name, version], properties: {pos_id: {$ref: '#/components/schemas/Uuid'}, name: {type: string}, version: {type: integer, minimum: 1}}}, membership: {type: object, additionalProperties: false, required: [membership_id, membership_type, role, version], properties: {membership_id: {$ref: '#/components/schemas/Uuid'}, membership_type: {type: string, const: INTERNAL}, role: {type: string, const: OWNER}, version: {type: integer, minimum: 1}}}, device_approval: {type: object, additionalProperties: false, required: [device_id, status, version], properties: {device_id: {$ref: '#/components/schemas/Uuid'}, status: {const: approved}, version: {type: integer, minimum: 1}}}, version: {type: integer, minimum: 1}}}
+    MembershipList: {type: object, additionalProperties: false, required: [items, page], properties: {items: {type: array, items: {$ref: '#/components/schemas/MembershipRef'}}, page: {type: object, additionalProperties: false, required: [next_cursor, has_more, limit], properties: {next_cursor: {oneOf: [{type: string, maxLength: 2048, description: Cursor opaco; no es credencial ni prueba de tenant.}, {type: 'null'}]}, has_more: {type: boolean}, limit: {type: integer, minimum: 1, maximum: 100}}}}}
+    ContextSelectionRequest: {type: object, additionalProperties: false, required: [membership_id, expected_version], properties: {membership_id: {$ref: '#/components/schemas/Uuid'}, expected_version: {type: integer, minimum: 1}}}
+    DeliveryMaterial: {type: object, additionalProperties: false, required: [recipient, verification_url, expires_at, locale, template_parameters], properties: {recipient: {type: string, format: email}, verification_url: {type: string, format: uri, description: 'URL sensible con token; disponible solo en respuesta interna autenticada, no registrar.', x-sensitive: true}, expires_at: {type: string, format: date-time}, locale: {type: string}, template_parameters: {type: object, additionalProperties: false, properties: {display_name: {type: string, maxLength: 100}}}}}
+    Problem: {$ref: './problem-details-v1.schema.json'}

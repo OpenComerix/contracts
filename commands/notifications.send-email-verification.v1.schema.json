@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/commands/notifications.send-email-verification.v1.schema.json",
+  "title": "notifications.send-email-verification.v1",
+  "examples": [
+    {
+      "command_id": "018f0000-0000-7000-8000-000000000101",
+      "command_type": "notifications.send-email-verification.v1",
+      "schema_version": 1,
+      "requested_at": "2026-09-25T12:00:00Z",
+      "producer": "identity-tenancy",
+      "target": "notifications",
+      "correlation_id": "018f0000-0000-7000-8000-000000000102",
+      "causation_id": null,
+      "organization_id": null,
+      "payload": {
+        "notification_intent_id": "018f0000-0000-7000-8000-000000000103",
+        "verification_request_id": "018f0000-0000-7000-8000-000000000104",
+        "account_id": "018f0000-0000-7000-8000-000000000105",
+        "delivery_material_id": "018f0000-0000-7000-8000-000000000106",
+        "locale": "es-AR",
+        "template_key": "identity_email_verification_v1",
+        "category": "security",
+        "expires_at": "2026-09-26T12:00:00Z",
+        "deduplication_key": "email-verification:018f0000-0000-7000-8000-000000000104"
+      }
+    }
+  ],
+  "allOf": [
+    { "$ref": "command-envelope-v1.schema.json" },
+    {
+      "type": "object",
+      "properties": {
+        "command_type": { "const": "notifications.send-email-verification.v1" },
+        "schema_version": { "const": 1 },
+        "producer": { "const": "identity-tenancy" },
+        "target": { "const": "notifications" },
+        "organization_id": { "type": ["null", "string"], "format": "uuid" },
+        "payload": {
+          "type": "object", "additionalProperties": false,
+          "required": ["notification_intent_id", "verification_request_id", "account_id", "delivery_material_id", "locale", "template_key", "category", "expires_at", "deduplication_key"],
+          "properties": {
+            "notification_intent_id": { "type": "string", "format": "uuid" },
+            "verification_request_id": { "type": "string", "format": "uuid" },
+            "account_id": { "type": "string", "format": "uuid" },
+            "delivery_material_id": { "type": "string", "format": "uuid" },
+            "locale": { "type": "string", "const": "es-AR" },
+            "template_key": { "type": "string", "const": "identity_email_verification_v1" },
+            "category": { "type": "string", "const": "security" },
+            "expires_at": { "type": "string", "format": "date-time" },
+            "deduplication_key": { "type": "string", "minLength": 1, "maxLength": 200 }
+          }
+        }
+      }
+    }
+  ]
+}

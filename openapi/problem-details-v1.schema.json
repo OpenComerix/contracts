@@ -1,0 +1,15 @@
+{
+  "$schema":"https://json-schema.org/draft/2020-12/schema",
+  "$id":"https://contracts.opencomerix.example/openapi/problem-details-v1.schema.json",
+  "title":"OpenComerix Problem Details v1",
+  "type":"object","additionalProperties":false,
+  "required":["type","title","status","instance","code","trace_id","retryable"],
+  "properties":{
+    "type":{"type":"string","pattern":"^urn:opencomerix:problem:[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"},
+    "title":{"type":"string","minLength":1,"maxLength":120},"status":{"type":"integer","enum":[400,401,403,404,409,410,422,429,500,503]},
+    "instance":{"type":"string","pattern":"^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "code":{"type":"string","pattern":"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"},
+    "detail":{"type":"string","maxLength":500},"trace_id":{"type":"string","format":"uuid"},"correlation_id":{"type":"string","format":"uuid"},"retryable":{"type":"boolean"},
+    "errors":{"type":"array","items":{"type":"object","additionalProperties":false,"required":["path","code"],"properties":{"path":{"type":"string","pattern":"^(?:/(?:[^~/]|~[01])*)*$"},"code":{"type":"string","pattern":"^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"},"message":{"type":"string","maxLength":200}}}}
+  }
+}

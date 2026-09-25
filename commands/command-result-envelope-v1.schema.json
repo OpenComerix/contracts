@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+  "title": "OpenComerix directed command result envelope v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["result_id", "command_id", "result_type", "schema_version", "occurred_at", "producer", "correlation_id", "causation_id", "status", "retryable", "payload"],
+  "properties": {
+    "result_id": { "type": "string", "format": "uuid" },
+    "command_id": { "type": "string", "format": "uuid" },
+    "result_type": { "type": "string", "minLength": 1 },
+    "schema_version": { "type": "integer", "minimum": 1 },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "producer": { "type": "string", "minLength": 1 },
+    "correlation_id": { "type": "string", "format": "uuid" },
+    "causation_id": { "type": "string", "format": "uuid" },
+    "status": { "type": "string", "enum": ["succeeded", "failed"] },
+    "retryable": { "type": "boolean" },
+    "error_code": { "type": "string", "pattern": "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$" },
+    "payload": { "type": "object" }
+  },
+  "allOf": [
+    { "if": { "properties": { "status": { "const": "succeeded" } } }, "then": { "properties": { "retryable": { "const": false } }, "not": { "required": ["error_code"] } } },
+    { "if": { "properties": { "status": { "const": "failed" } } }, "then": { "required": ["error_code"] } }
+  ]
+}
