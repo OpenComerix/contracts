@@ -34,3 +34,15 @@ Las versiones de Node y herramientas quedan fijadas en `.node-version` y `.gitla
 - No se eliminan campos ni se cambia su significado dentro de una versión.
 - Un cambio incompatible requiere una nueva versión contractual aprobada.
 - Los consumidores ignoran campos desconocidos cuando corresponda al formato.
+
+## Autenticacion interna de servicios H1A
+
+`openapi/identity-internal-auth-v1.yaml` es el contrato aditivo e independiente para las rutas privadas de `identity-tenancy`; no modifica H1. Se usa solo entre workloads en la red privada, nunca desde un navegador o gateway publico. TLS es obligatorio salvo en desarrollo y pruebas locales aislados.
+
+`POST /internal/identity/oauth/token` usa OAuth 2.0 `client_credentials` con credenciales HTTP Basic propias de cada workload. El servidor asigna la audiencia desde una allowlist por cliente; inicialmente `notifications` recibe solo `identity-tenancy.delivery-material`. Los JWT ES256 duran como maximo 300 segundos y no se emite refresh token. Los errores usan JSON OAuth en lugar de Problem Details; las respuestas y errores no se cachean ni revelan secretos o la existencia de un cliente.
+
+`GET /internal/identity/jwks.json` no requiere bearer dentro de la red privada, para evitar una dependencia circular. Publica solo claves publicas EC P-256/ES256: la actual y la anterior unicamente durante la ventana aprobada de rotacion, limitada a 300 segundos. La anterior desaparece del JWKS al vencer su aceptacion. La cache maxima es 30 segundos. Los consumidores validan firma, alg, kid, issuer, audience, type, expiracion y caller; el token no reemplaza permisos ni autorizacion del dominio.
+
+El OpenAPI publica nueve ejemplos positivos ligados exhaustivamente por operacion, request/respuesta, status, media type y nombre a sus fixtures versionados. El gate cubre ademas los cinco ejemplos inline restantes de headers y Problem Details, sin aceptar ejemplos nuevos o faltantes fuera del inventario. Sourcemeta valida los catorce positivos. Los dos controles negativos (`token-request-missing-grant-type.json` y `jwks-private-key-rejected.json`) permanecen fuera de `examples` y Sourcemeta comprueba que cada uno viola su schema exacto. El preparador falla si un ejemplo se mueve de ruta/status/schema, cambia su contenido, queda sin cobertura o se publica accidentalmente un negativo. Los autocontroles ejercitan cada rechazo. Los ejemplos positivos son sinteticos: no contienen credenciales reales, claves privadas ni JWT operativos.
+
+`TokenResponse.access_token` es obligatorio y se devuelve como campo de respuesta; el fixture usa solo un JWT sintético, no un token operativo. Este contrato no implementa rutas ni adaptadores. SOL audita y publica H1A; PF1-05B depende de esa publicación.

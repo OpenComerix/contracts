@@ -1,10 +1,12 @@
 import { spawnSync } from "node:child_process";
 
+const contract = process.argv[2] ?? "openapi/identity-onboarding-v1.yaml";
+if (process.argv.length > 3) throw new Error("usage: node scripts/validate-redocly-no-warnings.mjs [openapi-file]");
 const args = [
   "--yes",
   "@redocly/cli@2.53.3",
   "lint",
-  "openapi/identity-onboarding-v1.yaml",
+  contract,
   "--format",
   "json",
 ];
@@ -21,6 +23,6 @@ if (end < 0) throw new Error("Redocly JSON report is incomplete");
 const report = JSON.parse(result.stdout.slice(start, end + 2));
 if (report.version !== "2.53.3") throw new Error(`Unexpected Redocly version: ${report.version}`);
 if (report.totals.errors !== 0 || report.totals.warnings !== 0) {
-  throw new Error(`Identity OpenAPI must have zero Redocly errors and warnings; got ${report.totals.errors} errors and ${report.totals.warnings} warnings`);
+  throw new Error(`${contract} must have zero Redocly errors and warnings; got ${report.totals.errors} errors and ${report.totals.warnings} warnings`);
 }
-console.log("Identity OpenAPI: zero Redocly warnings.");
+console.log(`${contract}: zero Redocly warnings.`);
