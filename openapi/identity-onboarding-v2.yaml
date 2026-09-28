@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.0
+  version: 2.0.1
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -157,7 +157,7 @@ paths:
       operationId: completeMfaChallenge
       summary: Completa el desafío MFA de login
       description: >-
-        Verifica el código TOTP o de recuperación del challenge_id de login vinculado en servidor a la misma sesión restringida creada por createSession. Exige el JWT de servicio del gateway, esa cookie restringida y CSRF; el JWT de servicio aislado no basta. Consume desafío y factor de un solo uso de manera atómica, rota la cookie opaca y no concede autoridad tenant por completar MFA.
+        Verifica el código TOTP o de recuperación del challenge_id de login vinculado en servidor a la misma sesión restringida creada por createSession. La PWA presenta la cookie restringida y CSRF, sin JWT interno; el gateway añade su JWT de servicio solo en el salto privado a identity-tenancy. Consume desafío y factor de un solo uso de manera atómica, rota la cookie opaca y no concede autoridad tenant por completar MFA.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/MfaChallengeRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000004', code: '000000'}}}}
       responses:
