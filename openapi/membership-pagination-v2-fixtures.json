@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/membership-pagination-v2-fixtures.json",
+  "title": "Membership pagination v2 validation fixtures",
+  "query_examples": [
+    { "name": "omitted_uses_default", "file": "openapi/examples/membership-pagination-v2-query-default.json.json", "expectation": "valid" },
+    { "name": "minimum_limit", "file": "openapi/examples/membership-pagination-v2-query-minimum.json.json", "expectation": "valid" },
+    { "name": "maximum_limit", "file": "openapi/examples/membership-pagination-v2-query-maximum.json.json", "expectation": "valid" },
+    { "name": "opaque_cursor", "file": "openapi/examples/membership-pagination-v2-query-cursor.json.json", "expectation": "valid" },
+    { "name": "continued_with_signed_limit", "file": "openapi/examples/membership-pagination-v2-query-continued-limit.json.json", "expectation": "valid" },
+    { "name": "limit_below_minimum", "file": "openapi/examples/membership-pagination-v2-query-invalid-zero.json.json", "expectation": "invalid" },
+    { "name": "limit_above_maximum", "file": "openapi/examples/membership-pagination-v2-query-invalid-over-max.json.json", "expectation": "invalid" },
+    { "name": "limit_not_integer", "file": "openapi/examples/membership-pagination-v2-query-invalid-non-integer.json.json", "expectation": "invalid" },
+    { "name": "cursor_over_maximum", "file": "openapi/examples/membership-pagination-v2-query-invalid-long-cursor.json.json", "expectation": "invalid" }
+  ],
+  "problem_fixtures": [
+    { "name": "invalid_limit", "file": "examples/membership-pagination-v2-problem-invalid-limit.json", "schema": "openapi/problem-details-v1.schema.json", "code": "identity_invalid_request", "status": 400 },
+    { "name": "invalid_cursor", "file": "examples/membership-pagination-v2-problem-invalid-cursor.json", "schema": "openapi/problem-details-v1.schema.json", "code": "tenancy_invalid_cursor", "status": 400 }
+  ],
+  "catalog": "errors/error-catalog-v2.json",
+  "catalog_schema": "errors/error-catalog-v2.schema.json",
+  "baseline_catalog": "errors/error-catalog-v1.json"
+}

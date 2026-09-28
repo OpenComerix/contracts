@@ -4,7 +4,9 @@ Este repositorio contiene contratos versionados para productores y consumidores.
 
 - `openapi/pos-sales-v1.yaml` y `openapi/pos-sync-v1.json`: contratos existentes de ventas y sincronización.
 - `openapi/identity-onboarding-v1.yaml`: superficie v1 de identidad, sesiones, MFA, dispositivos, onboarding de organización y contexto.
+- `openapi/identity-onboarding-v2.yaml` y `openapi/identity-gateway-delegation-v2.yaml`: contratos candidatos v2.0.2. La lista de membresías acepta `limit` opcional (default 50, 1–100) y `cursor` opaco (máximo 2048 caracteres); no ofrece `sort` ni filtros. En una continuación, si se omite `limit`, rige el límite firmado en el cursor.
 - `openapi/problem-details-v1.schema.json` y `errors/error-catalog-v1.json`: formato común de errores y catálogo versionado.
+- `errors/error-catalog-v2.json`: catálogo aditivo que conserva las 18 entradas v1 y agrega `tenancy_invalid_cursor` para respuestas 400 restringidas.
 - `openapi/device-proof-v1-vectors.json` y su schema: vector positivo ECDSA P-256/SHA-256 y negativos de firma, nonce y vinculaciones; JSON Schema valida forma, el verificador local valida el vector criptográfico positivo y los cambios de nonce/firma.
 - `commands/`: sobres y contratos para emails dirigidos de verificación y autoaprobación del dispositivo del Propietario; ni comandos ni resultados contienen destinatario, token, URL, cuerpo o respuesta cruda del proveedor.
 - `events/`: sobres y schemas versionados de eventos de dominio.
@@ -70,3 +72,9 @@ Identity-tenancy comprueba la sesion vigente antes de emitir un JWT delegado ES2
 `openapi/identity-gateway-delegation-policy-v1.json` inventaria method, path y operationId de las 21 operaciones externas (3 service + 18 delegated) y las dos exclusiones internas. El gate compara el inventario completo con H1 y falla ante omisiones, sobrantes o cambios. Tambien coteja los ejemplos OpenAPI publicados con el inventario y sus fixtures. Los fixtures usan el issuer URI sintetico de `.env.example`; cada ambiente configura su propio issuer. Los claims usan `session_id`, `authenticated_at` y `security_version` como cadenas, y exigen `jti` UUIDv4 canonico. JSON Schema comprueba forma; el validador compara issuer configurado, sesion, audiencia/tipo, vigencias y ausencia de contexto tenant restringido. Ninguno verifica firmas JWT: corresponde a pruebas del servicio en PF1-06B.
 
 CI ejecuta Redocly CLI 2.53.3 para lint sin advertencias y Sourcemeta JSON Schema CLI 16.10.0 para los ejemplos/fixtures. Autocontroles negativos cubren issuer no URI o contradictorio, jti invalido, nombres/tipos incompatibles de claims, audiencia/tipo incorrectos, sesion ausente o contradictoria, claims tenant restringidos, ejemplo no inventariado y alteracion de matriz.
+
+## PF1-06A-R2 — paginación contractual de membresías
+
+Los cambios candidatos elevan ambos OpenAPI v2 a `2.0.2`; H1, H1A y PF1-06A v1 permanecen intactos. `GET /tenancy/memberships` lista membresías de la cuenta autenticada y no concede autoridad tenant. El cursor usa keyset `created_at ASC, membership_id ASC`, HMAC-SHA-256 y vínculo con la cuenta; vence como máximo a los 30 minutos. Un cursor alterado, vencido, de otra cuenta o con una versión/clave desconocida responde `400 tenancy_invalid_cursor`; un límite mal formado responde `400 identity_invalid_request`.
+
+El gate candidate-only valida el bundle real Redocly, los dos ejemplos Problem Details y la aditividad del catálogo: conserva exactamente las 18 entradas v1 y agrega una entrada sin parámetros permitidos. Sourcemeta 16.10.0 valida cinco fixtures de query positivos y rechaza cuatro negativos. La firma, rotación de clave, vencimiento, vínculo con cuenta y continuación del límite se probarán en PF1-06B0; los fixtures y JSON Schema solo acreditan forma contractual y no demuestran criptografía.

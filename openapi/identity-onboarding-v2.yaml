@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.1
+  version: 2.0.2
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -305,8 +305,26 @@ paths:
       summary: Lista membresías de la cuenta global autenticada
       description: Lista las membresias visibles de la cuenta global con limit y cursor opaco. Cada pagina vuelve a validar autorizacion; el cursor no es credencial ni prueba de pertenencia.
       security: [{sessionCookie: []}]
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          description: Cantidad de membresías de la página. Si se continúa con cursor y se omite este parámetro, se usa el límite firmado dentro del cursor.
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 50
+        - name: cursor
+          in: query
+          required: false
+          description: Cursor opaco versionado y firmado con HMAC-SHA-256, vinculado a la cuenta, con vencimiento máximo de 30 minutos. Usa keyset created_at ASC, membership_id ASC; si se omite limit en la continuación se usa el límite firmado, y un valor explícito distinto es inválido. No admite orden ni filtros libres.
+          schema:
+            type: string
+            maxLength: 2048
       responses:
         '200': {description: Membresías visibles de la cuenta., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/MembershipList'}}}}
+        '400': {description: "Límite mal formado o cursor inválido, expirado, alterado o no utilizable por esta cuenta.", content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {invalid_limit: {externalValue: examples/membership-pagination-v2-problem-invalid-limit.json}, invalid_cursor: {externalValue: examples/membership-pagination-v2-problem-invalid-cursor.json}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
   /tenancy/context-selections:
     post:
