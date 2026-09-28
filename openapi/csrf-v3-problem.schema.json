@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/csrf-v3-problem.schema.json",
+  "title": "Public gateway CSRF rejection Problem Details v3",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["type", "title", "status", "instance", "code", "trace_id", "retryable"],
+  "properties": {
+    "type": {"const": "urn:opencomerix:problem:gateway_csrf_invalid"},
+    "title": {"type": "string", "minLength": 1, "maxLength": 120},
+    "status": {"const": 403},
+    "instance": {"type": "string", "pattern": "^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"},
+    "code": {"const": "gateway_csrf_invalid"},
+    "trace_id": {"type": "string", "format": "uuid"},
+    "retryable": {"const": false}
+  }
+}

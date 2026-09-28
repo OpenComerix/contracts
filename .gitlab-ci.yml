@@ -38,6 +38,7 @@ validate:openapi:
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v2.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v2.bundle.json
     - node scripts/validate-gateway-identity-policy-v2.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
     - node scripts/validate-membership-pagination-v2.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+    - node scripts/validate-csrf-contract-v3.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
   artifacts:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
@@ -54,9 +55,10 @@ validate:json-schema:
     - job: validate:openapi
       artifacts: true
   script:
-    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/membership-pagination-v2.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json --verbose
+    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/membership-pagination-v2.schema.json openapi/csrf-v3-problem.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json errors/error-catalog-v3.schema.json --verbose
     - jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
     - jsonschema validate errors/error-catalog-v2.schema.json errors/error-catalog-v2.json --verbose
+    - sh scripts/validate-csrf-fixtures-v3.sh
     - jsonschema validate openapi/device-proof-v1-vectors.schema.json openapi/device-proof-v1-vectors.json --verbose
     - jsonschema validate commands/notifications.send-email-verification.v1.schema.json commands/examples/notifications.send-email-verification.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
     - jsonschema validate commands/notifications.send-email-verification.result.v1.schema.json commands/examples/notifications.send-email-verification.result.succeeded.v1.example.json commands/examples/notifications.send-email-verification.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose

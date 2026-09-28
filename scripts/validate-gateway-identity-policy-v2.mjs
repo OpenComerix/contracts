@@ -116,7 +116,7 @@ function validatePolicy(contract, candidate) {
     getCurrentSession: ["sessionCookie"], logoutCurrentSession: ["sessionCookie", "csrfToken"],
     revokeOtherSessions: ["sessionCookie", "csrfToken"], beginTotpEnrollment: ["sessionCookie", "csrfToken"],
     confirmTotpEnrollment: ["sessionCookie", "csrfToken"], createDeviceRegistrationChallenge: ["sessionCookie", "csrfToken"],
-    createRegisteredDeviceAuthenticationChallenge: ["sessionCookie"], proveRegisteredDevicePossession: ["sessionCookie", "csrfToken"],
+    createRegisteredDeviceAuthenticationChallenge: ["sessionCookie", "csrfToken"], proveRegisteredDevicePossession: ["sessionCookie", "csrfToken"],
     registerWebDevice: ["sessionCookie", "csrfToken"], requestOwnerDeviceSelfApproval: ["sessionCookie", "csrfToken"],
     confirmOwnerDeviceSelfApproval: ["sessionCookie", "csrfToken"], createInitialOrganization: ["sessionCookie", "csrfToken"],
     listMyMemberships: ["sessionCookie"], selectActiveOrganization: ["sessionCookie", "csrfToken"],

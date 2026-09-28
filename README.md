@@ -4,9 +4,10 @@ Este repositorio contiene contratos versionados para productores y consumidores.
 
 - `openapi/pos-sales-v1.yaml` y `openapi/pos-sync-v1.json`: contratos existentes de ventas y sincronización.
 - `openapi/identity-onboarding-v1.yaml`: superficie v1 de identidad, sesiones, MFA, dispositivos, onboarding de organización y contexto.
-- `openapi/identity-onboarding-v2.yaml` y `openapi/identity-gateway-delegation-v2.yaml`: contratos candidatos v2.0.2. La lista de membresías acepta `limit` opcional (default 50, 1–100) y `cursor` opaco (máximo 2048 caracteres); no ofrece `sort` ni filtros. En una continuación, si se omite `limit`, rige el límite firmado en el cursor.
+- `openapi/identity-onboarding-v2.yaml` y `openapi/identity-gateway-delegation-v2.yaml`: contratos sucesores v2 de identidad. La lista de membresías acepta `limit` opcional (default 50, 1–100) y `cursor` opaco (máximo 2048 caracteres); no ofrece `sort` ni filtros. En una continuación, si se omite `limit`, rige el límite firmado en el cursor.
 - `openapi/problem-details-v1.schema.json` y `errors/error-catalog-v1.json`: formato común de errores y catálogo versionado.
 - `errors/error-catalog-v2.json`: catálogo aditivo que conserva las 18 entradas v1 y agrega `tenancy_invalid_cursor` para respuestas 400 restringidas.
+- `errors/error-catalog-v3.json`: conserva las 19 entradas v2 y agrega `gateway_csrf_invalid`, error público 403 del gateway sin parámetros.
 - `openapi/device-proof-v1-vectors.json` y su schema: vector positivo ECDSA P-256/SHA-256 y negativos de firma, nonce y vinculaciones; JSON Schema valida forma, el verificador local valida el vector criptográfico positivo y los cambios de nonce/firma.
 - `commands/`: sobres y contratos para emails dirigidos de verificación y autoaprobación del dispositivo del Propietario; ni comandos ni resultados contienen destinatario, token, URL, cuerpo o respuesta cruda del proveedor.
 - `events/`: sobres y schemas versionados de eventos de dominio.
@@ -75,6 +76,12 @@ CI ejecuta Redocly CLI 2.53.3 para lint sin advertencias y Sourcemeta JSON Schem
 
 ## PF1-06A-R2 — paginación contractual de membresías
 
-Los cambios candidatos elevan ambos OpenAPI v2 a `2.0.2`; H1, H1A y PF1-06A v1 permanecen intactos. `GET /tenancy/memberships` lista membresías de la cuenta autenticada y no concede autoridad tenant. El cursor usa keyset `created_at ASC, membership_id ASC`, HMAC-SHA-256 y vínculo con la cuenta; vence como máximo a los 30 minutos. Un cursor alterado, vencido, de otra cuenta o con una versión/clave desconocida responde `400 tenancy_invalid_cursor`; un límite mal formado responde `400 identity_invalid_request`.
+Los tags `identity-onboarding-v2.0.2` e `identity-gateway-delegation-v2.0.2` publicaron los cambios de paginación; H1, H1A y PF1-06A v1 permanecen intactos. `GET /tenancy/memberships` lista membresías de la cuenta autenticada y no concede autoridad tenant. El cursor usa keyset `created_at ASC, membership_id ASC`, HMAC-SHA-256 y vínculo con la cuenta; vence como máximo a los 30 minutos. Un cursor alterado, vencido, de otra cuenta o con una versión/clave desconocida responde `400 tenancy_invalid_cursor`; un límite mal formado responde `400 identity_invalid_request`.
 
 El gate candidate-only valida el bundle real Redocly, los dos ejemplos Problem Details y la aditividad del catálogo: conserva exactamente las 18 entradas v1 y agrega una entrada sin parámetros permitidos. Sourcemeta 16.10.0 valida cinco fixtures de query positivos y rechaza cuatro negativos. La firma, rotación de clave, vencimiento, vínculo con cuenta y continuación del límite se probarán en PF1-06B0; los fixtures y JSON Schema solo acreditan forma contractual y no demuestran criptografía.
+
+## PF1-06A-R3 — entrega contractual de CSRF
+
+Los OpenAPI candidatos v2.0.3 separan el contrato público del gateway del salto privado a identity-tenancy. El gateway valida Origin exacto y un token HMAC vinculado a la cookie vigente; la PWA lo conserva solo en memoria. Se documenta `X-CSRF-Token` en `createSession` 200, `GET /identity/session` 200 y las respuestas 200/201 que rotan cookie de MFA, posesión de dispositivo, autoaprobación del Propietario y bootstrap. Todas esas respuestas son `no-store`; logout expira la cookie sin emitir token nuevo. Las 13 mutaciones autenticadas requieren cookie, CSRF y Origin permitido y pueden devolver Problem Details 403 `gateway_csrf_invalid` sin parámetros ni detalle sensible. `createRegisteredDeviceAuthenticationChallenge` conserva su clasificación privada delegated y ahora declara CSRF en la seguridad pública.
+
+El token CSRF y Origin se validan en el gateway antes de invocar identidad. El JWT de servicio acredita el workload únicamente; no es una atestación CSRF y el contrato privado no introduce un header de validación. Los bundles y fixtures comprueban forma, ubicación, status, catálogo y matriz; no prueban el HMAC, el vínculo criptográfico con sesión ni Origin dinámicamente. Esas pruebas corresponden al gateway en PF1-06C. Sourcemeta valida el catálogo v3 y el Problem Details sintético positivo y rechaza el negativo que intenta incluir detalle sensible.

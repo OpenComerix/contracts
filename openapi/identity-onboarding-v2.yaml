@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.2
+  version: 2.0.3
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -16,6 +16,15 @@ info:
     mutación autenticada requiere X-CSRF-Token y Origin validado. Correlation
     ID se propaga como X-Correlation-Id (o se genera uno) y se incluye en
     Problem Details; causation_id se conserva cuando hay causal previa.
+    El gateway valida Origin exacto contra su allowlist y emite/verifica un
+    X-CSRF-Token HMAC ligado a la cookie opaca actual; la PWA conserva ese token
+    solo en memoria. Las respuestas 200/201 que emiten o rotan la cookie también
+    emiten X-CSRF-Token y Cache-Control: no-store. Logout expira la cookie y no
+    emite token CSRF nuevo. Toda mutación autenticada requiere cookie,
+    X-CSRF-Token y Origin permitido. Origin ausente, null o ajeno, o token
+    ausente, alterado o ligado a otra sesión produce 403 gateway_csrf_invalid
+    sin parámetros ni detalle sensible. El gateway valida antes de invocar
+    identidad; estos contratos no prueban el HMAC ni la validación de Origin.
   license:
     name: Proprietary
     identifier: LicenseRef-Proprietary
@@ -74,7 +83,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/LoginRequest'}, examples: {valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real'}}, invalid_credentials: {value: {email: desconocido@example.invalid, password: 'credencial-ejemplo'}}}}}}
       responses:
-        '200': {description: Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No autoriza tenant hasta completar MFA y prueba/aprobación del dispositivo., headers: {Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/LoginResponse'}, examples: {authenticated_restricted: {value: {status: restricted, session_expires_at: '2026-09-25T12:05:00Z', next_actions: [enroll_mfa, register_device, create_organization]}}, mfa_pending: {value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-09-25T12:05:00Z', next_actions: [complete_mfa]}}}}}}
+        '200': {description: Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No autoriza tenant hasta completar MFA y prueba/aprobación del dispositivo., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/LoginResponse'}, examples: {authenticated_restricted: {value: {status: restricted, session_expires_at: '2026-09-25T12:05:00Z', next_actions: [enroll_mfa, register_device, create_organization]}}, mfa_pending: {value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-09-25T12:05:00Z', next_actions: [complete_mfa]}}}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '401': {description: Credenciales inválidas; respuesta indistinguible para cuenta ausente, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_credentials', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_credentials, trace_id: '018f0000-0000-7000-8000-000000000002', retryable: false}}}}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -88,7 +97,7 @@ paths:
       description: Devuelve el estado vigente de la cuenta, sesion, email, MFA, dispositivo y contexto autorizado sin incluir la credencial de sesion.
       security: [{sessionCookie: []}]
       responses:
-        '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/Forbidden'}
     delete:
@@ -101,7 +110,7 @@ paths:
       responses:
         '204': {description: Sesión revocada y cookie expirada., headers: {Set-Cookie: {schema: {type: string}, description: Expira __Host-oc_session con atributos seguros.}, Cache-Control: {schema: {type: string}, example: no-store}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
   /identity/session-revocations:
     post:
       tags: [IdentityOnboarding]
@@ -114,7 +123,7 @@ paths:
       responses:
         '200': {description: Resultado de revocación., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionRevocationResponse'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '429': {$ref: '#/components/responses/RateLimited'}
   /identity/mfa/totp-enrollments:
@@ -130,7 +139,7 @@ paths:
         '201': {description: 'Primera emisión del material TOTP temporal; no registrar ni cachear.', headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/mfa/totp-enrollments/018f0000-0000-7000-8000-000000000003}, Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: false}}, content: {application/json: {schema: {$ref: '#/components/schemas/TotpEnrollmentFirstResponse'}, example: {status: issued, enrollment_id: '018f0000-0000-7000-8000-000000000003', secret: 'SECRETO-OMITIDO', otpauth_uri: 'otpauth://totp/OpenComerix:ejemplo?secret=OMITIDO&issuer=OpenComerix', expires_at: '2026-09-25T12:10:00Z'}}}}
         '200': {description: 'Replay exacto: no regenera ni recupera secreto o URI.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: true}}, content: {application/json: {schema: {$ref: '#/components/schemas/SensitiveMaterialReplay'}, example: {status: already_issued}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '429': {$ref: '#/components/responses/RateLimited'}
   /identity/mfa/totp-enrollments/{enrollmentId}/confirmations:
@@ -145,7 +154,7 @@ paths:
       responses:
         '200': {description: 'Primera emisión: Idempotency-Replayed false, con códigos de recuperación de un solo uso. Replay exacto: Idempotency-Replayed true y status already_issued, sin volver a exponer códigos.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, description: 'false para primera emisión; true para replay exacto already_issued.'}}, content: {application/json: {schema: {oneOf: [{$ref: '#/components/schemas/TotpConfirmationResponse'}, {$ref: '#/components/schemas/SensitiveMaterialReplay'}]}, examples: {first_issuance: {summary: 'Primera emisión (Idempotency-Replayed: false)', value: {status: issued, mfa_status: enrolled, recovery_codes: [RECOVERY-CODE-OMITIDO]}}, replay: {summary: 'Replay (Idempotency-Replayed: true)', value: {status: already_issued}}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '422': {$ref: '#/components/responses/Unprocessable'}
@@ -161,7 +170,8 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/MfaChallengeRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000004', code: '000000'}}}}
       responses:
-        '200': {description: Sesión emitida en cookie segura; nunca en JSON., headers: {Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
+        '200': {description: Sesión emitida en cookie segura; nunca en JSON., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '422': {$ref: '#/components/responses/Unprocessable'}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -175,6 +185,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256}}}}
       responses:
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '200': {description: Desafío efímero para purpose registration; devuelve resultado sin crear un recurso navegable., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeResponse'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, purpose: registration, expires_at: '2026-09-25T12:05:00Z'}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -184,7 +195,7 @@ paths:
       operationId: createRegisteredDeviceAuthenticationChallenge
       summary: Emite un desafío de posesión para activar o renovar una sesión
       description: Emite un desafío aleatorio de 32 bytes con ECDSA_P256/SHA-256 para una sesión restringida o activa. El servidor lo vincula a cuenta, sesión, device_id, propósito, organization_id cuando corresponda y vencimiento. El navegador firma la serialización UTF-8 canónica del contrato; solo la clave registrada de ese dispositivo puede probar posesión. El desafío se consume atómicamente una vez. Esta prueba no concede permisos tenant; al consumirla se revalidan MFA y aprobación vigente para la organización.
-      security: [{sessionCookie: []}]
+      security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
         required: true
@@ -195,7 +206,7 @@ paths:
       responses:
         '200': {description: 'Desafío temporal vinculado a sesión, dispositivo y propósito; devuelve resultado sin crear un recurso navegable.', headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceAuthenticationChallenge'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, expires_at: '2026-09-25T12:05:00Z'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -214,9 +225,9 @@ paths:
             schema: {$ref: '#/components/schemas/DeviceAuthenticationProof'}
             example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_id: '018f0000-0000-7000-8000-000000000904', signature: zJV_UX1p1bikqQiRtIgX4HoYaKf2R4uiua4ggfE089s9o2WXaAO59WI7IQ5UwIYPSlHD4yZ4S7I13-lpbw5mAg}
       responses:
-        '200': {description: 'Posesión probada y cookie rotada; estado no operativo si falta aprobación tenant.', headers: {Set-Cookie: {schema: {type: string}, description: 'Cookie opaca rotada con atributos Secure, HttpOnly y SameSite=Lax.'}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200': {description: 'Posesión probada y cookie rotada; estado no operativo si falta aprobación tenant.', headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie opaca rotada con atributos Secure, HttpOnly y SameSite=Lax.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '422': {$ref: '#/components/responses/Unprocessable'}
@@ -231,6 +242,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceRegistrationRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}, signature: J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw, device_name: Navegador principal, platform: web}}}}
       responses:
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '201': {description: Dispositivo creado en estado pending_approval., headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/devices/018f0000-0000-7000-8000-000000000007}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/Device'}, example: {device_id: '018f0000-0000-7000-8000-000000000007', status: pending_approval, version: 1}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '409': {$ref: '#/components/responses/StateConflict'}
@@ -253,7 +265,7 @@ paths:
       responses:
         '200': {description: Solicitud registrada en estado pendiente; el token no se devuelve., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OwnerDeviceApprovalPending'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '422': {$ref: '#/components/responses/Unprocessable'}
@@ -273,9 +285,9 @@ paths:
             schema: {$ref: '#/components/schemas/OwnerDeviceApprovalConfirmation'}
             example: {approval_request_id: '018f0000-0000-7000-8000-000000000922', organization_id: '018f0000-0000-7000-8000-000000000906', device_id: '018f0000-0000-7000-8000-000000000904', token: 'TOKEN-EJEMPLO-NO-FUNCIONAL', challenge_id: '018f0000-0000-7000-8000-000000000931', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: Fdd2lpVdE4Vj4McJ44QyzV72wD2pAB1FWpqBDJjyh30EHygwRWR0dsKVv_MZdDGeUfydvpuGxWI7MsQGNHQ1fQ, expected_membership_version: 2}
       responses:
-        '200': {description: Aprobación tenant-scoped registrada; session y dispositivo confirmados en el resultado., headers: {Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
+        '200': {description: Aprobación tenant-scoped registrada; session y dispositivo confirmados en el resultado., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '422': {$ref: '#/components/responses/Unprocessable'}
@@ -290,9 +302,9 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingRequest'}, example: {organization_name: Comercio de ejemplo, branch_name: Casa central, pos_name: Caja 1, locale: es-AR, device_id: '018f0000-0000-7000-8000-000000000904', device_challenge_id: '018f0000-0000-7000-8000-000000000941', device_challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_signature: NSoukx7aU-44gJIUs2rkv7eDlxNMeLe5janDqK2957GEUDCLgDPmZ5HO9dvHzqEw4_tMSRZJhaQsRhXaxXPSYg, expected_device_version: 1}}}}
       responses:
-        '201': {description: 'Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización.', headers: {Location: {schema: {type: string, format: uri-reference}}, Set-Cookie: {schema: {type: string}, description: Cookie rotada y segura.}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}, example: {organization: {organization_id: '018f0000-0000-7000-8000-000000000011', name: Comercio de ejemplo, version: 1}, branch: {branch_id: '018f0000-0000-7000-8000-000000000012', name: Casa central, version: 1}, pos: {pos_id: '018f0000-0000-7000-8000-000000000013', name: Caja 1, version: 1}, membership: {membership_id: '018f0000-0000-7000-8000-000000000014', membership_type: INTERNAL, role: OWNER, version: 1}, device_approval: {device_id: '018f0000-0000-7000-8000-000000000007', status: approved, version: 1}, version: 1}}}}
+        '201': {description: 'Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización.', headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Location: {schema: {type: string, format: uri-reference}}, Set-Cookie: {schema: {type: string}, description: Cookie rotada y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}, example: {organization: {organization_id: '018f0000-0000-7000-8000-000000000011', name: Comercio de ejemplo, version: 1}, branch: {branch_id: '018f0000-0000-7000-8000-000000000012', name: Casa central, version: 1}, pos: {pos_id: '018f0000-0000-7000-8000-000000000013', name: Caja 1, version: 1}, membership: {membership_id: '018f0000-0000-7000-8000-000000000014', membership_type: INTERNAL, role: OWNER, version: 1}, device_approval: {device_id: '018f0000-0000-7000-8000-000000000007', status: approved, version: 1}, version: 1}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/IdempotencyConflict'}
         '422': {$ref: '#/components/responses/Unprocessable'}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -338,7 +350,7 @@ paths:
       responses:
         '200': {description: Contexto actualizado, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
-        '403': {$ref: '#/components/responses/Forbidden'}
+        '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {description: 'Membresía inexistente o no seleccionable para la cuenta.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:tenancy_organization_not_selectable', title: Organización no seleccionable, status: 404, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: tenancy_organization_not_selectable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
         '409': {$ref: '#/components/responses/StateConflict'}
   /tenancy/context:
@@ -388,6 +400,13 @@ paths:
         '429': {$ref: '#/components/responses/RateLimited'}
         '503': {$ref: '#/components/responses/Unavailable'}
 components:
+  headers:
+    CsrfToken:
+      description: Token CSRF opaco nuevo ligado a la cookie __Host-oc_session actual.
+      schema: {type: string, minLength: 1}
+    NoStore:
+      description: Respuesta sensible no almacenable.
+      schema: {type: string, const: no-store}
   securitySchemes:
     sessionCookie: {type: apiKey, in: cookie, name: __Host-oc_session, description: 'Cookie Secure, HttpOnly, SameSite=Lax, Path=/, sin Domain; no se devuelve en JSON.'}
     csrfToken: {type: apiKey, in: header, name: X-CSRF-Token, description: Token vinculado a la sesión; mutaciones autenticadas validan además Origin.}
@@ -410,6 +429,21 @@ components:
     Unavailable: {description: Dependencia temporalmente no disponible., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_dependency_unavailable', title: Servicio no disponible, status: 503, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_dependency_unavailable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
     Expired: {description: Material temporal expirado o consumido., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
     InternalError: {description: 'Error interno inesperado, sin detalles sensibles.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_internal_error', title: Error interno, status: 500, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_internal_error, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    AuthenticatedMutationForbidden:
+      description: >-
+        Problem Details 403 para mutaciones autenticadas. Mantiene las causas
+        de autorización de dominio y añade el rechazo público del gateway por
+        CSRF inválido, sin parámetros ni detalles sensibles.
+      headers:
+        Cache-Control: {$ref: '#/components/headers/NoStore'}
+      content:
+        application/problem+json:
+          schema: {$ref: '#/components/schemas/Problem'}
+          examples:
+            domain_forbidden:
+              value: {type: 'urn:opencomerix:problem:identity_device_not_approved', title: Operación no permitida, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_device_not_approved, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}
+            csrf_invalid:
+              externalValue: examples/gateway-csrf-invalid-v3.json
   schemas:
     Uuid: {type: string, format: uuid, pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', description: UUIDv7 canónico en minúsculas.}
     LoginResponse:

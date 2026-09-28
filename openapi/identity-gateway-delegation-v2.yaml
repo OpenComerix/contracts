@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Gateway to Identity Delegation API
-  version: 2.0.2
+  version: 2.0.3
   description: >-
     Contrato aditivo para el enlace privado entre gateway-bff e
     identity-tenancy. El JWT de servicio del gateway tiene audiencia fija
@@ -20,6 +20,10 @@ info:
     OpenAPI identity-onboarding-v2.yaml describe la API publica del gateway
     y sus operaciones externas nunca exigen service JWT ni delegated JWT del
     navegador.
+    CSRF and exact-Origin validation are performed by gateway-bff at the
+    browser-facing boundary before this private hop. The service JWT proves
+    workload identity only; it is not a CSRF-validation attestation. No internal
+    CSRF-validated header is accepted or trusted by identity-tenancy.
   license:
     name: Proprietary
     identifier: LicenseRef-Proprietary

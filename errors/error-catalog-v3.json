@@ -1,0 +1,276 @@
+{
+  "version": 3,
+  "errors": [
+    {
+      "code": "identity_invalid_request",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La solicitud no cumple el contrato",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [
+        "field_count"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "identity_email_verification_invalid",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Token inválido, expirado o usado",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_invalid_credentials",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Credenciales incorrectas con respuesta anti-enumeración",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_mfa_required",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La autenticación requiere completar MFA",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_mfa_invalid",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Desafío MFA inválido o expirado",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_not_registered",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo no registrado",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_not_approved",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo pendiente de aprobación para esta organización",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_revoked",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo revocado",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_session_invalid_or_expired",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Sesión inválida o expirada",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_membership_invalid",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "Membresía inválida o inactiva",
+      "statuses": [
+        403,
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_organization_not_selectable",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "Organización no seleccionable en el contexto actual",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_idempotency_key_reused",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "UUIDv7 Idempotency-Key se reutilizó con otro payload",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_idempotency_request_in_progress",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Operación idempotente todavía en curso",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "restricted",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "identity_state_or_version_conflict",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Conflicto de estado o versión esperada",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [
+        "current_version"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "platform_rate_limited",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Límite temporal excedido",
+      "statuses": [
+        429
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "platform_dependency_unavailable",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Dependencia temporalmente no disponible",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_internal_error",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Error interno inesperado",
+      "statuses": [
+        500
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "notifications_dependency_unavailable",
+      "owner": "notifications",
+      "domain": "notifications",
+      "description": "Notifications no pudo aceptar duraderamente la intención",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": true,
+      "exposure": "internal",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_invalid_cursor",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "El cursor es inválido, expiró o no corresponde a la cuenta autenticada",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "gateway_csrf_invalid",
+      "owner": "gateway-bff",
+      "domain": "gateway",
+      "description": "Origin o token CSRF ausente, inválido o no vinculado a la sesión actual",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    }
+  ]
+}
