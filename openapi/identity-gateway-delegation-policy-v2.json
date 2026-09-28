@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "policy_version": 2,
+  "source_contract": "identity-onboarding-v2.yaml",
+  "service_only_operations": [
+    {
+      "method": "post",
+      "path": "/identity/registrations",
+      "operationId": "registerGlobalAccount"
+    },
+    {
+      "method": "post",
+      "path": "/identity/email-verifications",
+      "operationId": "verifyEmail"
+    },
+    {
+      "method": "post",
+      "path": "/identity/sessions",
+      "operationId": "createSession"
+    },
+    {
+      "method": "post",
+      "path": "/identity/mfa/challenges",
+      "operationId": "completeMfaChallenge"
+    }
+  ],
+  "delegated_operations": [
+    {
+      "method": "get",
+      "path": "/identity/session",
+      "operationId": "getCurrentSession"
+    },
+    {
+      "method": "delete",
+      "path": "/identity/session",
+      "operationId": "logoutCurrentSession"
+    },
+    {
+      "method": "post",
+      "path": "/identity/session-revocations",
+      "operationId": "revokeOtherSessions"
+    },
+    {
+      "method": "post",
+      "path": "/identity/mfa/totp-enrollments",
+      "operationId": "beginTotpEnrollment"
+    },
+    {
+      "method": "post",
+      "path": "/identity/mfa/totp-enrollments/{enrollmentId}/confirmations",
+      "operationId": "confirmTotpEnrollment"
+    },
+    {
+      "method": "post",
+      "path": "/identity/device-registration-challenges",
+      "operationId": "createDeviceRegistrationChallenge"
+    },
+    {
+      "method": "post",
+      "path": "/identity/device-authentication-challenges",
+      "operationId": "createRegisteredDeviceAuthenticationChallenge"
+    },
+    {
+      "method": "post",
+      "path": "/identity/device-authentications",
+      "operationId": "proveRegisteredDevicePossession"
+    },
+    {
+      "method": "post",
+      "path": "/identity/devices",
+      "operationId": "registerWebDevice"
+    },
+    {
+      "method": "post",
+      "path": "/identity/devices/{deviceId}/owner-approval-requests",
+      "operationId": "requestOwnerDeviceSelfApproval"
+    },
+    {
+      "method": "post",
+      "path": "/identity/device-approval-confirmations",
+      "operationId": "confirmOwnerDeviceSelfApproval"
+    },
+    {
+      "method": "post",
+      "path": "/tenancy/organization-onboardings",
+      "operationId": "createInitialOrganization"
+    },
+    {
+      "method": "get",
+      "path": "/tenancy/memberships",
+      "operationId": "listMyMemberships"
+    },
+    {
+      "method": "post",
+      "path": "/tenancy/context-selections",
+      "operationId": "selectActiveOrganization"
+    },
+    {
+      "method": "get",
+      "path": "/tenancy/context",
+      "operationId": "getActiveTenantContext"
+    }
+  ],
+  "excluded_internal_operations": [
+    {
+      "method": "get",
+      "path": "/internal/identity/email-verification-delivery-material/{deliveryMaterialId}",
+      "operationId": "getEmailVerificationDeliveryMaterial"
+    },
+    {
+      "method": "get",
+      "path": "/internal/identity/device-approval-delivery-material/{deliveryMaterialId}",
+      "operationId": "getOwnerDeviceApprovalDeliveryMaterial"
+    }
+  ],
+  "published_examples": [
+    {
+      "status": "200",
+      "name": "restricted_session",
+      "fixture": "examples/identity-gateway-delegation-v2-delegation-response-restricted.json",
+      "context_fixture": "examples/identity-gateway-delegation-v2-delegation-context-restricted.json"
+    },
+    {
+      "status": "200",
+      "name": "tenant_session",
+      "fixture": "examples/identity-gateway-delegation-v2-delegation-response-tenant.json",
+      "context_fixture": "examples/identity-gateway-delegation-v2-delegation-context-tenant.json"
+    },
+    {
+      "status": "401",
+      "name": "invalid_or_missing_identity",
+      "fixture": "examples/identity-gateway-delegation-v2-problem-unauthorized.json"
+    },
+    {
+      "status": "403",
+      "name": "delegation_not_allowed",
+      "fixture": "examples/identity-gateway-delegation-v2-problem-forbidden.json"
+    }
+  ],
+  "context_fixtures": [
+    "examples/identity-gateway-delegation-v2-delegation-context-restricted.json",
+    "examples/identity-gateway-delegation-v2-delegation-context-tenant.json",
+    "examples/identity-gateway-delegation-v2-delegation-context-restricted-with-device.json",
+    "examples/identity-gateway-delegation-v2-delegation-context-active-no-tenant.json"
+  ],
+  "negative_context_fixtures": [
+    "examples/identity-gateway-delegation-v2-negative-active-no-tenant-device-unbound.json",
+    "examples/identity-gateway-delegation-v2-negative-audience.json",
+    "examples/identity-gateway-delegation-v2-negative-claim-names.json",
+    "examples/identity-gateway-delegation-v2-negative-claim-types.json",
+    "examples/identity-gateway-delegation-v2-negative-issuer-invalid.json",
+    "examples/identity-gateway-delegation-v2-negative-issuer-mismatch.json",
+    "examples/identity-gateway-delegation-v2-negative-jti-invalid.json",
+    "examples/identity-gateway-delegation-v2-negative-restricted-device-unbound.json",
+    "examples/identity-gateway-delegation-v2-negative-restricted-tenant-claims.json",
+    "examples/identity-gateway-delegation-v2-negative-session-mismatch.json",
+    "examples/identity-gateway-delegation-v2-negative-session-missing.json",
+    "examples/identity-gateway-delegation-v2-negative-tenant-branch-mismatch.json",
+    "examples/identity-gateway-delegation-v2-negative-tenant-branch-unverified.json",
+    "examples/identity-gateway-delegation-v2-negative-tenant-device-mismatch.json",
+    "examples/identity-gateway-delegation-v2-negative-tenant-device-missing.json",
+    "examples/identity-gateway-delegation-v2-negative-tenant-device-unapproved.json",
+    "examples/identity-gateway-delegation-v2-negative-type.json"
+  ]
+}

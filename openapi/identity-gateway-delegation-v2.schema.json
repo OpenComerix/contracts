@@ -1,0 +1,383 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/identity-gateway-delegation-v2.schema.json",
+  "title": "Gateway to identity delegation v2 examples and claim shapes",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/DelegationResponse"
+    },
+    {
+      "$ref": "#/$defs/DelegationContext"
+    }
+  ],
+  "$defs": {
+    "DelegationResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "access_token",
+        "token_type",
+        "expires_in"
+      ],
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+          "description": "JWT sintético en ejemplos; nunca un token operativo."
+        },
+        "token_type": {
+          "const": "Bearer"
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60
+        }
+      }
+    },
+    "Claims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "iss",
+        "aud",
+        "type",
+        "caller",
+        "jti",
+        "iat",
+        "exp"
+      ],
+      "properties": {
+        "iss": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:"
+        },
+        "aud": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "service",
+            "delegated"
+          ]
+        },
+        "caller": {
+          "const": "gateway-bff"
+        },
+        "jti": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "iat": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "exp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "sub": {
+          "type": "string",
+          "minLength": 1
+        },
+        "security_version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "membership_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "device_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "correlation_id": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "session_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "authenticated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "DelegationContext": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "configured_issuer",
+        "service_claims",
+        "session",
+        "delegated_claims"
+      ],
+      "properties": {
+        "service_claims": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Claims"
+            },
+            {
+              "properties": {
+                "aud": {
+                  "const": "identity-tenancy.gateway"
+                },
+                "type": {
+                  "const": "service"
+                }
+              }
+            }
+          ]
+        },
+        "session": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "session_id",
+            "account_id",
+            "status",
+            "security_version",
+            "authenticated_at",
+            "device",
+            "tenant_context"
+          ],
+          "properties": {
+            "session_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "account_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "status": {
+              "enum": [
+                "restricted",
+                "active"
+              ]
+            },
+            "security_version": {
+              "type": "string",
+              "minLength": 1
+            },
+            "device": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["status"],
+              "properties": {
+                "status": {
+                  "enum": ["not_registered", "pending_approval", "approved", "rejected", "revoked"]
+                },
+                "device_id": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            },
+            "tenant_context": {
+              "oneOf": [
+                {
+                  "type": "null"
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "organization_id",
+                    "membership_id"
+                  ],
+                  "properties": {
+                    "organization_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "membership_id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "branch_id": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              ]
+            },
+            "authenticated_at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        },
+        "delegated_claims": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/Claims"
+            },
+            {
+              "required": [
+                "sub",
+                "session_id",
+                "security_version",
+                "authenticated_at"
+              ]
+            },
+            {
+              "properties": {
+                "aud": {
+                  "const": "identity-tenancy.user-api"
+                },
+                "type": {
+                  "const": "delegated"
+                }
+              }
+            }
+          ]
+        },
+        "configured_issuer": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "status": {
+                    "const": "restricted"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "tenant_context": {
+                    "type": "null"
+                  }
+                }
+              },
+              "delegated_claims": {
+                "not": {
+                  "anyOf": [
+                    {
+                      "required": [
+                        "organization_id"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "membership_id"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "branch_id"
+                      ]
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "status": { "const": "active" },
+                  "tenant_context": { "type": "object" }
+                },
+                "required": ["status", "tenant_context"]
+              }
+            },
+            "required": ["session"]
+          },
+          "then": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "device": {
+                    "properties": {
+                      "status": { "const": "approved" },
+                      "device_id": { "type": "string", "minLength": 1 }
+                    },
+                    "required": ["status", "device_id"]
+                  }
+                }
+              },
+              "delegated_claims": {
+                "required": ["device_id", "organization_id", "membership_id"]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "delegated_claims": {
+                "required": ["device_id"]
+              }
+            },
+            "required": ["delegated_claims"]
+          },
+          "then": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "device": {
+                    "required": ["device_id"]
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "delegated_claims": {
+                "required": ["branch_id"]
+              }
+            },
+            "required": ["delegated_claims"]
+          },
+          "then": {
+            "properties": {
+              "session": {
+                "properties": {
+                  "tenant_context": {
+                    "properties": {
+                      "branch_id": { "type": "string", "minLength": 1 }
+                    },
+                    "required": ["branch_id"]
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

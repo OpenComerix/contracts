@@ -28,6 +28,18 @@ El job OpenAPI comprueba cobertura de fixtures estaticos y extrae los schemas ex
 
 Las versiones de Node y herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. El launcher ofrece una prueba de regresión para los contratos que ya descubre.
 
+## Contratos sucesores del corte inicial del Propietario (PF1-06A-R1)
+
+`openapi/identity-onboarding-v2.yaml` y `openapi/identity-gateway-delegation-v2.yaml` son contratos aditivos versionados, sin alterar H1, H1A ni PF1-06A v1. El corte contempla exclusivamente el onboarding inicial del Propietario; no incluye las operaciones generales `requestDeviceApproval` ni `decideDeviceApproval`.
+
+H1 v2 describe la API publica del gateway, no el salto privado a identity-tenancy. Sus 19 operaciones externas nunca exigen `serviceToService` ni `delegatedBearer` a la PWA: registro, verificacion de email e inicio de sesion son publicos; las operaciones autenticadas usan la cookie opaca y CSRF segun el metodo. `completeMfaChallenge` usa la cookie restringida y CSRF, sin JWT interno del navegador. Las dos rutas de material de correo mantienen su seguridad interna separada.
+
+La matriz privada `identity-gateway-delegation-policy-v2.json` clasifica exactamente cuatro operaciones service-only (registro, verificacion de email, login y `completeMfaChallenge`), quince operaciones delegated y excluye las dos rutas internas. En el salto privado, completar MFA requiere el JWT de servicio del gateway junto con la misma cookie restringida, CSRF y el desafio vinculado a esa sesion; consume el desafio una vez y rota la cookie. El JWT de servicio aislado no completa MFA ni autoriza operaciones autenticadas. Para las otras quince operaciones, el gateway presenta un delegado y la cookie; identity-tenancy revalida la sesion y la autorizacion.
+
+La delegacion privada v2 conserva las reglas de PF1-06A v1: sesion y contexto comprobados en servidor, claims tenant solo cuando corresponden, dispositivo aprobado y coincidente para contexto tenant, y branch_id solo cuando coincide con el contexto verificado. El policy v2 inventaria los 25 fixtures sinteticos (cuatro contextos positivos, 17 negativos y cuatro fixtures publicados, con las referencias de contexto deduplicadas). Los validadores cotejan inventarios, seguridad declarada, contextos y vinculos de claims; los schemas solo validan forma y no demuestran firmas JWT ni comportamiento de produccion.
+
+CI valida ambos OpenAPI v2 con Redocly CLI 2.53.3 sin advertencias, genera bundles dereferenciados y ejecuta los gates de cobertura REST, matriz y autocontroles. El validador comprueba por separado la seguridad publica de H1 v2 (cookie/CSRF y ausencia de JWT internos) y la clasificacion privada 4+15+2. Sourcemeta JSON Schema CLI 16.10.0 valida schemas y fixtures v2 positivos y rechaza los fixtures negativos. La regresion completa de H1, H1A y PF1-06A v1 se conserva. PF1-06A-R1 no implementa endpoints; PF1-06B0 y PF1-06B permanecen fuera de esta tanda y requieren auditoria/publicacion separadas.
+
 ## Compatibilidad
 
 - Se pueden agregar campos opcionales sin cambiar la versión principal.

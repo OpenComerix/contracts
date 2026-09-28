@@ -1,0 +1,224 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Gateway to Identity Delegation API
+  version: 2.0.0
+  description: >-
+    Contrato aditivo para el enlace privado entre gateway-bff e
+    identity-tenancy. El JWT de servicio del gateway tiene audiencia fija
+    identity-tenancy.gateway. Autoriza registro, verificacion de email y login;
+    completeMfaChallenge requiere ademas la cookie restringida de esa sesion y
+    CSRF, sin aceptar JWT delegado. El token tambien habilita solicitar esta
+    delegacion. Esta operacion exige ademas la cookie
+    opaca de sesion recibida por HTTPS privado. identity-tenancy valida la
+    sesion vigente antes de emitir un JWT ES256 type=delegated, caller=gateway-bff,
+    audiencia identity-tenancy.user-api y vigencia maxima de 60 segundos. El
+    JWT no contiene cookies ni secretos, no prolonga la sesion y no reemplaza
+    autorizacion; identity-tenancy vuelve a validar sesion y permisos en cada
+    operacion. Una sesion restringida no recibe referencias ni privilegios
+    tenant. Ningun JWT interno se devuelve a la PWA. Este documento describe
+    exclusivamente el salto privado gateway-bff a identity-tenancy; el
+    OpenAPI identity-onboarding-v2.yaml describe la API publica del gateway
+    y sus operaciones externas nunca exigen service JWT ni delegated JWT del
+    navegador.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Host privado ilustrativo; HTTPS directo y nombre validado.
+security: []
+tags:
+  - name: GatewayDelegation
+    description: Delegacion privada de una sesion opaca validada por identity-tenancy.
+paths:
+  /api/v1/internal/identity/delegations:
+    post:
+      tags: [GatewayDelegation]
+      operationId: createGatewayUserDelegation
+      summary: Emite una delegacion privada ligada a una sesion vigente
+      description: >-
+        Recibe exclusivamente el JWT de servicio de gateway-bff con audiencia
+        identity-tenancy.gateway y la cookie opaca vigente de sesion. La
+        audiencia de servicio no autoriza operaciones H1 autenticadas; habilita
+        registro, verificacion de email, login, completar MFA solo con la misma
+        cookie restringida y CSRF, y esta solicitud. La identidad
+        valida estado, expiración y referencias de la sesión antes de emitir un
+        JWT ES256 type=delegated, caller=gateway-bff, aud
+        identity-tenancy.user-api, jti único y exp no posterior a iat + 60 s.
+        La delegación no contiene la cookie ni secretos. Si la sesión está
+        restringida, no lleva organización, membresía, sucursal, roles,
+        permisos ni scopes. El gateway reenvía la cookie solo por HTTPS privado
+        junto al delegado para una operación H1 autenticada; identity-tenancy
+        vuelve a comprobar sesión y autorización de dominio. No se cachean
+        delegaciones entre requests. Respuestas y errores no se cachean.
+        A tenant-enabled delegation requires session.device.status=approved,
+        a real session.device.device_id, and an identical delegated device_id.
+        organization_id and membership_id must both match verified session
+        context. A delegated branch_id may be present only when the verified
+        session context contains the same branch_id; otherwise it is omitted.
+        If a delegated JWT includes device_id for any session, the verified
+        session context must contain the identical device_id. Restricted and
+        active sessions without tenant context may omit device_id; a restricted
+        session with a verified device may include only its matching reference.
+      security:
+        - gatewayServiceBearer: []
+          opaqueSessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/Traceparent'
+        - $ref: '#/components/parameters/CorrelationId'
+      responses:
+        '200':
+          description: Delegacion ES256 emitida; nunca contiene cookie ni refresh token.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: './identity-gateway-delegation-v2.schema.json#/$defs/DelegationResponse'
+              examples:
+                restricted_session:
+                  externalValue: examples/identity-gateway-delegation-v2-delegation-response-restricted.json
+                tenant_session:
+                  externalValue: examples/identity-gateway-delegation-v2-delegation-response-tenant.json
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          description: JWT de servicio o sesion ausente, invalido o vencido; no revela cual fallo.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/problem+json:
+              schema:
+                $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+              examples:
+                invalid_or_missing_identity:
+                  externalValue: examples/identity-gateway-delegation-v2-problem-unauthorized.json
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+        '500':
+          $ref: '#/components/responses/InternalError'
+        '503':
+          $ref: '#/components/responses/Unavailable'
+components:
+  securitySchemes:
+    gatewayServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: >-
+        ES256 service token issued by identity-tenancy. Required claims include
+        iss must be a URI and exactly match the issuer configured for this environment;
+        aud=identity-tenancy.gateway,
+        type=service, caller=gateway-bff, canonical UUIDv4 jti and expiry. It does not authorize authenticated
+        H1 operations.
+    opaqueSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Cookie de sesión opaca y vigente; se transmite solo por HTTPS privado.
+  parameters:
+    Traceparent:
+      name: traceparent
+      in: header
+      required: false
+      schema:
+        type: string
+        pattern: '^[0-9a-f]{2}-[0-9a-f]{32}-[0-9a-f]{16}-[0-9a-f]{2}$'
+    CorrelationId:
+      name: X-Correlation-Id
+      in: header
+      required: false
+      schema:
+        type: string
+        maxLength: 128
+  headers:
+    NoStore:
+      description: Evita almacenar delegaciones y respuestas de autenticación.
+      schema:
+        type: string
+        const: no-store
+    NoCache:
+      description: Evita almacenar respuestas de autenticación.
+      schema:
+        type: string
+        const: no-cache
+  responses:
+    InvalidRequest:
+      description: Solicitud HTTP mal formada.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+    Forbidden:
+      description: Dispositivo no aprobado para el contexto solicitado; no se concede delegación tenant.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+          examples:
+            delegation_not_allowed:
+              externalValue: examples/identity-gateway-delegation-v2-problem-forbidden.json
+    Conflict:
+      description: La sesión cambió o dejó de coincidir durante la emisión.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+    RateLimited:
+      description: Límite temporal excedido.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+    InternalError:
+      description: Error interno genérico, sin detalles sensibles.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'
+    Unavailable:
+      description: Dependencia temporalmente no disponible.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          $ref: '#/components/headers/NoCache'
+      content:
+        application/problem+json:
+          schema:
+            $ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'

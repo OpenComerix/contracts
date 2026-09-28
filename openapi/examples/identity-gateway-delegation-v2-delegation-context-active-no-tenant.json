@@ -1,0 +1,38 @@
+{
+  "configured_issuer": "https://identity-tenancy.internal.opencomerix",
+  "service_claims": {
+    "iss": "https://identity-tenancy.internal.opencomerix",
+    "aud": "identity-tenancy.gateway",
+    "type": "service",
+    "caller": "gateway-bff",
+    "jti": "123e4567-e89b-42d3-a456-426614174001",
+    "iat": 1780000000,
+    "exp": 1780000300
+  },
+  "session": {
+    "session_id": "session-example",
+    "account_id": "account-example",
+    "status": "active",
+    "security_version": "2",
+    "authenticated_at": "2026-09-27T12:00:00.000Z",
+    "tenant_context": null,
+    "device": {
+      "status": "approved",
+      "device_id": "device-example"
+    }
+  },
+  "delegated_claims": {
+    "iss": "https://identity-tenancy.internal.opencomerix",
+    "aud": "identity-tenancy.user-api",
+    "type": "delegated",
+    "caller": "gateway-bff",
+    "jti": "123e4567-e89b-42d3-a456-426614174002",
+    "iat": 1780000000,
+    "exp": 1780000060,
+    "sub": "account-example",
+    "session_id": "session-example",
+    "device_id": "device-example",
+    "security_version": "2",
+    "authenticated_at": "2026-09-27T12:00:00.000Z"
+  }
+}

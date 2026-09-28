@@ -21,6 +21,10 @@ validate:openapi:
     - node scripts/validate-redocly-no-warnings.mjs
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v1.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v1.bundle.json
     - node scripts/prepare-identity-rest-fixtures.mjs /tmp/identity-onboarding-v1.bundle.json .ci-artifacts/identity-rest-fixtures --self-test
+    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-onboarding-v2.yaml
+    - node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v2.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v2.bundle.json
+    - node scripts/prepare-identity-rest-fixtures-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/identity-rest-v2-fixtures --self-test
     - npx --yes @redocly/cli@2.53.3 lint openapi/identity-internal-auth-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-internal-auth-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-internal-auth-v1.yaml --dereferenced --ext json --output /tmp/identity-internal-auth-v1.bundle.json
@@ -29,9 +33,14 @@ validate:openapi:
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v1.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v1.bundle.json
     - node scripts/validate-gateway-identity-policy.mjs /tmp/identity-onboarding-v1.bundle.json /tmp/identity-gateway-delegation-v1.bundle.json --self-test
+    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-gateway-delegation-v2.yaml
+    - node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v2.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v2.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v2.bundle.json
+    - node scripts/validate-gateway-identity-policy-v2.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
   artifacts:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
+      - .ci-artifacts/identity-rest-v2-fixtures/
       - .ci-artifacts/identity-internal-auth-fixtures/
     expire_in: 1 day
 
@@ -44,7 +53,7 @@ validate:json-schema:
     - job: validate:openapi
       artifacts: true
   script:
-    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json errors/error-catalog-v1.schema.json --verbose
+    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json errors/error-catalog-v1.schema.json --verbose
     - jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
     - jsonschema validate openapi/device-proof-v1-vectors.schema.json openapi/device-proof-v1-vectors.json --verbose
     - jsonschema validate commands/notifications.send-email-verification.v1.schema.json commands/examples/notifications.send-email-verification.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
@@ -52,6 +61,7 @@ validate:json-schema:
     - jsonschema validate commands/notifications.send-device-approval.v1.schema.json commands/examples/notifications.send-device-approval.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
     - jsonschema validate commands/notifications.send-device-approval.result.v1.schema.json commands/examples/notifications.send-device-approval.result.succeeded.v1.example.json commands/examples/notifications.send-device-approval.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
     - sh scripts/validate-identity-rest-fixtures.sh .ci-artifacts/identity-rest-fixtures
+    - sh scripts/validate-identity-rest-fixtures-v2.sh .ci-artifacts/identity-rest-v2-fixtures
 
 validate:internal-auth-schema:
   stage: validate
@@ -80,3 +90,5 @@ validate:gateway-delegation-schema:
   script:
     - jsonschema metaschema openapi/identity-gateway-delegation-v1.schema.json --verbose
     - sh scripts/validate-gateway-delegation-schemas.sh
+    - jsonschema metaschema openapi/identity-gateway-delegation-v2.schema.json --verbose
+    - sh scripts/validate-gateway-delegation-v2-schemas.sh
