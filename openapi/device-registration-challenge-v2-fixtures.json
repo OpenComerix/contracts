@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/device-registration-challenge-v2-fixtures.json",
+  "title": "PF1-06A-R4 device registration challenge fixtures",
+  "version": "2.0.4",
+  "operations": {
+    "challenge": {"method": "post", "path": "/identity/device-registration-challenges", "operationId": "createDeviceRegistrationChallenge"},
+    "registration": {"method": "post", "path": "/identity/devices", "operationId": "registerWebDevice"}
+  },
+  "negative_fixtures": [
+    {"name": "missing_public_key", "file": "openapi/examples/device-registration-challenge-v2-missing-public-key.json", "kind": "challenge_request"},
+    {"name": "private_jwk_member", "file": "openapi/examples/device-registration-challenge-v2-private-jwk.json", "kind": "challenge_request"},
+    {"name": "malformed_jwk", "file": "openapi/examples/device-registration-challenge-v2-malformed-jwk.json", "kind": "challenge_request"},
+    {"name": "challenge_registration_key_mismatch", "file": "openapi/examples/device-registration-challenge-v2-mismatched-keys.json", "kind": "key_binding"}
+  ]
+}

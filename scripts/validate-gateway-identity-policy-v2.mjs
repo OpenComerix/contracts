@@ -50,11 +50,20 @@ async function validateArtifactEncoding(additionalPaths = []) {
     policyFile,
     resolve(root, "scripts/prepare-identity-rest-fixtures-v2.mjs"),
     resolve(root, "scripts/validate-identity-rest-fixtures-v2.sh"),
+    resolve(root, "openapi/device-registration-challenge-v2-fixtures.json"),
+    resolve(root, "scripts/prepare-device-registration-challenge-v2.mjs"),
+    resolve(root, "scripts/validate-device-registration-challenge-v2.sh"),
     resolve(root, "scripts/validate-gateway-identity-policy-v2.mjs"),
     resolve(root, "scripts/validate-gateway-delegation-v2-schemas.sh"),
     resolve(root, "README.md"),
     resolve(root, ".gitlab-ci.yml"),
     ...(await readdir(examplesDir)).filter((name) => name.startsWith("identity-gateway-delegation-v2-") && name.endsWith(".json")).map((name) => resolve(examplesDir, name)),
+    ...[
+      "device-registration-challenge-v2-missing-public-key.json",
+      "device-registration-challenge-v2-private-jwk.json",
+      "device-registration-challenge-v2-malformed-jwk.json",
+      "device-registration-challenge-v2-mismatched-keys.json",
+    ].map((name) => resolve(examplesDir, name)),
     ...additionalPaths,
   ];
   for (const path of artifactPaths) assertCleanEncoding(await readFile(path, "utf8"), path);

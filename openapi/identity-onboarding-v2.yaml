@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.3
+  version: 2.0.4
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -181,9 +181,22 @@ paths:
       security: [{sessionCookie: [], csrfToken: []}]
       operationId: createDeviceRegistrationChallenge
       summary: Emite un desafío efímero para probar posesión de clave de dispositivo
-      description: Emite un desafío aleatorio de 32 bytes para una sesión autenticada con email verificado y MFA completo. El servidor lo vincula a cuenta, sesión restringida, propósito registration y vencimiento. El navegador genera con WebCrypto ECDSA P-256/SHA-256 una clave privada no exportable y firma exactamente UTF-8 de `OpenComerix/device-proof/v1\n` + challenge_id + `\n` + challenge + `\n`; firma raw `r || s` de 64 bytes. En POST /identity/devices la firma se verifica con la JWK candidata antes de guardar la clave y el desafío se consume atómicamente una sola vez. La sesión restringida solo permite registrar el dispositivo y solicitar aprobación; no concede acceso tenant ni activa un POS físico.
+      description: >-
+        Antes de solicitar el desafío, el navegador genera con WebCrypto un par
+        ECDSA P-256/SHA-256 cuya clave privada no es exportable y permanece
+        local. Envía la JWK pública candidata junto con key_algorithm; el
+        servidor vincula y persiste esa candidata con el desafío aleatorio de
+        32 bytes, la cuenta, la sesión restringida, el propósito registration y
+        su vencimiento. El navegador firma exactamente UTF-8 de
+        `OpenComerix/device-proof/v1\n` + challenge_id + `\n` + challenge + `\n`;
+        la firma WebCrypto es raw `r || s` de 64 bytes. En
+        POST /identity/devices presenta la misma JWK pública. El servidor
+        compara su forma canónica con la candidata persistida antes de
+        verificar la firma y consume el desafío atómicamente una sola vez. La
+        sesión restringida solo permite registrar el dispositivo y solicitar
+        aprobación; no concede acceso tenant ni activa un POS físico.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
-      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256}}}}
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}}}}}
       responses:
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '200': {description: Desafío efímero para purpose registration; devuelve resultado sin crear un recurso navegable., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeResponse'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, purpose: registration, expires_at: '2026-09-25T12:05:00Z'}}}}
@@ -237,7 +250,15 @@ paths:
       tags: [IdentityOnboarding]
       operationId: registerWebDevice
       summary: Registra clave pública de dispositivo y prueba de posesión
-      description: Registra solo una JWK pública EC P-256 mínima y comprueba posesión verificando la firma raw de 64 bytes contra la clave candidata. La clave privada WebCrypto es no exportable y permanece local. Cuenta, sesión, propósito registration, ID/nonce y vencimiento deben coincidir con el desafío autenticado; el servidor consume ese desafío atómicamente antes de persistir la clave. El dispositivo nuevo queda en pending_approval sin aprobación tenant y sin habilitar un POS físico.
+      description: >-
+        Presenta exactamente la misma JWK pública EC P-256 mínima enviada al
+        solicitar el desafío de registro. El servidor compara su forma canónica
+        con la candidata persistida antes de verificar la firma raw r || s de 64
+        bytes. La clave privada WebCrypto no es exportable y permanece local.
+        Cuenta, sesión, propósito registration, ID/nonce y vencimiento deben
+        coincidir con el desafío autenticado; el servidor consume ese desafío
+        atómicamente antes de persistir la clave. El dispositivo nuevo queda en
+        pending_approval sin aprobación tenant y sin habilitar un POS físico.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceRegistrationRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}, signature: J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw, device_name: Navegador principal, platform: web}}}}
@@ -501,7 +522,7 @@ components:
     TotpConfirmationRequest: {type: object, additionalProperties: false, required: [code], properties: {code: {type: string, pattern: '^[0-9]{6,8}$', writeOnly: true}}}
     TotpConfirmationResponse: {type: object, additionalProperties: false, required: [status, mfa_status, recovery_codes], properties: {status: {const: issued}, mfa_status: {type: string, const: enrolled}, recovery_codes: {type: array, minItems: 1, uniqueItems: true, description: 'Entregados una sola vez; el servidor almacena solo hashes y no los registra.', x-sensitive: true, items: {type: string}}}}
     MfaChallengeRequest: {type: object, additionalProperties: false, required: [challenge_id, code], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, code: {type: string, minLength: 6, maxLength: 128, writeOnly: true, description: Código TOTP o de recuperación de un uso. Replay y fuerza bruta se bloquean y limitan.}}}
-    DeviceChallengeRequest: {type: object, additionalProperties: false, required: [key_algorithm], properties: {key_algorithm: {type: string, const: ECDSA_P256}}}
+    DeviceChallengeRequest: {type: object, additionalProperties: false, required: [key_algorithm, public_key], properties: {key_algorithm: {type: string, const: ECDSA_P256}, public_key: {$ref: '#/components/schemas/DevicePublicJwk'}}}
     DeviceProofNonce: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: 32 bytes aleatorios codificados en base64url sin relleno.}
     DeviceProofSignature: {type: string, pattern: '^[A-Za-z0-9_-]{86}$', description: Firma WebCrypto ECDSA P-256/SHA-256 raw r || s de 64 bytes codificada en base64url sin relleno; nunca DER.}
     DevicePublicJwk: {type: object, additionalProperties: false, required: [kty, crv, x, y], properties: {kty: {type: string, const: EC}, crv: {type: string, const: P-256}, x: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: Coordenada X de 32 bytes en base64url sin relleno.}, y: {type: string, pattern: '^[A-Za-z0-9_-]{43}$', description: Coordenada Y de 32 bytes en base64url sin relleno.}}}

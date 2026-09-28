@@ -25,6 +25,7 @@ validate:openapi:
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v2.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v2.bundle.json
     - node scripts/prepare-identity-rest-fixtures-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/identity-rest-v2-fixtures --self-test
+    - node scripts/prepare-device-registration-challenge-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/device-registration-challenge-v2 --self-test
     - npx --yes @redocly/cli@2.53.3 lint openapi/identity-internal-auth-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-internal-auth-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-internal-auth-v1.yaml --dereferenced --ext json --output /tmp/identity-internal-auth-v1.bundle.json
@@ -43,6 +44,7 @@ validate:openapi:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
       - .ci-artifacts/identity-rest-v2-fixtures/
+      - .ci-artifacts/device-registration-challenge-v2/
       - .ci-artifacts/identity-internal-auth-fixtures/
     expire_in: 1 day
 
@@ -66,6 +68,7 @@ validate:json-schema:
     - jsonschema validate commands/notifications.send-device-approval.result.v1.schema.json commands/examples/notifications.send-device-approval.result.succeeded.v1.example.json commands/examples/notifications.send-device-approval.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
     - sh scripts/validate-identity-rest-fixtures.sh .ci-artifacts/identity-rest-fixtures
     - sh scripts/validate-identity-rest-fixtures-v2.sh .ci-artifacts/identity-rest-v2-fixtures
+    - sh scripts/validate-device-registration-challenge-v2.sh .ci-artifacts/device-registration-challenge-v2
     - sh scripts/validate-membership-pagination-v2.sh
 
 validate:internal-auth-schema:
