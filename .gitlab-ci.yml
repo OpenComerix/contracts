@@ -25,6 +25,10 @@ validate:openapi:
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-internal-auth-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-internal-auth-v1.yaml --dereferenced --ext json --output /tmp/identity-internal-auth-v1.bundle.json
     - node scripts/prepare-identity-internal-auth-fixtures.mjs /tmp/identity-internal-auth-v1.bundle.json .ci-artifacts/identity-internal-auth-fixtures --self-test
+    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-gateway-delegation-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v1.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v1.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v1.bundle.json
+    - node scripts/validate-gateway-identity-policy.mjs /tmp/identity-onboarding-v1.bundle.json /tmp/identity-gateway-delegation-v1.bundle.json --self-test
   artifacts:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
@@ -67,3 +71,12 @@ validate:identity-checklist:
     - node scripts/validate-contract-refs.mjs --self-test
     - node scripts/validate-identity-onboarding.mjs --self-test
     - node scripts/validate-device-proof-vectors.mjs
+
+validate:gateway-delegation-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  script:
+    - jsonschema metaschema openapi/identity-gateway-delegation-v1.schema.json --verbose
+    - sh scripts/validate-gateway-delegation-schemas.sh
