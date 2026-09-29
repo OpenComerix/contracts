@@ -117,7 +117,7 @@ function validatePublic(api, candidateManifest = manifest, candidateCatalog = ca
   assert(same(headerPlacements.sort(), [...seen].map((key) => key.split(" ").slice(2).join(" ")).sort()), "X-CSRF-Token response header appears outside the seven approved responses");
 }
 function validatePrivate(api, candidatePolicy = policy) {
-  assert(api.info?.version === "2.0.5", "private delegation OpenAPI must be v2.0.5");
+  assert(api.info?.version === "2.0.6", "private delegation OpenAPI must be v2.0.6");
   const external = allOperations(publicApi).filter((row) => !row.operation["x-internal"] && !row.path.startsWith("/internal/"));
   const rows = [...candidatePolicy.service_only_operations, ...candidatePolicy.delegated_operations];
   const excluded = candidatePolicy.excluded_internal_operations;

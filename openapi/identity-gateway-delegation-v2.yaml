@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Gateway to Identity Delegation API
-  version: 2.0.5
+  version: 2.0.6
   description: >-
     Contrato aditivo para el enlace privado entre gateway-bff e
     identity-tenancy. El JWT de servicio del gateway tiene audiencia fija
@@ -31,6 +31,23 @@ info:
     public result and replacement session credential only to this private
     authenticated caller. It never repeats domain effects or grants general
     authentication to the previous cookie.
+    PF1-06A-R6 versions this private document as 2.0.6 while the public
+    identity-onboarding contract remains 2.0.5. The required private
+    X-OC-Client-Signal applies only to the 19 operationIds inventoried in the
+    policy extension: four service-only and fifteen delegated. It is a
+    rate-limit signal, not authority. gateway-bff strips any browser-supplied
+    copy and derives v1. plus canonical unpadded base64url HMAC-SHA-256 of a
+    verified public origin (complete IPv4 or IPv6 /64), using domain
+    separation and an exclusive CSPRNG secret of at least 32 bytes. The
+    identity service authenticates its internal gateway JWT before syntax
+    checking; it does not share or verify the HMAC secret and does not accept
+    X-Forwarded-* as a substitute. Missing, duplicate or malformed values fail
+    closed with generic cataloged identity_invalid_request. The two
+    notifications material routes are excluded. Purpose-scoped limits are
+    10/account and 100/signal in separate 15-minute windows, configurable by
+    environment and not by organization. PF1-06C implements derivation from
+    explicitly trusted ingress. Contract fixtures prove syntax and inventory
+    only, not HMAC, actual IP detection or runtime spoofing resistance.
   license:
     name: Proprietary
     identifier: LicenseRef-Proprietary
@@ -38,6 +55,13 @@ servers:
   - url: https://identity-tenancy.internal.example
     description: Host privado ilustrativo; HTTPS directo y nombre validado.
 security: []
+x-oc-client-signal-policy:
+  policy_ref: openapi/identity-gateway-delegation-policy-v2.json#/client_signal
+  parameter_ref: '#/components/parameters/OCClientSignal'
+  parameter:
+    $ref: '#/components/parameters/OCClientSignal'
+  applies_to_operation_ids: [registerGlobalAccount, verifyEmail, createSession, completeMfaChallenge, getCurrentSession, logoutCurrentSession, revokeOtherSessions, beginTotpEnrollment, confirmTotpEnrollment, createDeviceRegistrationChallenge, createRegisteredDeviceAuthenticationChallenge, proveRegisteredDevicePossession, registerWebDevice, requestOwnerDeviceSelfApproval, confirmOwnerDeviceSelfApproval, createInitialOrganization, listMyMemberships, selectActiveOrganization, getActiveTenantContext]
+  excluded_operation_ids: [getEmailVerificationDeliveryMaterial, getOwnerDeviceApprovalDeliveryMaterial]
 tags:
   - name: GatewayDelegation
     description: Delegacion privada de una sesion opaca validada por identity-tenancy.
@@ -75,6 +99,7 @@ paths:
         - gatewayServiceBearer: []
           currentSessionCookie: []
       parameters:
+        - $ref: '#/components/parameters/OCClientSignal'
         - $ref: '#/components/parameters/Traceparent'
         - $ref: '#/components/parameters/CorrelationId'
       responses:
@@ -157,6 +182,7 @@ paths:
         - gatewayServiceBearer: []
           previousSessionCookie: []
       parameters:
+        - $ref: '#/components/parameters/OCClientSignal'
         - $ref: '#/components/parameters/SessionRotationIdempotencyKey'
         - $ref: '#/components/parameters/Traceparent'
         - $ref: '#/components/parameters/CorrelationId'
@@ -278,6 +304,35 @@ components:
       schema:
         type: string
         maxLength: 128
+    OCClientSignal:
+      name: X-OC-Client-Signal
+      in: header
+      required: false
+      description: >-
+        The exact syntax declaration is reused by the two documented private
+        infrastructure routes as an optional, ignored header; this preserves
+        their existing v2.0.5 behavior. The private policy extension makes it
+        mandatory for the 19 gateway-to-identity operationIds listed there.
+        The value is v1. followed by the canonical
+        unpadded base64url encoding of a 32-byte HMAC-SHA-256. gateway-bff
+        derives it from the verified public origin (complete IPv4 or IPv6 /64)
+        using domain separation and an exclusive CSPRNG secret of at least 32
+        bytes. The browser-facing gateway strips any browser-supplied copy
+        before deriving it. identity-tenancy authenticates the internal gateway
+        JWT before syntax validation only; it neither shares nor verifies the
+        HMAC key and does not accept X-Forwarded-* as a substitute. Missing,
+        duplicate or malformed values fail closed with generic
+        identity_invalid_request. The signal is not authority. Per-purpose
+        limits are 10/account and 100/signal in separate 15-minute windows,
+        configurable by environment and never by organization. Fixtures prove
+        syntax and inventory only, not HMAC, real IP detection or runtime
+        spoofing resistance. The two notifications material operations are
+        excluded.
+      schema:
+        type: string
+        minLength: 46
+        maxLength: 46
+        pattern: '^v1\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$'
   headers:
     NoStore:
       description: Evita almacenar delegaciones y respuestas de autenticación.

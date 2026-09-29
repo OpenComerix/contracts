@@ -1,0 +1,73 @@
+{
+  "manifest_version": 1,
+  "source_policy": "identity-gateway-delegation-policy-v2.json#/client_signal",
+  "runtime_cryptography_demonstrated": false,
+  "cases": [
+    {
+      "id": "valid-service-only-synthetic",
+      "operation_id": "registerGlobalAccount",
+      "headers": {"client_signal": ["v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]},
+      "expected": "accept"
+    },
+    {
+      "id": "valid-delegated-synthetic",
+      "operation_id": "getCurrentSession",
+      "headers": {"client_signal": ["v1.BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBw"]},
+      "expected": "accept"
+    },
+    {
+      "id": "missing-header",
+      "operation_id": "createSession",
+      "headers": {},
+      "expected": "reject"
+    },
+    {
+      "id": "duplicate-header",
+      "operation_id": "logoutCurrentSession",
+      "headers": {"client_signal": ["v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]},
+      "expected": "reject"
+    },
+    {
+      "id": "raw-ip-value",
+      "operation_id": "revokeOtherSessions",
+      "headers": {"client_signal": ["192.0.2.42"]},
+      "expected": "reject"
+    },
+    {
+      "id": "raw-text-value",
+      "operation_id": "beginTotpEnrollment",
+      "headers": {"client_signal": ["origin=example.invalid; account=person@example.invalid"]},
+      "expected": "reject"
+    },
+    {
+      "id": "noncanonical-padding",
+      "operation_id": "confirmTotpEnrollment",
+      "headers": {"client_signal": ["v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="]},
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-version-prefix",
+      "operation_id": "createDeviceRegistrationChallenge",
+      "headers": {"client_signal": ["v0.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]},
+      "expected": "reject"
+    },
+    {
+      "id": "forwarded-for-is-not-substitute",
+      "operation_id": "createRegisteredDeviceAuthenticationChallenge",
+      "headers": {"x_forwarded_for": ["192.0.2.42"]},
+      "expected": "reject"
+    },
+    {
+      "id": "raw-cookie-value",
+      "operation_id": "proveRegisteredDevicePossession",
+      "headers": {"client_signal": ["__Host-oc_session=synthetic-cookie"]},
+      "expected": "reject"
+    },
+    {
+      "id": "raw-user-agent-value",
+      "operation_id": "registerWebDevice",
+      "headers": {"client_signal": ["Mozilla/5.0 synthetic user agent"]},
+      "expected": "reject"
+    }
+  ]
+}

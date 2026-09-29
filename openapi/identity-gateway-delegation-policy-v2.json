@@ -2,6 +2,73 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "policy_version": 2,
   "source_contract": "identity-onboarding-v2.yaml",
+  "client_signal": {
+    "version": 1,
+    "parameter_ref": "#/components/parameters/OCClientSignal",
+    "header": "X-OC-Client-Signal",
+    "required_for_matrix_operations": true,
+    "optional_on_infrastructure_operations": [
+      "createGatewayUserDelegation",
+      "recoverSessionRotationReplay"
+    ],
+    "value_pattern": "^v1\\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$",
+    "value_encoding": "v1. + canonical unpadded base64url(HMAC-SHA-256, 32 bytes)",
+    "derivation": {
+      "owner": "gateway-bff",
+      "input": "verified_public_origin",
+      "ipv4": "complete_address",
+      "ipv6": "network_prefix_64",
+      "mac": "HMAC-SHA-256",
+      "domain_separation": true,
+      "secret_minimum_bytes": 32,
+      "secret_generation": "CSPRNG",
+      "secret_exclusive_to": "gateway-bff"
+    },
+    "trust_boundary": {
+      "browser_copy_removed_before_derivation": true,
+      "ingress_must_be_explicitly_trusted": true,
+      "implementation_phase": "PF1-06C",
+      "identity_tenancy_authenticates_gateway_jwt_before_syntax_check": true,
+      "identity_tenancy_verifies_hmac": false,
+      "identity_tenancy_shares_hmac_secret": false,
+      "accept_forwarded_headers_as_substitute": false,
+      "transports_raw_ip_email_cookie_or_user_agent": false,
+      "authority_granted": false
+    },
+    "failure": {
+      "missing_duplicate_or_malformed": "identity_invalid_request",
+      "status": 400,
+      "generic": true,
+      "fail_closed": true
+    },
+    "limits": {
+      "purpose_scoped": true,
+      "account": {"maximum": 10, "window_seconds": 900},
+      "signal": {"maximum": 100, "window_seconds": 900},
+      "windows_separate": true,
+      "environment_configurable": true,
+      "organization_configurable": false
+    },
+    "applies_to_operation_ids": [
+      "registerGlobalAccount", "verifyEmail", "createSession", "completeMfaChallenge",
+      "getCurrentSession", "logoutCurrentSession", "revokeOtherSessions",
+      "beginTotpEnrollment", "confirmTotpEnrollment", "createDeviceRegistrationChallenge",
+      "createRegisteredDeviceAuthenticationChallenge", "proveRegisteredDevicePossession",
+      "registerWebDevice", "requestOwnerDeviceSelfApproval", "confirmOwnerDeviceSelfApproval",
+      "createInitialOrganization", "listMyMemberships", "selectActiveOrganization",
+      "getActiveTenantContext"
+    ],
+    "excluded_operation_ids": [
+      "getEmailVerificationDeliveryMaterial",
+      "getOwnerDeviceApprovalDeliveryMaterial"
+    ],
+    "fixtures": {
+      "manifest": "openapi/client-signal-v1-fixtures.json",
+      "schema": "openapi/client-signal-v1.schema.json",
+      "runtime_hmac_or_ip_detection_demonstrated": false,
+      "runtime_spoofing_resistance_demonstrated": false
+    }
+  },
   "service_only_operations": [
     {
       "method": "post",

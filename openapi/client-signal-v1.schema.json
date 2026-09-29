@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.invalid/openapi/client-signal-v1.schema.json",
+  "title": "Private X-OC-Client-Signal contract test manifest",
+  "description": "Validates the structure of synthetic signal-policy cases. It does not validate HMAC derivation, trusted ingress, IP detection, or runtime spoofing resistance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["manifest_version", "source_policy", "runtime_cryptography_demonstrated", "cases"],
+  "properties": {
+    "manifest_version": {"const": 1},
+    "source_policy": {"const": "identity-gateway-delegation-policy-v2.json#/client_signal"},
+    "runtime_cryptography_demonstrated": {"const": false},
+    "cases": {
+      "type": "array",
+      "minItems": 11,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "operation_id", "headers", "expected"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1, "pattern": "^[a-z0-9-]+$"},
+          "operation_id": {"type": "string", "minLength": 1},
+          "headers": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "client_signal": {"type": "array", "maxItems": 2, "items": {"type": "string", "maxLength": 256}},
+              "x_forwarded_for": {"type": "array", "maxItems": 2, "items": {"type": "string", "maxLength": 256}}
+            }
+          },
+          "expected": {"enum": ["accept", "reject"]}
+        }
+      }
+    }
+  }
+}
