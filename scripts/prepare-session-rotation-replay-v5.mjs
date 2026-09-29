@@ -22,7 +22,7 @@ const operation = (api, method, path, id) => {
   return op;
 };
 function fixtureInventory(candidate, filenames) {
-  assert(candidate.public_contract_version === "2.0.5" && candidate.private_contract_version === "2.0.6", "R5 fixture manifest must target public v2.0.5 and private v2.0.6 OpenAPI bundles");
+  assert(candidate.public_contract_version === "2.0.6" && candidate.private_contract_version === "2.0.6", "R5 fixture manifest must target public v2.0.6 and private v2.0.6 OpenAPI bundles");
   assert(candidate.rotations?.length === 4 && candidate.challenges?.length === 2, "manifest must inventory exactly four rotations and two challenge operations");
   const paths = [
     ...candidate.rotations.flatMap((row) => [row.body_fixture, row.request_fixture, row.response_fixture]),

@@ -54,7 +54,7 @@ function validateCatalog(base, candidate) {
   "v3 must add only gateway_csrf_invalid with owner/status/retry/parameter metadata");
 }
 function validatePublic(api, candidateManifest = manifest, candidateCatalog = catalogV3, fixture = problem) {
-  assert(api.info?.version === "2.0.5", "public identity OpenAPI must be v2.0.5");
+  assert(api.info?.version === "2.0.6", "public identity OpenAPI must be v2.0.6");
   const csrfPolicy = api.info?.description ?? "";
   assert(/Origin exacto/i.test(csrfPolicy) && /allowlist/i.test(csrfPolicy) && /Origin ausente, null o ajeno/i.test(csrfPolicy) && /solo en memoria/i.test(csrfPolicy), "public contract must document exact-Origin allowlist, rejection cases and in-memory PWA token handling");
   validateCatalog(catalogV2, candidateCatalog);

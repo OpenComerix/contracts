@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.5
+  version: 2.0.6
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -458,6 +458,14 @@ paths:
         '200': {description: Membresías visibles de la cuenta., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/MembershipList'}}}}
         '400': {description: "Límite mal formado o cursor inválido, expirado, alterado o no utilizable por esta cuenta.", content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {invalid_limit: {externalValue: examples/membership-pagination-v2-problem-invalid-limit.json}, invalid_cursor: {externalValue: examples/membership-pagination-v2-problem-invalid-cursor.json}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
+        '403':
+          description: La sesión todavía requiere completar MFA de login antes de listar membresías.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+              example: {type: 'urn:opencomerix:problem:identity_mfa_required', title: Operación no permitida, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_mfa_required, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}
   /tenancy/context-selections:
     post:
       tags: [IdentityOnboarding]
