@@ -148,7 +148,7 @@ async function validateEndpoint(contract, candidate) {
   assert(rows.length === 1 && rows[0].method === "post" && rows[0].path === "/api/v1/internal/identity/delegations", "delegation method/path/operationId incorrect");
   const op = rows[0].operation;
   const security = op.security ?? [];
-  assert(security.length === 1 && same(Object.keys(security[0]).sort(), ["gatewayServiceBearer", "opaqueSessionCookie"].sort()), "delegation requires both service bearer and opaque session cookie");
+  assert(security.length === 1 && same(Object.keys(security[0]).sort(), ["gatewayServiceBearer", "currentSessionCookie"].sort()), "delegation requires both service bearer and current opaque session cookie");
   const success = op.responses?.["200"];
   assert(success, "falta la respuesta 200");
   for (const [status, response] of Object.entries(op.responses ?? {})) {

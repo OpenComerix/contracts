@@ -1,0 +1,118 @@
+{
+  "manifest_version": 1,
+  "public_contract_version": "2.0.5",
+  "private_contract_version": "2.0.5",
+  "private_operation": {
+    "method": "post",
+    "path": "/api/v1/internal/identity/session-rotation-replays",
+    "operationId": "recoverSessionRotationReplay",
+    "request_schema": "SessionRotationReplayRequest",
+    "response_schema": "SessionRotationReplayResponse"
+  },
+  "rotations": [
+    {
+      "operationId": "proveRegisteredDevicePossession",
+      "method": "post",
+      "path": "/identity/device-authentications",
+      "status": "200",
+      "schema": "SessionContext",
+      "original_and_replay_idempotency_key": "018f0000-0000-7000-8000-000000000961",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+      "request_fixture": "openapi/examples/identity-session-rotation-replay-v5-request-prove-device.json",
+      "response_fixture": "openapi/examples/identity-session-rotation-replay-v5-response-prove-device.json"
+    },
+    {
+      "operationId": "confirmOwnerDeviceSelfApproval",
+      "method": "post",
+      "path": "/identity/device-approval-confirmations",
+      "status": "200",
+      "schema": "DeviceApprovalStatus",
+      "original_and_replay_idempotency_key": "018f0000-0000-7000-8000-000000000962",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-device-approval.json",
+      "request_fixture": "openapi/examples/identity-session-rotation-replay-v5-request-confirm-approval.json",
+      "response_fixture": "openapi/examples/identity-session-rotation-replay-v5-response-confirm-approval.json"
+    },
+    {
+      "operationId": "createInitialOrganization",
+      "method": "post",
+      "path": "/tenancy/organization-onboardings",
+      "status": "201",
+      "schema": "OrganizationOnboardingResponse",
+      "original_and_replay_idempotency_key": "018f0000-0000-7000-8000-000000000963",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-initial-organization.json",
+      "request_fixture": "openapi/examples/identity-session-rotation-replay-v5-request-initial-organization.json",
+      "response_fixture": "openapi/examples/identity-session-rotation-replay-v5-response-initial-organization.json"
+    },
+    {
+      "operationId": "selectActiveOrganization",
+      "method": "post",
+      "path": "/tenancy/context-selections",
+      "status": "200",
+      "schema": "SessionContext",
+      "original_and_replay_idempotency_key": "018f0000-0000-7000-8000-000000000964",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+      "request_fixture": "openapi/examples/identity-session-rotation-replay-v5-request-select-organization.json",
+      "response_fixture": "openapi/examples/identity-session-rotation-replay-v5-response-select-organization.json"
+    }
+  ],
+  "challenges": [
+    {
+      "operationId": "createDeviceRegistrationChallenge",
+      "method": "post",
+      "path": "/identity/device-registration-challenges",
+      "status": "200",
+      "schema": "DeviceChallengeResponse",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json"
+    },
+    {
+      "operationId": "createRegisteredDeviceAuthenticationChallenge",
+      "method": "post",
+      "path": "/identity/device-authentication-challenges",
+      "status": "200",
+      "schema": "DeviceAuthenticationChallenge",
+      "body_fixture": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json"
+    }
+  ],
+  "idempotency_replayed_headers": [
+    {"operationId": "proveRegisteredDevicePossession", "schema_type": "boolean", "first_effect": false, "exact_replay": true},
+    {"operationId": "confirmOwnerDeviceSelfApproval", "schema_type": "boolean", "first_effect": false, "exact_replay": true},
+    {"operationId": "createInitialOrganization", "schema_type": "boolean", "first_effect": false, "exact_replay": true},
+    {"operationId": "selectActiveOrganization", "schema_type": "boolean", "first_effect": false, "exact_replay": true},
+    {"operationId": "createDeviceRegistrationChallenge", "schema_type": "boolean", "first_issue": false, "exact_replay": true},
+    {"operationId": "createRegisteredDeviceAuthenticationChallenge", "schema_type": "boolean", "first_issue": false, "exact_replay": true}
+  ],
+  "errors": [
+    {"status": "400", "code": "identity_invalid_request", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-invalid-request.json"},
+    {"status": "401", "code": "identity_session_invalid_or_expired", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-unauthorized.json"},
+    {"status": "409", "code": "identity_idempotency_key_reused", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-key-reused.json"},
+    {"status": "409", "code": "identity_idempotency_request_in_progress", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-in-progress.json"},
+    {"status": "409", "code": "identity_state_or_version_conflict", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-state-conflict.json"}
+  ],
+  "rejections": [
+    {"condition": "service_jwt_invalid_or_expired", "status": "401", "code": "identity_session_invalid_or_expired", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-unauthorized.json"},
+    {"condition": "prior_cookie_not_bound", "status": "401", "code": "identity_session_invalid_or_expired", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-unauthorized.json"},
+    {"condition": "session_revoked_or_expired", "status": "401", "code": "identity_session_invalid_or_expired", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-unauthorized.json"},
+    {"condition": "different_operation_same_key", "status": "409", "code": "identity_idempotency_key_reused", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-key-reused.json"},
+    {"condition": "different_original_payload_same_key", "status": "409", "code": "identity_idempotency_key_reused", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-key-reused.json"},
+    {"condition": "result_expired", "status": "409", "code": "identity_state_or_version_conflict", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-state-conflict.json"},
+    {"condition": "credential_rotated_again", "status": "409", "code": "identity_state_or_version_conflict", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-state-conflict.json"},
+    {"condition": "authorization_or_approval_changed", "status": "409", "code": "identity_state_or_version_conflict", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-state-conflict.json"},
+    {"condition": "original_operation_still_in_progress", "status": "409", "code": "identity_idempotency_request_in_progress", "fixture": "openapi/examples/identity-session-rotation-replay-v5-problem-in-progress.json"}
+  ],
+  "negative_requests": [
+    "openapi/examples/identity-session-rotation-replay-v5-negative-unknown-operation.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-mismatched-request.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-extra-route-selector.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-missing-request.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-original-extra-property.json"
+  ],
+  "negative_responses": [
+    "openapi/examples/identity-session-rotation-replay-v5-negative-response-malformed-credential.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-response-missing-credential.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-response-not-replayed.json",
+    "openapi/examples/identity-session-rotation-replay-v5-negative-response-status-mismatch.json"
+  ],
+  "negative_public_bodies": [
+    "openapi/examples/identity-session-rotation-replay-v5-negative-public-credential.json"
+  ]
+}

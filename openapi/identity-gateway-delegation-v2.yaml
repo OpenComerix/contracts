@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Gateway to Identity Delegation API
-  version: 2.0.4
+  version: 2.0.5
   description: >-
     Contrato aditivo para el enlace privado entre gateway-bff e
     identity-tenancy. El JWT de servicio del gateway tiene audiencia fija
@@ -23,7 +23,14 @@ info:
     CSRF and exact-Origin validation are performed by gateway-bff at the
     browser-facing boundary before this private hop. The service JWT proves
     workload identity only; it is not a CSRF-validation attestation. No internal
-    CSRF-validated header is accepted or trusted by identity-tenancy.
+    CSRF-validated header is accepted or trusted by identity-tenancy. A prior
+    session cookie never obtains an ordinary delegation. The only exception is
+    the narrowly scoped session-rotation replay operation below, which requires
+    this gateway service JWT, that prior cookie, the original operation's
+    Idempotency-Key and its exact original request; it returns the preserved
+    public result and replacement session credential only to this private
+    authenticated caller. It never repeats domain effects or grants general
+    authentication to the previous cookie.
   license:
     name: Proprietary
     identifier: LicenseRef-Proprietary
@@ -66,7 +73,7 @@ paths:
         session with a verified device may include only its matching reference.
       security:
         - gatewayServiceBearer: []
-          opaqueSessionCookie: []
+          currentSessionCookie: []
       parameters:
         - $ref: '#/components/parameters/Traceparent'
         - $ref: '#/components/parameters/CorrelationId'
@@ -113,6 +120,118 @@ paths:
           $ref: '#/components/responses/InternalError'
         '503':
           $ref: '#/components/responses/Unavailable'
+  /api/v1/internal/identity/session-rotation-replays:
+    post:
+      tags: [GatewayDelegation]
+      operationId: recoverSessionRotationReplay
+      summary: Recupera el resultado exacto de una rotación idempotente
+      description: >-
+        Operación interna exclusiva para recuperar una respuesta ya confirmada
+        de proveRegisteredDevicePossession, confirmOwnerDeviceSelfApproval,
+        createInitialOrganization o selectActiveOrganization cuando el gateway
+        perdió la respuesta que rotó la credencial. Exige simultáneamente JWT
+        service de gateway-bff con audiencia identity-tenancy.gateway, la
+        cookie opaca anterior y el mismo Idempotency-Key UUIDv7 de la operación
+        original. El body estricto contiene operation_id y original_request;
+        este último valida contra el schema de request exacto de esa operación.
+        Método y ruta se derivan del operation_id permitido y nunca los elige
+        el cliente. La identidad compara operación, clave y fingerprint
+        canónico original mediante la versión persistida de su clave HMAC.
+        Solo se devuelve el status y body público originales más la nueva
+        session_credential en este canal privado. El gateway emite una cookie
+        y X-CSRF-Token nuevos ligados a esa credencial; la credencial privada
+        jamás se añade al body público. No se repite el efecto ni la auditoría,
+        no se extienden los vencimientos y no se emite delegación desde la
+        cookie anterior. El resultado solo se recupera mientras la sesión siga
+        vigente, la credencial recuperable siga siendo la actual y la
+        autorización/aprobación asociadas no hayan cambiado. Cookie no ligada,
+        sesión revocada/expirada o autenticación inválida produce el mismo 401
+        genérico; resultado expirado, rotación posterior o cambio de
+        autorización/estado produce 409 identity_state_or_version_conflict
+        sin revelar cuál precondición falló. Misma clave con otra operación o
+        carga usa identity_idempotency_key_reused; una reserva aún activa usa
+        identity_idempotency_request_in_progress. No se incluye cookie, token,
+        fingerprint, solicitud canónica ni credencial en logs, eventos o
+        auditoría.
+      security:
+        - gatewayServiceBearer: []
+          previousSessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/SessionRotationIdempotencyKey'
+        - $ref: '#/components/parameters/Traceparent'
+        - $ref: '#/components/parameters/CorrelationId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SessionRotationReplayRequest'
+            examples:
+              registered_device_possession:
+                externalValue: examples/identity-session-rotation-replay-v5-request-prove-device.json
+              owner_device_self_approval:
+                externalValue: examples/identity-session-rotation-replay-v5-request-confirm-approval.json
+              initial_organization:
+                externalValue: examples/identity-session-rotation-replay-v5-request-initial-organization.json
+              organization_selection:
+                externalValue: examples/identity-session-rotation-replay-v5-request-select-organization.json
+      responses:
+        '200':
+          description: Replay exacto; el body/status son los originales. session_credential solo se entrega al gateway autenticado.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Pragma: {$ref: '#/components/headers/NoCache'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SessionRotationReplayResponse'}
+              examples:
+                registered_device_possession:
+                  externalValue: examples/identity-session-rotation-replay-v5-response-prove-device.json
+                owner_device_self_approval:
+                  externalValue: examples/identity-session-rotation-replay-v5-response-confirm-approval.json
+                initial_organization:
+                  externalValue: examples/identity-session-rotation-replay-v5-response-initial-organization.json
+                organization_selection:
+                  externalValue: examples/identity-session-rotation-replay-v5-response-select-organization.json
+        '400':
+          description: Request estricto mal formado o original_request incompatible con operation_id.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Pragma: {$ref: '#/components/headers/NoCache'}
+          content:
+            application/problem+json:
+              schema: {$ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'}
+              examples:
+                invalid_request:
+                  externalValue: examples/identity-session-rotation-replay-v5-problem-invalid-request.json
+        '401':
+          description: Error genérico; no revela si falló JWT de servicio, cookie anterior o vigencia de sesión.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Pragma: {$ref: '#/components/headers/NoCache'}
+          content:
+            application/problem+json:
+              schema: {$ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'}
+              examples:
+                invalid_or_unbound_identity:
+                  externalValue: examples/identity-session-rotation-replay-v5-problem-unauthorized.json
+        '409':
+          description: Conflicto genérico; los códigos vigentes distinguen idempotencia reutilizada/en curso del conflicto de estado sin exponer detalles sensibles.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Pragma: {$ref: '#/components/headers/NoCache'}
+          content:
+            application/problem+json:
+              schema: {$ref: './identity-onboarding-v2.yaml#/components/schemas/Problem'}
+              examples:
+                key_reused:
+                  externalValue: examples/identity-session-rotation-replay-v5-problem-key-reused.json
+                request_in_progress:
+                  externalValue: examples/identity-session-rotation-replay-v5-problem-in-progress.json
+                stale_rotation_result:
+                  externalValue: examples/identity-session-rotation-replay-v5-problem-state-conflict.json
+        '429': {$ref: '#/components/responses/RateLimited'}
+        '503': {$ref: '#/components/responses/Unavailable'}
 components:
   securitySchemes:
     gatewayServiceBearer:
@@ -125,12 +244,26 @@ components:
         aud=identity-tenancy.gateway,
         type=service, caller=gateway-bff, canonical UUIDv4 jti and expiry. It does not authorize authenticated
         H1 operations.
-    opaqueSessionCookie:
+    currentSessionCookie:
       type: apiKey
       in: cookie
       name: __Host-oc_session
-      description: Cookie de sesión opaca y vigente; se transmite solo por HTTPS privado.
+      description: Cookie opaca vigente de la sesión actual; se transmite solo por HTTPS privado. No acepta la credencial anterior tras una rotación.
+    previousSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Cookie opaca anterior a una rotación, usada solo para recuperar el replay exacto; nunca autentica delegaciones ordinarias ni otras operaciones.
   parameters:
+    SessionRotationIdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: UUIDv7 original de la operación cuya rotación se recupera; no es una clave nueva de replay.
+      schema:
+        type: string
+        format: uuid
+        pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
     Traceparent:
       name: traceparent
       in: header
@@ -156,6 +289,71 @@ components:
       schema:
         type: string
         const: no-cache
+  schemas:
+    SessionRotationReplayRequest:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [operation_id, original_request]
+          properties:
+            operation_id: {const: proveRegisteredDevicePossession}
+            original_request: {$ref: './identity-onboarding-v2.yaml#/components/schemas/DeviceAuthenticationProof'}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, original_request]
+          properties:
+            operation_id: {const: confirmOwnerDeviceSelfApproval}
+            original_request: {$ref: './identity-onboarding-v2.yaml#/components/schemas/OwnerDeviceApprovalConfirmation'}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, original_request]
+          properties:
+            operation_id: {const: createInitialOrganization}
+            original_request: {$ref: './identity-onboarding-v2.yaml#/components/schemas/OrganizationOnboardingRequest'}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, original_request]
+          properties:
+            operation_id: {const: selectActiveOrganization}
+            original_request: {$ref: './identity-onboarding-v2.yaml#/components/schemas/ContextSelectionRequest'}
+    SessionRotationReplayResponse:
+      oneOf:
+        - type: object
+          additionalProperties: false
+          required: [operation_id, public_status, public_body, session_credential, replayed]
+          properties:
+            operation_id: {const: proveRegisteredDevicePossession}
+            public_status: {const: 200}
+            public_body: {$ref: './identity-onboarding-v2.yaml#/components/schemas/SessionContext'}
+            session_credential: {type: string, minLength: 43, maxLength: 43, pattern: '^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$', x-sensitive: true, description: 'Codificación base64url canónica sin padding de 32 bytes. La forma no demuestra entropía; runtime debe generar los 32 bytes con CSPRNG. Solo respuesta interna autenticada; nunca registrar ni usar el fixture sintético como credencial.'}
+            replayed: {const: true}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, public_status, public_body, session_credential, replayed]
+          properties:
+            operation_id: {const: confirmOwnerDeviceSelfApproval}
+            public_status: {const: 200}
+            public_body: {$ref: './identity-onboarding-v2.yaml#/components/schemas/DeviceApprovalStatus'}
+            session_credential: {type: string, minLength: 43, maxLength: 43, pattern: '^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$', x-sensitive: true, description: 'Codificación base64url canónica sin padding de 32 bytes. La forma no demuestra entropía; runtime debe generar los 32 bytes con CSPRNG. Solo respuesta interna autenticada; nunca registrar ni usar el fixture sintético como credencial.'}
+            replayed: {const: true}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, public_status, public_body, session_credential, replayed]
+          properties:
+            operation_id: {const: createInitialOrganization}
+            public_status: {const: 201}
+            public_body: {$ref: './identity-onboarding-v2.yaml#/components/schemas/OrganizationOnboardingResponse'}
+            session_credential: {type: string, minLength: 43, maxLength: 43, pattern: '^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$', x-sensitive: true, description: 'Codificación base64url canónica sin padding de 32 bytes. La forma no demuestra entropía; runtime debe generar los 32 bytes con CSPRNG. Solo respuesta interna autenticada; nunca registrar ni usar el fixture sintético como credencial.'}
+            replayed: {const: true}
+        - type: object
+          additionalProperties: false
+          required: [operation_id, public_status, public_body, session_credential, replayed]
+          properties:
+            operation_id: {const: selectActiveOrganization}
+            public_status: {const: 200}
+            public_body: {$ref: './identity-onboarding-v2.yaml#/components/schemas/SessionContext'}
+            session_credential: {type: string, minLength: 43, maxLength: 43, pattern: '^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$', x-sensitive: true, description: 'Codificación base64url canónica sin padding de 32 bytes. La forma no demuestra entropía; runtime debe generar los 32 bytes con CSPRNG. Solo respuesta interna autenticada; nunca registrar ni usar el fixture sintético como credencial.'}
+            replayed: {const: true}
   responses:
     InvalidRequest:
       description: Solicitud HTTP mal formada.

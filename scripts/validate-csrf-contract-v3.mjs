@@ -54,7 +54,7 @@ function validateCatalog(base, candidate) {
   "v3 must add only gateway_csrf_invalid with owner/status/retry/parameter metadata");
 }
 function validatePublic(api, candidateManifest = manifest, candidateCatalog = catalogV3, fixture = problem) {
-  assert(api.info?.version === "2.0.4", "public identity OpenAPI must be v2.0.4");
+  assert(api.info?.version === "2.0.5", "public identity OpenAPI must be v2.0.5");
   const csrfPolicy = api.info?.description ?? "";
   assert(/Origin exacto/i.test(csrfPolicy) && /allowlist/i.test(csrfPolicy) && /Origin ausente, null o ajeno/i.test(csrfPolicy) && /solo en memoria/i.test(csrfPolicy), "public contract must document exact-Origin allowlist, rejection cases and in-memory PWA token handling");
   validateCatalog(catalogV2, candidateCatalog);
@@ -64,7 +64,7 @@ function validatePublic(api, candidateManifest = manifest, candidateCatalog = ca
     "CSRF Problem Details fixture must be generic 403 gateway_csrf_invalid");
   assert(Object.keys(fixture).sort().join(",") === "code,instance,retryable,status,title,trace_id,type", "CSRF fixture must not carry parameters or sensitive details");
   const tokenRows = candidateManifest.token_delivery;
-  assert(tokenRows.length === 6, "exactly six responses must issue or rotate CSRF tokens");
+  assert(tokenRows.length === 7, "exactly seven responses must issue or rotate CSRF tokens");
   const seen = new Set();
   for (const row of tokenRows) {
     const key = `${row.method} ${row.path} ${row.operationId} ${row.status}`;
@@ -79,8 +79,9 @@ function validatePublic(api, candidateManifest = manifest, candidateCatalog = ca
     "post /identity/sessions createSession 200", "get /identity/session getCurrentSession 200",
     "post /identity/mfa/challenges completeMfaChallenge 200", "post /identity/device-authentications proveRegisteredDevicePossession 200",
     "post /identity/device-approval-confirmations confirmOwnerDeviceSelfApproval 200", "post /tenancy/organization-onboardings createInitialOrganization 201",
+    "post /tenancy/context-selections selectActiveOrganization 200",
   ].sort()), "CSRF token delivery inventory is incomplete or misplaced");
-  for (const id of ["createSession", "completeMfaChallenge", "proveRegisteredDevicePossession", "confirmOwnerDeviceSelfApproval", "createInitialOrganization"]) {
+  for (const id of ["createSession", "completeMfaChallenge", "proveRegisteredDevicePossession", "confirmOwnerDeviceSelfApproval", "createInitialOrganization", "selectActiveOrganization"]) {
     const row = allOperations(api).find((item) => item.operationId === id);
     const status = id === "createInitialOrganization" ? "201" : "200";
     assert(responseHeader(row.operation, status, "Set-Cookie"), `${id} ${status}: expected session cookie issuance or rotation`);
@@ -113,10 +114,10 @@ function validatePublic(api, candidateManifest = manifest, candidateCatalog = ca
   }
   const headerPlacements = [];
   for (const row of allOperations(api)) for (const [status, response] of Object.entries(row.operation.responses ?? {})) if (response.headers?.["X-CSRF-Token"]) headerPlacements.push(`${row.operationId} ${status}`);
-  assert(same(headerPlacements.sort(), [...seen].map((key) => key.split(" ").slice(2).join(" ")).sort()), "X-CSRF-Token response header appears outside the six approved responses");
+  assert(same(headerPlacements.sort(), [...seen].map((key) => key.split(" ").slice(2).join(" ")).sort()), "X-CSRF-Token response header appears outside the seven approved responses");
 }
 function validatePrivate(api, candidatePolicy = policy) {
-  assert(api.info?.version === "2.0.4", "private delegation OpenAPI must be v2.0.4");
+  assert(api.info?.version === "2.0.5", "private delegation OpenAPI must be v2.0.5");
   const external = allOperations(publicApi).filter((row) => !row.operation["x-internal"] && !row.path.startsWith("/internal/"));
   const rows = [...candidatePolicy.service_only_operations, ...candidatePolicy.delegated_operations];
   const excluded = candidatePolicy.excluded_internal_operations;
@@ -182,4 +183,4 @@ if (selfTest) {
   const duplicateError = structuredClone(catalogV3); duplicateError.errors[19].code = duplicateError.errors[0].code;
   await reject(() => validatePublic(publicApi, manifest, duplicateError), "duplicate/altered error catalog", "v3 error codes must be unique");
 }
-console.log(`CSRF contract gate passed: public=${manifest.public_contract_version}; token_delivery=6; authenticated_mutations=13; private_matrix=19 (4 service+15 delegated)+2 excluded; error_catalog_v3=${catalogV3.errors.length}; self_test_rejections=${negatives}; HMAC/session binding and dynamic Origin validation demonstrated=false (gateway PF1-06C).`);
+console.log(`CSRF contract gate passed: public=${manifest.public_contract_version}; token_delivery=7; authenticated_mutations=13; private_matrix=19 (4 service+15 delegated)+2 excluded; error_catalog_v3=${catalogV3.errors.length}; self_test_rejections=${negatives}; HMAC/session binding and dynamic Origin validation demonstrated=false (gateway PF1-06C).`);

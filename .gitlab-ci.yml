@@ -40,12 +40,15 @@ validate:openapi:
     - node scripts/validate-gateway-identity-policy-v2.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
     - node scripts/validate-membership-pagination-v2.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
     - node scripts/validate-csrf-contract-v3.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+    - node scripts/validate-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+    - node scripts/prepare-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json .ci-artifacts/session-rotation-replay-v5 --self-test
   artifacts:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
       - .ci-artifacts/identity-rest-v2-fixtures/
       - .ci-artifacts/device-registration-challenge-v2/
       - .ci-artifacts/identity-internal-auth-fixtures/
+      - .ci-artifacts/session-rotation-replay-v5/
     expire_in: 1 day
 
 validate:json-schema:
@@ -70,6 +73,7 @@ validate:json-schema:
     - sh scripts/validate-identity-rest-fixtures-v2.sh .ci-artifacts/identity-rest-v2-fixtures
     - sh scripts/validate-device-registration-challenge-v2.sh .ci-artifacts/device-registration-challenge-v2
     - sh scripts/validate-membership-pagination-v2.sh
+    - sh scripts/validate-session-rotation-replay-v5.sh .ci-artifacts/session-rotation-replay-v5
 
 validate:internal-auth-schema:
   stage: validate
@@ -89,6 +93,9 @@ validate:identity-checklist:
     - node scripts/validate-contract-refs.mjs --self-test
     - node scripts/validate-identity-onboarding.mjs --self-test
     - node scripts/validate-device-proof-vectors.mjs
+    - node --check scripts/validate-session-rotation-replay-v5.mjs
+    - node --check scripts/prepare-session-rotation-replay-v5.mjs
+    - sh -n scripts/validate-session-rotation-replay-v5.sh
 
 validate:gateway-delegation-schema:
   stage: validate

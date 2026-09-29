@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.4
+  version: 2.0.5
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -103,14 +103,23 @@ paths:
     delete:
       tags: [IdentityOnboarding]
       operationId: logoutCurrentSession
-      description: Revoca la sesion autenticada actual y expira la cookie segura del navegador; requiere proteccion CSRF y no crea una sesion nueva.
+      description: >-
+        Revoca idempotentemente la sesión autenticada actual y expira la cookie
+        segura del navegador; requiere Idempotency-Key UUIDv7, cookie, Origin
+        permitido y protección CSRF. La repetición exacta no duplica el efecto
+        ni la auditoría y devuelve 204 con la cookie expirada. Solo después de
+        un rechazo explícito que identifique una sesión ya inválida, si el
+        gateway presentó una cookie y Origin/CSRF fueron válidos, puede usar
+        204 para limpiar localmente esa cookie. Cookie ausente, Origin/CSRF
+        inválido o indisponibilidad no se convierten en logout exitoso.
       summary: Cierra la sesión actual
       security: [{sessionCookie: [], csrfToken: []}]
-      parameters: [{$ref: '#/components/parameters/Traceparent'}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       responses:
         '204': {description: Sesión revocada y cookie expirada., headers: {Set-Cookie: {schema: {type: string}, description: Expira __Host-oc_session con atributos seguros.}, Cache-Control: {schema: {type: string}, example: no-store}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
+        '503': {$ref: '#/components/responses/Unavailable'}
   /identity/session-revocations:
     post:
       tags: [IdentityOnboarding]
@@ -195,11 +204,29 @@ paths:
         verificar la firma y consume el desafío atómicamente una sola vez. La
         sesión restringida solo permite registrar el dispositivo y solicitar
         aprobación; no concede acceso tenant ni activa un POS físico.
+        Para la misma Idempotency-Key y carga canónica se devuelve el mismo
+        challenge_id, nonce y vencimiento originales incluso si el desafío ya
+        expiró; el replay no crea otro desafío ni extiende los cinco minutos.
+        Una clave nueva solicita un desafío nuevo. El resultado solo se entrega
+        por el canal autenticado y nunca se registra en logs ni eventos.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}}}}}
       responses:
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
-        '200': {description: Desafío efímero para purpose registration; devuelve resultado sin crear un recurso navegable., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeResponse'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, purpose: registration, expires_at: '2026-09-25T12:05:00Z'}}}}
+        '200':
+          description: Desafío temporal de cinco minutos. El replay exacto devuelve el mismo nonce y expires_at originales, incluso vencidos; no se extiende ni se registra.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_issue: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DeviceChallengeResponse'}
+              examples:
+                first_issue: {externalValue: examples/identity-session-rotation-replay-v5-public-registration-challenge.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-registration-challenge.json}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '429': {$ref: '#/components/responses/RateLimited'}
   /identity/device-authentication-challenges:
@@ -207,7 +234,20 @@ paths:
       tags: [IdentityOnboarding]
       operationId: createRegisteredDeviceAuthenticationChallenge
       summary: Emite un desafío de posesión para activar o renovar una sesión
-      description: Emite un desafío aleatorio de 32 bytes con ECDSA_P256/SHA-256 para una sesión restringida o activa. El servidor lo vincula a cuenta, sesión, device_id, propósito, organization_id cuando corresponda y vencimiento. El navegador firma la serialización UTF-8 canónica del contrato; solo la clave registrada de ese dispositivo puede probar posesión. El desafío se consume atómicamente una vez. Esta prueba no concede permisos tenant; al consumirla se revalidan MFA y aprobación vigente para la organización.
+      description: >-
+        Emite un desafío aleatorio de 32 bytes con ECDSA_P256/SHA-256 para una
+        sesión restringida o activa. El servidor lo vincula a cuenta, sesión,
+        device_id, propósito, organization_id cuando corresponda y vencimiento.
+        Para la misma Idempotency-Key y carga canónica se devuelve el mismo
+        challenge_id, nonce y vencimiento originales incluso si el desafío ya
+        expiró; el replay no crea otro desafío ni extiende los cinco minutos.
+        Una clave nueva solicita un desafío nuevo. El navegador firma la
+        serialización UTF-8 canónica del contrato; solo la clave registrada de
+        ese dispositivo puede probar posesión. El desafío se consume
+        atómicamente una vez. Esta prueba no concede permisos tenant; al
+        consumirla se revalidan MFA y aprobación vigente para la organización.
+        El resultado solo se entrega por el canal autenticado y nunca se
+        registra en logs ni eventos.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
@@ -217,7 +257,20 @@ paths:
             schema: {$ref: '#/components/schemas/DeviceAuthenticationChallengeRequest'}
             example: {device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, organization_id: '018f0000-0000-7000-8000-000000000906'}
       responses:
-        '200': {description: 'Desafío temporal vinculado a sesión, dispositivo y propósito; devuelve resultado sin crear un recurso navegable.', headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceAuthenticationChallenge'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, key_algorithm: ECDSA_P256, device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, expires_at: '2026-09-25T12:05:00Z'}}}}
+        '200':
+          description: Desafío temporal de cinco minutos. El replay exacto devuelve el mismo nonce y expires_at originales, incluso vencidos; no se extiende ni se registra.
+          headers:
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_issue: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DeviceAuthenticationChallenge'}
+              examples:
+                first_issue: {externalValue: examples/identity-session-rotation-replay-v5-public-authentication-challenge.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-authentication-challenge.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
@@ -238,7 +291,22 @@ paths:
             schema: {$ref: '#/components/schemas/DeviceAuthenticationProof'}
             example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_id: '018f0000-0000-7000-8000-000000000904', signature: zJV_UX1p1bikqQiRtIgX4HoYaKf2R4uiua4ggfE089s9o2WXaAO59WI7IQ5UwIYPSlHD4yZ4S7I13-lpbw5mAg}
       responses:
-        '200': {description: 'Posesión probada y cookie rotada; estado no operativo si falta aprobación tenant.', headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie opaca rotada con atributos Secure, HttpOnly y SameSite=Lax.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200':
+          description: Posesión probada; respuesta original se reproduce solo para la misma clave y carga si la sesión, autorización y aprobación siguen vigentes.
+          headers:
+            X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
+            Set-Cookie: {schema: {type: string}, description: 'Cookie opaca rotada con atributos Secure, HttpOnly y SameSite=Lax.'}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_effect: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SessionContext'}
+              examples:
+                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-session-context.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-session-context.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
@@ -306,7 +374,22 @@ paths:
             schema: {$ref: '#/components/schemas/OwnerDeviceApprovalConfirmation'}
             example: {approval_request_id: '018f0000-0000-7000-8000-000000000922', organization_id: '018f0000-0000-7000-8000-000000000906', device_id: '018f0000-0000-7000-8000-000000000904', token: 'TOKEN-EJEMPLO-NO-FUNCIONAL', challenge_id: '018f0000-0000-7000-8000-000000000931', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: Fdd2lpVdE4Vj4McJ44QyzV72wD2pAB1FWpqBDJjyh30EHygwRWR0dsKVv_MZdDGeUfydvpuGxWI7MsQGNHQ1fQ, expected_membership_version: 2}
       responses:
-        '200': {description: Aprobación tenant-scoped registrada; session y dispositivo confirmados en el resultado., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}}}}
+        '200':
+          description: Aprobación tenant-scoped registrada. El replay exacto solo recupera la respuesta si la sesión y aprobación siguen vigentes.
+          headers:
+            X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
+            Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_effect: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}
+              examples:
+                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-device-approval.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-device-approval.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
@@ -323,7 +406,23 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingRequest'}, example: {organization_name: Comercio de ejemplo, branch_name: Casa central, pos_name: Caja 1, locale: es-AR, device_id: '018f0000-0000-7000-8000-000000000904', device_challenge_id: '018f0000-0000-7000-8000-000000000941', device_challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_signature: NSoukx7aU-44gJIUs2rkv7eDlxNMeLe5janDqK2957GEUDCLgDPmZ5HO9dvHzqEw4_tMSRZJhaQsRhXaxXPSYg, expected_device_version: 1}}}}
       responses:
-        '201': {description: 'Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización.', headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Location: {schema: {type: string, format: uri-reference}}, Set-Cookie: {schema: {type: string}, description: Cookie rotada y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}, example: {organization: {organization_id: '018f0000-0000-7000-8000-000000000011', name: Comercio de ejemplo, version: 1}, branch: {branch_id: '018f0000-0000-7000-8000-000000000012', name: Casa central, version: 1}, pos: {pos_id: '018f0000-0000-7000-8000-000000000013', name: Caja 1, version: 1}, membership: {membership_id: '018f0000-0000-7000-8000-000000000014', membership_type: INTERNAL, role: OWNER, version: 1}, device_approval: {device_id: '018f0000-0000-7000-8000-000000000007', status: approved, version: 1}, version: 1}}}}
+        '201':
+          description: Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización. El replay exacto solo es recuperable si la sesión y autorizaciones siguen vigentes.
+          headers:
+            X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
+            Location: {schema: {type: string, format: uri-reference}}
+            Set-Cookie: {schema: {type: string}, description: Cookie rotada y segura.}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_effect: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}
+              examples:
+                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-initial-organization.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-initial-organization.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/IdempotencyConflict'}
@@ -369,7 +468,22 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ContextSelectionRequest'}, example: {membership_id: '018f0000-0000-7000-8000-000000000008', expected_version: 2}}}}
       responses:
-        '200': {description: Contexto actualizado, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200':
+          description: Contexto actualizado y credencial de sesión rotada. Un replay exacto usa el intercambio privado de recuperación y reproduce el mismo body solo si autorización y sesión siguen vigentes.
+          headers:
+            X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
+            Set-Cookie: {schema: {type: string}, description: Cookie opaca rotada con atributos seguros.}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed:
+              description: Booleano; HTTP serializa los valores como `false` o `true`.
+              schema: {type: boolean}
+              examples: {first_effect: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SessionContext'}
+              examples:
+                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-session-context.json}
+                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-session-context.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {description: 'Membresía inexistente o no seleccionable para la cuenta.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:tenancy_organization_not_selectable', title: Organización no seleccionable, status: 404, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: tenancy_organization_not_selectable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Identity v2.0.4 public CSRF contract fixtures",
-  "public_contract_version": "2.0.4",
+  "title": "Identity v2.0.5 public CSRF contract fixtures",
+  "public_contract_version": "2.0.5",
   "csrf_error": {
     "status": 403,
     "code": "gateway_csrf_invalid",
@@ -13,7 +13,8 @@
     { "operationId": "completeMfaChallenge", "method": "post", "path": "/identity/mfa/challenges", "status": "200" },
     { "operationId": "proveRegisteredDevicePossession", "method": "post", "path": "/identity/device-authentications", "status": "200" },
     { "operationId": "confirmOwnerDeviceSelfApproval", "method": "post", "path": "/identity/device-approval-confirmations", "status": "200" },
-    { "operationId": "createInitialOrganization", "method": "post", "path": "/tenancy/organization-onboardings", "status": "201" }
+    { "operationId": "createInitialOrganization", "method": "post", "path": "/tenancy/organization-onboardings", "status": "201" },
+    { "operationId": "selectActiveOrganization", "method": "post", "path": "/tenancy/context-selections", "status": "200" }
   ],
   "authenticated_mutations": [
     "logoutCurrentSession",

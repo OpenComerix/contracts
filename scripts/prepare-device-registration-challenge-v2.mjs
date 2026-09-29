@@ -52,8 +52,8 @@ function assertSameCandidateKey(challengeRequest, registrationRequest, label) {
   assert(same(challengeRequest?.public_key, registrationRequest?.public_key), `${label}: public_key mismatch with persisted challenge candidate`);
 }
 function validateContract(api, candidateManifest = manifest, fixtureValues) {
-  assert(api.info?.version === "2.0.4", "public identity contract must be v2.0.4");
-  assert(candidateManifest.version === "2.0.4", "device proof fixture manifest must target v2.0.4");
+  assert(api.info?.version === "2.0.5", "public identity contract must be v2.0.5");
+  assert(candidateManifest.version === "2.0.5", "device proof fixture manifest must target v2.0.5");
   assert(same(candidateManifest.operations, {
     challenge: { method: "post", path: "/identity/device-registration-challenges", operationId: "createDeviceRegistrationChallenge" },
     registration: { method: "post", path: "/identity/devices", operationId: "registerWebDevice" },
@@ -144,4 +144,4 @@ await writeJson("schema-key-binding-shape.json", withDialect(pairSchema));
 await writeJson("challenge-request-valid.json", result.challengeExample);
 await writeJson("registration-request-valid.json", result.registrationExample);
 for (const entry of manifest.negative_fixtures) await writeJson(entry.name + ".json", fixtureValues.get(entry.name));
-console.log(`PF1-06A-R4 device challenge gate passed: public_contract=2.0.4; shared_DevicePublicJwk=2; published_key_pair_match=1; structural_negative_fixtures=3; key_binding_negative_fixtures=1; self_test_rejections=${negatives.length}; cryptographic_signature_verification=not_demonstrated (service PF1-06B).`);
+console.log(`PF1-06A-R4 device challenge gate passed: public_contract=2.0.5; shared_DevicePublicJwk=2; published_key_pair_match=1; structural_negative_fixtures=3; key_binding_negative_fixtures=1; self_test_rejections=${negatives.length}; cryptographic_signature_verification=not_demonstrated (service PF1-06B).`);
