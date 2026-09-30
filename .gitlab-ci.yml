@@ -24,6 +24,7 @@ validate:openapi:
     - npx --yes @redocly/cli@2.53.3 lint openapi/identity-onboarding-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v2.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v2.bundle.json
+    - node scripts/validate-gateway-deadline-exceeded-v5.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
     - node scripts/prepare-identity-rest-fixtures-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/identity-rest-v2-fixtures --self-test
     - node scripts/prepare-device-registration-challenge-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/device-registration-challenge-v2 --self-test
     - npx --yes @redocly/cli@2.53.3 lint openapi/identity-internal-auth-v1.yaml
@@ -62,11 +63,12 @@ validate:json-schema:
     - job: validate:openapi
       artifacts: true
   script:
-    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/client-signal-v1.schema.json openapi/membership-pagination-v2.schema.json openapi/csrf-v3-problem.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json errors/error-catalog-v3.schema.json errors/error-catalog-v4.schema.json --verbose
+    - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/problem-details-v2.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/client-signal-v1.schema.json openapi/membership-pagination-v2.schema.json openapi/csrf-v3-problem.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json errors/error-catalog-v3.schema.json errors/error-catalog-v4.schema.json errors/error-catalog-v5.schema.json --verbose
     - jsonschema validate openapi/client-signal-v1.schema.json openapi/client-signal-v1-fixtures.json --verbose
     - jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
     - jsonschema validate errors/error-catalog-v2.schema.json errors/error-catalog-v2.json --verbose
     - jsonschema validate errors/error-catalog-v4.schema.json errors/error-catalog-v4.json --verbose
+    - sh scripts/validate-gateway-deadline-exceeded-v5.sh
     - sh scripts/validate-csrf-fixtures-v3.sh
     - jsonschema validate openapi/device-proof-v1-vectors.schema.json openapi/device-proof-v1-vectors.json --verbose
     - jsonschema validate commands/notifications.send-email-verification.v1.schema.json commands/examples/notifications.send-email-verification.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose

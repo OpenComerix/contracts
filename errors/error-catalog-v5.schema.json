@@ -1,0 +1,97 @@
+{
+    "$schema":  "https://json-schema.org/draft/2020-12/schema",
+    "$id":  "https://contracts.opencomerix.example/errors/error-catalog-v5.schema.json",
+    "title":  "OpenComerix versioned error catalog v5",
+    "type":  "object",
+    "additionalProperties":  false,
+    "required":  [
+                     "version",
+                     "errors"
+                 ],
+    "properties":  {
+                       "version":  {
+                                       "const":  5
+                                   },
+                       "errors":  {
+                                      "type":  "array",
+                                      "items":  {
+                                                    "type":  "object",
+                                                    "additionalProperties":  false,
+                                                    "required":  [
+                                                                     "code",
+                                                                     "owner",
+                                                                     "domain",
+                                                                     "description",
+                                                                     "statuses",
+                                                                     "retryable_by_default",
+                                                                     "exposure",
+                                                                     "allowed_parameters",
+                                                                     "deprecated"
+                                                                 ],
+                                                    "properties":  {
+                                                                       "code":  {
+                                                                                    "type":  "string",
+                                                                                    "pattern":  "^[a-z][a-z0-9]*(?:_[a-z0-9]+)*_[a-z][a-z0-9]*(?:_[a-z0-9]+)*$"
+                                                                                },
+                                                                       "owner":  {
+                                                                                     "type":  "string",
+                                                                                     "minLength":  1
+                                                                                 },
+                                                                       "domain":  {
+                                                                                      "type":  "string",
+                                                                                      "minLength":  1
+                                                                                  },
+                                                                       "description":  {
+                                                                                           "type":  "string",
+                                                                                           "minLength":  1
+                                                                                       },
+                                                                       "statuses":  {
+                                                                                        "type":  "array",
+                                                                                        "minItems":  1,
+                                                                                        "uniqueItems":  true,
+                                                                                        "items":  {
+                                                                                                      "type":  "integer",
+                                                                                                      "enum":  [
+                                                                                                                   400,
+                                                                                                                   401,
+                                                                                                                   403,
+                                                                                                                   404,
+                                                                                                                   409,
+                                                                                                                   410,
+                                                                                                                   422,
+                                                                                                                   429,
+                                                                                                                   500,
+                                                                                                                   503,
+                                                                                                                   504
+                                                                                                               ]
+                                                                                                  }
+                                                                                    },
+                                                                       "retryable_by_default":  {
+                                                                                                    "type":  "boolean"
+                                                                                                },
+                                                                       "exposure":  {
+                                                                                        "type":  "string",
+                                                                                        "enum":  [
+                                                                                                     "public",
+                                                                                                     "restricted",
+                                                                                                     "internal"
+                                                                                                 ]
+                                                                                    },
+                                                                       "allowed_parameters":  {
+                                                                                                  "type":  "array",
+                                                                                                  "uniqueItems":  true,
+                                                                                                  "items":  {
+                                                                                                                "type":  "string"
+                                                                                                            }
+                                                                                              },
+                                                                       "deprecated":  {
+                                                                                          "type":  [
+                                                                                                       "boolean",
+                                                                                                       "string"
+                                                                                                   ]
+                                                                                      }
+                                                                   }
+                                                }
+                                  }
+                   }
+}

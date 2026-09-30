@@ -32,7 +32,7 @@ const bundlePath = process.argv.slice(2).find((arg) => arg !== "--self-test");
 if (bundlePath) {
   const api = JSON.parse(readFileSync(resolve(bundlePath), "utf8"));
   function validateMembershipMfa(document) {
-    if (document.info?.version !== "2.0.6") throw new Error("public identity contract must be v2.0.6");
+    if (document.info?.version !== "2.0.7") throw new Error("public identity contract must be v2.0.7");
     const response = document.paths?.["/tenancy/memberships"]?.get?.responses?.["403"];
     const content = response?.content?.["application/problem+json"];
     const example = content?.example;

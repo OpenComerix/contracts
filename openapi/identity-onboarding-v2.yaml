@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.6
+  version: 2.0.7
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -49,6 +49,7 @@ paths:
             examples:
               valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real', first_name: Ana, last_name: Pérez, birth_date: '1990-01-02', country: AR, province: Buenos Aires, locality: La Plata, postal_code: '1900', address: 'Calle de ejemplo 123'}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Solicitud aceptada con respuesta genérica, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/RegistrationAccepted'}}}}
         '400': {description: 'Solicitud inválida, incluido un campo requerido ausente.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_request', title: Solicitud inválida, status: 400, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_request, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
         '409': {$ref: '#/components/responses/IdempotencyConflict'}
@@ -66,6 +67,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/EmailVerificationRequest'}, example: {token: 'valor-ejemplo-no-funcional'}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Verificación completada o respuesta genérica, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/EmailVerificationResponse'}, examples: {verified: {value: {status: verified, next_actions: [enroll_mfa, register_device, create_organization]}}, expired_or_used: {value: {status: not_verified, next_actions: [verify_email]}}}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '409': {$ref: '#/components/responses/IdempotencyConflict'}
@@ -83,6 +85,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/LoginRequest'}, examples: {valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real'}}, invalid_credentials: {value: {email: desconocido@example.invalid, password: 'credencial-ejemplo'}}}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No autoriza tenant hasta completar MFA y prueba/aprobación del dispositivo., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/LoginResponse'}, examples: {authenticated_restricted: {value: {status: restricted, session_expires_at: '2026-09-25T12:05:00Z', next_actions: [enroll_mfa, register_device, create_organization]}}, mfa_pending: {value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-09-25T12:05:00Z', next_actions: [complete_mfa]}}}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '401': {description: Credenciales inválidas; respuesta indistinguible para cuenta ausente, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_credentials', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_credentials, trace_id: '018f0000-0000-7000-8000-000000000002', retryable: false}}}}
@@ -97,6 +100,7 @@ paths:
       description: Devuelve el estado vigente de la cuenta, sesion, email, MFA, dispositivo y contexto autorizado sin incluir la credencial de sesion.
       security: [{sessionCookie: []}]
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/Forbidden'}
@@ -116,6 +120,7 @@ paths:
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '204': {description: Sesión revocada y cookie expirada., headers: {Set-Cookie: {schema: {type: string}, description: Expira __Host-oc_session con atributos seguros.}, Cache-Control: {schema: {type: string}, example: no-store}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
@@ -130,6 +135,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/SessionRevocationRequest'}, example: {except_current: true, expected_security_version: 3}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Resultado de revocación., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionRevocationResponse'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
@@ -145,6 +151,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/TotpEnrollmentRequest'}, example: {label: navegador-principal}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '201': {description: 'Primera emisión del material TOTP temporal; no registrar ni cachear.', headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/mfa/totp-enrollments/018f0000-0000-7000-8000-000000000003}, Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: false}}, content: {application/json: {schema: {$ref: '#/components/schemas/TotpEnrollmentFirstResponse'}, example: {status: issued, enrollment_id: '018f0000-0000-7000-8000-000000000003', secret: 'SECRETO-OMITIDO', otpauth_uri: 'otpauth://totp/OpenComerix:ejemplo?secret=OMITIDO&issuer=OpenComerix', expires_at: '2026-09-25T12:10:00Z'}}}}
         '200': {description: 'Replay exacto: no regenera ni recupera secreto o URI.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, example: true}}, content: {application/json: {schema: {$ref: '#/components/schemas/SensitiveMaterialReplay'}, example: {status: already_issued}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
@@ -161,6 +168,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/EnrollmentId'}, {$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/TotpConfirmationRequest'}, example: {code: '000000'}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: 'Primera emisión: Idempotency-Replayed false, con códigos de recuperación de un solo uso. Replay exacto: Idempotency-Replayed true y status already_issued, sin volver a exponer códigos.', headers: {Cache-Control: {schema: {type: string}, example: no-store}, Idempotency-Replayed: {schema: {type: boolean}, description: 'false para primera emisión; true para replay exacto already_issued.'}}, content: {application/json: {schema: {oneOf: [{$ref: '#/components/schemas/TotpConfirmationResponse'}, {$ref: '#/components/schemas/SensitiveMaterialReplay'}]}, examples: {first_issuance: {summary: 'Primera emisión (Idempotency-Replayed: false)', value: {status: issued, mfa_status: enrolled, recovery_codes: [RECOVERY-CODE-OMITIDO]}}, replay: {summary: 'Replay (Idempotency-Replayed: true)', value: {status: already_issued}}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
@@ -179,6 +187,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/MfaChallengeRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000004', code: '000000'}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '200': {description: Sesión emitida en cookie segura; nunca en JSON., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
@@ -212,6 +221,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceChallengeRequest'}, example: {key_algorithm: ECDSA_P256, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '200':
           description: Desafío temporal de cinco minutos. El replay exacto devuelve el mismo nonce y expires_at originales, incluso vencidos; no se extiende ni se registra.
@@ -257,6 +267,7 @@ paths:
             schema: {$ref: '#/components/schemas/DeviceAuthenticationChallengeRequest'}
             example: {device_id: '018f0000-0000-7000-8000-000000000904', purpose: activate_session, organization_id: '018f0000-0000-7000-8000-000000000906'}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
           description: Desafío temporal de cinco minutos. El replay exacto devuelve el mismo nonce y expires_at originales, incluso vencidos; no se extiende ni se registra.
           headers:
@@ -291,6 +302,7 @@ paths:
             schema: {$ref: '#/components/schemas/DeviceAuthenticationProof'}
             example: {challenge_id: '018f0000-0000-7000-8000-000000000911', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_id: '018f0000-0000-7000-8000-000000000904', signature: zJV_UX1p1bikqQiRtIgX4HoYaKf2R4uiua4ggfE089s9o2WXaAO59WI7IQ5UwIYPSlHD4yZ4S7I13-lpbw5mAg}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
           description: Posesión probada; respuesta original se reproduce solo para la misma clave y carga si la sesión, autorización y aprobación siguen vigentes.
           headers:
@@ -331,6 +343,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/DeviceRegistrationRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000901', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, public_key: {kty: EC, crv: P-256, x: ptE8S_rlKwJbCVU0nvO5Ar4vjak0QbW3vLYQUE8FPRw, y: jm-uemUYGs6gAOrgH8iUep9iajUiQdmJDbKTzGJMcbA}, signature: J7DmERcbJxUFaEfL7_W7XwxzDvtLpRUunmyPEk2Ljbj1OeE8ULRjl0JuUVRJvIW3YK3g7ELMPvs1j3C-_9K-Rw, device_name: Navegador principal, platform: web}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '201': {description: Dispositivo creado en estado pending_approval., headers: {Location: {schema: {type: string, format: uri-reference}, example: /identity/devices/018f0000-0000-7000-8000-000000000007}, Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/Device'}, example: {device_id: '018f0000-0000-7000-8000-000000000007', status: pending_approval, version: 1}}}}
         '400': {$ref: '#/components/responses/InvalidRequest'}
@@ -352,6 +365,7 @@ paths:
             schema: {$ref: '#/components/schemas/OwnerDeviceApprovalRequest'}
             example: {organization_id: '018f0000-0000-7000-8000-000000000906', challenge_id: '018f0000-0000-7000-8000-000000000921', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: jP1Ovmzd3abt71RKc2c69tH_P8UPhKAeeaQTLK8HWwdFaYg3S-JPeUGXoI6HiDNW6GtJMYIx3lR_fJE-PaBSUw, expected_membership_version: 2}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Solicitud registrada en estado pendiente; el token no se devuelve., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OwnerDeviceApprovalPending'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
@@ -374,6 +388,7 @@ paths:
             schema: {$ref: '#/components/schemas/OwnerDeviceApprovalConfirmation'}
             example: {approval_request_id: '018f0000-0000-7000-8000-000000000922', organization_id: '018f0000-0000-7000-8000-000000000906', device_id: '018f0000-0000-7000-8000-000000000904', token: 'TOKEN-EJEMPLO-NO-FUNCIONAL', challenge_id: '018f0000-0000-7000-8000-000000000931', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: Fdd2lpVdE4Vj4McJ44QyzV72wD2pAB1FWpqBDJjyh30EHygwRWR0dsKVv_MZdDGeUfydvpuGxWI7MsQGNHQ1fQ, expected_membership_version: 2}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
           description: Aprobación tenant-scoped registrada. El replay exacto solo recupera la respuesta si la sesión y aprobación siguen vigentes.
           headers:
@@ -406,6 +421,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingRequest'}, example: {organization_name: Comercio de ejemplo, branch_name: Casa central, pos_name: Caja 1, locale: es-AR, device_id: '018f0000-0000-7000-8000-000000000904', device_challenge_id: '018f0000-0000-7000-8000-000000000941', device_challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_signature: NSoukx7aU-44gJIUs2rkv7eDlxNMeLe5janDqK2957GEUDCLgDPmZ5HO9dvHzqEw4_tMSRZJhaQsRhXaxXPSYg, expected_device_version: 1}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '201':
           description: Recursos iniciales, membresía OWNER y aprobación del dispositivo creados atómicamente; Location apunta a la organización. El replay exacto solo es recuperable si la sesión y autorizaciones siguen vigentes.
           headers:
@@ -455,6 +471,7 @@ paths:
             type: string
             maxLength: 2048
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Membresías visibles de la cuenta., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/MembershipList'}}}}
         '400': {description: "Límite mal formado o cursor inválido, expirado, alterado o no utilizable por esta cuenta.", content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {invalid_limit: {externalValue: examples/membership-pagination-v2-problem-invalid-limit.json}, invalid_cursor: {externalValue: examples/membership-pagination-v2-problem-invalid-cursor.json}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
@@ -476,6 +493,7 @@ paths:
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ContextSelectionRequest'}, example: {membership_id: '018f0000-0000-7000-8000-000000000008', expected_version: 2}}}}
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
           description: Contexto actualizado y credencial de sesión rotada. Un replay exacto usa el intercambio privado de recuperación y reproduce el mismo body solo si autorización y sesión siguen vigentes.
           headers:
@@ -504,6 +522,7 @@ paths:
       description: Consulta la identidad global y, cuando exista, la organizacion activa, membresia, permisos efectivos y scopes derivados de autorizaciones vigentes.
       security: [{sessionCookie: []}]
       responses:
+        '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200': {description: Contexto derivado de autorizaciones vigentes, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/Forbidden'}
@@ -572,6 +591,7 @@ components:
     Unavailable: {description: Dependencia temporalmente no disponible., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_dependency_unavailable', title: Servicio no disponible, status: 503, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_dependency_unavailable, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
     Expired: {description: Material temporal expirado o consumido., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
     InternalError: {description: 'Error interno inesperado, sin detalles sensibles.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_internal_error', title: Error interno, status: 500, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_internal_error, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    GatewayDeadlineExceeded: {description: 'Tiempo de espera máximo del gateway agotado.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:gateway_deadline_exceeded', title: 'Tiempo de espera agotado', status: 504, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: gateway_deadline_exceeded, detail: 'La solicitud superó el tiempo máximo permitido.', trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
     AuthenticatedMutationForbidden:
       description: >-
         Problem Details 403 para mutaciones autenticadas. Mantiene las causas
@@ -657,4 +677,4 @@ components:
     MembershipList: {type: object, additionalProperties: false, required: [items, page], properties: {items: {type: array, items: {$ref: '#/components/schemas/MembershipRef'}}, page: {type: object, additionalProperties: false, required: [next_cursor, has_more, limit], properties: {next_cursor: {oneOf: [{type: string, maxLength: 2048, description: Cursor opaco; no es credencial ni prueba de tenant.}, {type: 'null'}]}, has_more: {type: boolean}, limit: {type: integer, minimum: 1, maximum: 100}}}}}
     ContextSelectionRequest: {type: object, additionalProperties: false, required: [membership_id, expected_version], properties: {membership_id: {$ref: '#/components/schemas/Uuid'}, expected_version: {type: integer, minimum: 1}}}
     DeliveryMaterial: {type: object, additionalProperties: false, required: [recipient, verification_url, expires_at, locale, template_parameters], properties: {recipient: {type: string, format: email}, verification_url: {type: string, format: uri, description: 'URL sensible con token; disponible solo en respuesta interna autenticada, no registrar.', x-sensitive: true}, expires_at: {type: string, format: date-time}, locale: {type: string}, template_parameters: {type: object, additionalProperties: false, properties: {display_name: {type: string, maxLength: 100}}}}}
-    Problem: {$ref: './problem-details-v1.schema.json'}
+    Problem: {$ref: './problem-details-v2.schema.json'}
