@@ -46,7 +46,7 @@ function validateCatalog(base, candidate) {
 }
 
 function validateContract(api, candidateCatalog = catalog) {
-  assert(api.info?.version === "2.0.7", "identity-onboarding v2 must be version 2.0.7");
+  assert(api.info?.version === "2.0.8", "identity-onboarding v2 must be version 2.0.8");
   const op = api.paths?.["/tenancy/memberships"]?.get;
   assert(op?.operationId === "listMyMemberships", "membership list operation missing or changed");
   const params = op.parameters ?? [];

@@ -82,7 +82,7 @@ function validateFixtureInventory(candidateManifest, filenames) {
 }
 
 async function validatePublic(api, candidateManifest = manifest, bodies = new Map()) {
-  assert(api.info?.version === "2.0.7", "public OpenAPI version must be 2.0.7");
+  assert(api.info?.version === "2.0.8", "public OpenAPI version must be 2.0.8");
   walk(api, (value, path) => {
     assert(!Object.hasOwn(value.properties ?? {}, "session_credential") && !Object.hasOwn(value, "session_credential"), `public schema or example leaks session_credential at ${path}`);
   });
@@ -162,7 +162,7 @@ async function validatePublic(api, candidateManifest = manifest, bodies = new Ma
 }
 
 async function validatePrivate(api, candidateManifest = manifest, candidateCatalog = catalog, bodies = new Map()) {
-  assert(api.info?.version === "2.0.6", "private OpenAPI version must be 2.0.6");
+  assert(api.info?.version === "2.0.7", "private OpenAPI version must be 2.0.7");
   const ordinaryDelegation = operation(api, "post", "/api/v1/internal/identity/delegations", "createGatewayUserDelegation");
   assert(ordinaryDelegation.security?.length === 1 && same(Object.keys(ordinaryDelegation.security[0]).sort(), ["currentSessionCookie", "gatewayServiceBearer"]), "ordinary delegation must require the current session cookie, never the prior cookie");
   const currentCookie = api.components?.securitySchemes?.currentSessionCookie;
@@ -359,4 +359,4 @@ if (selfTest) {
   const m3 = structuredClone(manifest); m3.rejections.pop();
   await expectReject("rejection case omitted", "rejection manifest must inventory all nine authentication, replay, and in-progress cases", () => validatePrivate(privateApi, m3, catalog, loaded));
 }
-console.log(`Session rotation replay v5 gate passed: public=2.0.7; private=2.0.6; rotations=4; challenge_replays=2; private_positive_request_response_fixtures=8; problem_fixtures=5; rejection_cases=${manifest.rejections.length}; negative_fixtures=${manifest.negative_requests.length + manifest.negative_responses.length + manifest.negative_public_bodies.length}; self_test_rejections=${rejected}; runtime HMAC/cookie/current-state validation demonstrated=false (service implementation out of scope).`);
+console.log(`Session rotation replay v5 regression gate passed: public=2.0.8; private=2.0.7; rotations=4; challenge_replays=2; private_positive_request_response_fixtures=8; problem_fixtures=5; rejection_cases=${manifest.rejections.length}; negative_fixtures=${manifest.negative_requests.length + manifest.negative_responses.length + manifest.negative_public_bodies.length}; self_test_rejections=${rejected}; runtime HMAC/cookie/current-state validation demonstrated=false (service implementation out of scope).`);

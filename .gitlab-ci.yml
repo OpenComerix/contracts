@@ -45,6 +45,8 @@ validate:openapi:
     - node scripts/validate-csrf-contract-v3.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
     - node scripts/validate-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
     - node scripts/prepare-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json .ci-artifacts/session-rotation-replay-v5 --self-test
+    - node scripts/prepare-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/owner-session-flow-v1
+    - node scripts/validate-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
   artifacts:
     paths:
       - .ci-artifacts/identity-rest-fixtures/
@@ -52,6 +54,7 @@ validate:openapi:
       - .ci-artifacts/device-registration-challenge-v2/
       - .ci-artifacts/identity-internal-auth-fixtures/
       - .ci-artifacts/session-rotation-replay-v5/
+      - .ci-artifacts/owner-session-flow-v1/
     expire_in: 1 day
 
 validate:json-schema:
@@ -64,6 +67,7 @@ validate:json-schema:
       artifacts: true
   script:
     - jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/problem-details-v2.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/client-signal-v1.schema.json openapi/membership-pagination-v2.schema.json openapi/csrf-v3-problem.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json errors/error-catalog-v3.schema.json errors/error-catalog-v4.schema.json errors/error-catalog-v5.schema.json --verbose
+    - jsonschema metaschema .ci-artifacts/owner-session-flow-v1/*.schema.json --default-dialect https://json-schema.org/draft/2020-12/schema --verbose
     - jsonschema validate openapi/client-signal-v1.schema.json openapi/client-signal-v1-fixtures.json --verbose
     - jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
     - jsonschema validate errors/error-catalog-v2.schema.json errors/error-catalog-v2.json --verbose
@@ -80,6 +84,7 @@ validate:json-schema:
     - sh scripts/validate-device-registration-challenge-v2.sh .ci-artifacts/device-registration-challenge-v2
     - sh scripts/validate-membership-pagination-v2.sh
     - sh scripts/validate-session-rotation-replay-v5.sh .ci-artifacts/session-rotation-replay-v5
+    - sh scripts/validate-owner-session-flow-v1.sh .ci-artifacts/owner-session-flow-v1
 
 validate:internal-auth-schema:
   stage: validate

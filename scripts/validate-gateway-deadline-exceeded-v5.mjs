@@ -73,7 +73,7 @@ function validProblem(example, schema) {
     typeof example.instance === "string" && typeof example.trace_id === "string";
 }
 function validateBundle(document) {
-  assert(document.info?.version === "2.0.7", "public OpenAPI must be version 2.0.7");
+  assert(document.info?.version === "2.0.8", "public OpenAPI must be version 2.0.8");
   const problem = document.components?.schemas?.Problem;
   assert(problem && same(problem, problemV2), "public Problem component must dereference to the new Problem v2 schema");
   const rows = operationRows(document);
@@ -124,4 +124,4 @@ if (selfTest) {
   const changedSchema = clone(problemV2); changedSchema.properties.status.enum.push(418);
   reject("Problem v2 extra status", () => validateProblemSchema(problemV1, changedSchema));
 }
-console.log(`PF1-06A-R7 gate passed: public=2.0.7; Problem schema additive=true; catalog v4 preserved=${catalogV4.errors.length}; catalog v5=${catalogV5.errors.length}; public 504 operations=${publicIds.length}; notification exclusions=${excluded.length}; self-test rejections=${negatives}.`);
+console.log(`PF1-06A-R7 regression gate passed: public=2.0.8; Problem schema additive=true; catalog v4 preserved=${catalogV4.errors.length}; catalog v5=${catalogV5.errors.length}; public 504 operations=${publicIds.length}; notification exclusions=${excluded.length}; self-test rejections=${negatives}.`);

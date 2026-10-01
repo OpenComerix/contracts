@@ -54,7 +54,7 @@ function validateCatalog(base, candidate) {
   "v3 must add only gateway_csrf_invalid with owner/status/retry/parameter metadata");
 }
 function validatePublic(api, candidateManifest = manifest, candidateCatalog = catalogV3, fixture = problem) {
-  assert(api.info?.version === "2.0.7", "public identity OpenAPI must be v2.0.7");
+  assert(api.info?.version === "2.0.8", "public identity OpenAPI must be v2.0.8");
   const csrfPolicy = api.info?.description ?? "";
   assert(/Origin exacto/i.test(csrfPolicy) && /allowlist/i.test(csrfPolicy) && /Origin ausente, null o ajeno/i.test(csrfPolicy) && /solo en memoria/i.test(csrfPolicy), "public contract must document exact-Origin allowlist, rejection cases and in-memory PWA token handling");
   validateCatalog(catalogV2, candidateCatalog);
@@ -117,7 +117,7 @@ function validatePublic(api, candidateManifest = manifest, candidateCatalog = ca
   assert(same(headerPlacements.sort(), [...seen].map((key) => key.split(" ").slice(2).join(" ")).sort()), "X-CSRF-Token response header appears outside the seven approved responses");
 }
 function validatePrivate(api, candidatePolicy = policy) {
-  assert(api.info?.version === "2.0.6", "private delegation OpenAPI must be v2.0.6");
+  assert(api.info?.version === "2.0.7", "private delegation OpenAPI must be v2.0.7");
   const external = allOperations(publicApi).filter((row) => !row.operation["x-internal"] && !row.path.startsWith("/internal/"));
   const rows = [...candidatePolicy.service_only_operations, ...candidatePolicy.delegated_operations];
   const excluded = candidatePolicy.excluded_internal_operations;

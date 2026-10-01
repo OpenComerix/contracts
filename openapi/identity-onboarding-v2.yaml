@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.7
+  version: 2.0.8
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -39,7 +39,7 @@ paths:
       security: []
       operationId: registerGlobalAccount
       summary: Registra una cuenta global y solicita verificar su email
-      description: Crea una cuenta global con los datos de perfil requeridos y solicita verificar el email. Responde de forma generica para evitar enumerar cuentas; la contrasena solo se acepta en el request y nunca se devuelve ni registra.
+      description: Crea una cuenta global con los datos de perfil requeridos y solicita verificar el email. No vincula implícitamente una sesión ni activa una organización. Responde de forma genérica para evitar enumerar cuentas; la contraseña solo se acepta en el request y nunca se devuelve ni registra.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
         required: true
@@ -81,12 +81,33 @@ paths:
       security: []
       operationId: createSession
       summary: Inicia sesión
-      description: Autentica la cuenta global con email y contrasena. Si TOTP esta enrolado devuelve challenge_id, vencimiento y cookie opaca temporal restringida; solo POST /identity/mfa/challenges consume el challenge. Sin TOTP, la sesion restringida permite unicamente enrolamiento/confirmacion MFA, registro del dispositivo y bootstrap inicial aplicable. Ningun estado restringido o MFA pendiente permite operaciones tenant. Credenciales invalidas no revelan si la cuenta existe; replay idempotente no crea sesiones adicionales.
+      description: >-
+        Autentica la cuenta global con email y contraseña. Si TOTP está enrolado
+        devuelve challenge_id, vencimiento y cookie opaca temporal restringida;
+        solo POST /identity/mfa/challenges consume el challenge. Sin TOTP, la
+        sesión restringida permite únicamente enrolamiento/confirmación MFA,
+        registro del dispositivo y bootstrap inicial aplicable. El login y
+        completar MFA nunca conceden autoridad tenant: todo estado restricted
+        o mfa_pending carece de organización, membresía, permisos y scopes
+        tenant. El registro no vincula implícitamente la sesión ni activa una
+        organización. Credenciales inválidas no revelan si la cuenta existe;
+        replay idempotente no crea sesiones adicionales.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/LoginRequest'}, examples: {valid: {value: {email: persona@example.invalid, password: 'ejemplo-seguro-no-real'}}, invalid_credentials: {value: {email: desconocido@example.invalid, password: 'credencial-ejemplo'}}}}}}
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
-        '200': {description: Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No autoriza tenant hasta completar MFA y prueba/aprobación del dispositivo., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/LoginResponse'}, examples: {authenticated_restricted: {value: {status: restricted, session_expires_at: '2026-09-25T12:05:00Z', next_actions: [enroll_mfa, register_device, create_organization]}}, mfa_pending: {value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-09-25T12:05:00Z', next_actions: [complete_mfa]}}}}}}
+        '200':
+          description: >-
+            Sesión restringida emitida solo mediante Set-Cookie; incluye challenge_id si MFA está pendiente. No concede autoridad tenant, aun después de completar MFA, sin una transición explícita de activación.
+          headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: 'Cookie __Host-oc_session opaca; Secure; HttpOnly; SameSite=Lax; Path=/; sin Domain.'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/LoginResponse'}
+              examples:
+                authenticated_restricted:
+                  value: {status: restricted, session_expires_at: '2026-10-01T12:00:00Z', next_actions: [enroll_mfa]}
+                mfa_pending:
+                  value: {status: mfa_pending, challenge_id: '018f0000-0000-7000-8000-000000000004', challenge_expires_at: '2026-10-01T12:05:00Z', next_actions: [complete_mfa]}
         '400': {$ref: '#/components/responses/InvalidRequest'}
         '401': {description: Credenciales inválidas; respuesta indistinguible para cuenta ausente, headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_credentials', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_credentials, trace_id: '018f0000-0000-7000-8000-000000000002', retryable: false}}}}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -97,11 +118,11 @@ paths:
       tags: [IdentityOnboarding]
       operationId: getCurrentSession
       summary: Consulta el contexto de sesión actual
-      description: Devuelve el estado vigente de la cuenta, sesion, email, MFA, dispositivo y contexto autorizado sin incluir la credencial de sesion.
+      description: Devuelve el SessionContext posterior al efecto vigente, sin incluir la credencial de sesion. next_actions conserva sus valores como navegacion, nunca permisos ni aprobacion local. register_device requiere resolver el dispositivo de la sesion sin vinculo despues de email verificado y MFA elegible; create_organization requiere elegibilidad real del primer bootstrap; approve_device requiere candidato pendiente vinculado, OWNER vigente y otro dispositivo aprobado y utilizable en esa organizacion; select_organization requiere dispositivo probado globalmente aprobado y MFA elegible, pero no garantiza aprobacion para todas las organizaciones.
       security: [{sessionCookie: []}]
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
-        '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200': {description: Contexto vigente; no incluye la credencial de sesión., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}, examples: {restricted_after_login: {externalValue: examples/owner-session-flow-v1-restricted-after-login.json}, restricted_after_mfa: {externalValue: examples/owner-session-flow-v1-restricted-after-mfa.json}, restricted_after_device_proof: {externalValue: examples/owner-session-flow-v1-restricted-device-proof.json}, restricted_after_owner_confirmation: {externalValue: examples/owner-session-flow-v1-restricted-owner-confirmation.json}, restricted_after_pending_candidate_proof: {externalValue: examples/owner-session-flow-v1-restricted-pending-candidate.json}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/Forbidden'}
     delete:
@@ -183,13 +204,13 @@ paths:
       operationId: completeMfaChallenge
       summary: Completa el desafío MFA de login
       description: >-
-        Verifica el código TOTP o de recuperación del challenge_id de login vinculado en servidor a la misma sesión restringida creada por createSession. La PWA presenta la cookie restringida y CSRF, sin JWT interno; el gateway añade su JWT de servicio solo en el salto privado a identity-tenancy. Consume desafío y factor de un solo uso de manera atómica, rota la cookie opaca y no concede autoridad tenant por completar MFA.
+        Verifica el código TOTP o de recuperación del challenge_id de login vinculado en servidor a la misma sesión restringida creada por createSession. La PWA presenta la cookie restringida y CSRF, sin JWT interno; el gateway añade su JWT de servicio solo en el salto privado a identity-tenancy. Consume desafío y factor de un solo uso de manera atómica y rota la cookie opaca. El estado posterior continúa restricted, sin organización, membresía, permisos o scopes tenant; completar MFA no concede autoridad tenant.
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/MfaChallengeRequest'}, example: {challenge_id: '018f0000-0000-7000-8000-000000000004', code: '000000'}}}}
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
-        '200': {description: Sesión emitida en cookie segura; nunca en JSON., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}}}}
+        '200': {description: Cookie segura rotada; SessionContext representa el estado posterior a completar MFA. La sesión permanece restricted y sin autoridad tenant hasta una transición explícita autorizada., headers: {X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}, Set-Cookie: {schema: {type: string}, description: Cookie __Host-oc_session opaca y segura.}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/json: {schema: {$ref: '#/components/schemas/SessionContext'}, examples: {restricted_after_mfa: {externalValue: examples/owner-session-flow-v1-restricted-after-mfa.json}}}}}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '422': {$ref: '#/components/responses/Unprocessable'}
         '429': {$ref: '#/components/responses/RateLimited'}
@@ -292,7 +313,7 @@ paths:
       tags: [IdentityOnboarding]
       operationId: proveRegisteredDevicePossession
       summary: Presenta firma del dispositivo y rota la cookie de sesión
-      description: Verifica y consume una firma de desafío de un solo uso para el dispositivo registrado vinculado. La cookie se rota; solo queda activa cuando MFA está completo y el dispositivo tiene aprobación para la organización solicitada. Un dispositivo pendiente solo conserva sesión restringida.
+      description: Verifica y consume atómicamente una firma de desafío de un solo uso vinculada a la misma cuenta, sesión, dispositivo y propósito; la cookie siempre se rota. La prueba válida vincula el dispositivo probado a la sesión. Sin organization_id explícito, la respuesta posterior permanece restricted y con tenant nulo, incluso con aprobación global del dispositivo. Con destino explícito, solo activa la sesión después de revalidar destino, membresía activa y versión, aprobación vigente específica para esa organización, MFA elegible y permisos/scopes. Un dispositivo pendiente solo conserva sesión restricted. renew_session rota la credencial y conserva el mismo dispositivo y tenant activos; nunca activa otra organización. next_actions es navegación derivada, no permiso ni aprobación local.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
@@ -354,8 +375,10 @@ paths:
     post:
       tags: [IdentityOnboarding]
       operationId: requestOwnerDeviceSelfApproval
+      x-owner-session-flow-r8: >-
+        Require otro dispositivo aprobado y utilizable en esa organización for both request and confirmation. Without it, sin el otro dispositivo utilizable la recuperación excepcional permanece cerrada. The confirmation transaction must revalidate it.
       summary: Solicita autoaprobación de un dispositivo nuevo del Propietario
-      description: Para cuenta y email verificados, membresía OWNER vigente en organization_id, sesión restringida, MFA/reautenticación recientes y dispositivo nuevo registrado en pending_approval. Requiere la firma ECDSA P-256 del desafío vinculado server-side a esa cuenta, sesión, dispositivo, propósito owner_device_approval, organización y vencimiento; la verificación y consumo son atómicos. Emite material aleatorio de un uso que vence en 30 minutos; reemitir invalida el anterior. La solicitud no aprueba el dispositivo ni concede acceso tenant.
+      description: Para cuenta y email verificados, membresía OWNER vigente en organization_id, sesión restricted, MFA/reautenticación recientes, candidato pending_approval y otro dispositivo aprobado y utilizable en esa organización. Requiere la firma ECDSA P-256 del desafío vinculado server-side a esa cuenta, sesión, dispositivo, propósito owner_device_approval, organización y vencimiento; la verificación y consumo son atómicos. Sin el otro dispositivo utilizable la recuperación excepcional permanece cerrada. La primera solicitud crea y envía una sola vez material aleatorio de un uso con vencimiento de 30 minutos; el replay exacto de Idempotency-Key reproduce el OwnerDeviceApprovalPending original, conserva IDs, status, versión y expires_at, no reenvía correo y no extiende el vencimiento. La huella de idempotencia cubre la solicitud completa y toda repetición revalida autorización vigente. No devuelve already_issued, que corresponde únicamente al material TOTP de presentación única. La respuesta no incluye Set-Cookie ni X-CSRF-Token de rotación. La solicitud no aprueba el dispositivo ni concede acceso tenant.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/DeviceId'}, {$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
@@ -366,7 +389,27 @@ paths:
             example: {organization_id: '018f0000-0000-7000-8000-000000000906', challenge_id: '018f0000-0000-7000-8000-000000000921', challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, signature: jP1Ovmzd3abt71RKc2c69tH_P8UPhKAeeaQTLK8HWwdFaYg3S-JPeUGXoI6HiDNW6GtJMYIx3lR_fJE-PaBSUw, expected_membership_version: 2}
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
-        '200': {description: Solicitud registrada en estado pendiente; el token no se devuelve., headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/json: {schema: {$ref: '#/components/schemas/OwnerDeviceApprovalPending'}}}}
+        '200':
+          description: >-
+            Primera solicitud o replay exacto de Idempotency-Key reproduce el
+            OwnerDeviceApprovalPending original con los mismos IDs, status,
+            versión y expires_at. El replay no reenvía correo, no extiende
+            expiración y toda repetición revalida autoridad. El token nunca se
+            devuelve; already_issued pertenece solo al replay TOTP. HTTP
+            serializa Idempotency-Replayed como false o true fuera del JSON.
+            Esta solicitud no rota cookie ni token CSRF.
+          headers:
+            Cache-Control: {schema: {type: string}, example: no-store}
+            Idempotency-Replayed:
+              description: 'Booleano; HTTP serializa los valores como `false` o `true`.'
+              schema: {type: boolean}
+              examples: {first_effect: {value: false}, exact_replay: {value: true}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/OwnerDeviceApprovalPending'}
+              examples:
+                first_effect: {externalValue: examples/owner-session-flow-v1-owner-approval-pending.json}
+                exact_replay: {externalValue: examples/owner-session-flow-v1-owner-approval-pending.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
@@ -377,8 +420,10 @@ paths:
     post:
       tags: [IdentityOnboarding]
       operationId: confirmOwnerDeviceSelfApproval
+      x-owner-session-flow-r8: >-
+        Require otro dispositivo aprobado y utilizable en esa organización. Dentro de la transacción revalida eligibility; sin ese dispositivo, la recuperación excepcional permanece cerrada. La prueba vincula el candidato probado a esta sesión; no crea un vínculo genérico de cuenta. Tras rotar, permanece restricted.
       summary: Confirma autoaprobación con token de email y firma del dispositivo
-      description: Exige conjuntamente token de un uso recibido por email verificado, sesión restringida, OWNER vigente para la organización, MFA/reautenticación recientes y firma ECDSA P-256 válida del dispositivo pendiente. El servidor comprueba que desafío y firma correspondan a la cuenta, sesión, dispositivo, propósito owner_device_approval, organization_id, versión vigente y vencimiento; consume el desafío y el token una sola vez de manera atómica. Solo identity-tenancy concede aprobación para esa organización y registra auditoría; ni el token ni un resultado de notifications bastan por sí solos. La aprobación web no activa un POS físico.
+      description: Exige conjuntamente token de un uso recibido por email verificado, sesión restricted, OWNER vigente para la organización, MFA/reautenticación recientes, otro dispositivo aprobado y utilizable en esa organización, y firma ECDSA P-256 válida del dispositivo candidato. El servidor comprueba que desafío y firma correspondan a cuenta, sesión y candidato, propósito owner_device_approval, organization_id, versión vigente y vencimiento; dentro de la transacción revalida OWNER y el otro dispositivo utilizable antes de consumir desafío y token atómicamente. Sin ese dispositivo, la recuperación excepcional permanece cerrada. Si la sesión no tiene dispositivo vinculado, vincula el candidato cuya posesión acaba de probarse; si ya existe vínculo, debe coincidir con ese candidato. No crea un vínculo genérico de cuenta. La operación registra aprobación solo para esa organización, rota la cookie y devuelve el estado posterior, que permanece restricted, sin organización activa, membresía, permisos ni scopes tenant. Solo una selección posterior puede activar un tenant. Ni el token ni un resultado de notifications bastan por sí solos. La aprobación web no activa un POS físico; next_actions es navegación, no autorización.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody:
@@ -390,7 +435,7 @@ paths:
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
-          description: Aprobación tenant-scoped registrada. El replay exacto solo recupera la respuesta si la sesión y aprobación siguen vigentes.
+          description: Aprobación tenant-scoped registrada y cookie rotada. SessionContext describe el estado posterior, que sigue restricted y sin autoridad tenant; el replay exacto solo recupera la respuesta si sesión y aprobación siguen vigentes.
           headers:
             X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
             Set-Cookie: {schema: {type: string}, description: Cookie de sesión rotada; no representa acceso a otros tenants.}
@@ -403,8 +448,8 @@ paths:
             application/json:
               schema: {$ref: '#/components/schemas/DeviceApprovalStatus'}
               examples:
-                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-device-approval.json}
-                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-device-approval.json}
+                first_effect: {externalValue: examples/owner-session-flow-v1-confirmation-response.json}
+                exact_replay: {externalValue: examples/owner-session-flow-v1-confirmation-response.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '404': {$ref: '#/components/responses/NotFound'}
@@ -416,7 +461,7 @@ paths:
       tags: [IdentityOnboarding]
       operationId: createInitialOrganization
       summary: Crea atómicamente organización, sucursal, POS lógico y membresía OWNER
-      description: Solo para el primer Propietario sin membresías previas, con email verificado, sesión restringida con MFA/reautenticación recientes y dispositivo registrado cuya posesión se prueba aquí. La firma ECDSA P-256 del desafío server-side debe vincular cuenta, sesión, device_id, propósito bootstrap_organization, nonce, vencimiento y versión del dispositivo. identity-tenancy verifica y consume el desafío atómicamente dentro de la misma transacción que crea organización, sucursal, POS lógico, membresía INTERNAL OWNER y aprobación del dispositivo para la organización nueva; registra auditoría y rota la cookie. Un fallo no deja aprobación ni recursos parciales. No asigna licencia, POS físico, fiscalidad ni permiso offline; el cliente no declara autoridad por organization_id.
+      description: Camino atómico propio y exclusivo del primer Propietario sin membresías previas, con email verificado, sesión restricted con MFA/reautenticación recientes y dispositivo registrado cuya posesión se prueba aquí. La firma ECDSA P-256 del desafío server-side debe vincular cuenta, sesión, device_id, propósito bootstrap_organization, nonce, vencimiento y versión del dispositivo. identity-tenancy verifica y consume el desafío atómicamente dentro de la misma transacción que crea organización, sucursal, POS lógico, membresía INTERNAL OWNER y aprobación del dispositivo para la organización nueva; registra auditoría, activa ese contexto posterior y rota la cookie. Un fallo no deja aprobación ni recursos parciales. No sustituye selección ordinaria ni asigna licencia, POS físico, fiscalidad o permiso offline; el cliente no declara autoridad por organization_id.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
       requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/OrganizationOnboardingRequest'}, example: {organization_name: Comercio de ejemplo, branch_name: Casa central, pos_name: Caja 1, locale: es-AR, device_id: '018f0000-0000-7000-8000-000000000904', device_challenge_id: '018f0000-0000-7000-8000-000000000941', device_challenge: AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE, device_signature: NSoukx7aU-44gJIUs2rkv7eDlxNMeLe5janDqK2957GEUDCLgDPmZ5HO9dvHzqEw4_tMSRZJhaQsRhXaxXPSYg, expected_device_version: 1}}}}
@@ -437,8 +482,8 @@ paths:
             application/json:
               schema: {$ref: '#/components/schemas/OrganizationOnboardingResponse'}
               examples:
-                first_effect: {externalValue: examples/identity-session-rotation-replay-v5-public-initial-organization.json}
-                exact_replay: {externalValue: examples/identity-session-rotation-replay-v5-public-initial-organization.json}
+                first_effect: {externalValue: examples/owner-session-flow-v1-active-bootstrap.json}
+                exact_replay: {externalValue: examples/owner-session-flow-v1-active-bootstrap.json}
         '401': {$ref: '#/components/responses/Unauthorized'}
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/IdempotencyConflict'}
@@ -488,10 +533,10 @@ paths:
       tags: [IdentityOnboarding]
       operationId: selectActiveOrganization
       summary: Selecciona organización activa validando la membresía vigente
-      description: Selecciona una membresia activa y actualiza el contexto tras revalidar autorizacion. La preferencia recordada por el dispositivo no demuestra acceso.
+      description: Acepta una sesión restricted elegible o active. Valida en servidor destino, membresía activa y versión esperada, MFA/reautenticación, aprobación vigente de ese dispositivo para esa organización y permisos/scopes efectivos; una referencia local o aprobación para otra organización no sirve. Solo tras todas las comprobaciones activa el destino, rota la cookie y devuelve el SessionContext posterior. restricted nunca lleva organización, membresía, permisos ni scopes tenant. La preferencia recordada por el dispositivo y next_actions son navegación, no acceso ni aprobación.
       security: [{sessionCookie: [], csrfToken: []}]
       parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
-      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ContextSelectionRequest'}, example: {membership_id: '018f0000-0000-7000-8000-000000000008', expected_version: 2}}}}
+      requestBody: {required: true, content: {application/json: {schema: {$ref: '#/components/schemas/ContextSelectionRequest'}, example: {membership_id: '018f0000-0000-7000-8000-000000000914', expected_version: 1}}}}
       responses:
         '504': {$ref: '#/components/responses/GatewayDeadlineExceeded'}
         '200':
@@ -642,6 +687,7 @@ components:
     SessionContext:
       type: object
       additionalProperties: false
+      description: Estado posterior al efecto que produjo la respuesta. En restricted, active_organization y active_membership son null, permissions y scopes están vacíos; un vínculo de dispositivo probado o una aprobación global no concede autoridad tenant. En active, el contexto refleja membresía, aprobación específica, permisos y scopes revalidados. next_actions enumera navegación aplicable, nunca permisos ni aprobación local.
       required: [account, session, mfa, device, active_organization, active_membership, permissions, scopes, next_actions]
       properties:
         account: {type: object, additionalProperties: false, required: [account_id, email_status], properties: {account_id: {$ref: '#/components/schemas/Uuid'}, email_status: {type: string, enum: [pending, verified]}}}
@@ -652,7 +698,7 @@ components:
         active_membership: {oneOf: [{$ref: '#/components/schemas/MembershipRef'}, {type: 'null'}]}
         permissions: {type: array, items: {type: string}}
         scopes: {type: array, items: {$ref: '#/components/schemas/Scope'}}
-        next_actions: {type: array, uniqueItems: true, items: {type: string, enum: [verify_email, enroll_mfa, complete_mfa, register_device, approve_device, create_organization, select_organization]}}
+        next_actions: {type: array, uniqueItems: true, description: Acciones de navegación conservadas según el estado; no son permisos ni prueba de aprobación o autoridad tenant., items: {type: string, enum: [verify_email, enroll_mfa, complete_mfa, register_device, approve_device, create_organization, select_organization]}}
     OrganizationRef: {type: object, additionalProperties: false, required: [organization_id, name, version], properties: {organization_id: {$ref: '#/components/schemas/Uuid'}, name: {type: string}, version: {type: integer, minimum: 1}}}
     MembershipRef: {type: object, additionalProperties: false, required: [membership_id, organization_id, membership_type, status, roles, version], properties: {membership_id: {$ref: '#/components/schemas/Uuid'}, organization_id: {$ref: '#/components/schemas/Uuid'}, membership_type: {type: string, enum: [INTERNAL, EXTERNAL]}, status: {type: string, enum: [active, suspended, revoked]}, roles: {type: array, items: {type: string}}, version: {type: integer, minimum: 1}}}
     Scope: {type: object, additionalProperties: false, required: [scope_type, scope_id], properties: {scope_type: {type: string, enum: [organization, branch, location, pos]}, scope_id: {$ref: '#/components/schemas/Uuid'}}}

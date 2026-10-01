@@ -40,8 +40,8 @@ const extension = privateApi["x-oc-client-signal-policy"];
 const definition = privateApi.components?.parameters?.OCClientSignal;
 const regex = /^v1\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$/;
 
-assert(publicApi.info?.version === "2.0.7", "public identity OpenAPI must be v2.0.7");
-assert(privateApi.info?.version === "2.0.6", "private delegation OpenAPI must be v2.0.6");
+assert(publicApi.info?.version === "2.0.8", "public identity OpenAPI must be v2.0.8");
+assert(privateApi.info?.version === "2.0.7", "private delegation OpenAPI must be v2.0.7");
 assert(definition?.name === "X-OC-Client-Signal" && definition.in === "header" && definition.required === false, "private reusable parameter must be optional on infrastructure routes; matrix requiredness is enforced by private policy");
 assert(definition.schema?.type === "string" && definition.schema.minLength === 46 && definition.schema.maxLength === 46 && definition.schema.pattern === "^v1\\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$", "signal parameter must require canonical v1 + 32-byte unpadded base64url syntax");
 assert(same(serviceIds, expectedIds.slice(0, 4)), "service-only matrix must retain the exact four operationIds");
@@ -107,4 +107,4 @@ if (selfTest) {
   assert(JSON.stringify(publicCopy).includes("x-oc-client-signal-policy"), "self-test could not detect accidental publication of the private extension");
 }
 
-console.log(`PF1-06A-R6 client-signal gate passed: public=2.0.7; private=2.0.6; protected_operations=19 (4 service-only + 15 delegated); excluded_notifications_operations=2; synthetic_cases=${fixtures.cases.length}; self_test_rejections=${selfTest ? 6 : 0}; runtime HMAC, trusted-origin derivation, spoofing resistance demonstrated=false.`);
+console.log(`PF1-06A-R6 client-signal gate passed: public=2.0.8; private=2.0.7; protected_operations=19 (4 service-only + 15 delegated); excluded_notifications_operations=2; synthetic_cases=${fixtures.cases.length}; self_test_rejections=${selfTest ? 6 : 0}; runtime HMAC, trusted-origin derivation, spoofing resistance demonstrated=false.`);

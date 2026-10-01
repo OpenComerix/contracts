@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Gateway to Identity Delegation API
-  version: 2.0.6
+  version: 2.0.7
   description: >-
     Contrato aditivo para el enlace privado entre gateway-bff e
     identity-tenancy. El JWT de servicio del gateway tiene audiencia fija
@@ -31,8 +31,11 @@ info:
     public result and replacement session credential only to this private
     authenticated caller. It never repeats domain effects or grants general
     authentication to the previous cookie.
-    PF1-06A-R6 versions this private document as 2.0.6 while the public
-    identity-onboarding contract remains 2.0.5. The required private
+    PF1-06A-R8 versions this private document as 2.0.7 while the public
+    identity-onboarding contract is 2.0.8. A verified device-session link
+    proves device binding only; restricted sessions still have no tenant
+    authority, membership, permissions or scopes. Device approval alone does
+    not activate an organization. The required private
     X-OC-Client-Signal applies only to the 19 operationIds inventoried in the
     policy extension: four service-only and fifteen delegated. It is a
     rate-limit signal, not authority. gateway-bff strips any browser-supplied
