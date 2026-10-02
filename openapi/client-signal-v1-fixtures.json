@@ -68,6 +68,18 @@
       "operation_id": "registerWebDevice",
       "headers": {"client_signal": ["Mozilla/5.0 synthetic user agent"]},
       "expected": "reject"
+    },
+    {
+      "id": "valid-step-up-challenge-signal",
+      "operation_id": "createSessionStepUpChallenge",
+      "headers": {"client_signal": ["v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"]},
+      "expected": "accept"
+    },
+    {
+      "id": "valid-step-up-confirmation-signal",
+      "operation_id": "completeSessionStepUp",
+      "headers": {"client_signal": ["v1.BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBw"]},
+      "expected": "accept"
     }
   ]
 }

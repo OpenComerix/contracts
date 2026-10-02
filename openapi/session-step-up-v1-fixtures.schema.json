@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/openapi/session-step-up-v1-fixtures.schema.json",
+  "title": "Session step-up v1 static contract fixtures",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "manifest_version", "public_contract_version", "private_contract_version", "runtime_authorization_demonstrated", "fixture_directory", "operations", "published_examples", "cases", "semantic_scenarios", "transition_templates", "transition_scenarios"],
+  "properties": {
+    "$schema": {"const": "https://json-schema.org/draft/2020-12/schema"},
+    "manifest_version": {"const": 1},
+    "public_contract_version": {"const": "2.1.0"},
+    "private_contract_version": {"const": "2.1.0"},
+    "runtime_authorization_demonstrated": {"const": false},
+    "fixture_directory": {"const": "openapi/examples/session-step-up-v1"},
+    "operations": {"type":"array","minItems":3,"maxItems":3,"uniqueItems":true,"items":{"type":"object","additionalProperties":false,"required":["operation_id","method","path","request_schema_pointer","success_status","success_schema_pointer"],"properties":{"operation_id":{"type":"string"},"method":{"const":"post"},"path":{"type":"string"},"request_schema_pointer":{"type":"string"},"success_status":{"enum":["200","201"]},"success_schema_pointer":{"type":"string"}}}},
+    "published_examples": {"type":"array","minItems":34,"maxItems":34,"items":{"$ref":"#/$defs/example"}},
+    "cases": {"type":"array","minItems":12,"items":{"$ref":"#/$defs/case"}},
+    "semantic_scenarios": {"type":"array","minItems":8,"maxItems":8,"items":{"type":"object","required":["id","expected","rate_limit_purpose","account","session","password","factor","challenge","effect"],"properties":{"id":{"type":"string"},"expected":{"enum":["accept","reject"]},"invariant":{"type":"string"},"rate_limit_purpose":{"const":"session_step_up"},"account":{"type":"object"},"session":{"type":"object"},"password":{"type":"object"},"factor":{"type":"object"},"challenge":{"type":"object"},"effect":{"type":"object"}}}},
+    "transition_templates": {"type":"object","minProperties":7,"maxProperties":7,"required":["challenge_create_restricted","challenge_create_active","challenge_replay_restricted","confirmation_restricted","confirmation_active","private_recovery_restricted","private_recovery_active"],"additionalProperties":false,"patternProperties":{"^[a-z_]+$":{"type":"object","required":["transition","rate_limit_purpose","at","account","session","password","challenge","effect"],"properties":{"transition":{"enum":["challenge_create","challenge_replay","confirmation","confirmation_replay","private_recovery"]},"rate_limit_purpose":{"const":"session_step_up"},"at":{"type":"string","format":"date-time"},"account":{"type":"object"},"session":{"type":"object"},"password":{"type":"object"},"factor":{"type":"object"},"challenge":{"type":"object"},"effect":{"type":"object"},"authority":{"type":"object"},"replay":{"type":"object"}}}}},
+    "transition_scenarios": {"type":"array","minItems":42,"maxItems":42,"items":{"type":"object","additionalProperties":false,"required":["id","template_id","expected"],"properties":{"id":{"type":"string","pattern":"^[a-z0-9-]+$"},"template_id":{"type":"string"},"expected":{"enum":["accept","reject"]},"invariant":{"type":"string"},"overrides":{"type":"object"}}}}
+  },
+  "$defs": {
+    "example": {"type":"object","additionalProperties":false,"required":["operation_id","method","path","status","media_type","example_name","schema_pointer","example_source","fixture"],"properties":{"operation_id":{"type":"string"},"method":{"const":"post"},"path":{"type":"string"},"status":{"type":"string"},"media_type":{"enum":["application/json","application/problem+json"]},"example_name":{"type":"string"},"schema_pointer":{"type":"string"},"example_source":{"enum":["inline","external"]},"external_value_path":{"type":"string"},"fixture":{"type":"string"}},"allOf":[{"if":{"properties":{"example_source":{"const":"external"}},"required":["example_source"]},"then":{"required":["external_value_path"]},"else":{"not":{"required":["external_value_path"]}}}]},
+    "case": {"type":"object","additionalProperties":false,"required":["id","operation_id","method","path","status","media_type","schema_pointer","fixture","expectation"],"properties":{"id":{"type":"string","pattern":"^[a-z0-9-]+$"},"operation_id":{"type":"string"},"method":{"const":"post"},"path":{"type":"string"},"status":{"type":"string"},"media_type":{"const":"application/json"},"schema_pointer":{"type":"string"},"fixture":{"type":"string"},"expectation":{"enum":["valid","invalid"]}}}
+  }
+}

@@ -96,7 +96,7 @@ const requiredDescriptions = [
   ["selectActiveOrganization", /sesión restricted elegible[\s\S]*membresía activa y versión[\s\S]*aprobación vigente/i],
 ];
 function validate(document, candidate, filenames, bodies) {
-  assert(document.info?.version === "2.0.8", "public OpenAPI version must be 2.0.8");
+  assert(document.info?.version === "2.1.0", "public OpenAPI version must be 2.1.0");
   assert(candidate.fixture_set === "owner-session-flow-v1", "fixture manifest id mismatch");
   const fixtureRows = [...candidate.scenarios.filter((row) => row.fixture), ...candidate.semantic_negatives];
   const scenarioIds = candidate.scenarios.map((row) => row.id).concat(candidate.semantic_negatives.map((row) => row.id));
@@ -398,4 +398,4 @@ if (selfTest) {
   const enrolledMfa = structuredClone(manifest); const loginRow = enrolledMfa.scenarios.find((row) => row.id === "restricted-after-login"); loginRow.transition.navigation.mfa_eligible = true; loginRow.transition.navigation.mfa_status = "enrolled";
   expectReject("enroll MFA after enrollment", "next_actions enroll_mfa contradicts", () => check(enrolledMfa));
 }
-console.log(`owner-session-flow-v1 gate passed: public=2.0.8; session_context_scenarios=${counts.contexts}; semantic_negatives=${counts.semanticNegatives}; replay_header_values=${counts.headerExamples}; self_test_rejections=${rejected}; runtime authorization demonstrated=false.`);
+console.log(`owner-session-flow-v1 gate passed: public=2.1.0; session_context_scenarios=${counts.contexts}; semantic_negatives=${counts.semanticNegatives}; replay_header_values=${counts.headerExamples}; self_test_rejections=${rejected}; runtime authorization demonstrated=false.`);

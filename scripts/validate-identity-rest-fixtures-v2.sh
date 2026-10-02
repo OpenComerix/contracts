@@ -23,8 +23,8 @@ while IFS="$(printf '\t')" read -r id expectation schema fixture pointer; do
   if [ "$expectation" = valid ]; then check_valid "$schema" "$fixture"; count_valid=$((count_valid+1));
   else check_invalid "$schema" "$fixture"; count_invalid=$((count_invalid+1)); fi
 done < "$dir/cases.tsv"
-[ "$count_valid" -eq 56 ] || { echo "expected 56 schema-valid cases, got $count_valid" >&2; exit 1; }
-[ "$count_invalid" -eq 15 ] || { echo "expected 15 schema-invalid requests, got $count_invalid" >&2; exit 1; }
+[ "$count_valid" -eq 62 ] || { echo "expected 62 schema-valid cases, got $count_valid" >&2; exit 1; }
+[ "$count_invalid" -eq 17 ] || { echo "expected 17 schema-invalid requests, got $count_invalid" >&2; exit 1; }
 # Boundary controls: accepting a known-invalid request or rejecting a known-valid one must fail the gate.
 first_invalid=$(awk -F '\t' '$2=="invalid" {print $3 "\t" $4; exit}' "$dir/cases.tsv")
 first_valid=$(awk -F '\t' '$2=="valid" && $1 ~ /request-valid$/ {print $3 "\t" $4; exit}' "$dir/cases.tsv")

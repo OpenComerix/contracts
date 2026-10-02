@@ -10,8 +10,8 @@ if (!bundleArg || !outputArg || args.some((arg) => arg !== "--self-test")) {
 const api = JSON.parse(await readFile(resolve(bundleArg), "utf8"));
 const manifest = JSON.parse(await readFile(resolve(root, "openapi/owner-session-flow-v1-fixtures.json"), "utf8"));
 const assert = (value, message) => { if (!value) throw new Error(message); };
-assert(api.openapi === "3.1.0" && api.info?.version === "2.0.8", "owner-session-flow requires the real public OpenAPI 2.0.8 bundle");
-assert(manifest.fixture_set === "owner-session-flow-v1" && manifest.public_contract?.version === "2.0.8", "owner-session-flow manifest version mismatch");
+assert(api.openapi === "3.1.0" && api.info?.version === "2.1.0", "owner-session-flow requires the real public OpenAPI 2.1.0 bundle");
+assert(manifest.fixture_set === "owner-session-flow-v1" && manifest.public_contract?.version === "2.1.0", "owner-session-flow manifest version mismatch");
 function selectedSchema(row) {
   const op = api.paths?.[row.path]?.[row.method];
   assert(op?.operationId === row.operationId, `${row.id}: selector method/path/operationId mismatch`);

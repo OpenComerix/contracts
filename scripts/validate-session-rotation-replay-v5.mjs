@@ -82,7 +82,7 @@ function validateFixtureInventory(candidateManifest, filenames) {
 }
 
 async function validatePublic(api, candidateManifest = manifest, bodies = new Map()) {
-  assert(api.info?.version === "2.0.8", "public OpenAPI version must be 2.0.8");
+  assert(api.info?.version === "2.1.0", "public OpenAPI version must be 2.1.0");
   walk(api, (value, path) => {
     assert(!Object.hasOwn(value.properties ?? {}, "session_credential") && !Object.hasOwn(value, "session_credential"), `public schema or example leaks session_credential at ${path}`);
   });
@@ -162,7 +162,7 @@ async function validatePublic(api, candidateManifest = manifest, bodies = new Ma
 }
 
 async function validatePrivate(api, candidateManifest = manifest, candidateCatalog = catalog, bodies = new Map()) {
-  assert(api.info?.version === "2.0.7", "private OpenAPI version must be 2.0.7");
+  assert(api.info?.version === "2.1.0", "private OpenAPI version must be 2.1.0");
   const ordinaryDelegation = operation(api, "post", "/api/v1/internal/identity/delegations", "createGatewayUserDelegation");
   assert(ordinaryDelegation.security?.length === 1 && same(Object.keys(ordinaryDelegation.security[0]).sort(), ["currentSessionCookie", "gatewayServiceBearer"]), "ordinary delegation must require the current session cookie, never the prior cookie");
   const currentCookie = api.components?.securitySchemes?.currentSessionCookie;
@@ -186,8 +186,8 @@ async function validatePrivate(api, candidateManifest = manifest, candidateCatal
   for (const status of ["400", "401", "409"]) assert(op.responses?.[status]?.content?.["application/problem+json"]?.schema, `private replay ${status} must use Problem Details`);
   const requestBranches = request.oneOf;
   const responseBranches = response.oneOf;
-  assert(Array.isArray(requestBranches) && requestBranches.length === 4, "private replay request schema must have exactly four operation branches");
-  assert(Array.isArray(responseBranches) && responseBranches.length === 4, "private replay response schema must have exactly four operation branches");
+  assert(Array.isArray(requestBranches) && requestBranches.length === 5, "private replay request schema must have exactly five operation branches");
+  assert(Array.isArray(responseBranches) && responseBranches.length === 5, "private replay response schema must have exactly five operation branches");
   const rotationRows = candidateManifest.rotations;
   for (const rotation of rotationRows) {
     const publicOp = operation(publicApi, rotation.method, rotation.path, rotation.operationId);
@@ -215,9 +215,9 @@ async function validatePrivate(api, candidateManifest = manifest, candidateCatal
     assert(typeof responseFixture.session_credential === "string" && responseFixture.session_credential === "SYNTHETIC-NON-FUNCTIONAL-000000000000000004" && /^[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$/.test(responseFixture.session_credential), `${rotation.operationId}: private credential fixture must be explicitly synthetic/nonfunctional and match the exact 32-byte base64url shape`);
   }
   const allExamples = op.requestBody.content["application/json"].examples;
-  assert(same(Object.keys(allExamples ?? {}).sort(), ["initial_organization", "organization_selection", "owner_device_self_approval", "registered_device_possession"]), "private request examples must exactly cover four operations");
+  assert(same(Object.keys(allExamples ?? {}).sort(), ["initial_organization", "organization_selection", "owner_device_self_approval", "registered_device_possession", "session_step_up"]), "private request examples must cover the four original operations and the R9 step-up branch");
   const privateResponseExamples = op.responses["200"].content["application/json"].examples;
-  assert(same(Object.keys(privateResponseExamples ?? {}).sort(), ["initial_organization", "organization_selection", "owner_device_self_approval", "registered_device_possession"]), "private response examples must exactly cover four operations");
+  assert(same(Object.keys(privateResponseExamples ?? {}).sort(), ["initial_organization", "organization_selection", "owner_device_self_approval", "registered_device_possession", "session_step_up"]), "private response examples must cover the four original operations and the R9 step-up branch");
   for (const rotation of rotationRows) {
     const requestName = ({ proveRegisteredDevicePossession: "registered_device_possession", confirmOwnerDeviceSelfApproval: "owner_device_self_approval", createInitialOrganization: "initial_organization", selectActiveOrganization: "organization_selection" })[rotation.operationId];
     const requestFixture = bodies.get(rotation.request_fixture) ?? await fixture(rotation.request_fixture);
@@ -313,7 +313,7 @@ if (selfTest) {
   await expectReject("UUIDv7 constraint removed", "private replay must require original UUIDv7 Idempotency-Key", () => validatePrivate(q2));
   const q3 = structuredClone(privateApi);
   q3.paths["/api/v1/internal/identity/session-rotation-replays"].post.requestBody.content["application/json"].schema.oneOf.pop();
-  await expectReject("operation mapping removed", "private replay request schema must have exactly four operation branches", () => validatePrivate(q3));
+  await expectReject("operation mapping removed", "private replay request schema must have exactly five operation branches", () => validatePrivate(q3));
   const q3b = structuredClone(privateApi);
   q3b.paths["/api/v1/internal/identity/session-rotation-replays"].post.requestBody.content["application/json"].schema.oneOf[0].properties.path = { type: "string" };
   await expectReject("client-selected route added", "private original request branch must be strict JSON with no route selector", () => validatePrivate(q3b));
@@ -359,4 +359,4 @@ if (selfTest) {
   const m3 = structuredClone(manifest); m3.rejections.pop();
   await expectReject("rejection case omitted", "rejection manifest must inventory all nine authentication, replay, and in-progress cases", () => validatePrivate(privateApi, m3, catalog, loaded));
 }
-console.log(`Session rotation replay v5 regression gate passed: public=2.0.8; private=2.0.7; rotations=4; challenge_replays=2; private_positive_request_response_fixtures=8; problem_fixtures=5; rejection_cases=${manifest.rejections.length}; negative_fixtures=${manifest.negative_requests.length + manifest.negative_responses.length + manifest.negative_public_bodies.length}; self_test_rejections=${rejected}; runtime HMAC/cookie/current-state validation demonstrated=false (service implementation out of scope).`);
+  console.log(`Session rotation replay v5 regression gate passed: public=2.1.0; private=2.1.0; rotations=4; challenge_replays=2; private_positive_request_response_fixtures=8; private_replay_branches=5; problem_fixtures=5; rejection_cases=${manifest.rejections.length}; negative_fixtures=${manifest.negative_requests.length + manifest.negative_responses.length + manifest.negative_public_bodies.length}; self_test_rejections=${rejected}; runtime HMAC/cookie/current-state validation demonstrated=false (service implementation out of scope).`);

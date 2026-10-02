@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Identity v2.0.8 public CSRF contract fixtures",
-  "public_contract_version": "2.0.8",
+  "title": "Identity v2.1.0 public CSRF contract fixtures",
+  "public_contract_version": "2.1.0",
   "csrf_error": {
     "status": 403,
     "code": "gateway_csrf_invalid",
@@ -14,7 +14,8 @@
     { "operationId": "proveRegisteredDevicePossession", "method": "post", "path": "/identity/device-authentications", "status": "200" },
     { "operationId": "confirmOwnerDeviceSelfApproval", "method": "post", "path": "/identity/device-approval-confirmations", "status": "200" },
     { "operationId": "createInitialOrganization", "method": "post", "path": "/tenancy/organization-onboardings", "status": "201" },
-    { "operationId": "selectActiveOrganization", "method": "post", "path": "/tenancy/context-selections", "status": "200" }
+    { "operationId": "selectActiveOrganization", "method": "post", "path": "/tenancy/context-selections", "status": "200" },
+    { "operationId": "completeSessionStepUp", "method": "post", "path": "/identity/step-up-confirmations", "status": "200" }
   ],
   "authenticated_mutations": [
     "logoutCurrentSession",
@@ -29,6 +30,8 @@
     "requestOwnerDeviceSelfApproval",
     "confirmOwnerDeviceSelfApproval",
     "createInitialOrganization",
-    "selectActiveOrganization"
+    "selectActiveOrganization",
+    "createSessionStepUpChallenge",
+    "completeSessionStepUp"
   ]
 }

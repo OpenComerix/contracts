@@ -922,6 +922,48 @@
           "retryable": true
         }
       }
+    },
+    {
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "POST",
+      "path": "/identity/step-up-challenges",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/examples/valid/value",
+        "invalid": {"password": ""}
+      },
+      "success": {
+        "status": 201,
+        "schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/201/content/application~1json/schema",
+        "fixture": {"challenge_id": "018f0000-0000-7000-8000-000000000951", "status": "mfa_required", "expires_at": "2026-10-02T12:05:00Z"}
+      },
+      "error": {
+        "status": 403,
+        "code": "identity_reauthentication_required",
+        "schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/403/content/application~1problem+json/schema",
+        "fixture": {"type": "urn:opencomerix:problem:identity_reauthentication_required", "title": "Se requiere reautenticación", "status": 403, "instance": "urn:uuid:01991a22-0000-7000-8000-000000000954", "code": "identity_reauthentication_required", "trace_id": "018f0000-0000-7000-8000-000000000954", "retryable": false}
+      }
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "POST",
+      "path": "/identity/step-up-confirmations",
+      "request": {
+        "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+        "valid_example_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/examples/valid_totp/value",
+        "invalid": {"challenge_id": "018f0000-0000-7000-8000-000000000951", "code": "12345"}
+      },
+      "success": {
+        "status": 200,
+        "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/200/content/application~1json/schema",
+        "fixture": {"status": "step_up_completed", "reauthenticated_at": "2026-10-02T12:00:00Z", "expires_at": "2026-10-02T12:15:00Z"}
+      },
+      "error": {
+        "status": 422,
+        "code": "identity_mfa_invalid",
+        "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/422/content/application~1problem+json/schema",
+        "fixture": {"type": "urn:opencomerix:problem:identity_mfa_invalid", "title": "Código no válido", "status": 422, "instance": "urn:uuid:01991a22-0000-7000-8000-000000000955", "code": "identity_mfa_invalid", "trace_id": "018f0000-0000-7000-8000-000000000955", "retryable": false}
+      }
     }
   ]
 }

@@ -108,8 +108,8 @@ function validatePolicy(contract, candidate) {
   assertUnique(external, "H1 externo");
   assertUnique([...service, ...delegated], "policy");
   assert(service.length === 4, `se esperaban 4 operaciones service, hay ${service.length}`);
-  assert(delegated.length === 15, `se esperaban 15 operaciones delegated, hay ${delegated.length}`);
-  assert(external.length === 19, `H1 debe tener exactamente 19 operaciones externas, hay ${external.length}`);
+  assert(delegated.length === 17, `se esperaban 17 operaciones delegated, hay ${delegated.length}`);
+  assert(external.length === 21, `H1 debe tener exactamente 21 operaciones externas, hay ${external.length}`);
   assert(same([...service, ...delegated].map(({ method, path, operationId }) => ({ method, path, operationId })).sort((a, b) => key(a).localeCompare(key(b))), external.map(({ method, path, operationId }) => ({ method, path, operationId })).sort((a, b) => key(a).localeCompare(key(b)))), "la matriz debe coincidir exactamente con las operaciones externas H1 (method/path/operationId)");
   const expectedExcluded = actualInternal.map(({ method, path, operationId }) => ({ method, path, operationId })).sort((a, b) => key(a).localeCompare(key(b)));
   assert(expectedExcluded.length === 2 && same([...excluded].sort((a, b) => key(a).localeCompare(key(b))), expectedExcluded), "las dos rutas internas H1 deben estar excluidas exactamente de la matriz");
@@ -130,8 +130,10 @@ function validatePolicy(contract, candidate) {
     confirmOwnerDeviceSelfApproval: ["sessionCookie", "csrfToken"], createInitialOrganization: ["sessionCookie", "csrfToken"],
     listMyMemberships: ["sessionCookie"], selectActiveOrganization: ["sessionCookie", "csrfToken"],
     getActiveTenantContext: ["sessionCookie"],
+    createSessionStepUpChallenge: ["sessionCookie", "csrfToken"],
+    completeSessionStepUp: ["sessionCookie", "csrfToken"],
   };
-  assert(Object.keys(publicSecurity).length === external.length, "public security inventory must cover all 19 external operations exactly");
+  assert(Object.keys(publicSecurity).length === external.length, "public security inventory must cover all 21 external operations exactly");
   assert((contract.security ?? []).length === 0, "public H1 v2 must not inherit security requirements");
   assert(!Object.hasOwn(contract.components?.securitySchemes ?? {}, "delegatedBearer"), "delegatedBearer is an internal capability and must not be a public security scheme");
   for (const live of external) {
@@ -367,4 +369,4 @@ if (selfTest) {
   await expectFailure(() => validateEndpoint(missingExample, policy), "ejemplo publicado faltante");
 }
 function rowsPath(document) { return operations(document).find((row) => row.operationId === "createGatewayUserDelegation")?.path; }
-console.log(`Gateway identity policy passed: H1 v2 external=19 service=4 delegated=15 excluded_internal=2; public security checked separately (3 anonymous, MFA cookie+CSRF, 15 cookie+CSRF by operation); delegation_examples=${policy.published_examples.length}; semantic_context_fixtures=${validContexts.length}; semantic_negative_controls=${selfTest ? 18 : 0}; response_binding_negative_controls=${selfTest ? 3 : 0}; semantic_positive_controls=${selfTest ? 3 : 0}; encoding_negative_controls=${selfTest ? 2 : 0}; matrix_negative_controls=${selfTest ? 7 : 0}; MFA_security_negative_controls=${selfTest ? 2 : 0}; public_internal_jwt_negative_controls=${selfTest ? 38 : 0}; crypto_signature_verified=false (schema/claims shape only).`);
+console.log(`Gateway identity policy passed: H1 v2.1 external=21 service=4 delegated=17 excluded_internal=2; public security checked separately (3 anonymous, MFA cookie+CSRF, 17 cookie+CSRF by operation); delegation_examples=${policy.published_examples.length}; semantic_context_fixtures=${validContexts.length}; semantic_negative_controls=${selfTest ? 18 : 0}; response_binding_negative_controls=${selfTest ? 3 : 0}; semantic_positive_controls=${selfTest ? 3 : 0}; encoding_negative_controls=${selfTest ? 2 : 0}; matrix_negative_controls=${selfTest ? 7 : 0}; MFA_security_negative_controls=${selfTest ? 2 : 0}; public_internal_jwt_negative_controls=${selfTest ? 42 : 0}; crypto_signature_verified=false (schema/claims shape only).`);

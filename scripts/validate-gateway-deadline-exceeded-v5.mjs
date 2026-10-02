@@ -24,6 +24,7 @@ const publicIds = [
   "createDeviceRegistrationChallenge", "createRegisteredDeviceAuthenticationChallenge", "proveRegisteredDevicePossession",
   "registerWebDevice", "requestOwnerDeviceSelfApproval", "confirmOwnerDeviceSelfApproval", "createInitialOrganization",
   "listMyMemberships", "selectActiveOrganization", "getActiveTenantContext",
+  "createSessionStepUpChallenge", "completeSessionStepUp",
 ];
 const excluded = [
   ["/internal/identity/email-verification-delivery-material/{deliveryMaterialId}", "getEmailVerificationDeliveryMaterial"],
@@ -73,12 +74,12 @@ function validProblem(example, schema) {
     typeof example.instance === "string" && typeof example.trace_id === "string";
 }
 function validateBundle(document) {
-  assert(document.info?.version === "2.0.8", "public OpenAPI must be version 2.0.8");
+  assert(document.info?.version === "2.1.0", "public OpenAPI must be version 2.1.0");
   const problem = document.components?.schemas?.Problem;
   assert(problem && same(problem, problemV2), "public Problem component must dereference to the new Problem v2 schema");
   const rows = operationRows(document);
   const external = rows.filter(({ path, operation }) => !path.startsWith("/internal/") && operation["x-internal"] !== true);
-  assert(external.length === 19 && same(external.map(({ operation }) => operation.operationId).sort(), [...publicIds].sort()), "the public Owner surface must remain exactly the 19 published operations");
+  assert(external.length === 21 && same(external.map(({ operation }) => operation.operationId).sort(), [...publicIds].sort()), "the public Owner surface must remain exactly the 21 published operations");
   for (const [path, id] of excluded) {
     const row = rows.find((item) => item.path === path && item.operation.operationId === id);
     assert(row && !row.operation.responses?.["504"], `${id} notification material route must remain excluded from public 504 responses`);
@@ -124,4 +125,4 @@ if (selfTest) {
   const changedSchema = clone(problemV2); changedSchema.properties.status.enum.push(418);
   reject("Problem v2 extra status", () => validateProblemSchema(problemV1, changedSchema));
 }
-console.log(`PF1-06A-R7 regression gate passed: public=2.0.8; Problem schema additive=true; catalog v4 preserved=${catalogV4.errors.length}; catalog v5=${catalogV5.errors.length}; public 504 operations=${publicIds.length}; notification exclusions=${excluded.length}; self-test rejections=${negatives}.`);
+console.log(`PF1-06A-R7 regression gate passed: public=2.1.0; Problem schema additive=true; catalog v4 preserved=${catalogV4.errors.length}; catalog v5=${catalogV5.errors.length}; public 504 operations=${publicIds.length}; notification exclusions=${excluded.length}; self-test rejections=${negatives}.`);

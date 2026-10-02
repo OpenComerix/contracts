@@ -1,0 +1,737 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "manifest_version": 1,
+  "public_contract_version": "2.1.0",
+  "private_contract_version": "2.1.0",
+  "runtime_authorization_demonstrated": false,
+  "fixture_directory": "openapi/examples/session-step-up-v1",
+  "operations": [
+    {
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "request_schema_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/schema",
+      "success_status": "201",
+      "success_schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/201/content/application~1json/schema"
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "request_schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "success_status": "200",
+      "success_schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/200/content/application~1json/schema"
+    },
+    {
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "request_schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/requestBody/content/application~1json/schema",
+      "success_status": "200",
+      "success_schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/responses/200/content/application~1json/schema"
+    }
+  ],
+  "published_examples": [
+    {
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "challenge-request.json"
+    },
+    {
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "first_effect",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/201/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "challenge-response.json"
+    },
+    {
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "exact_replay",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/201/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "challenge-response.json"
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "valid_totp",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "complete-totp-request.json"
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "valid_recovery",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "complete-recovery-request.json"
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "first_effect",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/200/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "completed-response.json"
+    },
+    {
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "exact_replay",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/200/content/application~1json/schema",
+      "example_source": "inline",
+      "fixture": "completed-response.json"
+    },
+    {
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "session_step_up",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/requestBody/content/application~1json/schema",
+      "example_source": "external",
+      "external_value_path": "examples/session-step-up-v1/replay-request.json",
+      "fixture": "replay-request.json"
+    },
+    {
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "session_step_up",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/responses/200/content/application~1json/schema",
+      "example_source": "external",
+      "external_value_path": "examples/session-step-up-v1/replay-response.json",
+      "fixture": "replay-response.json"
+    }
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"400","media_type":"application/problem+json","example_name":"default","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/400/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-invalid-request.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"401","media_type":"application/problem+json","example_name":"session_invalid","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/401/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-session-invalid.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"403","media_type":"application/problem+json","example_name":"reauthentication_required","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/403/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-reauthentication-required.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"403","media_type":"application/problem+json","example_name":"mfa_required","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/403/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-mfa-required.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"403","media_type":"application/problem+json","example_name":"csrf_invalid","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/403/content/application~1problem+json/schema","example_source":"external","external_value_path":"examples/gateway-csrf-invalid-v3.json","fixture":"problem-csrf-invalid.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"409","media_type":"application/problem+json","example_name":"key_reused","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-idempotency-key-reused.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"409","media_type":"application/problem+json","example_name":"request_in_progress","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-idempotency-in-progress.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"409","media_type":"application/problem+json","example_name":"state_conflict","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-state-conflict.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"429","media_type":"application/problem+json","example_name":"rate_limited","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/429/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-rate-limited.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"500","media_type":"application/problem+json","example_name":"internal_error","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/500/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-internal-error.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"503","media_type":"application/problem+json","example_name":"dependency_unavailable","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/503/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-dependency-unavailable.json"}
+    ,{"operation_id":"createSessionStepUpChallenge","method":"post","path":"/identity/step-up-challenges","status":"504","media_type":"application/problem+json","example_name":"default","schema_pointer":"/paths/~1identity~1step-up-challenges/post/responses/504/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-gateway-deadline.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"400","media_type":"application/problem+json","example_name":"default","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/400/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-invalid-request.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"401","media_type":"application/problem+json","example_name":"session_invalid","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/401/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-session-invalid.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"403","media_type":"application/problem+json","example_name":"reauthentication_required","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/403/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-reauthentication-required-confirmation.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"403","media_type":"application/problem+json","example_name":"mfa_required","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/403/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-mfa-required.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"403","media_type":"application/problem+json","example_name":"csrf_invalid","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/403/content/application~1problem+json/schema","example_source":"external","external_value_path":"examples/gateway-csrf-invalid-v3.json","fixture":"problem-csrf-invalid.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"409","media_type":"application/problem+json","example_name":"key_reused","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-idempotency-key-reused.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"409","media_type":"application/problem+json","example_name":"request_in_progress","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-idempotency-in-progress.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"409","media_type":"application/problem+json","example_name":"state_conflict","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/409/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-state-conflict.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"422","media_type":"application/problem+json","example_name":"mfa_invalid","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/422/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-mfa-invalid.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"429","media_type":"application/problem+json","example_name":"rate_limited","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/429/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-rate-limited.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"500","media_type":"application/problem+json","example_name":"internal_error","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/500/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-internal-error.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"503","media_type":"application/problem+json","example_name":"dependency_unavailable","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/503/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-dependency-unavailable.json"}
+    ,{"operation_id":"completeSessionStepUp","method":"post","path":"/identity/step-up-confirmations","status":"504","media_type":"application/problem+json","example_name":"default","schema_pointer":"/paths/~1identity~1step-up-confirmations/post/responses/504/content/application~1problem+json/schema","example_source":"inline","fixture":"problem-gateway-deadline.json"}
+  ],
+  "cases": [
+    {
+      "id": "challenge-request-positive",
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/schema",
+      "fixture": "challenge-request.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "challenge-response-positive",
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "201",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/responses/201/content/application~1json/schema",
+      "fixture": "challenge-response.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "confirmation-totp-positive",
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "fixture": "complete-totp-request.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "confirmation-recovery-positive",
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "fixture": "complete-recovery-request.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "confirmation-response-positive",
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "200",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/responses/200/content/application~1json/schema",
+      "fixture": "completed-response.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "private-replay-request-positive",
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/requestBody/content/application~1json/schema",
+      "fixture": "replay-request.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "private-replay-response-positive",
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "200",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/responses/200/content/application~1json/schema",
+      "fixture": "replay-response.json",
+      "expectation": "valid"
+    },
+    {
+      "id": "challenge-password-empty",
+      "operation_id": "createSessionStepUpChallenge",
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-challenges/post/requestBody/content/application~1json/schema",
+      "fixture": "negative-challenge-password-empty.json",
+      "expectation": "invalid"
+    },
+    {
+      "id": "confirmation-code-short",
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "fixture": "negative-confirmation-code-short.json",
+      "expectation": "invalid"
+    },
+    {
+      "id": "confirmation-extra-property",
+      "operation_id": "completeSessionStepUp",
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1identity~1step-up-confirmations/post/requestBody/content/application~1json/schema",
+      "fixture": "negative-confirmation-extra-property.json",
+      "expectation": "invalid"
+    },
+    {
+      "id": "replay-create-not-allowed",
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/requestBody/content/application~1json/schema",
+      "fixture": "negative-replay-create-challenge.json",
+      "expectation": "invalid"
+    },
+    {
+      "id": "replay-request-extra-field",
+      "operation_id": "recoverSessionRotationReplay",
+      "method": "post",
+      "path": "/api/v1/internal/identity/session-rotation-replays",
+      "status": "request",
+      "media_type": "application/json",
+      "schema_pointer": "/paths/~1api~1v1~1internal~1identity~1session-rotation-replays/post/requestBody/content/application~1json/schema",
+      "fixture": "negative-replay-mismatched-body.json",
+      "expectation": "invalid"
+    }
+  ],
+  "semantic_scenarios": [
+    {
+      "id": "eligible-restricted-totp",
+      "expected": "accept",
+      "rate_limit_purpose": "session_step_up",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "eligible-active-recovery",
+      "expected": "accept",
+      "rate_limit_purpose": "session_step_up",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-b",
+        "account_id": "account-b",
+        "status": "active",
+        "active_tenant": "org-b",
+        "permissions": [
+          "tenancy.context.select"
+        ],
+        "scopes": [
+          "org-b"
+        ],
+        "expires_at": "2026-10-02T12:08:00Z",
+        "login_mfa_pending": false
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "recovery",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000952",
+        "session_id": "session-b",
+        "account_id": "account-b",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-b",
+        "active_tenant": "org-b",
+        "permissions": [
+          "tenancy.context.select"
+        ],
+        "scopes": [
+          "org-b"
+        ],
+        "expires_at": "2026-10-02T12:08:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-unverified-email",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "account.email_verified",
+      "account": {
+        "active": true,
+        "email_verified": false
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-login-mfa-not-step-up",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "factor.method",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "login_mfa",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-challenge-account-binding",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "challenge.account_session_binding",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-b",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-challenge-too-long",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "challenge.duration",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:06:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-step-up-expiry-extended",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "effect.expires_at",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": null,
+        "permissions": [],
+        "scopes": [],
+        "expires_at": "2026-10-02T12:20:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    },
+    {
+      "id": "invalid-tenant-authority-added",
+      "expected": "reject",
+      "rate_limit_purpose": "session_step_up",
+      "invariant": "effect.authority_preserved",
+      "account": {
+        "active": true,
+        "email_verified": true
+      },
+      "session": {
+        "id": "session-a",
+        "account_id": "account-a",
+        "status": "restricted",
+        "active_tenant": null,
+        "expires_at": "2026-10-02T13:00:00Z",
+        "login_mfa_pending": false,
+        "permissions": [],
+        "scopes": []
+      },
+      "password": {
+        "verified": true,
+        "at": "2026-10-02T12:00:00Z",
+        "method": "local"
+      },
+      "factor": {
+        "method": "totp",
+        "eligible": true,
+        "used": false
+      },
+      "challenge": {
+        "id": "018f0000-0000-7000-8000-000000000951",
+        "session_id": "session-a",
+        "account_id": "account-a",
+        "purpose": "step_up",
+        "created_at": "2026-10-02T12:00:00Z",
+        "expires_at": "2026-10-02T12:05:00Z",
+        "attempts": 0
+      },
+      "effect": {
+        "session_id": "session-a",
+        "active_tenant": "org-a",
+        "permissions": [
+          "owner"
+        ],
+        "scopes": [
+          "org-a"
+        ],
+        "expires_at": "2026-10-02T12:15:00Z",
+        "reauthenticated_at": "2026-10-02T12:00:00Z"
+      }
+    }
+  ],
+  "transition_templates": {
+    "challenge_create_restricted": {"transition":"challenge_create","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:00:00Z","account":{"id":"account-a","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-a","account_id":"account-a","status":"restricted","credential_hash":"credential-hash-1","security_version":7,"expires_at":"2026-10-02T13:00:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":null,"permissions":[],"scopes":[]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"challenge":{"id":"challenge-a","account_id":"account-a","session_id":"session-a","purpose":"step_up","status":"pending","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":0,"max_attempts":5},"effect":{"session_id":"session-a","active_tenant":null,"permissions":[],"scopes":[],"credential_rotated":false,"step_up_installed":false,"session_created":false,"session_expiry_extended":false,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true}},
+    "challenge_create_active": {"transition":"challenge_create","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:00:00Z","account":{"id":"account-b","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-b","account_id":"account-b","status":"active","credential_hash":"credential-hash-1","security_version":7,"expires_at":"2026-10-02T13:00:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"challenge":{"id":"challenge-b","account_id":"account-b","session_id":"session-b","purpose":"step_up","status":"pending","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":0,"max_attempts":5},"effect":{"session_id":"session-b","active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"],"credential_rotated":false,"step_up_installed":false,"session_created":false,"session_expiry_extended":false,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true},"authority":{"organization_status":"active","membership_status":"active","membership_version":1,"expected_membership_version":1,"role_current":true,"capabilities_current":true,"approval_status":"approved","approval_unexpired":true,"device_status":"approved"}},
+    "challenge_replay_restricted": {"transition":"challenge_replay","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:04:00Z","account":{"id":"account-a","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-a","account_id":"account-a","status":"restricted","credential_hash":"credential-hash-1","security_version":7,"expires_at":"2026-10-02T13:00:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":null,"permissions":[],"scopes":[]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"challenge":{"id":"challenge-a","account_id":"account-a","session_id":"session-a","purpose":"step_up","status":"pending","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":1,"max_attempts":5},"effect":{"session_id":"session-a","challenge_id":"challenge-a","expires_at":"2026-10-02T12:05:00Z","replayed":true,"regenerated":false,"active_tenant":null,"permissions":[],"scopes":[],"credential_rotated":false,"step_up_installed":false,"session_created":false,"session_expiry_extended":false,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true}},
+    "confirmation_restricted": {"transition":"confirmation","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:01:00Z","account":{"id":"account-a","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-a","account_id":"account-a","status":"restricted","credential_hash":"credential-hash-1","security_version":7,"expires_at":"2026-10-02T13:00:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":null,"permissions":[],"scopes":[]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"factor":{"method":"totp","eligible":true,"used":false,"account_id":"account-a","session_id":"session-a"},"challenge":{"id":"challenge-a","account_id":"account-a","session_id":"session-a","purpose":"step_up","status":"pending","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":0,"max_attempts":5},"effect":{"session_id":"session-a","active_tenant":null,"permissions":[],"scopes":[],"challenge_consumed":true,"factor_consumed":true,"credential_rotated":true,"session_created":false,"session_expiry_extended":false,"reauthenticated_at":"2026-10-02T12:01:00Z","expires_at":"2026-10-02T12:15:00Z","session_expires_at":"2026-10-02T13:00:00Z"}},
+    "confirmation_active": {"transition":"confirmation","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:01:00Z","account":{"id":"account-b","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-b","account_id":"account-b","status":"active","credential_hash":"credential-hash-1","security_version":7,"expires_at":"2026-10-02T12:08:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"factor":{"method":"recovery","eligible":true,"used":false,"account_id":"account-b","session_id":"session-b"},"challenge":{"id":"challenge-b","account_id":"account-b","session_id":"session-b","purpose":"step_up","status":"pending","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":0,"max_attempts":5},"effect":{"session_id":"session-b","active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"],"challenge_consumed":true,"factor_consumed":true,"credential_rotated":true,"session_created":false,"session_expiry_extended":false,"reauthenticated_at":"2026-10-02T12:01:00Z","expires_at":"2026-10-02T12:08:00Z","session_expires_at":"2026-10-02T12:08:00Z"},"authority":{"organization_status":"active","membership_status":"active","membership_version":1,"expected_membership_version":1,"role_current":true,"capabilities_current":true,"approval_status":"approved","approval_unexpired":true,"device_status":"approved"}},
+    "private_recovery_restricted": {"transition":"private_recovery","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:06:00Z","account":{"id":"account-a","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-a","account_id":"account-a","status":"restricted","credential_hash":"credential-hash-2","security_version":7,"expires_at":"2026-10-02T13:00:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":null,"permissions":[],"scopes":[]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"factor":{"method":"totp","eligible":true,"used":true,"account_id":"account-a","session_id":"session-a"},"challenge":{"id":"challenge-a","account_id":"account-a","session_id":"session-a","purpose":"step_up","status":"expired","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":1,"max_attempts":5},"effect":{"session_id":"session-a","active_tenant":null,"permissions":[],"scopes":[],"challenge_consumed":true,"factor_consumed":true,"credential_rotated":true,"session_created":false,"session_expiry_extended":false,"confirmed":true,"reauthenticated_at":"2026-10-02T12:01:00Z","expires_at":"2026-10-02T12:15:00Z"},"replay":{"result_confirmed":true,"operation_id":"completeSessionStepUp","stored_operation_id":"completeSessionStepUp","idempotency_key":"key-a","stored_idempotency_key":"key-a","canonical_request_matches":true,"confirmed_challenge_credential_hash":"credential-hash-1","fingerprint_algorithm":"HMAC-SHA-256","fingerprint_key_id":"step-up-hmac-v1","persisted_key_available":true,"service_jwt_valid":true,"service_jwt_audience":"identity-tenancy.gateway","previous_cookie_session_id":"session-a","previous_cookie_bound":true,"credential_current":true,"result_credential_hash":"credential-hash-2","step_up_current":true,"step_up_current_before":true,"step_up_current_after":true,"session_current_before":true,"session_current_after":true,"factor_reconsumed":false,"credential_rotated_again":false,"evidence_renewed":false,"session_expiry_extended":false,"authority_current_before":true,"authority_current_after":true,"original_effect_expires_at":"2026-10-02T12:15:00Z"}},
+    "private_recovery_active": {"transition":"private_recovery","rate_limit_purpose":"session_step_up","at":"2026-10-02T12:06:00Z","account":{"id":"account-b","active":true,"email_verified":true,"local_password":true,"mfa_enrolled":true,"totp_enrolled":true},"session":{"id":"session-b","account_id":"account-b","status":"active","credential_hash":"credential-hash-2","security_version":7,"expires_at":"2026-10-02T12:08:00Z","login_mfa_pending":false,"revoked":false,"active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"]},"password":{"verified":true,"method":"local","at":"2026-10-02T12:00:00Z","credential_hash":"credential-hash-1"},"factor":{"method":"recovery","eligible":true,"used":true,"account_id":"account-b","session_id":"session-b"},"challenge":{"id":"challenge-b","account_id":"account-b","session_id":"session-b","purpose":"step_up","status":"consumed","substituted":false,"credential_hash":"credential-hash-1","security_version":7,"password_verified_at":"2026-10-02T12:00:00Z","created_at":"2026-10-02T12:00:00Z","expires_at":"2026-10-02T12:05:00Z","attempts":1,"max_attempts":5},"effect":{"session_id":"session-b","active_tenant":"org-b","permissions":["tenancy.context.select"],"scopes":["org-b"],"challenge_consumed":true,"factor_consumed":true,"credential_rotated":true,"session_created":false,"session_expiry_extended":false,"confirmed":true,"reauthenticated_at":"2026-10-02T12:01:00Z","expires_at":"2026-10-02T12:08:00Z"},"authority":{"organization_status":"active","membership_status":"active","membership_version":1,"expected_membership_version":1,"role_current":true,"capabilities_current":true,"approval_status":"approved","approval_unexpired":true,"device_status":"approved"},"replay":{"result_confirmed":true,"operation_id":"completeSessionStepUp","stored_operation_id":"completeSessionStepUp","idempotency_key":"key-b","stored_idempotency_key":"key-b","canonical_request_matches":true,"confirmed_challenge_credential_hash":"credential-hash-1","fingerprint_algorithm":"HMAC-SHA-256","fingerprint_key_id":"step-up-hmac-v1","persisted_key_available":true,"service_jwt_valid":true,"service_jwt_audience":"identity-tenancy.gateway","previous_cookie_session_id":"session-b","previous_cookie_bound":true,"credential_current":true,"result_credential_hash":"credential-hash-2","step_up_current":true,"step_up_current_before":true,"step_up_current_after":true,"session_current_before":true,"session_current_after":true,"factor_reconsumed":false,"credential_rotated_again":false,"evidence_renewed":false,"session_expiry_extended":false,"authority_current_before":true,"authority_current_after":true,"original_effect_expires_at":"2026-10-02T12:08:00Z"}}
+  },
+  "transition_scenarios": [
+    {"id":"create-restricted","template_id":"challenge_create_restricted","expected":"accept","overrides":{"previous_pending_challenge":null,"effect":{"previous_pending_challenge_substituted":false,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"create-active","template_id":"challenge_create_active","expected":"accept","overrides":{"previous_pending_challenge":null,"effect":{"previous_pending_challenge_substituted":false,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"create-restricted-prior-step-up-only","template_id":"challenge_create_restricted","expected":"accept","overrides":{"previous_pending_challenge":null,"effect":{"previous_pending_challenge_substituted":false,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"create-restricted-pending-only","template_id":"challenge_create_restricted","expected":"accept","overrides":{"previous_pending_challenge":{"id":"challenge-old-a","account_id":"account-a","session_id":"session-a","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"create-restricted-prior-step-up-and-pending","template_id":"challenge_create_restricted","expected":"accept","overrides":{"previous_pending_challenge":{"id":"challenge-old-a","account_id":"account-a","session_id":"session-a","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"create-active-prior-step-up-only","template_id":"challenge_create_active","expected":"accept","overrides":{"previous_pending_challenge":null,"effect":{"previous_pending_challenge_substituted":false,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"create-active-pending-only","template_id":"challenge_create_active","expected":"accept","overrides":{"previous_pending_challenge":{"id":"challenge-old-b","account_id":"account-b","session_id":"session-b","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"create-active-prior-step-up-and-pending","template_id":"challenge_create_active","expected":"accept","overrides":{"previous_pending_challenge":{"id":"challenge-old-b","account_id":"account-b","session_id":"session-b","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":true,"prior_step_up_valid_after":true,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"challenge-replay-pending","template_id":"challenge_replay_restricted","expected":"accept","overrides":{"effect":{"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"challenge-replay-without-prior-complete-step-up","template_id":"challenge_replay_restricted","expected":"accept","overrides":{"effect":{"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"confirm-restricted-totp","template_id":"confirmation_restricted","expected":"accept"},
+    {"id":"confirm-active-recovery-while-totp-enrolled","template_id":"confirmation_active","expected":"accept"},
+    {"id":"confirm-replay-after-challenge-expired-restricted","template_id":"private_recovery_restricted","expected":"accept","overrides":{"transition":"confirmation_replay","replay":{"session_current_before":true,"session_current_after":true,"step_up_current_before":true,"step_up_current_after":true,"factor_reconsumed":false,"credential_rotated_again":false,"evidence_renewed":false,"session_expiry_extended":false}}},
+    {"id":"private-recovery-after-challenge-expired-active","template_id":"private_recovery_active","expected":"accept","overrides":{"replay":{"session_current_before":true,"session_current_after":true,"step_up_current_before":true,"step_up_current_after":true,"factor_reconsumed":false,"credential_rotated_again":false,"evidence_renewed":false,"session_expiry_extended":false}}},
+    {"id":"confirmation-replay-after-challenge-expired","template_id":"private_recovery_restricted","expected":"accept","overrides":{"transition":"confirmation_replay","replay":{"session_current_before":true,"session_current_after":true,"step_up_current_before":true,"step_up_current_after":true,"factor_reconsumed":false,"credential_rotated_again":false,"evidence_renewed":false,"session_expiry_extended":false}}},
+    {"id":"new-challenge-does-not-substitute-pending","template_id":"challenge_create_restricted","expected":"reject","invariant":"challenge.previous_pending_substituted","overrides":{"previous_pending_challenge":{"id":"challenge-old-a","account_id":"account-a","session_id":"session-a","status":"pending"},"effect":{"previous_pending_challenge_substituted":false,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":"2026-10-02T12:30:00Z"}}},
+    {"id":"new-challenge-invalidates-current-step-up","template_id":"challenge_create_restricted","expected":"reject","invariant":"effect.prior_step_up_preserved","overrides":{"previous_pending_challenge":{"id":"challenge-old-a","account_id":"account-a","session_id":"session-a","status":"pending"},"effect":{"prior_step_up_valid_before":true,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":"2026-10-02T12:30:00Z","prior_step_up_expires_at_after":null,"previous_pending_challenge_substituted":true}}},
+    {"id":"challenge-predecessor-other-account","template_id":"challenge_create_restricted","expected":"reject","invariant":"challenge.previous_pending_substituted","overrides":{"previous_pending_challenge":{"id":"challenge-old-x","account_id":"account-b","session_id":"session-a","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"challenge-predecessor-other-session","template_id":"challenge_create_restricted","expected":"reject","invariant":"challenge.previous_pending_substituted","overrides":{"previous_pending_challenge":{"id":"challenge-old-x","account_id":"account-a","session_id":"session-b","status":"pending"},"effect":{"previous_pending_challenge_substituted":true,"prior_step_up_valid_before":false,"prior_step_up_valid_after":false,"prior_step_up_expires_at_before":null,"prior_step_up_expires_at_after":null}}},
+    {"id":"recovery-original-expiry-extended","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.original_effect_expiry","overrides":{"effect":{"expires_at":"2026-10-02T12:30:00Z"},"replay":{"original_effect_expires_at":"2026-10-02T12:30:00Z"}}},
+    {"id":"recovery-confirmed-after-original-challenge-expiry","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.original_confirmation_before_challenge_expiry","overrides":{"effect":{"reauthenticated_at":"2026-10-02T12:06:00Z"}}},
+    {"id":"recovery-confirmation-after-recovery-time","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.original_confirmation_not_future","overrides":{"effect":{"reauthenticated_at":"2026-10-02T12:10:00Z"}}},
+    {"id":"wrong-challenge-purpose","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.purpose","overrides":{"challenge":{"purpose":"session_step_up"}}},
+    {"id":"confirm-expired-at-1206","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.not_expired","overrides":{"at":"2026-10-02T12:06:00Z","effect":{"reauthenticated_at":"2026-10-02T12:06:00Z"}}},
+    {"id":"confirm-before-challenge-created","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.confirmation_not_before_creation","overrides":{"at":"2026-10-02T12:00:00Z","challenge":{"created_at":"2026-10-02T12:03:00Z"},"effect":{"reauthenticated_at":"2026-10-02T12:00:00Z"}}},
+    {"id":"challenge-account-binding-mismatch","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.account_session_binding","overrides":{"challenge":{"account_id":"account-b"}}},
+    {"id":"challenge-session-binding-mismatch","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.account_session_binding","overrides":{"challenge":{"session_id":"session-b"}}},
+    {"id":"challenge-credential-hash-changed","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.credential_binding","overrides":{"challenge":{"credential_hash":"credential-hash-stale"}}},
+    {"id":"challenge-security-version-changed","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.security_version","overrides":{"challenge":{"security_version":8}}},
+    {"id":"challenge-attempts-exhausted","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.attempts","overrides":{"challenge":{"attempts":5}}},
+    {"id":"challenge-superseded","template_id":"confirmation_restricted","expected":"reject","invariant":"challenge.pending","overrides":{"challenge":{"status":"superseded","substituted":true}}},
+    {"id":"recovery-factor-already-used","template_id":"confirmation_active","expected":"reject","invariant":"factor.available","overrides":{"factor":{"method":"recovery","used":true}}},
+    {"id":"session-revoked-before-confirmation","template_id":"confirmation_restricted","expected":"reject","invariant":"session.current","overrides":{"session":{"revoked":true}}},
+    {"id":"challenge-replay-after-expiry","template_id":"challenge_replay_restricted","expected":"reject","invariant":"challenge.replay_pending","overrides":{"at":"2026-10-02T12:06:00Z"}},
+    {"id":"private-recovery-hmac-key-missing","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.hmac_version","overrides":{"replay":{"persisted_key_available":false,"fingerprint_key_id":null}}},
+    {"id":"private-recovery-body-changed","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.request_exact","overrides":{"replay":{"canonical_request_matches":false}}},
+    {"id":"private-recovery-cookie-other-session","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.previous_cookie_binding","overrides":{"replay":{"previous_cookie_session_id":"session-other","previous_cookie_bound":false}}},
+    {"id":"private-recovery-credential-rotated-later","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.session_current","overrides":{"session":{"credential_hash":"credential-hash-3"},"replay":{"credential_current":false}}},
+    {"id":"private-recovery-authority-lost","template_id":"private_recovery_active","expected":"reject","invariant":"authority.current","overrides":{"replay":{"authority_current_after":false},"authority":{"membership_status":"suspended"}}},
+    {"id":"private-recovery-step-up-expired","template_id":"private_recovery_restricted","expected":"reject","invariant":"replay.step_up_current","overrides":{"at":"2026-10-02T12:16:00Z","replay":{"step_up_current":false}}},
+    {"id":"confirmation-adds-tenant-authority","template_id":"confirmation_restricted","expected":"reject","invariant":"effect.authority_preserved","overrides":{"effect":{"active_tenant":"organization-new","permissions":["owner"],"scopes":["organization-new"]}}},
+    {"id":"confirmation-stepup-creates-session","template_id":"confirmation_restricted","expected":"reject","invariant":"effect.atomic_same_session","overrides":{"effect":{"session_created":true}}}
+  ]
+}

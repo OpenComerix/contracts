@@ -56,7 +56,9 @@
       "createRegisteredDeviceAuthenticationChallenge", "proveRegisteredDevicePossession",
       "registerWebDevice", "requestOwnerDeviceSelfApproval", "confirmOwnerDeviceSelfApproval",
       "createInitialOrganization", "listMyMemberships", "selectActiveOrganization",
-      "getActiveTenantContext"
+      "getActiveTenantContext",
+      "createSessionStepUpChallenge",
+      "completeSessionStepUp"
     ],
     "excluded_operation_ids": [
       "getEmailVerificationDeliveryMaterial",
@@ -166,6 +168,16 @@
       "method": "get",
       "path": "/tenancy/context",
       "operationId": "getActiveTenantContext"
+    },
+    {
+      "method": "post",
+      "path": "/identity/step-up-challenges",
+      "operationId": "createSessionStepUpChallenge"
+    },
+    {
+      "method": "post",
+      "path": "/identity/step-up-confirmations",
+      "operationId": "completeSessionStepUp"
     }
   ],
   "excluded_internal_operations": [

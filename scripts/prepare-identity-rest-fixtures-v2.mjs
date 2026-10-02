@@ -11,7 +11,7 @@ if (!bundleFile || !outputDir) throw new Error("usage: node scripts/prepare-iden
 const parse = async (path) => JSON.parse(await readFile(path, "utf8"));
 const manifest = await parse(resolve(root, "openapi/identity-rest-fixtures-v2.json"));
 const bundle = await parse(resolve(bundleFile));
-const catalog = await parse(resolve(root, "errors/error-catalog-v1.json"));
+const catalog = await parse(resolve(root, "errors/error-catalog-v5.json"));
 const catalogByCode = new Map(catalog.errors.map((item) => [item.code, item]));
 const unescape = (s) => s.replaceAll("~1", "/").replaceAll("~0", "~");
 const at = (obj, pointer) => pointer.slice(1).split("/").map(unescape).reduce((v, key) => v?.[key], obj);
@@ -24,7 +24,7 @@ function validate(m = manifest, api = bundle, cat = catalogByCode) {
   for (const [path, pathItem] of Object.entries(api.paths ?? {})) for (const method of ["get", "post", "put", "patch", "delete"]) {
     const op = pathItem[method]; if (op?.operationId) ops.set(op.operationId, { path, method, op });
   }
-  if (m.operations.length !== 21) errors.push(`expected 21 manifest operations, got ${m.operations.length}`);
+  if (m.operations.length !== 23) errors.push(`expected 23 manifest operations, got ${m.operations.length}`);
   const seen = new Set(); let bodyCount = 0;
   for (const entry of m.operations) {
     if (seen.has(entry.operation_id)) errors.push(`duplicate operation ${entry.operation_id}`); seen.add(entry.operation_id);
@@ -58,9 +58,9 @@ function validate(m = manifest, api = bundle, cat = catalogByCode) {
     if (problem.status !== entry.error.status || problem.code !== entry.error.code || problem.type !== `urn:opencomerix:problem:${problem.code}` || problem.retryable !== item?.retryable_by_default) errors.push(`${entry.operation_id}: Problem Details/catalog mismatch`);
     cases.push({ id: `${entry.operation_id}-problem-${entry.error.status}`, expectation: "valid", pointer: expectedError, value: problem });
   }
-  if (bodyCount !== 15) errors.push(`expected 15 request bodies, got ${bodyCount}`);
+  if (bodyCount !== 17) errors.push(`expected 17 request bodies, got ${bodyCount}`);
   const expectedIds = new Set([...ops.keys()].filter((id) => id !== ""));
-  if (seen.size !== 21 || [...expectedIds].some((id) => !seen.has(id)) || [...seen].some((id) => !expectedIds.has(id))) errors.push("operation coverage incomplete");
+  if (seen.size !== 23 || [...expectedIds].some((id) => !seen.has(id)) || [...seen].some((id) => !expectedIds.has(id))) errors.push("operation coverage incomplete");
   return errors;
 }
 validate();
@@ -68,7 +68,7 @@ const baselineErrorCount = errors.length;
 const baselineCaseCount = cases.length;
 if (selfTest) {
   const clone = structuredClone(manifest); clone.operations.pop();
-  if (!validate(clone, bundle, catalogByCode).some((e) => e.includes("expected 21"))) errors.push("negative control failed: missing operation accepted");
+  if (!validate(clone, bundle, catalogByCode).some((e) => e.includes("expected 23"))) errors.push("negative control failed: missing operation accepted");
   const missingCase = structuredClone(manifest); delete missingCase.operations[0].request.valid_example_pointer;
   if (!validate(missingCase, bundle, catalogByCode).some((e) => e.includes("valid request example pointer missing"))) errors.push("negative control failed: missing REST case accepted");
   const bad = structuredClone(manifest); bad.operations[0].error.status = 200;
@@ -93,4 +93,4 @@ for (const c of cases) {
   rows.push([c.id, c.expectation, schemaName, name, c.pointer].join("\t"));
 }
 await writeFile(resolve(dir, "cases.tsv"), `${rows.join("\n")}\n`);
-console.log(`REST fixtures prepared: operations=21 request_bodies=15 request_cases=30 success_bodies=20 problem_errors=21 total_schema_cases=${cases.length} extracted_schemas=${schemaFiles.size}; negative controls=3 rejected`);
+console.log(`REST fixtures prepared: operations=23 request_bodies=17 request_cases=34 success_bodies=22 problem_errors=23 total_schema_cases=${cases.length} extracted_schemas=${schemaFiles.size}; negative controls=3 rejected`);

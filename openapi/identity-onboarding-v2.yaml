@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: OpenComerix Identity and Onboarding API
-  version: 2.0.8
+  version: 2.1.0
   description: >-
     Contrato sucesor v2 del corte inicial del Propietario para cuenta global, sesión web, MFA TOTP, aprobación
     de dispositivo y onboarding inicial de organización. Las mutaciones usan
@@ -9,8 +9,14 @@ info:
     el resultado original y con otro payload produce identity_idempotency_key_reused.
     Cada request/response admite correlation_id; se propagan causation_id
     cuando existe y traceparent conforme a W3C Trace Context. Rate limits se
-    aplican por cuenta, IP y propósito; sus límites concretos son configuración
-    del servicio. Respuestas autenticadas llevan Cache-Control: no-store.
+        aplican por cuenta, señal y propósito. Ambos pasos de session step-up
+        comparten el bucket session_step_up: identidad admite 10 intentos por
+        cuenta y 100 por señal en 900 segundos; gateway admite 300 solicitudes
+        por señal y propósito en esa ventana. Los límites por cuenta y señal
+        son independientes y se suman a cinco intentos por desafío; una clave
+        de idempotencia nueva no reinicia esos límites. La retención de
+        idempotencia es de siete días, pero no garantiza disponibilidad de replay
+        durante ese período. Respuestas autenticadas llevan Cache-Control: no-store.
     La cookie __Host-oc_session es Secure, HttpOnly, SameSite=Lax, Path=/ y sin
     Domain; vence tras 12 horas de inactividad y 30 días absolutos. Cada
     mutación autenticada requiere X-CSRF-Token y Origin validado. Correlation
@@ -162,6 +168,130 @@ paths:
         '403': {$ref: '#/components/responses/AuthenticatedMutationForbidden'}
         '409': {$ref: '#/components/responses/StateConflict'}
         '429': {$ref: '#/components/responses/RateLimited'}
+  /identity/step-up-challenges:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: createSessionStepUpChallenge
+      summary: Inicia el primer factor de un step-up explícito de sesión
+      description: >-
+        Requiere cuenta activa con email verificado, contraseña local correcta,
+        MFA enrolado y sesión vigente restricted o active sin desafío de MFA de
+        login pendiente. La contraseña verificada crea un desafío de propósito
+        step_up, ligado a la cuenta, sesión, hash de credencial y versión de seguridad
+        vigentes; no acredita step-up completo ni rota la cookie. El desafío vence
+        en un máximo de cinco minutos, admite cinco intentos y un desafío nuevo
+        autorizado sustituye pendientes sin invalidar por sí mismo evidencia
+        completa vigente. La operación no cambia tenant, permisos, scopes ni
+        vencimientos de sesión. Replay idempotente conserva 201, body y Location
+        mientras el desafío siga pendiente, vinculado y vigente; no reenvía ni
+        extiende su expiración. El rate-limit usa el propósito independiente
+        session_step_up compartido con la confirmación. Password no se devuelve
+        ni registra.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SessionStepUpChallengeRequest'}
+            examples:
+              valid: {value: {password: 'ejemplo-seguro-no-real'}}
+      responses:
+        '504': {$ref: '#/components/responses/StepUpGatewayDeadlineExceeded'}
+        '201':
+          description: Desafío pendiente de segundo factor; no instala step-up ni rota credencial.
+          headers:
+            Location: {schema: {type: string, format: uri-reference, pattern: '^/api/v1/identity/step-up-challenges/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'}, example: /api/v1/identity/step-up-challenges/018f0000-0000-7000-8000-000000000951}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed: {required: true, description: Booleano HTTP false en primera emisión y true en replay exacto., schema: {type: boolean}, examples: {first_effect: {value: false}, exact_replay: {value: true}}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SessionStepUpChallengeResponse'}
+              examples:
+                first_effect: {value: {challenge_id: '018f0000-0000-7000-8000-000000000951', status: mfa_required, expires_at: '2026-10-02T12:05:00Z'}}
+                exact_replay: {value: {challenge_id: '018f0000-0000-7000-8000-000000000951', status: mfa_required, expires_at: '2026-10-02T12:05:00Z'}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '401': {$ref: '#/components/responses/StepUpUnauthorized'}
+        '403':
+          description: Contraseña inválida o sesión sin método de step-up elegible; CSRF inválido se clasifica aparte en el gateway.
+          headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+              examples:
+                reauthentication_required: {value: {type: 'urn:opencomerix:problem:identity_reauthentication_required', title: Se requiere reautenticación, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000951', code: identity_reauthentication_required, trace_id: '018f0000-0000-7000-8000-000000000951', retryable: false}}
+                mfa_required: {value: {type: 'urn:opencomerix:problem:identity_mfa_required', title: Se requiere completar MFA, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000953', code: identity_mfa_required, trace_id: '018f0000-0000-7000-8000-000000000953', retryable: false}}
+                csrf_invalid: {externalValue: examples/gateway-csrf-invalid-v3.json}
+        '409': {$ref: '#/components/responses/IdempotencyConflict'}
+        '429': {$ref: '#/components/responses/StepUpRateLimited'}
+        '500': {$ref: '#/components/responses/StepUpInternalError'}
+        '503': {$ref: '#/components/responses/StepUpUnavailable'}
+  /identity/step-up-confirmations:
+    post:
+      tags: [IdentityOnboarding]
+      operationId: completeSessionStepUp
+      summary: Completa el step-up explícito y rota la credencial actual
+      description: >-
+        Consume atómicamente el desafío step_up y un TOTP o código de
+        recuperación de un solo uso ligado a la misma cuenta y sesión. Login,
+        MFA de login y enrolamiento no acreditan este step-up. Confirma y rota
+        la credencial en la misma sesión; no crea sesión, activa tenant, aprueba
+        dispositivos, asigna permisos/scopes ni extiende vencimientos. La vigencia
+        efectiva de reautenticación es el mínimo entre los vencimientos de sesión
+        y quince minutos desde la contraseña verificada; reauthenticated_at y MFA
+        reflejan el consumo, sin reiniciar ese reloj. El bucket rate-limit
+        independiente es session_step_up, compartido con la creación. Replay exacto conserva 200,
+        body y la credencial ya rotada sin segundo consumo, rotación ni extensión.
+        Credenciales y códigos son writeOnly y no aparecen en respuestas ni logs.
+      security: [{sessionCookie: [], csrfToken: []}]
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/Traceparent'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/SessionStepUpConfirmationRequest'}
+            examples:
+              valid_totp: {value: {challenge_id: '018f0000-0000-7000-8000-000000000951', code: '123456'}}
+              valid_recovery: {value: {challenge_id: '018f0000-0000-7000-8000-000000000951', code: 'RECUPERACION-EJEMPLO-NO-FUNCIONAL'}}
+      responses:
+        '504': {$ref: '#/components/responses/StepUpGatewayDeadlineExceeded'}
+        '200':
+          description: Step-up confirmado y credencial de la misma sesión rotada; no concede autoridad tenant.
+          headers:
+            X-CSRF-Token: {$ref: '#/components/headers/CsrfToken'}
+            Set-Cookie: {required: true, schema: {type: string}, description: Cookie segura rotada de la misma sesión.}
+            Cache-Control: {$ref: '#/components/headers/NoStore'}
+            Idempotency-Replayed: {required: true, description: Booleano HTTP false en primera ejecución y true en replay exacto., schema: {type: boolean}, examples: {first_effect: {value: false}, exact_replay: {value: true}}}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/SessionStepUpCompleted'}
+              examples:
+                first_effect: {value: {status: step_up_completed, reauthenticated_at: '2026-10-02T12:00:00Z', expires_at: '2026-10-02T12:15:00Z'}}
+                exact_replay: {value: {status: step_up_completed, reauthenticated_at: '2026-10-02T12:00:00Z', expires_at: '2026-10-02T12:15:00Z'}}
+        '400': {$ref: '#/components/responses/InvalidRequest'}
+        '401': {$ref: '#/components/responses/StepUpUnauthorized'}
+        '403':
+          description: Reautenticación no elegible o MFA de login pendiente; CSRF inválido se clasifica aparte en el gateway.
+          headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+              examples:
+                reauthentication_required: {value: {type: 'urn:opencomerix:problem:identity_reauthentication_required', title: Se requiere reautenticación, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000952', code: identity_reauthentication_required, trace_id: '018f0000-0000-7000-8000-000000000952', retryable: false}}
+                mfa_required: {value: {type: 'urn:opencomerix:problem:identity_mfa_required', title: Se requiere completar MFA, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000953', code: identity_mfa_required, trace_id: '018f0000-0000-7000-8000-000000000953', retryable: false}}
+                csrf_invalid: {externalValue: examples/gateway-csrf-invalid-v3.json}
+        '409': {$ref: '#/components/responses/IdempotencyConflict'}
+        '422':
+          description: Factor o desafío inválido, vencido, sustituido o agotado; no instala step-up.
+          headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+              examples:
+                mfa_invalid: {value: {type: 'urn:opencomerix:problem:identity_mfa_invalid', title: Código no válido, status: 422, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000956', code: identity_mfa_invalid, trace_id: '018f0000-0000-7000-8000-000000000956', retryable: false}}
+        '429': {$ref: '#/components/responses/StepUpRateLimited'}
+        '500': {$ref: '#/components/responses/StepUpInternalError'}
+        '503': {$ref: '#/components/responses/StepUpUnavailable'}
   /identity/mfa/totp-enrollments:
     post:
       tags: [IdentityOnboarding]
@@ -609,6 +739,7 @@ paths:
 components:
   headers:
     CsrfToken:
+      required: true
       description: Token CSRF opaco nuevo ligado a la cookie __Host-oc_session actual.
       schema: {type: string, minLength: 1}
     NoStore:
@@ -625,11 +756,16 @@ components:
     DeviceId: {name: deviceId, in: path, required: true, schema: {$ref: '#/components/schemas/Uuid'}}
     DeliveryMaterialId: {name: deliveryMaterialId, in: path, required: true, schema: {$ref: '#/components/schemas/Uuid'}}
   responses:
-    InvalidRequest: {description: Solicitud inválida., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_request', title: Solicitud inválida, status: 400, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_request, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    InvalidRequest: {description: Solicitud inválida., headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_invalid_request', title: Solicitud inválida, status: 400, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_invalid_request, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
     Unauthorized: {description: 'Sesión o autenticación ausente, inválida o expirada.', headers: {Cache-Control: {schema: {type: string}, example: no-store}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_session_invalid_or_expired', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_session_invalid_or_expired, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
     Forbidden: {description: 'Operación no permitida por estado de cuenta, MFA, dispositivo, permiso o scope.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_device_not_approved', title: Operación no permitida, status: 403, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_device_not_approved, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
     NotFound: {description: Recurso inexistente o no visible en el ámbito autenticado., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
-    IdempotencyConflict: {description: Clave de idempotencia reutilizada con otro payload., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_idempotency_key_reused', title: Conflicto de idempotencia, status: 409, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_idempotency_key_reused, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
+    IdempotencyConflict: {description: Clave de idempotencia reutilizada con otro payload., headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {key_reused: {value: {type: 'urn:opencomerix:problem:identity_idempotency_key_reused', title: Conflicto de idempotencia, status: 409, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_idempotency_key_reused, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}, request_in_progress: {value: {type: 'urn:opencomerix:problem:identity_idempotency_request_in_progress', title: Operación en curso, status: 409, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000002', code: identity_idempotency_request_in_progress, trace_id: '018f0000-0000-7000-8000-000000000010', retryable: true}}, state_conflict: {value: {type: 'urn:opencomerix:problem:identity_state_or_version_conflict', title: Conflicto de estado, status: 409, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000003', code: identity_state_or_version_conflict, trace_id: '018f0000-0000-7000-8000-000000000011', retryable: false}}}}}}
+    StepUpUnauthorized: {description: 'Sesión o autenticación ausente, inválida o expirada.', headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {session_invalid: {value: {type: 'urn:opencomerix:problem:identity_session_invalid_or_expired', title: No autenticado, status: 401, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000954', code: identity_session_invalid_or_expired, trace_id: '018f0000-0000-7000-8000-000000000954', retryable: false}}}}}}
+    StepUpRateLimited: {description: Límite temporal excedido., headers: {Retry-After: {required: true, schema: {type: integer, minimum: 1, example: 60}}, Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {rate_limited: {value: {type: 'urn:opencomerix:problem:platform_rate_limited', title: Demasiadas solicitudes, status: 429, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000957', code: platform_rate_limited, trace_id: '018f0000-0000-7000-8000-000000000957', retryable: true}}}}}}
+    StepUpUnavailable: {description: Dependencia temporalmente no disponible., headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {dependency_unavailable: {value: {type: 'urn:opencomerix:problem:platform_dependency_unavailable', title: Servicio no disponible, status: 503, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000958', code: platform_dependency_unavailable, trace_id: '018f0000-0000-7000-8000-000000000958', retryable: true}}}}}}
+    StepUpInternalError: {description: 'Error interno inesperado, sin detalles sensibles.', headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, examples: {internal_error: {value: {type: 'urn:opencomerix:problem:platform_internal_error', title: Error interno, status: 500, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000959', code: platform_internal_error, trace_id: '018f0000-0000-7000-8000-000000000959', retryable: false}}}}}}
+    StepUpGatewayDeadlineExceeded: {description: 'Tiempo de espera máximo del gateway agotado.', headers: {Cache-Control: {$ref: '#/components/headers/NoStore'}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:gateway_deadline_exceeded', title: 'Tiempo de espera agotado', status: 504, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: gateway_deadline_exceeded, detail: 'La solicitud superó el tiempo máximo permitido.', trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
     StateConflict: {description: Conflicto de estado o versión esperada., content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
     Unprocessable: {description: 'Credencial, token, MFA o datos semánticamente inválidos.', content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:identity_email_verification_invalid', title: Estado no válido, status: 422, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: identity_email_verification_invalid, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: false}}}}
     RateLimited: {description: Límite temporal excedido., headers: {Retry-After: {schema: {type: integer, minimum: 1}}}, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}, example: {type: 'urn:opencomerix:problem:platform_rate_limited', title: Demasiadas solicitudes, status: 429, instance: 'urn:uuid:01991a22-0000-7000-8000-000000000001', code: platform_rate_limited, trace_id: '018f0000-0000-7000-8000-000000000009', retryable: true}}}}
@@ -684,6 +820,10 @@ components:
     EmailVerificationRequest: {type: object, additionalProperties: false, required: [token], properties: {token: {type: string, minLength: 1, writeOnly: true, description: 'Token sensible, se procesa aquí y jamás se devuelve o registra.'}}}
     EmailVerificationResponse: {type: object, additionalProperties: false, required: [status, next_actions], properties: {status: {type: string, enum: [verified, not_verified]}, next_actions: {type: array, items: {type: string, enum: [verify_email, enroll_mfa, complete_mfa, register_device, approve_device, create_organization, select_organization]}}}}
     LoginRequest: {type: object, additionalProperties: false, required: [email, password], properties: {email: {type: string, format: email}, password: {type: string, minLength: 1, maxLength: 128, writeOnly: true}}}
+    SessionStepUpChallengeRequest: {type: object, additionalProperties: false, required: [password], properties: {password: {type: string, minLength: 1, maxLength: 128, writeOnly: true, description: Contraseña local verificada como primer factor del propósito fijo step_up; el bucket rate-limit compartido es session_step_up.}}}
+    SessionStepUpChallengeResponse: {type: object, additionalProperties: false, required: [challenge_id, status, expires_at], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, status: {const: mfa_required}, expires_at: {type: string, format: date-time, description: UTC con Z; máximo cinco minutos desde emisión.}}}
+    SessionStepUpConfirmationRequest: {type: object, additionalProperties: false, required: [challenge_id, code], properties: {challenge_id: {$ref: '#/components/schemas/Uuid'}, code: {type: string, minLength: 6, maxLength: 128, writeOnly: true, description: Código TOTP o recuperación de un solo uso ligado a la misma sesión.}}}
+    SessionStepUpCompleted: {type: object, additionalProperties: false, required: [status, reauthenticated_at, expires_at], properties: {status: {const: step_up_completed}, reauthenticated_at: {type: string, format: date-time, description: UTC con Z; instante de consumo del segundo factor.}, expires_at: {type: string, format: date-time, description: UTC con Z; mínimo entre vencimientos de sesión y quince minutos desde la contraseña verificada.}}}
     SessionContext:
       type: object
       additionalProperties: false
