@@ -1,0 +1,162 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "formatVersion",
+    "service",
+    "contracts",
+    "assets",
+    "bindings"
+  ],
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "service": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]+$"
+    },
+    "contracts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/dependency"
+      }
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/asset"
+      }
+    },
+    "bindings": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/binding"
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/registry/manifest-v1.schema.json",
+  "$defs": {
+    "strings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "dependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "role",
+        "version",
+        "operations",
+        "pointers",
+        "purpose",
+        "gates"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "enum": [
+            "consumer",
+            "producer",
+            "semantic-owner",
+            "validation",
+            "documentation",
+            "local-result"
+          ]
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operations": {
+          "$ref": "#/$defs/strings"
+        },
+        "pointers": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^(|/.*)$" }
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 8
+        },
+        "gates": {
+          "$ref": "#/$defs/strings"
+        }
+      }
+    },
+    "asset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contractId",
+        "sourcePath",
+        "destination",
+        "representation",
+        "purpose"
+      ],
+      "properties": {
+        "contractId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sourcePath": {
+          "type": "string",
+          "minLength": 1
+        },
+        "destination": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation": {
+          "enum": [
+            "exact",
+            "json-format"
+          ]
+        },
+        "purpose": {
+          "enum": [
+            "runtime",
+            "validation",
+            "documentation"
+          ]
+        }
+      }
+    },
+    "binding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "path",
+        "contractId"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "gateway-operation-registry",
+            "web-operation-matrix"
+          ]
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contractId": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    }
+  }
+}

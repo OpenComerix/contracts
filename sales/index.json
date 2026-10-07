@@ -1,0 +1,43 @@
+{
+  "formatVersion": 1,
+  "domain": "sales",
+  "registry": "../registry/contracts.json",
+  "contracts": [
+    "sales.sale.completed.v1",
+    "sales.sale.reversed.v1",
+    "sales.http.v1"
+  ],
+  "surfaces": [
+    {
+      "surface": "events",
+      "versions": [
+        {
+          "id": "sales.sale.completed.v1",
+          "version": "v1",
+          "path": "events/sales.sale.completed.v1.schema.json",
+          "status": "draft"
+        },
+        {
+          "id": "sales.sale.reversed.v1",
+          "version": "v1",
+          "path": "events/sales.sale.reversed.v1.schema.json",
+          "status": "draft"
+        }
+      ]
+    },
+    {
+      "surface": "http",
+      "versions": [
+        {
+          "id": "sales.http.v1",
+          "version": "1.0.0",
+          "path": "openapi/pos-sales-v1.yaml",
+          "status": "draft"
+        }
+      ]
+    }
+  ],
+  "planned": [
+    "sales.complete-snapshot.successor"
+  ]
+}

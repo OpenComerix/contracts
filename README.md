@@ -2,6 +2,8 @@
 
 Este repositorio contiene contratos versionados para productores y consumidores. Las decisiones de arquitectura y dominio se mantienen en la documentación del launcher.
 
+La organización por dominio, superficie y versión, los manifiestos/locks de consumidores y el análisis de impacto se describen en [el registro contractual](registry/README.md). Esta tanda añade metadatos y gates; preserva rutas, bytes y validadores anteriores. Los exports nuevos permanecen como candidatos locales hasta publicación autorizada.
+
 - `openapi/pos-sales-v1.yaml` y `openapi/pos-sync-v1.json`: contratos existentes de ventas y sincronización.
 - `openapi/identity-onboarding-v1.yaml`: superficie v1 de identidad, sesiones, MFA, dispositivos, onboarding de organización y contexto.
 - `openapi/identity-onboarding-v2.yaml` y `openapi/identity-gateway-delegation-v2.yaml`: contratos sucesores v2 de identidad. La lista de membresías acepta `limit` opcional (default 50, 1–100) y `cursor` opaco (máximo 2048 caracteres); no ofrece `sort` ni filtros. En una continuación, si se omite `limit`, rige el límite firmado en el cursor.
@@ -47,7 +49,7 @@ CI valida ambos OpenAPI v2 con Redocly CLI 2.53.3 sin advertencias, genera bundl
 
 ## Compatibilidad
 
-- Se pueden agregar campos opcionales sin cambiar la versión principal.
+- Agregar campos opcionales requiere comprobar compatibilidad estructural y semántica con los consumidores admitidos; un objeto estricto puede exigir una nueva versión principal.
 - No se eliminan campos ni se cambia su significado dentro de una versión.
 - Un cambio incompatible requiere una nueva versión contractual aprobada.
 - Los consumidores ignoran campos desconocidos cuando corresponda al formato.

@@ -128,3 +128,31 @@ validate:gateway-delegation-schema:
     - sh scripts/validate-gateway-delegation-schemas.sh
     - jsonschema metaschema openapi/identity-gateway-delegation-v2.schema.json --verbose
     - sh scripts/validate-gateway-delegation-v2-schemas.sh
+
+validate:contract-architecture:
+  stage: validate
+  variables:
+    GIT_DEPTH: "0"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile
+  script:
+    - pnpm test:architecture
+    - pnpm registry:check
+    - pnpm contracts:consumers
+    - pnpm contracts:impact --output .ci-artifacts/contract-impact.json
+  artifacts:
+    when: always
+    paths:
+      - .ci-artifacts/contract-impact.json
+    expire_in: 7 days
+
+validate:contract-metadata-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  script:
+    - jsonschema metaschema registry/manifest-v1.schema.json registry/lock-v1.schema.json --verbose

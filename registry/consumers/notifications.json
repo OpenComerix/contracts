@@ -1,0 +1,712 @@
+{
+  "formatVersion": 1,
+  "publication": "local-candidate",
+  "sourceRepository": "opencomerix/notifications",
+  "sourceCommit": "7828a346662ae0ba8940b8ebe02a388ad9fb3473",
+  "manifestSha256": "07a727d6bbbee66f4e180ac8e29a4919032835847856b4a4ef5bfd067d11ec74",
+  "lockSha256": "13552e0c0310c3680b1bc1e674d42982d0deb47d9fad82585c3ff547fc718b31",
+  "manifest": {
+    "formatVersion": 1,
+    "service": "notifications",
+    "contracts": [
+      {
+        "id": "notifications.send-email-verification.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Validar y entregar exclusivamente emails de verificación dirigidos.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "notifications.send-device-approval.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Validar y entregar exclusivamente solicitudes de aprobación OWNER.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "common.command-envelope.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Validar identidad, versión y destino del sobre dirigido.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "identity.internal-auth.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "issueInternalServiceToken",
+          "getInternalIdentityJwks"
+        ],
+        "pointers": [],
+        "purpose": "Autenticar el workload notifications y verificar su token.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "identity.onboarding.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "getEmailVerificationDeliveryMaterial",
+          "getOwnerDeviceApprovalDeliveryMaterial"
+        ],
+        "pointers": [],
+        "purpose": "Recuperar material temporal mediante las dos rutas H1 privadas estables.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "notifications.send-email-verification.result.v1",
+        "role": "local-result",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar un resultado durable local; no declarar un publicador remoto.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      },
+      {
+        "id": "notifications.send-device-approval.result.v1",
+        "role": "local-result",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar resultado local de entrega separado de aprobación del dispositivo.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:integration"
+        ]
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "common.command-envelope.v1",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/delivery/schemas/command-envelope-v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "notifications.send-email-verification.v1",
+        "sourcePath": "commands/notifications.send-email-verification.v1.schema.json",
+        "destination": "src/delivery/schemas/notifications.send-email-verification.v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "notifications.send-device-approval.v1",
+        "sourcePath": "commands/notifications.send-device-approval.v1.schema.json",
+        "destination": "src/delivery/schemas/notifications.send-device-approval.v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime"
+      }
+    ],
+    "bindings": []
+  },
+  "lock": {
+    "formatVersion": 1,
+    "service": "notifications",
+    "manifestSha256": "07a727d6bbbee66f4e180ac8e29a4919032835847856b4a4ef5bfd067d11ec74",
+    "entries": [
+      {
+        "id": "notifications.send-email-verification.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "commands/notifications.send-email-verification.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.v1.schema.json",
+            "sha256": "525be90b9a12a49dc164f335bd65ebe8948673aaecc558d3d17596ab7a1efb4b"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.v1.schema.json",
+            "pointer": "",
+            "sha256": "85e0ea4cb88843edb1e7fc82a0f3d9782c63bb8d4300defb5a5eca05554f55e5"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e85197575b261632ddddd5048abfa0bb3b35071ef9f9a0d241881e172c2f1fd9"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ae53aaf4aea3f1fbd40246dfd3c5440c4cba106cc8a4fd1e4f481b8e5823f653",
+        "runtimeSha256": "ae53aaf4aea3f1fbd40246dfd3c5440c4cba106cc8a4fd1e4f481b8e5823f653"
+      },
+      {
+        "id": "notifications.send-device-approval.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "commands/notifications.send-device-approval.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/notifications.send-device-approval.v1.schema.json",
+            "sha256": "e2d62ce8a4c0aef231e68a8fb8444522bfaa848a1b0273a840b2010b35a1cb71"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/notifications.send-device-approval.v1.schema.json",
+            "pointer": "",
+            "sha256": "ed916cc6b3333208413ed392db1e496875b884edb31c793cae7448d9c5db9bbb"
+          },
+          {
+            "path": "commands/notifications.send-device-approval.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "f4ed6879b75dfec88f90c24fd0a1e4e497079db2344db74178fa6b20bb189c86"
+          },
+          {
+            "path": "commands/notifications.send-device-approval.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "f9df24856c241cbed7b3e2c9a433da04ad4b53579bca9939956d4ff6bab51ca2",
+        "runtimeSha256": "f9df24856c241cbed7b3e2c9a433da04ad4b53579bca9939956d4ff6bab51ca2"
+      },
+      {
+        "id": "common.command-envelope.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "commands/command-envelope-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "0a74b2f66d4537496a9ec62c63dc8345a104d9df6a955cd8ca289c618280529e",
+        "runtimeSha256": "0a74b2f66d4537496a9ec62c63dc8345a104d9df6a955cd8ca289c618280529e"
+      },
+      {
+        "id": "identity.internal-auth.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "26e8c5b50d04508adec5d1a56f38660944faa27c",
+        "tag": "identity-internal-auth-v1.0.0",
+        "tagObject": "a22615cbb08a2035e48d3f4d59f4a395cab0ae33",
+        "root": "openapi/identity-internal-auth-v1.yaml",
+        "operations": [
+          "issueInternalServiceToken",
+          "getInternalIdentityJwks"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/jwks-current.json",
+            "sha256": "24427df0b9d774593999cad345f123d359743814139541f39864ad3a106e5002"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/jwks-rotation-overlap.json",
+            "sha256": "82b7c706dfc7deb3ae2f6db8ca88d6793b4f0126865cbe461a13b3dd107c61e6"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "sha256": "1a5fa4bbfc9f445a56bd9d33f4a9b93d7d53d26f5ab947172e91ebca1fd98a3f"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "sha256": "2a77bb3fbb64052e95568069f1891ce6b43b5da9328476b890d78bda9c169166"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "sha256": "bd8676729435dc64354407b4ffd02a136b93cf9d1b54a41ffdf833d9e567ce84"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "sha256": "b187c9dd08c0d8051d8105e43db70ec2abe454f78e833fcd67c6e2342ba587e0"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "sha256": "52125fd2bb0535499d0ac5eae6f9788babf29d437847cff2677956bf1fed0713"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "sha256": "0f5b088c764ef9c34f5ba52eefa49870de065724256fa8fc39011b7036162527"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "sha256": "fa532bd7b24744d5d8e24e21cf091a20961dc675b08c6cf9dc0cba433b0e3e6e"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "sha256": "4a8624be6f2cae9116ac634bc6e64d59f5382cad91a7f9d0a6eba2dd9b7e451b"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/jwks-current.json",
+            "pointer": "",
+            "sha256": "369b9c3abda5296f4f0a2999723fc105bbbe43e76667c9d309694a7c8627a907"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/jwks-rotation-overlap.json",
+            "pointer": "",
+            "sha256": "6094633fc35fad6c12b97cdf911bc2c413a407e6c028f98e21421f873f63292f"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "pointer": "",
+            "sha256": "7fea647e5f15c86fbce494e086e2c9487a3a9e06954e405b82055b6cecfc124b"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "pointer": "",
+            "sha256": "52977cef16ffb1e7392b602fc98ae422b15b03d9403f17ac43ad8e59b51c8782"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "pointer": "",
+            "sha256": "74d505516733379dbb4a80024e593d63d739abb6cbb4fb89ce3cd780c1bcfa27"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "pointer": "",
+            "sha256": "0856809ec8a314e173b301e35291ac07d38ea0ae468b01d086832ccb9fa29dad"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "pointer": "",
+            "sha256": "326a51086889d002cb57fbc397555a9f885b18b36ba814cd3c5ef4262aca794c"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "pointer": "",
+            "sha256": "46333dc00fd2301169f9c46a93be801e6d5010877877b0a20706596580df89f9"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "pointer": "",
+            "sha256": "c54597bd437f04f97971559ab0989bef8538afc0cd633dafb485962a698f28e6"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/headers/NoCache",
+            "sha256": "18ca9d07efe39b854719a51cda6f176517206f878009eb761e7395fb903697ab"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "50422c71994b1573e9988012c10d253bf42d637edd6b4c154b63313319ddceb9"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/ClientCredentialsRequest",
+            "sha256": "1d64c1f6534e77b5bf5c9266cf1091b8effce588f996046ade3a3c5a04817e78"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/JsonWebKeySet",
+            "sha256": "fc63c92c0ce29906b7f69c256a3cc9b2b2b6d9143d4eea7daa439fe5008f2f6a"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/OAuthError",
+            "sha256": "07e7e90a0843664b8afdb93544ce89562878ef982f5175fa80cb650d5b447249"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/Problem",
+            "sha256": "fe2dc061320201ba0569a6fdffca64092ddf99c0d1ca6671c0632bf992bc0e40"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/TokenResponse",
+            "sha256": "9b57e994565bf3250ade89239dddbf2e0a956a7103c653d0b0e3505a1e17de52"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/schemas/VerificationJsonWebKey",
+            "sha256": "b45c21d671931a2fd7172b893ecfcd0ec3d0e5e8eab18cc6f8d003a69f56ef23"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/components/securitySchemes/workloadBasic",
+            "sha256": "82612b0e2110574247e733bd5151bd5b14694c48daf299c769bc5f6c7c49359f"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1jwks.json/get",
+            "sha256": "938cf6573380a17f6c800951e5c729e91331f9b2055fd726d78aca522ba214a5"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1oauth~1token/post",
+            "sha256": "d6b4e130bcaf4d5abfde9a7a9224296c303d8855a9887d536db85e2bfbd24901"
+          },
+          {
+            "path": "openapi/identity-internal-auth-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "cdd2192ae50db22dd36ac27fbebc19ae7df673d11950ef97b56aeda3b313b600"
+          }
+        ],
+        "selectionSha256": "0f3869a649c4b0b8f3abeecf9801250e882622299137ad8510defceb06282909",
+        "runtimeSha256": "e7aab295696478e3d0a2ce625572f69c4703204fb89e0a93d888dae3a4e5218c"
+      },
+      {
+        "id": "identity.onboarding.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "openapi/identity-onboarding-v1.yaml",
+        "operations": [
+          "getEmailVerificationDeliveryMaterial",
+          "getOwnerDeviceApprovalDeliveryMaterial"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "sha256": "65b6a6804074123a97b0967291839d1edf7aaa698cbfcfb59de79cba70f79cec"
+          },
+          {
+            "path": "openapi/problem-details-v1.schema.json",
+            "sha256": "9e9236d08579fb1d807bb6006adf795d123ed25f8af4885dc8470c838dd93e0a"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/parameters/DeliveryMaterialId",
+            "sha256": "27768064e12749f9febd998c27009b1906ce9b80da73c8f833906b5519b60617"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/Expired",
+            "sha256": "1ff56cff4d6408983292517e5f5fbe2f3e8bbd4e1fcf846ea0da42609b2ace14"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/Forbidden",
+            "sha256": "bd534249c4df106c351cdaa17f64c6f6b5c792a239b3964ad63fb81189b23aa5"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "082d0e18dd3591d955fc856038e731baf9f2936b1f07f89e08204d6af5b71071"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/RateLimited",
+            "sha256": "7737a4ec23b328e1d45dd2f8f8a9ec02299f824bbb35fdc0b073533e0a194441"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/Unauthorized",
+            "sha256": "70bea07469144fbc6c0b5d2e19368b3dd64f7983d1d0546532a5610973f45893"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/responses/Unavailable",
+            "sha256": "8bc6e7ff1c4579e1278cd140efc8d492f158003bb507a26069f0adc26cfa3c23"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/schemas/DeliveryMaterial",
+            "sha256": "a1cd7034c92df25101a65c581e8ba7cee0fe4dd128227c43dc199135d2334b78"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/schemas/DeviceApprovalDeliveryMaterial",
+            "sha256": "7e91db1ae871e2e92e96983fb96cc43a79fdca14dc6670961efbacedbfcb976b"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/schemas/Problem",
+            "sha256": "b4bd7eda03bda7d6d89fb340142436121182fe5e6eddcc1aad186fd0c9e0be60"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/schemas/Uuid",
+            "sha256": "117d6ce37dfe94ad20762d7188395a79652cb85f5cb5f69f0bed047849f06a65"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/components/securitySchemes/serviceToService",
+            "sha256": "6a89d5fa6db225f7024e46221f8fb2befca9cc3c86dc5f23cafb4aca532f8b05"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1device-approval-delivery-material~1{deliveryMaterialId}/get",
+            "sha256": "c7bee116368493c097ad4b95e8fbf754131dc5179337642006fde4c8f11ce5b7"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1email-verification-delivery-material~1{deliveryMaterialId}/get",
+            "sha256": "a291d66fa02376c9ba28efbb748bc29868c16aa785ca72a1a7bf1b0313b5c32b"
+          },
+          {
+            "path": "openapi/identity-onboarding-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "363e45814abcc0e26d6281e347499327eef840ece1afe7129899123813704e16"
+          },
+          {
+            "path": "openapi/problem-details-v1.schema.json",
+            "pointer": "",
+            "sha256": "e5a17aa5e204da36ba7a9c5e5e3ed49c9a1db5eeeae1cd7392feb264d9916b79"
+          },
+          {
+            "path": "openapi/problem-details-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c88b9829aea6a67fe161a3d532e8f7047bd10a71b0527775b04d8ca5f138c31c"
+          },
+          {
+            "path": "openapi/problem-details-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "9a499a077f07485c9b48af5cba990c92f9c0b7cd69624206aa5c31b8d6c28b0b",
+        "runtimeSha256": "87a0e28c4c7b22b328a39a972e3d50b0df21adbe20a8a48db37ae8483c359a02"
+      },
+      {
+        "id": "notifications.send-email-verification.result.v1",
+        "role": "local-result",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "commands/notifications.send-email-verification.result.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.result.v1.schema.json",
+            "sha256": "7308404744b748ada267ee161086e2e3c8539115d915c52f3f6136a9fcdac7cc"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "3fd666674908080be26aaf96e4e7616bb70d4ab2c2b3f528c589824aea378877"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9523c814019c9f19e913c98949fc6914d1dcc9ba8cdd91f7d41da5e75440de86"
+          },
+          {
+            "path": "commands/notifications.send-email-verification.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "d1dfa5ee96711bd7d2cf6c70d0cd0680f24516f0087356bbe0989a2ca554041e",
+        "runtimeSha256": "d1dfa5ee96711bd7d2cf6c70d0cd0680f24516f0087356bbe0989a2ca554041e"
+      },
+      {
+        "id": "notifications.send-device-approval.result.v1",
+        "role": "local-result",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7533def9d85ea26ca032c83b704901e0b2b4325b",
+        "tag": "identity-onboarding-v1.0.0",
+        "tagObject": "dc8a8cfe350dc0b2ff2c0ee5f5041652a04a8b10",
+        "root": "commands/notifications.send-device-approval.result.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/notifications.send-device-approval.result.v1.schema.json",
+            "sha256": "e5d951ca47ff99d06d578735328a34bb6a949186557b34b7b070ec3481fab087"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/notifications.send-device-approval.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "e30ef9ef8c52e456ff8f1984f089b99ae0fbbab31ae3671ecd9c12c7521db968"
+          },
+          {
+            "path": "commands/notifications.send-device-approval.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a25d222e2aae6ce616fce6462169e2122f0e518ee12f57dac8dc3a18c428eff2"
+          },
+          {
+            "path": "commands/notifications.send-device-approval.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "340e8ac9fcedbec0ccbe158b1e00ccf3cb3838c431f5f89eb8fd14b10aa8d108",
+        "runtimeSha256": "340e8ac9fcedbec0ccbe158b1e00ccf3cb3838c431f5f89eb8fd14b10aa8d108"
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "common.command-envelope.v1",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/delivery/schemas/command-envelope-v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime",
+        "sourceSha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f",
+        "semanticSha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562",
+        "localSha256": "721426821216b53da260ca301b99f59d977287d312444cfb4bae3afc904d07e1"
+      },
+      {
+        "contractId": "notifications.send-email-verification.v1",
+        "sourcePath": "commands/notifications.send-email-verification.v1.schema.json",
+        "destination": "src/delivery/schemas/notifications.send-email-verification.v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime",
+        "sourceSha256": "525be90b9a12a49dc164f335bd65ebe8948673aaecc558d3d17596ab7a1efb4b",
+        "semanticSha256": "85e0ea4cb88843edb1e7fc82a0f3d9782c63bb8d4300defb5a5eca05554f55e5",
+        "localSha256": "423213e97daadb1fc330ff54009e0947ad9897b3b4735c9cd877235988718348"
+      },
+      {
+        "contractId": "notifications.send-device-approval.v1",
+        "sourcePath": "commands/notifications.send-device-approval.v1.schema.json",
+        "destination": "src/delivery/schemas/notifications.send-device-approval.v1.schema.json",
+        "representation": "json-format",
+        "purpose": "runtime",
+        "sourceSha256": "e2d62ce8a4c0aef231e68a8fb8444522bfaa848a1b0273a840b2010b35a1cb71",
+        "semanticSha256": "ed916cc6b3333208413ed392db1e496875b884edb31c793cae7448d9c5db9bbb",
+        "localSha256": "aa3cd2e4b6624db82a9235df84f3e43b1aec8cf9ba77ca64681191b458439bd7"
+      }
+    ]
+  }
+}

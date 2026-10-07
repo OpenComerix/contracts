@@ -1,0 +1,2016 @@
+{
+  "formatVersion": 1,
+  "publication": "local-candidate",
+  "sourceRepository": "opencomerix/web-pos",
+  "sourceCommit": "7e8baa4247f17a0222e3435b554f6b541c6e4c75",
+  "manifestSha256": "c186417d6b18e13199e3b1cbfe6fce534c1cf3ef39affe4b61b79cf318b87bc3",
+  "lockSha256": "0dad3fd2437b136c7efc876c331aa94f1f0da8ef527f689a16986662d77a6c5f",
+  "manifest": {
+    "formatVersion": 1,
+    "service": "web-pos",
+    "contracts": [
+      {
+        "id": "identity.onboarding.v2",
+        "role": "consumer",
+        "version": "2.1.0",
+        "operations": [
+          "registerGlobalAccount",
+          "verifyEmail",
+          "createSession",
+          "getCurrentSession",
+          "logoutCurrentSession",
+          "createSessionStepUpChallenge",
+          "completeSessionStepUp",
+          "beginTotpEnrollment",
+          "confirmTotpEnrollment",
+          "completeMfaChallenge",
+          "createDeviceRegistrationChallenge",
+          "createRegisteredDeviceAuthenticationChallenge",
+          "proveRegisteredDevicePossession",
+          "registerWebDevice",
+          "requestOwnerDeviceSelfApproval",
+          "confirmOwnerDeviceSelfApproval",
+          "createInitialOrganization",
+          "listMyMemberships",
+          "selectActiveOrganization",
+          "getActiveTenantContext"
+        ],
+        "pointers": [],
+        "purpose": "Consumir 20 operaciones públicas vía gateway; excluir revocación de otras sesiones y rutas internas.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.rest-fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          "/operations/0",
+          "/operations/1",
+          "/operations/2",
+          "/operations/3",
+          "/operations/4",
+          "/operations/6",
+          "/operations/7",
+          "/operations/8",
+          "/operations/9",
+          "/operations/10",
+          "/operations/11",
+          "/operations/12",
+          "/operations/13",
+          "/operations/14",
+          "/operations/15",
+          "/operations/16",
+          "/operations/17",
+          "/operations/18",
+          "/operations/21",
+          "/operations/22"
+        ],
+        "purpose": "Comprobar las operaciones UI utilizadas y sus ejemplos.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v5",
+        "role": "validation",
+        "version": "5",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Interpretar códigos publicados sin interpretar detail ni inventar autoridad.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v5.schema",
+        "role": "validation",
+        "version": "v5",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar evidencia de validación del catálogo.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.device-proof-v1-vectors",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar los vectores contractuales de prueba de dispositivo.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.device-proof-v1-vectors.schema",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar el schema de los vectores criptográficos.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.onboarding.v2",
+        "role": "documentation",
+        "version": "2.1.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Conservar copia publicada de referencia; no implica consumo de todas las operaciones.",
+        "gates": [
+          "pnpm contracts:metadata"
+        ]
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/identity-onboarding-v2.yaml",
+        "destination": "public/contracts/identity-onboarding-v2.1.0.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/problem-details-v2.schema.json",
+        "destination": "public/contracts/problem-details-v2.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "common.error-catalog.v5",
+        "sourcePath": "errors/error-catalog-v5.json",
+        "destination": "public/contracts/error-catalog-v5.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "common.error-catalog.v5.schema",
+        "sourcePath": "errors/error-catalog-v5.schema.json",
+        "destination": "public/contracts/error-catalog-v5.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.rest-fixtures.v2",
+        "sourcePath": "openapi/identity-rest-fixtures-v2.json",
+        "destination": "public/contracts/identity-rest-fixtures-v2.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.device-proof-v1-vectors",
+        "sourcePath": "openapi/device-proof-v1-vectors.json",
+        "destination": "public/contracts/device-proof-v1-vectors.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.device-proof-v1-vectors.schema",
+        "sourcePath": "openapi/device-proof-v1-vectors.schema.json",
+        "destination": "public/contracts/device-proof-v1-vectors.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/gateway-csrf-invalid-v3.json",
+        "destination": "public/contracts/examples/gateway-csrf-invalid-v3.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-device-approval.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-device-approval.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-initial-organization.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-initial-organization.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-session-context.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+        "destination": "public/contracts/examples/membership-pagination-v2-problem-invalid-cursor.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+        "destination": "public/contracts/examples/membership-pagination-v2-problem-invalid-limit.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-after-login.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-after-mfa.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-device-proof.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-owner-approval-pending.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-confirmation-response.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-active-bootstrap.json",
+        "representation": "exact",
+        "purpose": "validation"
+      }
+    ],
+    "bindings": [
+      {
+        "kind": "web-operation-matrix",
+        "path": "src/app/identity-contract.mjs",
+        "contractId": "identity.onboarding.v2"
+      }
+    ]
+  },
+  "lock": {
+    "formatVersion": 1,
+    "service": "web-pos",
+    "manifestSha256": "c186417d6b18e13199e3b1cbfe6fce534c1cf3ef39affe4b61b79cf318b87bc3",
+    "entries": [
+      {
+        "id": "identity.onboarding.v2",
+        "role": "consumer",
+        "version": "2.1.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": "identity-onboarding-v2.1.0",
+        "tagObject": "8f54bd182e2cadb9e4a7b0376d1d8c477fc84772",
+        "root": "openapi/identity-onboarding-v2.yaml",
+        "operations": [
+          "registerGlobalAccount",
+          "verifyEmail",
+          "createSession",
+          "getCurrentSession",
+          "logoutCurrentSession",
+          "createSessionStepUpChallenge",
+          "completeSessionStepUp",
+          "beginTotpEnrollment",
+          "confirmTotpEnrollment",
+          "completeMfaChallenge",
+          "createDeviceRegistrationChallenge",
+          "createRegisteredDeviceAuthenticationChallenge",
+          "proveRegisteredDevicePossession",
+          "registerWebDevice",
+          "requestOwnerDeviceSelfApproval",
+          "confirmOwnerDeviceSelfApproval",
+          "createInitialOrganization",
+          "listMyMemberships",
+          "selectActiveOrganization",
+          "getActiveTenantContext"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "openapi/examples/gateway-csrf-invalid-v3.json",
+            "sha256": "a24795204d623acb178a3a49c4e96f6dc419f5f3659820c2c05b37bdd314f80d"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+            "sha256": "50ea124b38dcb3e90b9ac6fdfa1cc3888c1b7c1ff5840fef9f2550cf8abb2582"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+            "sha256": "e0227971212b7cb6cce6550b15c416fdb475f8bf4960f353049b9c0b7beda8ae"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+            "sha256": "448b0f554f6499eeafba87a04b561c4147196b4e3182c7f191239aa4c63ee871"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+            "sha256": "c59a9cebdad8b4c27d2dc8143abe6c5080a26aa850ddeccc722fd34902783eb2"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+            "sha256": "8e20bd2e89ad6f95b7d0e836593eaec497137efd7281ae8d0c866302ec91a1d6"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+            "sha256": "953734538af90d8358417a5f9dd6cc14f59e2b03646231256aacf8ed25f0cdc0"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+            "sha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+            "sha256": "0c6f97b02413cdd8199ebecc21ff0a2b7d1816a7c50a0e1fc1f105e68fa2729c"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+            "sha256": "f9f39a3cd5d8bdda33c6108aacede3bc482dfd2ff9e004bc2a00709f0f72b138"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+            "sha256": "08a277cbd9c9bc7254ce589ad03ab7967ba8e2d49b790d6ae5ef21d1b70ef91f"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+            "sha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+            "sha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+            "sha256": "a39cccf06a0d58808983280e060750d9c546563c0b5f90bc222fd1ed0c0f42fd"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "sha256": "f8368c4aa1feb85eca31b1b1f23b826814dfc4aeccdb93b581f0794ee3bbcbab"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "sha256": "d272013008a05c96b0a6e0569f0004658f16f478cbf2463013b68663aac92269"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/examples/gateway-csrf-invalid-v3.json",
+            "pointer": "",
+            "sha256": "560a0b7460cdd929e9f0e45c8973ee7082b2ff9a83c0b4eb83e776d5a0f1dab8"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+            "pointer": "",
+            "sha256": "3b5aaffb0d106112f12fb0d6a9ea55cc4d3f71b41b111ee18b76476472e51802"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+            "pointer": "",
+            "sha256": "fc68aa32968bcce2b197ad318a7e1f43ed5a40e31e510ba084afc58ea1909ac9"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+            "pointer": "",
+            "sha256": "1685e64bbb7603ccf38fc792516516e4b9914d9481f725acf2090f190afa9db4"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+            "pointer": "",
+            "sha256": "62673eca7f18d4190f44247191009caf34087063f365aeafc6006ac0aab4f0b5"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+            "pointer": "",
+            "sha256": "53f8eae9a2c51b0bfb09e8eec34169b5c22d9f6d43d46020077f790c9d89ed5c"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+            "pointer": "",
+            "sha256": "8fca2ba10ecb43df9eab18a3939da35405ac9cb6910d35deab848e7d946e60fc"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+            "pointer": "",
+            "sha256": "3055bec7b5679cf10714885e467c810bbdb7166fccf059440c6e60af482cf4b9"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+            "pointer": "",
+            "sha256": "3c33db48f995b5fbdc7fceec94cdc7676e421ad877d8e6a67741732d169099c3"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+            "pointer": "",
+            "sha256": "d8e2f6cbd1f712f6b87dd632944c029d55fb8f26546407055c5316d7c56ccdc6"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+            "pointer": "",
+            "sha256": "ffce6344f0b8f0376ad9abc47e6caf7911265ca8da1aee9071ce1a7d289a3a88"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+            "pointer": "",
+            "sha256": "8a1860d06be095192d4cfd7a2454deb5a97084b3c9838d4931da8cfd7b7e5663"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+            "pointer": "",
+            "sha256": "8a1860d06be095192d4cfd7a2454deb5a97084b3c9838d4931da8cfd7b7e5663"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+            "pointer": "",
+            "sha256": "0265a2b1763d5a9124b2252fd516bc5845cd414e34568bf9cbbe88de824d6345"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/headers/CsrfToken",
+            "sha256": "e21d42555f66950b52d4811aa300b968a6eea6936d21ebe8def98472c847eb88"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "e5fc22e87dede17d3cc8e2fe860e79dbf23bfc8ffdc254b5c04d1404a267420c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/DeviceId",
+            "sha256": "bb7714d09b1e88e4599633dbe7cd9ad6c6e9731d14035ea53106a70fdd531b28"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/EnrollmentId",
+            "sha256": "8a4754b5730e2abda5071b13d7d6459b3dfe062ccf668d12bb87b6804786872a"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/IdempotencyKey",
+            "sha256": "645c9452af44609bda20a5b1640c139b4065ab6f18b2c5916b22b965aae40409"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/Traceparent",
+            "sha256": "479dca643e0e12119b4821ca4ed8e7f4f14e34981f8adf6b49dc978fb0f46ee2"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/AuthenticatedMutationForbidden",
+            "sha256": "7acba367851c10b267d364fde4b183ec2657fba453462e69008345e471adb53b"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Forbidden",
+            "sha256": "bd534249c4df106c351cdaa17f64c6f6b5c792a239b3964ad63fb81189b23aa5"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/GatewayDeadlineExceeded",
+            "sha256": "6d283e0d5cee0abe6cc56e3d58431fdef25a932b9f59ed1cfdd12f324b9d9877"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/IdempotencyConflict",
+            "sha256": "07ccedb8e138360f5d37c48e9c6973bfe9b2cdd91b2108154f7e6c04d5523fd7"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/InternalError",
+            "sha256": "7f0b30ccbc9f5424923021bd48f73e84cc0ba4e05d7ab38a43352947be83608d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "0627d26a57ea3aeeb5118c0361a45424a63c25b2ff0eb200a70e7c4fdc616851"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "082d0e18dd3591d955fc856038e731baf9f2936b1f07f89e08204d6af5b71071"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/RateLimited",
+            "sha256": "7737a4ec23b328e1d45dd2f8f8a9ec02299f824bbb35fdc0b073533e0a194441"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StateConflict",
+            "sha256": "fe0492953d6ae3de9ee69dc98638a53073b3849d539b173ab52492a97b7aaf16"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpGatewayDeadlineExceeded",
+            "sha256": "dd717cc1c8fd7236621db3ef38dee94cf42070f87c10a684e1592ce2fe3846fa"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpInternalError",
+            "sha256": "15d03e1bc0bf8e08116f6880000a13730f0cc68e1fcda6c0955ee04dac2e2ae1"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpRateLimited",
+            "sha256": "60f1eb34b5058aa7d0aa9c1f99a5ff7c524180ba564b34a2a71b64ad7460afd6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpUnauthorized",
+            "sha256": "b5c3121f3825a3a42497ef86b8778438abb7ed9c32f78d890e65c52d8bc0a1b6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpUnavailable",
+            "sha256": "24dbba8fc41df21212979e2ad9eaeb758c5a538d69fe59fa65e6fe90fb5d8a11"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unauthorized",
+            "sha256": "70bea07469144fbc6c0b5d2e19368b3dd64f7983d1d0546532a5610973f45893"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unavailable",
+            "sha256": "8bc6e7ff1c4579e1278cd140efc8d492f158003bb507a26069f0adc26cfa3c23"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unprocessable",
+            "sha256": "627583a1806b10482bd269b02c9dd08675cbff61bf0feb757d7a25098a3f43eb"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/ContextSelectionRequest",
+            "sha256": "3e5af1b7c94dc1191eb50637b2465cb22d5f287d0714317baa94621230da2de3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Device",
+            "sha256": "c24dad08d7ef902dbeb0815cb11367ae395299d9491122d0673efce51133b5e2"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceApprovalStatus",
+            "sha256": "26d46015e251023c7da4cd3d1c13ec19c5e450fccfe912c36775331c1efc49e0"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationChallenge",
+            "sha256": "e93699406f946226a30eb8e41ab379bf33e1e556a0288201054c71e27fb69f18"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationChallengeRequest",
+            "sha256": "46b485c56511a01e01ed53a6aca00a66c3b43799b108e5a37abc7fc70f0281b9"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationProof",
+            "sha256": "a6c2bf76c96b48eed431d8517662882a739deb86effdcc1830edf20983849f1c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceChallengeRequest",
+            "sha256": "b5017a0f36db8c1cb2727593fb60c0a00bceccfd01203d7515cf4a72f0b78261"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceChallengeResponse",
+            "sha256": "bfcaea34d5993bb0f006f8abf32d7f4b2a38694ad63604db598b1fed4cd812e8"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceProofNonce",
+            "sha256": "2841a4e852fd58e26dcc36ce527fdfb322ca815da4740e15aa5af0884c63191e"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceProofSignature",
+            "sha256": "bd28986d729aacd1928042b10162501909ac1a80afaa1a5b9cf4419d8738ad51"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DevicePublicJwk",
+            "sha256": "fa50d105cf4376a9b8469f3a231c9682c306ab6ec9f1e2276638a750850113b0"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceRegistrationRequest",
+            "sha256": "f08032850d26e2167812cb81b248f67632588fd48c83472c735145dcfee47010"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/EmailVerificationRequest",
+            "sha256": "05eb591a3b754bd0b90584841f134f413bb97c5239e2644b8effdb7e760d649d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/EmailVerificationResponse",
+            "sha256": "516bd1c66beb80909bfa0c2c308a296751078c6f22b89a38eac43701c0f644da"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/LoginRequest",
+            "sha256": "25da247c97f739ecb7067f20d8e5e22ca621c0693a59e1469d9542b175a98d3c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/LoginResponse",
+            "sha256": "b42c8def194e06df122309f91aca734e60d124b1935a3777646074979b5c0788"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MembershipList",
+            "sha256": "5d8fed1a4fd425861c9eb4bc6fb85626f883a239562c24b3e38e9bea0519b11d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MembershipRef",
+            "sha256": "11b4cd4214b73ab3a53f17401ce92f449851eb4eae2dbe5c94a5f13511233dae"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MfaChallengeRequest",
+            "sha256": "fae8c9c81dcb6c547e29e51c4c8cd08a0e1878e852d6748732add48d96ede4ec"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationOnboardingRequest",
+            "sha256": "6cb8536e494068c5fb6d01b5e0f52a3a5ac2acc724caad5d509d8ef812e602b6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationOnboardingResponse",
+            "sha256": "92da1dfe6914097f693a32ae035fa24a7f51a263c19b2e2133fa688cda8e01fe"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationRef",
+            "sha256": "b36bae30bb8d541e413ebe91cd485d26b246a172657c911ab42e58fd0bee0df3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalConfirmation",
+            "sha256": "730c79ec723735e1d4f196bfe85e1557ad4c5af340c688d6c5f2570b1a344479"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalPending",
+            "sha256": "db844f5ac295dbb57dfc429e5826aaa92fa27893984c4150575f4024bbf9746c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalRequest",
+            "sha256": "91b39a7255fad850b7ab392b50648b14474854857666945eba0bea3e30a9b386"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Problem",
+            "sha256": "cd108d1b131dee906f479623596d2d07046017e7d99f5bb74fe728df0cf74797"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/RegistrationAccepted",
+            "sha256": "b8c368888192cd9ba42956736c9d53e69eff9ebf7c7712ee39add0da21301857"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/RegistrationRequest",
+            "sha256": "5239afc51270785d0e1e205aa3a5e84829d63572b0d27f817af1a4145981096a"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Scope",
+            "sha256": "2c7360a4d9ed9f8e22f83ad55e7dd1d99d748b60db96679dc2656b6537dcf41d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SensitiveMaterialReplay",
+            "sha256": "517a4b6b232651b65f7f3e43deb0ea34b35fb08327e5ced52d0a1cb649c2dcad"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionContext",
+            "sha256": "351a13e9918d501568a1733a2df586450df967ce1f67fd2e5b8a44cf53f9a829"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpChallengeRequest",
+            "sha256": "d8d151f006d3725fcd6e0f76c994367f44b0a92e9f416f0c351aebd42a86325e"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpChallengeResponse",
+            "sha256": "97ee6525f84670bb2cec6c24e5f58adac497ea30fe866f9f8576a42c73073fe8"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpCompleted",
+            "sha256": "a773e718046ab265fbb6f3918246aa4634336461121b011abfd8abd347729aaa"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpConfirmationRequest",
+            "sha256": "ad494383a6da8871d4f54024cc3e16157bff7db718cf1428bd424cd4cc9c7e92"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpConfirmationRequest",
+            "sha256": "b81c21ec789c1e828f86a63f34b3d79efd8edccd951f8779c6826856dcc55035"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpConfirmationResponse",
+            "sha256": "8ea3b0659393c92e8f8792fab0b2ecaa099a3d0a354e33ffbf6064af024bcb93"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpEnrollmentFirstResponse",
+            "sha256": "73bfcf3d1a9a36a2be34a3e5dd11aa9a7b332e58bed07a89b3f9b7aad8d4a405"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpEnrollmentRequest",
+            "sha256": "63af1d46b88476b0cb0b95955581e50e21d10af33d3edb643d3400e416cb2f4d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Uuid",
+            "sha256": "117d6ce37dfe94ad20762d7188395a79652cb85f5cb5f69f0bed047849f06a65"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/securitySchemes/csrfToken",
+            "sha256": "af076f60bd626d09e62995252e8642b05f82e06124afcc68f648e45bcffbe1d8"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/securitySchemes/sessionCookie",
+            "sha256": "0c456fe0cf111f72e5ff5c6adf6a5c08f9b1b30b4130a2d306bea8e6310cbd65"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1device-approval-confirmations/post",
+            "sha256": "9118c744536bf4f61b23951a727a8cb3f4682b1219f3c94984efd4e8e34b46fb"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1device-authentication-challenges/post",
+            "sha256": "a5ee00d36fe8e8d2e4794a7e80630c1f22bb0ab3c93063cbc200f0968f1821fc"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1device-authentications/post",
+            "sha256": "8d4afecb94764b553683a0baddecb1001fcb42e2ff8c018ebd0b969a9d49b0d3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1device-registration-challenges/post",
+            "sha256": "12ba8b2f53d6482184329de6d76fc7bbc9264744b0b3abf67fd948ba3bd933ed"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1devices/post",
+            "sha256": "2c8b96e2f85175d600d447499eb454fba19b1eb20590fdb654e61d286febd305"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1devices~1{deviceId}~1owner-approval-requests/post",
+            "sha256": "6f4a717fd7e04e90cf4526e8a0de6be6eb26f361c46bbd55f56653513f57e1ec"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1email-verifications/post",
+            "sha256": "a5b7d9751a3421fa89941bb7f411c22791ec952d7ffe57949c44e993624a91c9"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1mfa~1challenges/post",
+            "sha256": "ff9c2c006408bc235991f91c025634c0bb4289e54f865418449c63460033d25d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1mfa~1totp-enrollments/post",
+            "sha256": "2725a309d924b73bd7db8b74678c09ab3301857b359d212ca42d8ebf5bf07257"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1mfa~1totp-enrollments~1{enrollmentId}~1confirmations/post",
+            "sha256": "4d11d02679d8cc1ebdb7f6102d4bdf5241a63df66109a3c36e7b50c2fce87ac4"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1registrations/post",
+            "sha256": "d5c85b4d47bb6a016d04077a2f00cf49b69523a48db38f00db3c6bd3492c27e9"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1session/delete",
+            "sha256": "671f238ca020be207a4dc341f2e1bd390f1d007d592213e89356dd5dabdc06a3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1session/get",
+            "sha256": "ffc480301e3c351d974fdf4b203897822e8b14012e8adcb890db2120ecd87ee7"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1sessions/post",
+            "sha256": "c6d9c554cbaf0f92143de5fca44b8d73515f91b37eab47806e021c6c7fdcb4ab"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1step-up-challenges/post",
+            "sha256": "02fb08525bf359cf5492917160a2163fba0c6cf904c454a527e45586c8dc8d90"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1identity~1step-up-confirmations/post",
+            "sha256": "f40f671f1673c907cee6cc4b7a2eb6d1a3327dda820709fc029618feefaa7200"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1tenancy~1context-selections/post",
+            "sha256": "485a781e4a6c857ec7eb539b318dbf3814ed63a26bbb793eb24cebfa0c9a6238"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1tenancy~1context/get",
+            "sha256": "0c81c1eb8de7667039d040312017428fce70e64f823a19e707e7e46e2e8f9436"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1tenancy~1memberships/get",
+            "sha256": "2dbfc52566260735f372d4d6a216ca9dcaf75d9b55922c950d7d018703302edf"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/paths/~1tenancy~1organization-onboardings/post",
+            "sha256": "8bc2232afe93fe16d21a8ef59259047833e341ef72f01c3f6d775e6189c12ee1"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "363e45814abcc0e26d6281e347499327eef840ece1afe7129899123813704e16"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "",
+            "sha256": "d455df86167cdc777f5a8aabc0ab4371d6c18e4359eea3ee64c1988101384452"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "add1b2eddf719c5a009f4384bfc98523bdfba3f015d68ef85bff057c6ae25f1c"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ca37c744b023cf1d8b5410434f792f82299ae52d01807f0509c88c0f34ce81d7",
+        "runtimeSha256": "cc13a23e7f380c9606fc1f0013fe9c5b3d59a4cba23e0de22679eb5d3f0c7bb9"
+      },
+      {
+        "id": "identity.rest-fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": "identity-onboarding-v2.1.0",
+        "tagObject": "8f54bd182e2cadb9e4a7b0376d1d8c477fc84772",
+        "root": "openapi/identity-rest-fixtures-v2.json",
+        "operations": [],
+        "pointers": [
+          "/operations/0",
+          "/operations/1",
+          "/operations/2",
+          "/operations/3",
+          "/operations/4",
+          "/operations/6",
+          "/operations/7",
+          "/operations/8",
+          "/operations/9",
+          "/operations/10",
+          "/operations/11",
+          "/operations/12",
+          "/operations/13",
+          "/operations/14",
+          "/operations/15",
+          "/operations/16",
+          "/operations/17",
+          "/operations/18",
+          "/operations/21",
+          "/operations/22"
+        ],
+        "files": [
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "sha256": "8e500be0de47c8a26463d95e475b1f681126f04b3c7b5f9376e371672ad07104"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/$id",
+            "sha256": "92528147647e1ac258bc07bb8c5ccf0035f4c6b4956cdbb604e23369b3110cf2"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/0",
+            "sha256": "f1bafd09cb3ccb05017ba626e45b4c06522b8a1ea071d5e93f7120f5a6ac75b9"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/1",
+            "sha256": "87820e267790432d50de40ab3ef8cccef9ce2eb6dbb9517a687e53aab46fb695"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/10",
+            "sha256": "a88e738728f4af3e0130e49f6db4ac4a95afeccf2c49b838bed2310a77dbaf03"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/11",
+            "sha256": "7bb626145fe52fd803162f3f1c43afebb478742281776a819c105dc37f37ee8d"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/12",
+            "sha256": "fc7c91aa78fc1a12aca56d5893027cde754a8bcc96dd724b6f8957a11611fe9c"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/13",
+            "sha256": "ccd8c67d698ab50fdf1ca6e93af35a7b889502a2c6faf72d523aa68f2d6ab32e"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/14",
+            "sha256": "0e33afbfc6cefe8abc9e7ef7600a00566b498493e6eca2a601ef7db18b8fe723"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/15",
+            "sha256": "68b3cb0bb96cb70173560524f893a37db8fa5a28a1c44c8dcef924030501da57"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/16",
+            "sha256": "2d67c38a4c51c33317d8a1210b3ce98b672114370f431812d23e98d323f91b32"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/17",
+            "sha256": "7cf7fc0c17c3cdcb8e556586187d5d3f8b073345a2e1c2d1bfb32331e3887180"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/18",
+            "sha256": "50984402e168520d189e12333a5881ce176f2a6dee62ff9a184d9e50fd7d7c52"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/2",
+            "sha256": "a76fbc3d2647597c1ddd7fe408482655171c9ea65aad66e5e0489481a17e561b"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/21",
+            "sha256": "e34b402c4b590564ae33ed084ef1a0fc439ccb8deaa0c8d64d34fd731ab93f10"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/22",
+            "sha256": "28adff79e510ea12ad9c56fa629a6c25f9e00b01d6ebef7046b609048bad6233"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/3",
+            "sha256": "decbf7f2354b6131f1a90f3820bfb8534f282e69093a067f2102f6553cc6b8cf"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/4",
+            "sha256": "e584422893689b7636a1d17be0a4e65483d4538691d647f98eaef65c02afe39a"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/6",
+            "sha256": "7d2ae6f7fb77b0a1ec3159e1c2ea66995420e8a63ce42b5be095ec06a385d815"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/7",
+            "sha256": "00fd04abfef9576de8094c681a6db77fc0f52d1ba27eabc68c1ccab5b1abd072"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/8",
+            "sha256": "0ba117ccf7edf3e8448dcb318dd2c629829dea6df17353163cc717a1aaff3026"
+          },
+          {
+            "path": "openapi/identity-rest-fixtures-v2.json",
+            "pointer": "/operations/9",
+            "sha256": "e5edab183ab392d465fc959e8382d3329bfae5de44b232287a3bd1f5bf16c1d4"
+          }
+        ],
+        "selectionSha256": "8e7eb361fe7501c6fca5bef711be37fcc78f1cd80fd943ee195f7dc946c3f939",
+        "runtimeSha256": "8e7eb361fe7501c6fca5bef711be37fcc78f1cd80fd943ee195f7dc946c3f939"
+      },
+      {
+        "id": "common.error-catalog.v5",
+        "role": "validation",
+        "version": "5",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": "identity-onboarding-v2.1.0",
+        "tagObject": "8f54bd182e2cadb9e4a7b0376d1d8c477fc84772",
+        "root": "errors/error-catalog-v5.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "errors/error-catalog-v5.json",
+            "sha256": "765c3fc88d98de67fb8eb5745c5974a5c308a9879cd91fb35515f33495cb5a0e"
+          }
+        ],
+        "units": [
+          {
+            "path": "errors/error-catalog-v5.json",
+            "pointer": "",
+            "sha256": "7628b31948e3f48a89f4afdf66803237fd359f9174c72ec9eb8175430f149e5a"
+          }
+        ],
+        "selectionSha256": "34cb8a90fc5cd97c841886aa685ebb4e8054fd95b1869311ff7498f5e15b0b6f",
+        "runtimeSha256": "34cb8a90fc5cd97c841886aa685ebb4e8054fd95b1869311ff7498f5e15b0b6f"
+      },
+      {
+        "id": "common.error-catalog.v5.schema",
+        "role": "validation",
+        "version": "v5",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": null,
+        "tagObject": null,
+        "root": "errors/error-catalog-v5.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "errors/error-catalog-v5.schema.json",
+            "sha256": "196909e8a47cb67fe82761119fd5275bbf7092b228d8bf7706dab60a80f77dd7"
+          }
+        ],
+        "units": [
+          {
+            "path": "errors/error-catalog-v5.schema.json",
+            "pointer": "",
+            "sha256": "7d256569518b4eb3e60b07354d0de1c4a74c297399c1ccd3dcfefa35542a6ac8"
+          },
+          {
+            "path": "errors/error-catalog-v5.schema.json",
+            "pointer": "/$id",
+            "sha256": "bb5af8085a0f9679874ff584de06d906a5a598d1d9b3756e39c1fa1fedb31af1"
+          },
+          {
+            "path": "errors/error-catalog-v5.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "7d95d7f657a1132f4f0e281928a31f8373090d338f61f10ef8a7c214b160e88b",
+        "runtimeSha256": "7d95d7f657a1132f4f0e281928a31f8373090d338f61f10ef8a7c214b160e88b"
+      },
+      {
+        "id": "identity.device-proof-v1-vectors",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": null,
+        "tagObject": null,
+        "root": "openapi/device-proof-v1-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "openapi/device-proof-v1-vectors.json",
+            "sha256": "f468558a41b1c84bdac53841cf209b1b7bdc9ddab61a8c25212c9c5d666bcc7b"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/device-proof-v1-vectors.json",
+            "pointer": "",
+            "sha256": "f91a2d1fa3c9fe15f91277cae197333b688feb7f0176a38679e02f68ba9c08b7"
+          },
+          {
+            "path": "openapi/device-proof-v1-vectors.json",
+            "pointer": "/$id",
+            "sha256": "a86d385ae1a95195d9ecbb0cde2dbdb17a00a4fb72df7a365fc894f944ae90d7"
+          },
+          {
+            "path": "openapi/device-proof-v1-vectors.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "bb8eb55e3c6e086a58d0159021c47bc618225bc066f1ba682c03750405e81cd6",
+        "runtimeSha256": "bb8eb55e3c6e086a58d0159021c47bc618225bc066f1ba682c03750405e81cd6"
+      },
+      {
+        "id": "identity.device-proof-v1-vectors.schema",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": null,
+        "tagObject": null,
+        "root": "openapi/device-proof-v1-vectors.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "openapi/device-proof-v1-vectors.schema.json",
+            "sha256": "d6c805ba02a63c250c4c3dce3cc8f392741eef6469280ea3372d07ef0b018906"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/device-proof-v1-vectors.schema.json",
+            "pointer": "",
+            "sha256": "340cdbbdf1fb6fac4e9661f105d56c2022fdc89cd051703f8106f1683048760e"
+          },
+          {
+            "path": "openapi/device-proof-v1-vectors.schema.json",
+            "pointer": "/$id",
+            "sha256": "ced3ed95579cb7df7434a4bd65523236823b72429a7d8b168e83385e37afc356"
+          },
+          {
+            "path": "openapi/device-proof-v1-vectors.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "4f5a5f24d4a5df330b583201f5414a53ad44c49a29352ab465d8334808cb3e67",
+        "runtimeSha256": "4f5a5f24d4a5df330b583201f5414a53ad44c49a29352ab465d8334808cb3e67"
+      },
+      {
+        "id": "identity.onboarding.v2",
+        "role": "documentation",
+        "version": "2.1.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "4ec41110d2c4c68139101e0a13109f6fd1cdfcba",
+        "tag": "identity-onboarding-v2.1.0",
+        "tagObject": "8f54bd182e2cadb9e4a7b0376d1d8c477fc84772",
+        "root": "openapi/identity-onboarding-v2.yaml",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "openapi/examples/gateway-csrf-invalid-v3.json",
+            "sha256": "a24795204d623acb178a3a49c4e96f6dc419f5f3659820c2c05b37bdd314f80d"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+            "sha256": "50ea124b38dcb3e90b9ac6fdfa1cc3888c1b7c1ff5840fef9f2550cf8abb2582"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+            "sha256": "e0227971212b7cb6cce6550b15c416fdb475f8bf4960f353049b9c0b7beda8ae"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+            "sha256": "448b0f554f6499eeafba87a04b561c4147196b4e3182c7f191239aa4c63ee871"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+            "sha256": "c59a9cebdad8b4c27d2dc8143abe6c5080a26aa850ddeccc722fd34902783eb2"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+            "sha256": "8e20bd2e89ad6f95b7d0e836593eaec497137efd7281ae8d0c866302ec91a1d6"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+            "sha256": "953734538af90d8358417a5f9dd6cc14f59e2b03646231256aacf8ed25f0cdc0"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+            "sha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+            "sha256": "0c6f97b02413cdd8199ebecc21ff0a2b7d1816a7c50a0e1fc1f105e68fa2729c"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+            "sha256": "f9f39a3cd5d8bdda33c6108aacede3bc482dfd2ff9e004bc2a00709f0f72b138"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+            "sha256": "08a277cbd9c9bc7254ce589ad03ab7967ba8e2d49b790d6ae5ef21d1b70ef91f"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+            "sha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+            "sha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+            "sha256": "a39cccf06a0d58808983280e060750d9c546563c0b5f90bc222fd1ed0c0f42fd"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "sha256": "f8368c4aa1feb85eca31b1b1f23b826814dfc4aeccdb93b581f0794ee3bbcbab"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "sha256": "d272013008a05c96b0a6e0569f0004658f16f478cbf2463013b68663aac92269"
+          }
+        ],
+        "units": [
+          {
+            "path": "openapi/examples/gateway-csrf-invalid-v3.json",
+            "pointer": "",
+            "sha256": "560a0b7460cdd929e9f0e45c8973ee7082b2ff9a83c0b4eb83e776d5a0f1dab8"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+            "pointer": "",
+            "sha256": "3b5aaffb0d106112f12fb0d6a9ea55cc4d3f71b41b111ee18b76476472e51802"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+            "pointer": "",
+            "sha256": "fc68aa32968bcce2b197ad318a7e1f43ed5a40e31e510ba084afc58ea1909ac9"
+          },
+          {
+            "path": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+            "pointer": "",
+            "sha256": "1685e64bbb7603ccf38fc792516516e4b9914d9481f725acf2090f190afa9db4"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+            "pointer": "",
+            "sha256": "62673eca7f18d4190f44247191009caf34087063f365aeafc6006ac0aab4f0b5"
+          },
+          {
+            "path": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+            "pointer": "",
+            "sha256": "53f8eae9a2c51b0bfb09e8eec34169b5c22d9f6d43d46020077f790c9d89ed5c"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+            "pointer": "",
+            "sha256": "8fca2ba10ecb43df9eab18a3939da35405ac9cb6910d35deab848e7d946e60fc"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+            "pointer": "",
+            "sha256": "3055bec7b5679cf10714885e467c810bbdb7166fccf059440c6e60af482cf4b9"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+            "pointer": "",
+            "sha256": "3c33db48f995b5fbdc7fceec94cdc7676e421ad877d8e6a67741732d169099c3"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+            "pointer": "",
+            "sha256": "d8e2f6cbd1f712f6b87dd632944c029d55fb8f26546407055c5316d7c56ccdc6"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+            "pointer": "",
+            "sha256": "ffce6344f0b8f0376ad9abc47e6caf7911265ca8da1aee9071ce1a7d289a3a88"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+            "pointer": "",
+            "sha256": "8a1860d06be095192d4cfd7a2454deb5a97084b3c9838d4931da8cfd7b7e5663"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+            "pointer": "",
+            "sha256": "8a1860d06be095192d4cfd7a2454deb5a97084b3c9838d4931da8cfd7b7e5663"
+          },
+          {
+            "path": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+            "pointer": "",
+            "sha256": "0265a2b1763d5a9124b2252fd516bc5845cd414e34568bf9cbbe88de824d6345"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "",
+            "sha256": "bdcb38ee6e84f7637999c5ed39934228b903936c7c18cee530f9226a3e58af4a"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/headers/CsrfToken",
+            "sha256": "e21d42555f66950b52d4811aa300b968a6eea6936d21ebe8def98472c847eb88"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "e5fc22e87dede17d3cc8e2fe860e79dbf23bfc8ffdc254b5c04d1404a267420c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/DeliveryMaterialId",
+            "sha256": "27768064e12749f9febd998c27009b1906ce9b80da73c8f833906b5519b60617"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/DeviceId",
+            "sha256": "bb7714d09b1e88e4599633dbe7cd9ad6c6e9731d14035ea53106a70fdd531b28"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/EnrollmentId",
+            "sha256": "8a4754b5730e2abda5071b13d7d6459b3dfe062ccf668d12bb87b6804786872a"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/IdempotencyKey",
+            "sha256": "645c9452af44609bda20a5b1640c139b4065ab6f18b2c5916b22b965aae40409"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/parameters/Traceparent",
+            "sha256": "479dca643e0e12119b4821ca4ed8e7f4f14e34981f8adf6b49dc978fb0f46ee2"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/AuthenticatedMutationForbidden",
+            "sha256": "7acba367851c10b267d364fde4b183ec2657fba453462e69008345e471adb53b"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Expired",
+            "sha256": "1ff56cff4d6408983292517e5f5fbe2f3e8bbd4e1fcf846ea0da42609b2ace14"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Forbidden",
+            "sha256": "bd534249c4df106c351cdaa17f64c6f6b5c792a239b3964ad63fb81189b23aa5"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/GatewayDeadlineExceeded",
+            "sha256": "6d283e0d5cee0abe6cc56e3d58431fdef25a932b9f59ed1cfdd12f324b9d9877"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/IdempotencyConflict",
+            "sha256": "07ccedb8e138360f5d37c48e9c6973bfe9b2cdd91b2108154f7e6c04d5523fd7"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/InternalError",
+            "sha256": "7f0b30ccbc9f5424923021bd48f73e84cc0ba4e05d7ab38a43352947be83608d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "0627d26a57ea3aeeb5118c0361a45424a63c25b2ff0eb200a70e7c4fdc616851"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "082d0e18dd3591d955fc856038e731baf9f2936b1f07f89e08204d6af5b71071"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/RateLimited",
+            "sha256": "7737a4ec23b328e1d45dd2f8f8a9ec02299f824bbb35fdc0b073533e0a194441"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StateConflict",
+            "sha256": "fe0492953d6ae3de9ee69dc98638a53073b3849d539b173ab52492a97b7aaf16"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpGatewayDeadlineExceeded",
+            "sha256": "dd717cc1c8fd7236621db3ef38dee94cf42070f87c10a684e1592ce2fe3846fa"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpInternalError",
+            "sha256": "15d03e1bc0bf8e08116f6880000a13730f0cc68e1fcda6c0955ee04dac2e2ae1"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpRateLimited",
+            "sha256": "60f1eb34b5058aa7d0aa9c1f99a5ff7c524180ba564b34a2a71b64ad7460afd6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpUnauthorized",
+            "sha256": "b5c3121f3825a3a42497ef86b8778438abb7ed9c32f78d890e65c52d8bc0a1b6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/StepUpUnavailable",
+            "sha256": "24dbba8fc41df21212979e2ad9eaeb758c5a538d69fe59fa65e6fe90fb5d8a11"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unauthorized",
+            "sha256": "70bea07469144fbc6c0b5d2e19368b3dd64f7983d1d0546532a5610973f45893"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unavailable",
+            "sha256": "8bc6e7ff1c4579e1278cd140efc8d492f158003bb507a26069f0adc26cfa3c23"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/responses/Unprocessable",
+            "sha256": "627583a1806b10482bd269b02c9dd08675cbff61bf0feb757d7a25098a3f43eb"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/ContextSelectionRequest",
+            "sha256": "3e5af1b7c94dc1191eb50637b2465cb22d5f287d0714317baa94621230da2de3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeliveryMaterial",
+            "sha256": "a1cd7034c92df25101a65c581e8ba7cee0fe4dd128227c43dc199135d2334b78"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Device",
+            "sha256": "c24dad08d7ef902dbeb0815cb11367ae395299d9491122d0673efce51133b5e2"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceApprovalDeliveryMaterial",
+            "sha256": "7e91db1ae871e2e92e96983fb96cc43a79fdca14dc6670961efbacedbfcb976b"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceApprovalStatus",
+            "sha256": "26d46015e251023c7da4cd3d1c13ec19c5e450fccfe912c36775331c1efc49e0"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationChallenge",
+            "sha256": "e93699406f946226a30eb8e41ab379bf33e1e556a0288201054c71e27fb69f18"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationChallengeRequest",
+            "sha256": "46b485c56511a01e01ed53a6aca00a66c3b43799b108e5a37abc7fc70f0281b9"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceAuthenticationProof",
+            "sha256": "a6c2bf76c96b48eed431d8517662882a739deb86effdcc1830edf20983849f1c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceChallengeRequest",
+            "sha256": "b5017a0f36db8c1cb2727593fb60c0a00bceccfd01203d7515cf4a72f0b78261"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceChallengeResponse",
+            "sha256": "bfcaea34d5993bb0f006f8abf32d7f4b2a38694ad63604db598b1fed4cd812e8"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceProofNonce",
+            "sha256": "2841a4e852fd58e26dcc36ce527fdfb322ca815da4740e15aa5af0884c63191e"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceProofSignature",
+            "sha256": "bd28986d729aacd1928042b10162501909ac1a80afaa1a5b9cf4419d8738ad51"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DevicePublicJwk",
+            "sha256": "fa50d105cf4376a9b8469f3a231c9682c306ab6ec9f1e2276638a750850113b0"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/DeviceRegistrationRequest",
+            "sha256": "f08032850d26e2167812cb81b248f67632588fd48c83472c735145dcfee47010"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/EmailVerificationRequest",
+            "sha256": "05eb591a3b754bd0b90584841f134f413bb97c5239e2644b8effdb7e760d649d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/EmailVerificationResponse",
+            "sha256": "516bd1c66beb80909bfa0c2c308a296751078c6f22b89a38eac43701c0f644da"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/LoginRequest",
+            "sha256": "25da247c97f739ecb7067f20d8e5e22ca621c0693a59e1469d9542b175a98d3c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/LoginResponse",
+            "sha256": "b42c8def194e06df122309f91aca734e60d124b1935a3777646074979b5c0788"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MembershipList",
+            "sha256": "5d8fed1a4fd425861c9eb4bc6fb85626f883a239562c24b3e38e9bea0519b11d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MembershipRef",
+            "sha256": "11b4cd4214b73ab3a53f17401ce92f449851eb4eae2dbe5c94a5f13511233dae"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/MfaChallengeRequest",
+            "sha256": "fae8c9c81dcb6c547e29e51c4c8cd08a0e1878e852d6748732add48d96ede4ec"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationOnboardingRequest",
+            "sha256": "6cb8536e494068c5fb6d01b5e0f52a3a5ac2acc724caad5d509d8ef812e602b6"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationOnboardingResponse",
+            "sha256": "92da1dfe6914097f693a32ae035fa24a7f51a263c19b2e2133fa688cda8e01fe"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OrganizationRef",
+            "sha256": "b36bae30bb8d541e413ebe91cd485d26b246a172657c911ab42e58fd0bee0df3"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalConfirmation",
+            "sha256": "730c79ec723735e1d4f196bfe85e1557ad4c5af340c688d6c5f2570b1a344479"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalPending",
+            "sha256": "db844f5ac295dbb57dfc429e5826aaa92fa27893984c4150575f4024bbf9746c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/OwnerDeviceApprovalRequest",
+            "sha256": "91b39a7255fad850b7ab392b50648b14474854857666945eba0bea3e30a9b386"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Problem",
+            "sha256": "cd108d1b131dee906f479623596d2d07046017e7d99f5bb74fe728df0cf74797"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/RegistrationAccepted",
+            "sha256": "b8c368888192cd9ba42956736c9d53e69eff9ebf7c7712ee39add0da21301857"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/RegistrationRequest",
+            "sha256": "5239afc51270785d0e1e205aa3a5e84829d63572b0d27f817af1a4145981096a"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Scope",
+            "sha256": "2c7360a4d9ed9f8e22f83ad55e7dd1d99d748b60db96679dc2656b6537dcf41d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SensitiveMaterialReplay",
+            "sha256": "517a4b6b232651b65f7f3e43deb0ea34b35fb08327e5ced52d0a1cb649c2dcad"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionContext",
+            "sha256": "351a13e9918d501568a1733a2df586450df967ce1f67fd2e5b8a44cf53f9a829"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionRevocationRequest",
+            "sha256": "be61c2391ff7a47a36daf78bd343f9148873e6e5ba3bc213ced66233fd70ec48"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionRevocationResponse",
+            "sha256": "5739e15522e18bb63c92d371b539a1163e1f50cb708cdf4c5db594dbf14d487c"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpChallengeRequest",
+            "sha256": "d8d151f006d3725fcd6e0f76c994367f44b0a92e9f416f0c351aebd42a86325e"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpChallengeResponse",
+            "sha256": "97ee6525f84670bb2cec6c24e5f58adac497ea30fe866f9f8576a42c73073fe8"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpCompleted",
+            "sha256": "a773e718046ab265fbb6f3918246aa4634336461121b011abfd8abd347729aaa"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/SessionStepUpConfirmationRequest",
+            "sha256": "ad494383a6da8871d4f54024cc3e16157bff7db718cf1428bd424cd4cc9c7e92"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpConfirmationRequest",
+            "sha256": "b81c21ec789c1e828f86a63f34b3d79efd8edccd951f8779c6826856dcc55035"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpConfirmationResponse",
+            "sha256": "8ea3b0659393c92e8f8792fab0b2ecaa099a3d0a354e33ffbf6064af024bcb93"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpEnrollmentFirstResponse",
+            "sha256": "73bfcf3d1a9a36a2be34a3e5dd11aa9a7b332e58bed07a89b3f9b7aad8d4a405"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/TotpEnrollmentRequest",
+            "sha256": "63af1d46b88476b0cb0b95955581e50e21d10af33d3edb643d3400e416cb2f4d"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/components/schemas/Uuid",
+            "sha256": "117d6ce37dfe94ad20762d7188395a79652cb85f5cb5f69f0bed047849f06a65"
+          },
+          {
+            "path": "openapi/identity-onboarding-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "",
+            "sha256": "d455df86167cdc777f5a8aabc0ab4371d6c18e4359eea3ee64c1988101384452"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "add1b2eddf719c5a009f4384bfc98523bdfba3f015d68ef85bff057c6ae25f1c"
+          },
+          {
+            "path": "openapi/problem-details-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ef1767013ce643919008f126113edfd5d64583463c91b8bb07b65167cccb788e",
+        "runtimeSha256": "ef1767013ce643919008f126113edfd5d64583463c91b8bb07b65167cccb788e"
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/identity-onboarding-v2.yaml",
+        "destination": "public/contracts/identity-onboarding-v2.1.0.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "f8368c4aa1feb85eca31b1b1f23b826814dfc4aeccdb93b581f0794ee3bbcbab",
+        "semanticSha256": null,
+        "localSha256": "f8368c4aa1feb85eca31b1b1f23b826814dfc4aeccdb93b581f0794ee3bbcbab"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/problem-details-v2.schema.json",
+        "destination": "public/contracts/problem-details-v2.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "d272013008a05c96b0a6e0569f0004658f16f478cbf2463013b68663aac92269",
+        "semanticSha256": null,
+        "localSha256": "d272013008a05c96b0a6e0569f0004658f16f478cbf2463013b68663aac92269"
+      },
+      {
+        "contractId": "common.error-catalog.v5",
+        "sourcePath": "errors/error-catalog-v5.json",
+        "destination": "public/contracts/error-catalog-v5.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "765c3fc88d98de67fb8eb5745c5974a5c308a9879cd91fb35515f33495cb5a0e",
+        "semanticSha256": null,
+        "localSha256": "765c3fc88d98de67fb8eb5745c5974a5c308a9879cd91fb35515f33495cb5a0e"
+      },
+      {
+        "contractId": "common.error-catalog.v5.schema",
+        "sourcePath": "errors/error-catalog-v5.schema.json",
+        "destination": "public/contracts/error-catalog-v5.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "196909e8a47cb67fe82761119fd5275bbf7092b228d8bf7706dab60a80f77dd7",
+        "semanticSha256": null,
+        "localSha256": "196909e8a47cb67fe82761119fd5275bbf7092b228d8bf7706dab60a80f77dd7"
+      },
+      {
+        "contractId": "identity.rest-fixtures.v2",
+        "sourcePath": "openapi/identity-rest-fixtures-v2.json",
+        "destination": "public/contracts/identity-rest-fixtures-v2.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8e500be0de47c8a26463d95e475b1f681126f04b3c7b5f9376e371672ad07104",
+        "semanticSha256": null,
+        "localSha256": "8e500be0de47c8a26463d95e475b1f681126f04b3c7b5f9376e371672ad07104"
+      },
+      {
+        "contractId": "identity.device-proof-v1-vectors",
+        "sourcePath": "openapi/device-proof-v1-vectors.json",
+        "destination": "public/contracts/device-proof-v1-vectors.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "f468558a41b1c84bdac53841cf209b1b7bdc9ddab61a8c25212c9c5d666bcc7b",
+        "semanticSha256": null,
+        "localSha256": "f468558a41b1c84bdac53841cf209b1b7bdc9ddab61a8c25212c9c5d666bcc7b"
+      },
+      {
+        "contractId": "identity.device-proof-v1-vectors.schema",
+        "sourcePath": "openapi/device-proof-v1-vectors.schema.json",
+        "destination": "public/contracts/device-proof-v1-vectors.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "d6c805ba02a63c250c4c3dce3cc8f392741eef6469280ea3372d07ef0b018906",
+        "semanticSha256": null,
+        "localSha256": "d6c805ba02a63c250c4c3dce3cc8f392741eef6469280ea3372d07ef0b018906"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/gateway-csrf-invalid-v3.json",
+        "destination": "public/contracts/examples/gateway-csrf-invalid-v3.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "a24795204d623acb178a3a49c4e96f6dc419f5f3659820c2c05b37bdd314f80d",
+        "semanticSha256": null,
+        "localSha256": "a24795204d623acb178a3a49c4e96f6dc419f5f3659820c2c05b37bdd314f80d"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-authentication-challenge.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "50ea124b38dcb3e90b9ac6fdfa1cc3888c1b7c1ff5840fef9f2550cf8abb2582",
+        "semanticSha256": null,
+        "localSha256": "50ea124b38dcb3e90b9ac6fdfa1cc3888c1b7c1ff5840fef9f2550cf8abb2582"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-device-approval.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-device-approval.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a",
+        "semanticSha256": null,
+        "localSha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-initial-organization.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-initial-organization.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "95ee8b208b5c96d5312ed783a6319be5477ded32e63551caa311c1529de621bf",
+        "semanticSha256": null,
+        "localSha256": "95ee8b208b5c96d5312ed783a6319be5477ded32e63551caa311c1529de621bf"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-registration-challenge.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "e0227971212b7cb6cce6550b15c416fdb475f8bf4960f353049b9c0b7beda8ae",
+        "semanticSha256": null,
+        "localSha256": "e0227971212b7cb6cce6550b15c416fdb475f8bf4960f353049b9c0b7beda8ae"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/identity-session-rotation-replay-v5-public-session-context.json",
+        "destination": "public/contracts/examples/identity-session-rotation-replay-v5-public-session-context.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "448b0f554f6499eeafba87a04b561c4147196b4e3182c7f191239aa4c63ee871",
+        "semanticSha256": null,
+        "localSha256": "448b0f554f6499eeafba87a04b561c4147196b4e3182c7f191239aa4c63ee871"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/membership-pagination-v2-problem-invalid-cursor.json",
+        "destination": "public/contracts/examples/membership-pagination-v2-problem-invalid-cursor.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "c59a9cebdad8b4c27d2dc8143abe6c5080a26aa850ddeccc722fd34902783eb2",
+        "semanticSha256": null,
+        "localSha256": "c59a9cebdad8b4c27d2dc8143abe6c5080a26aa850ddeccc722fd34902783eb2"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/membership-pagination-v2-problem-invalid-limit.json",
+        "destination": "public/contracts/examples/membership-pagination-v2-problem-invalid-limit.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8e20bd2e89ad6f95b7d0e836593eaec497137efd7281ae8d0c866302ec91a1d6",
+        "semanticSha256": null,
+        "localSha256": "8e20bd2e89ad6f95b7d0e836593eaec497137efd7281ae8d0c866302ec91a1d6"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-after-login.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-after-login.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "f9f39a3cd5d8bdda33c6108aacede3bc482dfd2ff9e004bc2a00709f0f72b138",
+        "semanticSha256": null,
+        "localSha256": "f9f39a3cd5d8bdda33c6108aacede3bc482dfd2ff9e004bc2a00709f0f72b138"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-after-mfa.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-after-mfa.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "08a277cbd9c9bc7254ce589ad03ab7967ba8e2d49b790d6ae5ef21d1b70ef91f",
+        "semanticSha256": null,
+        "localSha256": "08a277cbd9c9bc7254ce589ad03ab7967ba8e2d49b790d6ae5ef21d1b70ef91f"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-device-proof.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-device-proof.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b",
+        "semanticSha256": null,
+        "localSha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-owner-confirmation.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b",
+        "semanticSha256": null,
+        "localSha256": "622886e21f4aaa3d463e54101ed7c5f40f79f063ec692100f5cc25734b3f297b"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-restricted-pending-candidate.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "a39cccf06a0d58808983280e060750d9c546563c0b5f90bc222fd1ed0c0f42fd",
+        "semanticSha256": null,
+        "localSha256": "a39cccf06a0d58808983280e060750d9c546563c0b5f90bc222fd1ed0c0f42fd"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-owner-approval-pending.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-owner-approval-pending.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "0c6f97b02413cdd8199ebecc21ff0a2b7d1816a7c50a0e1fc1f105e68fa2729c",
+        "semanticSha256": null,
+        "localSha256": "0c6f97b02413cdd8199ebecc21ff0a2b7d1816a7c50a0e1fc1f105e68fa2729c"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-confirmation-response.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-confirmation-response.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a",
+        "semanticSha256": null,
+        "localSha256": "99d13e86660f3f3eef1724e5552d90e3db123c195d383037ba02c366c1e24d1a"
+      },
+      {
+        "contractId": "identity.onboarding.v2",
+        "sourcePath": "openapi/examples/owner-session-flow-v1-active-bootstrap.json",
+        "destination": "public/contracts/examples/owner-session-flow-v1-active-bootstrap.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "953734538af90d8358417a5f9dd6cc14f59e2b03646231256aacf8ed25f0cdc0",
+        "semanticSha256": null,
+        "localSha256": "953734538af90d8358417a5f9dd6cc14f59e2b03646231256aacf8ed25f0cdc0"
+      }
+    ]
+  }
+}
