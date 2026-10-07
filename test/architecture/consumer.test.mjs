@@ -27,7 +27,10 @@ const put = (dir, name, value) =>
   writeFileSync(path.join(dir, name), JSON.stringify(value, null, 2) + '\n');
 
 test('published snapshot admits identical contents without relabeling the local candidate', () => {
-  const local = readJSON(root, 'registry/consumers/notifications.json');
+  const local = {
+    ...readJSON(root, 'registry/consumers/notifications.json'),
+    publication: 'local-candidate',
+  };
   const published = { ...structuredClone(local), publication: 'published' };
   let reads = 0;
   const readPublished = (revision) => {
@@ -44,7 +47,10 @@ test('published snapshot admits identical contents without relabeling the local 
 });
 
 test('published comparison rejects content drift and unverifiable Git provenance', () => {
-  const local = readJSON(root, 'registry/consumers/notifications.json');
+  const local = {
+    ...readJSON(root, 'registry/consumers/notifications.json'),
+    publication: 'local-candidate',
+  };
   const published = { ...structuredClone(local), publication: 'published' };
   for (const field of [
     'manifestSha256',
@@ -80,7 +86,10 @@ test('published comparison rejects content drift and unverifiable Git provenance
 });
 
 test('local candidate comparison retains strict base revision and content checks', () => {
-  const local = readJSON(root, 'registry/consumers/notifications.json');
+  const local = {
+    ...readJSON(root, 'registry/consumers/notifications.json'),
+    publication: 'local-candidate',
+  };
   const noPublishedRead = () => {
     throw new Error('Unexpected publication lookup');
   };
