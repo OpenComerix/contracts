@@ -1,0 +1,128 @@
+{
+  "configured_issuer": "https://identity-tenancy.test.invalid",
+  "jwt_header": {
+    "alg": "ES256",
+    "kid": "synthetic-public-key"
+  },
+  "workload": {
+    "caller": "catalog-pricing",
+    "aud": "identity-tenancy.catalog-authority",
+    "type": "service"
+  },
+  "now_seconds": 1000,
+  "elapsed_ms": 100,
+  "signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "claims": {
+    "iss": "https://identity-tenancy.test.invalid",
+    "aud": "catalog-pricing.user-api",
+    "caller": "gateway-bff",
+    "type": "delegated",
+    "jti": "12345678-1234-4234-8234-123456789abc",
+    "iat": 995,
+    "exp": 1055,
+    "sub": "account-example",
+    "session_id": "session-example",
+    "security_version": "3",
+    "organization_id": "org-example",
+    "membership_id": "membership-example",
+    "device_id": "device-example",
+    "authenticated_at": "2026-10-14T12:00:00Z",
+    "operation_id": "listCatalogProducts",
+    "canonicalization_version": "catalog-request-v1",
+    "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "issued": {
+    "delegation_id": "12345678-1234-4234-8234-123456789abc",
+    "credential_version": "2",
+    "signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "operation_id": "listCatalogProducts",
+    "canonicalization_version": "catalog-request-v1",
+    "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "current": {
+    "account": {
+      "account_id": "account-example",
+      "security_version": "3"
+    },
+    "session": {
+      "session_id": "session-example",
+      "credential_version": "2"
+    },
+    "organization": {
+      "organization_id": "org-example",
+      "version": "1"
+    },
+    "membership": {
+      "membership_id": "membership-example",
+      "version": "4"
+    },
+    "device": {
+      "device_id": "device-example",
+      "version": "2"
+    },
+    "approval": {
+      "approval_id": "approval-example",
+      "version": "1"
+    },
+    "account_active": true,
+    "session_active": true,
+    "organization_active": true,
+    "membership_active": false,
+    "device_approved": true,
+    "mfa_valid": true,
+    "permissions": [
+      "catalog.read",
+      "catalog.manage",
+      "pricing.read",
+      "pricing.manage"
+    ],
+    "remaining_authority_ms": 2000,
+    "remaining_step_up_ms": 0
+  },
+  "request": {
+    "delegated_token": "eyJhbGciOiJFUzI1NiJ9.eyJzeW50aGV0aWMiOnRydWV9.c3ludGhldGlj",
+    "operation_id": "listCatalogProducts",
+    "canonicalization_version": "catalog-request-v1",
+    "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  },
+  "response": {
+    "decision": "authorized",
+    "decision_id": "019a64c0-0000-7000-8000-000000000001",
+    "delegation_id": "12345678-1234-4234-8234-123456789abc",
+    "operation_id": "listCatalogProducts",
+    "canonicalization_version": "catalog-request-v1",
+    "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "account": {
+      "account_id": "account-example",
+      "security_version": "3"
+    },
+    "session": {
+      "session_id": "session-example",
+      "credential_version": "2"
+    },
+    "organization": {
+      "organization_id": "org-example",
+      "version": "1"
+    },
+    "membership": {
+      "membership_id": "membership-example",
+      "version": "4"
+    },
+    "device": {
+      "device_id": "device-example",
+      "version": "2"
+    },
+    "approval": {
+      "approval_id": "approval-example",
+      "version": "1"
+    },
+    "permission": "catalog.read",
+    "scope": {
+      "kind": "organization",
+      "organization_id": "org-example"
+    },
+    "valid_for_ms": 2000,
+    "step_up_valid_for_ms": 0
+  },
+  "active_product_tax_change": false
+}

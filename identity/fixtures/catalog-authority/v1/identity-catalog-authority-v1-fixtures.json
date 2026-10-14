@@ -1,0 +1,920 @@
+{
+  "manifest_version": 1,
+  "runtime_cryptography_demonstrated": false,
+  "examples": [
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "request",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/requestBody/content/application~1json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/delegation-request.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "success",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/200/content/application~1json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/delegation-response.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "identity_invalid_request",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/400/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_reauthentication_required",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/406/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "413",
+      "media_type": "application/problem+json",
+      "example_name": "platform_payload_too_large",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/413/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "415",
+      "media_type": "application/problem+json",
+      "example_name": "platform_unsupported_media_type",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/415/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/429/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/500/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json"
+    },
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-delegations/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "request",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/requestBody/content/application~1json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/authorization-request.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "success",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/200/content/application~1json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/authorization-response.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "identity_invalid_request",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/400/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_reauthentication_required",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/406/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "413",
+      "media_type": "application/problem+json",
+      "example_name": "platform_payload_too_large",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/413/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "415",
+      "media_type": "application/problem+json",
+      "example_name": "platform_unsupported_media_type",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/415/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/429/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/500/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1internal~1identity~1catalog-authorizations/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json"
+    }
+  ],
+  "additional_errors": [
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_invalid_request.json",
+      "code": "catalog_invalid_request",
+      "status": 400,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_invalid_cursor.json",
+      "code": "catalog_invalid_cursor",
+      "status": 400,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_resource_not_found.json",
+      "code": "catalog_resource_not_found",
+      "status": 404,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_version_conflict.json",
+      "code": "catalog_version_conflict",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_state_conflict.json",
+      "code": "catalog_state_conflict",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_idempotency_key_reused.json",
+      "code": "catalog_idempotency_key_reused",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_idempotency_request_in_progress.json",
+      "code": "catalog_idempotency_request_in_progress",
+      "status": 409,
+      "retryable": true
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_semantic_validation_failed.json",
+      "code": "catalog_semantic_validation_failed",
+      "status": 422,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "code": "pricing_invalid_request",
+      "status": 400,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_cursor.json",
+      "code": "pricing_invalid_cursor",
+      "status": 400,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "code": "pricing_resource_not_found",
+      "status": 404,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_version_conflict.json",
+      "code": "pricing_version_conflict",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_state_conflict.json",
+      "code": "pricing_state_conflict",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_key_reused.json",
+      "code": "pricing_idempotency_key_reused",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_request_in_progress.json",
+      "code": "pricing_idempotency_request_in_progress",
+      "status": 409,
+      "retryable": true
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_semantic_validation_failed.json",
+      "code": "pricing_semantic_validation_failed",
+      "status": 422,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-catalog_uniqueness_conflict.json",
+      "code": "catalog_uniqueness_conflict",
+      "status": 409,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_price_not_set.json",
+      "code": "pricing_price_not_set",
+      "status": 404,
+      "retryable": false
+    },
+    {
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_default_list_not_initialized.json",
+      "code": "pricing_default_list_not_initialized",
+      "status": 404,
+      "retryable": false
+    },
+    {
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json",
+      "code": "platform_payload_too_large",
+      "status": 413,
+      "retryable": false
+    },
+    {
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json",
+      "code": "platform_unsupported_media_type",
+      "status": 415,
+      "retryable": false
+    },
+    {
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json",
+      "code": "platform_not_acceptable",
+      "status": 406,
+      "retryable": false
+    },
+    {
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "code": "platform_capacity_exhausted",
+      "status": 503,
+      "retryable": true
+    },
+    {
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json",
+      "code": "catalog_delegation_invalid",
+      "status": 401,
+      "retryable": false
+    },
+    {
+      "fixture": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json",
+      "code": "catalog_delegation_request_mismatch",
+      "status": 403,
+      "retryable": false
+    }
+  ],
+  "schema_cases": [
+    {
+      "id": "schema-catalog-id",
+      "fixture": "catalog/fixtures/base/v1/schema-catalog-id.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/CatalogId",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-catalog-id-v4",
+      "fixture": "catalog/fixtures/base/v1/schema-catalog-id-v4.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/CatalogId",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price",
+      "fixture": "catalog/fixtures/base/v1/schema-price.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-price-scale",
+      "fixture": "catalog/fixtures/base/v1/schema-price-scale.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-zero",
+      "fixture": "catalog/fixtures/base/v1/schema-price-zero.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-number",
+      "fixture": "catalog/fixtures/base/v1/schema-price-number.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-range",
+      "fixture": "catalog/fixtures/base/v1/schema-price-range.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-exponent",
+      "fixture": "catalog/fixtures/base/v1/schema-price-exponent.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-separator",
+      "fixture": "catalog/fixtures/base/v1/schema-price-separator.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-price-leading-zero",
+      "fixture": "catalog/fixtures/base/v1/schema-price-leading-zero.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-quantity",
+      "fixture": "catalog/fixtures/base/v1/schema-quantity.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/QuantityDecimal",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-quantity-scale",
+      "fixture": "catalog/fixtures/base/v1/schema-quantity-scale.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/QuantityDecimal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-indivisible",
+      "fixture": "catalog/fixtures/base/v1/schema-indivisible.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IndivisibleQuantity",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-indivisible-fraction",
+      "fixture": "catalog/fixtures/base/v1/schema-indivisible-fraction.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IndivisibleQuantity",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-factor",
+      "fixture": "catalog/fixtures/base/v1/schema-factor.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ConversionFactor",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-factor-scale",
+      "fixture": "catalog/fixtures/base/v1/schema-factor-scale.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ConversionFactor",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-factor-zero",
+      "fixture": "catalog/fixtures/base/v1/schema-factor-zero.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ConversionFactor",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-unit",
+      "fixture": "catalog/fixtures/base/v1/schema-unit.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/UnitCode",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-unit-pack",
+      "fixture": "catalog/fixtures/base/v1/schema-unit-pack.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/UnitCode",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-page",
+      "fixture": "catalog/fixtures/base/v1/schema-page.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/Page",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-page-extension",
+      "fixture": "catalog/fixtures/base/v1/schema-page-extension.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/Page",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-page-limit",
+      "fixture": "catalog/fixtures/base/v1/schema-page-limit.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PageLimit",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-cursor",
+      "fixture": "catalog/fixtures/base/v1/schema-cursor.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/Cursor",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-cursor-long",
+      "fixture": "catalog/fixtures/base/v1/schema-cursor-long.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/Cursor",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-version-string",
+      "fixture": "catalog/fixtures/base/v1/schema-version-string.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IdentityVersion",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-version-number",
+      "fixture": "catalog/fixtures/base/v1/schema-version-number.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IdentityVersion",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-expected-first-price",
+      "fixture": "catalog/fixtures/base/v1/schema-expected-first-price.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceExpectedVersion",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-expected-other-zero",
+      "fixture": "catalog/fixtures/base/v1/schema-expected-other-zero.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ExpectedVersion",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-signal",
+      "fixture": "catalog/fixtures/base/v1/schema-signal.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ClientSignal",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-signal-pad",
+      "fixture": "catalog/fixtures/base/v1/schema-signal-pad.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ClientSignal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-signal-duplicate",
+      "fixture": "catalog/fixtures/base/v1/schema-signal-duplicate.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ClientSignal",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-no-store",
+      "fixture": "catalog/fixtures/base/v1/schema-no-store.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/CacheControl",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-etag",
+      "fixture": "catalog/fixtures/base/v1/schema-etag.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ETag",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-replay",
+      "fixture": "catalog/fixtures/base/v1/schema-replay.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IdempotencyReplayed",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-location",
+      "fixture": "catalog/fixtures/base/v1/schema-location.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/Location",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-retry-after",
+      "fixture": "catalog/fixtures/base/v1/schema-retry-after.json",
+      "schema": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/RetryAfter",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-delegation-request-missing-hash",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-delegation-request-missing-hash.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/DelegationRequest",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-delegation-request-extra-tenant",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-delegation-request-extra-tenant.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/DelegationRequest",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-authorization-request-missing-hash",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-authorization-request-missing-hash.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationRequest",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-authorization-request-extra-tenant",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-authorization-request-extra-tenant.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationRequest",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-authority-extension",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-authority-extension.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationResponse",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-claims",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-claims.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/DelegatedClaims",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-claims-h2-audience",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-claims-h2-audience.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/DelegatedClaims",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-claims-role",
+      "fixture": "identity/fixtures/catalog-authority/v1/structure/schema-claims-role.json",
+      "schema": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+      "pointer": "/$defs/DelegatedClaims",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-product-nfc-uppercase",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-product-nfc-uppercase.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-product-nfc-lowercase",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-product-nfc-lowercase.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-price-short",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-price-short.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-price-trailing-zeros",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-price-trailing-zeros.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-query-cursor",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-query-cursor.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-query-reversed",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-query-reversed.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-default-omitted",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-default-omitted.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-default-present",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-default-present.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-patch-omitted",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-patch-omitted.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-patch-null",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-patch-null.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "schema-canonical-extra",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-extra.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-version",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-version.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-path",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-path.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-method",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-method.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-hash-query",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-hash-query.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "schema-canonical-key",
+      "fixture": "catalog/fixtures/base/v1/schema-canonical-key.json",
+      "schema": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+      "pointer": "",
+      "expected": "reject"
+    }
+  ]
+}

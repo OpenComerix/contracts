@@ -1,0 +1,291 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "canonicalization_version": "catalog-request-v1",
+  "source_design": "launcher/docs/arquitectura/fase-1/F1-07.md#f1-07a",
+  "operations": [
+    {
+      "operation_id": "listCatalogUnits",
+      "method": "GET",
+      "path": "/api/v1/catalog/units",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "listCatalogTaxClassifications",
+      "method": "GET",
+      "path": "/api/v1/catalog/tax-classifications",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "listCatalogCategories",
+      "method": "GET",
+      "path": "/api/v1/catalog/categories",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": [
+        "limit",
+        "cursor"
+      ]
+    },
+    {
+      "operation_id": "createCatalogCategory",
+      "method": "POST",
+      "path": "/api/v1/catalog/categories",
+      "permission": "catalog.manage",
+      "success_status": 201,
+      "query": []
+    },
+    {
+      "operation_id": "getCatalogCategory",
+      "method": "GET",
+      "path": "/api/v1/catalog/categories/{category_id}",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "updateCatalogCategory",
+      "method": "PATCH",
+      "path": "/api/v1/catalog/categories/{category_id}",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "moveCatalogCategory",
+      "method": "POST",
+      "path": "/api/v1/catalog/categories/{category_id}/move",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "inactivateCatalogCategory",
+      "method": "POST",
+      "path": "/api/v1/catalog/categories/{category_id}/inactivate",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "listCatalogProducts",
+      "method": "GET",
+      "path": "/api/v1/catalog/products",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": [
+        "limit",
+        "cursor",
+        "q",
+        "sku",
+        "plu",
+        "barcode",
+        "status",
+        "category_id"
+      ]
+    },
+    {
+      "operation_id": "createCatalogProduct",
+      "method": "POST",
+      "path": "/api/v1/catalog/products",
+      "permission": "catalog.manage",
+      "success_status": 201,
+      "query": []
+    },
+    {
+      "operation_id": "getCatalogProduct",
+      "method": "GET",
+      "path": "/api/v1/catalog/products/{product_id}",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "updateCatalogProduct",
+      "method": "PATCH",
+      "path": "/api/v1/catalog/products/{product_id}",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "transitionCatalogProduct",
+      "method": "POST",
+      "path": "/api/v1/catalog/products/{product_id}/transitions",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "listCatalogProductPresentations",
+      "method": "GET",
+      "path": "/api/v1/catalog/products/{product_id}/presentations",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": [
+        "limit",
+        "cursor"
+      ]
+    },
+    {
+      "operation_id": "createCatalogPresentation",
+      "method": "POST",
+      "path": "/api/v1/catalog/products/{product_id}/presentations",
+      "permission": "catalog.manage",
+      "success_status": 201,
+      "query": []
+    },
+    {
+      "operation_id": "getCatalogPresentation",
+      "method": "GET",
+      "path": "/api/v1/catalog/presentations/{presentation_id}",
+      "permission": "catalog.read",
+      "success_status": 200,
+      "query": [
+        "barcode_limit",
+        "barcode_cursor"
+      ]
+    },
+    {
+      "operation_id": "updateCatalogPresentation",
+      "method": "PATCH",
+      "path": "/api/v1/catalog/presentations/{presentation_id}",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "transitionCatalogPresentation",
+      "method": "POST",
+      "path": "/api/v1/catalog/presentations/{presentation_id}/transitions",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "addCatalogPresentationBarcode",
+      "method": "POST",
+      "path": "/api/v1/catalog/presentations/{presentation_id}/barcodes",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "retireCatalogPresentationBarcode",
+      "method": "POST",
+      "path": "/api/v1/catalog/presentations/{presentation_id}/barcodes/{barcode_id}/retire",
+      "permission": "catalog.manage",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "getDefaultPriceList",
+      "method": "GET",
+      "path": "/api/v1/pricing/default-list",
+      "permission": "pricing.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "GET",
+      "path": "/api/v1/pricing/presentations/{presentation_id}/price",
+      "permission": "pricing.read",
+      "success_status": 200,
+      "query": []
+    },
+    {
+      "operation_id": "listPresentationPrices",
+      "method": "GET",
+      "path": "/api/v1/pricing/presentations/{presentation_id}/prices",
+      "permission": "pricing.read",
+      "success_status": 200,
+      "query": [
+        "limit",
+        "cursor"
+      ]
+    },
+    {
+      "operation_id": "createPresentationPrice",
+      "method": "POST",
+      "path": "/api/v1/pricing/presentations/{presentation_id}/prices",
+      "permission": "pricing.manage",
+      "success_status": 201,
+      "query": []
+    },
+    {
+      "operation_id": "getPrice",
+      "method": "GET",
+      "path": "/api/v1/pricing/prices/{price_id}",
+      "permission": "pricing.read",
+      "success_status": 200,
+      "query": []
+    }
+  ],
+  "public_security": {
+    "cookie": "__Host-oc_session",
+    "origin_csrf_owner": "gateway-bff",
+    "private_tokens_to_browser": false,
+    "free_tenant_headers_grant_authority": false
+  },
+  "private_security": {
+    "delegated_audience": "catalog-pricing.user-api",
+    "delegated_caller": "gateway-bff",
+    "delegated_type": "delegated",
+    "algorithm": "ES256",
+    "maximum_seconds": 60,
+    "client_signal_required": true,
+    "client_signal_in_public_hash": false,
+    "client_signal_pattern": "^v1\\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+  },
+  "authority": {
+    "owner": "identity-tenancy",
+    "maximum_valid_for_ms": 2000,
+    "clock": "monotonic_before_send",
+    "cache": false,
+    "scope": "organization",
+    "query_before_sql_locks": true,
+    "check_after_locks_before_commit": true,
+    "check_before_read_or_replay": true,
+    "distributed_atomicity": false,
+    "step_up_maximum_seconds": 900,
+    "step_up_condition": "tax_classification_change_of_already_active_product"
+  },
+  "budgets": {
+    "gateway_total_ms": 10000,
+    "ordinary_private_call_ms": 3000,
+    "authority_call_ms": 1000,
+    "catalog_total_ms": 5000,
+    "sql_lock_wait_ms": 1000,
+    "json_bytes": 1048576,
+    "replay_days": 7
+  },
+  "ports": [
+    {
+      "operation_id": "createCatalogDelegation",
+      "method": "post",
+      "path": "/internal/identity/catalog-delegations",
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.gateway",
+      "cookie_required": true,
+      "request_schema": "DelegationRequest",
+      "response_schema": "DelegationResponse"
+    },
+    {
+      "operation_id": "checkCatalogAuthorization",
+      "method": "post",
+      "path": "/internal/identity/catalog-authorizations",
+      "caller": "catalog-pricing",
+      "audience": "identity-tenancy.catalog-authority",
+      "cookie_required": false,
+      "request_schema": "AuthorizationRequest",
+      "response_schema": "AuthorizationResponse"
+    }
+  ],
+  "runtime_demonstrated": false,
+  "publication_admission": "F1-07G after immutable commit; no current consumer admission"
+}

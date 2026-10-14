@@ -1,9 +1,10 @@
 import { readFile, readdir } from "node:fs/promises";
 import { dirname, extname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { contractDirectories } from "../tools/architecture/layout.mjs";
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const contractDirectories = [resolve(root, "events"), resolve(root, "commands"), resolve(root, "openapi"), resolve(root, "errors")];
+const directories = contractDirectories(root);
 
 async function listJsonFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -116,7 +117,7 @@ function collectReferences(value, references = []) {
   return references;
 }
 
-const files = (await Promise.all(contractDirectories.map(listJsonFiles))).flat();
+const files = (await Promise.all(directories.map(listJsonFiles))).flat();
 const documents = new Map();
 
 for (const file of files) {

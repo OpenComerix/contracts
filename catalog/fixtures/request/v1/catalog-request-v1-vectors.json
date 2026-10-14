@@ -1,0 +1,330 @@
+{
+  "profile": "catalog-request-v1",
+  "runtime_domain_validation_demonstrated": false,
+  "vectors": [
+    {
+      "id": "product-nfc-uppercase",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createCatalogProduct",
+        "method": "POST",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "type": "STOCKED_GOOD",
+          "default_variant": {
+            "sku": "ABC-1",
+            "base_unit": "unit"
+          },
+          "base_presentation": {
+            "name": "Unidad",
+            "allows_fractions": false,
+            "minimum_quantity": "1",
+            "quantity_increment": "1"
+          }
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createCatalogProduct",
+        "method": "POST",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "type": "STOCKED_GOOD",
+          "default_variant": {
+            "sku": "ABC-1",
+            "base_unit": "unit"
+          },
+          "base_presentation": {
+            "name": "Unidad",
+            "allows_fractions": false,
+            "minimum_quantity": "1",
+            "quantity_increment": "1"
+          }
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"base_presentation\":{\"allows_fractions\":false,\"minimum_quantity\":\"1\",\"name\":\"Unidad\",\"quantity_increment\":\"1\"},\"default_variant\":{\"base_unit\":\"unit\",\"sku\":\"ABC-1\"},\"name\":\"Café\",\"type\":\"STOCKED_GOOD\"},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"POST\",\"operation_id\":\"createCatalogProduct\",\"path\":\"/api/v1/catalog/products\",\"query\":{}}",
+      "sha256": "3adadb10b7ef9e521842237c6f1fca58a1355a108aa9b29fc003c516fc74a60b"
+    },
+    {
+      "id": "product-nfc-lowercase",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createCatalogProduct",
+        "method": "POST",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "type": "STOCKED_GOOD",
+          "default_variant": {
+            "sku": "abc-1",
+            "base_unit": "unit"
+          },
+          "base_presentation": {
+            "name": "Unidad",
+            "allows_fractions": false,
+            "minimum_quantity": "1",
+            "quantity_increment": "1"
+          }
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createCatalogProduct",
+        "method": "POST",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "type": "STOCKED_GOOD",
+          "default_variant": {
+            "sku": "ABC-1",
+            "base_unit": "unit"
+          },
+          "base_presentation": {
+            "name": "Unidad",
+            "allows_fractions": false,
+            "minimum_quantity": "1",
+            "quantity_increment": "1"
+          }
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"base_presentation\":{\"allows_fractions\":false,\"minimum_quantity\":\"1\",\"name\":\"Unidad\",\"quantity_increment\":\"1\"},\"default_variant\":{\"base_unit\":\"unit\",\"sku\":\"ABC-1\"},\"name\":\"Café\",\"type\":\"STOCKED_GOOD\"},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"POST\",\"operation_id\":\"createCatalogProduct\",\"path\":\"/api/v1/catalog/products\",\"query\":{}}",
+      "sha256": "3adadb10b7ef9e521842237c6f1fca58a1355a108aa9b29fc003c516fc74a60b"
+    },
+    {
+      "id": "price-short",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createPresentationPrice",
+        "method": "POST",
+        "path": "/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices",
+        "query": {},
+        "body": {
+          "amount": "10",
+          "expected_version": 0
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createPresentationPrice",
+        "method": "POST",
+        "path": "/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices",
+        "query": {},
+        "body": {
+          "amount": "10",
+          "expected_version": 0
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"amount\":\"10\",\"expected_version\":0},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"POST\",\"operation_id\":\"createPresentationPrice\",\"path\":\"/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices\",\"query\":{}}",
+      "sha256": "a1438b0e665d5e6d606fc73c33def670621b75f7a7795359a1be30713ae6f7d0"
+    },
+    {
+      "id": "price-trailing-zeros",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createPresentationPrice",
+        "method": "POST",
+        "path": "/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices",
+        "query": {},
+        "body": {
+          "amount": "10.00",
+          "expected_version": 0
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "createPresentationPrice",
+        "method": "POST",
+        "path": "/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices",
+        "query": {},
+        "body": {
+          "amount": "10",
+          "expected_version": 0
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"amount\":\"10\",\"expected_version\":0},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"POST\",\"operation_id\":\"createPresentationPrice\",\"path\":\"/api/v1/pricing/presentations/019a64c0-0000-7000-8000-000000000001/prices\",\"query\":{}}",
+      "sha256": "a1438b0e665d5e6d606fc73c33def670621b75f7a7795359a1be30713ae6f7d0"
+    },
+    {
+      "id": "query-cursor",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "limit": "50",
+          "cursor": "opaque_cursor"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "limit": "50",
+          "cursor": "opaque_cursor"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "canonical_utf8": "{\"body\":null,\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":null,\"method\":\"GET\",\"operation_id\":\"listCatalogProducts\",\"path\":\"/api/v1/catalog/products\",\"query\":{\"cursor\":\"opaque_cursor\",\"limit\":\"50\"}}",
+      "sha256": "c47ea02cde597cce94b3b3072979d114eac0fd6bad46a5edb4dac88ce46290cb"
+    },
+    {
+      "id": "query-reversed",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "cursor": "opaque_cursor",
+          "limit": "50"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "limit": "50",
+          "cursor": "opaque_cursor"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "canonical_utf8": "{\"body\":null,\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":null,\"method\":\"GET\",\"operation_id\":\"listCatalogProducts\",\"path\":\"/api/v1/catalog/products\",\"query\":{\"cursor\":\"opaque_cursor\",\"limit\":\"50\"}}",
+      "sha256": "c47ea02cde597cce94b3b3072979d114eac0fd6bad46a5edb4dac88ce46290cb"
+    },
+    {
+      "id": "default-omitted",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": null,
+        "idempotency_key": null
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {},
+        "body": null,
+        "idempotency_key": null
+      },
+      "canonical_utf8": "{\"body\":null,\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":null,\"method\":\"GET\",\"operation_id\":\"listCatalogProducts\",\"path\":\"/api/v1/catalog/products\",\"query\":{}}",
+      "sha256": "b8d07efb66a28fc78ac40c0a455b3b54934efac2476bec917207a11d5a56b1b4"
+    },
+    {
+      "id": "default-present",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "limit": "50"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "listCatalogProducts",
+        "method": "GET",
+        "path": "/api/v1/catalog/products",
+        "query": {
+          "limit": "50"
+        },
+        "body": null,
+        "idempotency_key": null
+      },
+      "canonical_utf8": "{\"body\":null,\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":null,\"method\":\"GET\",\"operation_id\":\"listCatalogProducts\",\"path\":\"/api/v1/catalog/products\",\"query\":{\"limit\":\"50\"}}",
+      "sha256": "1daaee4d9658c2c41dba86dc0e6467e767b7cf1021da25f3bc80698a0ff93215"
+    },
+    {
+      "id": "patch-omitted",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "updateCatalogProduct",
+        "method": "PATCH",
+        "path": "/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "expected_version": 1
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "updateCatalogProduct",
+        "method": "PATCH",
+        "path": "/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "expected_version": 1
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"expected_version\":1,\"name\":\"Café\"},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"PATCH\",\"operation_id\":\"updateCatalogProduct\",\"path\":\"/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001\",\"query\":{}}",
+      "sha256": "8d855fc86cb4312dd96f6f612b82e2580af8d66d77a03840d50e1f47ea2191bd"
+    },
+    {
+      "id": "patch-null",
+      "input": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "updateCatalogProduct",
+        "method": "PATCH",
+        "path": "/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "expected_version": 1,
+          "description": null
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "normalized": {
+        "canonicalization_version": "catalog-request-v1",
+        "operation_id": "updateCatalogProduct",
+        "method": "PATCH",
+        "path": "/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001",
+        "query": {},
+        "body": {
+          "name": "Café",
+          "expected_version": 1,
+          "description": null
+        },
+        "idempotency_key": "019a64c0-0000-7000-8000-000000000001"
+      },
+      "canonical_utf8": "{\"body\":{\"description\":null,\"expected_version\":1,\"name\":\"Café\"},\"canonicalization_version\":\"catalog-request-v1\",\"idempotency_key\":\"019a64c0-0000-7000-8000-000000000001\",\"method\":\"PATCH\",\"operation_id\":\"updateCatalogProduct\",\"path\":\"/api/v1/catalog/products/019a64c0-0000-7000-8000-000000000001\",\"query\":{}}",
+      "sha256": "2ca7dd2aae770e04426c7aac68bb84456bcfe1c00a12830e1535b797c7efbc44"
+    }
+  ]
+}

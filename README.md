@@ -14,6 +14,37 @@ La organización por dominio, superficie y versión, los manifiestos/locks de co
 - `commands/`: sobres y contratos para emails dirigidos de verificación y autoaprobación del dispositivo del Propietario; ni comandos ni resultados contienen destinatario, token, URL, cuerpo o respuesta cruda del proveedor.
 - `events/`: sobres y schemas versionados de eventos de dominio.
 
+## Organización por dominio
+
+Los nuevos contratos se ubican físicamente en su dominio y se separan por transporte, superficie y versión mayor. Los artefactos publicados conservan sus rutas históricas. Convención y responsabilidades en [la guía contractual](../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14).
+
+Mapas: [catalog](catalog/README.md), [identity](identity/README.md) y [common](common/README.md). Los README distinguen candidatos y contratos admitidos; los índices y locks conservan su procedencia. Fixtures por dominio/capacidad/versión; herramientas por capacidad bajo scripts y tests externos bajo test. El gate de layout y el discovery de referencias reutilizan el registro existente.
+
+## F1-07B — Seguridad/base de catálogo (candidatos)
+
+`identity/http/private/v1/identity-catalog-authority-v1.yaml` 1.0.0 materializa únicamente los dos puertos privados de identidad. Política/permisos de las 25 operaciones aprobadas en `catalog/http/shared/v1/catalog-security-policy-v1.json`; sus OpenAPI públicos/privados completos corresponden a C/D. Tipos comunes en `catalog/http/shared/v1/catalog-common-v1.schema.json`, objeto de siete campos en `catalog/http/shared/v1/catalog-request-v1.schema.json`. `common/errors/v6/error-catalog-v6.json` conserva íntegramente las 24 entradas v5 y añade 25; `common/http/shared/v3/problem-details-v3.schema.json` conserva v2 y admite 406/413/415.
+
+Los nuevos archivos son candidatos locales: no están admitidos por los manifests/locks actuales ni tienen una procedencia publicada ficticia. Registry/planned, exports y consumidores vigentes permanecen intactos. F1-07G fija commits inmutables/publicación/admisión después de completar los cortes; F1-07F integra nuevos gates en CI. El productor real de identidad requiere otra tanda posterior antes de F1-08. No modificar contratos H2 para habilitar catálogo.
+
+Validación local con Node24.21.0 y dependencias congeladas del repositorio:
+
+```text
+pnpm install --frozen-lockfile
+node --test test/catalog/*.test.mjs
+npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-authority-v1.yaml
+node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-authority-v1.yaml
+npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-authority-v1.yaml --dereferenced --ext json --output /tmp/identity-catalog-authority-v1.bundle.json
+node scripts/catalog/validate-security-v1.mjs /tmp/identity-catalog-authority-v1.bundle.json .ci-artifacts/catalog-security-v1 --self-test
+jsonschema metaschema catalog/http/shared/v1/catalog-common-v1.schema.json catalog/http/shared/v1/catalog-request-v1.schema.json identity/http/private/v1/identity-catalog-authority-v1.schema.json common/http/shared/v3/problem-details-v3.schema.json common/errors/v6/error-catalog-v6.schema.json
+jsonschema validate common/errors/v6/error-catalog-v6.schema.json common/errors/v6/error-catalog-v6.json --format-assertion
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-security-v1
+```
+
+Usar directorio de extracción nuevo; no sobrescribir evidencia previa. Sourcemeta16.10.0 exige metaschemas y valida cada positivo y negativo contra el schema exacto. Un negativo cuenta únicamente por rechazo de instancia (exit2 y diagnóstico de validación), no por archivo ausente, parsing, referencia rota o error de herramienta. El inventario compara ambos sentidos de los ejemplos y todos los archivos de fixture; los autocontroles comprueban seguridad/matriz/compatibilidad.
+
+`scripts/catalog/security-v1-common.mjs` contiene helpers de prueba, no autorización runtime ni un cliente SDK. El serializer JCS sigue [RFC8785](https://www.rfc-editor.org/rfc/rfc8785): orden UTF-16 y serialización directa de claves (también numéricas), Unicode válido y números finitos. El helper de metadatos `canonical` no se reutiliza como JCS. Normalización de nombres/SKU/decimales ocurre antes del serializer; validar escala antes de quitar ceros. El body debe haber pasado el schema específico y normalización C/D: la forma genérica de B no acredita CRUD. GET usa body/clave null, query conserva solo parámetros presentes como cadenas y cursor opaco; no expandir defaults. El parser compartido rechaza claves JSON duplicadas antes de JCS.
+
+Claims/contextos y JWT de ejemplo son sintéticos. Los gates prueban forma y coherencia de vínculo/autoridad modelada; no firma ES256, HMAC, credenciales vigentes reales, revocación, cursor firmado, SQL, fairness ni atomicidad distribuida. Medir vigencia desde antes del envío con reloj monotónico, descontar red/waits; no mantener locks durante consulta a identidad, ni cachear decisión/replay. Step-up únicamente para cambio fiscal de producto ya activo. Ningún token, cookie/hash, señal, tenant elegido o versión numérica de identidad se vuelve autoridad pública por esta documentación.
 ## Validación en CI
 
 El pipeline valida:

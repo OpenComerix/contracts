@@ -1,0 +1,432 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+  "title": "identity-catalog-authority-v1",
+  "$defs": {
+    "DelegationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "canonicalization_version",
+        "request_hash"
+      ],
+      "properties": {
+        "operation_id": {
+          "enum": [
+            "listCatalogUnits",
+            "listCatalogTaxClassifications",
+            "listCatalogCategories",
+            "createCatalogCategory",
+            "getCatalogCategory",
+            "updateCatalogCategory",
+            "moveCatalogCategory",
+            "inactivateCatalogCategory",
+            "listCatalogProducts",
+            "createCatalogProduct",
+            "getCatalogProduct",
+            "updateCatalogProduct",
+            "transitionCatalogProduct",
+            "listCatalogProductPresentations",
+            "createCatalogPresentation",
+            "getCatalogPresentation",
+            "updateCatalogPresentation",
+            "transitionCatalogPresentation",
+            "addCatalogPresentationBarcode",
+            "retireCatalogPresentationBarcode",
+            "getDefaultPriceList",
+            "getPresentationCurrentPrice",
+            "listPresentationPrices",
+            "createPresentationPrice",
+            "getPrice"
+          ]
+        },
+        "canonicalization_version": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CanonicalizationVersion"
+        },
+        "request_hash": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/RequestHash"
+        }
+      }
+    },
+    "AuthorizationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "delegated_token",
+        "operation_id",
+        "canonicalization_version",
+        "request_hash"
+      ],
+      "properties": {
+        "delegated_token": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+          "description": "Solo JWT sintético en fixtures; validación de firma ES256 y kid/issuer runtime obligatoria.",
+          "writeOnly": true
+        },
+        "operation_id": {
+          "enum": [
+            "listCatalogUnits",
+            "listCatalogTaxClassifications",
+            "listCatalogCategories",
+            "createCatalogCategory",
+            "getCatalogCategory",
+            "updateCatalogCategory",
+            "moveCatalogCategory",
+            "inactivateCatalogCategory",
+            "listCatalogProducts",
+            "createCatalogProduct",
+            "getCatalogProduct",
+            "updateCatalogProduct",
+            "transitionCatalogProduct",
+            "listCatalogProductPresentations",
+            "createCatalogPresentation",
+            "getCatalogPresentation",
+            "updateCatalogPresentation",
+            "transitionCatalogPresentation",
+            "addCatalogPresentationBarcode",
+            "retireCatalogPresentationBarcode",
+            "getDefaultPriceList",
+            "getPresentationCurrentPrice",
+            "listPresentationPrices",
+            "createPresentationPrice",
+            "getPrice"
+          ]
+        },
+        "canonicalization_version": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CanonicalizationVersion"
+        },
+        "request_hash": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/RequestHash"
+        }
+      }
+    },
+    "DelegationResponse": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "access_token",
+        "token_type",
+        "expires_in"
+      ],
+      "properties": {
+        "access_token": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+\\.[A-Za-z0-9_-]+$",
+          "description": "Solo JWT sintético en fixtures; validación de firma ES256 y kid/issuer runtime obligatoria."
+        },
+        "token_type": {
+          "const": "Bearer"
+        },
+        "expires_in": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 60
+        }
+      }
+    },
+    "DelegatedClaims": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "iss",
+        "aud",
+        "caller",
+        "type",
+        "jti",
+        "iat",
+        "exp",
+        "sub",
+        "session_id",
+        "security_version",
+        "organization_id",
+        "membership_id",
+        "device_id",
+        "authenticated_at",
+        "operation_id",
+        "canonicalization_version",
+        "request_hash"
+      ],
+      "properties": {
+        "iss": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^[A-Za-z][A-Za-z0-9+.-]*:"
+        },
+        "aud": {
+          "const": "catalog-pricing.user-api"
+        },
+        "caller": {
+          "const": "gateway-bff"
+        },
+        "type": {
+          "const": "delegated"
+        },
+        "jti": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/DelegationId"
+        },
+        "iat": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "exp": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sub": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "session_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "security_version": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+        },
+        "organization_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "membership_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "device_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "authenticated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "operation_id": {
+          "enum": [
+            "listCatalogUnits",
+            "listCatalogTaxClassifications",
+            "listCatalogCategories",
+            "createCatalogCategory",
+            "getCatalogCategory",
+            "updateCatalogCategory",
+            "moveCatalogCategory",
+            "inactivateCatalogCategory",
+            "listCatalogProducts",
+            "createCatalogProduct",
+            "getCatalogProduct",
+            "updateCatalogProduct",
+            "transitionCatalogProduct",
+            "listCatalogProductPresentations",
+            "createCatalogPresentation",
+            "getCatalogPresentation",
+            "updateCatalogPresentation",
+            "transitionCatalogPresentation",
+            "addCatalogPresentationBarcode",
+            "retireCatalogPresentationBarcode",
+            "getDefaultPriceList",
+            "getPresentationCurrentPrice",
+            "listPresentationPrices",
+            "createPresentationPrice",
+            "getPrice"
+          ]
+        },
+        "canonicalization_version": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CanonicalizationVersion"
+        },
+        "request_hash": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/RequestHash"
+        }
+      }
+    },
+    "AuthorizationResponse": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "decision",
+        "decision_id",
+        "delegation_id",
+        "operation_id",
+        "canonicalization_version",
+        "request_hash",
+        "account",
+        "session",
+        "organization",
+        "membership",
+        "device",
+        "approval",
+        "permission",
+        "scope",
+        "valid_for_ms",
+        "step_up_valid_for_ms"
+      ],
+      "properties": {
+        "decision": {
+          "const": "authorized"
+        },
+        "decision_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "delegation_id": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/DelegationId"
+        },
+        "operation_id": {
+          "enum": [
+            "listCatalogUnits",
+            "listCatalogTaxClassifications",
+            "listCatalogCategories",
+            "createCatalogCategory",
+            "getCatalogCategory",
+            "updateCatalogCategory",
+            "moveCatalogCategory",
+            "inactivateCatalogCategory",
+            "listCatalogProducts",
+            "createCatalogProduct",
+            "getCatalogProduct",
+            "updateCatalogProduct",
+            "transitionCatalogProduct",
+            "listCatalogProductPresentations",
+            "createCatalogPresentation",
+            "getCatalogPresentation",
+            "updateCatalogPresentation",
+            "transitionCatalogPresentation",
+            "addCatalogPresentationBarcode",
+            "retireCatalogPresentationBarcode",
+            "getDefaultPriceList",
+            "getPresentationCurrentPrice",
+            "listPresentationPrices",
+            "createPresentationPrice",
+            "getPrice"
+          ]
+        },
+        "canonicalization_version": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CanonicalizationVersion"
+        },
+        "request_hash": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/RequestHash"
+        },
+        "account": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "account_id",
+            "security_version"
+          ],
+          "properties": {
+            "account_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "security_version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "session": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "session_id",
+            "credential_version"
+          ],
+          "properties": {
+            "session_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "credential_version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "organization": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "organization_id",
+            "version"
+          ],
+          "properties": {
+            "organization_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "membership": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "membership_id",
+            "version"
+          ],
+          "properties": {
+            "membership_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "device": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "device_id",
+            "version"
+          ],
+          "properties": {
+            "device_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "approval": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "approval_id",
+            "version"
+          ],
+          "properties": {
+            "approval_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            },
+            "version": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityVersion"
+            }
+          }
+        },
+        "permission": {
+          "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/Permission"
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": [
+            "kind",
+            "organization_id"
+          ],
+          "properties": {
+            "kind": {
+              "const": "organization"
+            },
+            "organization_id": {
+              "$ref": "../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/IdentityReference"
+            }
+          }
+        },
+        "valid_for_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "step_up_valid_for_ms": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2000
+        }
+      }
+    }
+  }
+}

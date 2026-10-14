@@ -1,0 +1,963 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-request-v1.schema.json",
+  "title": "catalog-request-v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "canonicalization_version",
+    "operation_id",
+    "method",
+    "path",
+    "query",
+    "body",
+    "idempotency_key"
+  ],
+  "properties": {
+    "canonicalization_version": {
+      "$ref": "catalog-common-v1.schema.json#/$defs/CanonicalizationVersion"
+    },
+    "operation_id": {
+      "enum": [
+        "listCatalogUnits",
+        "listCatalogTaxClassifications",
+        "listCatalogCategories",
+        "createCatalogCategory",
+        "getCatalogCategory",
+        "updateCatalogCategory",
+        "moveCatalogCategory",
+        "inactivateCatalogCategory",
+        "listCatalogProducts",
+        "createCatalogProduct",
+        "getCatalogProduct",
+        "updateCatalogProduct",
+        "transitionCatalogProduct",
+        "listCatalogProductPresentations",
+        "createCatalogPresentation",
+        "getCatalogPresentation",
+        "updateCatalogPresentation",
+        "transitionCatalogPresentation",
+        "addCatalogPresentationBarcode",
+        "retireCatalogPresentationBarcode",
+        "getDefaultPriceList",
+        "getPresentationCurrentPrice",
+        "listPresentationPrices",
+        "createPresentationPrice",
+        "getPrice"
+      ]
+    },
+    "method": {
+      "enum": [
+        "GET",
+        "POST",
+        "PATCH"
+      ]
+    },
+    "path": {
+      "type": "string",
+      "pattern": "^/api/v1/(?:catalog|pricing)/[^?#{}]+$"
+    },
+    "query": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "body": {
+      "type": [
+        "object",
+        "null"
+      ]
+    },
+    "idempotency_key": {
+      "anyOf": [
+        {
+          "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listCatalogUnits"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/units$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listCatalogTaxClassifications"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/tax-classifications$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listCatalogCategories"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "type": "string"
+              },
+              "cursor": {
+                "type": "string"
+              }
+            }
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "createCatalogCategory"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getCatalogCategory"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "updateCatalogCategory"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "PATCH"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "moveCatalogCategory"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/move$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "inactivateCatalogCategory"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/categories/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/inactivate$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listCatalogProducts"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "type": "string"
+              },
+              "cursor": {
+                "type": "string"
+              },
+              "q": {
+                "type": "string"
+              },
+              "sku": {
+                "type": "string"
+              },
+              "plu": {
+                "type": "string"
+              },
+              "barcode": {
+                "type": "string"
+              },
+              "status": {
+                "type": "string"
+              },
+              "category_id": {
+                "type": "string"
+              }
+            }
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "createCatalogProduct"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getCatalogProduct"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "updateCatalogProduct"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "PATCH"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "transitionCatalogProduct"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/transitions$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listCatalogProductPresentations"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/presentations$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "type": "string"
+              },
+              "cursor": {
+                "type": "string"
+              }
+            }
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "createCatalogPresentation"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/products/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/presentations$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getCatalogPresentation"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "barcode_limit": {
+                "type": "string"
+              },
+              "barcode_cursor": {
+                "type": "string"
+              }
+            }
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "updateCatalogPresentation"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "PATCH"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "transitionCatalogPresentation"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/transitions$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "addCatalogPresentationBarcode"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/barcodes$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "retireCatalogPresentationBarcode"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/catalog/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/barcodes/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/retire$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getDefaultPriceList"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/pricing/default-list$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getPresentationCurrentPrice"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/pricing/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/price$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "listPresentationPrices"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/pricing/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/prices$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "limit": {
+                "type": "string"
+              },
+              "cursor": {
+                "type": "string"
+              }
+            }
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "createPresentationPrice"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "POST"
+          },
+          "path": {
+            "pattern": "^/api/v1/pricing/presentations/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/prices$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "object"
+          },
+          "idempotency_key": {
+            "$ref": "catalog-common-v1.schema.json#/$defs/IdempotencyKey"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation_id": {
+            "const": "getPrice"
+          }
+        },
+        "required": [
+          "operation_id"
+        ]
+      },
+      "then": {
+        "properties": {
+          "method": {
+            "const": "GET"
+          },
+          "path": {
+            "pattern": "^/api/v1/pricing/prices/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+          },
+          "query": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {}
+          },
+          "body": {
+            "type": "null"
+          },
+          "idempotency_key": {
+            "type": "null"
+          }
+        }
+      }
+    }
+  ]
+}

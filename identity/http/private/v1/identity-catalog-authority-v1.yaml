@@ -1,0 +1,414 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity Catalog Authority API
+  version: 1.0.0
+  description: Dos puertos privados candidatos F1-07B. Identidad valida cuenta, sesión y credencial
+    vigentes, organización, membresía, dispositivo aprobado, MFA y permiso. No hay autorización por
+    headers libres ni caché de decisiones. HTTPS privado; ningún token interno llega al navegador.
+    Los fixtures no acreditan firma JWT, HMAC, revocación runtime, SQL ni atomicidad distribuida.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example/api/v1
+    description: Host privado ilustrativo; HTTPS con nombre validado.
+tags:
+  - name: CatalogAuthority
+    description: Delegación y decisión fresca propiedad de identity-tenancy.
+paths:
+  /internal/identity/catalog-delegations:
+    post:
+      operationId: createCatalogDelegation
+      summary: Emitir delegado para una solicitud de catálogo
+      description: Gateway valida Origin/CSRF en el borde público y presenta JWT de servicio más cookie
+        vigente. Identidad valida autoridad actual y conserva registro efímero de emisión que
+        vincula sesión/credencial, operación/hash y señal. Emite ES256 exclusivo
+        catalog-pricing.user-api; no admite delegados H2. Se comprueba nuevamente autoridad al
+        ejecutar; no se reutilizan delegaciones entre solicitudes. El body nunca contiene cookie,
+        actor o tenant elegido por cliente.
+      tags:
+        - CatalogAuthority
+      x-internal: true
+      x-workload:
+        caller: gateway-bff
+        audience: identity-tenancy.gateway
+        type: service
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      parameters:
+        - $ref: "#/components/parameters/ClientSignal"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: identity-catalog-authority-v1.schema.json#/$defs/DelegationRequest
+            examples:
+              request:
+                externalValue: ../../../fixtures/catalog-authority/v1/examples/delegation-request.json
+      responses:
+        "200":
+          description: Delegación ES256 válida hasta 60 s, no prolonga la sesión ni reemplaza autoridad.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/json:
+              schema:
+                $ref: identity-catalog-authority-v1.schema.json#/$defs/DelegationResponse
+              examples:
+                success:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/delegation-response.json
+        "400":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_invalid_request:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json
+        "401":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json
+                catalog_delegation_invalid:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json
+        "403":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                catalog_delegation_request_mismatch:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json
+                identity_access_denied:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json
+                identity_reauthentication_required:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json
+        "406":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json
+        "413":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_payload_too_large:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json
+        "415":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_unsupported_media_type:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json
+        "429":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              $ref: "#/components/headers/RetryAfter"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json
+        "500":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json
+        "503":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json
+  /internal/identity/catalog-authorizations:
+    post:
+      operationId: checkCatalogAuthorization
+      summary: Comprobar autoridad fresca de una solicitud de catálogo
+      description: "Solo workload catalog-pricing presenta JWT propio y delegado en body. Recalcula hash
+        público catalog-request-v1; identidad compara registro, señal, sesión/credencial actuales y
+        todas las autoridades actuales. Permiso deriva de operationId, scope exclusivamente
+        organizacional sin sucursal inferida. No confía en roles embebidos ni en tenant del
+        navegador. Falla cerrada sin dependencia y revalida incluso al exponer replay. Operación de
+        comprobación sin efecto comercial ni replay de decisión: cada llamada obtiene una decisión
+        fresca."
+      tags:
+        - CatalogAuthority
+      x-internal: true
+      x-workload:
+        caller: catalog-pricing
+        audience: identity-tenancy.catalog-authority
+        type: service
+      security:
+        - catalogServiceBearer: []
+      parameters:
+        - $ref: "#/components/parameters/ClientSignal"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: identity-catalog-authority-v1.schema.json#/$defs/AuthorizationRequest
+            examples:
+              request:
+                externalValue: ../../../fixtures/catalog-authority/v1/examples/authorization-request.json
+      responses:
+        "200":
+          description: Decisión autorizada ligada a operación/hash/registro/señal y referencias/versiones
+            actuales. valid_for_ms ≤2000, step_up_valid_for_ms ≤valid_for_ms. Medir desde antes del
+            envío con reloj monotónico, descontar red/waits. Sin consulta identidad con locks SQL.
+            Revisar tras locks, antes de commit y antes de lecturas/replays. Step-up hasta 15 min
+            solo para cambio fiscal de producto ya activo. Sin atomicidad distribuida.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/json:
+              schema:
+                $ref: identity-catalog-authority-v1.schema.json#/$defs/AuthorizationResponse
+              examples:
+                success:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/authorization-response.json
+        "400":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_invalid_request:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json
+        "401":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json
+                catalog_delegation_invalid:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json
+        "403":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                catalog_delegation_request_mismatch:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json
+                identity_access_denied:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json
+                identity_reauthentication_required:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json
+        "406":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json
+        "413":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_payload_too_large:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json
+        "415":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_unsupported_media_type:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json
+        "429":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              $ref: "#/components/headers/RetryAfter"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json
+        "500":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json
+        "503":
+          description: Rechazo genérico, sin token, cookie, hash, señal, SQL ni pertenencia ajena. Nunca
+            decisión denegada en 200.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json
+components:
+  securitySchemes:
+    gatewayServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: ES256; issuer configurado, kid vigente, aud identity-tenancy.gateway, type service,
+        caller gateway-bff. No acredita CSRF.
+    currentSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Cookie opaca vigente solo por HTTPS privado; no acepta cookie anterior ni la recibe catálogo.
+    catalogServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Credenciales propias catalog-pricing; ES256 issuer configurado, kid vigente, aud
+        identity-tenancy.catalog-authority, type service, caller catalog-pricing.
+  parameters:
+    ClientSignal:
+      name: X-OC-Client-Signal
+      in: header
+      required: true
+      description: Valor único derivado por gateway desde ingress confiable; elimina copia del navegador.
+        Se vincula al registro de emisión y se compara al comprobar autoridad. No transporta IP/HMAC
+        secret, no concede permisos y no integra request_hash. Autenticar workload antes de validar
+        sintaxis.
+      schema:
+        $ref: ../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/ClientSignal
+  headers:
+    NoStore:
+      required: true
+      description: Nunca cachear respuestas ni errores.
+      schema:
+        $ref: ../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+    RetryAfter:
+      required: true
+      description: Segundos antes del siguiente intento; no concede autoridad.
+      schema:
+        $ref: ../../../../catalog/http/shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+  schemas: {}

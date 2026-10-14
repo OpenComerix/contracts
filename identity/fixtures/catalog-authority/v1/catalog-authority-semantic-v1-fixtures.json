@@ -1,0 +1,204 @@
+{
+  "manifest_version": 1,
+  "runtime_cryptography_demonstrated": false,
+  "cases": [
+    {
+      "id": "authority-context-valid",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/authority-context-valid.json",
+      "expected": "accept",
+      "reason": null
+    },
+    {
+      "id": "authority-context-step-up",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/authority-context-step-up.json",
+      "expected": "accept",
+      "reason": null
+    },
+    {
+      "id": "negative-audience",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-audience.json",
+      "expected": "reject",
+      "reason": "DELEGATED_AUDIENCE"
+    },
+    {
+      "id": "negative-caller",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-caller.json",
+      "expected": "reject",
+      "reason": "DELEGATED_CALLER"
+    },
+    {
+      "id": "negative-issuer",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-issuer.json",
+      "expected": "reject",
+      "reason": "DELEGATED_ISSUER"
+    },
+    {
+      "id": "negative-algorithm",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-algorithm.json",
+      "expected": "reject",
+      "reason": "DELEGATED_ALGORITHM"
+    },
+    {
+      "id": "negative-type",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-type.json",
+      "expected": "reject",
+      "reason": "DELEGATED_TYPE"
+    },
+    {
+      "id": "negative-jti",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-jti.json",
+      "expected": "reject",
+      "reason": "DELEGATED_JTI"
+    },
+    {
+      "id": "negative-expired",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-expired.json",
+      "expected": "reject",
+      "reason": "DELEGATED_LIFETIME"
+    },
+    {
+      "id": "negative-lifetime",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-lifetime.json",
+      "expected": "reject",
+      "reason": "DELEGATED_LIFETIME"
+    },
+    {
+      "id": "negative-operation",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-operation.json",
+      "expected": "reject",
+      "reason": "DELEGATED_REQUEST_BINDING"
+    },
+    {
+      "id": "negative-hash",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-hash.json",
+      "expected": "reject",
+      "reason": "DELEGATED_REQUEST_BINDING"
+    },
+    {
+      "id": "negative-signal",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-signal.json",
+      "expected": "reject",
+      "reason": "ISSUANCE_SIGNAL"
+    },
+    {
+      "id": "negative-signal-format",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-signal-format.json",
+      "expected": "reject",
+      "reason": "CLIENT_SIGNAL_SYNTAX"
+    },
+    {
+      "id": "negative-account",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-account.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-session",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-session.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-organization",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-organization.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-membership",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-membership.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-device",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-device.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-mfa",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-mfa.json",
+      "expected": "reject",
+      "reason": "CURRENT_AUTHORITY_INACTIVE"
+    },
+    {
+      "id": "negative-permission",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-permission.json",
+      "expected": "reject",
+      "reason": "CURRENT_PERMISSION"
+    },
+    {
+      "id": "negative-scope",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-scope.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_SCOPE_ORGANIZATION"
+    },
+    {
+      "id": "negative-branch",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-branch.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_NO_BRANCH"
+    },
+    {
+      "id": "negative-credential",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-credential.json",
+      "expected": "reject",
+      "reason": "CREDENTIAL_CHANGED"
+    },
+    {
+      "id": "negative-version-type",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-version-type.json",
+      "expected": "reject",
+      "reason": "IDENTITY_STRING_REFERENCE_VERSION"
+    },
+    {
+      "id": "negative-duration",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-duration.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_DURATION"
+    },
+    {
+      "id": "negative-network-expiration",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-network-expiration.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_EXPIRED"
+    },
+    {
+      "id": "negative-step-excess",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-step-excess.json",
+      "expected": "reject",
+      "reason": "STEP_UP_DURATION"
+    },
+    {
+      "id": "negative-step-missing",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-step-missing.json",
+      "expected": "reject",
+      "reason": "STEP_UP_REQUIRED"
+    },
+    {
+      "id": "negative-workload",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-workload.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_WORKLOAD"
+    },
+    {
+      "id": "negative-denied-200",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-denied-200.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_DECISION"
+    },
+    {
+      "id": "negative-authority-shorter",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-authority-shorter.json",
+      "expected": "reject",
+      "reason": "AUTHORITY_CANNOT_EXTEND"
+    },
+    {
+      "id": "negative-step-shorter",
+      "fixture": "identity/fixtures/catalog-authority/v1/semantic/negative-step-shorter.json",
+      "expected": "reject",
+      "reason": "STEP_UP_CANNOT_EXTEND"
+    }
+  ]
+}
