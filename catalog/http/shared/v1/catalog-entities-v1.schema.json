@@ -1,0 +1,1640 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+  "title": "Catalog HTTP entities and requests v1",
+  "description": "Candidate C; no admitted runtime. Structural validation complements exact-decimal, normalization, state and owner-context semantic fixtures. Requests closed; responses compatible.",
+  "$defs": {
+    "Name160": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f](?:[^\\x00-\\x1f\\x7f]*[^\\s\\x00-\\x1f\\x7f])?$"
+    },
+    "Name80": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f](?:[^\\x00-\\x1f\\x7f]*[^\\s\\x00-\\x1f\\x7f])?$"
+    },
+    "Description": {
+      "type": "string",
+      "maxLength": 1000,
+      "pattern": "^[^\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]*$"
+    },
+    "Sku": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_./-]{1,64}$"
+    },
+    "CanonicalSku": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_./-]{1,64}$"
+    },
+    "Plu": {
+      "type": "string",
+      "pattern": "^[0-9]{1,12}$"
+    },
+    "TaxCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_.:-]{0,63}$"
+    },
+    "State": {
+      "type": "string",
+      "enum": ["draft", "active", "inactive", "discontinued"]
+    },
+    "Action": {
+      "type": "string",
+      "enum": ["activate", "inactivate", "reactivate", "discontinue"]
+    },
+    "ProductType": {
+      "type": "string",
+      "enum": ["STOCKED_GOOD", "NON_STOCK_GOOD", "SERVICE"]
+    },
+    "PositiveQuantity": {
+      "allOf": [
+        {
+          "$ref": "catalog-common-v1.schema.json#/$defs/QuantityDecimal"
+        },
+        {
+          "not": {
+            "pattern": "^0(?:\\.0+)?$"
+          }
+        }
+      ]
+    },
+    "TaxReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["code", "version"],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        }
+      }
+    },
+    "TaxRule": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["code", "version"],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        }
+      }
+    },
+    "TaxComponent": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["tax_code", "jurisdiction_code", "treatment", "rule_ref"],
+      "properties": {
+        "tax_code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "jurisdiction_code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "treatment": {
+          "type": "string",
+          "enum": ["taxable", "exempt", "not_taxable"]
+        },
+        "rule_ref": {
+          "$ref": "#/$defs/TaxRule"
+        }
+      }
+    },
+    "TaxClassification": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "code",
+        "version",
+        "country_code",
+        "name",
+        "selectable",
+        "components"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        },
+        "country_code": {
+          "const": "AR"
+        },
+        "name": {
+          "$ref": "#/$defs/Name160"
+        },
+        "selectable": {
+          "type": "boolean"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaxComponent"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        }
+      }
+    },
+    "Unit": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["unit_code", "dimension", "name", "symbol"],
+      "properties": {
+        "unit_code": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        },
+        "dimension": {
+          "type": "string",
+          "enum": ["count", "mass", "volume", "length", "area"]
+        },
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "symbol": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 16
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "unit"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "count"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "kg"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "mass"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "g"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "mass"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "l"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "volume"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "ml"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "volume"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "m"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "length"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "cm"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "length"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "unit_code": {
+                "const": "m2"
+              }
+            },
+            "required": ["unit_code"]
+          },
+          "then": {
+            "properties": {
+              "dimension": {
+                "const": "area"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "DefaultVariantCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sku", "base_unit"],
+      "properties": {
+        "sku": {
+          "$ref": "#/$defs/Sku"
+        },
+        "base_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        },
+        "plu": {
+          "$ref": "#/$defs/Plu"
+        }
+      }
+    },
+    "DefaultVariantPatch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "sku": {
+          "$ref": "#/$defs/Sku"
+        },
+        "plu": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Plu"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "base_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        }
+      },
+      "minProperties": 1
+    },
+    "DefaultVariant": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["variant_id", "sku", "plu", "base_unit"],
+      "properties": {
+        "variant_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "sku": {
+          "$ref": "#/$defs/CanonicalSku"
+        },
+        "plu": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Plu"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "base_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        }
+      }
+    },
+    "BasePresentationCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "allows_fractions": {
+          "type": "boolean"
+        },
+        "minimum_quantity": {
+          "$ref": "#/$defs/PositiveQuantity"
+        },
+        "quantity_increment": {
+          "$ref": "#/$defs/PositiveQuantity"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false
+              }
+            },
+            "required": ["allows_fractions"]
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CategoryCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "CategoryUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "expected_version"],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        }
+      }
+    },
+    "CategoryMove": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["parent_id", "expected_version"],
+      "properties": {
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        }
+      }
+    },
+    "VersionCommand": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_version"],
+      "properties": {
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        }
+      }
+    },
+    "ProductCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "type", "default_variant", "base_presentation"],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name160"
+        },
+        "type": {
+          "$ref": "#/$defs/ProductType"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Description"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tax_classification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaxReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "default_variant": {
+          "$ref": "#/$defs/DefaultVariantCreate"
+        },
+        "base_presentation": {
+          "$ref": "#/$defs/BasePresentationCreate"
+        }
+      }
+    },
+    "ProductUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_version"],
+      "properties": {
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        },
+        "expected_base_presentation_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        },
+        "name": {
+          "$ref": "#/$defs/Name160"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Description"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "category_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tax_classification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaxReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "$ref": "#/$defs/ProductType"
+        },
+        "default_variant": {
+          "$ref": "#/$defs/DefaultVariantPatch"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["name"]
+        },
+        {
+          "required": ["description"]
+        },
+        {
+          "required": ["category_id"]
+        },
+        {
+          "required": ["tax_classification"]
+        },
+        {
+          "required": ["type"]
+        },
+        {
+          "required": ["default_variant"]
+        }
+      ],
+      "allOf": [
+        {
+          "if": {
+            "required": ["default_variant"],
+            "properties": {
+              "default_variant": {
+                "required": ["base_unit"],
+                "properties": {
+                  "base_unit": {}
+                }
+              }
+            }
+          },
+          "then": {
+            "required": ["expected_base_presentation_version"],
+            "properties": {
+              "expected_base_presentation_version": {}
+            }
+          },
+          "else": {
+            "not": {
+              "required": ["expected_base_presentation_version"],
+              "properties": {
+                "expected_base_presentation_version": {}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Transition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["action", "expected_version"],
+      "properties": {
+        "action": {
+          "$ref": "#/$defs/Action"
+        },
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        }
+      }
+    },
+    "PresentationCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "unit_code",
+        "conversion_factor",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment"
+      ],
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "unit_code": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        },
+        "conversion_factor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ConversionFactor"
+        },
+        "allows_fractions": {
+          "type": "boolean"
+        },
+        "minimum_quantity": {
+          "$ref": "#/$defs/PositiveQuantity"
+        },
+        "quantity_increment": {
+          "$ref": "#/$defs/PositiveQuantity"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false
+              }
+            },
+            "required": ["allows_fractions"]
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PresentationUpdate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["expected_version"],
+      "properties": {
+        "expected_version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+        },
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "unit_code": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        },
+        "conversion_factor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ConversionFactor"
+        },
+        "allows_fractions": {
+          "type": "boolean"
+        },
+        "minimum_quantity": {
+          "$ref": "#/$defs/PositiveQuantity"
+        },
+        "quantity_increment": {
+          "$ref": "#/$defs/PositiveQuantity"
+        }
+      },
+      "anyOf": [
+        {
+          "required": ["name"]
+        },
+        {
+          "required": ["unit_code"]
+        },
+        {
+          "required": ["conversion_factor"]
+        },
+        {
+          "required": ["allows_fractions"]
+        },
+        {
+          "required": ["minimum_quantity"]
+        },
+        {
+          "required": ["quantity_increment"]
+        }
+      ]
+    },
+    "BarcodeInput": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "expected_version"],
+          "properties": {
+            "type": {
+              "const": "GTIN_8"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[0-9]{8}$"
+            },
+            "expected_version": {
+              "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "expected_version"],
+          "properties": {
+            "type": {
+              "const": "GTIN_12"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[0-9]{12}$"
+            },
+            "expected_version": {
+              "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "expected_version"],
+          "properties": {
+            "type": {
+              "const": "GTIN_13"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[0-9]{13}$"
+            },
+            "expected_version": {
+              "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "expected_version"],
+          "properties": {
+            "type": {
+              "const": "GTIN_14"
+            },
+            "value": {
+              "type": "string",
+              "pattern": "^[0-9]{14}$"
+            },
+            "expected_version": {
+              "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["type", "value", "expected_version"],
+          "properties": {
+            "type": {
+              "const": "INTERNAL"
+            },
+            "value": {
+              "type": "string",
+              "maxLength": 64,
+              "pattern": "^OC:[A-Z0-9_.-]+$"
+            },
+            "expected_version": {
+              "$ref": "catalog-common-v1.schema.json#/$defs/ExpectedVersion"
+            }
+          }
+        }
+      ]
+    },
+    "Category": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "category_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "parent_id",
+        "status"
+      ],
+      "properties": {
+        "category_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "organization_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "inactive"]
+        }
+      }
+    },
+    "Product": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "product_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "type",
+        "category_id",
+        "tax_classification",
+        "status",
+        "default_variant",
+        "base_presentation_id"
+      ],
+      "properties": {
+        "product_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "organization_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/Name160"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Description"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "$ref": "#/$defs/ProductType"
+        },
+        "category_id": {
+          "anyOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tax_classification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TaxReferenceResponse"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/State"
+        },
+        "default_variant": {
+          "$ref": "#/$defs/DefaultVariant"
+        },
+        "base_presentation_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "matched_presentation_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "tax_classification": {
+                "$ref": "#/$defs/TaxReferenceResponse"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "TaxReferenceResponse": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["code", "version"],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        }
+      }
+    },
+    "Presentation": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "presentation_id",
+        "product_id",
+        "variant_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "unit_code",
+        "conversion_factor",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment",
+        "status"
+      ],
+      "properties": {
+        "presentation_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "product_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "variant_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "organization_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/Name80"
+        },
+        "unit_code": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode"
+        },
+        "conversion_factor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ConversionFactor"
+        },
+        "allows_fractions": {
+          "type": "boolean"
+        },
+        "minimum_quantity": {
+          "$ref": "#/$defs/PositiveQuantity"
+        },
+        "quantity_increment": {
+          "$ref": "#/$defs/PositiveQuantity"
+        },
+        "status": {
+          "$ref": "#/$defs/State"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false
+              }
+            },
+            "required": ["allows_fractions"]
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Barcode": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "barcode_id",
+        "presentation_id",
+        "organization_id",
+        "type",
+        "value",
+        "status",
+        "created_at",
+        "retired_at"
+      ],
+      "properties": {
+        "barcode_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "presentation_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        },
+        "organization_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/IdentityReference"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["GTIN_8", "GTIN_12", "GTIN_13", "GTIN_14", "INTERNAL"]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "retired"]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "retired_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_8"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{8}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_12"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{12}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_13"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{13}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_14"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{14}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "INTERNAL"
+              }
+            },
+            "required": ["type"]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^OC:[A-Z0-9_.-]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "retired_at": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "retired_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "PresentationWithBarcodes": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["presentation", "barcodes"],
+      "properties": {
+        "presentation": {
+          "$ref": "#/$defs/Presentation"
+        },
+        "barcodes": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["items", "next_cursor"],
+          "properties": {
+            "items": {
+              "type": "array",
+              "items": {
+                "$ref": "#/$defs/Barcode"
+              },
+              "maxItems": 100
+            },
+            "next_cursor": {
+              "anyOf": [
+                {
+                  "$ref": "catalog-common-v1.schema.json#/$defs/Cursor"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "BarcodeResult": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["presentation", "barcode"],
+      "properties": {
+        "presentation": {
+          "$ref": "#/$defs/Presentation"
+        },
+        "barcode": {
+          "$ref": "#/$defs/Barcode"
+        }
+      }
+    },
+    "CategoriesPage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["items", "page"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Category"
+          },
+          "maxItems": 100
+        },
+        "page": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Page"
+        }
+      }
+    },
+    "ProductsPage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["items", "page"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Product"
+          },
+          "maxItems": 100
+        },
+        "page": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Page"
+        }
+      }
+    },
+    "PresentationsPage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["items", "page"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Presentation"
+          },
+          "maxItems": 100
+        },
+        "page": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Page"
+        }
+      }
+    },
+    "Units": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["items"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Unit"
+          },
+          "maxItems": 8,
+          "minItems": 8
+        }
+      },
+      "allOf": [
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "unit"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "kg"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "g"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "l"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "ml"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "m"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "cm"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        },
+        {
+          "properties": {
+            "items": {
+              "contains": {
+                "type": "object",
+                "properties": {
+                  "unit_code": {
+                    "const": "m2"
+                  }
+                },
+                "required": ["unit_code"]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "TaxClassifications": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["items"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TaxClassification"
+          }
+        }
+      }
+    },
+    "ListQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "limit": {
+          "type": "string",
+          "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+        },
+        "cursor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Cursor"
+        }
+      }
+    },
+    "ProductsQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "limit": {
+          "type": "string",
+          "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+        },
+        "cursor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Cursor"
+        },
+        "q": {
+          "$ref": "#/$defs/Name160"
+        },
+        "sku": {
+          "$ref": "#/$defs/Sku"
+        },
+        "plu": {
+          "$ref": "#/$defs/Plu"
+        },
+        "barcode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "status": {
+          "$ref": "#/$defs/State"
+        },
+        "category_id": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/CatalogId"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": ["sku"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": ["q"]
+                },
+                {
+                  "required": ["plu"]
+                },
+                {
+                  "required": ["barcode"]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["plu"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": ["q"]
+                },
+                {
+                  "required": ["sku"]
+                },
+                {
+                  "required": ["barcode"]
+                }
+              ]
+            }
+          }
+        },
+        {
+          "if": {
+            "required": ["barcode"]
+          },
+          "then": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": ["q"]
+                },
+                {
+                  "required": ["sku"]
+                },
+                {
+                  "required": ["plu"]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "BarcodesQuery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {
+        "barcode_limit": {
+          "type": "string",
+          "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+        },
+        "barcode_cursor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/Cursor"
+        }
+      }
+    }
+  }
+}

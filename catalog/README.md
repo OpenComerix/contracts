@@ -10,3 +10,12 @@ Candidatos F1-07B:
 - Herramientas: [scripts/catalog](../scripts/catalog/validate-security-v1.mjs); pruebas: [test/catalog](../test/catalog/security-v1.test.mjs). Ejecución completa y límites en [README principal](../README.md#f1-07b--seguridadbase-de-catálogo-candidatos).
 
 Los OpenAPI públicos y privados completos corresponden a C/D, eventos a E y admisión/publicación a G. No cambiar descriptores/locks para presentar estos candidatos como publicados.
+
+## Candidato F1-07C
+
+- HTTP [público](http/public/v1/catalog-pricing-v1.yaml) y [privado](http/private/v1/catalog-pricing-internal-v1.yaml): veinte operaciones de catálogo; cinco de precios reservadas D. Artefactos candidatos 1.0.0, sin admisión por existir archivos.
+- [Entidades y solicitudes](http/shared/v1/catalog-entities-v1.schema.json): categorías, producto/variante predeterminada, presentación/barcode, unidades y clasificación fiscal versionada; reutiliza base B y preserva ownership.
+- [Inventario HTTP](fixtures/http/v1/catalog-http-v1-fixtures.json), fixtures/http/v1/structure y fixtures/semantics/v1: positivos, errores aplicables, replay y negativos estructurales/semánticos. No validación de runtime.
+- Gates: [validate-http-v1](../scripts/catalog/validate-http-v1.mjs), helpers de normalización/semántica separados y [tests](../test/catalog/http-v1.test.mjs). Comandos, versiones y límites en [README raíz](../README.md#f1-07c--http-de-catálogo-candidatos).
+
+Índice/planned, registry y consumer locks sin modificaciones; precios D, eventos E, CI conjunta F y admisión/tags G conservan sus tandas/autorizaciones.

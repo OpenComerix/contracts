@@ -45,6 +45,7 @@ Usar directorio de extracción nuevo; no sobrescribir evidencia previa. Sourceme
 `scripts/catalog/security-v1-common.mjs` contiene helpers de prueba, no autorización runtime ni un cliente SDK. El serializer JCS sigue [RFC8785](https://www.rfc-editor.org/rfc/rfc8785): orden UTF-16 y serialización directa de claves (también numéricas), Unicode válido y números finitos. El helper de metadatos `canonical` no se reutiliza como JCS. Normalización de nombres/SKU/decimales ocurre antes del serializer; validar escala antes de quitar ceros. El body debe haber pasado el schema específico y normalización C/D: la forma genérica de B no acredita CRUD. GET usa body/clave null, query conserva solo parámetros presentes como cadenas y cursor opaco; no expandir defaults. El parser compartido rechaza claves JSON duplicadas antes de JCS.
 
 Claims/contextos y JWT de ejemplo son sintéticos. Los gates prueban forma y coherencia de vínculo/autoridad modelada; no firma ES256, HMAC, credenciales vigentes reales, revocación, cursor firmado, SQL, fairness ni atomicidad distribuida. Medir vigencia desde antes del envío con reloj monotónico, descontar red/waits; no mantener locks durante consulta a identidad, ni cachear decisión/replay. Step-up únicamente para cambio fiscal de producto ya activo. Ningún token, cookie/hash, señal, tenant elegido o versión numérica de identidad se vuelve autoridad pública por esta documentación.
+
 ## Validación en CI
 
 El pipeline valida:
@@ -176,3 +177,29 @@ Las candidatas pública y privada pasan a 2.1.0 e incorporan `POST /identity/ste
 Las operaciones comparten el bucket de rate limiting `session_step_up`, independiente del propósito `step_up` del desafío: identity limita 10 intentos por cuenta y 100 por señal en ventanas independientes de 900 segundos; gateway limita 300 solicitudes por señal y propósito en esa ventana. Los cinco intentos por desafío se suman a esos límites y una Idempotency-Key nueva no los reinicia. La retención idempotente de siete días no garantiza que el replay siga disponible durante todo ese plazo. Las huellas usan HMAC-SHA-256 versionado y los resultados sensibles se conservan cifrados; si falta la versión de clave persistida, la recuperación falla cerrada.
 
 El replay privado de `completeSessionStepUp` exige JWT de servicio gateway, cookie anterior vinculada, operación/clave/request canónicos y credencial resultante aún vigente. Revalida sesión, step-up y autoridad antes y después del descifrado. El desafío de origen ya consumido o vencido no impide por sí solo recuperar el resultado confirmado mientras el step-up y las demás condiciones continúen vigentes; no se consume el factor, rota otra vez ni extiende vencimientos. CSRF y deadline son rechazos del gateway, no respuestas atribuidas al productor privado. El manifiesto R9 inventaría en ambas direcciones los ejemplos Problem Details inline y externos de las dos operaciones y los contrasta con el catálogo v5, incluidos código, status y retryable.
+
+## F1-07C — HTTP de catálogo (candidatos)
+
+Superficies [pública](catalog/http/public/v1/catalog-pricing-v1.yaml) y [privada](catalog/http/private/v1/catalog-pricing-internal-v1.yaml), ambas 1.0.0 candidata: veinte operaciones de catálogo (8 GET y 12 mutaciones: tres 201/nueve 200). F1-07D añade cinco operaciones de precios para completar la matriz de 25 antes de F/G. No consumir este corte como un release completo; registro, índices, admisiones y locks siguen intactos. Las rutas efectivas aplican /api/v1 una sola vez.
+
+[Entidades/requests](catalog/http/shared/v1/catalog-entities-v1.schema.json) reutilizan catalog-common-v1. Requests cerrados y respuestas extensibles en todos los niveles propios, manteniendo campos conocidos obligatorios. Producto/default_variant y presentación/base_presentation_id separados; precio y stock no se incrustan. Clasificación fiscal code/version con opciones y reglas sintéticas, sin alícuotas productivas. Mutaciones tienen cookie/Origin/CSRF en la superficie pública y delegado/señal en la privada; ETag individual, no-store, idempotencia y Location solo para altas consultables. No cookie ni tokens internos en la respuesta pública. Los ejemplos de replay conservan body/status/Location/version y cambian solo el indicador.
+
+[Inventario](catalog/fixtures/http/v1/catalog-http-v1-fixtures.json): selectores exactos por superficie/operación/método/ruta/status/media/schema/headers y cobertura de archivos en ambos sentidos. Ejemplos de errores de B referenciados sin copiarlos. Casos estructurales positivos/negativos en fixtures/http/v1/structure; contextos semánticos en fixtures/semantics/v1. Incluyen conversión exacta, reserva/equivalencia GTIN, categorías/ciclos/profundidad, unidad base protegida, clasificación/activación, control de versión/replay, búsqueda barcode y cursores. Contextos de propietario verificados son inputs sintéticos, no autoridad enviada por la PWA.
+
+Herramientas: http-v1-common.mjs (normalización/contratos), http-v1-semantics.mjs (invariantes de fixtures) y validate-http-v1.mjs (inventario/extracción). Tests externos en test/catalog/http-v1.test.mjs. No segundo motor JSON Schema: se reutilizan helpers de B y su runner Sourcemeta. Headers idénticos en schema/valor se validan estructuralmente una vez por par, tras comprobar los headers de cada selector; no se omite cobertura del inventario.
+
+Después de ejecutar la regresión H2/B, con las mismas herramientas fijadas:
+
+```text
+node --test test/catalog/*.test.mjs
+npx --yes @redocly/cli@2.53.3 lint catalog/http/public/v1/catalog-pricing-v1.yaml catalog/http/private/v1/catalog-pricing-internal-v1.yaml
+node scripts/validate-redocly-no-warnings.mjs catalog/http/public/v1/catalog-pricing-v1.yaml
+node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-pricing-internal-v1.yaml
+npx --yes @redocly/cli@2.53.3 bundle catalog/http/public/v1/catalog-pricing-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-public-v1.bundle.json
+npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-pricing-internal-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-private-v1.bundle.json
+node scripts/catalog/validate-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-http-v1 --self-test
+jsonschema metaschema catalog/http/shared/v1/catalog-entities-v1.schema.json
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
+```
+
+Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. Integración CI conjunta reservada F; admisión/publicación G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
