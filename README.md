@@ -24,7 +24,7 @@ Mapas: [catalog](catalog/README.md), [identity](identity/README.md) y [common](c
 
 `identity/http/private/v1/identity-catalog-authority-v1.yaml` 1.0.0 materializa únicamente los dos puertos privados de identidad. Política/permisos de las 25 operaciones aprobadas en `catalog/http/shared/v1/catalog-security-policy-v1.json`; sus OpenAPI públicos/privados completos corresponden a C/D. Tipos comunes en `catalog/http/shared/v1/catalog-common-v1.schema.json`, objeto de siete campos en `catalog/http/shared/v1/catalog-request-v1.schema.json`. `common/errors/v6/error-catalog-v6.json` conserva íntegramente las 24 entradas v5 y añade 25; `common/http/shared/v3/problem-details-v3.schema.json` conserva v2 y admite 406/413/415.
 
-Los nuevos archivos son candidatos locales: no están admitidos por los manifests/locks actuales ni tienen una procedencia publicada ficticia. Registry/planned, exports y consumidores vigentes permanecen intactos. F1-07G fija commits inmutables/publicación/admisión después de completar los cortes; F1-07F integra nuevos gates en CI. El productor real de identidad requiere otra tanda posterior antes de F1-08. No modificar contratos H2 para habilitar catálogo.
+Los archivos B–E son candidatos contractuales: no están admitidos por los manifests/locks actuales ni tienen una procedencia publicada ficticia. Registry/planned, exports y consumidores vigentes permanecen intactos. F1-07G fija publicación/admisión final; la [configuración candidata F](catalog/README.md#candidato-f1-07f--validación-conjunta-en-ci) integra los gates en CI. El productor real de identidad requiere otra tanda posterior antes de F1-08. No modificar contratos H2 para habilitar catálogo.
 
 Validación local con Node24.21.0 y dependencias congeladas del repositorio:
 
@@ -64,6 +64,8 @@ El pipeline valida:
 El job OpenAPI comprueba cobertura de fixtures estaticos y extrae los schemas exactos del bundle dereferenciado para el job Sourcemeta JSON Schema CLI 16.10.0. Sourcemeta valida los 79 casos: 62 instancias validas (requests, exitos y errores Problem Details) y 17 requests invalidos que deben rechazarse. El control tambien comprueba status, codigo registrado, Problem Details y 204 sin body. Los ejemplos no se generan desde schemas. Los tests del servicio F1-04 aun deben demostrar rechazo criptografico y transiciones reales; JSON Schema no demuestra criptografia. F1-01 no queda completa ni aceptada hasta auditoria de SOL. Este repositorio no implementa servicios ni infraestructura.
 
 Las versiones de Node y herramientas quedan fijadas en `.node-version` y `.gitlab-ci.yml`. El launcher ofrece una prueba de regresión para los contratos que ya descubre.
+
+El candidato F1-07F añade `validate:catalog-contracts` y `validate:catalog-schema` conservando los ocho jobs anteriores. Pruebas B–E, tres OpenAPI reales, inventarios/autocontroles y positivos/negativos Sourcemeta se conectan con artefactos explícitos; [mapa de ejecución y límites](catalog/README.md#candidato-f1-07f--validación-conjunta-en-ci). Los comandos exactos pertenecen a [la configuración CI](.gitlab-ci.yml). Configuración local y reproducción no acreditan un pipeline remoto ni admisión G.
 
 ## Contratos sucesores del corte inicial del Propietario (PF1-06A-R1)
 
@@ -202,11 +204,11 @@ jsonschema metaschema catalog/http/shared/v1/catalog-entities-v1.schema.json
 sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
 ```
 
-Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. Integración CI conjunta reservada F; admisión/publicación G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
+Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. CI conjunta en el candidato F; admisión/publicación G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
 
 ## F1-07D — Lista predeterminada y precios (candidatos)
 
-Las dos superficies candidatas anteriores ahora completan las 25 operaciones de A: veinte de catálogo preservadas y cinco de precios. El commit de C permanece inmutable; esta revisión agrega los selectores pricing sin cambiar los de catalog. Registro/planned, índices, admisiones, exports, locks y CI permanecen intactos; no release consumible ni runtime por existir estos archivos. F integra los gates nuevos en CI y G fija publicación/admisión final.
+Las dos superficies candidatas anteriores completan las 25 operaciones de A: veinte de catálogo preservadas y cinco de precios. El commit de C permanece inmutable; D agrega los selectores pricing sin cambiar los de catalog. Registro/planned, índices, admisiones, exports y locks permanecen intactos; no release consumible ni runtime por existir estos archivos. El candidato F integra los gates en CI y G fija publicación/admisión final.
 
 [Schema de precios](catalog/http/shared/v1/catalog-prices-v1.schema.json): PriceList, Price, PricesPage y PriceSet. Una lista por organización, ARS/impuestos incluidos; importes positivos como cadenas con hasta doce dígitos enteros/dos decimales, sin redondeo. Escritura exclusivamente amount/expected_version; primera versión esperada cero, nueva versión uno. IDs/contexto/instante del servidor. GET no crea lista ni fabrica precio cero/costo/histórico. Cambios inmediatos prospectivos, sin intervalos vacíos/solapados, programación ni reescritura de importes/versiones anteriores. Producto y presentación conservan sus versiones/estados; discontinuado bloquea nuevos precios.
 
@@ -227,4 +229,4 @@ Usar directorio de salida nuevo. Se mantienen Redocly2.53.3 sin warnings y Sourc
 
 ## F1-07E — Eventos e integración contractual (candidatos)
 
-Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado; preserva HTTP, registro, índices, locks, dependencias y CI. Validación conjunta F, admisión G y runtimes requieren sus cortes propios.
+Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado; preserva HTTP, registro, índices, locks y dependencias. Validación conjunta en el candidato F; admisión G y runtimes requieren sus cortes propios.

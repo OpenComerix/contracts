@@ -18,7 +18,7 @@ Los OpenAPI públicos y privados completos corresponden a C/D, eventos a E y adm
 - [Inventario HTTP](fixtures/http/v1/catalog-http-v1-fixtures.json), fixtures/http/v1/structure y fixtures/semantics/v1: positivos, errores aplicables, replay y negativos estructurales/semánticos. No validación de runtime.
 - Gates: [validate-http-v1](../scripts/catalog/validate-http-v1.mjs), helpers de normalización/semántica separados y [tests](../test/catalog/http-v1.test.mjs). Comandos, versiones y límites en [README raíz](../README.md#f1-07c--http-de-catálogo-candidatos).
 
-Índice/planned, registry y consumer locks sin modificaciones; precios D, eventos E, CI conjunta F y admisión/tags G conservan sus tandas/autorizaciones.
+Índice/planned, registry y consumer locks sin modificaciones. D/E completan precios/eventos; integración CI candidata en F y admisión/tags G con autorización propia.
 
 ## Candidato F1-07D
 
@@ -27,11 +27,11 @@ Los OpenAPI públicos y privados completos corresponden a C/D, eventos a E y adm
 - [Fixtures de precios](fixtures/pricing/v1/pricing-http-v1-fixtures.json): errores B referenciados, ejemplos HTTP, structure y semantics por esta capacidad.
 - Gate [validate-pricing-http-v1](../scripts/catalog/validate-pricing-http-v1.mjs), helpers específicos y [tests externos](../test/catalog/pricing-http-v1.test.mjs); reutiliza el gate/extractor HTTP C y runner estructural B. Comandos y límites en [README raíz](../README.md#f1-07d--lista-predeterminada-y-precios-candidatos).
 
-Sin nuevos dominios, CI, índices/admisiones/locks, servicios ni PWA. Eventos E, CI conjunta F y release G permanecen pendientes.
+Sin nuevos dominios, índices/admisiones/locks, servicios ni PWA. E aporta eventos; F conecta los gates en su configuración candidata y G conserva el release final.
 
 ## Candidato F1-07E
 
-Diseño concreto aprobado por chat el 2026-10-15: cuatro hechos de `catalog-pricing`, revisión inicial 1. Son candidatos contractuales; admisión G, CI conjunta F y productores siguen separados. Las 25 operaciones HTTP y el sobre publicado conservan sus bytes. No se agrega un cliente de eventos a ventas, PWA o reporting.
+Diseño concreto aprobado por chat el 2026-10-15: cuatro hechos de `catalog-pricing`, revisión inicial 1. Son candidatos contractuales; CI conjunta en F, admisión G y productores separados. Las 25 operaciones HTTP y el sobre publicado conservan sus bytes. No se agrega un cliente de eventos a ventas, PWA o reporting.
 
 | Hecho | Perfil productor | Agregado/versionado |
 | --- | --- | --- |
@@ -59,3 +59,16 @@ sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-events-v1
 Usar salida nueva. El extractor resuelve las referencias reales de cada perfil antes de Sourcemeta 16.10.0; no implementa otro motor JSON Schema. El runner estructural conserva el nombre/mensaje histórico B, pero ejecuta todos los casos E de su `cases.tsv`. Un negativo exige exit 2 y diagnóstico de instancia; errores de preparación/referencias/herramienta no cuentan. Preservación y regresiones requieren su evidencia propia. Los resultados vigentes están en ESTADO del launcher, no en conteos duplicados aquí.
 
 CAF-01/02/03/04/07/08/09/10/14 tienen alcance contractual: preservación, vínculos y captura, precisión, perfiles, rechazo de desconocidos y minimización. Ninguna fixture acredita autorización real, transacciones, entrega, orden, deduplicación, cuarentena efectiva o reconstrucción durable. CAF-11/12 exigen antes del productor F1-08 hecho/historia+auditoría+outbox atómicos y fuente histórica propia con exportación/replay autorizados; outbox no es archivo de negocio. `TECHNICAL_SHORT` clasifica el transporte serializado, no habilita purgar historia comercial/fiscal. El perfil histórico versionado, holds y obligaciones heredadas se cierran en el dueño antes del runtime; no se inventan plazos legales. La futura venta captura datos/versiones efectivamente usados; E no crea su schema ni permite vender por recibir un evento.
+
+## Candidato F1-07F — Validación conjunta en CI
+
+La [configuración CI](../.gitlab-ci.yml) añade dos jobs obligatorios y conserva íntegros los ocho anteriores. No añade dependencias, modifica transporte ni admite contratos. Ejecutar los comandos de `before_script` y `script` de cada job desde contracts, con las imágenes fijadas; transferir solo los artefactos declarados por sus `needs`. Usar un checkout limpio y salidas nuevas: los extractores rechazan sobrescrituras.
+
+| Job | Cobertura y transferencia |
+| --- | --- |
+| `validate:catalog-contracts` | Node24.21.0/pnpm12.4.2 e instalación congelada; tests externos B–E; Redocly2.53.3 lint sin warnings y bundles de autoridad, HTTP público y privado; cuatro extractores con `--self-test`. Publica bundles y los cuatro directorios de casos por un día. |
+| `validate:catalog-schema` | Sourcemeta16.10.0; `needs` del job anterior con descarga de artefactos; metaschemas de transporte B–E y catálogo de errores v6; runner estructural existente sobre cada directorio. Requiere positivos y negativos, y solo acepta rechazo de instancia con exit2/diagnóstico previsto. |
+
+La matriz CAF contractual se comprueba con los gates existentes: arquitectura/preservación para CAF-01; B/C para autoridad/contexto CAF-02; D/E para captura histórica y precisión CAF-03/04/07; perfiles productor/consumidor y evolución sintética E para CAF-08/09/10; inventario campo→clasificación/finalidad/acceso/retención y negativos E para CAF-14. Las matrices operación→hecho→campo e inventarios de fixtures conservan sus fuentes B–E, sin otro inventario paralelo.
+
+Mantener aparte la regresión del wrapper `opencomerix contracts`: descubre referencias, lint de ventas/sync y once schemas históricos de eventos; no ejecuta por sí solo la matriz nueva. Reproducción local de jobs y transferencia de artefactos no equivalen a pipeline GitLab: se verifica el SHA/ref exacto al publicar/consumir. Estado, resultados y próximo paso en [ESTADO del launcher](../../../ESTADO.md); la publicación G requiere autorización específica. Los límites runtime/CAF-11/12 y AsyncAPI de E permanecen vigentes.

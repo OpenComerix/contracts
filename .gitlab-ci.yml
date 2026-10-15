@@ -156,3 +156,52 @@ validate:contract-metadata-schema:
     entrypoint: [""]
   script:
     - jsonschema metaschema registry/manifest-v1.schema.json registry/lock-v1.schema.json --verbose
+
+validate:catalog-contracts:
+  stage: validate
+  variables:
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile
+  script:
+    - node --test test/catalog/*.test.mjs
+    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-authority-v1.yaml catalog/http/public/v1/catalog-pricing-v1.yaml catalog/http/private/v1/catalog-pricing-internal-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-authority-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs catalog/http/public/v1/catalog-pricing-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-pricing-internal-v1.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-authority-v1.bundle.json
+    - npx --yes @redocly/cli@2.53.3 bundle catalog/http/public/v1/catalog-pricing-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-public-v1.bundle.json
+    - npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-pricing-internal-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-private-v1.bundle.json
+    - node scripts/catalog/validate-security-v1.mjs .ci-artifacts/catalog-authority-v1.bundle.json .ci-artifacts/catalog-security-v1 --self-test
+    - node scripts/catalog/validate-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-http-v1 --self-test
+    - node scripts/catalog/validate-pricing-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-pricing-v1 --self-test
+    - node scripts/catalog/validate-events-v1.mjs .ci-artifacts/catalog-events-v1 --self-test
+  artifacts:
+    paths:
+      - .ci-artifacts/catalog-authority-v1.bundle.json
+      - .ci-artifacts/catalog-public-v1.bundle.json
+      - .ci-artifacts/catalog-private-v1.bundle.json
+      - .ci-artifacts/catalog-security-v1/
+      - .ci-artifacts/catalog-http-v1/
+      - .ci-artifacts/catalog-pricing-v1/
+      - .ci-artifacts/catalog-events-v1/
+    expire_in: 1 day
+
+validate:catalog-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:catalog-contracts
+      artifacts: true
+  script:
+    - jsonschema metaschema catalog/http/shared/v1/*.schema.json identity/http/private/v1/identity-catalog-authority-v1.schema.json common/http/shared/v3/problem-details-v3.schema.json common/errors/v6/error-catalog-v6.schema.json catalog/events/v1/*.schema.json --verbose
+    - jsonschema validate common/errors/v6/error-catalog-v6.schema.json common/errors/v6/error-catalog-v6.json --format-assertion --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-security-v1
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-pricing-v1
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-events-v1
