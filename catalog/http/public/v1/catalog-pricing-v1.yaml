@@ -4,7 +4,7 @@ info:
   title: OpenComerix catalog public
   version: 1.0.0
   description:
-    "F1-07C candidate: 20 catalog operations; 5 pricing operations reserved D before final
+    "F1-07C/D candidate: 20 catalog and 5 pricing operations; awaiting final
     admission G. No runtime. Organization authority from verified identity; UUIDv7/UTC/exact decimal
     strings. No cross-database access. Snapshot history never rewritten; no
     stock/promotions/images/offline in this cut."
@@ -18,6 +18,8 @@ servers:
 tags:
   - name: Catalog
     description: Catalog-owned product, presentation, category and codes.
+  - name: Pricing
+    description: Default-list presentation prices and immutable history.
 paths:
   /catalog/units:
     get:
@@ -4816,6 +4818,1028 @@ paths:
             examples:
               valid:
                 externalValue: ../../../fixtures/http/v1/retireCatalogPresentationBarcode-request.json
+  /pricing/default-list:
+    get:
+      operationId: getDefaultPriceList
+      summary: getDefaultPriceList
+      tags:
+        - Pricing
+      description: "Read-only: never creates the default list. Before first price return 404
+        pricing_default_list_not_initialized. A single organization list, ARS and tax included; no
+        client list choice. All responses no-store. Public session cookie; mutation Origin/CSRF
+        validated by gateway. Private ES256 aud catalog-pricing.user-api, gateway-bff caller, type
+        delegated <=60s and trusted X-OC-Client-Signal. Current identity authority checked before
+        reads/replays and after SQL locks before commit, <=2000ms from before request; no cached
+        authority or distributed atomicity. "
+      security:
+        - sessionCookie: []
+      x-permission: pricing.read
+      x-internal: false
+      parameters: []
+      responses:
+        "200":
+          description: Successful getDefaultPriceList
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            ETag:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/ETag
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/PriceList
+              examples:
+                valid:
+                  externalValue: ../../../fixtures/pricing/v1/getDefaultPriceList-success.json
+        "400":
+          description: Explicit 400 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_invalid_request:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_request.json
+        "401":
+          description: Explicit 401 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_session_invalid_or_expired.json
+        "403":
+          description: Explicit 403 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_access_denied:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_mfa_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-tenancy_membership_invalid.json
+        "404":
+          description: Explicit 404 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_default_list_not_initialized:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_default_list_not_initialized.json
+        "406":
+          description: Explicit 406 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_not_acceptable.json
+        "429":
+          description: Explicit 429 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            Retry-After:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_rate_limited.json
+        "500":
+          description: Explicit 500 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_internal_error.json
+        "503":
+          description: Explicit 503 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_capacity_exhausted:
+                  externalValue: ../../../../common/fixtures/errors/v6/problem-platform_capacity_exhausted.json
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_dependency_unavailable.json
+        "504":
+          description: Explicit 504 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_deadline_exceeded:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_deadline_exceeded.json
+  /pricing/presentations/{presentation_id}/price:
+    get:
+      operationId: getPresentationCurrentPrice
+      summary: getPresentationCurrentPrice
+      tags:
+        - Pricing
+      description: "Read owner current price for exact presentation/default list at server UTC instant. No
+        price => 404 pricing_price_not_set; never zero, cost or historical fallback. Reading does
+        not prove sellability. All responses no-store. Public session cookie; mutation Origin/CSRF
+        validated by gateway. Private ES256 aud catalog-pricing.user-api, gateway-bff caller, type
+        delegated <=60s and trusted X-OC-Client-Signal. Current identity authority checked before
+        reads/replays and after SQL locks before commit, <=2000ms from before request; no cached
+        authority or distributed atomicity. "
+      security:
+        - sessionCookie: []
+      x-permission: pricing.read
+      x-internal: false
+      parameters:
+        - name: presentation_id
+          in: path
+          required: true
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CatalogId
+      responses:
+        "200":
+          description: Successful getPresentationCurrentPrice
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            ETag:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/ETag
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/Price
+              examples:
+                valid:
+                  externalValue: ../../../fixtures/pricing/v1/getPresentationCurrentPrice-success.json
+        "400":
+          description: Explicit 400 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_invalid_request:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_request.json
+        "401":
+          description: Explicit 401 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_session_invalid_or_expired.json
+        "403":
+          description: Explicit 403 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_access_denied:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_mfa_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-tenancy_membership_invalid.json
+        "404":
+          description: Explicit 404 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_price_not_set:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_price_not_set.json
+                pricing_resource_not_found:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_resource_not_found.json
+        "406":
+          description: Explicit 406 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_not_acceptable.json
+        "429":
+          description: Explicit 429 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            Retry-After:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_rate_limited.json
+        "500":
+          description: Explicit 500 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_internal_error.json
+        "503":
+          description: Explicit 503 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_capacity_exhausted:
+                  externalValue: ../../../../common/fixtures/errors/v6/problem-platform_capacity_exhausted.json
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_dependency_unavailable.json
+        "504":
+          description: Explicit 504 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_deadline_exceeded:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_deadline_exceeded.json
+  /pricing/presentations/{presentation_id}/prices:
+    get:
+      operationId: listPresentationPrices
+      summary: listPresentationPrices
+      tags:
+        - Pricing
+      description: "History of exact presentation/default list, version DESC; items/page. limit default
+        50, max100; opaque signed cursor <=2048 chars, <=30min bound to organization, presentation,
+        list, filters and limit. No arbitrary sort, body or snapshot guarantee. History survives
+        discontinued products. All responses no-store. Public session cookie; mutation Origin/CSRF
+        validated by gateway. Private ES256 aud catalog-pricing.user-api, gateway-bff caller, type
+        delegated <=60s and trusted X-OC-Client-Signal. Current identity authority checked before
+        reads/replays and after SQL locks before commit, <=2000ms from before request; no cached
+        authority or distributed atomicity. "
+      security:
+        - sessionCookie: []
+      x-permission: pricing.read
+      x-internal: false
+      parameters:
+        - name: presentation_id
+          in: path
+          required: true
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CatalogId
+        - name: limit
+          in: query
+          required: false
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/PageLimit
+          description: Only declared selectors; unknown or duplicate query fields rejected. Cursor bound to
+            current organization/presentation/list/filters/limit; no authority from cursor.
+        - name: cursor
+          in: query
+          required: false
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/Cursor
+          description: Only declared selectors; unknown or duplicate query fields rejected. Cursor bound to
+            current organization/presentation/list/filters/limit; no authority from cursor.
+      responses:
+        "200":
+          description: Successful listPresentationPrices
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/PricesPage
+              examples:
+                valid:
+                  externalValue: ../../../fixtures/pricing/v1/listPresentationPrices-success.json
+        "400":
+          description: Explicit 400 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_invalid_cursor:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_cursor.json
+                pricing_invalid_request:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_request.json
+        "401":
+          description: Explicit 401 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_session_invalid_or_expired.json
+        "403":
+          description: Explicit 403 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_access_denied:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_mfa_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-tenancy_membership_invalid.json
+        "404":
+          description: Explicit 404 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_resource_not_found:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_resource_not_found.json
+        "406":
+          description: Explicit 406 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_not_acceptable.json
+        "429":
+          description: Explicit 429 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            Retry-After:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_rate_limited.json
+        "500":
+          description: Explicit 500 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_internal_error.json
+        "503":
+          description: Explicit 503 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_capacity_exhausted:
+                  externalValue: ../../../../common/fixtures/errors/v6/problem-platform_capacity_exhausted.json
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_dependency_unavailable.json
+        "504":
+          description: Explicit 504 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_deadline_exceeded:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_deadline_exceeded.json
+    post:
+      operationId: createPresentationPrice
+      summary: createPresentationPrice
+      tags:
+        - Pricing
+      description: Only amount and expected_version. Expected0 denotes absence; first version1. Per
+        organization/presentation/default-list sequence independent of catalog versions. Server
+        immediately closes previous valid_to and creates prospective version at same UTC instant
+        [valid_from,valid_to); never rewrite earlier amount/version or accept client
+        timestamps/scheduling. First price creates unique default list in same local transaction;
+        failure leaves neither partial list nor price. Product/presentation remain unchanged;
+        discontinued forbids new prices. Never activate as side effect. Return201 and consultable
+        /api/v1/pricing/prices/{price_id}. No If-Match. Replay preserves original
+        status/body/Location/version/validity/ETag even when persisted historical record was
+        subsequently closed; only Idempotency-Replayed changes. Transaction/SQL concurrency belong
+        to future owner. All responses no-store. Public session cookie; mutation Origin/CSRF
+        validated by gateway. Private ES256 aud catalog-pricing.user-api, gateway-bff caller, type
+        delegated <=60s and trusted X-OC-Client-Signal. Current identity authority checked before
+        reads/replays and after SQL locks before commit, <=2000ms from before request; no cached
+        authority or distributed atomicity. Idempotency-Key UUIDv7;7 days; no automatic retry after
+        uncertain result. Reject unknown/duplicate fields; validate scale before decimal
+        normalization/catalog-request-v1 JCS.
+      security:
+        - sessionCookie: []
+      x-permission: pricing.manage
+      x-internal: false
+      parameters:
+        - name: presentation_id
+          in: path
+          required: true
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CatalogId
+        - name: Idempotency-Key
+          in: header
+          required: true
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/IdempotencyKey
+        - name: Origin
+          in: header
+          required: true
+          schema:
+            type: string
+            format: uri
+          description: Exact allowed origin verified by gateway.
+        - name: X-CSRF-Token
+          in: header
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Session-bound CSRF verified by gateway; never private browser tokens.
+      responses:
+        "201":
+          description: Successful createPresentationPrice
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            ETag:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/ETag
+            Idempotency-Replayed:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/IdempotencyReplayed
+            Location:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/Location
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/Price
+              examples:
+                valid:
+                  externalValue: ../../../fixtures/pricing/v1/createPresentationPrice-success.json
+                replay:
+                  externalValue: ../../../fixtures/pricing/v1/createPresentationPrice-success.json
+        "400":
+          description: Explicit 400 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_invalid_request:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_request.json
+        "401":
+          description: Explicit 401 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_session_invalid_or_expired.json
+        "403":
+          description: Explicit 403 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_csrf_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_csrf_invalid.json
+                identity_access_denied:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_mfa_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-tenancy_membership_invalid.json
+        "404":
+          description: Explicit 404 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_resource_not_found:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_resource_not_found.json
+        "406":
+          description: Explicit 406 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_not_acceptable.json
+        "409":
+          description: Explicit 409 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_idempotency_key_reused:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_idempotency_key_reused.json
+                pricing_idempotency_request_in_progress:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_idempotency_request_in_progress.json
+                pricing_state_conflict:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_state_conflict.json
+                pricing_version_conflict:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_version_conflict.json
+        "413":
+          description: Explicit 413 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_payload_too_large:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_payload_too_large.json
+        "415":
+          description: Explicit 415 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_unsupported_media_type:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_unsupported_media_type.json
+        "422":
+          description: Explicit 422 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_semantic_validation_failed:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_semantic_validation_failed.json
+        "429":
+          description: Explicit 429 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            Retry-After:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_rate_limited.json
+        "500":
+          description: Explicit 500 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_internal_error.json
+        "503":
+          description: Explicit 503 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_capacity_exhausted:
+                  externalValue: ../../../../common/fixtures/errors/v6/problem-platform_capacity_exhausted.json
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_dependency_unavailable.json
+        "504":
+          description: Explicit 504 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_deadline_exceeded:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_deadline_exceeded.json
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/PriceSet
+            examples:
+              valid:
+                externalValue: ../../../fixtures/pricing/v1/createPresentationPrice-request.json
+  /pricing/prices/{price_id}:
+    get:
+      operationId: getPrice
+      summary: getPrice
+      tags:
+        - Pricing
+      description: "Read immutable historical amount/version by price_id within current organization,
+        including its actual interval. Closing valid_to changes representation ETag without
+        incrementing historical version. History remains available after product discontinuation.
+        All responses no-store. Public session cookie; mutation Origin/CSRF validated by gateway.
+        Private ES256 aud catalog-pricing.user-api, gateway-bff caller, type delegated <=60s and
+        trusted X-OC-Client-Signal. Current identity authority checked before reads/replays and
+        after SQL locks before commit, <=2000ms from before request; no cached authority or
+        distributed atomicity. "
+      security:
+        - sessionCookie: []
+      x-permission: pricing.read
+      x-internal: false
+      parameters:
+        - name: price_id
+          in: path
+          required: true
+          schema:
+            $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CatalogId
+      responses:
+        "200":
+          description: Successful getPrice
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            ETag:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/ETag
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-prices-v1.schema.json#/$defs/Price
+              examples:
+                valid:
+                  externalValue: ../../../fixtures/pricing/v1/getPrice-success.json
+        "400":
+          description: Explicit 400 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_invalid_request:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_invalid_request.json
+        "401":
+          description: Explicit 401 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_session_invalid_or_expired:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_session_invalid_or_expired.json
+        "403":
+          description: Explicit 403 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                identity_access_denied:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_access_denied.json
+                identity_device_not_approved:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_device_not_approved.json
+                identity_mfa_required:
+                  externalValue: ../../../fixtures/http/v1/problem-identity_mfa_required.json
+                tenancy_membership_invalid:
+                  externalValue: ../../../fixtures/http/v1/problem-tenancy_membership_invalid.json
+        "404":
+          description: Explicit 404 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                pricing_resource_not_found:
+                  externalValue: ../../../fixtures/errors/v6/problem-pricing_resource_not_found.json
+        "406":
+          description: Explicit 406 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_not_acceptable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_not_acceptable.json
+        "429":
+          description: Explicit 429 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+            Retry-After:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/RetryAfter
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_rate_limited:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_rate_limited.json
+        "500":
+          description: Explicit 500 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_internal_error:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_internal_error.json
+        "503":
+          description: Explicit 503 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                platform_capacity_exhausted:
+                  externalValue: ../../../../common/fixtures/errors/v6/problem-platform_capacity_exhausted.json
+                platform_dependency_unavailable:
+                  externalValue: ../../../fixtures/http/v1/problem-platform_dependency_unavailable.json
+        "504":
+          description: Explicit 504 Problem Details
+          headers:
+            Cache-Control:
+              required: true
+              schema:
+                $ref: ../../shared/v1/catalog-common-v1.schema.json#/$defs/CacheControl
+          content:
+            application/problem+json:
+              schema:
+                $ref: ../../../../common/http/shared/v3/problem-details-v3.schema.json
+              examples:
+                gateway_deadline_exceeded:
+                  externalValue: ../../../fixtures/http/v1/problem-gateway_deadline_exceeded.json
 components:
   securitySchemes:
     sessionCookie:

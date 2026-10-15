@@ -1,0 +1,3295 @@
+{
+  "format_version": 1,
+  "scope": "F1-07D",
+  "status": "candidate",
+  "operations": [
+    "getDefaultPriceList",
+    "getPresentationCurrentPrice",
+    "listPresentationPrices",
+    "createPresentationPrice",
+    "getPrice"
+  ],
+  "runtime_demonstrated": false,
+  "examples": [
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getDefaultPriceList-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getDefaultPriceList\""
+      },
+      "definition": "PriceList"
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "504",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_deadline_exceeded",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/504/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_deadline_exceeded.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_session_invalid_or_expired.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_default_list_not_initialized",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_default_list_not_initialized.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getPresentationCurrentPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getPresentationCurrentPrice\""
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "504",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_deadline_exceeded",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/504/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_deadline_exceeded.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_session_invalid_or_expired.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_price_not_set",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_price_not_set.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/listPresentationPrices-success.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      },
+      "definition": "PricesPage"
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "504",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_deadline_exceeded",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/504/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_deadline_exceeded.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_session_invalid_or_expired.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_cursor",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_cursor.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/requestBody/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-request.json",
+      "headers": {},
+      "definition": "PriceSet"
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/201/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-createPresentationPrice\"",
+        "Idempotency-Replayed": false,
+        "Location": "/api/v1/pricing/prices/01998d00-0000-7000-8000-000000000103"
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "replay",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/201/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-createPresentationPrice\"",
+        "Idempotency-Replayed": true,
+        "Location": "/api/v1/pricing/prices/01998d00-0000-7000-8000-000000000103"
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_csrf_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_csrf_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "504",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_deadline_exceeded",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/504/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_deadline_exceeded.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_session_invalid_or_expired.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "413",
+      "media_type": "application/problem+json",
+      "example_name": "platform_payload_too_large",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/413/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_payload_too_large.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "415",
+      "media_type": "application/problem+json",
+      "example_name": "platform_unsupported_media_type",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/415/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_unsupported_media_type.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_idempotency_key_reused",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_key_reused.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_idempotency_request_in_progress",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_request_in_progress.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "422",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_semantic_validation_failed",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/422/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_semantic_validation_failed.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_state_conflict",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_state_conflict.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_version_conflict",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_version_conflict.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getPrice\""
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "504",
+      "media_type": "application/problem+json",
+      "example_name": "gateway_deadline_exceeded",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/504/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-gateway_deadline_exceeded.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "identity_session_invalid_or_expired",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_session_invalid_or_expired.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "public",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getDefaultPriceList-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getDefaultPriceList\""
+      },
+      "definition": "PriceList"
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_request_mismatch.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_default_list_not_initialized",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_default_list_not_initialized.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getDefaultPriceList",
+      "method": "get",
+      "path": "/pricing/default-list",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1default-list/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getPresentationCurrentPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getPresentationCurrentPrice\""
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_request_mismatch.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_price_not_set",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_price_not_set.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPresentationCurrentPrice",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/price",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1price/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/listPresentationPrices-success.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      },
+      "definition": "PricesPage"
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_request_mismatch.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_cursor",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_cursor.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "listPresentationPrices",
+      "method": "get",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "request",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/requestBody/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-request.json",
+      "headers": {},
+      "definition": "PriceSet"
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/201/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-createPresentationPrice\"",
+        "Idempotency-Replayed": false,
+        "Location": "/api/v1/pricing/prices/01998d00-0000-7000-8000-000000000103"
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "201",
+      "media_type": "application/json",
+      "example_name": "replay",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/201/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/createPresentationPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-createPresentationPrice\"",
+        "Idempotency-Replayed": true,
+        "Location": "/api/v1/pricing/prices/01998d00-0000-7000-8000-000000000103"
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_request_mismatch.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "413",
+      "media_type": "application/problem+json",
+      "example_name": "platform_payload_too_large",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/413/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_payload_too_large.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "415",
+      "media_type": "application/problem+json",
+      "example_name": "platform_unsupported_media_type",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/415/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_unsupported_media_type.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_idempotency_key_reused",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_key_reused.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_idempotency_request_in_progress",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_idempotency_request_in_progress.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "422",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_semantic_validation_failed",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/422/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_semantic_validation_failed.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_state_conflict",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_state_conflict.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "409",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_version_conflict",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/409/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_version_conflict.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "createPresentationPrice",
+      "method": "post",
+      "path": "/pricing/presentations/{presentation_id}/prices",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1presentations~1{presentation_id}~1prices/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "200",
+      "media_type": "application/json",
+      "example_name": "valid",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "catalog/fixtures/pricing/v1/getPrice-success.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "ETag": "\"price-fixture-getPrice\""
+      },
+      "definition": "Price"
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "401",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_invalid",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/401/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "catalog_delegation_request_mismatch",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-catalog_delegation_request_mismatch.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_access_denied",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_access_denied.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_device_not_approved",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_device_not_approved.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "identity_mfa_required",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-identity_mfa_required.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_capacity_exhausted",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "common/fixtures/errors/v6/problem-platform_capacity_exhausted.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "503",
+      "media_type": "application/problem+json",
+      "example_name": "platform_dependency_unavailable",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/503/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_dependency_unavailable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "500",
+      "media_type": "application/problem+json",
+      "example_name": "platform_internal_error",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/500/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_internal_error.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "406",
+      "media_type": "application/problem+json",
+      "example_name": "platform_not_acceptable",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/406/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_not_acceptable.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "429",
+      "media_type": "application/problem+json",
+      "example_name": "platform_rate_limited",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/429/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-platform_rate_limited.json",
+      "headers": {
+        "Cache-Control": "no-store",
+        "Retry-After": "60"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "400",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_invalid_request",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/400/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_invalid_request.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "404",
+      "media_type": "application/problem+json",
+      "example_name": "pricing_resource_not_found",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/404/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/errors/v6/problem-pricing_resource_not_found.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "surface": "private",
+      "operation_id": "getPrice",
+      "method": "get",
+      "path": "/pricing/prices/{price_id}",
+      "status": "403",
+      "media_type": "application/problem+json",
+      "example_name": "tenancy_membership_invalid",
+      "schema_pointer": "/paths/~1pricing~1prices~1{price_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "catalog/fixtures/http/v1/problem-tenancy_membership_invalid.json",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    }
+  ],
+  "schema_cases": [
+    {
+      "id": "amount-valid-0",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-valid-0.json",
+      "expected": "accept"
+    },
+    {
+      "id": "amount-valid-1",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-valid-1.json",
+      "expected": "accept"
+    },
+    {
+      "id": "amount-valid-2",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-valid-2.json",
+      "expected": "accept"
+    },
+    {
+      "id": "amount-valid-3",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-valid-3.json",
+      "expected": "accept"
+    },
+    {
+      "id": "amount-invalid-4",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-4.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-5",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-5.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-6",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-6.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-7",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-7.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-8",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-8.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-9",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-9.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-10",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-10.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-11",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-11.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-12",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-12.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-13",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-13.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-14",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-14.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-15",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-15.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-16",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-16.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-17",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-17.json",
+      "expected": "reject"
+    },
+    {
+      "id": "amount-invalid-18",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/amount-invalid-18.json",
+      "expected": "reject"
+    },
+    {
+      "id": "version-invalid-19",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/version-invalid-19.json",
+      "expected": "reject"
+    },
+    {
+      "id": "version-invalid-20",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/version-invalid-20.json",
+      "expected": "reject"
+    },
+    {
+      "id": "version-invalid-21",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/version-invalid-21.json",
+      "expected": "reject"
+    },
+    {
+      "id": "version-invalid-22",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/version-invalid-22.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-organization_id",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-organization_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-account_id",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-account_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-presentation_id",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-presentation_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-price_list_id",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-price_list_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-currency",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-currency.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-valid_from",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-valid_from.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-valid_to",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-valid_to.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-version",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-version.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-forbidden-status",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-forbidden-status.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-missing-amount",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-missing-amount.json",
+      "expected": "reject"
+    },
+    {
+      "id": "request-missing-expected_version",
+      "definition": "PriceSet",
+      "fixture": "catalog/fixtures/pricing/v1/structure/request-missing-expected_version.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-Price",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-Price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "extension-Price",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/extension-Price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "response-missing-Price-price_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-price_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-organization_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-organization_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-price_list_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-price_list_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-product_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-product_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-presentation_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-presentation_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-amount",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-amount.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-currency",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-currency.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-tax_included",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-tax_included.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-version",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-version.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-valid_from",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-valid_from.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-Price-valid_to",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-Price-valid_to.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-PriceList",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-PriceList.json",
+      "expected": "accept"
+    },
+    {
+      "id": "extension-PriceList",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/extension-PriceList.json",
+      "expected": "accept"
+    },
+    {
+      "id": "response-missing-PriceList-price_list_id",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-price_list_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-organization_id",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-organization_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-currency",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-currency.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-tax_included",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-tax_included.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-version",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-version.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-created_at",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-created_at.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PriceList-updated_at",
+      "definition": "PriceList",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PriceList-updated_at.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-PricesPage",
+      "definition": "PricesPage",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-PricesPage.json",
+      "expected": "accept"
+    },
+    {
+      "id": "extension-PricesPage",
+      "definition": "PricesPage",
+      "fixture": "catalog/fixtures/pricing/v1/structure/extension-PricesPage.json",
+      "expected": "accept"
+    },
+    {
+      "id": "response-missing-PricesPage-items",
+      "definition": "PricesPage",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PricesPage-items.json",
+      "expected": "reject"
+    },
+    {
+      "id": "response-missing-PricesPage-page",
+      "definition": "PricesPage",
+      "fixture": "catalog/fixtures/pricing/v1/structure/response-missing-PricesPage-page.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-currency",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-currency.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-tax_included",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-tax_included.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-version",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-version.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-price_id",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-price_id.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-valid_from",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-valid_from.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-valid_to",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-valid_to.json",
+      "expected": "reject"
+    },
+    {
+      "id": "price-invalid-amount",
+      "definition": "Price",
+      "fixture": "catalog/fixtures/pricing/v1/structure/price-invalid-amount.json",
+      "expected": "reject"
+    },
+    {
+      "id": "history-too-large",
+      "definition": "PricesPage",
+      "fixture": "catalog/fixtures/pricing/v1/structure/history-too-large.json",
+      "expected": "reject"
+    }
+  ],
+  "semantic_cases": [
+    {
+      "id": "first-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/first-price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "replace-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replace-price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "price-existing-list-new-presentation",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/price-existing-list-new-presentation.json",
+      "expected": "accept"
+    },
+    {
+      "id": "current-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/current-price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "history-page",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-page.json",
+      "expected": "accept"
+    },
+    {
+      "id": "uninitialized-list",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/uninitialized-list.json",
+      "expected": "accept"
+    },
+    {
+      "id": "no-current-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/no-current-price.json",
+      "expected": "accept"
+    },
+    {
+      "id": "replay-after-replacement",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-after-replacement.json",
+      "expected": "accept"
+    },
+    {
+      "id": "history-cursor",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor.json",
+      "expected": "accept"
+    },
+    {
+      "id": "version-conflict",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/version-conflict.json",
+      "expected": "reject",
+      "reason": "PRICE_VERSION_CONFLICT"
+    },
+    {
+      "id": "retroactive",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/retroactive.json",
+      "expected": "reject",
+      "reason": "PRICE_INTERVAL"
+    },
+    {
+      "id": "old-amount-rewrite",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/old-amount-rewrite.json",
+      "expected": "reject",
+      "reason": "PRICE_CLOSE_PREVIOUS_ONLY"
+    },
+    {
+      "id": "old-version-rewrite",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/old-version-rewrite.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_ORDER"
+    },
+    {
+      "id": "etag-not-updated",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/etag-not-updated.json",
+      "expected": "reject",
+      "reason": "PRICE_CLOSED_ETAG_CHANGED"
+    },
+    {
+      "id": "product-activated",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/product-activated.json",
+      "expected": "reject",
+      "reason": "PRICE_PRODUCT_UNCHANGED"
+    },
+    {
+      "id": "presentation-activated",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/presentation-activated.json",
+      "expected": "reject",
+      "reason": "PRICE_PRESENTATION_UNCHANGED"
+    },
+    {
+      "id": "discontinued",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/discontinued.json",
+      "expected": "reject",
+      "reason": "PRICE_DISCONTINUED"
+    },
+    {
+      "id": "cross-tenant",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cross-tenant.json",
+      "expected": "reject",
+      "reason": "PRICE_SCOPE:organization_id"
+    },
+    {
+      "id": "cross-list",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cross-list.json",
+      "expected": "reject",
+      "reason": "PRICE_SCOPE:price_list_id"
+    },
+    {
+      "id": "cross-product",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cross-product.json",
+      "expected": "reject",
+      "reason": "PRICE_OWNER_PRODUCT"
+    },
+    {
+      "id": "cross-variant",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cross-variant.json",
+      "expected": "reject",
+      "reason": "PRICE_OWNER_VARIANT"
+    },
+    {
+      "id": "list-mutated",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-mutated.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_UNCHANGED"
+    },
+    {
+      "id": "wrong-route",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/wrong-route.json",
+      "expected": "reject",
+      "reason": "PRICE_PATH_PRESENTATION"
+    },
+    {
+      "id": "first-version-not-one",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/first-version-not-one.json",
+      "expected": "reject",
+      "reason": "PRICE_NEXT_VERSION"
+    },
+    {
+      "id": "list-other-tenant",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-other-tenant.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_TENANT"
+    },
+    {
+      "id": "current-not-latest",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/current-not-latest.json",
+      "expected": "reject",
+      "reason": "PRICE_CURRENT_LATEST"
+    },
+    {
+      "id": "current-from-future",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/current-from-future.json",
+      "expected": "reject",
+      "reason": "PRICE_CURRENT_FUTURE"
+    },
+    {
+      "id": "history-ascending",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-ascending.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_ORDER"
+    },
+    {
+      "id": "history-overlap",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-overlap.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_OVERLAP"
+    },
+    {
+      "id": "history-gap",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-gap.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_GAP"
+    },
+    {
+      "id": "history-limit",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-limit.json",
+      "expected": "reject",
+      "reason": "PRICE_PAGE_REQUEST_LIMIT"
+    },
+    {
+      "id": "absence-zero-fallback",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/absence-zero-fallback.json",
+      "expected": "reject",
+      "reason": "PRICE_ABSENCE_NO_FALLBACK"
+    },
+    {
+      "id": "get-creates-list",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/get-creates-list.json",
+      "expected": "reject",
+      "reason": "PRICE_GET_NO_EFFECT"
+    },
+    {
+      "id": "replay-shift-validity",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-shift-validity.json",
+      "expected": "reject",
+      "reason": "HTTP_REPLAY_RESULT"
+    },
+    {
+      "id": "replay-new-effect",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-new-effect.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_NO_EFFECT"
+    },
+    {
+      "id": "replay-key-changed",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-key-changed.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_REQUEST"
+    },
+    {
+      "id": "replay-authority-revoked",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-authority-revoked.json",
+      "expected": "reject",
+      "reason": "PRICE_AUTHORITY"
+    },
+    {
+      "id": "cursor-mismatch-organization_id",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-mismatch-organization_id.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BINDING"
+    },
+    {
+      "id": "cursor-mismatch-presentation_id",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-mismatch-presentation_id.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BINDING"
+    },
+    {
+      "id": "cursor-mismatch-price_list_id",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-mismatch-price_list_id.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BINDING"
+    },
+    {
+      "id": "cursor-mismatch-limit",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-mismatch-limit.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BINDING"
+    },
+    {
+      "id": "cursor-mismatch-before_version",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-mismatch-before_version.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BINDING"
+    },
+    {
+      "id": "cursor-expired",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-expired.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_EXPIRY"
+    },
+    {
+      "id": "cursor-unverified",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-unverified.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_SIGNATURE"
+    },
+    {
+      "id": "historical-price-get",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/historical-price-get.json",
+      "expected": "accept"
+    },
+    {
+      "id": "historical-price-wrong-id",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/historical-price-wrong-id.json",
+      "expected": "reject",
+      "reason": "PRICE_PATH_ID"
+    },
+    {
+      "id": "default-list-read",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/default-list-read.json",
+      "expected": "accept"
+    },
+    {
+      "id": "history-continuation",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-continuation.json",
+      "expected": "accept"
+    },
+    {
+      "id": "history-cursor-missing",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor-missing.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:history.cursor"
+    },
+    {
+      "id": "history-cursor-revoked",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor-revoked.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_SIGNATURE"
+    },
+    {
+      "id": "history-cursor-boundary",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor-boundary.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_BOUNDARY"
+    },
+    {
+      "id": "history-cursor-limit-changed",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor-limit-changed.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_REQUEST_LIMIT"
+    },
+    {
+      "id": "history-cursor-expired",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-cursor-expired.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_EXPIRY"
+    },
+    {
+      "id": "history-missing-version",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-missing-version.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_SEQUENCE"
+    },
+    {
+      "id": "history-missing-current-first-page",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/history-missing-current-first-page.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_FIRST_PAGE_CURRENT"
+    },
+    {
+      "id": "page-premature-end",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/page-premature-end.json",
+      "expected": "reject",
+      "reason": "PRICE_PAGE_COMPLETENESS"
+    },
+    {
+      "id": "page-spurious-more",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/page-spurious-more.json",
+      "expected": "reject",
+      "reason": "PRICE_PAGE_COMPLETENESS"
+    },
+    {
+      "id": "cursor-skipped-next-version",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-skipped-next-version.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_NEXT_VERSION"
+    },
+    {
+      "id": "cursor-empty-before-end",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-empty-before-end.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_MISSING_NEXT"
+    },
+    {
+      "id": "cursor-record-not-closed",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-record-not-closed.json",
+      "expected": "reject",
+      "reason": "PRICE_CURSOR_HISTORICAL_CLOSED"
+    },
+    {
+      "id": "list-after-price-first-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-first-price.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_CREATION_TIME"
+    },
+    {
+      "id": "list-after-price-replace-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-replace-price.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_PRICE_TIME"
+    },
+    {
+      "id": "list-after-price-current-price",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-current-price.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_PRICE_TIME"
+    },
+    {
+      "id": "list-after-price-historical-price-get",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-historical-price-get.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_PRICE_TIME"
+    },
+    {
+      "id": "list-after-price-history-page",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-history-page.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_PRICE_TIME"
+    },
+    {
+      "id": "list-after-price-replay-after-replacement",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/list-after-price-replay-after-replacement.json",
+      "expected": "reject",
+      "reason": "PRICE_LIST_PRICE_TIME"
+    },
+    {
+      "id": "page-more-before-version-one",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/page-more-before-version-one.json",
+      "expected": "accept"
+    },
+    {
+      "id": "cursor-after-version-one-empty",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/cursor-after-version-one-empty.json",
+      "expected": "accept"
+    },
+    {
+      "id": "replay-headers-missing-etag",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-missing-etag.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:replay.headers.ETag",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-numeric-etag",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-numeric-etag.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:replay.headers.ETag",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-malformed-etag",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-malformed-etag.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_ETAG",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-missing-location",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-missing-location.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:replay.headers.Location",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-invalid-location",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-invalid-location.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_LOCATION_FORMAT",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-missing-cache",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-missing-cache.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:replay.headers.Cache-Control",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-invalid-replay-type",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-invalid-replay-type.json",
+      "expected": "reject",
+      "reason": "PRICE_CONTEXT:replay.headers.Idempotency-Replayed",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "replay-headers-undeclared-header",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/replay-headers-undeclared-header.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_HEADER_INVENTORY",
+      "header_expectations": {
+        "original": "reject",
+        "replay": "reject"
+      }
+    },
+    {
+      "id": "temporal-get-before-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-get-before-transition.json",
+      "expected": "reject",
+      "reason": "PRICE_GET_FUTURE"
+    },
+    {
+      "id": "temporal-replay-before-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-replay-before-transition.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_HISTORY_FUTURE"
+    },
+    {
+      "id": "temporal-get-before-closure",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-get-before-closure.json",
+      "expected": "reject",
+      "reason": "PRICE_GET_FUTURE"
+    },
+    {
+      "id": "temporal-replay-before-closure",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-replay-before-closure.json",
+      "expected": "reject",
+      "reason": "PRICE_REPLAY_HISTORY_FUTURE"
+    },
+    {
+      "id": "temporal-page-before-closure",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-page-before-closure.json",
+      "expected": "reject",
+      "reason": "PRICE_HISTORY_FUTURE"
+    },
+    {
+      "id": "temporal-get-at-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-get-at-transition.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-replay-at-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-replay-at-transition.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-page-at-closure",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-page-at-closure.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-get-after-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-get-after-transition.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-replay-after-transition",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-replay-after-transition.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-page-after-closure",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-page-after-closure.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-get-before-replacement-open",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-get-before-replacement-open.json",
+      "expected": "accept"
+    },
+    {
+      "id": "temporal-replay-before-replacement-open",
+      "fixture": "catalog/fixtures/pricing/v1/semantics/temporal-replay-before-replacement-open.json",
+      "expected": "accept"
+    }
+  ],
+  "c_source_hashes": {
+    "public": "9b95d6a31f21d306fa427325d9e92b2e4b336029d96b0df088f13ca0a093e9fe",
+    "private": "85f619075d779164d670ea900fafaab66d6784df62ebafedc1e352456ab2dcee"
+  }
+}

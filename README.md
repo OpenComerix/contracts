@@ -203,3 +203,24 @@ sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
 ```
 
 Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. Integración CI conjunta reservada F; admisión/publicación G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
+
+## F1-07D — Lista predeterminada y precios (candidatos)
+
+Las dos superficies candidatas anteriores ahora completan las 25 operaciones de A: veinte de catálogo preservadas y cinco de precios. El commit de C permanece inmutable; esta revisión agrega los selectores pricing sin cambiar los de catalog. Registro/planned, índices, admisiones, exports, locks y CI permanecen intactos; no release consumible ni runtime por existir estos archivos. F integra los gates nuevos en CI y G fija publicación/admisión final.
+
+[Schema de precios](catalog/http/shared/v1/catalog-prices-v1.schema.json): PriceList, Price, PricesPage y PriceSet. Una lista por organización, ARS/impuestos incluidos; importes positivos como cadenas con hasta doce dígitos enteros/dos decimales, sin redondeo. Escritura exclusivamente amount/expected_version; primera versión esperada cero, nueva versión uno. IDs/contexto/instante del servidor. GET no crea lista ni fabrica precio cero/costo/histórico. Cambios inmediatos prospectivos, sin intervalos vacíos/solapados, programación ni reescritura de importes/versiones anteriores. Producto y presentación conservan sus versiones/estados; discontinuado bloquea nuevos precios.
+
+El precio histórico cierra valid_to y cambia ETag de representación, sin incrementar su versión histórica. Un replay entrega el cuerpo/intervalo/ETag capturado, aunque el registro persistido haya cerrado después; no crea otra versión, lista ni vigencia. La secuencia de precios es independiente del catálogo. Cursor de historia por versión descendente, ligado a organización/presentación/lista/filtros/límite y vencimiento; firma/autorización representadas solo mediante contexto sintético, no criptografía acreditada.
+
+[Inventario D](catalog/fixtures/pricing/v1/pricing-http-v1-fixtures.json), structure y semantics reúnen ejemplos HTTP, decimales y contextos completos con positivos/negativos. Helpers específicos pricing-http-v1-common y pricing-http-v1-semantics; validate-pricing-http-v1 reutiliza el gate HTTP/extractor de C, la política B y el runner Sourcemeta existente. Tests externos en test/catalog/pricing-http-v1.test.mjs. Huellas del inventario y de operaciones C detectan cambios accidentales de cobertura; no autentican contra manipulación deliberada.
+
+Tras la regresión H2/B/C y los bundles de las dos superficies indicados arriba:
+
+```text
+node --test test/architecture/*.test.mjs test/catalog/*.test.mjs
+node scripts/catalog/validate-pricing-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-pricing-v1 --self-test
+jsonschema metaschema catalog/http/shared/v1/catalog-prices-v1.schema.json
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-pricing-v1
+```
+
+Usar directorio de salida nuevo. Se mantienen Redocly2.53.3 sin warnings y Sourcemeta16.10.0, con negativos aceptados únicamente por exit2/causa de instancia. Los contextos del propietario se validan estructuralmente además de sus relaciones semánticas. Ejecutar mediante opencomerix check desde el launcher y ampliar evidence solo para diagnóstico; el recibo del wrapper no acredita dependencias externas ignoradas. No SQL, atomicidad de alta de lista/precio, concurrencia, autorización real, firma de cursor ni cifrado/runtime demostrados por estas fixtures.

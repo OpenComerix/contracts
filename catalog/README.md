@@ -19,3 +19,12 @@ Los OpenAPI públicos y privados completos corresponden a C/D, eventos a E y adm
 - Gates: [validate-http-v1](../scripts/catalog/validate-http-v1.mjs), helpers de normalización/semántica separados y [tests](../test/catalog/http-v1.test.mjs). Comandos, versiones y límites en [README raíz](../README.md#f1-07c--http-de-catálogo-candidatos).
 
 Índice/planned, registry y consumer locks sin modificaciones; precios D, eventos E, CI conjunta F y admisión/tags G conservan sus tandas/autorizaciones.
+
+## Candidato F1-07D
+
+- [Precios y lista](http/shared/v1/catalog-prices-v1.schema.json): lista predeterminada, precio vigente/histórico, página y solicitud estricta; reutiliza base decimal B, sin precio embebido en producto/presentación.
+- Las superficies pública/privada anteriores completan 25 operaciones: veinte C preservadas y cinco pricing. Fuente candidata ampliada, no admisión/release completo.
+- [Fixtures de precios](fixtures/pricing/v1/pricing-http-v1-fixtures.json): errores B referenciados, ejemplos HTTP, structure y semantics por esta capacidad.
+- Gate [validate-pricing-http-v1](../scripts/catalog/validate-pricing-http-v1.mjs), helpers específicos y [tests externos](../test/catalog/pricing-http-v1.test.mjs); reutiliza el gate/extractor HTTP C y runner estructural B. Comandos y límites en [README raíz](../README.md#f1-07d--lista-predeterminada-y-precios-candidatos).
+
+Sin nuevos dominios, CI, índices/admisiones/locks, servicios ni PWA. Eventos E, CI conjunta F y release G permanecen pendientes.

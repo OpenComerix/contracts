@@ -79,7 +79,12 @@ export function validateHttpApi(
   manifest,
   surface,
   catalog,
+  profile = null,
 ) {
+  const defs = profile?.definitions ?? definitions;
+  const ref = profile?.schemaRef ?? schemaRef;
+  const errorCodes = profile?.operationErrors ?? operationErrors;
+  const scope = profile?.scope ?? "C";
   assert(["public", "private"].includes(surface), "SURFACE");
   validatePolicy(policy);
   assert.equal(api.openapi, "3.1.0", "OPENAPI_VERSION");
@@ -131,26 +136,32 @@ export function validateHttpApi(
     );
   }
   const ops = policy.operations.filter((o) =>
-    o.permission.startsWith("catalog."),
+    o.permission.startsWith(profile?.permission ?? "catalog."),
   );
   same(
     manifest.operations,
     ops.map((o) => o.operation_id),
     "C_OPERATION_INVENTORY",
   );
-  assert.equal(ops.length, 20, "C_OPERATION_COUNT");
+  assert.equal(ops.length, profile?.count ?? 20, scope + "_OPERATION_COUNT");
+  // C remains independently testable; once any pricing path exists the closed
+  // surface inventory must contain all 25 operations approved in policy A.
+  const fullSurface =
+    profile !== null ||
+    Object.keys(api.paths).some((p) => p.startsWith("/pricing/"));
+  const surfaceOps = fullSurface ? policy.operations : ops;
   assert.equal(manifest.runtime_demonstrated, false, "RUNTIME_LIMIT");
   assert.equal(manifest.status, "candidate", "ADMISSION_LIMIT");
   same(
     Object.keys(api.paths).sort(),
-    [...new Set(ops.map((o) => o.path.slice(7)))].sort(),
+    [...new Set(surfaceOps.map((o) => o.path.slice(7)))].sort(),
     "PATH_INVENTORY",
   );
   const discovered = [];
   for (const p of Object.keys(api.paths))
     same(
       Object.keys(api.paths[p]).sort(),
-      ops
+      surfaceOps
         .filter((o) => o.path.slice(7) === p)
         .map((o) => o.method.toLowerCase())
         .sort(),
@@ -220,16 +231,16 @@ export function validateHttpApi(
       assert.equal(op.requestBody?.required, true, "REQUEST_REQUIRED");
       assert.equal(
         original.requestBody.content["application/json"].schema.$ref,
-        schemaRef(definitions[o.operation_id][0]),
+        ref(defs[o.operation_id][0]),
         "REQUEST_SCHEMA_REF",
       );
       assert.equal(
         op.requestBody.content["application/json"].schema.additionalProperties,
-        definitions[o.operation_id][0] === "BarcodeInput" ? undefined : false,
+        defs[o.operation_id][0] === "BarcodeInput" ? undefined : false,
         "REQUEST_CLOSED",
       );
     } else assert(!Object.hasOwn(op, "requestBody"), "GET_WITHOUT_BODY");
-    const codes = operationErrors(o, priv),
+    const codes = errorCodes(o, priv),
       errorStatuses = [
         ...new Set(
           codes.map((code) => {
@@ -298,8 +309,7 @@ export function validateHttpApi(
                 )?.headers ?? headers),
           ...(status === "request" || status === String(o.success_status)
             ? {
-                definition:
-                  definitions[o.operation_id][status === "request" ? 0 : 1],
+                definition: defs[o.operation_id][status === "request" ? 0 : 1],
               }
             : {}),
         });
@@ -371,7 +381,7 @@ export function validateHttpApi(
       assert.equal(
         original.responses[status].content[media].schema.$ref,
         success
-          ? schemaRef(definitions[o.operation_id][1])
+          ? ref(defs[o.operation_id][1])
           : "../../../../common/http/shared/v3/problem-details-v3.schema.json",
         "RESPONSE_SCHEMA_REF",
       );
@@ -431,9 +441,12 @@ export function validateHttpApi(
             createCatalogPresentation: "presentations",
           }[o.operation_id];
           assert(
-            new RegExp("^/api/v1/catalog/" + target + "/[0-9a-f-]{36}$").test(
-              row.headers.Location,
-            ),
+            new RegExp(
+              "^" +
+                (profile?.locationRoots?.[o.operation_id] ??
+                  "/api/v1/catalog/" + target) +
+                "/[0-9a-f-]{36}$",
+            ).test(row.headers.Location),
             "EXAMPLE_LOCATION",
           );
         }
@@ -858,37 +871,7 @@ export async function validateHttp(
       "SELF_TEST_INVENTORY",
     );
   }
-  if (output) {
-    await mkdir(output, { recursive: true });
-    const lines = [];
-    assert(
-      new Set(cases.map((c) => c.id)).size === cases.length,
-      "PREPARED_CASE_DUPLICATE",
-    );
-    for (const c of cases) {
-      assert(c.schema && typeof c.schema === "object", "EXTRACTED_SCHEMA");
-      assert(/^[A-Za-z0-9_-]+$/.test(c.id), "PREPARED_ID");
-      await writeFile(
-        path.join(output, c.id + ".schema.json"),
-        JSON.stringify({
-          $schema: "https://json-schema.org/draft/2020-12/schema",
-          ...c.schema,
-        }) + "\n",
-        { flag: "wx" },
-      );
-      await writeFile(
-        path.join(output, c.id + ".json"),
-        JSON.stringify(c.value) + "\n",
-        { flag: "wx" },
-      );
-      lines.push(
-        [c.id, c.expected, c.id + ".schema.json", c.id + ".json"].join("\t"),
-      );
-    }
-    await writeFile(path.join(output, "cases.tsv"), lines.join("\n") + "\n", {
-      flag: "wx",
-    });
-  }
+  if (output) await writeHttpCases(cases, output);
   console.log(
     "F1-07C contract gate passed: public=20 private=20 examples=" +
       manifest.examples.length +
@@ -899,6 +882,38 @@ export async function validateHttp(
       "; static fixtures only.",
   );
 }
+export async function writeHttpCases(cases, output) {
+  await mkdir(output, { recursive: true });
+  const lines = [];
+  assert(
+    new Set(cases.map((c) => c.id)).size === cases.length,
+    "PREPARED_CASE_DUPLICATE",
+  );
+  for (const c of cases) {
+    assert(c.schema && typeof c.schema === "object", "EXTRACTED_SCHEMA");
+    assert(/^[A-Za-z0-9_-]+$/.test(c.id), "PREPARED_ID");
+    await writeFile(
+      path.join(output, c.id + ".schema.json"),
+      JSON.stringify({
+        $schema: "https://json-schema.org/draft/2020-12/schema",
+        ...c.schema,
+      }) + "\n",
+      { flag: "wx" },
+    );
+    await writeFile(
+      path.join(output, c.id + ".json"),
+      JSON.stringify(c.value) + "\n",
+      { flag: "wx" },
+    );
+    lines.push(
+      [c.id, c.expected, c.id + ".schema.json", c.id + ".json"].join("\t"),
+    );
+  }
+  await writeFile(path.join(output, "cases.tsv"), lines.join("\n") + "\n", {
+    flag: "wx",
+  });
+}
+
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) {
   const args = process.argv.slice(2),
     self = args.includes("--self-test"),
