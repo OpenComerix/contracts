@@ -10,11 +10,13 @@ const root = path.resolve(import.meta.dirname, '../..');
 const revision = '68d923e903b6341eedb980af3586890c0eab7d5e';
 const registry = readJSON(root, 'registry/contracts.json');
 const baseline = JSON.parse(gitReader(root, revision)('registry/contracts.json'));
+const admissionRevision = '7b3996185ba57879d63a281f067b435a115857cb';
+const admissionBaseline = JSON.parse(gitReader(root, admissionRevision)('registry/contracts.json'));
 const previousIds = new Set(baseline.contracts.map(row => row.id));
 const added = registry.contracts.filter(row => !previousIds.has(row.id));
 
 test('G preserves historical descriptors, consumer exports, pins and deferred sale intention', () => {
-  assert.deepEqual(registry.contracts.filter(row => previousIds.has(row.id)), baseline.contracts);
+  assert.deepEqual(admissionBaseline.contracts.filter(row => previousIds.has(row.id)), baseline.contracts);
   assert.deepEqual(registry.preservedFiles, baseline.preservedFiles);
   assert.deepEqual(registry.requiredConsumers, baseline.requiredConsumers);
   assert.equal(registry.baselineCommit, baseline.baselineCommit);
@@ -78,15 +80,27 @@ function selectedManifest(descriptor, role, operations = [], pointers = ['']) {
 }
 const manifestBytes = (manifest) => Buffer.from(JSON.stringify(manifest, null, 2) + '\n');
 const eventProfiles = added.filter(row => row.surface === 'events' || row.id.endsWith('.consumer'));
+
+test('F1-08B changes only the envelope lifecycle, preserving all other registry metadata and source bytes', () => {
+  const expected = structuredClone(admissionBaseline);
+  const envelope = expected.contracts.find(row => row.id === 'common.event-envelope.v1');
+  assert.equal(envelope.status, 'draft');
+  envelope.status = 'active';
+  assert.deepEqual(registry, expected);
+  const source = gitReader(root, envelope.commit)(envelope.path);
+  assert.equal(sha256(source), envelope.sha256);
+  assert.equal(readFileSync(path.join(root, envelope.path)).toString('utf8').replaceAll('\r\n', '\n'), source.toString('utf8'));
+});
+
 for (const descriptor of eventProfiles)
-  test('M1 rejects functional use of the actual draft closure, including pins and impact: ' + descriptor.id, () => {
+  test('M1 historical registry rejects its draft closure, including pins and impact: ' + descriptor.id, () => {
     assert.equal(eventProfiles.length, 8);
-    const envelope = registry.contracts.find(row => row.id === 'common.event-envelope.v1');
+    const envelope = admissionBaseline.contracts.find(row => row.id === 'common.event-envelope.v1');
     assert.equal(envelope.status, 'draft');
     let observation;
     for (const role of ['validation', 'documentation', 'local-result']) {
       const manifest = selectedManifest(descriptor, role);
-      const lock = makeLock(root, manifest, manifestBytes(manifest), registry);
+      const lock = makeLock(root, manifest, manifestBytes(manifest), admissionBaseline);
       assert(lock.entries[0].files.some(row => row.path === envelope.path));
       if (role === 'validation') observation = lock;
     }
@@ -94,9 +108,9 @@ for (const descriptor of eventProfiles)
       const manifest = selectedManifest(descriptor, role);
       const pinned = { ...observation.entries[0], role };
       const forbidden = /New use of a draft is forbidden: common\.event-envelope\.v1/;
-      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), registry), forbidden);
-      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), registry, [pinned]), forbidden);
-      const report = impactForConsumer({ manifest, lock: { entries: [pinned], assets: [] } }, registry, gitReader(root, revision));
+      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), admissionBaseline), forbidden);
+      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), admissionBaseline, [pinned]), forbidden);
+      const report = impactForConsumer({ manifest, lock: { entries: [pinned], assets: [] } }, admissionBaseline, gitReader(root, revision));
       assert.equal(report.affected, true);
       assert.equal(report.dependencies.length, 1);
       assert.equal(report.dependencies[0].classification, 'unresolved');
@@ -105,13 +119,56 @@ for (const descriptor of eventProfiles)
     }
   });
 
+for (const descriptor of eventProfiles)
+  test('F1-08B admits the unchanged event closure, including pins and impact: ' + descriptor.id, () => {
+    assert.equal(eventProfiles.length, 8);
+    const observation = selectedManifest(descriptor, 'validation');
+    const previous = makeLock(root, observation, manifestBytes(observation), admissionBaseline).entries[0];
+    const envelope = registry.contracts.find(row => row.id === 'common.event-envelope.v1');
+    assert.equal(envelope.status, 'active');
+    assert(previous.files.some(row => row.path === envelope.path && row.sha256 === envelope.sha256));
+    for (const role of ['producer', 'consumer', 'semantic-owner']) {
+      const manifest = selectedManifest(descriptor, role);
+      const expected = { ...previous, role };
+      const lock = makeLock(root, manifest, manifestBytes(manifest), registry);
+      assert.deepEqual(lock.entries, [expected]);
+      assert.deepEqual(makeLock(root, manifest, manifestBytes(manifest), registry, [expected]), lock);
+      const report = impactForConsumer({ manifest, lock }, registry, gitReader(root, revision));
+      assert.equal(report.affected, false);
+      assert.deepEqual(report.dependencies, []);
+    }
+  });
+
+for (const descriptor of registry.contracts.filter(row => row.status === 'draft'))
+  test('F1-08B retains the functional prohibition for other actual drafts: ' + descriptor.id, () => {
+    const observation = selectedManifest(descriptor, 'validation');
+    const previous = makeLock(root, observation, manifestBytes(observation), registry).entries[0];
+    const blockedDependency = registry.contracts.find(row => row.status === 'draft' && previous.files.some(file => file.path === row.path));
+    assert(blockedDependency);
+    const forbidden = error => error instanceof assert.AssertionError &&
+      error.message === 'New use of a draft is forbidden: ' + descriptor.id;
+    for (const role of ['producer', 'consumer', 'semantic-owner']) {
+      const manifest = selectedManifest(descriptor, role);
+      const pinned = { ...previous, role };
+      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), registry), forbidden);
+      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), registry, [pinned]), forbidden);
+      const report = impactForConsumer({ manifest, lock: { entries: [pinned], assets: [] } }, registry, gitReader(root, descriptor.commit));
+      assert.equal(report.affected, true);
+      assert.equal(report.dependencies.length, 1);
+      assert.equal(report.dependencies[0].classification, 'unresolved');
+      assert.equal(report.dependencies[0].decision, 'New use of a draft is forbidden: ' + blockedDependency.id);
+      assert.deepEqual(report.dependencies[0].gates, manifest.contracts[0].gates);
+    }
+  });
+
 test('M1 permits an active HTTP selection without selecting unrelated draft URI mappings', () => {
-  const descriptor = registry.contracts.find(row => row.id === 'catalog.http.public.v1');
-  const envelope = registry.contracts.find(row => row.id === 'common.event-envelope.v1');
+  const descriptor = admissionBaseline.contracts.find(row => row.id === 'catalog.http.public.v1');
+  const envelope = admissionBaseline.contracts.find(row => row.id === 'common.event-envelope.v1');
+  assert.equal(envelope.status, 'draft');
   assert(descriptor.uriMappings.some(row => row.path === envelope.path));
   for (const role of ['producer', 'consumer', 'semantic-owner']) {
     const manifest = selectedManifest(descriptor, role, ['listCatalogUnits'], []);
-    const lock = makeLock(root, manifest, manifestBytes(manifest), registry);
+    const lock = makeLock(root, manifest, manifestBytes(manifest), admissionBaseline);
     assert(!lock.entries[0].files.some(row => row.path === envelope.path));
   }
 });
