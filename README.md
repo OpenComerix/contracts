@@ -224,3 +224,7 @@ sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-pricing-v1
 ```
 
 Usar directorio de salida nuevo. Se mantienen Redocly2.53.3 sin warnings y Sourcemeta16.10.0, con negativos aceptados únicamente por exit2/causa de instancia. Los contextos del propietario se validan estructuralmente además de sus relaciones semánticas. Ejecutar mediante opencomerix check desde el launcher y ampliar evidence solo para diagnóstico; el recibo del wrapper no acredita dependencias externas ignoradas. No SQL, atomicidad de alta de lista/precio, concurrencia, autorización real, firma de cursor ni cifrado/runtime demostrados por estas fixtures.
+
+## F1-07E — Eventos e integración contractual (candidatos)
+
+Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado; preserva HTTP, registro, índices, locks, dependencias y CI. Validación conjunta F, admisión G y runtimes requieren sus cortes propios.

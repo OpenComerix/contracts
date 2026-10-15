@@ -1,0 +1,49 @@
+{
+  "operation_id": "createCatalogCategory",
+  "organization_id": "01998d00-0000-7000-8000-000000000090",
+  "causation_id": "01998d00-0000-7000-8000-000000000201",
+  "correlation_id": "01998d00-0000-7000-8000-000000000202",
+  "occurred_at": "2026-10-14T00:00:00Z",
+  "outcome": "committed",
+  "request": {
+    "name": "Categoría de ejemplo"
+  },
+  "response": {
+    "category_id": "01998d00-0000-7000-8000-000000000001",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "name": "Categoría de ejemplo",
+    "parent_id": null,
+    "status": "active",
+    "version": 1,
+    "created_at": "2026-10-14T00:00:00Z",
+    "updated_at": "2026-10-14T00:00:00Z"
+  },
+  "events": [
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000203",
+      "event_type": "catalog.category.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-14T00:00:00Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "category",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000001",
+      "aggregate_version": 1,
+      "correlation_id": "01998d00-0000-7000-8000-000000000202",
+      "causation_id": "01998d00-0000-7000-8000-000000000201",
+      "payload": {
+        "operation_id": "createCatalogCategory",
+        "category": {
+          "category_id": "01998d00-0000-7000-8000-000000000001",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "name": "Categoría de ejemplo",
+          "parent_id": null,
+          "status": "active",
+          "version": 1,
+          "created_at": "2026-10-14T00:00:00Z",
+          "updated_at": "2026-10-14T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

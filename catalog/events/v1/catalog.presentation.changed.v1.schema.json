@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+  "title": "catalog.presentation.changed.v1 producer revision 1 candidate",
+  "description": "Organization-wide committed fact, at most 128 KiB UTF-8. Re-delivery preserves bytes/identity; unknown revisions fail closed. Semantic gate validates relationships. Not runtime or admission.",
+  "allOf": [
+    {
+      "$ref": "../../../events/event-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "required": [
+        "causation_id"
+      ],
+      "properties": {
+        "event_type": {
+          "const": "catalog.presentation.changed.v1"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "producer": {
+          "const": "catalog-pricing"
+        },
+        "aggregate_type": {
+          "const": "presentation"
+        },
+        "event_id": {
+          "$ref": "catalog-event-data-v1.schema.json#/$defs/C_CatalogId"
+        },
+        "aggregate_id": {
+          "$ref": "catalog-event-data-v1.schema.json#/$defs/C_CatalogId"
+        },
+        "aggregate_version": {
+          "$ref": "catalog-event-data-v1.schema.json#/$defs/C_AggregateVersion"
+        },
+        "causation_id": {
+          "$ref": "catalog-event-data-v1.schema.json#/$defs/C_CatalogId"
+        },
+        "occurred_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+        },
+        "branch_id": false,
+        "pos_id": false,
+        "payload": {
+          "$ref": "catalog-event-data-v1.schema.json#/$defs/PresentationPayload"
+        }
+      }
+    }
+  ],
+  "x-data-classification": {
+    "sensitivity": "CONFIDENTIAL",
+    "categories": [
+      "COMMERCIAL"
+    ]
+  },
+  "x-data-purpose": "Retained catalog/price meaning; per-field classification in catalog-event-policy-v1.json",
+  "x-retention-profile": "TECHNICAL_SHORT (serialized transport only; owner historical policy required before F1-08)",
+  "x-log-policy": "no-event-body-or-field-values"
+}

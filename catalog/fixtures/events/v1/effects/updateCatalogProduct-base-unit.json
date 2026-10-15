@@ -1,0 +1,129 @@
+{
+  "operation_id": "updateCatalogProduct",
+  "organization_id": "01998d00-0000-7000-8000-000000000090",
+  "causation_id": "01998d00-0000-7000-8000-000000000241",
+  "correlation_id": "01998d00-0000-7000-8000-000000000242",
+  "occurred_at": "2026-10-14T00:00:00Z",
+  "outcome": "committed",
+  "request": {
+    "default_variant": {
+      "base_unit": "kg"
+    },
+    "expected_version": 1,
+    "expected_base_presentation_version": 1
+  },
+  "response": {
+    "product_id": "01998d00-0000-7000-8000-000000000002",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "name": "Producto renombrado",
+    "description": null,
+    "type": "STOCKED_GOOD",
+    "category_id": null,
+    "tax_classification": null,
+    "status": "draft",
+    "version": 2,
+    "default_variant": {
+      "variant_id": "01998d00-0000-7000-8000-000000000003",
+      "sku": "PRODUCTO-001",
+      "plu": null,
+      "base_unit": "kg"
+    },
+    "base_presentation_id": "01998d00-0000-7000-8000-000000000004",
+    "created_at": "2026-10-14T00:00:00Z",
+    "updated_at": "2026-10-14T00:00:00Z"
+  },
+  "base_presentation": {
+    "presentation_id": "01998d00-0000-7000-8000-000000000004",
+    "product_id": "01998d00-0000-7000-8000-000000000002",
+    "variant_id": "01998d00-0000-7000-8000-000000000003",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "name": "Unidad",
+    "unit_code": "kg",
+    "conversion_factor": "1",
+    "allows_fractions": false,
+    "minimum_quantity": "1",
+    "quantity_increment": "1",
+    "status": "draft",
+    "version": 2,
+    "created_at": "2026-10-14T00:00:00Z",
+    "updated_at": "2026-10-14T00:00:00Z"
+  },
+  "events": [
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000243",
+      "event_type": "catalog.product.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-14T00:00:00Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "product",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000002",
+      "aggregate_version": 2,
+      "correlation_id": "01998d00-0000-7000-8000-000000000242",
+      "causation_id": "01998d00-0000-7000-8000-000000000241",
+      "payload": {
+        "operation_id": "updateCatalogProduct",
+        "product": {
+          "product_id": "01998d00-0000-7000-8000-000000000002",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "name": "Producto renombrado",
+          "description": null,
+          "type": "STOCKED_GOOD",
+          "category_id": null,
+          "tax_classification": null,
+          "status": "draft",
+          "version": 2,
+          "default_variant": {
+            "variant_id": "01998d00-0000-7000-8000-000000000003",
+            "sku": "PRODUCTO-001",
+            "plu": null,
+            "base_unit": "kg"
+          },
+          "base_presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "created_at": "2026-10-14T00:00:00Z",
+          "updated_at": "2026-10-14T00:00:00Z"
+        },
+        "tax_definition": null,
+        "affected_base_presentation": {
+          "presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "version": 2
+        }
+      }
+    },
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000244",
+      "event_type": "catalog.presentation.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-14T00:00:00Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "presentation",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000004",
+      "aggregate_version": 2,
+      "correlation_id": "01998d00-0000-7000-8000-000000000242",
+      "causation_id": "01998d00-0000-7000-8000-000000000241",
+      "payload": {
+        "operation_id": "updateCatalogProduct",
+        "presentation": {
+          "presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "product_id": "01998d00-0000-7000-8000-000000000002",
+          "variant_id": "01998d00-0000-7000-8000-000000000003",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "name": "Unidad",
+          "unit_code": "kg",
+          "conversion_factor": "1",
+          "allows_fractions": false,
+          "minimum_quantity": "1",
+          "quantity_increment": "1",
+          "status": "draft",
+          "version": 2,
+          "created_at": "2026-10-14T00:00:00Z",
+          "updated_at": "2026-10-14T00:00:00Z"
+        },
+        "base_unit": "kg",
+        "product_version": 2,
+        "barcode": null
+      }
+    }
+  ]
+}

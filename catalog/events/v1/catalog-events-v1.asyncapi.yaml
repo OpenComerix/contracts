@@ -1,0 +1,156 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Catalog/pricing committed facts — candidate",
+    "version": "1.0.0",
+    "license": {
+      "name": "Proprietary",
+      "url": "https://gitlab.com/opencomerix/contracts/-/blob/dev/LICENSE.md"
+    }
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "catalogEvents": {
+      "address": "catalog-pricing.events",
+      "messages": {
+        "category": {
+          "$ref": "#/components/messages/category"
+        },
+        "product": {
+          "$ref": "#/components/messages/product"
+        },
+        "presentation": {
+          "$ref": "#/components/messages/presentation"
+        },
+        "price": {
+          "$ref": "#/components/messages/price"
+        }
+      },
+      "description": "One logical producer topic; future SNS Standard -> subscriber-owned SQS/DLQ. No infrastructure provisioned.",
+      "x-future-consumers": [
+        {
+          "topic": "catalog-pricing.events",
+          "consumer": "reporting.catalog-changes",
+          "queue": "reporting.catalog-changes",
+          "dlq": "reporting.catalog-changes.dlq",
+          "status": "future_intention",
+          "runtime_demonstrated": false
+        }
+      ]
+    }
+  },
+  "operations": {
+    "publishCatalogChanges": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/catalogEvents"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/catalogEvents/messages/category"
+        },
+        {
+          "$ref": "#/channels/catalogEvents/messages/product"
+        },
+        {
+          "$ref": "#/channels/catalogEvents/messages/presentation"
+        },
+        {
+          "$ref": "#/channels/catalogEvents/messages/price"
+        }
+      ]
+    }
+  },
+  "components": {
+    "messages": {
+      "category": {
+        "name": "catalog.category.changed.v1",
+        "title": "catalog.category.changed.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "catalog.category.changed.v1.schema.json"
+          }
+        },
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "x-schema-version": 1,
+        "x-producer": "catalog-pricing",
+        "x-consumer-status": "future_intention"
+      },
+      "product": {
+        "name": "catalog.product.changed.v1",
+        "title": "catalog.product.changed.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "catalog.product.changed.v1.schema.json"
+          }
+        },
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "x-schema-version": 1,
+        "x-producer": "catalog-pricing",
+        "x-consumer-status": "future_intention"
+      },
+      "presentation": {
+        "name": "catalog.presentation.changed.v1",
+        "title": "catalog.presentation.changed.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "catalog.presentation.changed.v1.schema.json"
+          }
+        },
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "x-schema-version": 1,
+        "x-producer": "catalog-pricing",
+        "x-consumer-status": "future_intention"
+      },
+      "price": {
+        "name": "pricing.presentation-price.changed.v1",
+        "title": "pricing.presentation-price.changed.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "pricing.presentation-price.changed.v1.schema.json"
+          }
+        },
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "x-schema-version": 1,
+        "x-producer": "catalog-pricing",
+        "x-consumer-status": "future_intention"
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-owner": "catalog-pricing",
+  "x-filter-pairs": [
+    {
+      "event_type": "catalog.category.changed.v1",
+      "schema_version": 1
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "schema_version": 1
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "schema_version": 1
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "schema_version": 1
+    }
+  ]
+}

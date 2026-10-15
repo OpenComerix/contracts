@@ -1,0 +1,91 @@
+{
+  "operation_id": "createPresentationPrice",
+  "organization_id": "01998d00-0000-7000-8000-000000000090",
+  "causation_id": "01998d00-0000-7000-8000-000000000238",
+  "correlation_id": "01998d00-0000-7000-8000-000000000239",
+  "occurred_at": "2026-10-15T10:00:01.000002Z",
+  "outcome": "committed",
+  "request": {
+    "amount": "12.50",
+    "expected_version": 1
+  },
+  "response": {
+    "price_id": "01998d00-0000-7000-8000-000000000103",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "price_list_id": "01998d00-0000-7000-8000-000000000101",
+    "product_id": "01998d00-0000-7000-8000-000000000002",
+    "presentation_id": "01998d00-0000-7000-8000-000000000004",
+    "amount": "12.5",
+    "currency": "ARS",
+    "tax_included": true,
+    "version": 2,
+    "valid_from": "2026-10-15T10:00:01.000002Z",
+    "valid_to": null
+  },
+  "previous_price": {
+    "price_id": "01998d00-0000-7000-8000-000000000102",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "price_list_id": "01998d00-0000-7000-8000-000000000101",
+    "product_id": "01998d00-0000-7000-8000-000000000002",
+    "presentation_id": "01998d00-0000-7000-8000-000000000004",
+    "amount": "10",
+    "currency": "ARS",
+    "tax_included": true,
+    "version": 1,
+    "valid_from": "2026-10-15T10:00:00.000001Z",
+    "valid_to": "2026-10-15T10:00:01.000002Z"
+  },
+  "events": [
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000240",
+      "event_type": "pricing.presentation-price.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-15T10:00:01.000002Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "presentation_price",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000004",
+      "aggregate_version": 2,
+      "correlation_id": "01998d00-0000-7000-8000-000000000239",
+      "causation_id": "01998d00-0000-7000-8000-000000000238",
+      "payload": {
+        "operation_id": "createPresentationPrice",
+        "list": {
+          "price_list_id": "01998d00-0000-7000-8000-000000000101",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "currency": "ARS",
+          "tax_included": true,
+          "version": 1,
+          "created_at": "2026-10-15T10:00:00.000001Z",
+          "updated_at": "2026-10-15T10:00:00.000001Z"
+        },
+        "price": {
+          "price_id": "01998d00-0000-7000-8000-000000000103",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "price_list_id": "01998d00-0000-7000-8000-000000000101",
+          "product_id": "01998d00-0000-7000-8000-000000000002",
+          "presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "amount": "12.5",
+          "currency": "ARS",
+          "tax_included": true,
+          "version": 2,
+          "valid_from": "2026-10-15T10:00:01.000002Z",
+          "valid_to": null
+        },
+        "previous_price": {
+          "price_id": "01998d00-0000-7000-8000-000000000102",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "price_list_id": "01998d00-0000-7000-8000-000000000101",
+          "product_id": "01998d00-0000-7000-8000-000000000002",
+          "presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "amount": "10",
+          "currency": "ARS",
+          "tax_included": true,
+          "version": 1,
+          "valid_from": "2026-10-15T10:00:00.000001Z",
+          "valid_to": "2026-10-15T10:00:01.000002Z"
+        }
+      }
+    }
+  ]
+}

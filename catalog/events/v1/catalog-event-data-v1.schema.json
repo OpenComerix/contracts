@@ -1,0 +1,949 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/events/v1/catalog-event-data-v1.schema.json",
+  "title": "Catalog event snapshots v1 — F1-07E candidate",
+  "description": "Strict, self-contained transport snapshots derived from the approved HTTP fields; no HTTP response object is relaxed or modified. Source shape bindings are in the event policy. Semantic relationships require the E gate.",
+  "$defs": {
+    "E_Category": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "category_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "parent_id",
+        "status"
+      ],
+      "properties": {
+        "category_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/E_Name80"
+        },
+        "parent_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/C_CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "inactive"
+          ]
+        }
+      }
+    },
+    "C_CatalogId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "C_IdentityReference": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Referencia opaca de identidad: no imponer UUIDv7 ni reinterpretar versiones."
+    },
+    "C_AggregateVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "E_Name80": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 80,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f](?:[^\\x00-\\x1f\\x7f]*[^\\s\\x00-\\x1f\\x7f])?$"
+    },
+    "E_Product": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "product_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "description",
+        "type",
+        "category_id",
+        "tax_classification",
+        "status",
+        "default_variant",
+        "base_presentation_id"
+      ],
+      "properties": {
+        "product_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/E_Name160"
+        },
+        "description": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/E_Description"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "type": {
+          "$ref": "#/$defs/E_ProductType"
+        },
+        "category_id": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/C_CatalogId"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "tax_classification": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/E_TaxReferenceResponse"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "status": {
+          "$ref": "#/$defs/E_State"
+        },
+        "default_variant": {
+          "$ref": "#/$defs/E_DefaultVariant"
+        },
+        "base_presentation_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "tax_classification": {
+                "$ref": "#/$defs/E_TaxReferenceResponse"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "E_Name160": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f](?:[^\\x00-\\x1f\\x7f]*[^\\s\\x00-\\x1f\\x7f])?$"
+    },
+    "E_Description": {
+      "type": "string",
+      "maxLength": 1000,
+      "pattern": "^[^\\x00-\\x08\\x0b\\x0c\\x0e-\\x1f\\x7f]*$"
+    },
+    "E_ProductType": {
+      "type": "string",
+      "enum": [
+        "STOCKED_GOOD",
+        "NON_STOCK_GOOD",
+        "SERVICE"
+      ]
+    },
+    "E_TaxReferenceResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "version"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/E_TaxCode"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        }
+      }
+    },
+    "E_TaxCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_.:-]{0,63}$"
+    },
+    "E_State": {
+      "type": "string",
+      "enum": [
+        "draft",
+        "active",
+        "inactive",
+        "discontinued"
+      ]
+    },
+    "E_DefaultVariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant_id",
+        "sku",
+        "plu",
+        "base_unit"
+      ],
+      "properties": {
+        "variant_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "sku": {
+          "$ref": "#/$defs/E_CanonicalSku"
+        },
+        "plu": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/E_Plu"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "base_unit": {
+          "$ref": "#/$defs/C_UnitCode"
+        }
+      }
+    },
+    "E_CanonicalSku": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_./-]{1,64}$"
+    },
+    "E_Plu": {
+      "type": "string",
+      "pattern": "^[0-9]{1,12}$"
+    },
+    "C_UnitCode": {
+      "enum": [
+        "unit",
+        "kg",
+        "g",
+        "l",
+        "ml",
+        "m",
+        "cm",
+        "m2"
+      ]
+    },
+    "E_Presentation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation_id",
+        "product_id",
+        "variant_id",
+        "organization_id",
+        "version",
+        "created_at",
+        "updated_at",
+        "name",
+        "unit_code",
+        "conversion_factor",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment",
+        "status"
+      ],
+      "properties": {
+        "presentation_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "product_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "variant_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "name": {
+          "$ref": "#/$defs/E_Name80"
+        },
+        "unit_code": {
+          "$ref": "#/$defs/C_UnitCode"
+        },
+        "conversion_factor": {
+          "$ref": "#/$defs/C_ConversionFactor"
+        },
+        "allows_fractions": {
+          "type": "boolean"
+        },
+        "minimum_quantity": {
+          "$ref": "#/$defs/E_PositiveQuantity"
+        },
+        "quantity_increment": {
+          "$ref": "#/$defs/E_PositiveQuantity"
+        },
+        "status": {
+          "$ref": "#/$defs/E_State"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false
+              }
+            },
+            "required": [
+              "allows_fractions"
+            ]
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "C_ConversionFactor": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,6})?$",
+      "not": {
+        "pattern": "^0(?:\\.0+)?$"
+      }
+    },
+    "E_PositiveQuantity": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/C_QuantityDecimal"
+        },
+        {
+          "not": {
+            "pattern": "^0(?:\\.0+)?$"
+          }
+        }
+      ]
+    },
+    "C_QuantityDecimal": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,3})?$"
+    },
+    "E_Barcode": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "barcode_id",
+        "presentation_id",
+        "organization_id",
+        "type",
+        "value",
+        "status",
+        "created_at",
+        "retired_at"
+      ],
+      "properties": {
+        "barcode_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "presentation_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "GTIN_8",
+            "GTIN_12",
+            "GTIN_13",
+            "GTIN_14",
+            "INTERNAL"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "retired"
+          ]
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "retired_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_8"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{8}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_12"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{12}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_13"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{13}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "GTIN_14"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^[0-9]{14}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "INTERNAL"
+              }
+            },
+            "required": [
+              "type"
+            ]
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "pattern": "^OC:[A-Z0-9_.-]+$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "active"
+              }
+            },
+            "required": [
+              "status"
+            ]
+          },
+          "then": {
+            "properties": {
+              "retired_at": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "retired_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "Z$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "E_TaxClassification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "version",
+        "country_code",
+        "name",
+        "selectable",
+        "components"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/E_TaxCode"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "country_code": {
+          "const": "AR"
+        },
+        "name": {
+          "$ref": "#/$defs/E_Name160"
+        },
+        "selectable": {
+          "type": "boolean"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/E_TaxComponent"
+          },
+          "maxItems": 16,
+          "minItems": 1
+        }
+      }
+    },
+    "E_TaxComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tax_code",
+        "jurisdiction_code",
+        "treatment",
+        "rule_ref"
+      ],
+      "properties": {
+        "tax_code": {
+          "$ref": "#/$defs/E_TaxCode"
+        },
+        "jurisdiction_code": {
+          "$ref": "#/$defs/E_TaxCode"
+        },
+        "treatment": {
+          "type": "string",
+          "enum": [
+            "taxable",
+            "exempt",
+            "not_taxable"
+          ]
+        },
+        "rule_ref": {
+          "$ref": "#/$defs/E_TaxRule"
+        }
+      }
+    },
+    "E_TaxRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "version"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/E_TaxCode"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        }
+      }
+    },
+    "P_PriceList": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "price_list_id",
+        "organization_id",
+        "currency",
+        "tax_included",
+        "version",
+        "created_at",
+        "updated_at"
+      ],
+      "properties": {
+        "price_list_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "tax_included": {
+          "const": true
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+        }
+      }
+    },
+    "P_Price": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "price_id",
+        "organization_id",
+        "price_list_id",
+        "product_id",
+        "presentation_id",
+        "amount",
+        "currency",
+        "tax_included",
+        "version",
+        "valid_from",
+        "valid_to"
+      ],
+      "properties": {
+        "price_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "organization_id": {
+          "$ref": "#/$defs/C_IdentityReference"
+        },
+        "price_list_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "product_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "presentation_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "amount": {
+          "$ref": "#/$defs/C_PriceDecimal"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "tax_included": {
+          "const": true
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "valid_from": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+        },
+        "valid_to": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:\\.[0-9]{1,6})?Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "C_PriceDecimal": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,11})(?:\\.[0-9]{1,2})?$",
+      "not": {
+        "pattern": "^0(?:\\.0+)?$"
+      },
+      "description": "Precio ARS positivo, hasta 12 dígitos enteros y dos decimales; sin redondeo."
+    },
+    "BasePresentationReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "presentation_id",
+        "version"
+      ],
+      "properties": {
+        "presentation_id": {
+          "$ref": "#/$defs/C_CatalogId"
+        },
+        "version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        }
+      }
+    },
+    "CategoryPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "category"
+      ],
+      "properties": {
+        "operation_id": {
+          "enum": [
+            "createCatalogCategory",
+            "updateCatalogCategory",
+            "moveCatalogCategory",
+            "inactivateCatalogCategory"
+          ]
+        },
+        "category": {
+          "$ref": "#/$defs/E_Category"
+        }
+      }
+    },
+    "ProductPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "product",
+        "tax_definition",
+        "affected_base_presentation"
+      ],
+      "properties": {
+        "operation_id": {
+          "enum": [
+            "createCatalogProduct",
+            "updateCatalogProduct",
+            "transitionCatalogProduct"
+          ]
+        },
+        "product": {
+          "$ref": "#/$defs/E_Product"
+        },
+        "tax_definition": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/E_TaxClassification"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "affected_base_presentation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BasePresentationReference"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "PresentationPayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "presentation",
+        "base_unit",
+        "product_version",
+        "barcode"
+      ],
+      "properties": {
+        "operation_id": {
+          "enum": [
+            "createCatalogProduct",
+            "updateCatalogProduct",
+            "createCatalogPresentation",
+            "updateCatalogPresentation",
+            "transitionCatalogPresentation",
+            "addCatalogPresentationBarcode",
+            "retireCatalogPresentationBarcode"
+          ]
+        },
+        "presentation": {
+          "$ref": "#/$defs/E_Presentation"
+        },
+        "base_unit": {
+          "$ref": "#/$defs/C_UnitCode"
+        },
+        "product_version": {
+          "$ref": "#/$defs/C_AggregateVersion"
+        },
+        "barcode": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/E_Barcode"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "PricePayload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "list",
+        "price",
+        "previous_price"
+      ],
+      "properties": {
+        "operation_id": {
+          "const": "createPresentationPrice"
+        },
+        "list": {
+          "$ref": "#/$defs/P_PriceList"
+        },
+        "price": {
+          "$ref": "#/$defs/P_Price"
+        },
+        "previous_price": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/P_Price"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "x-data-classification": {
+    "sensitivity": "RESTRICTED",
+    "categories": [
+      "COMMERCIAL",
+      "FISCAL"
+    ]
+  },
+  "x-data-purpose": "Retained catalog/price meaning; per-field classification in catalog-event-policy-v1.json",
+  "x-retention-profile": "TECHNICAL_SHORT (serialized transport only; owner historical policy required before F1-08)",
+  "x-log-policy": "no-event-body-or-field-values"
+}

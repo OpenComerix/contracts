@@ -1,0 +1,3196 @@
+{
+  "format_version": 1,
+  "status": "candidate",
+  "producer": "catalog-pricing",
+  "maximum_bytes": 131072,
+  "events": [
+    {
+      "key": "category",
+      "event_type": "catalog.category.changed.v1",
+      "schema_version": 1,
+      "aggregate_type": "category",
+      "payload_definition": "CategoryPayload",
+      "schema": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+      "consumer_schema": "catalog/events/v1/catalog.category.changed.v1.consumer.schema.json"
+    },
+    {
+      "key": "product",
+      "event_type": "catalog.product.changed.v1",
+      "schema_version": 1,
+      "aggregate_type": "product",
+      "payload_definition": "ProductPayload",
+      "schema": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+      "consumer_schema": "catalog/events/v1/catalog.product.changed.v1.consumer.schema.json"
+    },
+    {
+      "key": "presentation",
+      "event_type": "catalog.presentation.changed.v1",
+      "schema_version": 1,
+      "aggregate_type": "presentation",
+      "payload_definition": "PresentationPayload",
+      "schema": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+      "consumer_schema": "catalog/events/v1/catalog.presentation.changed.v1.consumer.schema.json"
+    },
+    {
+      "key": "price",
+      "event_type": "pricing.presentation-price.changed.v1",
+      "schema_version": 1,
+      "aggregate_type": "presentation_price",
+      "payload_definition": "PricePayload",
+      "schema": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+      "consumer_schema": "catalog/events/v1/pricing.presentation-price.changed.v1.consumer.schema.json"
+    }
+  ],
+  "operation_effects": [
+    {
+      "operation_id": "createCatalogCategory",
+      "event_type": "catalog.category.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "updateCatalogCategory",
+      "event_type": "catalog.category.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "moveCatalogCategory",
+      "event_type": "catalog.category.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "inactivateCatalogCategory",
+      "event_type": "catalog.category.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "createCatalogProduct",
+      "event_type": "catalog.product.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "updateCatalogProduct",
+      "event_type": "catalog.product.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "transitionCatalogProduct",
+      "event_type": "catalog.product.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "createCatalogProduct",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "updateCatalogProduct",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "base_unit_changed"
+    },
+    {
+      "operation_id": "createCatalogPresentation",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "updateCatalogPresentation",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "transitionCatalogPresentation",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "addCatalogPresentationBarcode",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "retireCatalogPresentationBarcode",
+      "event_type": "catalog.presentation.changed.v1",
+      "condition": "committed"
+    },
+    {
+      "operation_id": "createPresentationPrice",
+      "event_type": "pricing.presentation-price.changed.v1",
+      "condition": "committed"
+    }
+  ],
+  "source_shapes": {
+    "C_CatalogId": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/CatalogId"
+    },
+    "C_IdentityReference": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/IdentityReference"
+    },
+    "C_AggregateVersion": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/AggregateVersion"
+    },
+    "E_Name80": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Name80"
+    },
+    "E_Category": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Category"
+    },
+    "E_Name160": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Name160"
+    },
+    "E_Description": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Description"
+    },
+    "E_ProductType": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/ProductType"
+    },
+    "E_TaxCode": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/TaxCode"
+    },
+    "E_TaxReferenceResponse": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/TaxReferenceResponse"
+    },
+    "E_State": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/State"
+    },
+    "E_CanonicalSku": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/CanonicalSku"
+    },
+    "E_Plu": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Plu"
+    },
+    "C_UnitCode": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/UnitCode"
+    },
+    "E_DefaultVariant": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/DefaultVariant"
+    },
+    "E_Product": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Product"
+    },
+    "C_ConversionFactor": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/ConversionFactor"
+    },
+    "C_QuantityDecimal": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/QuantityDecimal"
+    },
+    "E_PositiveQuantity": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/PositiveQuantity"
+    },
+    "E_Presentation": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Presentation"
+    },
+    "E_Barcode": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/Barcode"
+    },
+    "E_TaxRule": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/TaxRule"
+    },
+    "E_TaxComponent": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/TaxComponent"
+    },
+    "E_TaxClassification": {
+      "file": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+      "pointer": "/$defs/TaxClassification"
+    },
+    "P_PriceList": {
+      "file": "catalog/http/shared/v1/catalog-prices-v1.schema.json",
+      "pointer": "/$defs/PriceList"
+    },
+    "C_PriceDecimal": {
+      "file": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "pointer": "/$defs/PriceDecimal"
+    },
+    "P_Price": {
+      "file": "catalog/http/shared/v1/catalog-prices-v1.schema.json",
+      "pointer": "/$defs/Price"
+    }
+  },
+  "compatibility": {
+    "admitted_revisions": [
+      1
+    ],
+    "extension_zone": "/payload/extensions",
+    "active_extensions": [],
+    "synthetic_evolution_only": true,
+    "unknown_revision": "quarantine_without_effect",
+    "unknown_critical_enum": "quarantine_without_effect"
+  },
+  "delivery": {
+    "topic": "catalog-pricing.events",
+    "consumer": "reporting.catalog-changes",
+    "queue": "reporting.catalog-changes",
+    "dlq": "reporting.catalog-changes.dlq",
+    "status": "future_intention",
+    "runtime_demonstrated": false
+  },
+  "privacy": {
+    "purpose": "Historical catalog/price interpretation and authorized future projections",
+    "access": "Tenant-scoped workloads authorized by capability; no browser broker access",
+    "retention": "Versioned domain profiles ADR-016/035; no new legal period. Outbox/inbox operational retention is not business-history retention.",
+    "audit_actor": "Restricted local audit only, linked by causation_id; not event payload",
+    "owner": "catalog-pricing",
+    "sensitivity": "RESTRICTED",
+    "categories": [
+      "COMMERCIAL",
+      "FISCAL"
+    ],
+    "base": "Authorized organization operations and historical interpretation; no marketing reuse",
+    "log_policy": "Do not log event bodies or field values; minimize correlation metadata",
+    "encryption": "TLS in transit and encryption at rest by owner/workload policy before runtime",
+    "transport_retention_profile": "TECHNICAL_SHORT",
+    "history_retention": "Approve versioned owner historical policy before F1-08; legal holds and inherited obligations apply. Never use transport TTL as business retention.",
+    "export_correction": "Authorized organization data export; correction creates a new version, never rewrites retained facts",
+    "third_parties_regions": "No transfers or region deployment authorized by this candidate"
+  },
+  "future_runtime": {
+    "atomicity": "Domain fact/history + mandatory audit + serialized outbox in one owner SQL transaction",
+    "reconstruction": "Approve durable owner historical source and authorized export/replay with stable IDs/checkpoints before F1-08 producer; never outbox alone",
+    "not_demonstrated": [
+      "SQL",
+      "authorization",
+      "delivery",
+      "order",
+      "deduplication",
+      "broker",
+      "durable-reconstruction"
+    ]
+  },
+  "field_inventory": [
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/aggregate_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/aggregate_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/aggregate_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/causation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/correlation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/event_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/event_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/occurred_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/category_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/created_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/name",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/parent_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/status",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/updated_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/category/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/payload/operation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/producer",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.category.changed.v1",
+      "path": "/schema_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/aggregate_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/aggregate_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/aggregate_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/causation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/correlation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/event_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/event_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/occurred_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/affected_base_presentation/presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/affected_base_presentation/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/operation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/base_presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/category_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/created_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/default_variant/base_unit",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/default_variant/plu",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/default_variant/sku",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/default_variant/variant_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/description",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/name",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/product_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/status",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/tax_classification/code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/tax_classification/version",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/updated_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/product/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/components/*/jurisdiction_code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/components/*/rule_ref/code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/components/*/rule_ref/version",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/components/*/tax_code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/components/*/treatment",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/country_code",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/name",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/selectable",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/payload/tax_definition/version",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/producer",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.product.changed.v1",
+      "path": "/schema_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/aggregate_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/aggregate_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/aggregate_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/causation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/correlation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/event_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/event_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/occurred_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/barcode_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/created_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/retired_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/status",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/barcode/value",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/base_unit",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/operation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/allows_fractions",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/conversion_factor",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/created_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/minimum_quantity",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/name",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/product_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/quantity_increment",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/status",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/unit_code",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/updated_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/variant_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/presentation/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/payload/product_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/producer",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "catalog.presentation.changed.v1",
+      "path": "/schema_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/aggregate_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/aggregate_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/aggregate_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/causation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/correlation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/event_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/event_type",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/occurred_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/created_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/currency",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/price_list_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/tax_included",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/updated_at",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/list/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/operation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/amount",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/currency",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/price_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/price_list_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/product_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/tax_included",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/valid_from",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/valid_to",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/previous_price/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/amount",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/currency",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "CONFIDENTIAL",
+      "categories": [
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/organization_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/presentation_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/price_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/price_list_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/product_id",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/tax_included",
+      "purpose": "Retained synthetic classification, no production tax rule",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FISCAL",
+        "COMMERCIAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/valid_from",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/valid_to",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/payload/price/version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/producer",
+      "purpose": "Captured commercial meaning",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "event_type": "pricing.presentation-price.changed.v1",
+      "path": "/schema_version",
+      "purpose": "Historical identity/version/causality binding",
+      "access": "authorized-tenant-workloads",
+      "sensitivity": "INTERNAL",
+      "categories": [
+        "OPERATIONAL"
+      ],
+      "owner": "catalog-pricing",
+      "base": "authorized-organization-operation-and-history",
+      "consumers": [
+        "reporting.catalog-changes (future intention only)"
+      ],
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention_profile": "TECHNICAL_SHORT",
+      "history_retention": "owner-policy-required-before-F1-08; holds and source obligations preserved",
+      "export_correction": "authorized-export; prospective-version-only",
+      "third_parties_regions": "none-authorized"
+    }
+  ]
+}

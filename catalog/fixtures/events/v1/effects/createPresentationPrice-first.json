@@ -1,0 +1,67 @@
+{
+  "operation_id": "createPresentationPrice",
+  "organization_id": "01998d00-0000-7000-8000-000000000090",
+  "causation_id": "01998d00-0000-7000-8000-000000000245",
+  "correlation_id": "01998d00-0000-7000-8000-000000000246",
+  "occurred_at": "2026-10-15T10:00:00.000001Z",
+  "outcome": "committed",
+  "request": {
+    "amount": "12.50",
+    "expected_version": 0
+  },
+  "response": {
+    "price_id": "01998d00-0000-7000-8000-000000000102",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "price_list_id": "01998d00-0000-7000-8000-000000000101",
+    "product_id": "01998d00-0000-7000-8000-000000000002",
+    "presentation_id": "01998d00-0000-7000-8000-000000000004",
+    "amount": "12.5",
+    "currency": "ARS",
+    "tax_included": true,
+    "version": 1,
+    "valid_from": "2026-10-15T10:00:00.000001Z",
+    "valid_to": null
+  },
+  "previous_price": null,
+  "events": [
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000247",
+      "event_type": "pricing.presentation-price.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-15T10:00:00.000001Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "presentation_price",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000004",
+      "aggregate_version": 1,
+      "correlation_id": "01998d00-0000-7000-8000-000000000246",
+      "causation_id": "01998d00-0000-7000-8000-000000000245",
+      "payload": {
+        "operation_id": "createPresentationPrice",
+        "list": {
+          "price_list_id": "01998d00-0000-7000-8000-000000000101",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "currency": "ARS",
+          "tax_included": true,
+          "version": 1,
+          "created_at": "2026-10-15T10:00:00.000001Z",
+          "updated_at": "2026-10-15T10:00:00.000001Z"
+        },
+        "price": {
+          "price_id": "01998d00-0000-7000-8000-000000000102",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "price_list_id": "01998d00-0000-7000-8000-000000000101",
+          "product_id": "01998d00-0000-7000-8000-000000000002",
+          "presentation_id": "01998d00-0000-7000-8000-000000000004",
+          "amount": "12.5",
+          "currency": "ARS",
+          "tax_included": true,
+          "version": 1,
+          "valid_from": "2026-10-15T10:00:00.000001Z",
+          "valid_to": null
+        },
+        "previous_price": null
+      }
+    }
+  ]
+}

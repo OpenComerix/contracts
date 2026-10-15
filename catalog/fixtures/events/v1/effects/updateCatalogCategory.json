@@ -1,0 +1,50 @@
+{
+  "operation_id": "updateCatalogCategory",
+  "organization_id": "01998d00-0000-7000-8000-000000000090",
+  "causation_id": "01998d00-0000-7000-8000-000000000204",
+  "correlation_id": "01998d00-0000-7000-8000-000000000205",
+  "occurred_at": "2026-10-14T00:00:00Z",
+  "outcome": "committed",
+  "request": {
+    "name": "Categoría renombrada",
+    "expected_version": 1
+  },
+  "response": {
+    "category_id": "01998d00-0000-7000-8000-000000000001",
+    "organization_id": "01998d00-0000-7000-8000-000000000090",
+    "name": "Categoría renombrada",
+    "parent_id": null,
+    "status": "active",
+    "version": 2,
+    "created_at": "2026-10-14T00:00:00Z",
+    "updated_at": "2026-10-14T00:00:00Z"
+  },
+  "events": [
+    {
+      "event_id": "01998d00-0000-7000-8000-000000000206",
+      "event_type": "catalog.category.changed.v1",
+      "schema_version": 1,
+      "occurred_at": "2026-10-14T00:00:00Z",
+      "producer": "catalog-pricing",
+      "organization_id": "01998d00-0000-7000-8000-000000000090",
+      "aggregate_type": "category",
+      "aggregate_id": "01998d00-0000-7000-8000-000000000001",
+      "aggregate_version": 2,
+      "correlation_id": "01998d00-0000-7000-8000-000000000205",
+      "causation_id": "01998d00-0000-7000-8000-000000000204",
+      "payload": {
+        "operation_id": "updateCatalogCategory",
+        "category": {
+          "category_id": "01998d00-0000-7000-8000-000000000001",
+          "organization_id": "01998d00-0000-7000-8000-000000000090",
+          "name": "Categoría renombrada",
+          "parent_id": null,
+          "status": "active",
+          "version": 2,
+          "created_at": "2026-10-14T00:00:00Z",
+          "updated_at": "2026-10-14T00:00:00Z"
+        }
+      }
+    }
+  ]
+}

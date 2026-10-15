@@ -1,0 +1,3560 @@
+{
+  "format_version": 1,
+  "cases": [
+    {
+      "id": "tenant",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/product/organization_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_TENANT"
+    },
+    {
+      "id": "aggregate-id",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/aggregate_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_AGGREGATE_ID"
+    },
+    {
+      "id": "aggregate-version",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/aggregate_version",
+          "value": 2
+        }
+      ],
+      "reason": "E_AGGREGATE_VERSION"
+    },
+    {
+      "id": "tax-definition",
+      "kind": "semantic",
+      "context": "transitionCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/tax_definition/version",
+          "value": 2
+        }
+      ],
+      "reason": "E_TAX_CAPTURE"
+    },
+    {
+      "id": "price-sequence",
+      "kind": "semantic",
+      "context": "createPresentationPrice",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/previous_price/version",
+          "value": 2
+        }
+      ],
+      "reason": "E_PRICE_SEQUENCE"
+    },
+    {
+      "id": "price-contiguity",
+      "kind": "semantic",
+      "context": "createPresentationPrice",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/previous_price/valid_to",
+          "value": "2026-10-15T10:00:01.000001Z"
+        }
+      ],
+      "reason": "E_PRICE_CONTIGUITY"
+    },
+    {
+      "id": "causation",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/causation_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_CAUSAL_CONTEXT"
+    },
+    {
+      "id": "correlation",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/correlation_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_CAUSAL_CONTEXT"
+    },
+    {
+      "id": "missing-sibling",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events",
+          "value": [
+            {
+              "event_id": "01998d00-0000-7000-8000-000000000215",
+              "event_type": "catalog.product.changed.v1",
+              "schema_version": 1,
+              "occurred_at": "2026-10-14T00:00:00Z",
+              "producer": "catalog-pricing",
+              "organization_id": "01998d00-0000-7000-8000-000000000090",
+              "aggregate_type": "product",
+              "aggregate_id": "01998d00-0000-7000-8000-000000000002",
+              "aggregate_version": 1,
+              "correlation_id": "01998d00-0000-7000-8000-000000000214",
+              "causation_id": "01998d00-0000-7000-8000-000000000213",
+              "payload": {
+                "operation_id": "createCatalogProduct",
+                "product": {
+                  "product_id": "01998d00-0000-7000-8000-000000000002",
+                  "organization_id": "01998d00-0000-7000-8000-000000000090",
+                  "name": "Producto de ejemplo",
+                  "description": null,
+                  "type": "STOCKED_GOOD",
+                  "category_id": null,
+                  "tax_classification": null,
+                  "status": "draft",
+                  "version": 1,
+                  "default_variant": {
+                    "variant_id": "01998d00-0000-7000-8000-000000000003",
+                    "sku": "PRODUCTO-001",
+                    "plu": null,
+                    "base_unit": "unit"
+                  },
+                  "base_presentation_id": "01998d00-0000-7000-8000-000000000004",
+                  "created_at": "2026-10-14T00:00:00Z",
+                  "updated_at": "2026-10-14T00:00:00Z"
+                },
+                "tax_definition": null,
+                "affected_base_presentation": {
+                  "presentation_id": "01998d00-0000-7000-8000-000000000004",
+                  "version": 1
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "reason": "E_EFFECT_INVENTORY"
+    },
+    {
+      "id": "extra-event-replay",
+      "kind": "semantic",
+      "context": "no-event-replay",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events",
+          "value": [
+            {
+              "event_id": "01998d00-0000-7000-8000-000000000215",
+              "event_type": "catalog.product.changed.v1",
+              "schema_version": 1,
+              "occurred_at": "2026-10-14T00:00:00Z",
+              "producer": "catalog-pricing",
+              "organization_id": "01998d00-0000-7000-8000-000000000090",
+              "aggregate_type": "product",
+              "aggregate_id": "01998d00-0000-7000-8000-000000000002",
+              "aggregate_version": 1,
+              "correlation_id": "01998d00-0000-7000-8000-000000000214",
+              "causation_id": "01998d00-0000-7000-8000-000000000213",
+              "payload": {
+                "operation_id": "createCatalogProduct",
+                "product": {
+                  "product_id": "01998d00-0000-7000-8000-000000000002",
+                  "organization_id": "01998d00-0000-7000-8000-000000000090",
+                  "name": "Producto de ejemplo",
+                  "description": null,
+                  "type": "STOCKED_GOOD",
+                  "category_id": null,
+                  "tax_classification": null,
+                  "status": "draft",
+                  "version": 1,
+                  "default_variant": {
+                    "variant_id": "01998d00-0000-7000-8000-000000000003",
+                    "sku": "PRODUCTO-001",
+                    "plu": null,
+                    "base_unit": "unit"
+                  },
+                  "base_presentation_id": "01998d00-0000-7000-8000-000000000004",
+                  "created_at": "2026-10-14T00:00:00Z",
+                  "updated_at": "2026-10-14T00:00:00Z"
+                },
+                "tax_definition": null,
+                "affected_base_presentation": {
+                  "presentation_id": "01998d00-0000-7000-8000-000000000004",
+                  "version": 1
+                }
+              }
+            },
+            {
+              "event_id": "01998d00-0000-7000-8000-000000000216",
+              "event_type": "catalog.presentation.changed.v1",
+              "schema_version": 1,
+              "occurred_at": "2026-10-14T00:00:00Z",
+              "producer": "catalog-pricing",
+              "organization_id": "01998d00-0000-7000-8000-000000000090",
+              "aggregate_type": "presentation",
+              "aggregate_id": "01998d00-0000-7000-8000-000000000004",
+              "aggregate_version": 1,
+              "correlation_id": "01998d00-0000-7000-8000-000000000214",
+              "causation_id": "01998d00-0000-7000-8000-000000000213",
+              "payload": {
+                "operation_id": "createCatalogProduct",
+                "presentation": {
+                  "presentation_id": "01998d00-0000-7000-8000-000000000004",
+                  "product_id": "01998d00-0000-7000-8000-000000000002",
+                  "variant_id": "01998d00-0000-7000-8000-000000000003",
+                  "organization_id": "01998d00-0000-7000-8000-000000000090",
+                  "name": "Unidad",
+                  "unit_code": "unit",
+                  "conversion_factor": "1",
+                  "allows_fractions": false,
+                  "minimum_quantity": "1",
+                  "quantity_increment": "1",
+                  "status": "draft",
+                  "version": 1,
+                  "created_at": "2026-10-14T00:00:00Z",
+                  "updated_at": "2026-10-14T00:00:00Z"
+                },
+                "base_unit": "unit",
+                "product_version": 1,
+                "barcode": null
+              }
+            }
+          ]
+        }
+      ],
+      "reason": "E_EFFECT_INVENTORY"
+    },
+    {
+      "id": "base-pair",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/variant_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_BASE_PAIR"
+    },
+    {
+      "id": "base-unit-pair",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/unit_code",
+          "value": "g"
+        }
+      ],
+      "reason": "E_BASE_PAIR"
+    },
+    {
+      "id": "barcode-presentation",
+      "kind": "semantic",
+      "context": "addCatalogPresentationBarcode",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/barcode/presentation_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_BARCODE_PRESENTATION"
+    },
+    {
+      "id": "http-price",
+      "kind": "semantic",
+      "context": "createPresentationPrice",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/request/amount",
+          "value": "100"
+        }
+      ],
+      "reason": "E_HTTP_PRICE"
+    },
+    {
+      "id": "http-snapshot",
+      "kind": "semantic",
+      "context": "updateCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/response/name",
+          "value": "Changed but event not changed"
+        }
+      ],
+      "reason": "E_HTTP_SNAPSHOT"
+    },
+    {
+      "id": "unknown-pair",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/schema_version",
+          "value": 2
+        }
+      ],
+      "reason": "E_UNSUPPORTED_PAIR"
+    },
+    {
+      "id": "size",
+      "kind": "semantic",
+      "context": "createCatalogCategory",
+      "patches": [
+        {
+          "op": "repeat",
+          "path": "/events/0/payload/unused_padding",
+          "value": "x",
+          "count": 131073
+        }
+      ],
+      "reason": "E_MESSAGE_SIZE"
+    },
+    {
+      "id": "duplicate-event-id",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/event_id",
+          "value": "01998d00-0000-7000-8000-000000000215"
+        }
+      ],
+      "reason": "E_EVENT_ID_UNIQUE"
+    },
+    {
+      "id": "unexpected-barcode",
+      "kind": "semantic",
+      "context": "createCatalogPresentation",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/barcode",
+          "value": {
+            "barcode_id": "01998d00-0000-7000-8000-000000000005",
+            "presentation_id": "01998d00-0000-7000-8000-000000000004",
+            "organization_id": "01998d00-0000-7000-8000-000000000090",
+            "type": "INTERNAL",
+            "value": "OC:UNIDAD-001",
+            "status": "active",
+            "created_at": "2026-10-14T00:00:00Z",
+            "retired_at": null
+          }
+        }
+      ],
+      "reason": "E_BARCODE_UNEXPECTED"
+    },
+    {
+      "id": "first-price-sequence",
+      "kind": "semantic",
+      "context": "createPresentationPrice-first",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/price/version",
+          "value": 2
+        },
+        {
+          "op": "set",
+          "path": "/events/0/aggregate_version",
+          "value": 2
+        }
+      ],
+      "reason": "E_FIRST_PRICE"
+    },
+    {
+      "id": "new-price-closed",
+      "kind": "semantic",
+      "context": "createPresentationPrice",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/price/valid_to",
+          "value": "2026-10-16T00:00:00Z"
+        }
+      ],
+      "reason": "E_NEW_PRICE_OPEN"
+    },
+    {
+      "id": "price-scope",
+      "kind": "semantic",
+      "context": "createPresentationPrice",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/previous_price/price_list_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_PRICE_SCOPE"
+    },
+    {
+      "id": "missing-definition",
+      "kind": "semantic",
+      "context": "transitionCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/tax_definition",
+          "value": null
+        }
+      ],
+      "reason": "E_TAX_CAPTURE"
+    },
+    {
+      "id": "unexpected-definition",
+      "kind": "semantic",
+      "context": "createCatalogProduct",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/tax_definition",
+          "value": {
+            "code": "TEST.CLASSIFICATION",
+            "version": 1,
+            "country_code": "AR",
+            "name": "Clasificación sintética sin reglas productivas",
+            "selectable": true,
+            "components": [
+              {
+                "tax_code": "TEST.TAX",
+                "jurisdiction_code": "TEST.AR",
+                "treatment": "taxable",
+                "rule_ref": {
+                  "code": "TEST.RULE",
+                  "version": 1
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "reason": "E_TAX_CAPTURE"
+    },
+    {
+      "id": "barcode-state",
+      "kind": "semantic",
+      "context": "retireCatalogPresentationBarcode",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/barcode/status",
+          "value": "active"
+        }
+      ],
+      "reason": "E_BARCODE_STATE"
+    },
+    {
+      "id": "quantity-step",
+      "kind": "semantic",
+      "context": "createCatalogPresentation",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/minimum_quantity",
+          "value": "1"
+        },
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/quantity_increment",
+          "value": "2"
+        }
+      ],
+      "reason": "MINIMUM_INCREMENT_MULTIPLE"
+    },
+    {
+      "id": "quantity-dimension",
+      "kind": "semantic",
+      "context": "createCatalogPresentation",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/base_unit",
+          "value": "kg"
+        }
+      ],
+      "reason": "UNIT_DIMENSION"
+    },
+    {
+      "id": "owner-version",
+      "kind": "semantic",
+      "context": "createCatalogPresentation",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/product_version",
+          "value": 2
+        }
+      ],
+      "reason": "E_OWNER_PRODUCT"
+    },
+    {
+      "id": "owner-variant",
+      "kind": "semantic",
+      "context": "createCatalogPresentation",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/variant_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        },
+        {
+          "op": "set",
+          "path": "/response/variant_id",
+          "value": "01998d00-0000-7000-8000-000000000099"
+        }
+      ],
+      "reason": "E_OWNER_PRODUCT"
+    },
+    {
+      "id": "required-category-event_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-event_type",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_type"
+        }
+      ]
+    },
+    {
+      "id": "required-category-schema_version",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/schema_version"
+        }
+      ]
+    },
+    {
+      "id": "required-category-occurred_at",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/occurred_at"
+        }
+      ]
+    },
+    {
+      "id": "required-category-producer",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/producer"
+        }
+      ]
+    },
+    {
+      "id": "required-category-organization_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-aggregate_type",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_type"
+        }
+      ]
+    },
+    {
+      "id": "required-category-aggregate_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-aggregate_version",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_version"
+        }
+      ]
+    },
+    {
+      "id": "required-category-correlation_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/correlation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-causation_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/causation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-operation_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/operation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-category_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/category_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-organization_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-name",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/name"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-parent_id",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/parent_id"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-status",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/status"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-version",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/version"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-created_at",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/created_at"
+        }
+      ]
+    },
+    {
+      "id": "required-category-payload-category-updated_at",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/category/updated_at"
+        }
+      ]
+    },
+    {
+      "id": "extra-envelope-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "extra-payload-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-extra-payload-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-forbidden-extension-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/extensions",
+          "value": {
+            "token": "synthetic-secret"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-major-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/event_type",
+          "value": "catalog.category.changed.v2"
+        }
+      ]
+    },
+    {
+      "id": "unknown-revision-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/schema_version",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "wrong-producer-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/producer",
+          "value": "gateway-bff"
+        }
+      ]
+    },
+    {
+      "id": "tenant-not-uuid-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/organization_id",
+          "value": "organization-fixture"
+        }
+      ]
+    },
+    {
+      "id": "cause-null-category",
+      "kind": "schema",
+      "context": "createCatalogCategory",
+      "type": "category",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/causation_id",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "required-product-event_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-event_type",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_type"
+        }
+      ]
+    },
+    {
+      "id": "required-product-schema_version",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/schema_version"
+        }
+      ]
+    },
+    {
+      "id": "required-product-occurred_at",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/occurred_at"
+        }
+      ]
+    },
+    {
+      "id": "required-product-producer",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/producer"
+        }
+      ]
+    },
+    {
+      "id": "required-product-organization_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-aggregate_type",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_type"
+        }
+      ]
+    },
+    {
+      "id": "required-product-aggregate_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-aggregate_version",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_version"
+        }
+      ]
+    },
+    {
+      "id": "required-product-correlation_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/correlation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-causation_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/causation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-operation_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/operation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-product_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/product_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-organization_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-name",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/name"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-description",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/description"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-type",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/type"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-category_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/category_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-tax_classification",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/tax_classification"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-tax_classification-code",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/tax_classification/code"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-tax_classification-version",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/tax_classification/version"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-status",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/status"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-version",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/version"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-default_variant",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/default_variant"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-default_variant-variant_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/default_variant/variant_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-default_variant-sku",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/default_variant/sku"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-default_variant-plu",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/default_variant/plu"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-default_variant-base_unit",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/default_variant/base_unit"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-base_presentation_id",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/base_presentation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-created_at",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/created_at"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-product-updated_at",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product/updated_at"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-code",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/code"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-version",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/version"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-country_code",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/country_code"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-name",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/name"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-selectable",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/selectable"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-tax_definition-components",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/tax_definition/components"
+        }
+      ]
+    },
+    {
+      "id": "required-product-payload-affected_base_presentation",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/affected_base_presentation"
+        }
+      ]
+    },
+    {
+      "id": "extra-envelope-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "extra-payload-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-extra-payload-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-forbidden-extension-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/extensions",
+          "value": {
+            "token": "synthetic-secret"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-major-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/event_type",
+          "value": "catalog.product.changed.v2"
+        }
+      ]
+    },
+    {
+      "id": "unknown-revision-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/schema_version",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "wrong-producer-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/producer",
+          "value": "gateway-bff"
+        }
+      ]
+    },
+    {
+      "id": "tenant-not-uuid-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/organization_id",
+          "value": "organization-fixture"
+        }
+      ]
+    },
+    {
+      "id": "cause-null-product",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/causation_id",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-event_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-event_type",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_type"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-schema_version",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/schema_version"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-occurred_at",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/occurred_at"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-producer",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/producer"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-organization_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-aggregate_type",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_type"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-aggregate_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-aggregate_version",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_version"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-correlation_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/correlation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-causation_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/causation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-operation_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/operation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-presentation_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/presentation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-product_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/product_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-variant_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/variant_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-organization_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-name",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/name"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-unit_code",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/unit_code"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-conversion_factor",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/conversion_factor"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-allows_fractions",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/allows_fractions"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-minimum_quantity",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/minimum_quantity"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-quantity_increment",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/quantity_increment"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-status",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/status"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-version",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/version"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-created_at",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/created_at"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-presentation-updated_at",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/presentation/updated_at"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-base_unit",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/base_unit"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-product_version",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/product_version"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-barcode_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/barcode_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-presentation_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/presentation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-organization_id",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-type",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/type"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-value",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/value"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-status",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/status"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-created_at",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/created_at"
+        }
+      ]
+    },
+    {
+      "id": "required-presentation-payload-barcode-retired_at",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/barcode/retired_at"
+        }
+      ]
+    },
+    {
+      "id": "extra-envelope-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "extra-payload-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-extra-payload-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-forbidden-extension-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/extensions",
+          "value": {
+            "token": "synthetic-secret"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-major-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/event_type",
+          "value": "catalog.presentation.changed.v2"
+        }
+      ]
+    },
+    {
+      "id": "unknown-revision-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/schema_version",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "wrong-producer-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/producer",
+          "value": "gateway-bff"
+        }
+      ]
+    },
+    {
+      "id": "tenant-not-uuid-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/organization_id",
+          "value": "organization-fixture"
+        }
+      ]
+    },
+    {
+      "id": "cause-null-presentation",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/causation_id",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "required-price-event_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-event_type",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/event_type"
+        }
+      ]
+    },
+    {
+      "id": "required-price-schema_version",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/schema_version"
+        }
+      ]
+    },
+    {
+      "id": "required-price-occurred_at",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/occurred_at"
+        }
+      ]
+    },
+    {
+      "id": "required-price-producer",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/producer"
+        }
+      ]
+    },
+    {
+      "id": "required-price-organization_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-aggregate_type",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_type"
+        }
+      ]
+    },
+    {
+      "id": "required-price-aggregate_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-aggregate_version",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/aggregate_version"
+        }
+      ]
+    },
+    {
+      "id": "required-price-correlation_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/correlation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-causation_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/causation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-operation_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/operation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-price_list_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/price_list_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-organization_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-currency",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/currency"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-tax_included",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/tax_included"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-version",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/version"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-created_at",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/created_at"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-list-updated_at",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/list/updated_at"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-price_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/price_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-organization_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-price_list_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/price_list_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-product_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/product_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-presentation_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/presentation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-amount",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/amount"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-currency",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/currency"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-tax_included",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/tax_included"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-version",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/version"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-valid_from",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/valid_from"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-price-valid_to",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/price/valid_to"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-price_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/price_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-organization_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/organization_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-price_list_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/price_list_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-product_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/product_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-presentation_id",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/presentation_id"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-amount",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/amount"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-currency",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/currency"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-tax_included",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/tax_included"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-version",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/version"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-valid_from",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/valid_from"
+        }
+      ]
+    },
+    {
+      "id": "required-price-payload-previous_price-valid_to",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/events/0/payload/previous_price/valid_to"
+        }
+      ]
+    },
+    {
+      "id": "extra-envelope-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "extra-payload-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-extra-payload-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/token",
+          "value": "synthetic-secret"
+        }
+      ]
+    },
+    {
+      "id": "consumer-forbidden-extension-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/extensions",
+          "value": {
+            "token": "synthetic-secret"
+          }
+        }
+      ]
+    },
+    {
+      "id": "unknown-major-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/event_type",
+          "value": "pricing.presentation-price.changed.v2"
+        }
+      ]
+    },
+    {
+      "id": "unknown-revision-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/schema_version",
+          "value": 2
+        }
+      ]
+    },
+    {
+      "id": "wrong-producer-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/producer",
+          "value": "gateway-bff"
+        }
+      ]
+    },
+    {
+      "id": "tenant-not-uuid-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/organization_id",
+          "value": "organization-fixture"
+        }
+      ]
+    },
+    {
+      "id": "cause-null-price",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/causation_id",
+          "value": null
+        }
+      ]
+    },
+    {
+      "id": "known-critical-product-enum",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/product/type",
+          "value": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "id": "known-critical-state-enum",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/status",
+          "value": "UNKNOWN"
+        }
+      ]
+    },
+    {
+      "id": "known-critical-tax-enum",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "consumer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/tax_definition/components",
+          "value": [
+            {
+              "tax_code": "TEST.TAX",
+              "jurisdiction_code": "TEST.AR",
+              "treatment": "UNKNOWN",
+              "rule_ref": {
+                "code": "TEST.RULE",
+                "version": 1
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "price-numeric",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/price/amount",
+          "value": 12.5
+        }
+      ]
+    },
+    {
+      "id": "price-excess-scale",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/price/amount",
+          "value": "12.501"
+        }
+      ]
+    },
+    {
+      "id": "factor-excess-scale",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/conversion_factor",
+          "value": "1.0000001"
+        }
+      ]
+    },
+    {
+      "id": "fraction-excess-scale",
+      "kind": "schema",
+      "context": "addCatalogPresentationBarcode",
+      "type": "presentation",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/allows_fractions",
+          "value": true
+        },
+        {
+          "op": "set",
+          "path": "/events/0/payload/presentation/minimum_quantity",
+          "value": "0.0001"
+        }
+      ]
+    },
+    {
+      "id": "nested-price-secret",
+      "kind": "schema",
+      "context": "createPresentationPrice",
+      "type": "price",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/price/cost",
+          "value": "1"
+        }
+      ]
+    },
+    {
+      "id": "nested-variant-secret",
+      "kind": "schema",
+      "context": "transitionCatalogProduct",
+      "type": "product",
+      "event_index": 0,
+      "profile": "producer",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/0/payload/product/default_variant/token",
+          "value": "synthetic"
+        }
+      ]
+    },
+    {
+      "id": "base-snapshot-name",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/name",
+          "value": "Never committed name"
+        }
+      ],
+      "reason": "E_BASE_SNAPSHOT"
+    },
+    {
+      "id": "base-snapshot-quantities",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/minimum_quantity",
+          "value": "2"
+        },
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/quantity_increment",
+          "value": "2"
+        }
+      ],
+      "reason": "E_BASE_SNAPSHOT"
+    },
+    {
+      "id": "base-snapshot-fractions",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/allows_fractions",
+          "value": true
+        }
+      ],
+      "reason": "E_BASE_SNAPSHOT"
+    },
+    {
+      "id": "base-snapshot-state",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/events/1/payload/presentation/status",
+          "value": "inactive"
+        }
+      ],
+      "reason": "E_BASE_SNAPSHOT"
+    },
+    {
+      "id": "base-snapshot-missing-result",
+      "kind": "semantic",
+      "context": "updateCatalogProduct-base-unit",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/base_presentation"
+        }
+      ],
+      "reason": "E_BASE_RESULT"
+    }
+  ]
+}
