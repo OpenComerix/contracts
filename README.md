@@ -2,7 +2,7 @@
 
 Este repositorio contiene contratos versionados para productores y consumidores. Las decisiones de arquitectura y dominio se mantienen en la documentación del launcher.
 
-La organización por dominio, superficie y versión, los manifiestos/locks de consumidores y el análisis de impacto se describen en [el registro contractual](registry/README.md). Esta tanda añade metadatos y gates; preserva rutas, bytes y validadores anteriores. Los exports nuevos permanecen como candidatos locales hasta publicación autorizada.
+La organización por dominio, superficie y versión, los manifiestos/locks de consumidores y el análisis de impacto se describen en [el registro contractual](registry/README.md). La admisión F1-07G conserva rutas, bytes, validadores y exports anteriores. [Procedencia y publicación del paquete B–F](catalog/README.md#f1-07g--admisión-y-publicación); los consumidores conservan sus locks H2.
 
 - `openapi/pos-sales-v1.yaml` y `openapi/pos-sync-v1.json`: contratos existentes de ventas y sincronización.
 - `openapi/identity-onboarding-v1.yaml`: superficie v1 de identidad, sesiones, MFA, dispositivos, onboarding de organización y contexto.
@@ -24,7 +24,7 @@ Mapas: [catalog](catalog/README.md), [identity](identity/README.md) y [common](c
 
 `identity/http/private/v1/identity-catalog-authority-v1.yaml` 1.0.0 materializa únicamente los dos puertos privados de identidad. Política/permisos de las 25 operaciones aprobadas en `catalog/http/shared/v1/catalog-security-policy-v1.json`; sus OpenAPI públicos/privados completos corresponden a C/D. Tipos comunes en `catalog/http/shared/v1/catalog-common-v1.schema.json`, objeto de siete campos en `catalog/http/shared/v1/catalog-request-v1.schema.json`. `common/errors/v6/error-catalog-v6.json` conserva íntegramente las 24 entradas v5 y añade 25; `common/http/shared/v3/problem-details-v3.schema.json` conserva v2 y admite 406/413/415.
 
-Los archivos B–E son candidatos contractuales: no están admitidos por los manifests/locks actuales ni tienen una procedencia publicada ficticia. Registry/planned, exports y consumidores vigentes permanecen intactos. F1-07G fija publicación/admisión final; la [configuración candidata F](catalog/README.md#candidato-f1-07f--validación-conjunta-en-ci) integra los gates en CI. El productor real de identidad requiere otra tanda posterior antes de F1-08. No modificar contratos H2 para habilitar catálogo.
+F1-07G registra las raíces B–F desde el commit fuente exacto publicado `68d923e903b6341eedb980af3586890c0eab7d5e`: registro e índices fijan esa procedencia; manifiestos/locks/exports consumidores siguen H2. La [matriz F](catalog/README.md#candidato-f1-07f--validación-conjunta-en-ci) conserva sus diez jobs. Revisión, publicación y CI de G preceden al nuevo consumo. El productor real de identidad y el perfil histórico requieren cortes propios antes de F1-08.
 
 Validación local con Node24.21.0 y dependencias congeladas del repositorio:
 
@@ -182,7 +182,7 @@ El replay privado de `completeSessionStepUp` exige JWT de servicio gateway, cook
 
 ## F1-07C — HTTP de catálogo (candidatos)
 
-Superficies [pública](catalog/http/public/v1/catalog-pricing-v1.yaml) y [privada](catalog/http/private/v1/catalog-pricing-internal-v1.yaml), ambas 1.0.0 candidata: veinte operaciones de catálogo (8 GET y 12 mutaciones: tres 201/nueve 200). F1-07D añade cinco operaciones de precios para completar la matriz de 25 antes de F/G. No consumir este corte como un release completo; registro, índices, admisiones y locks siguen intactos. Las rutas efectivas aplican /api/v1 una sola vez.
+Superficies [pública](catalog/http/public/v1/catalog-pricing-v1.yaml) y [privada](catalog/http/private/v1/catalog-pricing-internal-v1.yaml), ambas 1.0.0: veinte operaciones de catálogo (8 GET y 12 mutaciones: tres 201/nueve 200) y cinco de precios incorporadas en D completan la matriz de 25. La admisión G conserva los bytes B–F; todo nuevo consumo exige revisión y CI de la revisión exacta. Las rutas efectivas aplican /api/v1 una sola vez.
 
 [Entidades/requests](catalog/http/shared/v1/catalog-entities-v1.schema.json) reutilizan catalog-common-v1. Requests cerrados y respuestas extensibles en todos los niveles propios, manteniendo campos conocidos obligatorios. Producto/default_variant y presentación/base_presentation_id separados; precio y stock no se incrustan. Clasificación fiscal code/version con opciones y reglas sintéticas, sin alícuotas productivas. Mutaciones tienen cookie/Origin/CSRF en la superficie pública y delegado/señal en la privada; ETag individual, no-store, idempotencia y Location solo para altas consultables. No cookie ni tokens internos en la respuesta pública. Los ejemplos de replay conservan body/status/Location/version y cambian solo el indicador.
 
@@ -204,11 +204,11 @@ jsonschema metaschema catalog/http/shared/v1/catalog-entities-v1.schema.json
 sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
 ```
 
-Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. CI conjunta en el candidato F; admisión/publicación G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
+Usar directorio de extracción nuevo; el runner estructural mantiene su nombre/mensaje histórico de B y ejecuta los casos C de ese directorio. Negativos solo por exit2/causa de validación: errores de selector, parsing, archivos o herramienta fallan el gate. El hash de inventario detecta pérdida/alteración accidental de cobertura, no autentica contra manipulación deliberada. CI conjunta F; admisión/publicación en G. Fixtures no acreditan SQL, rollback, autorización/criptografía, firma de cursores, concurrencia o recuperación reales.
 
 ## F1-07D — Lista predeterminada y precios (candidatos)
 
-Las dos superficies candidatas anteriores completan las 25 operaciones de A: veinte de catálogo preservadas y cinco de precios. El commit de C permanece inmutable; D agrega los selectores pricing sin cambiar los de catalog. Registro/planned, índices, admisiones, exports y locks permanecen intactos; no release consumible ni runtime por existir estos archivos. El candidato F integra los gates en CI y G fija publicación/admisión final.
+Las dos superficies candidatas anteriores completan las 25 operaciones de A: veinte de catálogo preservadas y cinco de precios. El commit de C permanece inmutable; D agrega los selectores pricing sin cambiar los de catalog. G agrega los descriptores e índices desde fuente F, sin migrar admisiones, exports o locks de consumidores. No hay runtime ni publicación final por existir archivos; los gates CI de F se conservan.
 
 [Schema de precios](catalog/http/shared/v1/catalog-prices-v1.schema.json): PriceList, Price, PricesPage y PriceSet. Una lista por organización, ARS/impuestos incluidos; importes positivos como cadenas con hasta doce dígitos enteros/dos decimales, sin redondeo. Escritura exclusivamente amount/expected_version; primera versión esperada cero, nueva versión uno. IDs/contexto/instante del servidor. GET no crea lista ni fabrica precio cero/costo/histórico. Cambios inmediatos prospectivos, sin intervalos vacíos/solapados, programación ni reescritura de importes/versiones anteriores. Producto y presentación conservan sus versiones/estados; discontinuado bloquea nuevos precios.
 
@@ -229,4 +229,4 @@ Usar directorio de salida nuevo. Se mantienen Redocly2.53.3 sin warnings y Sourc
 
 ## F1-07E — Eventos e integración contractual (candidatos)
 
-Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado; preserva HTTP, registro, índices, locks y dependencias. Validación conjunta en el candidato F; admisión G y runtimes requieren sus cortes propios.
+Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado y preserva HTTP, locks y dependencias. Los descriptores/índices de G fijan la procedencia en F; el cierre draft limita el uso funcional de los eventos. Nuevas admisiones consumidoras y runtimes requieren sus autorizaciones propias.

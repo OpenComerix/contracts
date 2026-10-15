@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { parseDocument } from 'yaml';
 import path from 'node:path';
+import { validateContractPaths } from './layout.mjs';
 import {
   canonical,
   sha256,
@@ -13,6 +14,7 @@ import {
 
 const encode = (token) => token.replaceAll('~', '~0').replaceAll('/', '~1');
 const HTTP = new Set(['get', 'post', 'put', 'patch', 'delete', 'head', 'options', 'trace']);
+const FUNCTIONAL_ROLES = new Set(['consumer', 'producer', 'semantic-owner']);
 const DIALECTS = new Set([
   'https://json-schema.org/draft/2020-12/schema',
   'https://spec.openapis.org/oas/3.1/dialect/base',
@@ -113,7 +115,10 @@ function runtimeValue(row) {
   }
   return row.value;
 }
-export function resolveSelection(read, descriptor, dependency) {
+export function resolveSelection(read, descriptor, dependency, registry = {}) {
+  const domains = [...new Set(
+    [...(registry.contracts ?? []), ...(registry.planned ?? [])].map((row) => row.domain),
+  )];
   assert.equal(
     dependency.version,
     descriptor.version,
@@ -207,10 +212,10 @@ export function resolveSelection(read, descriptor, dependency) {
         ? path.posix.normalize(path.posix.join(path.posix.dirname(currentFile), rawFile))
         : currentFile;
     safePath('.', target);
-    assert(
-      /^(openapi|commands|events|errors)\//.test(target),
-      'Reference outside contract surfaces',
-    );
+    if (!/^(openapi|commands|events|errors)\//.test(target)) {
+      validateContractPaths([target], { domains, preserved: [] });
+      assert(!schemaReference || !target.includes('/fixtures/'), 'Schema reference to a fixture');
+    }
     visit(target, fragment);
   };
   const walk = (value, currentFile, location, kind) => {
@@ -274,6 +279,12 @@ export function resolveSelection(read, descriptor, dependency) {
     values: rows,
   };
 }
+function assertFunctionalAdmission(registry, dependency, files) {
+  if (!FUNCTIONAL_ROLES.has(dependency.role)) return;
+  const selected = new Set(files.map((file) => file.path));
+  const draft = registry.contracts.find((row) => row.status === 'draft' && selected.has(row.path));
+  assert(!draft, 'New use of a draft is forbidden: ' + draft?.id);
+}
 export function makeLock(root, manifest, manifestBytes, registry, pins = []) {
   const entries = manifest.contracts.map((dependency) => {
     const registered = registry.contracts.find((item) => item.id === dependency.id);
@@ -281,13 +292,7 @@ export function makeLock(root, manifest, manifestBytes, registry, pins = []) {
       registered && registered.status !== 'planned',
       'Unknown/unmaterialized contract ' + dependency.id,
     );
-    assert(
-      !(
-        registered.status === 'draft' &&
-        ['consumer', 'producer', 'semantic-owner'].includes(dependency.role)
-      ),
-      'New use of a draft is forbidden',
-    );
+    assertFunctionalAdmission(registry, dependency, [{ path: registered.path }]);
     const pinned = pins.find(
       (item) =>
         item.id === dependency.id &&
@@ -328,7 +333,9 @@ export function makeLock(root, manifest, manifestBytes, registry, pins = []) {
       gitReader(root, descriptor.commit),
       descriptor,
       dependency,
+      registry,
     );
+    assertFunctionalAdmission(registry, dependency, closure.files);
     return {
       id: dependency.id,
       role: dependency.role,
@@ -385,7 +392,8 @@ export function impactForConsumer(snapshot, registry, read) {
       descriptor = registry.contracts.find((item) => item.id === dependency.id);
     assert(descriptor, 'Consumer contract omitted from registry');
     try {
-      const next = resolveSelection(read, descriptor, dependency);
+      const next = resolveSelection(read, descriptor, dependency, registry);
+      assertFunctionalAdmission(registry, dependency, next.files);
       const classification =
         dependency.role === 'documentation' && locked.selectionSha256 !== next.selectionSha256
           ? 'documentation'

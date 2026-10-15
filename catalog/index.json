@@ -2,10 +2,205 @@
   "formatVersion": 1,
   "domain": "catalog",
   "registry": "../registry/contracts.json",
-  "contracts": [],
-  "surfaces": [],
-  "planned": [
+  "contracts": [
     "catalog.http.public.v1",
-    "catalog.http.private.v1"
-  ]
+    "catalog.http.private.v1",
+    "catalog.common.v1",
+    "catalog.entities.v1",
+    "catalog.prices.v1",
+    "catalog.request.v1",
+    "catalog.security-policy.v1",
+    "catalog.event-data.v1",
+    "catalog.event-policy.v1",
+    "catalog.events.v1.asyncapi",
+    "catalog.category.changed.v1",
+    "catalog.category.changed.v1.consumer",
+    "catalog.product.changed.v1",
+    "catalog.product.changed.v1.consumer",
+    "catalog.presentation.changed.v1",
+    "catalog.presentation.changed.v1.consumer",
+    "pricing.presentation-price.changed.v1",
+    "pricing.presentation-price.changed.v1.consumer",
+    "catalog.request-v1-vectors",
+    "catalog.http-v1-fixtures",
+    "catalog.pricing-http-v1-fixtures",
+    "catalog.event-v1-fixtures",
+    "catalog.event-v1-vectors"
+  ],
+  "surfaces": [
+    {
+      "surface": "documentation",
+      "versions": [
+        {
+          "id": "catalog.events.v1.asyncapi",
+          "version": "1.0.0",
+          "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+          "status": "draft"
+        }
+      ]
+    },
+    {
+      "surface": "events",
+      "versions": [
+        {
+          "id": "catalog.category.changed.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.product.changed.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.presentation.changed.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "pricing.presentation-price.changed.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-private",
+      "versions": [
+        {
+          "id": "catalog.http.private.v1",
+          "version": "1.0.0",
+          "path": "catalog/http/private/v1/catalog-pricing-internal-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "catalog.http.public.v1",
+          "version": "1.0.0",
+          "path": "catalog/http/public/v1/catalog-pricing-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "policy",
+      "versions": [
+        {
+          "id": "catalog.security-policy.v1",
+          "version": "1",
+          "path": "catalog/http/shared/v1/catalog-security-policy-v1.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.event-policy.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog-event-policy-v1.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "schema",
+      "versions": [
+        {
+          "id": "catalog.common.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.entities.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.prices.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-prices-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.request.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-request-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.event-data.v1",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.category.changed.v1.consumer",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.category.changed.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.product.changed.v1.consumer",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.product.changed.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.presentation.changed.v1.consumer",
+          "version": "v1",
+          "path": "catalog/events/v1/catalog.presentation.changed.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "pricing.presentation-price.changed.v1.consumer",
+          "version": "v1",
+          "path": "catalog/events/v1/pricing.presentation-price.changed.v1.consumer.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "validation",
+      "versions": [
+        {
+          "id": "catalog.request-v1-vectors",
+          "version": "v1",
+          "path": "catalog/fixtures/request/v1/catalog-request-v1-vectors.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.http-v1-fixtures",
+          "version": "v1",
+          "path": "catalog/fixtures/http/v1/catalog-http-v1-fixtures.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.pricing-http-v1-fixtures",
+          "version": "v1",
+          "path": "catalog/fixtures/pricing/v1/pricing-http-v1-fixtures.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.event-v1-fixtures",
+          "version": "v1",
+          "path": "catalog/fixtures/events/v1/catalog-event-v1-fixtures.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.event-v1-vectors",
+          "version": "v1",
+          "path": "catalog/fixtures/events/v1/event-v1-vectors.json",
+          "status": "active"
+        }
+      ]
+    }
+  ],
+  "planned": []
 }
