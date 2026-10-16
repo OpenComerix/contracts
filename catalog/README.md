@@ -132,3 +132,10 @@ jsonschema validate common/errors/v7/error-catalog-v7.schema.json common/errors/
 ~~~
 
 Redocly 2.53.3 ejecuta lint sin warnings y bundle; Sourcemeta 16.10.0 ejecuta metaschemas y positivos/negativos reales. Se conservan jobs/gates anteriores, registro/consumidores/impacto y cotejo local del launcher. Extractores requieren una salida nueva vacía. Registro e índices solo incorporan planned: sin locks ni admisión funcional. Fixtures no acreditan identidad/firma/autorización reales, SQL/inbox, carreras, ausencia real de referencias/offline, fences ni disposición segura. Esos prerrequisitos siguen pendientes antes del runtime; estado en [ESTADO](../../../ESTADO.md).
+
+## Candidato F1-08F — contexto de autoridad de recuperación R3
+
+- [Schema compartido](http/shared/v1/catalog-history-recovery-v1.schema.json): selección de tipos/versiones/IDs y destino fijo `catalog-pricing`; la selección no concede autoridad.
+- [Fixtures](fixtures/recovery/v1/catalog-history-recovery-v1-fixtures.json): ausencia de grant, workload/destino incorrectos y selección mutada fallan cerrados.
+
+La autoridad semántica del grant y del catálogo de permisos permanece en `identity-tenancy`; este contexto solo define los datos de recuperación que se vinculan. El candidato es `planned`, no agrega una superficie R4 ni altera las 25 operaciones publicadas.

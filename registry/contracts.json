@@ -15302,6 +15302,46 @@
       "materializeIn": "F1-08E",
       "status": "planned",
       "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
+    },
+    {
+      "id": "identity.catalog-recovery-authority.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-08F",
+      "status": "planned",
+      "constraint": "Candidate R3 authority only; explicit MFA/person/grant binding. No identity runtime, SQL, cryptography, producer or consumer migration."
+    },
+    {
+      "id": "identity.catalog-recovery-authority.v1.schema",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-08F",
+      "status": "planned",
+      "constraint": "Candidate R3 schema only; opaque grant reference is not a JWT or password. Admission requires a separate reviewed publication cut."
+    },
+    {
+      "id": "identity.catalog-recovery-authority-v1-fixtures",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-08F",
+      "status": "planned",
+      "constraint": "Candidate R3 validation fixtures only; fixtures do not prove authority, MFA, revocation, SQL or cryptography."
+    },
+    {
+      "id": "catalog.history-recovery.schema.v1",
+      "domain": "catalog",
+      "owner": "catalog-pricing",
+      "materializeIn": "F1-08F",
+      "status": "planned",
+      "constraint": "Candidate R3/R4 selection context only; selection and destination do not grant authority and no recovery API is enabled."
+    },
+    {
+      "id": "catalog.history-recovery.fixtures.v1",
+      "domain": "catalog",
+      "owner": "catalog-pricing",
+      "materializeIn": "F1-08F",
+      "status": "planned",
+      "constraint": "Candidate negative fixtures only; no runtime recovery or consumer migration."
     }
   ],
   "requiredConsumers": [

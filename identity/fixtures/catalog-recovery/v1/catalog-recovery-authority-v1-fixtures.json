@@ -1,0 +1,126 @@
+{
+  "formatVersion": 1,
+  "contract": "identity.catalog-recovery-authority.v1",
+  "status": "planned",
+  "runtime_authorization_demonstrated": false,
+  "credential_decision": "opaque-256-bit-random-reference; server-side-hash-only; no-jwt-grant; no-key-in-wire",
+  "trusted_context": {
+    "now": "2026-10-16T12:00:01Z",
+    "authority_available": true,
+    "decision_active": true,
+    "decision_id": "77777777-7777-4777-8777-777777777777",
+    "mfa_recent": true,
+    "mfa_event_id": "88888888-8888-4888-8888-888888888888",
+    "mfa_authenticated_at": "2026-10-16T12:00:00Z",
+    "workload_caller": "gateway-bff",
+    "workload_audience": "identity-tenancy.catalog-recovery",
+    "headers": {},
+    "account": { "account_id": "55555555-5555-4555-8555-555555555555", "active": true, "security_version": "2" },
+    "session": { "session_id": "33333333-3333-4333-8333-333333333333", "account_id": "55555555-5555-4555-8555-555555555555", "active": true, "credential_version": "3" },
+    "organization": { "organization_id": "11111111-1111-4111-8111-111111111111", "active": true, "version": "4" },
+    "membership": {
+      "membership_id": "66666666-6666-4666-8666-666666666666",
+      "account_id": "55555555-5555-4555-8555-555555555555",
+      "organization_id": "11111111-1111-4111-8111-111111111111",
+      "active": true,
+      "version": "5",
+      "permissions": ["catalog.history.authorize", "catalog.history.recover", "catalog.history.configure"]
+    }
+  },
+  "permission_catalog": {
+    "version": "1.0.0",
+    "permissions": [
+      { "id": "catalog.history.recover", "action": "read", "mfa_required": true, "owner_inference": false, "scope": "organization" },
+      { "id": "catalog.history.authorize", "action": "grant", "mfa_required": true, "owner_inference": false, "scope": "organization" },
+      { "id": "catalog.history.configure", "action": "configure", "mfa_required": true, "owner_inference": false, "scope": "organization" }
+    ]
+  },
+  "positive": {
+    "issue": {
+      "binding": {
+        "organization_id": "11111111-1111-4111-8111-111111111111",
+        "account_id": "55555555-5555-4555-8555-555555555555",
+        "membership_id": "66666666-6666-4666-8666-666666666666",
+        "purpose": "exceptional-history-recovery",
+        "selection": { "aggregate_types": ["product", "presentation"], "aggregate_ids": ["22222222-2222-4222-8222-222222222222"], "versions": ["7", "8"] },
+        "destination": { "kind": "catalog-pricing-recovery", "workload": "catalog-pricing", "audience": "identity-tenancy.catalog-recovery" },
+        "session_id": "33333333-3333-4333-8333-333333333333"
+      },
+      "requested_permissions": ["catalog.history.recover"],
+      "requested_at": "2026-10-16T12:00:00Z"
+    },
+    "grant": {
+      "grant_id": "44444444-4444-4444-8444-444444444444",
+      "grant_reference": "ocgr_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "binding": {
+        "organization_id": "11111111-1111-4111-8111-111111111111",
+        "account_id": "55555555-5555-4555-8555-555555555555",
+        "membership_id": "66666666-6666-4666-8666-666666666666",
+        "purpose": "exceptional-history-recovery",
+        "selection": { "aggregate_types": ["product", "presentation"], "aggregate_ids": ["22222222-2222-4222-8222-222222222222"], "versions": ["7", "8"] },
+        "destination": { "kind": "catalog-pricing-recovery", "workload": "catalog-pricing", "audience": "identity-tenancy.catalog-recovery" },
+        "session_id": "33333333-3333-4333-8333-333333333333"
+      },
+      "authority": {
+        "decision_id": "77777777-7777-4777-8777-777777777777",
+        "account_security_version": "2",
+        "session_credential_version": "3",
+        "organization_version": "4",
+        "membership_version": "5",
+        "mfa_event_id": "88888888-8888-4888-8888-888888888888",
+        "mfa_authenticated_at": "2026-10-16T12:00:00Z"
+      },
+      "permissions": ["catalog.history.recover"],
+      "issued_at": "2026-10-16T12:00:01Z",
+      "expires_at": "2026-10-16T12:15:01Z",
+      "lifetime_seconds": 900,
+      "revocable": true,
+      "status": "active"
+    }
+  },
+  "negative": [
+    { "id": "mfa-required", "operation": "issue", "changes": { "context.mfa_recent": false }, "expected_code": "identity_catalog_recovery_mfa_required" },
+    { "id": "grant-foreign-organization", "operation": "verify", "changes": { "request.binding.organization_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "selection-altered", "operation": "verify", "changes": { "request.binding.selection.versions": ["8"] }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "revoked", "operation": "verify", "changes": { "grant.status": "revoked" }, "expected_code": "identity_catalog_recovery_revoked" },
+    { "id": "expired", "operation": "verify", "changes": { "context.now": "2026-10-16T12:15:02Z" }, "expected_code": "identity_catalog_recovery_expired" },
+    { "id": "owner-inference", "operation": "issue", "changes": { "context.role": "OWNER", "context.membership.permissions": [] }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "h2-audience", "operation": "verify", "changes": { "context.workload_audience": "identity-tenancy.h2" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "free-header", "operation": "issue", "changes": { "context.membership.permissions": [], "context.headers.X-Catalog-Recovery-Authority": "catalog.history.authorize" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "dependency-unavailable", "operation": "verify", "changes": { "context.authority_available": false }, "expected_code": "identity_catalog_recovery_dependency_unavailable" },
+    { "id": "purpose-permission-issue", "operation": "issue", "changes": { "request.requested_permissions": ["catalog.history.configure"] }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "purpose-permission-verify", "operation": "verify", "changes": { "request.required_permission": "catalog.history.configure" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "lifetime-over-15-minutes", "operation": "verify", "changes": { "grant.lifetime_seconds": 901, "grant.expires_at": "2026-10-16T12:15:02Z" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "expiry-before-issue", "operation": "verify", "changes": { "grant.expires_at": "2026-10-16T11:59:59Z" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "expiry-duration-mismatch", "operation": "verify", "changes": { "grant.expires_at": "2026-10-16T12:14:01Z" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "zero-lifetime", "operation": "verify", "changes": { "grant.lifetime_seconds": 0 }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "issue-cross-tenant", "operation": "issue", "changes": { "request.binding.organization_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-other-person", "operation": "issue", "changes": { "request.binding.account_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-other-membership", "operation": "issue", "changes": { "context.membership.organization_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-membership-revoked", "operation": "issue", "changes": { "context.membership.active": false }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "authority-revoked", "operation": "verify", "changes": { "context.decision_active": false }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "authority-version-changed", "operation": "verify", "changes": { "context.membership.version": "6" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-expiry-malformed", "operation": "issue", "changes": { "grant.expires_at": "2026-10-16T12:14:01Z" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "renew-expiry-malformed", "operation": "renew", "changes": { "grant.lifetime_seconds": 901 }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "renew-mfa-missing", "operation": "renew", "changes": { "context.mfa_recent": false }, "expected_code": "identity_catalog_recovery_mfa_required" },
+    { "id": "renew-mfa-reused", "operation": "renew", "changes": { "context.mfa_event_id": "88888888-8888-4888-8888-888888888888" }, "expected_code": "identity_catalog_recovery_mfa_required" },
+    { "id": "renew-binding-altered", "operation": "renew", "changes": { "request.binding.selection.versions": ["8"] }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "renew-wrong-id", "operation": "renew", "changes": { "path_grant_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "renew-wrong-reference", "operation": "renew", "changes": { "request.grant_reference": "ocgr_CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "renew-revoked", "operation": "renew", "changes": { "previous_grant.status": "revoked" }, "expected_code": "identity_catalog_recovery_revoked" },
+    { "id": "revoke-unauthorized", "operation": "revoke", "changes": { "context.membership.permissions": [] }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "revoke-wrong-id", "operation": "revoke", "changes": { "path_grant_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "revoke-wrong-reference", "operation": "revoke", "changes": { "request.grant_reference": "ocgr_CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "revoke-cross-tenant", "operation": "revoke", "changes": { "context.membership.organization_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-decision-revoked", "operation": "issue", "changes": { "context.decision_active": false }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "issue-stale-mfa", "operation": "issue", "changes": { "context.mfa_authenticated_at": "2026-10-16T11:55:00Z" }, "expected_code": "identity_catalog_recovery_mfa_required" },
+    { "id": "issue-output-other-person", "operation": "issue", "changes": { "grant.binding.account_id": "99999999-9999-4999-8999-999999999999" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "issue-output-stale-authority", "operation": "issue", "changes": { "grant.authority.membership_version": "4" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "verify-authorizer-permission-revoked", "operation": "verify", "changes": { "context.membership.permissions": ["catalog.history.recover"] }, "expected_code": "identity_catalog_recovery_not_authorized" },
+    { "id": "renew-decision-reused", "operation": "renew", "changes": { "context.decision_id": "77777777-7777-4777-8777-777777777777" }, "expected_code": "identity_catalog_recovery_mfa_required" },
+    { "id": "renew-expired", "operation": "renew", "changes": { "context.now": "2026-10-16T12:15:01Z", "context.mfa_authenticated_at": "2026-10-16T12:15:00Z" }, "expected_code": "identity_catalog_recovery_expired" },
+    { "id": "renew-permission-broadened", "operation": "renew", "changes": { "request.requested_permissions": ["catalog.history.recover", "catalog.history.configure"] }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "renew-reference-reused", "operation": "renew", "changes": { "grant.grant_reference": "ocgr_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" }, "expected_code": "identity_catalog_recovery_invalid_request" },
+    { "id": "revoke-mfa-missing", "operation": "revoke", "changes": { "context.mfa_recent": false }, "expected_code": "identity_catalog_recovery_mfa_required" }
+  ]
+}

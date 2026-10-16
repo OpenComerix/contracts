@@ -1,0 +1,326 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity Catalog Recovery Authority API
+  version: 1.0.0
+  description: >-
+    Candidato F1-08F/R3. Identity-tenancy is the semantic authority for the
+    exceptional recovery grant and its permission catalog. Workload JWT
+    authentication is separate from the opaque grant reference. The grant is
+    bound to the account, membership, organization, purpose, selection,
+    destination and session, with a server-resolved decision/version snapshot;
+    issuance, verification, renewal and revocation are distinct audited
+    actions. This candidate does not implement identity, SQL, signing keys or
+    runtime authorization.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Private illustrative host; validated HTTPS only.
+tags:
+  - name: CatalogRecoveryAuthority
+    description: R3 authority; not the public catalog API and not the R4 recovery surface.
+security:
+  - catalogWorkloadBearer: []
+paths:
+  /internal/v1/identity/catalog/recovery-grants:
+    post:
+      operationId: issueCatalogRecoveryGrant
+      tags: [CatalogRecoveryAuthority]
+      summary: Issue an exceptional catalog recovery grant
+      description: >-
+        Requires a current authenticated person session, effective organization
+        membership and both catalog.history.authorize and the requested operation
+        permission in that organization with recent MFA (maximum five
+        minutes). The request body is intent, never authority: tenant, actor,
+        OWNER, local role and free headers cannot grant access. The grant uses
+        an opaque 256-bit random bearer reference stored only as a server-side
+        hash; it is not a JWT, password or impersonation token. Maximum grant
+        lifetime is fifteen minutes: the producer enforces 1–900 whole seconds
+        and expires_at equals issued_at plus lifetime_seconds. A malformed or
+        reversed interval is rejected, not normalized, before returning the grant.
+        Identity resolves account, session, organization and membership from its
+        own state, matches every supplied binding identifier and captures the
+        decision, security/credential/organization/membership versions and MFA
+        event. These are opaque audit references; request IDs or headers cannot
+        replace those checks. Only current active memberships/sessions and an
+        active server-side authority decision permit issuance.
+      x-internal: true
+      x-workload:
+        caller: gateway-bff
+        audience: identity-tenancy.catalog-recovery
+        type: service
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/IssueRequest
+      responses:
+        '201':
+          description: Grant issued after fresh person/MFA/permission checks.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Grant
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationRequired'
+        '403':
+          $ref: '#/components/responses/NotAuthorized'
+        '409':
+          $ref: '#/components/responses/BindingConflict'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /internal/v1/identity/catalog/recovery-grants/verify:
+    post:
+      operationId: verifyCatalogRecoveryGrant
+      tags: [CatalogRecoveryAuthority]
+      summary: Verify a recovery grant for one bound operation
+      description: >-
+        Only catalog-pricing presents its own workload JWT and the opaque grant.
+        Identity revalidates the grant status, organization, purpose, selection,
+        destination, account, membership, session and required permission on every
+        call. Current person/membership/session state, effective organization
+        permissions, server-side decision validity and all authority snapshot
+        versions must still match. Identity uses its own clock; checked_at is
+        caller intent and cannot postpone expiry. Any mismatch,
+        revocation, expiry or unavailable authority fails closed before data is
+        delivered. Verification does not renew or broaden authority.
+      x-internal: true
+      x-workload:
+        caller: catalog-pricing
+        audience: identity-tenancy.catalog-recovery
+        type: service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyRequest
+      responses:
+        '200':
+          description: Fresh positive decision for the exact binding and permission.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse
+        '400':
+          $ref: '#/components/responses/InvalidRequest'
+        '401':
+          $ref: '#/components/responses/AuthenticationRequired'
+        '403':
+          $ref: '#/components/responses/NotAuthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '410':
+          $ref: '#/components/responses/ExpiredOrRevoked'
+        '503':
+          $ref: '#/components/responses/DependencyUnavailable'
+  /internal/v1/identity/catalog/recovery-grants/{grant_id}/renew:
+    post:
+      operationId: renewCatalogRecoveryGrant
+      tags: [CatalogRecoveryAuthority]
+      summary: Renew a grant only after a new person authorization and MFA
+      description: >-
+        Renewal requires current effective organization permissions, a new
+        server-side decision and a distinct recent MFA event performed after
+        the previous grant was issued. The old grant must be active, unexpired,
+        and match both grant_id and grant_reference. Preserve its complete
+        binding and permissions, including person, membership and session;
+        revalidate authority versions. Return a different grant ID/reference
+        only after validating its new interval and server-resolved snapshot.
+      x-internal: true
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/GrantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/RenewRequest
+      responses:
+        '201':
+          description: New grant issued; old grant is not silently extended.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Grant
+        '400': { $ref: '#/components/responses/InvalidRequest' }
+        '401': { $ref: '#/components/responses/AuthenticationRequired' }
+        '403': { $ref: '#/components/responses/NotAuthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '410': { $ref: '#/components/responses/ExpiredOrRevoked' }
+        '503': { $ref: '#/components/responses/DependencyUnavailable' }
+  /internal/v1/identity/catalog/recovery-grants/{grant_id}/revoke:
+    post:
+      operationId: revokeCatalogRecoveryGrant
+      tags: [CatalogRecoveryAuthority]
+      summary: Revoke a grant
+      description: >-
+        Requires the current authenticated bound person/session, effective
+        membership in the grant organization, catalog.history.authorize and
+        recent MFA. Match both grant_id and grant_reference before revocation.
+        An invalid or revoked authority decision does not prevent that authorized
+        person from revoking the grant. Revocation is effective before any later
+        verification. Repeating it returns the original server-recorded revoked_at
+        and the same response, even when the caller supplies a later revoked_at;
+        the request timestamp never determines the effective revocation time.
+      x-internal: true
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      parameters:
+        - $ref: '#/components/parameters/GrantId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/RevokeRequest
+      responses:
+        '200':
+          description: Grant revoked.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/RevokeResponse
+        '400': { $ref: '#/components/responses/InvalidRequest' }
+        '401': { $ref: '#/components/responses/AuthenticationRequired' }
+        '403': { $ref: '#/components/responses/NotAuthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '503': { $ref: '#/components/responses/DependencyUnavailable' }
+  /internal/v1/identity/catalog/recovery-permissions:
+    get:
+      operationId: getCatalogRecoveryPermissionCatalog
+      tags: [CatalogRecoveryAuthority]
+      summary: Read the candidate permission catalog
+      description: The catalog is descriptive; no role, OWNER status or header grants any listed permission.
+      x-internal: true
+      responses:
+        '200':
+          description: Explicit R3/R1 permission catalog.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/PermissionCatalog
+        '401': { $ref: '#/components/responses/AuthenticationRequired' }
+        '403': { $ref: '#/components/responses/NotAuthorized' }
+components:
+  securitySchemes:
+    gatewayServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Gateway workload credential; does not carry the user's recovery authority.
+    catalogWorkloadBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: catalog-pricing workload credential; separate from the opaque grant.
+    currentSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Current person session used only on issuance, renewal and revocation.
+  parameters:
+    GrantId:
+      name: grant_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  headers:
+    NoStore:
+      required: true
+      description: Never cache grants, decisions or errors.
+      schema:
+        type: string
+        const: no-store
+  responses:
+    InvalidRequest:
+      description: Invalid request without tokens, PII, authority details or protected content.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    AuthenticationRequired:
+      description: Missing or invalid workload/session authentication.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    NotAuthorized:
+      description: Missing effective membership, permission, recent MFA or exact binding.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    BindingConflict:
+      description: Selection, destination, session or permission binding conflicts.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    NotFound:
+      description: Unknown grant or non-matching tenant/workload, without existence disclosure.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    ExpiredOrRevoked:
+      description: Grant expired or revoked after membership checks.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem
+    DependencyUnavailable:
+      description: Authority dependency unavailable; fail closed.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+      content:
+        application/problem+json:
+          schema:
+            $ref: ../../shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem

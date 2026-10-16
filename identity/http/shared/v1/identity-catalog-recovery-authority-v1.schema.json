@@ -1,0 +1,216 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+  "title": "Identity catalog recovery authority v1 — candidate",
+  "description": "R3 contract candidate. Workload authentication is separate. The opaque grant is a one-purpose bearer reference; no JWT, key or password is transported in it.",
+  "$defs": {
+    "Selection": {
+      "$ref": "../../../../catalog/http/shared/v1/catalog-history-recovery-v1.schema.json#/$defs/Selection"
+    },
+    "Destination": {
+      "$ref": "../../../../catalog/http/shared/v1/catalog-history-recovery-v1.schema.json#/$defs/Destination"
+    },
+    "Purpose": {
+      "$ref": "../../../../catalog/http/shared/v1/catalog-history-recovery-v1.schema.json#/$defs/Purpose"
+    },
+    "GrantBinding": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Intent only in requests. Identity resolves the authenticated account/session and effective organization membership and requires an exact match; supplied identifiers never confer authority.",
+      "required": ["organization_id", "account_id", "membership_id", "purpose", "selection", "destination", "session_id"],
+      "properties": {
+        "organization_id": { "type": "string", "format": "uuid" },
+        "account_id": { "type": "string", "format": "uuid" },
+        "membership_id": { "type": "string", "format": "uuid" },
+        "purpose": { "$ref": "#/$defs/Purpose" },
+        "selection": { "$ref": "#/$defs/Selection" },
+        "destination": { "$ref": "#/$defs/Destination" },
+        "session_id": { "type": "string", "format": "uuid" }
+      }
+    },
+    "AuthoritySnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Server-resolved decision and versions for the exact person/session/organization/membership in binding. Revalidated against current identity state on every use. Renewal requires a new decision and MFA event; this snapshot is not client authority.",
+      "required": ["decision_id", "account_security_version", "session_credential_version", "organization_version", "membership_version", "mfa_event_id", "mfa_authenticated_at"],
+      "properties": {
+        "decision_id": { "type": "string", "format": "uuid" },
+        "account_security_version": { "type": "string", "pattern": "^[1-9][0-9]{0,18}$" },
+        "session_credential_version": { "type": "string", "pattern": "^[1-9][0-9]{0,18}$" },
+        "organization_version": { "type": "string", "pattern": "^[1-9][0-9]{0,18}$" },
+        "membership_version": { "type": "string", "pattern": "^[1-9][0-9]{0,18}$" },
+        "mfa_event_id": { "type": "string", "format": "uuid" },
+        "mfa_authenticated_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "IssueRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["binding", "requested_permissions", "requested_at"],
+      "properties": {
+        "binding": { "$ref": "#/$defs/GrantBinding" },
+        "requested_permissions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["catalog.history.recover", "catalog.history.configure"] }
+        },
+        "requested_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [{ "$ref": "#/$defs/IssuePurposePermission" }]
+    },
+    "Grant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grant_id", "grant_reference", "binding", "authority", "permissions", "issued_at", "expires_at", "lifetime_seconds", "revocable", "status"],
+      "properties": {
+        "grant_id": { "type": "string", "format": "uuid" },
+        "grant_reference": { "type": "string", "pattern": "^ocgr_[A-Za-z0-9_-]{43}$" },
+        "binding": { "$ref": "#/$defs/GrantBinding" },
+        "authority": { "$ref": "#/$defs/AuthoritySnapshot" },
+        "permissions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["catalog.history.recover", "catalog.history.configure"] }
+        },
+        "issued_at": { "type": "string", "format": "date-time" },
+        "expires_at": { "type": "string", "format": "date-time", "description": "Must equal issued_at plus lifetime_seconds; checked by the semantic contract gate and by identity at issuance." },
+        "lifetime_seconds": { "type": "integer", "minimum": 1, "maximum": 900 },
+        "revocable": { "const": true },
+        "status": { "const": "active" }
+      },
+      "allOf": [{ "$ref": "#/$defs/GrantPurposePermission" }]
+    },
+    "VerifyRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grant_reference", "binding", "required_permission", "checked_at"],
+      "properties": {
+        "grant_reference": { "type": "string", "pattern": "^ocgr_[A-Za-z0-9_-]{43}$" },
+        "binding": { "$ref": "#/$defs/GrantBinding" },
+        "required_permission": { "enum": ["catalog.history.recover", "catalog.history.configure"] },
+        "checked_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [{ "$ref": "#/$defs/VerifyPurposePermission" }]
+    },
+    "VerifyResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorized", "grant_id", "binding", "authority", "permission", "valid_until", "status"],
+      "properties": {
+        "authorized": { "const": true },
+        "grant_id": { "type": "string", "format": "uuid" },
+        "binding": { "$ref": "#/$defs/GrantBinding" },
+        "authority": { "$ref": "#/$defs/AuthoritySnapshot" },
+        "permission": { "enum": ["catalog.history.recover", "catalog.history.configure"] },
+        "valid_until": { "type": "string", "format": "date-time" },
+        "status": { "const": "active" }
+      },
+      "allOf": [{ "$ref": "#/$defs/VerifiedPurposePermission" }]
+    },
+    "RenewRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grant_reference", "binding", "requested_permissions", "requested_at"],
+      "properties": {
+        "grant_reference": { "type": "string", "pattern": "^ocgr_[A-Za-z0-9_-]{43}$" },
+        "binding": { "$ref": "#/$defs/GrantBinding" },
+        "requested_permissions": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "uniqueItems": true,
+          "items": { "enum": ["catalog.history.recover", "catalog.history.configure"] }
+        },
+        "requested_at": { "type": "string", "format": "date-time" }
+      },
+      "allOf": [{ "$ref": "#/$defs/IssuePurposePermission" }]
+    },
+    "IssuePurposePermission": {
+      "if": { "properties": { "binding": { "properties": { "purpose": { "const": "exceptional-history-recovery" } }, "required": ["purpose"] } }, "required": ["binding"] },
+      "then": { "properties": { "requested_permissions": { "const": ["catalog.history.recover"] } } },
+      "else": { "properties": { "requested_permissions": { "const": ["catalog.history.configure"] } } }
+    },
+    "GrantPurposePermission": {
+      "if": { "properties": { "binding": { "properties": { "purpose": { "const": "exceptional-history-recovery" } }, "required": ["purpose"] } }, "required": ["binding"] },
+      "then": { "properties": { "permissions": { "const": ["catalog.history.recover"] } } },
+      "else": { "properties": { "permissions": { "const": ["catalog.history.configure"] } } }
+    },
+    "VerifyPurposePermission": {
+      "if": { "properties": { "binding": { "properties": { "purpose": { "const": "exceptional-history-recovery" } }, "required": ["purpose"] } }, "required": ["binding"] },
+      "then": { "properties": { "required_permission": { "const": "catalog.history.recover" } } },
+      "else": { "properties": { "required_permission": { "const": "catalog.history.configure" } } }
+    },
+    "VerifiedPurposePermission": {
+      "if": { "properties": { "binding": { "properties": { "purpose": { "const": "exceptional-history-recovery" } }, "required": ["purpose"] } }, "required": ["binding"] },
+      "then": { "properties": { "permission": { "const": "catalog.history.recover" } } },
+      "else": { "properties": { "permission": { "const": "catalog.history.configure" } } }
+    },
+    "RevokeRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grant_reference", "reason_code", "revoked_at"],
+      "properties": {
+        "grant_reference": { "type": "string", "pattern": "^ocgr_[A-Za-z0-9_-]{43}$" },
+        "reason_code": { "enum": ["operator_request", "authority_changed", "session_expired", "security_event"] },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "RevokeResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grant_id", "status", "revoked_at"],
+      "properties": {
+        "grant_id": { "type": "string", "format": "uuid" },
+        "status": { "const": "revoked" },
+        "revoked_at": { "type": "string", "format": "date-time" }
+      }
+    },
+    "PermissionCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["version", "permissions"],
+      "properties": {
+        "version": { "const": "1.0.0" },
+        "permissions": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "action", "mfa_required", "owner_inference", "scope"],
+            "oneOf": [
+              { "required": ["id", "action"], "properties": { "id": { "const": "catalog.history.recover" }, "action": { "const": "read" } } },
+              { "required": ["id", "action"], "properties": { "id": { "const": "catalog.history.authorize" }, "action": { "const": "grant" } } },
+              { "required": ["id", "action"], "properties": { "id": { "const": "catalog.history.configure" }, "action": { "const": "configure" } } }
+            ],
+            "properties": {
+              "id": { "enum": ["catalog.history.recover", "catalog.history.authorize", "catalog.history.configure"] },
+              "action": { "enum": ["read", "grant", "configure"] },
+              "mfa_required": { "const": true },
+              "owner_inference": { "const": false },
+              "scope": { "const": "organization" }
+            }
+          }
+        }
+      }
+    },
+    "Problem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "status", "code", "retryable"],
+      "properties": {
+        "type": { "type": "string", "pattern": "^urn:opencomerix:problem:identity_catalog_recovery_[a-z_]+$" },
+        "title": { "const": "Autoridad de recuperación rechazada" },
+        "status": { "enum": [400, 401, 403, 404, 409, 410, 503] },
+        "code": { "enum": ["identity_catalog_recovery_invalid_request", "identity_catalog_recovery_authentication_required", "identity_catalog_recovery_mfa_required", "identity_catalog_recovery_not_authorized", "identity_catalog_recovery_not_found", "identity_catalog_recovery_revoked", "identity_catalog_recovery_expired", "identity_catalog_recovery_dependency_unavailable"] },
+        "retryable": { "type": "boolean" }
+      }
+    }
+  }
+}

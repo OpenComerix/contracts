@@ -186,6 +186,10 @@ validate:catalog-contracts:
     - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-protection-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-protection-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-protection-v1.bundle.json
     - node scripts/catalog/validate-history-protection-v1.mjs .ci-artifacts/catalog-history-protection-v1 --self-test
+    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-authority-v1.bundle.json
+    - node scripts/identity/validate-catalog-recovery-authority-v1.mjs .ci-artifacts/catalog-recovery-authority-v1
   artifacts:
     paths:
       - .ci-artifacts/catalog-authority-v1.bundle.json
@@ -198,6 +202,8 @@ validate:catalog-contracts:
       - .ci-artifacts/catalog-history-policy-v1/
       - .ci-artifacts/catalog-history-protection-v1/
       - .ci-artifacts/catalog-history-protection-v1.bundle.json
+      - .ci-artifacts/catalog-recovery-authority-v1.bundle.json
+      - .ci-artifacts/catalog-recovery-authority-v1/
     expire_in: 1 day
 
 validate:catalog-schema:
@@ -210,6 +216,8 @@ validate:catalog-schema:
       artifacts: true
   script:
     - jsonschema metaschema catalog/http/shared/v1/*.schema.json identity/http/private/v1/identity-catalog-authority-v1.schema.json common/http/shared/v3/problem-details-v3.schema.json common/errors/v6/error-catalog-v6.schema.json catalog/events/v1/*.schema.json --verbose
+    - jsonschema metaschema identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json --verbose
+    - sh scripts/identity/validate-catalog-recovery-authority-v1.sh .ci-artifacts/catalog-recovery-authority-v1
     - jsonschema validate common/errors/v6/error-catalog-v6.schema.json common/errors/v6/error-catalog-v6.json --format-assertion --verbose
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-security-v1
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1

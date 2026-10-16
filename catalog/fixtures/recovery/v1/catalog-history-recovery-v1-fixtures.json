@@ -1,0 +1,19 @@
+{
+  "formatVersion": 1,
+  "contract": "catalog.history-recovery.v1",
+  "status": "planned",
+  "authority_required": true,
+  "grant_permissions_allowed": ["catalog.history.recover", "catalog.history.configure"],
+  "selection_does_not_grant_authority": true,
+  "positive": {
+    "aggregate_types": ["product"],
+    "aggregate_ids": ["22222222-2222-4222-8222-222222222222"],
+    "versions": ["7"]
+  },
+  "negative": [
+    { "id": "missing-grant", "expected": "fail-closed" },
+    { "id": "wrong-workload", "expected": "fail-closed" },
+    { "id": "wrong-destination", "expected": "fail-closed" },
+    { "id": "selection-mutation", "expected": "fail-closed" }
+  ]
+}
