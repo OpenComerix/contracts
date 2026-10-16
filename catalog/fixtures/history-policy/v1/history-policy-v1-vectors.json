@@ -1,0 +1,399 @@
+{
+  "format_version": 1,
+  "scope": "F1-08C",
+  "base": "catalog/http/shared/v1/catalog-history-policy-v1.json",
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "id": "approved-policy",
+      "kind": "schema",
+      "expected": "accept",
+      "patches": []
+    },
+    {
+      "id": "owner-missing",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/owner"
+        }
+      ]
+    },
+    {
+      "id": "unexpected-root",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/unapproved",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "classification-invalid",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/0/classification/sensitivity",
+          "value": "PRIVATE"
+        }
+      ]
+    },
+    {
+      "id": "category-duplicate",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/0/classification/categories",
+          "value": [
+            "COMMERCIAL",
+            "COMMERCIAL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "unversioned-policy",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/version",
+          "value": 0
+        }
+      ]
+    },
+    {
+      "id": "production-enabled",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/0/production_enabled",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "fake-runtime",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/runtime_demonstrated",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "protocol-fields-invented",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/2/field_catalogue/state",
+          "value": "complete"
+        }
+      ]
+    },
+    {
+      "id": "range-order",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/periods/default",
+          "value": 6
+        }
+      ],
+      "reason": "H_RANGE"
+    },
+    {
+      "id": "seconds-as-years",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/clock/calculation",
+          "value": "fixed-seconds"
+        }
+      ],
+      "reason": "H_CLOCK"
+    },
+    {
+      "id": "created-at-trigger",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/clock/start_event",
+          "value": "created_at"
+        }
+      ],
+      "reason": "H_CLOCK"
+    },
+    {
+      "id": "unknown-trigger",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/clock/unknown_start",
+          "value": "assume-now"
+        }
+      ],
+      "reason": "H_UNKNOWN_TRIGGER"
+    },
+    {
+      "id": "active-purpose",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/clock/active_purpose_blocks",
+          "value": false
+        }
+      ],
+      "reason": "H_ACTIVE_PURPOSE"
+    },
+    {
+      "id": "hold-ignored",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/guards/holds_block",
+          "value": false
+        }
+      ],
+      "reason": "H_HOLD"
+    },
+    {
+      "id": "greater-obligation",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/guards/inherited_obligations_prevail",
+          "value": false
+        }
+      ],
+      "reason": "H_OBLIGATION"
+    },
+    {
+      "id": "unknown-obligation",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/guards/unknown_obligations_block",
+          "value": false
+        }
+      ],
+      "reason": "H_OBLIGATION"
+    },
+    {
+      "id": "unknown-sources",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/guards/unknown_sources_block",
+          "value": false
+        }
+      ],
+      "reason": "H_SOURCE_CLOSURE"
+    },
+    {
+      "id": "privacy-conflict",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/guards/privacy_conflict",
+          "value": "automatic-purge"
+        }
+      ],
+      "reason": "H_PRIVACY"
+    },
+    {
+      "id": "immediate-delete",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/configuration/reduction",
+          "value": "immediate-delete"
+        }
+      ],
+      "reason": "H_REDUCTION"
+    },
+    {
+      "id": "plan-dependent",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/configuration/plan_dependent",
+          "value": true
+        }
+      ],
+      "reason": "H_CONFIGURATION"
+    },
+    {
+      "id": "transport-ttl",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/field_sources/0/transport_profile_applies_to_history",
+          "value": true
+        }
+      ],
+      "reason": "H_TRANSPORT_TTL"
+    },
+    {
+      "id": "source-hash-drift",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/field_sources/0/sha256",
+          "value": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ],
+      "reason": "H_SOURCE_PIN"
+    },
+    {
+      "id": "field-metadata-omitted",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/field_sources/0/inherited_metadata",
+          "value": [
+            "path"
+          ]
+        }
+      ],
+      "reason": "H_FIELD_METADATA"
+    },
+    {
+      "id": "inventory-slice",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/field_sources/0/pointer",
+          "value": "/field_inventory/0"
+        }
+      ],
+      "reason": "H_FIELD_SELECTION"
+    },
+    {
+      "id": "storage-omitted",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/storage_policies/1"
+        }
+      ],
+      "reason": "H_STORAGE_COVERAGE"
+    },
+    {
+      "id": "index-decoupled",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/1/dependencies",
+          "value": []
+        }
+      ],
+      "reason": "H_INDEX_LIFECYCLE"
+    },
+    {
+      "id": "session-metadata-ttl",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/3/retention/periods/maximum",
+          "value": 25
+        }
+      ],
+      "reason": "H_METADATA_TTL"
+    },
+    {
+      "id": "deleted-values-in-evidence",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/2/retention/after_disposition",
+          "value": "keep-deleted-snapshot"
+        }
+      ],
+      "reason": "H_MINIMAL_EVIDENCE"
+    },
+    {
+      "id": "history-classification-lowered",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/0/classification/sensitivity",
+          "value": "INTERNAL"
+        }
+      ],
+      "reason": "H_CLASSIFICATION"
+    },
+    {
+      "id": "temporary-file-enabled",
+      "kind": "semantic",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/5/retention/mode",
+          "value": "fixed"
+        }
+      ],
+      "reason": "H_FILES_DISABLED"
+    }
+  ]
+}

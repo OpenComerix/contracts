@@ -86,3 +86,25 @@ La admisión funcional (`producer`, `consumer`, `semantic-owner`) exige que la r
 Referencia de release: tag inmutable 'catalog-contracts-v1.0.0' sobre el commit de admisión G; las raíces conservan el SHA fuente anterior y 'tag/tagObject: null', sin asociarles un tag de otro commit. Consumir únicamente tras verificar commit/tag y CI por SHA/ref exactos; launcher integra ese commit mediante gitlink autorizado. Los resultados de publicación se registran en [ESTADO](../../../ESTADO.md). No mover tags previos ni fabricar procedencias. Los comandos de validación siguen en la configuración CI F y el registro.
 
 Perfil histórico versionado y productor de identidad siguen pendientes de tandas propias antes de F1-08. Este paquete no cierra H3 ni acredita CAF runtime o certificación AsyncAPI completa; tampoco autoriza iniciar servicios, gateway o PWA.
+
+## Candidato F1-08C — Políticas de historia R1
+
+[catalog-history-policy-v1.json](http/shared/v1/catalog-history-policy-v1.json) materializa como metadatos candidatos ADR-062/R1 bajo el [schema común](../common/http/shared/v1/data-lifecycle-policy-v1.schema.json). El catálogo versiona clasificación, finalidad, hito, retención, configuración restringida, bloqueos por obligaciones/holds, copias y evidencia. Historia original e índice conservan su ciclo propio; transporte, auditoría y evidencia crítica mantienen sus políticas independientes. La interpretación jurídica y el cálculo fiscal existente no se sustituyen.
+
+La clasificación de cada campo referencia el inventario completo de [la política E](events/v1/catalog-event-policy-v1.json), fijado por commit/hash y verificado contra Git y el checkout. Conserva sus metadatos, reemplazando exclusivamente la asignación de retención al persistir historia. La intención futura de un consumidor en E no concede acceso: los requisitos de autoridad de ADR-062/R3 permanecen pendientes. Los campos adicionales de índices, obligaciones, sesiones/grants y cobertura se señalan `pending-protocol`; archivos temporales siguen prohibidos. Ningún almacenamiento está habilitado para producción por este candidato.
+
+- [Vectores](fixtures/history-policy/v1/history-policy-v1-vectors.json): base, casos estructurales para Sourcemeta y negativos semánticos de rango, cierre, holds, obligaciones, privacidad, configuración, cobertura y procedencia.
+- [Validador/extractor](../scripts/catalog/validate-history-policy-v1.mjs) y [tests externos](../test/catalog/history-policy-v1.test.mjs): integridad de fuentes, cobertura y coherencia de políticas; no calculan elegibilidad ni ejecutan purgas. El extractor usa una salida vacía y nunca sobrescribe evidencia.
+- Los jobs existentes `validate:catalog-contracts`/`validate:catalog-schema` añaden extracción y validación, conservando sus comandos anteriores y transferencia de artefactos. El runner Sourcemeta compartido exige rechazo de instancia, no errores de herramienta/preparación.
+
+Desde contracts, mediante `opencomerix check contracts`, con Node 24.21.0/pnpm 12.4.2 y Sourcemeta 16.10.0:
+
+```text
+node --test --test-reporter=tap test/architecture/*.test.mjs test/catalog/*.test.mjs
+node scripts/catalog/validate-history-policy-v1.mjs .ci-artifacts/catalog-history-policy-v1 --self-test
+jsonschema metaschema common/http/shared/v1/data-lifecycle-policy-v1.schema.json
+jsonschema validate common/http/shared/v1/data-lifecycle-policy-v1.schema.json catalog/http/shared/v1/catalog-history-policy-v1.json --format-assertion
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v1
+```
+
+También ejecutar registro, consumidores/impacto y el cotejo local del launcher de la guía contractual. El registro/índices solo añaden intenciones `planned`; las raíces admitidas, publicados, pins y locks previos se conservan. Admisión funcional/publicación, protocolos R2–R4 y productor de identidad requieren cortes propios antes de F1-08. Fixtures no acreditan SQL, autoridad, criptografía, disposición, recuperación ni CAF-11/12/14 runtime. Estado y evidencia vigente: [ESTADO](../../../ESTADO.md).

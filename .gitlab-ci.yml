@@ -160,9 +160,11 @@ validate:contract-metadata-schema:
 validate:catalog-contracts:
   stage: validate
   variables:
+    GIT_DEPTH: "0"
     REDOCLY_TELEMETRY: "off"
     REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
   before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
     - pnpm install --frozen-lockfile
@@ -179,6 +181,7 @@ validate:catalog-contracts:
     - node scripts/catalog/validate-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-http-v1 --self-test
     - node scripts/catalog/validate-pricing-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-pricing-v1 --self-test
     - node scripts/catalog/validate-events-v1.mjs .ci-artifacts/catalog-events-v1 --self-test
+    - node scripts/catalog/validate-history-policy-v1.mjs .ci-artifacts/catalog-history-policy-v1 --self-test
   artifacts:
     paths:
       - .ci-artifacts/catalog-authority-v1.bundle.json
@@ -188,6 +191,7 @@ validate:catalog-contracts:
       - .ci-artifacts/catalog-http-v1/
       - .ci-artifacts/catalog-pricing-v1/
       - .ci-artifacts/catalog-events-v1/
+      - .ci-artifacts/catalog-history-policy-v1/
     expire_in: 1 day
 
 validate:catalog-schema:
@@ -205,3 +209,6 @@ validate:catalog-schema:
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-pricing-v1
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-events-v1
+    - jsonschema metaschema common/http/shared/v1/data-lifecycle-policy-v1.schema.json --verbose
+    - jsonschema validate common/http/shared/v1/data-lifecycle-policy-v1.schema.json catalog/http/shared/v1/catalog-history-policy-v1.json --format-assertion --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v1

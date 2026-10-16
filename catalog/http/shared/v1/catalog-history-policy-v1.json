@@ -1,0 +1,421 @@
+{
+  "format_version": 1,
+  "status": "candidate",
+  "catalogue_id": "catalog.history",
+  "version": 1,
+  "owner": "catalog-pricing",
+  "decision": "ADR-062/R1 (2026-10-15); ADR-016/035",
+  "profiles": [
+    {
+      "id": "CATALOG_HISTORY_AR",
+      "version": 1,
+      "jurisdiction": "AR",
+      "legal_period": false,
+      "purpose": "retained-original-catalog-price-meaning-without-greater-obligations",
+      "periods": {
+        "unit": "calendar-years",
+        "minimum": 1,
+        "default": 2,
+        "maximum": 5
+      },
+      "clock": {
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "calculation": "calendar-arithmetic-by-applicable-jurisdiction; never-fixed-seconds",
+        "unknown_start": "block-and-alert; never-invent-date-or-indefinite-default",
+        "active_purpose_blocks": true
+      },
+      "guards": {
+        "inherited_obligations_prevail": true,
+        "holds_block": true,
+        "unknown_obligations_block": true,
+        "privacy_conflict": "explicit-resolution; no-automatic-purge",
+        "unknown_sources_block": true
+      },
+      "configuration": {
+        "tenant_configurable": true,
+        "authorization": "specific-permission-purpose-and-audit; permission-contract-pending",
+        "reduction": "eligibility-only; never-immediate-delete",
+        "plan_dependent": false,
+        "onboarding_step": false
+      },
+      "disposition": "controlled-purge-of-original-and-authorized-copies; preserve-required-evidence"
+    }
+  ],
+  "storage_policies": [
+    {
+      "id": "original-history",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "category/product/presentation/presentation_price",
+      "lifecycle_class": "business-history",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "original-four-events-and-snapshots-with-interpretation-metadata; actor-personal-data-stays-in-restricted-audit",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "profile",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "while_required": "active-purpose-or-unknown-trigger-blocks-and-alerts",
+        "after_disposition": "minimal-evidence-only; no-original-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "inherited",
+        "source_id": "catalog-event-fields-v1",
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "history-index",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "history-index",
+      "lifecycle_class": "business-history-index",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "recover-retained-originals; same-lifecycle-as-source",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "while_required": "exactly-same-lifecycle-as-original-history; never-transport-TTL",
+        "after_disposition": "minimal-evidence-only; no-original-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "pending-protocol",
+        "source_id": null,
+        "pending": [
+          "R4 index fields; original event keys inherit catalog-event-fields-v1 when stored"
+        ]
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "references-holds-closures",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "history-protection",
+      "lifecycle_class": "reference-protection",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "AUDIT",
+          "OPERATIONAL",
+          "PERSONAL"
+        ],
+        "personal_data": "possible-indirect",
+        "purpose": "protect-source-obligations; opaque-ids-authority-and-coded-reason; no-copied-names-documents",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": null,
+        "start_event": "source-protection-ended-and-source-disposed",
+        "while_required": "retain-while-protecting-source; explicit-owner-baselines-checkpoints-and-final-closures-required",
+        "after_disposition": "minimal-evidence-under-PURGE_EVIDENCE_CRITICAL; no-deleted-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "pending-protocol",
+        "source_id": null,
+        "pending": [
+          "R2 obligations/holds/baseline/checkpoint/final-closure DTO and authority"
+        ]
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "recovery-metadata",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "recovery-session",
+      "lifecycle_class": "recovery-metadata",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "OPERATIONAL",
+          "AUTHENTICATION",
+          "PERSONAL"
+        ],
+        "personal_data": "possible-indirect",
+        "purpose": "minimal-session-selection-position-grant-binding; no-secrets-or-payloads",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "exclusive-owner-and-authorized-workload; R3 authority/grant required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "fixed",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": {
+          "unit": "hours",
+          "minimum": 24,
+          "default": 24,
+          "maximum": 24
+        },
+        "start_event": "session-closed-or-expired",
+        "while_required": "minimal-binding-metadata-only; no-payload-or-credential-copy",
+        "after_disposition": "purge-metadata; independent-audit-preserved",
+        "evidence_profile": null,
+        "evidence_source": null
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "pending-protocol",
+        "source_id": null,
+        "pending": [
+          "R3 grant/authority DTO",
+          "R4 session/selection/position/cursor DTO; session 1h absolute and grant at most 15m; no implicit renewal"
+        ]
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "disposed-ranges-coverage",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "history-coverage",
+      "lifecycle_class": "coverage-metadata",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "OPERATIONAL",
+          "AUDIT"
+        ],
+        "personal_data": "absent",
+        "purpose": "declare-coverage-boundary-and-missing-ranges-with-policy-cut-cause-category; no-person-ids-or-deleted-values",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "later-facts-and-supported-checkpoints-cycle-closed",
+        "while_required": "retain-while-later-facts-or-supported-checkpoints-need-coverage",
+        "after_disposition": "operational-metadata-follows-history-profile; critical-evidence-follows-ADR-016",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "pending-protocol",
+        "source_id": null,
+        "pending": [
+          "R4 coverage/ranges/checkpoints DTO"
+        ]
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "temporary-files",
+      "policy_version": 1,
+      "owner": "catalog-pricing",
+      "aggregate": "recovery-output",
+      "lifecycle_class": "temporary-output",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "disabled; first recovery contract uses authenticated-pages",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "prohibited",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": null,
+        "start_event": "not-enabled",
+        "while_required": "no-temporary-files-in-first-recovery-contract",
+        "after_disposition": "require-separate-profile-encryption-recipient-expiry-before-enabling",
+        "evidence_profile": null,
+        "evidence_source": null
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "prohibited",
+        "source_id": null,
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    }
+  ],
+  "field_sources": [
+    {
+      "id": "catalog-event-fields-v1",
+      "contract_id": "catalog.event-policy.v1",
+      "path": "catalog/events/v1/catalog-event-policy-v1.json",
+      "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+      "sha256": "7d37a6e3e639cd259f3f9b7f8d2000647b865105f366f24a1cd7c19424327be6",
+      "pointer": "/field_inventory",
+      "inherited_metadata": [
+        "event_type",
+        "path",
+        "owner",
+        "sensitivity",
+        "categories",
+        "purpose",
+        "base",
+        "consumers",
+        "access",
+        "log_policy",
+        "encryption",
+        "export_correction",
+        "third_parties_regions"
+      ],
+      "history_profile_id": "CATALOG_HISTORY_AR",
+      "history_profile_version": 1,
+      "transport_profile_applies_to_history": false,
+      "runtime_access_requires_separate_authority": true
+    }
+  ],
+  "independent_policies": [
+    "outbox/inbox/idempotency: existing ADR-016 profiles, not changed",
+    "audit: independent ADR-015/016 policy, not recovery session TTL",
+    "inherited obligations: source profile/version/jurisdiction/trigger/due-date/suspensions; LEGAL_FISCAL_AR calculation unchanged",
+    "critical purge evidence: existing PURGE_EVIDENCE_CRITICAL, no deleted values; no new admission/version invented"
+  ],
+  "production_prerequisites": [
+    "reviewed-published-contract-admission",
+    "R2 protection protocol and inventory of all reference-capable sources; unknown or missing closures block",
+    "R3 current identity authority and specific permissions/grants with human MFA; no OWNER/read/manage inference",
+    "R4 recovery/cursor/coverage protocol and complete field catalogue",
+    "owner runtime SQL migrations and real CAF-11/12/14 tests; no external database access",
+    "same policy and essential access across Free/Pro; no automatic expiry from subscription"
+  ],
+  "runtime_demonstrated": false
+}
