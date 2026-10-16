@@ -190,6 +190,14 @@ validate:catalog-contracts:
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-authority-v1.bundle.json
     - node scripts/identity/validate-catalog-recovery-authority-v1.mjs .ci-artifacts/catalog-recovery-authority-v1
+    - npx --yes @redocly/cli@2.53.3 lint catalog/http/private/v1/catalog-history-recovery-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-recovery-v1.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-recovery-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-recovery-v1.bundle.json
+    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml
+    - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-verification-v2.bundle.json
+    - node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
+    - node scripts/catalog/validate-history-recovery-v1.mjs .ci-artifacts/catalog-history-recovery-v1 --self-test
   artifacts:
     paths:
       - .ci-artifacts/catalog-authority-v1.bundle.json
@@ -204,6 +212,10 @@ validate:catalog-contracts:
       - .ci-artifacts/catalog-history-protection-v1.bundle.json
       - .ci-artifacts/catalog-recovery-authority-v1.bundle.json
       - .ci-artifacts/catalog-recovery-authority-v1/
+      - .ci-artifacts/catalog-history-recovery-v1.bundle.json
+      - .ci-artifacts/catalog-history-recovery-v1/
+      - .ci-artifacts/catalog-recovery-verification-v2.bundle.json
+      - .ci-artifacts/catalog-recovery-verification-v2/
     expire_in: 1 day
 
 validate:catalog-schema:
@@ -229,3 +241,8 @@ validate:catalog-schema:
     - jsonschema metaschema common/errors/v7/error-catalog-v7.schema.json --verbose
     - jsonschema validate common/errors/v7/error-catalog-v7.schema.json common/errors/v7/error-catalog-v7.json --format-assertion --verbose
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-protection-v1
+    - jsonschema metaschema common/errors/v8/error-catalog-v8.schema.json --verbose
+    - jsonschema validate common/errors/v8/error-catalog-v8.schema.json common/errors/v8/error-catalog-v8.json --format-assertion --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-recovery-v1
+    - jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-verification-v2

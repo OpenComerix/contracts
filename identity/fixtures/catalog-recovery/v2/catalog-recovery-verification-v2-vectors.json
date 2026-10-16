@@ -1,0 +1,32 @@
+{
+  "format_version": 1,
+  "scope": "F1-08G",
+  "runtime_demonstrated": false,
+  "base": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+  "now": "2026-10-16T12:05:00Z",
+  "negative": [
+    {
+      "id": "future-original-issuance",
+      "changes": {
+        "grant.issued_at": "2026-10-16T12:06:00Z",
+        "grant.expires_at": "2026-10-16T12:21:00Z"
+      },
+      "expected": "identity_catalog_recovery_not_authorized"
+    },
+    {
+      "id": "caller-cannot-postpone-expiry",
+      "changes": {
+        "context.now": "2026-10-16T12:15:01Z",
+        "request.checked_at": "2026-10-16T12:01:00Z"
+      },
+      "expected": "identity_catalog_recovery_expired"
+    },
+    {
+      "id": "caller-reference-not-source-time",
+      "changes": {
+        "request.grant_reference": "ocgr_ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ"
+      },
+      "expected": "identity_catalog_recovery_not_authorized"
+    }
+  ]
+}

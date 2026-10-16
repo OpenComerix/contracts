@@ -1,0 +1,114 @@
+{
+  "version": 2,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "caller_storage": "none; fresh decision for one request only; never cache grant, response or issued_at",
+  "source_semantics": "All response fields come from the same freshly verified identity grant/decision. issued_at is original issuance; valid_until is original expires_at. No assumed lifetime or caller timestamps.",
+  "profiles": {
+    "metadata": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUTHENTICATION",
+        "PERSONAL",
+        "OPERATIONAL"
+      ],
+      "purpose": "fresh exact exceptional catalog authority verification with original issuance time",
+      "base": "explicit effective organization permissions and current R3 authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "H1A catalog-pricing / identity-tenancy.catalog-recovery and every current R3 check",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS; identity grant state retains its existing encryption at rest",
+      "retention": "one request only at caller; no decision/grant/issued_at cache or storage; identity source grant and independent audit keep their own R3 lifecycles",
+      "export_correction": "authorized identity export; never rewrite issuance or snapshot; new explicit grant when needed",
+      "third_parties_regions": "none-authorized"
+    },
+    "inherited_request": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECRET",
+        "AUTHENTICATION",
+        "PERSONAL"
+      ],
+      "purpose": "opaque grant reference and complete binding subtree, including inherited IDs, selection and destination; never telemetry",
+      "base": "explicit effective organization permissions and current R3 authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "H1A catalog-pricing / identity-tenancy.catalog-recovery and every current R3 check",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS; identity grant state retains its existing encryption at rest",
+      "retention": "one request only at caller; no decision/grant/issued_at cache or storage; identity source grant and independent audit keep their own R3 lifecycles",
+      "export_correction": "authorized identity export; never rewrite issuance or snapshot; new explicit grant when needed",
+      "third_parties_regions": "none-authorized"
+    }
+  },
+  "field_inventory": [
+    {
+      "path": "/$defs/VerifyResponse/properties/authorized",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/grant_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/binding",
+      "profile": "metadata",
+      "scope": "entire inherited subtree including every nested field"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/authority",
+      "profile": "metadata",
+      "scope": "entire inherited subtree including every nested field"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/permission",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/issued_at",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/valid_until",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyResponse/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/VerifyRequest",
+      "profile": "inherited_request",
+      "scope": "entire referenced R3 request subtree"
+    },
+    {
+      "path": "/$defs/Problem",
+      "profile": "metadata",
+      "scope": "entire referenced R3 error subtree; no free protected detail"
+    }
+  ],
+  "source_pins": [
+    {
+      "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "477ef82a9d7813cea1451a13d1f0d128f4411432405c1a8dd2adbe7541225183"
+    },
+    {
+      "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+    }
+  ]
+}

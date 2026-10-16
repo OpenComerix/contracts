@@ -22,3 +22,17 @@ Es candidato `planned`: la referencia de grant es opaca y de un solo propósito,
 El [oráculo semántico](../scripts/identity/catalog-recovery-authority-v1-semantics.mjs) usa estado sintético confiable de identidad, permisos por membresía y reloj del servidor: rechaza emisión entre tenants/personas, membresía o decisión revocada y versiones obsoletas. Comprueba también el resultado de emisión/renovación antes de devolverlo. Renovar exige otro grant, una decisión y un evento MFA nuevos, conservando todo el binding; revocar exige autorización vigente del mismo contexto y conserva el resultado/instante original al repetir. Estos escenarios no sustituyen la implementación ni pruebas reales del productor de identidad.
 
 CI ejecuta el gate semántico y genera DTO positivos/negativos bajo `.ci-artifacts/catalog-recovery-authority-v1`; el [gate Sourcemeta](../scripts/identity/validate-catalog-recovery-authority-v1.sh) comprueba esos payloads contra los schemas reales, junto a metaschema y Redocly lint/bundle sin warnings. No reutilizar el directorio generado para otra ejecución: el generador rechaza sobrescribirlo.
+
+## Candidato F1-08G — verificación de recuperación v2
+
+[API privada](http/private/v2/identity-catalog-recovery-verification-v2.yaml), [schema](http/shared/v2/identity-catalog-recovery-verification-v2.schema.json), [clasificación/policy](http/shared/v2/identity-catalog-recovery-verification-v2-policy.json), [vectores](fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json), [oráculo](../scripts/identity/catalog-recovery-verification-v2-semantics.mjs), [extractor](../scripts/identity/validate-catalog-recovery-verification-v2.mjs) y [tests externos](../test/catalog/recovery-verification-v2.test.mjs). Solo `POST /internal/v2/identity/catalog/recovery-grants/verify`, workload `catalog-pricing` y audiencia H1A R3 existente; emisión, renovación, revocación y todos los bytes v1 permanecen intactos.
+
+La respuesta cerrada conserva los datos de verificación v1 y exige `issued_at` del mismo grant verificado; `valid_until` es su vencimiento original. No se calcula la emisión a partir de quince minutos ni se acepta del caller. R4 obtiene esta respuesta fresca para cada creación/página/reintento; el grant completo y el estado de la persona pertenecen al lado de identidad del puerto. La clasificación cubre subárboles heredados completos; el caller no conserva ni registra respuesta, referencia, emisión o snapshot. No hay admisión funcional ni runtime.
+
+CI conserva los gates v1 y añade lint Redocly 2.53.3 sin warnings, bundle, extracción a una salida nueva y Sourcemeta 16.10.0 con positivos/negativos del DTO real. En la validación local, el bundle v2 emitió un warning por dos componentes `NoStore` con distinto contenido y renombró uno a `NoStore-2`; ambos exigen `Cache-Control: no-store`. El warning se conserva en la evidencia; la auditoría no observó alteración funcional. Los tests de catálogo recorren el productor sintético v2 y pasan únicamente su respuesta a R4; no acreditan autorización, SQL ni criptografía real.
+
+~~~text
+node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-verification-v2
+jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json
+~~~

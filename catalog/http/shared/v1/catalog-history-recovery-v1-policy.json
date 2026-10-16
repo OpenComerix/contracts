@@ -1,0 +1,816 @@
+{
+  "protocol_version": 1,
+  "status": "candidate",
+  "owner": "catalog-pricing",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "transport": {
+    "caller": "catalog-pricing",
+    "audience": "catalog-pricing.history-recovery",
+    "authentication": "H1A ES256 plus fresh R3 authority via identity verification v2 for every request; no new reader is enabled",
+    "request_bytes": 131072,
+    "response_bytes": 1048576,
+    "event_bytes": 131072,
+    "deadline_ms": 10000
+  },
+  "limits": {
+    "session_absolute_ms": 3600000,
+    "grant_maximum_ms": 900000,
+    "metadata_after_original_close_or_expiry_ms": 86400000,
+    "events_default": 100,
+    "events_maximum": 500,
+    "coverage_ranges_per_page": 500,
+    "pages_in_flight_per_session": 1,
+    "active_sessions_per_tenant": 2,
+    "page_requests_per_second_per_tenant": 5,
+    "total_history_quota": null,
+    "plan_dependent": false
+  },
+  "cursor": {
+    "version": 1,
+    "format": "ocrc1_ + canonical-unpadded-base64url(CSPRNG(32 bytes))",
+    "storage": "SHA-256(UTF-8 token) only; no plaintext token/grant or event cache",
+    "keys": "no cursor signing/encryption keys; H1A key management remains independent",
+    "bindings": [
+      "recovery_id",
+      "organization_id",
+      "workload",
+      "binding_hash",
+      "cut_position",
+      "after_position",
+      "expires_at",
+      "version"
+    ],
+    "retries": "previous handles remain valid until unchanged session expiry; new next/initial handles may differ"
+  },
+  "semantics": {
+    "creation": "UUIDv7 timestamp inside [issued_at from fresh trusted identity v2 VerifyResponse, server now] only when session absent; atomically admit same intent and tenant slots; existing session checks original immutable binding/after/cut/times without timestamp renewal",
+    "selection": "exact R3 binding; arrays preserve order; empty IDs/versions match all; aggregate versions do not redefine published event revisions",
+    "positions": "canonical decimal strings; BigInt comparisons; confirmed contiguous per-tenant order; no reserved-sequence or timestamp watermark",
+    "coverage": "global requested status and scanned partition from same source view; filters are not gaps; missing original-selection evidence means conservative partial, never complete",
+    "retries": "fresh authority plus live source/coverage; never cached event payloads; completion frees slot and only terminal-after/limit may replay before absolute expiry; a closed-session terminal replay that cannot reach the fixed cut within current budgets returns catalog_recovery_closed without a next cursor; require a new authorized intention",
+    "disposition": "no pin, synthetic original or resurrection; no unknown-gap inference as legitimate disposal",
+    "authority": "R3 session_id is person session, separate from recovery_id; only catalog-pricing reader; no inference for OWNER/H2/header or other workload"
+  },
+  "profiles": {
+    "metadata": {
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "OPERATIONAL",
+        "AUTHENTICATION",
+        "PERSONAL"
+      ],
+      "purpose": "minimal exceptional recovery binding and traversal",
+      "base": "authorized organization operation and history",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current H1A plus current exact R3 authority",
+      "log_policy": "no-values-including-hashes-and-IDs",
+      "encryption": "TLS and encryption at rest",
+      "retention": "minimal metadata exactly 24h after original close/expiry; then purge; independent audit unchanged",
+      "export_correction": "authorized export; new intent rather than rewriting original binding",
+      "third_parties_regions": "none-authorized"
+    },
+    "secret": {
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECRET",
+        "AUTHENTICATION"
+      ],
+      "purpose": "transport one bound operation credential/reference",
+      "base": "explicit R3 authorization",
+      "consumers": [
+        "catalog-pricing",
+        "identity-tenancy for grant verification only"
+      ],
+      "access": "fresh authority per request",
+      "log_policy": "prohibited",
+      "encryption": "TLS; no plaintext credential persistence",
+      "retention": "transient request/response only; cursor hash has metadata lifecycle",
+      "export_correction": "never export credentials; do not persist response tokens for replay",
+      "third_parties_regions": "none-authorized"
+    },
+    "coverage": {
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "OPERATIONAL",
+        "AUDIT"
+      ],
+      "purpose": "prove supported frontier and declare disposed coverage without deleted values",
+      "base": "source history integrity and disposal evidence",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "fresh bound recovery authority",
+      "log_policy": "no-values",
+      "encryption": "TLS and encryption at rest",
+      "retention": "while later facts or supported checkpoints need coverage; then R1 operational profile; critical evidence keeps ADR-016 policy",
+      "export_correction": "authorized export; immutable source evidence",
+      "third_parties_regions": "none-authorized"
+    },
+    "original": {
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "COMMERCIAL",
+        "FISCAL",
+        "OPERATIONAL"
+      ],
+      "purpose": "original retained facts without reconstruction",
+      "base": "authorized organization history",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "fresh R3 bound selection",
+      "log_policy": "no-payloads-or-field-values",
+      "encryption": "TLS and encrypted owner history",
+      "retention": "published R1 source lifecycle; response is transient, no session payload copy",
+      "export_correction": "original events and identifiers preserved; never rewrite",
+      "third_parties_regions": "none-authorized"
+    }
+  },
+  "field_inventory": [
+    {
+      "path": "/$defs/Binding/allOf/1/properties/purpose",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/PageRequest/properties/binding",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/PageRequest/properties/grant_reference",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/PageRequest/properties/cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/PageRequest/properties/limit",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Interval/properties/from_position",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Interval/properties/through_position",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/properties/from_position",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/properties/through_position",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/properties/reason",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/properties/policy_id",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/properties/policy_version",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/allOf/0/if/properties/reason",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/allOf/0/then/properties/policy_id",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/allOf/0/then/properties/policy_version",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/allOf/0/else/properties/policy_id",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/MissingRange/allOf/0/else/properties/policy_version",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/requested_after",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/requested_through",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/scanned_after",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/scanned_through",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/frontier_position",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/evaluated_at",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/status",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/available_ranges",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/Coverage/properties/missing_ranges",
+      "profile": "coverage"
+    },
+    {
+      "path": "/$defs/PositionedEvent/properties/position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/PositionedEvent/properties/event",
+      "profile": "original"
+    },
+    {
+      "path": "/$defs/Session/properties/recovery_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/organization_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/selection",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/requested_after",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/cut_position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/created_at",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/expires_at",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/properties/initial_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Session/properties/state",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/allOf/0/if/properties/state",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Session/allOf/0/then/properties/initial_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Session/allOf/0/else/properties/initial_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Page/properties/recovery_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/cut_position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/expires_at",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/events",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/coverage",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/end_of_traversal",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/complete",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/properties/next_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Page/allOf/0/if/properties/end_of_traversal",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/allOf/0/then/properties/next_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Page/allOf/0/else/properties/next_cursor",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/Page/allOf/0/else/properties/complete",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/allOf/1/if/properties/complete",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/allOf/1/then/properties/end_of_traversal",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/allOf/1/then/properties/coverage",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Page/allOf/1/then/properties/coverage/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/properties/title",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/properties/detail",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/properties/errors",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/properties/correlation_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/code",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/type",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/status",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/retryable",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CreateRequest/properties/recovery_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CreateRequest/properties/binding",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CreateRequest/properties/grant_reference",
+      "profile": "secret"
+    },
+    {
+      "path": "/$defs/CreateRequest/properties/after_position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/hash",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/recovery_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/organization_id",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/workload",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/binding_hash",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/cut_position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/after_position",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/expires_at",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/CursorMetadata/properties/version",
+      "profile": "metadata"
+    },
+    {
+      "path": "/$defs/Binding",
+      "profile": "metadata",
+      "inheritance": "recursive; imported fields keep stricter source classifications; no unclassified nested field"
+    },
+    {
+      "path": "/$defs/OriginalEvent",
+      "profile": "original",
+      "inheritance": "recursive; imported fields keep stricter source classifications; no unclassified nested field"
+    }
+  ],
+  "storage_inventory": {
+    "session": [
+      "recovery_id",
+      "organization_id",
+      "workload",
+      "binding",
+      "requested_after",
+      "cut_position",
+      "created_at",
+      "expires_at",
+      "closed_at",
+      "terminal_after",
+      "terminal_limit"
+    ],
+    "cursor": [
+      "hash",
+      "recovery_id",
+      "organization_id",
+      "workload",
+      "binding_hash",
+      "cut_position",
+      "after_position",
+      "expires_at",
+      "version"
+    ],
+    "coverage": [
+      "organization_id",
+      "frontier_position",
+      "from_position",
+      "through_position",
+      "reason",
+      "policy_id",
+      "policy_version"
+    ]
+  },
+  "source_pins": [
+    {
+      "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+    },
+    {
+      "path": "catalog/http/shared/v1/catalog-history-policy-v1.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "39b028c2a69b7a76d8ffda428f1e221a8c63a58cc0c35d16fac72994fd38c964"
+    },
+    {
+      "path": "events/event-envelope-v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+    },
+    {
+      "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+    },
+    {
+      "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+    },
+    {
+      "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+    },
+    {
+      "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+    },
+    {
+      "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+      "commit": "a45e700eadd36790a5480faccd3ed80015b08e13",
+      "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+    }
+  ],
+  "candidate_dependencies": [
+    "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+    "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+    "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+    "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json"
+  ]
+}

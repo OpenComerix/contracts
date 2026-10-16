@@ -1,0 +1,353 @@
+{
+  "format_version": 1,
+  "scope": "F1-08G",
+  "runtime_demonstrated": false,
+  "base": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+  "originals": [
+    "catalog/fixtures/events/v1/effects/createCatalogCategory.json",
+    "catalog/fixtures/events/v1/effects/createCatalogProduct.json",
+    "catalog/fixtures/events/v1/effects/createPresentationPrice-first.json"
+  ],
+  "synthetic_cursor": "ocrc1_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+  "synthetic_next_cursor": "ocrc1_BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBA",
+  "negative": [
+    {
+      "id": "workload-missing",
+      "operation": "page",
+      "changes": {
+        "context.workload.authenticated": false
+      },
+      "expected": "catalog_history_workload_invalid"
+    },
+    {
+      "id": "workload-is-user",
+      "operation": "page",
+      "changes": {
+        "context.workload.type": "user"
+      },
+      "expected": "catalog_history_workload_invalid"
+    },
+    {
+      "id": "wrong-workload",
+      "operation": "page",
+      "changes": {
+        "context.workload.caller": "reporting"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "h2-audience",
+      "operation": "page",
+      "changes": {
+        "context.workload.audience": "identity-tenancy.h2"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "authority-down",
+      "operation": "page",
+      "changes": {
+        "context.identity.authority_available": false
+      },
+      "expected": "platform_dependency_unavailable"
+    },
+    {
+      "id": "membership-revoked",
+      "operation": "page",
+      "changes": {
+        "context.identity.membership.active": false
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "authority-version-changed",
+      "operation": "page",
+      "changes": {
+        "context.identity.membership.version": "9"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "authorizer-permission-revoked",
+      "operation": "page",
+      "changes": {
+        "context.identity.membership.permissions": [
+          "catalog.history.recover"
+        ]
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "owner-and-header-not-authority",
+      "operation": "page",
+      "changes": {
+        "context.identity.membership.permissions": [],
+        "context.role": "OWNER",
+        "context.headers": {
+          "X-Catalog-Recovery-Authority": "catalog.history.recover"
+        }
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "grant-missing",
+      "operation": "page",
+      "changes": {
+        "request.grant_reference": ""
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "grant-revoked",
+      "operation": "page",
+      "changes": {
+        "grant.status": "revoked"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "grant-expired",
+      "operation": "page",
+      "changes": {
+        "context.now": "2026-10-16T12:15:01Z"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "selection-altered",
+      "operation": "page",
+      "changes": {
+        "request.binding.selection.aggregate_types": [
+          "product"
+        ]
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "grant-other-tenant",
+      "operation": "page",
+      "changes": {
+        "request.binding.organization_id": "99999999-9999-4999-8999-999999999999"
+      },
+      "expected": "catalog_recovery_not_authorized"
+    },
+    {
+      "id": "foreign-session",
+      "operation": "page",
+      "changes": {
+        "session.organization_id": "99999999-9999-4999-8999-999999999999"
+      },
+      "expected": "catalog_recovery_not_found"
+    },
+    {
+      "id": "foreign-session-workload",
+      "operation": "page",
+      "changes": {
+        "session.workload": "reporting"
+      },
+      "expected": "catalog_recovery_not_found"
+    },
+    {
+      "id": "unknown-session",
+      "operation": "page",
+      "changes": {
+        "session": null
+      },
+      "expected": "catalog_recovery_not_found"
+    },
+    {
+      "id": "expired-session",
+      "operation": "page",
+      "changes": {
+        "session.expires_at": "2026-10-16T12:05:00Z"
+      },
+      "expected": "catalog_recovery_expired"
+    },
+    {
+      "id": "cursor-altered",
+      "operation": "page",
+      "changes": {
+        "request.cursor": "ocrc1_CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCA"
+      },
+      "expected": "catalog_recovery_cursor_invalid"
+    },
+    {
+      "id": "cursor-version",
+      "operation": "page",
+      "changes": {
+        "request.cursor": "ocrc2_AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      },
+      "expected": "catalog_recovery_cursor_version_unsupported"
+    },
+    {
+      "id": "cursor-unknown",
+      "operation": "page",
+      "changes": {
+        "cursor": null
+      },
+      "expected": "catalog_recovery_cursor_invalid"
+    },
+    {
+      "id": "cursor-foreign",
+      "operation": "page",
+      "changes": {
+        "cursor.organization_id": "99999999-9999-4999-8999-999999999999"
+      },
+      "expected": "catalog_recovery_not_found"
+    },
+    {
+      "id": "cursor-cut-changed",
+      "operation": "page",
+      "changes": {
+        "cursor.cut_position": "5"
+      },
+      "expected": "catalog_recovery_intent_conflict"
+    },
+    {
+      "id": "cursor-selection-changed",
+      "operation": "page",
+      "changes": {
+        "cursor.binding_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      "expected": "catalog_recovery_intent_conflict"
+    },
+    {
+      "id": "cursor-expiry-extended",
+      "operation": "page",
+      "changes": {
+        "cursor.expires_at": "2026-10-16T13:10:00Z"
+      },
+      "expected": "catalog_recovery_intent_conflict"
+    },
+    {
+      "id": "cursor-ahead-of-cut",
+      "operation": "page",
+      "changes": {
+        "cursor.after_position": "5"
+      },
+      "expected": "catalog_recovery_intent_conflict"
+    },
+    {
+      "id": "page-busy",
+      "operation": "page",
+      "changes": {
+        "context.in_flight": true
+      },
+      "expected": "platform_rate_limited"
+    },
+    {
+      "id": "rate-limit",
+      "operation": "page",
+      "changes": {
+        "context.pages_in_last_second": 5
+      },
+      "expected": "platform_rate_limited"
+    },
+    {
+      "id": "deadline-including-body",
+      "operation": "page",
+      "changes": {
+        "context.elapsed_ms": 10000
+      },
+      "expected": "platform_dependency_unavailable"
+    },
+    {
+      "id": "source-down",
+      "operation": "page",
+      "changes": {
+        "context.source_available": false
+      },
+      "expected": "platform_dependency_unavailable"
+    },
+    {
+      "id": "source-integrity-unknown",
+      "operation": "page",
+      "changes": {
+        "source.integrity_verified": false
+      },
+      "expected": "catalog_recovery_source_unverifiable"
+    },
+    {
+      "id": "unknown-gap",
+      "operation": "page",
+      "changes": {
+        "source.high_water": "5",
+        "session.cut_position": "5",
+        "cursor.cut_position": "5"
+      },
+      "expected": "catalog_recovery_source_unverifiable"
+    },
+    {
+      "id": "foreign-original-event",
+      "operation": "page",
+      "changes": {
+        "source.records.0.event.organization_id": "99999999-9999-4999-8999-999999999999"
+      },
+      "expected": "catalog_recovery_source_unverifiable"
+    },
+    {
+      "id": "unknown-original-revision",
+      "operation": "page",
+      "changes": {
+        "source.records.0.event.schema_version": 2
+      },
+      "expected": "catalog_recovery_source_unverifiable"
+    },
+    {
+      "id": "too-many-events",
+      "operation": "page",
+      "changes": {
+        "request.limit": 501
+      },
+      "expected": "catalog_invalid_request"
+    },
+    {
+      "id": "zero-limit",
+      "operation": "page",
+      "changes": {
+        "request.limit": 0
+      },
+      "expected": "catalog_invalid_request"
+    },
+    {
+      "id": "create-session-limit",
+      "operation": "create",
+      "changes": {
+        "context.active_sessions": 2
+      },
+      "expected": "platform_rate_limited"
+    },
+    {
+      "id": "create-cut-ahead",
+      "operation": "create",
+      "changes": {
+        "request.after_position": "5"
+      },
+      "expected": "catalog_recovery_intent_conflict"
+    },
+    {
+      "id": "create-distinct-person-session",
+      "operation": "create",
+      "changes": {
+        "request.recovery_id": "33333333-3333-4333-8333-333333333333"
+      },
+      "expected": "catalog_invalid_request"
+    },
+    {
+      "id": "create-old-intent-after-purge",
+      "operation": "create",
+      "changes": {
+        "request.recovery_id": "01998d00-0000-7000-8000-000000000777"
+      },
+      "expected": "catalog_recovery_expired"
+    },
+    {
+      "id": "create-future-intent",
+      "operation": "create",
+      "changes": {
+        "request.recovery_id": "ffffffff-ffff-7000-8000-000000000777"
+      },
+      "expected": "catalog_invalid_request"
+    }
+  ]
+}

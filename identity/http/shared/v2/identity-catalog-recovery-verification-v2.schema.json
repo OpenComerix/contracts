@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+  "title": "Identity catalog recovery verification v2 — candidate",
+  "description": "Versioned verification response only. Issued_at comes from the verified identity grant; R3 v1 remains unchanged.",
+  "$defs": {
+    "VerifyRequest": {
+      "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyRequest"
+    },
+    "VerifyResponse": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["authorized", "grant_id", "binding", "authority", "permission", "issued_at", "valid_until", "status"],
+      "properties": {
+        "authorized": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse/properties/authorized" },
+        "grant_id": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse/properties/grant_id" },
+        "binding": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/GrantBinding" },
+        "authority": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/AuthoritySnapshot" },
+        "permission": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse/properties/permission" },
+        "issued_at": { "type": "string", "format": "date-time", "description": "Original verified grant issuance; never calculated from a maximum lifetime or caller input. Semantic producer gate enforces issued_at <= server now < valid_until and a 1–900 whole-second interval." },
+        "valid_until": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse/properties/valid_until" },
+        "status": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifyResponse/properties/status" }
+      },
+      "allOf": [{ "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/VerifiedPurposePermission" }]
+    },
+    "Problem": { "$ref": "../v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/Problem" }
+  }
+}

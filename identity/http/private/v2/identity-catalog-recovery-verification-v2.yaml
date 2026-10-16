@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity Catalog Recovery Verification API
+  version: 2.0.0
+  description: >-
+    F1-08G candidate. Versioned verification only; preserves every R3 v1 byte,
+    issuance, renewal, revocation and permission. Identity-tenancy owns the
+    decision and grant issuance timestamp. No runtime or admission is enabled.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Illustrative private HTTPS host.
+tags:
+  - name: CatalogRecoveryVerification
+    description: Fresh R3 authority verification with authenticated issuance time.
+security:
+  - catalogWorkloadBearer: []
+paths:
+  /internal/v2/identity/catalog/recovery-grants/verify:
+    post:
+      operationId: verifyCatalogRecoveryGrantV2
+      tags: [CatalogRecoveryVerification]
+      summary: Verify a bound recovery grant and return its original issuance time
+      description: >-
+        Only authenticated H1A catalog-pricing with audience
+        identity-tenancy.catalog-recovery may call this port. Apply all R3 v1
+        verification checks on every request: live account, session, organization,
+        membership, permissions, decision and authority versions, exact binding,
+        opaque reference, status and expiry. Use identity's clock; checked_at is
+        intent. No renewal or broader authority occurs. Return issued_at from the
+        same verified grant record and decision as valid_until (the original
+        expires_at), never from a caller timestamp, reference decoding or an
+        assumed lifetime. The interval must be valid and at most 900 seconds.
+        R4 must call this port afresh for each create/page/retry and use only this
+        response, never the gateway's full Grant or a client-supplied decision.
+        Unknown, revoked, expired or unavailable authority fails closed with R3
+        errors. No grants or decisions may be cached, logged or retained by the
+        caller; classification and lifecycle are in the v2 policy.
+      x-internal: true
+      x-workload:
+        caller: catalog-pricing
+        audience: identity-tenancy.catalog-recovery
+        type: service
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v2/identity-catalog-recovery-verification-v2.schema.json#/$defs/VerifyRequest
+      responses:
+        '200':
+          description: Fresh exact decision including the original verified issuance time.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v2/identity-catalog-recovery-verification-v2.schema.json#/$defs/VerifyResponse
+        '400':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/InvalidRequest
+        '401':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/AuthenticationRequired
+        '403':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/NotAuthorized
+        '404':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/NotFound
+        '410':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/ExpiredOrRevoked
+        '503':
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/DependencyUnavailable
+components:
+  securitySchemes:
+    catalogWorkloadBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: H1A workload authentication, separate from the opaque R3 grant.
+  headers:
+    NoStore:
+      required: true
+      description: Never cache authority requests, responses or errors.
+      schema:
+        type: string
+        const: no-store

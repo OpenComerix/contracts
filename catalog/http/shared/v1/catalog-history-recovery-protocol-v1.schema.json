@@ -1,0 +1,951 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+  "title": "Catalog history recovery protocol v1 — candidate R4",
+  "description": "Private R4 transport candidate. Relational invariants and authority require semantic gates and future backend checks; fixtures do not prove SQL, cryptography or runtime.",
+  "$defs": {
+    "Position": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,18})$"
+    },
+    "Cursor": {
+      "type": "string",
+      "maxLength": 54,
+      "pattern": "^ocrc[1-9][0-9]{0,2}_[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+    },
+    "Binding": {
+      "allOf": [
+        {
+          "$ref": "../../../../identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json#/$defs/GrantBinding"
+        },
+        {
+          "properties": {
+            "purpose": {
+              "const": "exceptional-history-recovery"
+            }
+          }
+        }
+      ]
+    },
+    "PageRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "binding",
+        "grant_reference",
+        "cursor"
+      ],
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/Binding"
+        },
+        "grant_reference": {
+          "type": "string",
+          "pattern": "^ocgr_[A-Za-z0-9_-]{43}$"
+        },
+        "cursor": {
+          "$ref": "#/$defs/Cursor"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 500,
+          "default": 100
+        }
+      }
+    },
+    "Interval": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_position",
+        "through_position"
+      ],
+      "properties": {
+        "from_position": {
+          "$ref": "#/$defs/PositivePosition"
+        },
+        "through_position": {
+          "$ref": "#/$defs/PositivePosition"
+        }
+      }
+    },
+    "MissingRange": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_position",
+        "through_position",
+        "reason",
+        "policy_id",
+        "policy_version"
+      ],
+      "properties": {
+        "from_position": {
+          "$ref": "#/$defs/PositivePosition"
+        },
+        "through_position": {
+          "$ref": "#/$defs/PositivePosition"
+        },
+        "reason": {
+          "enum": [
+            "disposed",
+            "before_supported_frontier"
+          ]
+        },
+        "policy_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "maxLength": 100
+        },
+        "policy_version": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "reason": {
+                "const": "disposed"
+              }
+            },
+            "required": [
+              "reason"
+            ]
+          },
+          "then": {
+            "properties": {
+              "policy_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "policy_version": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "policy_id": {
+                "type": "null"
+              },
+              "policy_version": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Coverage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requested_after",
+        "requested_through",
+        "scanned_after",
+        "scanned_through",
+        "frontier_position",
+        "evaluated_at",
+        "status",
+        "available_ranges",
+        "missing_ranges"
+      ],
+      "properties": {
+        "requested_after": {
+          "$ref": "#/$defs/Position"
+        },
+        "requested_through": {
+          "$ref": "#/$defs/Position"
+        },
+        "scanned_after": {
+          "$ref": "#/$defs/Position"
+        },
+        "scanned_through": {
+          "$ref": "#/$defs/Position"
+        },
+        "frontier_position": {
+          "$ref": "#/$defs/PositivePosition"
+        },
+        "evaluated_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "status": {
+          "enum": [
+            "complete",
+            "partial"
+          ]
+        },
+        "available_ranges": {
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "#/$defs/Interval"
+          }
+        },
+        "missing_ranges": {
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "#/$defs/MissingRange"
+          }
+        }
+      }
+    },
+    "OriginalEvent": {
+      "oneOf": [
+        {
+          "$ref": "../../../events/v1/catalog.category.changed.v1.schema.json"
+        },
+        {
+          "$ref": "../../../events/v1/catalog.product.changed.v1.schema.json"
+        },
+        {
+          "$ref": "../../../events/v1/catalog.presentation.changed.v1.schema.json"
+        },
+        {
+          "$ref": "../../../events/v1/pricing.presentation-price.changed.v1.schema.json"
+        }
+      ]
+    },
+    "PositionedEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "position",
+        "event"
+      ],
+      "properties": {
+        "position": {
+          "$ref": "#/$defs/Position"
+        },
+        "event": {
+          "$ref": "#/$defs/OriginalEvent"
+        }
+      }
+    },
+    "Session": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recovery_id",
+        "organization_id",
+        "selection",
+        "requested_after",
+        "cut_position",
+        "created_at",
+        "expires_at",
+        "initial_cursor",
+        "state"
+      ],
+      "properties": {
+        "recovery_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "selection": {
+          "$ref": "catalog-history-recovery-v1.schema.json#/$defs/Selection"
+        },
+        "requested_after": {
+          "$ref": "#/$defs/Position"
+        },
+        "cut_position": {
+          "$ref": "#/$defs/Position"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "initial_cursor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Cursor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "state": {
+          "enum": [
+            "active",
+            "completed"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "completed"
+              }
+            },
+            "required": [
+              "state"
+            ]
+          },
+          "then": {
+            "properties": {
+              "initial_cursor": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "initial_cursor": {
+                "$ref": "#/$defs/Cursor"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recovery_id",
+        "cut_position",
+        "expires_at",
+        "events",
+        "coverage",
+        "end_of_traversal",
+        "complete",
+        "next_cursor"
+      ],
+      "properties": {
+        "recovery_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cut_position": {
+          "$ref": "#/$defs/Position"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "events": {
+          "type": "array",
+          "maxItems": 500,
+          "items": {
+            "$ref": "#/$defs/PositionedEvent"
+          }
+        },
+        "coverage": {
+          "$ref": "#/$defs/Coverage"
+        },
+        "end_of_traversal": {
+          "type": "boolean"
+        },
+        "complete": {
+          "type": "boolean"
+        },
+        "next_cursor": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Cursor"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "end_of_traversal": {
+                "const": true
+              }
+            },
+            "required": [
+              "end_of_traversal"
+            ]
+          },
+          "then": {
+            "properties": {
+              "next_cursor": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "next_cursor": {
+                "$ref": "#/$defs/Cursor"
+              },
+              "complete": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "complete": {
+                "const": true
+              }
+            },
+            "required": [
+              "complete"
+            ]
+          },
+          "then": {
+            "properties": {
+              "end_of_traversal": {
+                "const": true
+              },
+              "coverage": {
+                "properties": {
+                  "status": {
+                    "const": "complete"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Problem": {
+      "allOf": [
+        {
+          "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "properties": {
+            "title": {
+              "const": "Recuperación de catálogo rechazada"
+            },
+            "detail": false,
+            "errors": false,
+            "correlation_id": false
+          },
+          "allOf": [
+            {
+              "oneOf": [
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_not_authorized"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_not_authorized"
+                    },
+                    "status": {
+                      "const": 403
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_not_found"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_not_found"
+                    },
+                    "status": {
+                      "const": 404
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_intent_conflict"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_intent_conflict"
+                    },
+                    "status": {
+                      "const": 409
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_closed"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_closed"
+                    },
+                    "status": {
+                      "const": 409
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_expired"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_expired"
+                    },
+                    "status": {
+                      "const": 410
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_cursor_invalid"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_cursor_invalid"
+                    },
+                    "status": {
+                      "const": 400
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_cursor_version_unsupported"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_cursor_version_unsupported"
+                    },
+                    "status": {
+                      "const": 410
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_source_unverifiable"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_source_unverifiable"
+                    },
+                    "status": {
+                      "const": 503
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_recovery_event_unrepresentable"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_recovery_event_unrepresentable"
+                    },
+                    "status": {
+                      "const": 503
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_invalid_request"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_invalid_request"
+                    },
+                    "status": {
+                      "const": 400
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "catalog_history_workload_invalid"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:catalog_history_workload_invalid"
+                    },
+                    "status": {
+                      "const": 401
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_payload_too_large"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_payload_too_large"
+                    },
+                    "status": {
+                      "const": 413
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_unsupported_media_type"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_unsupported_media_type"
+                    },
+                    "status": {
+                      "const": 415
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_not_acceptable"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_not_acceptable"
+                    },
+                    "status": {
+                      "const": 406
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_rate_limited"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_rate_limited"
+                    },
+                    "status": {
+                      "const": 429
+                    },
+                    "retryable": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_capacity_exhausted"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_capacity_exhausted"
+                    },
+                    "status": {
+                      "const": 503
+                    },
+                    "retryable": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_dependency_unavailable"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_dependency_unavailable"
+                    },
+                    "status": {
+                      "const": 503
+                    },
+                    "retryable": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                },
+                {
+                  "properties": {
+                    "code": {
+                      "const": "platform_internal_error"
+                    },
+                    "type": {
+                      "const": "urn:opencomerix:problem:platform_internal_error"
+                    },
+                    "status": {
+                      "const": 500
+                    },
+                    "retryable": {
+                      "const": false
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "type",
+                    "status",
+                    "retryable"
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "CreateRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "recovery_id",
+        "binding",
+        "grant_reference",
+        "after_position"
+      ],
+      "properties": {
+        "recovery_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "binding": {
+          "$ref": "#/$defs/Binding"
+        },
+        "grant_reference": {
+          "type": "string",
+          "pattern": "^ocgr_[A-Za-z0-9_-]{43}$"
+        },
+        "after_position": {
+          "$ref": "#/$defs/Position"
+        }
+      }
+    },
+    "CursorMetadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hash",
+        "recovery_id",
+        "organization_id",
+        "workload",
+        "binding_hash",
+        "cut_position",
+        "after_position",
+        "expires_at",
+        "version"
+      ],
+      "properties": {
+        "hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "recovery_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "workload": {
+          "const": "catalog-pricing"
+        },
+        "binding_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "cut_position": {
+          "$ref": "#/$defs/Position"
+        },
+        "after_position": {
+          "$ref": "#/$defs/Position"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "version": {
+          "const": 1
+        }
+      }
+    },
+    "PositivePosition": {
+      "type": "string",
+      "pattern": "^[1-9][0-9]{0,18}$"
+    }
+  },
+  "x-data-classification": {
+    "sensitivity": "RESTRICTED",
+    "categories": [
+      "OPERATIONAL",
+      "AUTHENTICATION",
+      "PERSONAL"
+    ]
+  },
+  "x-data-purpose": "Exceptional owner history recovery after fresh R3 authorization",
+  "x-retention-profile": "ADR-062: minimal session metadata 24h after close/expiry; no payload cache; source history and independent audit retain their own policies",
+  "x-log-policy": "no-bodies-values-grants-cursors-or-credential-hashes"
+}
