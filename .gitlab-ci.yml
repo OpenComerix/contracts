@@ -198,6 +198,7 @@ validate:catalog-contracts:
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-verification-v2.bundle.json
     - node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
     - node scripts/catalog/validate-history-recovery-v1.mjs .ci-artifacts/catalog-history-recovery-v1 --self-test
+    - node scripts/catalog/validate-history-policy-v2.mjs .ci-artifacts/catalog-history-policy-v2 --self-test
   artifacts:
     paths:
       - .ci-artifacts/catalog-authority-v1.bundle.json
@@ -216,6 +217,7 @@ validate:catalog-contracts:
       - .ci-artifacts/catalog-history-recovery-v1/
       - .ci-artifacts/catalog-recovery-verification-v2.bundle.json
       - .ci-artifacts/catalog-recovery-verification-v2/
+      - .ci-artifacts/catalog-history-policy-v2/
     expire_in: 1 day
 
 validate:catalog-schema:
@@ -246,3 +248,6 @@ validate:catalog-schema:
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-recovery-v1
     - jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json --verbose
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-verification-v2
+    - jsonschema metaschema common/http/shared/v2/data-lifecycle-policy-v2.schema.json --verbose
+    - jsonschema validate common/http/shared/v2/data-lifecycle-policy-v2.schema.json catalog/http/shared/v2/catalog-history-policy-v2.json --format-assertion --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2

@@ -1,8 +1,8 @@
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { parseDocument } from 'yaml';
 import path from 'node:path';
 import { validateContractPaths } from './layout.mjs';
+import { parseYamlSource } from './yaml-source.mjs';
 import {
   canonical,
   sha256,
@@ -55,13 +55,7 @@ const gitCache = new Map();
 const verifiedCommits = new Set();
 export function parseSource(bytes, file) {
   if (file.endsWith('.json')) return parseJSON(bytes.toString('utf8'));
-  const parsed = parseDocument(bytes.toString('utf8'), { uniqueKeys: true });
-  assert.equal(
-    parsed.errors.length,
-    0,
-    'Invalid YAML ' + file + ': ' + parsed.errors.map((error) => error.message).join('; '),
-  );
-  return parsed.toJS({ maxAliasCount: 0 });
+  return parseYamlSource(bytes, file);
 }
 export function gitReader(root, revision) {
   assert(/^[a-f0-9]{40}$/.test(revision), 'Source revision must be a resolved commit');

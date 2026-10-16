@@ -1,0 +1,6028 @@
+{
+  "format_version": 2,
+  "status": "candidate",
+  "catalogue_id": "catalog.history",
+  "version": 2,
+  "owner": "catalog-pricing",
+  "decision": "ADR-062/R1-R4; F1-08H classification successor, approved 2026-10-16",
+  "profiles": [
+    {
+      "id": "CATALOG_HISTORY_AR",
+      "version": 1,
+      "jurisdiction": "AR",
+      "legal_period": false,
+      "purpose": "retained-original-catalog-price-meaning-without-greater-obligations",
+      "periods": {
+        "unit": "calendar-years",
+        "minimum": 1,
+        "default": 2,
+        "maximum": 5
+      },
+      "clock": {
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "calculation": "calendar-arithmetic-by-applicable-jurisdiction; never-fixed-seconds",
+        "unknown_start": "block-and-alert; never-invent-date-or-indefinite-default",
+        "active_purpose_blocks": true
+      },
+      "guards": {
+        "inherited_obligations_prevail": true,
+        "holds_block": true,
+        "unknown_obligations_block": true,
+        "privacy_conflict": "explicit-resolution; no-automatic-purge",
+        "unknown_sources_block": true
+      },
+      "configuration": {
+        "tenant_configurable": true,
+        "authorization": "catalog.history.configure with current exact R3 restricted-history-configuration grant, effective organization permissions, human authorization/MFA and audit; no OWNER/read/manage inference",
+        "reduction": "eligibility-only; never-immediate-delete",
+        "plan_dependent": false,
+        "onboarding_step": false
+      },
+      "disposition": "controlled-purge-of-original-and-authorized-copies; preserve-required-evidence"
+    }
+  ],
+  "storage_policies": [
+    {
+      "id": "original-history",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "category/product/presentation/presentation_price",
+      "lifecycle_class": "business-history",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "original-four-events-and-snapshots-with-interpretation-metadata; actor-personal-data-stays-in-restricted-audit",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "profile",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "while_required": "active-purpose-or-unknown-trigger-blocks-and-alerts",
+        "after_disposition": "minimal-evidence-only; no-original-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "complete",
+        "source_ids": [
+          "catalog-event-fields-v1",
+          "storage-fields-v2"
+        ],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "history-index",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "history-index",
+      "lifecycle_class": "business-history-index",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "recover-retained-originals; same-lifecycle-as-source",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "latest-of-definitive-retirement-references-closed-obligations-ended",
+        "while_required": "exactly-same-lifecycle-as-original-history; never-transport-TTL",
+        "after_disposition": "minimal-evidence-only; no-original-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "complete",
+        "source_ids": [
+          "storage-fields-v2"
+        ],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "references-holds-closures",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "history-protection",
+      "lifecycle_class": "reference-protection",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "AUDIT",
+          "OPERATIONAL",
+          "PERSONAL"
+        ],
+        "personal_data": "possible-indirect",
+        "purpose": "protect-source-obligations; opaque-ids-authority-and-coded-reason; no-copied-names-documents",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "current R2 workload and owner-managed source/contract/tenant/scope admission; hold releases require reinforced authority; evidence alone grants nothing",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": null,
+        "start_event": "source-protection-ended-and-source-disposed",
+        "while_required": "retain-while-protecting-source; explicit-owner-baselines-checkpoints-and-final-closures-required",
+        "after_disposition": "minimal-evidence-under-PURGE_EVIDENCE_CRITICAL; no-deleted-snapshot",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "complete",
+        "source_ids": [
+          "storage-fields-v2"
+        ],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "recovery-metadata",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "recovery-session",
+      "lifecycle_class": "recovery-metadata",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "OPERATIONAL",
+          "AUTHENTICATION",
+          "PERSONAL"
+        ],
+        "personal_data": "possible-indirect",
+        "purpose": "minimal-session-selection-position-grant-binding; no-secrets-or-payloads",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "exclusive-owner-and-authorized-workload; R3 authority/grant required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "fixed",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": {
+          "unit": "hours",
+          "minimum": 24,
+          "default": 24,
+          "maximum": 24
+        },
+        "start_event": "session-closed-or-expired",
+        "while_required": "minimal-binding-metadata-only; no-payload-or-credential-copy",
+        "after_disposition": "purge-metadata; independent-audit-preserved",
+        "evidence_profile": null,
+        "evidence_source": null
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "complete",
+        "source_ids": [
+          "storage-fields-v2"
+        ],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "disposed-ranges-coverage",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "history-coverage",
+      "lifecycle_class": "coverage-metadata",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "OPERATIONAL",
+          "AUDIT"
+        ],
+        "personal_data": "absent",
+        "purpose": "declare-coverage-boundary-and-missing-ranges-with-policy-cut-cause-category; no-person-ids-or-deleted-values",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "dependent",
+        "profile_id": "CATALOG_HISTORY_AR",
+        "profile_version": 1,
+        "periods": null,
+        "start_event": "later-facts-and-supported-checkpoints-cycle-closed",
+        "while_required": "retain-while-later-facts-or-supported-checkpoints-need-coverage",
+        "after_disposition": "operational-metadata-follows-history-profile; critical-evidence-follows-ADR-016",
+        "evidence_profile": "PURGE_EVIDENCE_CRITICAL",
+        "evidence_source": "ADR-016 section 5; existing profile, not newly admitted by F1-08C"
+      },
+      "dependencies": [
+        "original-history"
+      ],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "complete",
+        "source_ids": [
+          "storage-fields-v2"
+        ],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    },
+    {
+      "id": "temporary-files",
+      "policy_version": 2,
+      "owner": "catalog-pricing",
+      "aggregate": "recovery-output",
+      "lifecycle_class": "temporary-output",
+      "classification": {
+        "sensitivity": "RESTRICTED",
+        "categories": [
+          "COMMERCIAL",
+          "FISCAL",
+          "OPERATIONAL"
+        ],
+        "personal_data": "absent",
+        "purpose": "disabled; first recovery contract uses authenticated-pages",
+        "base": "authorized-organization-operation-and-history; no-marketing",
+        "access": "owner-and-authorized-tenant-workload; R3 admission and current authority required",
+        "log_policy": "no-payloads-field-values-grants-or-cursors",
+        "encryption": "TLS-and-encrypted-at-rest",
+        "export_correction": "authorized-export; no-rewrite-of-original-facts",
+        "third_parties_regions": "none-authorized"
+      },
+      "retention": {
+        "mode": "prohibited",
+        "profile_id": null,
+        "profile_version": null,
+        "periods": null,
+        "start_event": "not-enabled",
+        "while_required": "no-temporary-files-in-first-recovery-contract",
+        "after_disposition": "require-separate-profile-encryption-recipient-expiry-before-enabling",
+        "evidence_profile": null,
+        "evidence_source": null
+      },
+      "dependencies": [],
+      "copies": "same-source-lifecycle; no-unclassified-derived-copy",
+      "field_catalogue": {
+        "state": "prohibited",
+        "source_ids": [],
+        "pending": []
+      },
+      "disposition": "controlled-purge-after-evaluation-and-required-authorization; no-anonymized-original-recovery",
+      "evidence": [
+        "policy-version-scope-cut-authority-counts-result",
+        "no-deleted-values-or-snapshots",
+        "independent-audit-policy-preserved"
+      ],
+      "alerts": [
+        "unknown-trigger-obligation-hold-or-source",
+        "disposal-overdue-partial-or-derived-copy-unreconciled"
+      ],
+      "production_enabled": false
+    }
+  ],
+  "field_sources": [
+    {
+      "id": "catalog-event-fields-v1",
+      "contract_id": "catalog.event-policy.v1",
+      "path": "catalog/events/v1/catalog-event-policy-v1.json",
+      "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+      "sha256": "7d37a6e3e639cd259f3f9b7f8d2000647b865105f366f24a1cd7c19424327be6",
+      "pointer": "/field_inventory",
+      "inherited_metadata": [
+        "event_type",
+        "path",
+        "owner",
+        "sensitivity",
+        "categories",
+        "purpose",
+        "base",
+        "consumers",
+        "access",
+        "log_policy",
+        "encryption",
+        "export_correction",
+        "third_parties_regions"
+      ],
+      "history_profile_id": "CATALOG_HISTORY_AR",
+      "history_profile_version": 1,
+      "transport_profile_applies_to_history": false,
+      "runtime_access_requires_separate_authority": true
+    }
+  ],
+  "independent_policies": [
+    "outbox/inbox/idempotency: existing ADR-016 profiles, not changed",
+    "audit: independent ADR-015/016 policy, not recovery session TTL",
+    "inherited obligations: source profile/version/jurisdiction/trigger/due-date/suspensions; LEGAL_FISCAL_AR calculation unchanged",
+    "critical purge evidence: existing PURGE_EVIDENCE_CRITICAL, no deleted values; no new admission/version invented"
+  ],
+  "production_prerequisites": [
+    "reviewed-published-contract-admission; new v2 source must be immutable and CI-verified before registration",
+    "R2 actual source inventory, baselines/checkpoints/fences and current authority; unknown or missing closures block",
+    "R3 real identity producer and explicit effective permissions/grants; source persistence remains identity-owned",
+    "R4 real transactional order/source/coverage, protected cursor and live authority per request",
+    "owner runtime SQL migrations and real CAF-11/12/14 tests; metadata does not prescribe SQL or access another database",
+    "same essential access and profile across Free/Pro; no automatic expiry from subscription"
+  ],
+  "runtime_demonstrated": false,
+  "protocol_sources": [
+    {
+      "id": "r2",
+      "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "07023d9bfb5a50fdf05dab10411395a94f2506d87e8b06044deab5e53949e2b9"
+    },
+    {
+      "id": "r2-policy",
+      "path": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+      "kind": "policy",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "a241fe9cc94415f5da75cc411f27a2a37d109c078fa04d515854d86e55fcfb45"
+    },
+    {
+      "id": "r3",
+      "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+      "kind": "schema",
+      "owner": "identity-tenancy",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+    },
+    {
+      "id": "selection",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+    },
+    {
+      "id": "r4",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "c1e011e4a0917f1fe8a7f964433cdc2fa51413bf4bb4d88dc305dd6676cad7e2"
+    },
+    {
+      "id": "r4-policy",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+      "kind": "policy",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "ad811a5974dea90ffbe8180220e4ba7c73ef9ad16e99bcbe24677bd70f83d7a3"
+    },
+    {
+      "id": "verification-v2",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+      "kind": "schema",
+      "owner": "identity-tenancy",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde"
+    },
+    {
+      "id": "verification-v2-policy",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+      "kind": "policy",
+      "owner": "identity-tenancy",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "8b144ebb1e7508afcec67bbf63c5defc707eeb0a2cbef97140fd18274a1c21c9"
+    },
+    {
+      "id": "problem-v3",
+      "path": "common/http/shared/v3/problem-details-v3.schema.json",
+      "kind": "schema",
+      "owner": "platform-contracts",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+    },
+    {
+      "id": "envelope",
+      "path": "events/event-envelope-v1.schema.json",
+      "kind": "schema",
+      "owner": "platform-contracts",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+    },
+    {
+      "id": "event-data",
+      "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+    },
+    {
+      "id": "event-policy",
+      "path": "catalog/events/v1/catalog-event-policy-v1.json",
+      "kind": "policy",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "7d37a6e3e639cd259f3f9b7f8d2000647b865105f366f24a1cd7c19424327be6"
+    },
+    {
+      "id": "history-v1",
+      "path": "catalog/http/shared/v1/catalog-history-policy-v1.json",
+      "kind": "policy",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "39b028c2a69b7a76d8ffda428f1e221a8c63a58cc0c35d16fac72994fd38c964"
+    },
+    {
+      "id": "common",
+      "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+    },
+    {
+      "id": "original-0",
+      "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+    },
+    {
+      "id": "original-1",
+      "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+    },
+    {
+      "id": "original-2",
+      "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+    },
+    {
+      "id": "original-3",
+      "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+      "kind": "schema",
+      "owner": "catalog-pricing",
+      "commit": "10c2b44ddbe9f8f1c73a212895dbf5d5ed849000",
+      "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+    }
+  ],
+  "classification_profiles": [
+    {
+      "id": "protection",
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "personal_data": "possible-indirect",
+      "purpose": "protect and reconcile source obligations/holds/fences using opaque metadata only",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current R2 workload and source/contract/tenant/scope admission; reinforced hold release",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "transient transport; normalized durable protection uses references-holds-closures"
+    },
+    {
+      "id": "authority",
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUTHENTICATION",
+        "PERSONAL",
+        "OPERATIONAL"
+      ],
+      "personal_data": "possible-indirect",
+      "purpose": "transport exact current R3 authority and permission intent; never caller authority",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "identity-tenancy",
+        "catalog-pricing via admitted R3 only",
+        "gateway-bff via admitted issuance/renewal/revocation only"
+      ],
+      "access": "current R3 person/workload/membership/permission/MFA checks for the operation",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "transient caller request/response only; identity source state and independent audit keep their own owner policies"
+    },
+    {
+      "id": "grant-secret",
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECRET",
+        "AUTHENTICATION",
+        "PERSONAL"
+      ],
+      "personal_data": "possible-indirect",
+      "purpose": "transport an opaque grant reference for one bound request; no credential copies",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "identity-tenancy",
+        "catalog-pricing via admitted R3 only",
+        "gateway-bff via admitted issuance/renewal/revocation only"
+      ],
+      "access": "current R3 authority for the exact purpose and binding",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "transient only; no plaintext persistence or telemetry; cursor hashes use recovery metadata lifecycle"
+    },
+    {
+      "id": "recovery",
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "OPERATIONAL",
+        "AUTHENTICATION",
+        "PERSONAL"
+      ],
+      "personal_data": "possible-indirect",
+      "purpose": "minimal recovery traversal/binding; response fields do not authorize storing decisions or originals",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current H1A plus fresh exact R3 authority every request",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "transient transport; only declared storage fields persist exactly 24h after original session close/expiry"
+    },
+    {
+      "id": "coverage",
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "OPERATIONAL",
+        "AUDIT"
+      ],
+      "personal_data": "absent",
+      "purpose": "prove frontier and disposed coverage without personal IDs or deleted values",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current bound recovery authority; owner-controlled integrity/disposition evidence",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "disposed-ranges-coverage lifecycle; transient page summaries do not create stored copies"
+    },
+    {
+      "id": "original",
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "COMMERCIAL",
+        "FISCAL",
+        "OPERATIONAL"
+      ],
+      "personal_data": "absent",
+      "purpose": "preserve original retained history; every field inherits its stricter published classification",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current exact R3 recovery selection; references require current R2 authority",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "original-history profile and obligations; no session or page payload cache"
+    },
+    {
+      "id": "cursor-secret",
+      "owner": "catalog-pricing",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECRET",
+        "AUTHENTICATION",
+        "PERSONAL"
+      ],
+      "personal_data": "possible-indirect",
+      "purpose": "transport one opaque cursor; persisted handles use SHA-256 only and contain no event payload",
+      "base": "authorized organization operation/history; explicit purpose and current backend authority",
+      "consumers": [
+        "catalog-pricing"
+      ],
+      "access": "current R3 authority for the exact purpose and binding",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS-and-encrypted-at-rest; no plaintext credential persistence",
+      "export_correction": "authorized scoped export; no rewriting original facts or authority decisions; credentials never exported",
+      "third_parties_regions": "none-authorized",
+      "retention_scope": "transient only; no plaintext persistence or telemetry; cursor hashes use recovery metadata lifecycle"
+    }
+  ],
+  "transport_fields": [
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Reference/properties/event_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Reference/properties/aggregate_type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Reference/properties/aggregate_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Reference/properties/aggregate_version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Scope/properties/scope_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Scope/properties/references",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Scope/properties/references/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Evidence/properties/authority_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Evidence/properties/evidence_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Evidence/properties/reason_code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Deadline/oneOf/0/properties/state",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Deadline/oneOf/1/properties/state",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Deadline/oneOf/1/properties/at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/obligation_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/reference",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/profile_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/profile_version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/jurisdiction",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/trigger",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/required_until",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/suspensions",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/reference/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/trigger/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/required_until/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Obligation/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/obligation_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/reference",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/ended_at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/reference/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Release/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/hold_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/created_at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/until",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/until/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Hold/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/HoldRelease/properties/hold_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/HoldRelease/properties/version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/HoldRelease/properties/released_at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/HoldRelease/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/HoldRelease/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/baseline_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/cut",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/page",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/obligations",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/releases",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/holds",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/hold_releases",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/obligations/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/releases/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/holds/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselinePage/properties/hold_releases/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/baseline_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/cut",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/pages",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/obligations",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/releases",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/holds",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/hold_releases",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/BaselineComplete/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/baseline_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/through",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/open_obligations",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/active_holds",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/pending_messages",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/pending_operations",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Checkpoint/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/checkpoint_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/through",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/closed_at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/pending_messages",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/pending_operations",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/future_references_rejected",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Closure/properties/evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/source_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/caller",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/source_contract_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/source_contract_version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/source_contract_sha256",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/scope",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/allows_holds",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/authority_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Admission/properties/scope/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/organization_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/revision",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/authority_evidence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/enabled_contracts",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/sources",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/authority_evidence/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/enabled_contracts/items/properties/id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/enabled_contracts/items/properties/version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/enabled_contracts/items/properties/sha256",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Inventory/properties/sources/items/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/protocol_version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/message_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/organization_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/source_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/source_contract_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/source_contract_version",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/inventory_revision",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/scope_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/sequence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/issued_at",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/0/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/0/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/0/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/1/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/1/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/1/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/2/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/2/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/2/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/3/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/3/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/3/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/4/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/4/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/4/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/5/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/5/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/5/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/6/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/6/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/6/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/7/if/properties/kind",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/7/then/properties/payload",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Message/allOf/7/then/properties/payload/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/message_id",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/result",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/contiguous_sequence",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/baseline_complete",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/scope_closed",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Receipt/properties/disposition_authorized",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/1/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/1/properties/detail",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/1/properties/errors",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/2/properties/title",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/3/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/3/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/3/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/3/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/4/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/4/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/4/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/4/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/5/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/5/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/5/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/5/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/6/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/6/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/6/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/6/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/7/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/7/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/7/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/7/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/8/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/8/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/8/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/8/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/9/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/9/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/9/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/9/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/10/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/10/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/10/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/10/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/11/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/11/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/11/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/11/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/12/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/12/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/12/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/12/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/13/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/13/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/13/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/13/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/14/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/14/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/14/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/14/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/15/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/15/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/15/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/15/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/16/if/properties/code",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/16/then/properties/type",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/16/then/properties/status",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r2",
+      "pointer": "/$defs/Problem/allOf/16/then/properties/retryable",
+      "kind": "property",
+      "profile": "protection",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Selection/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Destination/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Purpose/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/organization_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/account_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/membership_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/purpose",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/selection",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/destination",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/session_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/purpose/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/selection/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantBinding/properties/destination/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/decision_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/account_security_version",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/session_credential_version",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/organization_version",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/membership_version",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/mfa_event_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/AuthoritySnapshot/properties/mfa_authenticated_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssueRequest/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssueRequest/properties/requested_permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssueRequest/properties/requested_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssueRequest/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssueRequest/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/grant_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/authority",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/issued_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/expires_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/lifetime_seconds",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/revocable",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/status",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/properties/authority/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Grant/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/properties/required_permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/properties/checked_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyRequest/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/authorized",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/grant_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/authority",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/valid_until",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/status",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/properties/authority/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyResponse/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/properties/requested_permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/properties/requested_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RenewRequest/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssuePurposePermission/if/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssuePurposePermission/if/properties/binding/properties/purpose",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssuePurposePermission/then/properties/requested_permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/IssuePurposePermission/else/properties/requested_permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantPurposePermission/if/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantPurposePermission/if/properties/binding/properties/purpose",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantPurposePermission/then/properties/permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/GrantPurposePermission/else/properties/permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyPurposePermission/if/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyPurposePermission/if/properties/binding/properties/purpose",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyPurposePermission/then/properties/required_permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifyPurposePermission/else/properties/required_permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifiedPurposePermission/if/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifiedPurposePermission/if/properties/binding/properties/purpose",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifiedPurposePermission/then/properties/permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/VerifiedPurposePermission/else/properties/permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeRequest/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeRequest/properties/reason_code",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeRequest/properties/revoked_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeResponse/properties/grant_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeResponse/properties/status",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/RevokeResponse/properties/revoked_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/version",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/properties/id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/properties/action",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/properties/mfa_required",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/properties/owner_inference",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/properties/scope",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/0/properties/id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/0/properties/action",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/1/properties/id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/1/properties/action",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/2/properties/id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/PermissionCatalog/properties/permissions/items/oneOf/2/properties/action",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Problem/properties/type",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Problem/properties/title",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Problem/properties/status",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Problem/properties/code",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r3",
+      "pointer": "/$defs/Problem/properties/retryable",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Selection/properties/aggregate_types",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Selection/properties/aggregate_ids",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Selection/properties/versions",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Selection/properties/aggregate_types/items/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Destination/properties/kind",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Destination/properties/workload",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "selection",
+      "pointer": "/$defs/Destination/properties/audience",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Binding/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Binding/allOf/1/properties/purpose",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/binding",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/limit",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PageRequest/properties/cursor/$ref",
+      "kind": "reference",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Interval/properties/from_position",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Interval/properties/through_position",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Interval/properties/from_position/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Interval/properties/through_position/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/from_position",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/through_position",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/reason",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/policy_id",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/policy_version",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/from_position/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/properties/through_position/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/allOf/0/if/properties/reason",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/allOf/0/then/properties/policy_id",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/allOf/0/then/properties/policy_version",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/allOf/0/else/properties/policy_id",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/MissingRange/allOf/0/else/properties/policy_version",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/requested_after",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/requested_through",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/scanned_after",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/scanned_through",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/frontier_position",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/evaluated_at",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/status",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/available_ranges",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/missing_ranges",
+      "kind": "property",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/requested_after/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/requested_through/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/scanned_after/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/scanned_through/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/frontier_position/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/available_ranges/items/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Coverage/properties/missing_ranges/items/$ref",
+      "kind": "reference",
+      "profile": "coverage",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/OriginalEvent/oneOf/0/$ref",
+      "kind": "reference",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/OriginalEvent/oneOf/1/$ref",
+      "kind": "reference",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/OriginalEvent/oneOf/2/$ref",
+      "kind": "reference",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/OriginalEvent/oneOf/3/$ref",
+      "kind": "reference",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PositionedEvent/properties/position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PositionedEvent/properties/event",
+      "kind": "property",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PositionedEvent/properties/position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/PositionedEvent/properties/event/$ref",
+      "kind": "reference",
+      "profile": "original",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/recovery_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/organization_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/selection",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/requested_after",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/cut_position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/created_at",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/expires_at",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/initial_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/state",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/selection/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/requested_after/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/cut_position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/properties/initial_cursor/anyOf/0/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/allOf/0/if/properties/state",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/allOf/0/then/properties/initial_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/allOf/0/else/properties/initial_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Session/allOf/0/else/properties/initial_cursor/$ref",
+      "kind": "reference",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/recovery_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/cut_position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/expires_at",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/events",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/coverage",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/end_of_traversal",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/complete",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/next_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/cut_position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/events/items/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/coverage/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/properties/next_cursor/anyOf/0/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/0/if/properties/end_of_traversal",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/0/then/properties/next_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/0/else/properties/next_cursor",
+      "kind": "property",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/0/else/properties/complete",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/0/else/properties/next_cursor/$ref",
+      "kind": "reference",
+      "profile": "cursor-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/1/if/properties/complete",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/1/then/properties/end_of_traversal",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/1/then/properties/coverage",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Page/allOf/1/then/properties/coverage/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/properties/title",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/properties/detail",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/properties/errors",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/properties/correlation_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/0/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/1/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/2/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/3/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/4/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/5/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/6/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/7/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/8/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/9/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/10/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/11/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/12/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/13/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/14/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/15/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/16/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/Problem/allOf/1/allOf/0/oneOf/17/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/recovery_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/binding",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/grant_reference",
+      "kind": "property",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/after_position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CreateRequest/properties/after_position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/hash",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/recovery_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/organization_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/workload",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/binding_hash",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/cut_position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/after_position",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/expires_at",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/version",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/cut_position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "r4",
+      "pointer": "/$defs/CursorMetadata/properties/after_position/$ref",
+      "kind": "reference",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyRequest/$ref",
+      "kind": "reference",
+      "profile": "grant-secret",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/authorized",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/grant_id",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/binding",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/authority",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/permission",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/issued_at",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/valid_until",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/status",
+      "kind": "property",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/authorized/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/grant_id/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/binding/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/authority/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/permission/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/valid_until/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/properties/status/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/VerifyResponse/allOf/0/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "verification-v2",
+      "pointer": "/$defs/Problem/$ref",
+      "kind": "reference",
+      "profile": "authority",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/type",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/title",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/status",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/instance",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/detail",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/trace_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/correlation_id",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/retryable",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/errors",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/errors/items/properties/path",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/errors/items/properties/code",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    },
+    {
+      "source_id": "problem-v3",
+      "pointer": "/properties/errors/items/properties/message",
+      "kind": "property",
+      "profile": "recovery",
+      "persistence": "none-implied-by-transport"
+    }
+  ],
+  "storage_fields": [
+    {
+      "storage_id": "original-history",
+      "field": "tenant-transaction-position",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4",
+          "pointer": "/$defs/PositionedEvent/properties/position"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "event_id",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/event_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "event_type",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/event_type"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "schema_version",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/schema_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "occurred_at",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/occurred_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "producer",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/producer"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "organization_id",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/organization_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "aggregate_type",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/aggregate_type"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "aggregate_id",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/aggregate_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "aggregate_version",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/aggregate_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "correlation_id",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/correlation_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "causation_id",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "envelope",
+          "pointer": "/properties/causation_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "history-index",
+      "field": "tenant-transaction-position",
+      "profile": "original",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4",
+          "pointer": "/$defs/PositionedEvent/properties/position"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Reference.event_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Reference/properties/event_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Reference.aggregate_type",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Reference/properties/aggregate_type"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Reference.aggregate_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Reference/properties/aggregate_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Reference.aggregate_version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Reference/properties/aggregate_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Scope.scope_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Scope/properties/scope_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Scope.references",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Scope/properties/references"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Evidence.authority_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Evidence/properties/authority_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Evidence.evidence_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Evidence/properties/evidence_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Evidence.reason_code",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Evidence/properties/reason_code"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.obligation_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/obligation_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.reference",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/reference"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.profile_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/profile_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.profile_version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/profile_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.jurisdiction",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/jurisdiction"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.trigger",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/trigger"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.required_until",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/required_until"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.suspensions",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/suspensions"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Obligation.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Obligation/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Release.obligation_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Release/properties/obligation_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Release.version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Release/properties/version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Release.reference",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Release/properties/reference"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Release.ended_at",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Release/properties/ended_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Release.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Release/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Hold.hold_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Hold/properties/hold_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Hold.version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Hold/properties/version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Hold.created_at",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Hold/properties/created_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Hold.until",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Hold/properties/until"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Hold.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Hold/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "HoldRelease.hold_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/HoldRelease/properties/hold_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "HoldRelease.version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/HoldRelease/properties/version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "HoldRelease.released_at",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/HoldRelease/properties/released_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "HoldRelease.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/HoldRelease/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.baseline_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/baseline_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.cut",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/cut"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.page",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/page"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.obligations",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/obligations"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.releases",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/releases"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.holds",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/holds"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselinePage.hold_releases",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselinePage/properties/hold_releases"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.baseline_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/baseline_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.cut",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/cut"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.pages",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/pages"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.obligations",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/obligations"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.releases",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/releases"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.holds",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/holds"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.hold_releases",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/hold_releases"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "BaselineComplete.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/BaselineComplete/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.baseline_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/baseline_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.through",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/through"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.open_obligations",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/open_obligations"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.active_holds",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/active_holds"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.pending_messages",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/pending_messages"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.pending_operations",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/pending_operations"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Checkpoint.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Checkpoint/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.checkpoint_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/checkpoint_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.through",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/through"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.closed_at",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/closed_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.pending_messages",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/pending_messages"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.pending_operations",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/pending_operations"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.future_references_rejected",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/future_references_rejected"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Closure.evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Closure/properties/evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.source_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/source_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.caller",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/caller"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.source_contract_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/source_contract_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.source_contract_version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/source_contract_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.source_contract_sha256",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/source_contract_sha256"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.scope",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/scope"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.allows_holds",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/allows_holds"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Admission.authority_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Admission/properties/authority_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Inventory.organization_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Inventory/properties/organization_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Inventory.revision",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Inventory/properties/revision"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Inventory.authority_evidence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Inventory/properties/authority_evidence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Inventory.enabled_contracts",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Inventory/properties/enabled_contracts"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Inventory.sources",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Inventory/properties/sources"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.protocol_version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/protocol_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.message_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/message_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.organization_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/organization_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.source_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/source_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.source_contract_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/source_contract_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.source_contract_version",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/source_contract_version"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.inventory_revision",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/inventory_revision"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.scope_id",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/scope_id"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.sequence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/sequence"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.issued_at",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/issued_at"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.kind",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/kind"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "Message.payload",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2",
+          "pointer": "/$defs/Message/properties/payload"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "source-stream-through-and-gap-latch",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/ordering"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "per-scope-reconciliation-proof",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/checkpoint"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "completed-baseline-binding-and-page-manifest",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/baseline"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "definitive-source-scope-fence",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/closure"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "versioned-release-tombstones-and-replay-binding",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/idempotency"
+        }
+      ]
+    },
+    {
+      "storage_id": "references-holds-closures",
+      "field": "conflict-quarantine-and-block",
+      "profile": "protection",
+      "representation": "normalized-protection-state",
+      "sources": [
+        {
+          "source_id": "r2-policy",
+          "pointer": "/semantics/conflicts"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.recovery_id",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/0"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.organization_id",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/1"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.workload",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/2"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.binding",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/3"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.requested_after",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/4"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.cut_position",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/5"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.created_at",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/6"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.expires_at",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/7"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.closed_at",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/8"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.terminal_after",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/9"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "session.terminal_limit",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/session/10"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.hash",
+      "profile": "recovery",
+      "representation": "hash-only",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/0"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.recovery_id",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/1"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.organization_id",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/2"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.workload",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/3"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.binding_hash",
+      "profile": "recovery",
+      "representation": "hash-only",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/4"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.cut_position",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/5"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.after_position",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/6"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.expires_at",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/7"
+        }
+      ]
+    },
+    {
+      "storage_id": "recovery-metadata",
+      "field": "cursor.version",
+      "profile": "recovery",
+      "representation": "minimal-metadata",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/cursor/8"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "organization_id",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/0"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "frontier_position",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/1"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "from_position",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/2"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "through_position",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/3"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "reason",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/4"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "policy_id",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/5"
+        }
+      ]
+    },
+    {
+      "storage_id": "disposed-ranges-coverage",
+      "field": "policy_version",
+      "profile": "coverage",
+      "representation": "coverage-without-deleted-values",
+      "sources": [
+        {
+          "source_id": "r4-policy",
+          "pointer": "/storage_inventory/coverage/6"
+        }
+      ]
+    }
+  ],
+  "inheritance": "stricter-referenced-classification-wins; originals-inherit-published-field-metadata; transport-is-not-storage-authority",
+  "compatibility": [
+    {
+      "aspect": "R1 lifecycle",
+      "guarantee": "profile CATALOG_HISTORY_AR v1 keeps 1/2/5 calendar years; unknown trigger/source/obligation and holds block; privacy conflicts require explicit resolution",
+      "evidence": [
+        "history-policy-v1",
+        "history-policy-v2"
+      ]
+    },
+    {
+      "aspect": "R2 authority",
+      "guarantee": "source inventory and reinforced hold release remain separate from R3; absence does not release protection or reopen fences",
+      "evidence": [
+        "history-protection-v1",
+        "history-policy-v2"
+      ]
+    },
+    {
+      "aspect": "R3 separation",
+      "guarantee": "human effective permissions/MFA plus independent workload; purpose-specific recover/configure; fresh verification without caller decision cache",
+      "evidence": [
+        "catalog-recovery-authority-v1",
+        "recovery-verification-v2",
+        "history-policy-v2"
+      ]
+    },
+    {
+      "aspect": "R4 minimization",
+      "guarantee": "raw cursor/grant and events never enter session metadata; only cursor/binding hashes, binding once, fixed original deadlines and terminal metadata; no temporary files",
+      "evidence": [
+        "history-recovery-v1",
+        "history-policy-v2"
+      ]
+    },
+    {
+      "aspect": "published compatibility",
+      "guarantee": "all published transport bytes, versions, original event field metadata and H2 pins remain unchanged; no consumer migration or draft promotion",
+      "evidence": [
+        "registry",
+        "consumers",
+        "impact",
+        "history-policy-v2"
+      ]
+    }
+  ]
+}

@@ -12,4 +12,6 @@ Con Node 24.21.0 y pnpm 12.4.2 ejecutar instalación congelada y `pnpm test:arch
 
 El resolvedor sigue selecciones por operación/pointer, referencias locales/URI mapeadas y seguridad efectiva. Los manifiestos agregan policy, errores y fixtures explícitos. Referencias/keywords desconocidos o cobertura omitida fallan cerrados; los dos schemas de metadatos usan un subconjunto estricto del gate nativo. Sourcemeta/Redocly y los gates runtime existentes permanecen obligatorios.
 
+F1-08H añade lectura acotada de aliases YAML de valores mediante `tools/architecture/yaml-source.mjs`; límites, rechazos y semántica de hashes en [Grafo e impacto](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#grafo-e-impacto). No modifica fuentes publicadas ni migra admisiones. Las pruebas `test/architecture/yaml-source.test.mjs` incluyen el R4 real y casos adversos.
+
 El reporte separa impacto funcional de documentación/validación y propone pruebas. Cambios de forma o semántica requieren revisión; no son automáticamente compatibles. Requests, responses, errores, headers, seguridad y recuperación forman parte del contrato. `sales.sale.completed.v1` es inmutable; un sucesor incompatible pertenece a F1-10.

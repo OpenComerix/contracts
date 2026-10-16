@@ -1,0 +1,647 @@
+{
+  "format_version": 2,
+  "scope": "F1-08H",
+  "base": "catalog/http/shared/v2/catalog-history-policy-v2.json",
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "id": "history-range-changed",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_HISTORY_LIFECYCLE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/periods/default",
+          "value": 3
+        }
+      ]
+    },
+    {
+      "id": "plan-dependent-history",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_HISTORY_LIFECYCLE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/configuration/plan_dependent",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "configuration-authority-inferred",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_CONFIGURATION_AUTHORITY",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/profiles/0/configuration/authorization",
+          "value": "OWNER or catalog.manage"
+        }
+      ]
+    },
+    {
+      "id": "original-classification-lost",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_ORIGINAL_FIELDS",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/field_sources/0/inherited_metadata",
+          "value": [
+            "path"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "source-inventory-missing",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SOURCE_COVERAGE",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/protocol_sources/0"
+        }
+      ]
+    },
+    {
+      "id": "source-hash-wrong",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SOURCE_PIN",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/protocol_sources/0/sha256",
+          "value": "0000000000000000000000000000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "id": "source-commit-wrong",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SOURCE_PIN",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/protocol_sources/0/commit",
+          "value": "0000000000000000000000000000000000000000"
+        }
+      ]
+    },
+    {
+      "id": "protocol-field-missing",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_TRANSPORT_COVERAGE",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/transport_fields/0"
+        }
+      ]
+    },
+    {
+      "id": "protocol-field-duplicate",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_TRANSPORT_COVERAGE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/transport_fields/522",
+          "value": {
+            "source_id": "r2",
+            "pointer": "/$defs/Reference/properties/event_id",
+            "kind": "property",
+            "profile": "protection",
+            "persistence": "none-implied-by-transport"
+          }
+        }
+      ]
+    },
+    {
+      "id": "protocol-classification-wrong",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_TRANSPORT_PROFILE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/transport_fields/0/profile",
+          "value": "authority"
+        }
+      ]
+    },
+    {
+      "id": "transport-implies-storage",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_TRANSPORT_STORAGE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/transport_fields/0/persistence",
+          "value": "persist-entire-response"
+        }
+      ]
+    },
+    {
+      "id": "pending-fields-remain",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_FIELDS_COMPLETE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/1/field_catalogue/state",
+          "value": "pending-protocol"
+        }
+      ]
+    },
+    {
+      "id": "r2-uses-recovery-authority",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_R2_AUTHORITY",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/2/classification/access",
+          "value": "R3 grant only"
+        }
+      ]
+    },
+    {
+      "id": "session-retention-extended",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORAGE_LIFECYCLE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/3/retention/periods/default",
+          "value": 48
+        }
+      ]
+    },
+    {
+      "id": "temporary-files-enabled",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_RUNTIME",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/5/production_enabled",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "independent-audit-erased",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_INDEPENDENT_POLICIES",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/independent_policies",
+          "value": []
+        }
+      ]
+    },
+    {
+      "id": "inheritance-downgraded",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_INHERITANCE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/inheritance",
+          "value": "container-replaces-source"
+        }
+      ]
+    },
+    {
+      "id": "stored-field-missing",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_COVERAGE",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/storage_fields/0"
+        }
+      ]
+    },
+    {
+      "id": "raw-grant-stored",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_COVERAGE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/133",
+          "value": {
+            "storage_id": "recovery-metadata",
+            "field": "session.grant_reference",
+            "profile": "grant-secret",
+            "representation": "minimal-metadata",
+            "sources": [
+              {
+                "source_id": "r3",
+                "pointer": "/$defs/Grant/properties/grant_reference"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "page-payload-cache",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_COVERAGE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/133",
+          "value": {
+            "storage_id": "recovery-metadata",
+            "field": "session.events",
+            "profile": "original",
+            "representation": "minimal-metadata",
+            "sources": [
+              {
+                "source_id": "r4",
+                "pointer": "/$defs/Page/properties/events"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "id": "raw-cursor-for-hash",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_REPRESENTATION",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/117/representation",
+          "value": "minimal-metadata"
+        }
+      ]
+    },
+    {
+      "id": "storage-source-misdirected",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_SOURCE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/0/sources/0/pointer",
+          "value": "/$defs/Page"
+        }
+      ]
+    },
+    {
+      "id": "stored-classification-wrong",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_STORED_PROFILE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/0/profile",
+          "value": "authority"
+        }
+      ]
+    },
+    {
+      "id": "classification-sensitivity-downgraded",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SENSITIVITY",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/sensitivity",
+          "value": "INTERNAL"
+        }
+      ]
+    },
+    {
+      "id": "personal-binding-denied",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_PERSONAL",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/1/personal_data",
+          "value": "absent"
+        }
+      ]
+    },
+    {
+      "id": "authentication-category-removed",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_CATEGORIES",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/1/categories",
+          "value": [
+            "OPERATIONAL",
+            "PERSONAL"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "cursor-owner-transferred",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_OWNER",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/6/owner",
+          "value": "identity-tenancy"
+        }
+      ]
+    },
+    {
+      "id": "sensitive-values-in-telemetry",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_NO_TELEMETRY",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/log_policy",
+          "value": "allow-values"
+        }
+      ]
+    },
+    {
+      "id": "third-party-added",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_NO_THIRD_PARTIES",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/third_parties_regions",
+          "value": "external-reader"
+        }
+      ]
+    },
+    {
+      "id": "reader-added",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_CONSUMERS",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/consumers",
+          "value": [
+            "reporting"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "plaintext-credential-storage",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SECRET_LIFECYCLE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/2/retention_scope",
+          "value": "keep plaintext reference for replay"
+        }
+      ]
+    },
+    {
+      "id": "decision-cache",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_NO_DECISION_CACHE",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/1/retention_scope",
+          "value": "store verification response and issued_at"
+        }
+      ]
+    },
+    {
+      "id": "compatibility-row-missing",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_COMPATIBILITY",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/compatibility/0"
+        }
+      ]
+    },
+    {
+      "id": "admission-prerequisite-erased",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_ADMISSION_REQUIRED",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/production_prerequisites",
+          "value": [
+            "runtime-ready"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "complete-policy",
+      "kind": "schema",
+      "expected": "accept",
+      "patches": []
+    },
+    {
+      "id": "owner-missing",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/owner"
+        }
+      ]
+    },
+    {
+      "id": "unapproved-root",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/unexpected",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "invalid-source-hash",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/protocol_sources/0/sha256",
+          "value": "invalid"
+        }
+      ]
+    },
+    {
+      "id": "invalid-source-kind",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/protocol_sources/0/kind",
+          "value": "runtime"
+        }
+      ]
+    },
+    {
+      "id": "field-owner-missing",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "remove",
+          "path": "/classification_profiles/0/owner"
+        }
+      ]
+    },
+    {
+      "id": "field-class-invalid",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/sensitivity",
+          "value": "PRIVATE"
+        }
+      ]
+    },
+    {
+      "id": "pending-field-left",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/1/field_catalogue/pending",
+          "value": [
+            "missing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "production-enabled",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_policies/0/production_enabled",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "runtime-claimed",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/runtime_demonstrated",
+          "value": true
+        }
+      ]
+    },
+    {
+      "id": "field-storage-authorization",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/transport_fields/0/persistence",
+          "value": "persist-response"
+        }
+      ]
+    },
+    {
+      "id": "unknown-representation",
+      "kind": "schema",
+      "expected": "reject",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/storage_fields/0/representation",
+          "value": "plaintext-credential"
+        }
+      ]
+    },
+    {
+      "id": "encryption-omitted",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_ENCRYPTION",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/classification_profiles/0/encryption",
+          "value": "none"
+        }
+      ]
+    },
+    {
+      "id": "source-owner-transferred",
+      "kind": "semantic",
+      "expected": "reject",
+      "reason": "H2_SOURCE_OWNER",
+      "patches": [
+        {
+          "op": "set",
+          "path": "/protocol_sources/0/owner",
+          "value": "reporting"
+        }
+      ]
+    }
+  ]
+}

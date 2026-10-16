@@ -176,7 +176,11 @@ export function validateContract() {
   const before = JSON.parse(execFileSync('git', ['show', 'a45e700eadd36790a5480faccd3ed80015b08e13:registry/contracts.json'], { cwd: root, maxBuffer: 4 * 1024 * 1024 }));
   assert.deepEqual({ ...registry, planned: before.planned }, before, 'R4_NO_ADMISSION');
   assert.deepEqual(registry.planned.slice(0, before.planned.length), before.planned, 'R4_PRIOR_INTENTIONS');
-  assert.equal(registry.planned.length - before.planned.length, 10);
+  const publishedG = JSON.parse(execFileSync('git', ['show', '10c2b44ddbe9f8f1c73a212895dbf5d5ed849000:registry/contracts.json'], { cwd: root, maxBuffer: 4 * 1024 * 1024 }));
+  assert.deepEqual(registry.planned.slice(0, publishedG.planned.length), publishedG.planned, 'R4_PUBLISHED_INTENTIONS');
+  assert.equal(publishedG.planned.length - before.planned.length, 10);
+  assert.deepEqual(registry.planned.slice(publishedG.planned.length).map(row => row.id),
+    ['common.data-lifecycle-policy.v2', 'catalog.history-policy.v2', 'catalog.history-policy.fixtures.v2'], 'R4_H_SOURCE_INTENTIONS_ONLY');
   return { semantic_negatives: vectors.negative.length, classified_fields: validatePolicy(), runtime_demonstrated: false };
 }
 

@@ -27,3 +27,9 @@ Primer catálogo candidato: [historia de catalog-pricing](../catalog/README.md#c
 ## Candidato F1-08E — Catálogo de errores v7
 
 [Catálogo v7](errors/v7/error-catalog-v7.json) y [schema](errors/v7/error-catalog-v7.schema.json) conservan íntegramente las entradas de v6 y agregan seis códigos internos propiedad de catalog-pricing para autoridad workload/fuente/holds, conflicto, reconciliación y referencia tardía. La coordinación común no traslada el dominio. Uso candidato limitado a [R2](../catalog/README.md#candidato-f1-08e--obligaciones-y-cierres-r2); no migra APIs publicadas ni consumidores. Registro/índice mantienen planned, sin procedencia ni admisión inventadas. Tests comprueban preservación, códigos/status/retryability y ausencia de detalles; Sourcemeta valida el schema y el catálogo reales.
+
+## Candidato F1-08H — clasificación completa v2
+
+[Schema v2](http/shared/v2/data-lifecycle-policy-v2.schema.json) evoluciona la forma de metadatos de ciclo de vida, preservando v1. Distingue fuentes inmutables, clasificación de transporte con herencia estricta y campos lógicos persistidos. Los almacenamientos completos deben declarar sus fuentes y no pueden conservar pendientes; una declaración de transporte no concede autoridad de persistencia. Los perfiles de clasificación incluyen propietario, consumidores y alcance de retención, sin sustituir las políticas del dueño.
+
+[Catálogo/gates de historia v2](../catalog/README.md#candidato-f1-08h--clasificación-conjunta-v2-fuente-previa-a-admisión). Schema, catálogo y fixtures mantienen intención `planned` hasta publicación y admisión posteriores autorizadas. No acredita runtime, SQL, autoridad real ni purgas, y no migra consumidores.

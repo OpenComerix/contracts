@@ -559,10 +559,9 @@ test('operation override selects effective security without global overreach', (
   files['openapi/test.json'].paths['/a'].get.security = [];
   assert(!resolve(files).units.some((u) => u.pointer.includes('security')));
 });
-test('rejects duplicate JSON and YAML keys, duplicate operation IDs, aliases and unknown metadata keywords', () => {
+test('rejects duplicate JSON and YAML keys, duplicate operation IDs and unknown metadata keywords', () => {
   assert.throws(() => parseJSON('{"a":1,"\u0061":2}'), /Duplicate/);
   assert.throws(() => parseSource(Buffer.from('a: 1\na: 2\n'), 'a.yaml'), /Invalid YAML/);
-  assert.throws(() => parseSource(Buffer.from('a: &x [1]\nb: *x\n'), 'a.yaml'));
   const doc = source()['openapi/test.json'];
   doc.paths['/b'].get.operationId = 'readA';
   assert.throws(() => operationPointers(doc), /Duplicate/);

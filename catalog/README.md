@@ -167,3 +167,23 @@ jsonschema validate common/errors/v8/error-catalog-v8.schema.json common/errors/
 ~~~
 
 Salida nueva obligatoria. El extractor resuelve schemas reales conservando siblings de `$ref`; Sourcemeta 16.10.0 valida positivos/negativos reales y exige exit 2 con diagnóstico de instancia. CI añade lint Redocly 2.53.3 sin warnings, bundle y transferencia de artefactos; el bundle de identidad v2 conserva el [warning de componentes duplicados documentado por su propietario](../identity/README.md#candidato-f1-08g--verificación-de-recuperación-v2). Conservar registro/consumidores/impacto y cotejo local del launcher. Pins R3/R1/perfiles contrastan Git/checkout; fuente candidata no equivale a admisión. Solo intenciones `planned`: H integrará clasificación/admisiones. Fixtures no acreditan SQL, CSPRNG real, criptografía, autorización, concurrencia ni recuperación productiva. Publicación/CI exactos requieren autorización posterior.
+
+## Candidato F1-08H — clasificación conjunta v2, fuente previa a admisión
+
+[Catálogo v2](http/shared/v2/catalog-history-policy-v2.json), [schema común v2](../common/http/shared/v2/data-lifecycle-policy-v2.schema.json), [vectores](fixtures/history-policy/v2/history-policy-v2-vectors.json), [validador/extractor](../scripts/catalog/validate-history-policy-v2.mjs) y [tests externos](../test/catalog/history-policy-v2.test.mjs). El sucesor completa la clasificación de los protocolos R2/R3/R4 y los seis almacenamientos de R1. Conserva el perfil `CATALOG_HISTORY_AR` versión 1, sus plazos/hitos/bloqueos y los metadatos de cada campo original; R1 v1 y todos los transportes publicados permanecen intactos.
+
+`protocol_sources` fija bytes Git de las fuentes publicadas. `transport_fields` inventaría declaraciones y referencias completas; la clasificación más estricta de los subárboles importados sigue vigente. `storage_fields` delimita metadatos lógicos, hashes y estado normalizado de protección; no prescribe tablas SQL ni autoriza guardar requests/respuestas completos. La vinculación se conserva una vez en sesión; el cursor guarda solo hashes y vínculos mínimos. Grants, cursores en claro, decisiones R3 y payloads de páginas no se copian a sesión, replay o telemetría. Identidad conserva propiedad de su estado fuente y de sus políticas de persistencia/auditoría. R2 usa autoridad propia de fuente, no un grant de recuperación; configurar R1 exige el propósito y permiso específicos R3.
+
+Los estados de campos completos son evidencia contractual. `production_enabled` y `runtime_demonstrated` siguen false; fuentes reales, autoridad, SQL, carreras, purga y recuperación requieren I–N. Temporales continúan prohibidos. La matriz `compatibility` vincula las garantías de ciclo de vida, autoridad, minimización y preservación con sus gates.
+
+CI conserva todos los jobs anteriores y agrega extracción v2, metaschema y positivos/negativos Sourcemeta 16.10.0. Además de los comandos de [.gitlab-ci.yml](../.gitlab-ci.yml), desde contracts mediante `opencomerix check contracts`:
+
+~~~text
+node --test --test-reporter=tap test/architecture/*.test.mjs test/catalog/*.test.mjs
+node scripts/catalog/validate-history-policy-v2.mjs .ci-artifacts/catalog-history-policy-v2 --self-test
+jsonschema metaschema common/http/shared/v2/data-lifecycle-policy-v2.schema.json
+jsonschema validate common/http/shared/v2/data-lifecycle-policy-v2.schema.json catalog/http/shared/v2/catalog-history-policy-v2.json --format-assertion
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2
+~~~
+
+Salida nueva obligatoria. Registro/índices añaden exactamente tres intenciones `planned`, sin descriptores admitidos ni consumo nuevo. Primero se audita/publica esta fuente con permiso y CI del SHA/ref exactos; después H prepara y audita la admisión contra ese commit inmutable. Esta entrega intermedia no cierra H. AsyncAPI y los demás drafts conservan sus bloqueos, al igual que las admisiones consumidoras. El lector acotado de aliases permite resolver el R4 existente sin reescribirlo; límites y evidencia en [la guía contractual](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#grafo-e-impacto).

@@ -230,3 +230,7 @@ Usar directorio de salida nuevo. Se mantienen Redocly2.53.3 sin warnings y Sourc
 ## F1-07E — Eventos e integración contractual (candidatos)
 
 Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatibles de consumidor, snapshots históricos, topología lógica AsyncAPI y fixtures/gates propios. [Mapa, comandos, perfiles y límites E](catalog/README.md#candidato-f1-07e). Reutiliza inmutable el sobre publicado y preserva HTTP, locks y dependencias. Los descriptores/índices de G fijan la procedencia en F; la admisión del envelope que bloqueaba el cierre se trata en [F1-08B](common/README.md#f1-08b--admisión-del-envelope-de-eventos), auditada satisfactoriamente, con publicación/CI en ESTADO del launcher. Nuevas admisiones consumidoras y runtimes requieren sus autorizaciones propias.
+
+## F1-08H — fuente de clasificación conjunta
+
+[Mapa de clasificación R1–R4 v2](catalog/README.md#candidato-f1-08h--clasificación-conjunta-v2-fuente-previa-a-admisión): catálogo/schema/fixtures candidatos y gates conjuntos, conservando fuentes, versiones y locks publicados. La admisión H requiere primero publicación autorizada y CI de esta fuente inmutable; no hay consumo nuevo ni cierre runtime. El [registro](registry/README.md) documenta el lector acotado de aliases YAML y las intenciones de esta entrega.

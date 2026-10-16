@@ -1,0 +1,932 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+  "title": "Versioned data lifecycle policy catalogue v2 — complete field metadata",
+  "description": "Candidate owner policy metadata. Separates transient transport fields from logical retained fields and immutable inherited originals. Not SQL, authorization, admission or disposition runtime.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "status",
+    "catalogue_id",
+    "version",
+    "owner",
+    "decision",
+    "profiles",
+    "storage_policies",
+    "field_sources",
+    "independent_policies",
+    "production_prerequisites",
+    "runtime_demonstrated",
+    "protocol_sources",
+    "classification_profiles",
+    "transport_fields",
+    "storage_fields",
+    "inheritance",
+    "compatibility"
+  ],
+  "properties": {
+    "format_version": {
+      "const": 2
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "catalogue_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "owner": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Profile"
+      }
+    },
+    "storage_policies": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Storage"
+      }
+    },
+    "field_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/FieldSource"
+      }
+    },
+    "independent_policies": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "production_prerequisites": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "runtime_demonstrated": {
+      "const": false
+    },
+    "protocol_sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Source"
+      }
+    },
+    "classification_profiles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/ClassificationProfile"
+      }
+    },
+    "transport_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/TransportField"
+      }
+    },
+    "storage_fields": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/StorageField"
+      }
+    },
+    "inheritance": {
+      "const": "stricter-referenced-classification-wins; originals-inherit-published-field-metadata; transport-is-not-storage-authority"
+    },
+    "compatibility": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/Compatibility"
+      }
+    }
+  },
+  "$defs": {
+    "Classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sensitivity",
+        "categories",
+        "personal_data",
+        "purpose",
+        "base",
+        "access",
+        "log_policy",
+        "encryption",
+        "export_correction",
+        "third_parties_regions"
+      ],
+      "properties": {
+        "sensitivity": {
+          "enum": [
+            "PUBLIC",
+            "INTERNAL",
+            "CONFIDENTIAL",
+            "RESTRICTED"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PERSONAL",
+              "SENSITIVE_PERSONAL",
+              "AUTHENTICATION",
+              "SECRET",
+              "FISCAL",
+              "FINANCIAL",
+              "PAYMENT",
+              "COMMERCIAL",
+              "AUDIT",
+              "OPERATIONAL"
+            ]
+          }
+        },
+        "personal_data": {
+          "enum": [
+            "absent",
+            "possible-indirect"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "type": "string",
+          "minLength": 1
+        },
+        "log_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encryption": {
+          "type": "string",
+          "minLength": 1
+        },
+        "export_correction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "third_parties_regions": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "jurisdiction",
+        "legal_period",
+        "purpose",
+        "periods",
+        "clock",
+        "guards",
+        "configuration",
+        "disposition"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "legal_period": {
+          "type": "boolean"
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "periods": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unit",
+            "minimum",
+            "default",
+            "maximum"
+          ],
+          "properties": {
+            "unit": {
+              "enum": [
+                "calendar-years",
+                "hours"
+              ]
+            },
+            "minimum": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "default": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "maximum": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "clock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "start_event",
+            "calculation",
+            "unknown_start",
+            "active_purpose_blocks"
+          ],
+          "properties": {
+            "start_event": {
+              "type": "string",
+              "minLength": 1
+            },
+            "calculation": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unknown_start": {
+              "type": "string",
+              "minLength": 1
+            },
+            "active_purpose_blocks": {
+              "type": "boolean"
+            }
+          }
+        },
+        "guards": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "inherited_obligations_prevail",
+            "holds_block",
+            "unknown_obligations_block",
+            "privacy_conflict",
+            "unknown_sources_block"
+          ],
+          "properties": {
+            "inherited_obligations_prevail": {
+              "type": "boolean"
+            },
+            "holds_block": {
+              "type": "boolean"
+            },
+            "unknown_obligations_block": {
+              "type": "boolean"
+            },
+            "privacy_conflict": {
+              "type": "string",
+              "minLength": 1
+            },
+            "unknown_sources_block": {
+              "type": "boolean"
+            }
+          }
+        },
+        "configuration": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tenant_configurable",
+            "authorization",
+            "reduction",
+            "plan_dependent",
+            "onboarding_step"
+          ],
+          "properties": {
+            "tenant_configurable": {
+              "type": "boolean"
+            },
+            "authorization": {
+              "type": "string",
+              "minLength": 1
+            },
+            "reduction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "plan_dependent": {
+              "type": "boolean"
+            },
+            "onboarding_step": {
+              "type": "boolean"
+            }
+          }
+        },
+        "disposition": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "profile_id",
+        "profile_version",
+        "periods",
+        "start_event",
+        "while_required",
+        "after_disposition",
+        "evidence_profile",
+        "evidence_source"
+      ],
+      "properties": {
+        "mode": {
+          "enum": [
+            "profile",
+            "dependent",
+            "fixed",
+            "prohibited"
+          ]
+        },
+        "profile_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "profile_version": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "periods": {
+          "anyOf": [
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unit",
+                "minimum",
+                "default",
+                "maximum"
+              ],
+              "properties": {
+                "unit": {
+                  "enum": [
+                    "calendar-years",
+                    "hours"
+                  ]
+                },
+                "minimum": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "default": {
+                  "type": "integer",
+                  "minimum": 1
+                },
+                "maximum": {
+                  "type": "integer",
+                  "minimum": 1
+                }
+              }
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "start_event": {
+          "type": "string",
+          "minLength": 1
+        },
+        "while_required": {
+          "type": "string",
+          "minLength": 1
+        },
+        "after_disposition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence_profile": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "evidence_source": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "policy_version",
+        "owner",
+        "aggregate",
+        "lifecycle_class",
+        "classification",
+        "retention",
+        "dependencies",
+        "copies",
+        "field_catalogue",
+        "disposition",
+        "evidence",
+        "alerts",
+        "production_enabled"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "policy_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "aggregate": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lifecycle_class": {
+          "type": "string",
+          "minLength": 1
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification"
+        },
+        "retention": {
+          "$ref": "#/$defs/Retention"
+        },
+        "dependencies": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "copies": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field_catalogue": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "source_ids",
+            "pending"
+          ],
+          "properties": {
+            "state": {
+              "enum": [
+                "complete",
+                "prohibited"
+              ]
+            },
+            "source_ids": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "pending": {
+              "type": "array",
+              "maxItems": 0
+            }
+          }
+        },
+        "disposition": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "alerts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "production_enabled": {
+          "const": false
+        }
+      }
+    },
+    "FieldSource": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "contract_id",
+        "path",
+        "commit",
+        "sha256",
+        "pointer",
+        "inherited_metadata",
+        "history_profile_id",
+        "history_profile_version",
+        "transport_profile_applies_to_history",
+        "runtime_access_requires_separate_authority"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "contract_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "inherited_metadata": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "history_profile_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "history_profile_version": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "transport_profile_applies_to_history": {
+          "type": "boolean"
+        },
+        "runtime_access_requires_separate_authority": {
+          "type": "boolean"
+        }
+      }
+    },
+    "Source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "owner",
+        "kind",
+        "commit",
+        "sha256"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "schema",
+            "policy"
+          ]
+        },
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "ClassificationProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sensitivity",
+        "categories",
+        "personal_data",
+        "purpose",
+        "base",
+        "access",
+        "log_policy",
+        "encryption",
+        "export_correction",
+        "third_parties_regions",
+        "id",
+        "owner",
+        "consumers",
+        "retention_scope"
+      ],
+      "properties": {
+        "sensitivity": {
+          "enum": [
+            "PUBLIC",
+            "INTERNAL",
+            "CONFIDENTIAL",
+            "RESTRICTED"
+          ]
+        },
+        "categories": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PERSONAL",
+              "SENSITIVE_PERSONAL",
+              "AUTHENTICATION",
+              "SECRET",
+              "FISCAL",
+              "FINANCIAL",
+              "PAYMENT",
+              "COMMERCIAL",
+              "AUDIT",
+              "OPERATIONAL"
+            ]
+          }
+        },
+        "personal_data": {
+          "enum": [
+            "absent",
+            "possible-indirect"
+          ]
+        },
+        "purpose": {
+          "type": "string",
+          "minLength": 1
+        },
+        "base": {
+          "type": "string",
+          "minLength": 1
+        },
+        "access": {
+          "type": "string",
+          "minLength": 1
+        },
+        "log_policy": {
+          "type": "string",
+          "minLength": 1
+        },
+        "encryption": {
+          "type": "string",
+          "minLength": 1
+        },
+        "export_correction": {
+          "type": "string",
+          "minLength": 1
+        },
+        "third_parties_regions": {
+          "type": "string",
+          "minLength": 1
+        },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "consumers": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "retention_scope": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "Selector": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "pointer"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^/"
+        }
+      }
+    },
+    "TransportField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "pointer",
+        "kind",
+        "profile",
+        "persistence"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "pattern": "^/"
+        },
+        "kind": {
+          "enum": [
+            "property",
+            "reference"
+          ]
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "persistence": {
+          "const": "none-implied-by-transport"
+        }
+      }
+    },
+    "StorageField": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "storage_id",
+        "field",
+        "profile",
+        "representation",
+        "sources"
+      ],
+      "properties": {
+        "storage_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "field": {
+          "type": "string",
+          "minLength": 1
+        },
+        "profile": {
+          "type": "string",
+          "minLength": 1
+        },
+        "representation": {
+          "enum": [
+            "minimal-metadata",
+            "hash-only",
+            "normalized-protection-state",
+            "coverage-without-deleted-values"
+          ]
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/Selector"
+          }
+        }
+      }
+    },
+    "Compatibility": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "aspect",
+        "guarantee",
+        "evidence"
+      ],
+      "properties": {
+        "aspect": {
+          "type": "string",
+          "minLength": 1
+        },
+        "guarantee": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}
