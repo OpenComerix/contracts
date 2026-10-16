@@ -1,0 +1,241 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Catalog History Protection API
+  version: 1.0.0
+  description: >-
+    Candidato R2 F1-08E. Recepción privada tras commit local de la fuente, sin
+    dependencia síncrona por venta. No habilita fuentes ni implementa runtime.
+    Un mensaje no concede autoridad. Baseline y cierres no liberan holds u
+    obligaciones por silencio. Cada fuente conserva su contrato y entrega durable.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://catalog-pricing.internal.example
+    description: Host privado ilustrativo; TLS obligatorio fuera de pruebas locales aisladas.
+tags:
+  - name: HistoryProtection
+    description: Obligaciones y cierre de fuentes; no es recuperación R3/R4.
+security:
+  - sourceWorkloadBearer: []
+paths:
+  /internal/v1/catalog/history/protection/messages:
+    post:
+      operationId: submitCatalogHistoryProtectionMessage
+      tags: [HistoryProtection]
+      summary: Registrar un mensaje versionado de protección de historia
+      description: >-
+        Verifica JWT de workload y admisión local vigente antes de evaluar
+        idempotencia. Cada mensaje tiene identidad estable y secuencia contigua
+        por organización/fuente, compartida entre ámbitos. Repetir el mismo JSON
+        semántico conserva el resultado; ningún retry renueva autoridad ni cierre.
+        El backend valida referencias contra su historia, autoridad de evidencia
+        y contrato de la fuente. Máximo 128 KiB UTF-8 incluido todo el body,
+        100 entradas por página baseline, sin cupo total de referencias.
+        Presupuesto de 10 s incluido body. 409 puede conservar bloqueo y
+        cuarentena auditados, sin aplicar la liberación solicitada. La autoridad
+        indisponible falla cerrada; un 200 nunca autoriza disposición.
+      x-internal: true
+      x-workload:
+        audience: catalog-pricing.history-protection
+        type: service
+        caller: owner-inventory-bound-source
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Message
+      responses:
+        '200':
+          description: Mensaje aplicado atómicamente o duplicado equivalente ya aplicado.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Receipt
+        '400':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 400
+                      code:
+                        enum: [catalog_invalid_request]
+        '401':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 401
+                      code:
+                        enum: [catalog_history_workload_invalid]
+        '403':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 403
+                      code:
+                        enum: [catalog_history_source_not_authorized, catalog_history_hold_authority_required]
+        '406':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 406
+                      code:
+                        enum: [platform_not_acceptable]
+        '409':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 409
+                      code:
+                        enum: [catalog_history_message_conflict, catalog_history_reconciliation_required, catalog_history_scope_closed]
+        '413':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 413
+                      code:
+                        enum: [platform_payload_too_large]
+        '415':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 415
+                      code:
+                        enum: [platform_unsupported_media_type]
+        '429':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Retry-After:
+              description: Espera técnica acotada en segundos; no resuelve conflictos semánticos.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 429
+                      code:
+                        enum: [platform_rate_limited]
+        '500':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 500
+                      code:
+                        enum: [platform_internal_error]
+        '503':
+          description: Rechazo genérico sin PII, tokens, existencia ajena ni contenido protegido.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Retry-After:
+              description: Espera técnica acotada en segundos; no resuelve conflictos semánticos.
+              schema:
+                type: integer
+                minimum: 1
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/catalog-history-protection-v1.schema.json#/$defs/Problem
+                  - type: object
+                    properties:
+                      status:
+                        const: 503
+                      code:
+                        enum: [platform_dependency_unavailable, platform_capacity_exhausted]
+components:
+  securitySchemes:
+    sourceWorkloadBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: H1A ES256, máximo 300 s, audiencia exclusiva y caller admitido; no delegado de usuario.
+  headers:
+    NoStore:
+      description: No almacenar respuestas ni errores de protección.
+      schema:
+        type: string
+        const: no-store

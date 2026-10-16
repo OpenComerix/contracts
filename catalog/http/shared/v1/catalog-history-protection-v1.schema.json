@@ -1,0 +1,1495 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+  "title": "Catalog history protection R2 v1 — candidate",
+  "description": "Private R2 transport only. Semantic trace gates supplement JSON Schema. No SQL, authorization implementation or disposition is supplied. A closure certifies source fencing, not expiry of obligations or holds.",
+  "$defs": {
+    "Reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_id",
+        "aggregate_type",
+        "aggregate_id",
+        "aggregate_version"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "aggregate_type": {
+          "type": "string",
+          "enum": [
+            "category",
+            "product",
+            "presentation",
+            "presentation_price"
+          ],
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "aggregate_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "aggregate_version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scope_id",
+        "references"
+      ],
+      "properties": {
+        "scope_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "references": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_id",
+        "evidence_id",
+        "reason_code"
+      ],
+      "properties": {
+        "authority_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "source_lifecycle",
+            "legal_fiscal",
+            "legal_hold",
+            "privacy_resolution",
+            "reconciliation",
+            "definitive_closure"
+          ],
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Deadline": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "state": {
+              "const": "unknown"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "at"
+          ],
+          "properties": {
+            "state": {
+              "const": "known"
+            },
+            "at": {
+              "type": "string",
+              "format": "date-time",
+              "x-data-classification": "RESTRICTED",
+              "x-log-policy": "no-values",
+              "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+            }
+          }
+        }
+      ]
+    },
+    "Obligation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "obligation_id",
+        "version",
+        "reference",
+        "profile_id",
+        "profile_version",
+        "jurisdiction",
+        "trigger",
+        "required_until",
+        "suspensions",
+        "evidence"
+      ],
+      "properties": {
+        "obligation_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "reference": {
+          "$ref": "#/$defs/Reference",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "profile_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "jurisdiction": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "trigger": {
+          "$ref": "#/$defs/Deadline",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "required_until": {
+          "$ref": "#/$defs/Deadline",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "suspensions": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "format": "uuid",
+            "x-data-classification": "RESTRICTED",
+            "x-log-policy": "no-values",
+            "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "obligation_id",
+        "version",
+        "reference",
+        "ended_at",
+        "evidence"
+      ],
+      "properties": {
+        "obligation_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "reference": {
+          "$ref": "#/$defs/Reference",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "ended_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Hold": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hold_id",
+        "version",
+        "created_at",
+        "until",
+        "evidence"
+      ],
+      "properties": {
+        "hold_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "until": {
+          "$ref": "#/$defs/Deadline",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "HoldRelease": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hold_id",
+        "version",
+        "released_at",
+        "evidence"
+      ],
+      "properties": {
+        "hold_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "released_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "BaselinePage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_id",
+        "cut",
+        "page",
+        "obligations",
+        "releases",
+        "holds",
+        "hold_releases"
+      ],
+      "properties": {
+        "baseline_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "cut": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "obligations": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Obligation"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "releases": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Release"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "holds": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Hold"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "hold_releases": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 100,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/HoldRelease"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "BaselineComplete": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_id",
+        "cut",
+        "pages",
+        "obligations",
+        "releases",
+        "holds",
+        "hold_releases",
+        "evidence"
+      ],
+      "properties": {
+        "baseline_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "cut": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "pages": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "obligations": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "releases": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "holds": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "hold_releases": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "baseline_id",
+        "through",
+        "open_obligations",
+        "active_holds",
+        "pending_messages",
+        "pending_operations",
+        "evidence"
+      ],
+      "properties": {
+        "baseline_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "through": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "open_obligations": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "active_holds": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "pending_messages": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "pending_operations": {
+          "type": "integer",
+          "minimum": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpoint_id",
+        "through",
+        "closed_at",
+        "pending_messages",
+        "pending_operations",
+        "future_references_rejected",
+        "evidence"
+      ],
+      "properties": {
+        "checkpoint_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "through": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "closed_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "pending_messages": {
+          "const": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "pending_operations": {
+          "const": 0,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "future_references_rejected": {
+          "const": true,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Admission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_id",
+        "caller",
+        "source_contract_id",
+        "source_contract_version",
+        "source_contract_sha256",
+        "scope",
+        "allows_holds",
+        "authority_id"
+      ],
+      "properties": {
+        "source_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "caller": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_contract_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_contract_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_contract_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "scope": {
+          "$ref": "#/$defs/Scope",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "allows_holds": {
+          "type": "boolean",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "authority_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Inventory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "revision",
+        "authority_evidence",
+        "enabled_contracts",
+        "sources"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "authority_evidence": {
+          "$ref": "#/$defs/Evidence",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "enabled_contracts": {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "version",
+              "sha256"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96,
+                "x-data-classification": "RESTRICTED",
+                "x-log-policy": "no-values",
+                "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+              },
+              "version": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96,
+                "x-data-classification": "RESTRICTED",
+                "x-log-policy": "no-values",
+                "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 0,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/Admission"
+          },
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Message": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "protocol_version",
+        "message_id",
+        "organization_id",
+        "source_id",
+        "source_contract_id",
+        "source_contract_version",
+        "inventory_revision",
+        "scope_id",
+        "sequence",
+        "issued_at",
+        "kind",
+        "payload"
+      ],
+      "properties": {
+        "protocol_version": {
+          "const": 1,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "message_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "organization_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_contract_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "source_contract_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "inventory_revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2147483647,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "scope_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "sequence": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]{0,18}$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "baseline.page",
+            "baseline.complete",
+            "obligation.upsert",
+            "obligation.release",
+            "checkpoint",
+            "closure",
+            "hold.upsert",
+            "hold.release"
+          ],
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "payload": {
+          "type": "object",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "baseline.page"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/BaselinePage"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "baseline.complete"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/BaselineComplete"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "obligation.upsert"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/Obligation"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "obligation.release"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/Release"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "checkpoint"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/Checkpoint"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "closure"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/Closure"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "hold.upsert"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/Hold"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "hold.release"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payload": {
+                "$ref": "#/$defs/HoldRelease"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Receipt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "message_id",
+        "result",
+        "contiguous_sequence",
+        "baseline_complete",
+        "scope_closed",
+        "disposition_authorized"
+      ],
+      "properties": {
+        "message_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "result": {
+          "type": "string",
+          "enum": [
+            "applied",
+            "duplicate"
+          ],
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "contiguous_sequence": {
+          "type": "string",
+          "pattern": "^(0|[1-9][0-9]{0,18})$",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "baseline_complete": {
+          "type": "boolean",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "scope_closed": {
+          "type": "boolean",
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        },
+        "disposition_authorized": {
+          "const": false,
+          "x-data-classification": "RESTRICTED",
+          "x-log-policy": "no-values",
+          "x-data-purpose": "protect-original-history-and-reconcile-owner-obligations"
+        }
+      }
+    },
+    "Problem": {
+      "allOf": [
+        {
+          "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "properties": {
+            "code": {
+              "type": "string",
+              "enum": [
+                "catalog_invalid_request",
+                "platform_payload_too_large",
+                "platform_unsupported_media_type",
+                "platform_not_acceptable",
+                "platform_rate_limited",
+                "platform_capacity_exhausted",
+                "platform_dependency_unavailable",
+                "platform_internal_error",
+                "catalog_history_workload_invalid",
+                "catalog_history_source_not_authorized",
+                "catalog_history_hold_authority_required",
+                "catalog_history_message_conflict",
+                "catalog_history_reconciliation_required",
+                "catalog_history_scope_closed"
+              ]
+            },
+            "detail": false,
+            "errors": false
+          }
+        },
+        {
+          "properties": {
+            "title": {
+              "const": "Solicitud R2 rechazada"
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_invalid_request"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_invalid_request"
+              },
+              "status": {
+                "enum": [
+                  400
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_payload_too_large"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_payload_too_large"
+              },
+              "status": {
+                "enum": [
+                  413
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_unsupported_media_type"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_unsupported_media_type"
+              },
+              "status": {
+                "enum": [
+                  415
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_not_acceptable"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_not_acceptable"
+              },
+              "status": {
+                "enum": [
+                  406
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_rate_limited"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_rate_limited"
+              },
+              "status": {
+                "enum": [
+                  429
+                ]
+              },
+              "retryable": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_capacity_exhausted"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_capacity_exhausted"
+              },
+              "status": {
+                "enum": [
+                  503
+                ]
+              },
+              "retryable": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_dependency_unavailable"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_dependency_unavailable"
+              },
+              "status": {
+                "enum": [
+                  503
+                ]
+              },
+              "retryable": {
+                "const": true
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "platform_internal_error"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:platform_internal_error"
+              },
+              "status": {
+                "enum": [
+                  500
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_workload_invalid"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_workload_invalid"
+              },
+              "status": {
+                "enum": [
+                  401
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_source_not_authorized"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_source_not_authorized"
+              },
+              "status": {
+                "enum": [
+                  403
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_hold_authority_required"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_hold_authority_required"
+              },
+              "status": {
+                "enum": [
+                  403
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_message_conflict"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_message_conflict"
+              },
+              "status": {
+                "enum": [
+                  409
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_reconciliation_required"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_reconciliation_required"
+              },
+              "status": {
+                "enum": [
+                  409
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "code": {
+                "const": "catalog_history_scope_closed"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "type": {
+                "const": "urn:opencomerix:problem:catalog_history_scope_closed"
+              },
+              "status": {
+                "enum": [
+                  409
+                ]
+              },
+              "retryable": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

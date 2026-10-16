@@ -19,13 +19,22 @@ const historyPlanned = [
   { id: 'common.data-lifecycle-policy.v1', domain: 'common', owner: 'platform-contracts', materializeIn: 'F1-08C', status: 'planned', constraint: 'Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration.' },
   { id: 'catalog.history-policy.v1', domain: 'catalog', owner: 'catalog-pricing', materializeIn: 'F1-08C', status: 'planned', constraint: 'Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration.' },
 ];
+// Closed list of the six authorized R2 candidates; no admission or wildcard.
+const protectionPlanned = [
+  ['catalog.history-protection.http.v1', 'catalog'],
+  ['catalog.history-protection.schema.v1', 'catalog'],
+  ['catalog.history-protection.policy.v1', 'catalog'],
+  ['catalog.history-protection.fixtures.v1', 'catalog'],
+  ['common.error-catalog.v7', 'common'],
+  ['common.error-catalog.v7.schema', 'common'],
+].map(([id, domain]) => ({ id, domain, owner: domain === 'catalog' ? 'catalog-pricing' : 'platform-contracts', materializeIn: 'F1-08E', status: 'planned', constraint: 'Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration.' }));
 
 test('G preserves historical descriptors, consumer exports, pins and deferred sale intention', () => {
   assert.deepEqual(admissionBaseline.contracts.filter(row => previousIds.has(row.id)), baseline.contracts);
   assert.deepEqual(registry.preservedFiles, baseline.preservedFiles);
   assert.deepEqual(registry.requiredConsumers, baseline.requiredConsumers);
   assert.equal(registry.baselineCommit, baseline.baselineCommit);
-  assert.deepEqual(registry.planned, [...baseline.planned.filter(row => row.materializeIn !== 'F1-07'), ...historyPlanned]);
+  assert.deepEqual(registry.planned, [...baseline.planned.filter(row => row.materializeIn !== 'F1-07'), ...historyPlanned, ...protectionPlanned]);
   const files = ['registry/consumers/index.json', ...registry.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')];
   for (const file of files) {
     const local = readFileSync(path.join(root, file)).toString('utf8').replaceAll('\r\n', '\n');
@@ -33,13 +42,13 @@ test('G preserves historical descriptors, consumer exports, pins and deferred sa
   }
 });
 
-test('G inventory stays intact; F1-08C only appends its two planned policy intentions', () => {
+test('G inventory stays intact; F1-08C/E only append their closed lists of planned intentions', () => {
   const files = execFileSync('git', ['-C', root, 'ls-tree', '-r', '--name-only', revision])
     .toString().trim().split('\n')
     .filter(file => /^(catalog\/(http|events)|identity\/http|common\/(http|errors))\//.test(file));
   assert.equal(new Set(added.map(row => row.path)).size, added.length);
   assert.deepEqual(added.filter(row => row.surface !== 'validation').map(row => row.path).sort(), files.sort());
-  assert.deepEqual(registry.planned.map(row => row.id), ['sales.complete-snapshot.successor', ...historyPlanned.map(row => row.id)]);
+  assert.deepEqual(registry.planned.map(row => row.id), ['sales.complete-snapshot.successor', ...historyPlanned.map(row => row.id), ...protectionPlanned.map(row => row.id)]);
   assert.equal(added.filter(row => row.surface === 'events').length, 4);
   assert.equal(added.filter(row => row.id.endsWith('.consumer')).length, 4);
   assert.equal(added.find(row => row.id === 'catalog.events.v1.asyncapi').status, 'draft');
@@ -86,12 +95,12 @@ function selectedManifest(descriptor, role, operations = [], pointers = ['']) {
 const manifestBytes = (manifest) => Buffer.from(JSON.stringify(manifest, null, 2) + '\n');
 const eventProfiles = added.filter(row => row.surface === 'events' || row.id.endsWith('.consumer'));
 
-test('F1-08B envelope admission plus F1-08C planned intentions preserve all other registry metadata and source bytes', () => {
+test('F1-08B envelope admission plus F1-08C/E planned intentions preserve all other registry metadata and source bytes', () => {
   const expected = structuredClone(admissionBaseline);
   const envelope = expected.contracts.find(row => row.id === 'common.event-envelope.v1');
   assert.equal(envelope.status, 'draft');
   envelope.status = 'active';
-  expected.planned.push(...historyPlanned);
+  expected.planned.push(...historyPlanned, ...protectionPlanned);
   assert.deepEqual(registry, expected);
   const source = gitReader(root, envelope.commit)(envelope.path);
   assert.equal(sha256(source), envelope.sha256);

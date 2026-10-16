@@ -1,0 +1,2136 @@
+{
+  "protocol_version": 1,
+  "status": "candidate",
+  "owner": "catalog-pricing",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "transport": {
+    "method": "POST",
+    "path": "/internal/v1/catalog/history/protection/messages",
+    "operation_id": "submitCatalogHistoryProtectionMessage",
+    "audience": "catalog-pricing.history-protection",
+    "authentication": "H1A ES256 workload JWT; validated issuer/alg/kid/type=service/caller/iat/exp/aud; maximum 300s; no user delegation",
+    "tls": "required-except-isolated-local-tests",
+    "delivery": "source-local-commit-and-durable-delivery; never-synchronous-per-sale"
+  },
+  "limits": {
+    "message_bytes": 131072,
+    "baseline_page_entries": 100,
+    "scope_references": null,
+    "deadline_ms": 10000,
+    "total_reference_quota": null
+  },
+  "authority": {
+    "source": "owner-managed-versioned-inventory; no-self-enrolment",
+    "binding": [
+      "organization_id",
+      "source_id",
+      "caller",
+      "source_contract_id",
+      "source_contract_version",
+      "scope_id",
+      "inventory_revision"
+    ],
+    "evidence": "opaque-reference-only; backend-must-verify-authority-currently",
+    "hold_release": "reinforced-authority-required; no-OWNER-or-catalog.manage-inference",
+    "empty_inventory": "explicit-enabled-contracts-empty-and-sources-empty; never-empty-queue",
+    "new_source": "block-covered-history-before-source-can-reference; baseline-before-disposition",
+    "source_contract": "each-future-owner-publishes-own-adapter-contract; no-sources-enabled-here"
+  },
+  "semantics": {
+    "ordering": "contiguous-per-organization-and-source-across-all-scopes; canonical-decimal-strings; unknown-gap-blocks-entire-source; replay-alone-does-not-clear-source-block",
+    "idempotency": "revalidate-authority-before-replay; stable-message-and-sequence-and-canonical-JSON-content; durable-protection-tombstones-outlive-inbox-TTL",
+    "versions": "contiguous-per-obligation-or-hold; no-release-by-timeout-or-absence; old-message-never-releases-new-state",
+    "baseline": "immutable-id-cut-scope; numbered-pages-and-explicit-counts; snapshots-preserve-missing-local-protection-unless-explicit-release; changes-after-cut-must-be-reconciled; cut-covers-confirmed-source-stream-before-pages; no-protective-mutation-between-cut-and-complete; page-manifest-counts-all-four-record-kinds; completed-bindings-retained-for-protection-lifecycle; immutable-organization-source-scope-cut-page-manifest-and-completion; later-snapshot-requires-new-id; completed-id-never-restaged",
+    "checkpoint": "bind-baseline-and-complete-contiguous-source-stream; exact-open-counts-and-pending-work; fresh-checkpoint-reconciles-closed-scope-without-reopening-fence; source-gap-latch-lifts-only-after-every-scope-reconciles; later-mutation-invalidates-that-scope-proof; zero-pending-work-required-for-source-gap-proof; pending-work-invalidates-earlier-scope-proof",
+    "closure": "source-scope-fence-plus-reconciled-checkpoint; zero-pending-messages-and-operations; no-new-references; does-not-end-obligations-or-holds; checkpoint-is-immediately-previous-source-message; later-authorized-release-or-hold-does-not-remove-source-fence",
+    "late": "reject-incompatible-message; durable-block-and-alert; never-silent-reopen-or-ignore",
+    "holds": "independent-of-obligations-and-closure; expiry-does-not-substitute-explicit-authorized-release",
+    "conflicts": "quarantine-and-durable-block; no-protection-reduction; scope-if-known-otherwise-source",
+    "reconciliation": "new-complete-baseline-at-known-cut; explicit-versioned-releases; cannot-clear-late-after-closure-by-absence; gaps-replay-missing-original-messages-then-reconcile-every-scope-with-new-baseline-or-fresh-checkpoint; contradictory-or-post-closure-evidence-needs-explicit-owner-resolution-not-automatic-clear",
+    "atomicity": "inbox-effect-audit-and-disposition-check-share-owner-local-transaction; no-external-IO-under-lock; no-remote-SQL",
+    "errors": "409-may-persist-blocking-evidence-and-quarantine; does-not-apply-requested-release; no-blind-retry; technical-uncertainty-replays-identical-message",
+    "inventory": "local-only-unbounded-inventory; admissions-and-source-identities-never-reset-history-or-closure-tombstones; overlapping-scope-or-inventory-change-cannot-bypass-prior-source-fence; same-source-scopes-disjoint-and-share-one-caller-contract-authority-binding"
+  },
+  "kinds": [
+    "baseline.page",
+    "baseline.complete",
+    "obligation.upsert",
+    "obligation.release",
+    "checkpoint",
+    "closure",
+    "hold.upsert",
+    "hold.release"
+  ],
+  "errors": [
+    "catalog_invalid_request",
+    "platform_payload_too_large",
+    "platform_unsupported_media_type",
+    "platform_not_acceptable",
+    "platform_rate_limited",
+    "platform_capacity_exhausted",
+    "platform_dependency_unavailable",
+    "platform_internal_error",
+    "catalog_history_workload_invalid",
+    "catalog_history_source_not_authorized",
+    "catalog_history_hold_authority_required",
+    "catalog_history_message_conflict",
+    "catalog_history_reconciliation_required",
+    "catalog_history_scope_closed"
+  ],
+  "field_inventory": [
+    {
+      "path": "/$defs/Reference/properties/event_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Reference/properties/aggregate_type",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Reference/properties/aggregate_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Reference/properties/aggregate_version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Scope/properties/scope_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Scope/properties/references",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Evidence/properties/authority_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Evidence/properties/evidence_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Evidence/properties/reason_code",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/obligation_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/reference",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/profile_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/profile_version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/jurisdiction",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/trigger",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/required_until",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/suspensions",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Obligation/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Release/properties/obligation_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Release/properties/version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Release/properties/reference",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Release/properties/ended_at",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Release/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Hold/properties/hold_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Hold/properties/version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Hold/properties/created_at",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Hold/properties/until",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Hold/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/HoldRelease/properties/hold_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/HoldRelease/properties/version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/HoldRelease/properties/released_at",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/HoldRelease/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/baseline_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/cut",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/page",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/obligations",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/releases",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/holds",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselinePage/properties/hold_releases",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/baseline_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/cut",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/pages",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/obligations",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/releases",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/holds",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/hold_releases",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/BaselineComplete/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/baseline_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/through",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/open_obligations",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/active_holds",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/pending_messages",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/pending_operations",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Checkpoint/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/checkpoint_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/through",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/closed_at",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/pending_messages",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/pending_operations",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/future_references_rejected",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Closure/properties/evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/source_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/caller",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/source_contract_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/source_contract_version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/source_contract_sha256",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/scope",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/allows_holds",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Admission/properties/authority_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Inventory/properties/organization_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Inventory/properties/revision",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Inventory/properties/authority_evidence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Inventory/properties/enabled_contracts",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Inventory/properties/sources",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/protocol_version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/message_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/organization_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/source_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/source_contract_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/source_contract_version",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/inventory_revision",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/scope_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/sequence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/issued_at",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/kind",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Message/properties/payload",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/message_id",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/result",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/contiguous_sequence",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/baseline_complete",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/scope_closed",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    },
+    {
+      "path": "/$defs/Receipt/properties/disposition_authorized",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUDIT",
+        "OPERATIONAL",
+        "PERSONAL"
+      ],
+      "purpose": "protect-original-history-and-reconcile-owner-obligations",
+      "base": "authorized-organization-operation-and-history",
+      "owner": "catalog-pricing",
+      "consumers": [
+        "catalog-pricing",
+        "admitted-source-for-own-scope"
+      ],
+      "access": "current-workload-and-local-source-admission; evidence-is-not-authority",
+      "log_policy": "no-values",
+      "encryption": "TLS-and-encrypted-at-rest",
+      "retention": "ADR-062/R1 references-holds-closures; independent-audit-and-inbox-policies",
+      "export_correction": "authorized-export; versioned-compensation-only",
+      "third_parties_regions": "none-authorized"
+    }
+  ],
+  "prerequisites": [
+    "separate-contract-admission-H",
+    "current-source-authority-and-identity-audience-producer",
+    "per-source-contract-and-fencing-implementation",
+    "owner-PostgreSQL-atomicity-and-races-L",
+    "complete-field-classification-H"
+  ]
+}
