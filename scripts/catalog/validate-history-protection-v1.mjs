@@ -3,6 +3,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { parse } from 'yaml';
+import { gitReader, operationPointers, parseSource, resolveSelection } from '../../tools/architecture/graph.mjs';
+import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const schemaPath = 'catalog/http/shared/v1/catalog-history-protection-v1.schema.json';
@@ -20,6 +22,82 @@ function normalize(value) {
 const key = ref => canonical(ref);
 const countOpen = values => [...values.values()].filter(value => !value.released).length;
 const result = (status = 200, code = null) => ({ status, code });
+
+export const historyAdmissionSource = '28be1edf02a3771629febf554f8b5f4856452877';
+// Closed H package; R1 v1 and its schema remain candidates. Shared with R4 so
+// both gates check the same transition without weakening their wire invariants.
+const historyAdmission = [
+  ['catalog.history-protection.http.v1', 'catalog/http/private/v1/catalog-history-protection-v1.yaml', 'http-private', '1.0.0'],
+  ['catalog.history-protection.schema.v1', 'catalog/http/shared/v1/catalog-history-protection-v1.schema.json', 'schema', 'v1'],
+  ['catalog.history-protection.policy.v1', 'catalog/http/shared/v1/catalog-history-protection-v1-policy.json', 'policy', '1'],
+  ['catalog.history-protection.fixtures.v1', 'catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json', 'validation', 'v1'],
+  ['common.error-catalog.v7', 'common/errors/v7/error-catalog-v7.json', 'errors', '7'],
+  ['common.error-catalog.v7.schema', 'common/errors/v7/error-catalog-v7.schema.json', 'schema', 'v7'],
+  ['identity.catalog-recovery-authority.v1', 'identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml', 'http-private', '1.0.0'],
+  ['identity.catalog-recovery-authority.v1.schema', 'identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json', 'schema', 'v1'],
+  ['identity.catalog-recovery-authority-v1-fixtures', 'identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json', 'validation', 'v1'],
+  ['catalog.history-recovery.schema.v1', 'catalog/http/shared/v1/catalog-history-recovery-v1.schema.json', 'schema', 'v1'],
+  ['catalog.history-recovery.fixtures.v1', 'catalog/fixtures/recovery/v1/catalog-history-recovery-v1-fixtures.json', 'validation', 'v1'],
+  ['catalog.history-recovery.http.v1', 'catalog/http/private/v1/catalog-history-recovery-v1.yaml', 'http-private', '1.0.0'],
+  ['catalog.history-recovery.protocol.v1', 'catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json', 'schema', 'v1'],
+  ['catalog.history-recovery.policy.v1', 'catalog/http/shared/v1/catalog-history-recovery-v1-policy.json', 'policy', '1'],
+  ['catalog.history-recovery.protocol-fixtures.v1', 'catalog/fixtures/recovery/v1/catalog-history-recovery-protocol-v1-vectors.json', 'validation', 'v1'],
+  ['common.error-catalog.v8', 'common/errors/v8/error-catalog-v8.json', 'errors', '8'],
+  ['common.error-catalog.v8.schema', 'common/errors/v8/error-catalog-v8.schema.json', 'schema', 'v8'],
+  ['identity.catalog-recovery-verification.http.v2', 'identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml', 'http-private', '2.0.0'],
+  ['identity.catalog-recovery-verification.schema.v2', 'identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json', 'schema', 'v2'],
+  ['identity.catalog-recovery-verification.policy.v2', 'identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json', 'policy', '2'],
+  ['identity.catalog-recovery-verification.fixtures.v2', 'identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json', 'validation', 'v2'],
+  ['common.data-lifecycle-policy.v2', 'common/http/shared/v2/data-lifecycle-policy-v2.schema.json', 'schema', 'v2'],
+  ['catalog.history-policy.v2', 'catalog/http/shared/v2/catalog-history-policy-v2.json', 'policy', '2'],
+  ['catalog.history-policy.fixtures.v2', 'catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json', 'validation', 'v2'],
+];
+
+export function validateHistoryRegistry(registry = read('registry/contracts.json')) {
+  const source = gitReader(root, historyAdmissionSource);
+  const baseline = JSON.parse(source('registry/contracts.json'));
+  if (registry.contracts.length === baseline.contracts.length) {
+    same(registry, baseline, 'H_CANDIDATE_REGISTRY');
+    return { phase: 'candidate', admitted: 0 };
+  }
+  const { contracts, planned, ...metadata } = registry;
+  const { contracts: priorContracts, planned: priorPlanned, ...priorMetadata } = baseline;
+  same(metadata, priorMetadata, 'H_REGISTRY_METADATA');
+  same(contracts.slice(0, priorContracts.length), priorContracts, 'H_PRIOR_DESCRIPTORS');
+  const added = contracts.slice(priorContracts.length);
+  same(added.map(row => row.id), historyAdmission.map(([id]) => id), 'H_SELECTED_ROOTS');
+  const ids = new Set(added.map(row => row.id));
+  same(planned, priorPlanned.filter(row => !ids.has(row.id)), 'H_REMAINING_INTENTIONS');
+  const mappings = new Map(priorContracts.flatMap(row => row.uriMappings).map(row => [row.uri, row]));
+  for (const [index, [id, file, surface, version]] of historyAdmission.entries()) {
+    const row = added[index], intent = priorPlanned.find(item => item.id === id);
+    same([row.path, row.surface, row.version, row.owner, row.domain, row.status],
+      [file, surface, version, intent.owner, intent.domain, 'active'], 'H_DESCRIPTOR');
+    same([row.commit, row.tag, row.tagObject, row.sha256],
+      [historyAdmissionSource, null, null, sha256(source(file))], 'H_PROVENANCE');
+    const document = parseSource(source(file), file);
+    same(row.operations, [...operationPointers(document).keys()], 'H_OPERATIONS');
+    for (const key of ['capability', 'purpose', 'reasonForChange', 'retirement'])
+      assert(typeof row[key] === 'string' && row[key].length > 0, 'H_EVOLUTION_METADATA');
+    if (document.$id) {
+      assert(!mappings.has(document.$id), 'H_AMBIGUOUS_MAPPING');
+      mappings.set(document.$id, { uri: document.$id, path: file });
+    }
+  }
+  const draftPaths = new Set(contracts.filter(row => row.status === 'draft').map(row => row.path));
+  for (const row of added) {
+    const closure = resolveSelection(source, { ...row, uriMappings: [...mappings.values()] },
+      { version: row.version, operations: row.operations, pointers: [''] }, registry);
+    const files = new Set(closure.files.map(file => file.path));
+    same(row.uriMappings, [...mappings.values()].filter(item => files.has(item.path)), 'H_URI_MAPPINGS');
+    for (const file of closure.files) {
+      assert(!draftPaths.has(file.path), 'H_DRAFT_CLOSURE');
+      same(fs.readFileSync(path.join(root, file.path), 'utf8').replaceAll('\r\n', '\n'),
+        source(file.path).toString('utf8'), 'H_SOURCE_BYTES');
+    }
+  }
+  return { phase: 'admitted', admitted: added.length };
+}
 const errors = {
   authority: 'catalog_history_source_not_authorized',
   conflict: 'catalog_history_message_conflict',
@@ -175,7 +253,7 @@ export function evaluateTrace(trace) {
   return { outputs, scopes: [...scopes.values()].map(scope => ({ scope_id: scope.source.scope.scope_id, open_obligations: countOpen(scope.obligations), active_holds: countOpen(scope.holds), baseline_complete: scope.baseline !== null, closed: scope.closed, blocked: scope.blocked || streams.get(scope.source.source_id).gapBlocked, disposition_authorized: false })) };
 }
 
-export function validateProtectionMetadata(schema = read(schemaPath), policy = read(policyPath), api = parse(fs.readFileSync(path.join(root, apiPath), 'utf8'))) {
+export function validateProtectionMetadata(schema = read(schemaPath), policy = read(policyPath), api = parse(fs.readFileSync(path.join(root, apiPath), 'utf8')), registry = read('registry/contracts.json')) {
   same([policy.protocol_version, policy.status, policy.owner, policy.production_enabled, policy.runtime_demonstrated], [1,'candidate','catalog-pricing',false,false], 'R2_SCOPE');
   same(policy.transport.audience, 'catalog-pricing.history-protection', 'R2_AUTHORITY');
   same(policy.limits, { message_bytes:131072, baseline_page_entries:100, scope_references:null, deadline_ms:10000, total_reference_quota:null }, 'R2_LIMITS');
@@ -220,11 +298,7 @@ export function validateProtectionMetadata(schema = read(schemaPath), policy = r
     }
   }
   same([...new Set(documented)].sort(), [...policy.errors].sort(), 'R2_ERROR_COVERAGE');
-  const registry = read('registry/contracts.json');
-  for (const id of ['catalog.history-protection.http.v1','catalog.history-protection.schema.v1','catalog.history-protection.policy.v1','catalog.history-protection.fixtures.v1','common.error-catalog.v7','common.error-catalog.v7.schema']) {
-    assert(registry.planned.some(row => row.id === id && row.status === 'planned'), 'R2_PLANNED');
-    assert(!registry.contracts.some(row => row.id === id), 'R2_NO_ADMISSION');
-  }
+  validateHistoryRegistry(registry);
   return { fields: fields.length, codes: policy.errors.length, runtime_demonstrated:false };
 }
 

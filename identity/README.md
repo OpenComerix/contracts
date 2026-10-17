@@ -11,6 +11,8 @@ Fuente F1-07B incluida en la admisión G:
 
 G agrega los descriptores desde la fuente F sin alterar admisiones/locks H2. [Procedencia, gates y publicación](../catalog/README.md#f1-07g--admisión-y-publicación). No reutilizar audiencias H2 para catálogo, mover archivos ni interpretar fixtures como autorización real. Productor de identidad en otra tanda antes de F1-08.
 
+Las secciones F/G conservan la descripción de las fuentes candidatas publicadas. Las menciones a planned o ausencia de admisión se refieren a esas entregas; la selección actual se describe en [admisión H](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4).
+
 ## Candidato F1-08F — autoridad contractual de recuperación R3
 
 - [API privada](http/private/v1/identity-catalog-recovery-authority-v1.yaml): emisión, comprobación, renovación explícita y revocación del grant, más catálogo de permisos.
@@ -36,3 +38,7 @@ node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifact
 sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-verification-v2
 jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json
 ~~~
+
+## F1-08H — Admisión de autoridad y verificación
+
+El candidato local H registra las tres raíces R3 de identidad y las cuatro de verificación v2 contra la fuente inmutable y CI exacto indicados en [el mapa de admisión](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4). El [índice](index.json) fija su navegación; el [registro](../registry/contracts.json) fija hashes, versiones y procedencia. R3 v1, el puerto v2 y sus pins no cambian. No se asignan permisos a OWNER ni se implementan emisión, MFA, criptografía o SQL; productor, consumidores y publicación del candidato requieren sus cortes y permisos propios.

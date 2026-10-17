@@ -25,7 +25,19 @@
     "catalog.http-v1-fixtures",
     "catalog.pricing-http-v1-fixtures",
     "catalog.event-v1-fixtures",
-    "catalog.event-v1-vectors"
+    "catalog.event-v1-vectors",
+    "catalog.history-protection.http.v1",
+    "catalog.history-protection.schema.v1",
+    "catalog.history-protection.policy.v1",
+    "catalog.history-protection.fixtures.v1",
+    "catalog.history-recovery.schema.v1",
+    "catalog.history-recovery.fixtures.v1",
+    "catalog.history-recovery.http.v1",
+    "catalog.history-recovery.protocol.v1",
+    "catalog.history-recovery.policy.v1",
+    "catalog.history-recovery.protocol-fixtures.v1",
+    "catalog.history-policy.v2",
+    "catalog.history-policy.fixtures.v2"
   ],
   "surfaces": [
     {
@@ -76,6 +88,18 @@
           "version": "1.0.0",
           "path": "catalog/http/private/v1/catalog-pricing-internal-v1.yaml",
           "status": "active"
+        },
+        {
+          "id": "catalog.history-protection.http.v1",
+          "version": "1.0.0",
+          "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.http.v1",
+          "version": "1.0.0",
+          "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+          "status": "active"
         }
       ]
     },
@@ -103,6 +127,24 @@
           "id": "catalog.event-policy.v1",
           "version": "v1",
           "path": "catalog/events/v1/catalog-event-policy-v1.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-protection.policy.v1",
+          "version": "1",
+          "path": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.policy.v1",
+          "version": "1",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-policy.v2",
+          "version": "2",
+          "path": "catalog/http/shared/v2/catalog-history-policy-v2.json",
           "status": "active"
         }
       ]
@@ -163,6 +205,24 @@
           "version": "v1",
           "path": "catalog/events/v1/pricing.presentation-price.changed.v1.consumer.schema.json",
           "status": "active"
+        },
+        {
+          "id": "catalog.history-protection.schema.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.schema.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.protocol.v1",
+          "version": "v1",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+          "status": "active"
         }
       ]
     },
@@ -198,23 +258,35 @@
           "version": "v1",
           "path": "catalog/fixtures/events/v1/event-v1-vectors.json",
           "status": "active"
+        },
+        {
+          "id": "catalog.history-protection.fixtures.v1",
+          "version": "v1",
+          "path": "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.fixtures.v1",
+          "version": "v1",
+          "path": "catalog/fixtures/recovery/v1/catalog-history-recovery-v1-fixtures.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-recovery.protocol-fixtures.v1",
+          "version": "v1",
+          "path": "catalog/fixtures/recovery/v1/catalog-history-recovery-protocol-v1-vectors.json",
+          "status": "active"
+        },
+        {
+          "id": "catalog.history-policy.fixtures.v2",
+          "version": "v2",
+          "path": "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+          "status": "active"
         }
       ]
     }
   ],
   "planned": [
-    "catalog.history-policy.v1",
-    "catalog.history-protection.http.v1",
-    "catalog.history-protection.schema.v1",
-    "catalog.history-protection.policy.v1",
-    "catalog.history-protection.fixtures.v1",
-    "catalog.history-recovery.schema.v1",
-    "catalog.history-recovery.fixtures.v1",
-    "catalog.history-recovery.http.v1",
-    "catalog.history-recovery.protocol.v1",
-    "catalog.history-recovery.policy.v1",
-    "catalog.history-recovery.protocol-fixtures.v1",
-    "catalog.history-policy.v2",
-    "catalog.history-policy.fixtures.v2"
+    "catalog.history-policy.v1"
   ]
 }

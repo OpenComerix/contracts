@@ -28,7 +28,14 @@
     "identity.catalog-authority.v1",
     "identity.catalog-authority.v1.schema",
     "identity.catalog-authority-v1-fixtures",
-    "identity.catalog-authority-semantic-v1-fixtures"
+    "identity.catalog-authority-semantic-v1-fixtures",
+    "identity.catalog-recovery-authority.v1",
+    "identity.catalog-recovery-authority.v1.schema",
+    "identity.catalog-recovery-authority-v1-fixtures",
+    "identity.catalog-recovery-verification.http.v2",
+    "identity.catalog-recovery-verification.schema.v2",
+    "identity.catalog-recovery-verification.policy.v2",
+    "identity.catalog-recovery-verification.fixtures.v2"
   ],
   "surfaces": [
     {
@@ -57,6 +64,18 @@
           "version": "1.0.0",
           "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
           "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-authority.v1",
+          "version": "1.0.0",
+          "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+          "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-verification.http.v2",
+          "version": "2.0.0",
+          "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+          "status": "active"
         }
       ]
     },
@@ -84,6 +103,12 @@
           "id": "identity.gateway-policy.v2",
           "version": "2",
           "path": "openapi/identity-gateway-delegation-policy-v2.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-verification.policy.v2",
+          "version": "2",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
           "status": "active"
         }
       ]
@@ -131,6 +156,18 @@
           "id": "identity.catalog-authority.v1.schema",
           "version": "v1",
           "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-authority.v1.schema",
+          "version": "v1",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-verification.schema.v2",
+          "version": "v2",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
           "status": "active"
         }
       ]
@@ -209,17 +246,21 @@
           "version": "v1",
           "path": "identity/fixtures/catalog-authority/v1/catalog-authority-semantic-v1-fixtures.json",
           "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-authority-v1-fixtures",
+          "version": "v1",
+          "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.catalog-recovery-verification.fixtures.v2",
+          "version": "v2",
+          "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+          "status": "active"
         }
       ]
     }
   ],
-  "planned": [
-    "identity.catalog-recovery-authority.v1",
-    "identity.catalog-recovery-authority.v1.schema",
-    "identity.catalog-recovery-authority-v1-fixtures",
-    "identity.catalog-recovery-verification.http.v2",
-    "identity.catalog-recovery-verification.schema.v2",
-    "identity.catalog-recovery-verification.policy.v2",
-    "identity.catalog-recovery-verification.fixtures.v2"
-  ]
+  "planned": []
 }

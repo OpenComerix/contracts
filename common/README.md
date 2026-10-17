@@ -18,6 +18,8 @@ Los demás drafts, incluido AsyncAPI de catálogo, conservan su prohibición de 
 
 Gates: tests de arquitectura/catálogo, registro, consumidores/impacto y cotejo local del launcher; extractor de eventos con autocontroles, metaschemas y fixtures positivos/negativos con Sourcemeta 16.10.0, más la regresión del wrapper contracts. `test/architecture/catalog-admission.test.mjs` conserva el rechazo histórico M1 desde su revisión inmutable, comprueba la única transición de estado y la aceptación del mismo cierre con pins/impacto, y rechaza los demás drafts. Comandos existentes en [guía contractual](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#ejecución-y-ci) y [mapa de eventos](../catalog/README.md#candidato-f1-07e). Estas pruebas no acreditan autoridad, SQL, entrega, orden ni recuperación runtime.
 
+Las secciones candidatas siguientes describen sus fuentes publicadas previas a admisión. El [candidato H](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4) incorpora solo las raíces seleccionadas; R1 v1 y su schema común continúan planned.
+
 ## Candidato F1-08C — Catálogo de políticas de ciclo de vida
 
 [data-lifecycle-policy-v1.schema.json](http/shared/v1/data-lifecycle-policy-v1.schema.json) define la forma versionada de metadatos de políticas requerida por ADR-016/035: propietario, perfiles, clasificación de almacenamientos, fuentes de clasificación por campo, retención, copias, evidencia y prerrequisitos. Coordinación `platform-contracts`; cada dominio conserva sus reglas y aplicación. El schema valida estructura; los gates del dominio verifican rangos, vínculos y semántica aprobada. No es un evaluador de elegibilidad, un motor de purgas ni un mecanismo de autorización.
@@ -33,3 +35,7 @@ Primer catálogo candidato: [historia de catalog-pricing](../catalog/README.md#c
 [Schema v2](http/shared/v2/data-lifecycle-policy-v2.schema.json) evoluciona la forma de metadatos de ciclo de vida, preservando v1. Distingue fuentes inmutables, clasificación de transporte con herencia estricta y campos lógicos persistidos. Los almacenamientos completos deben declarar sus fuentes y no pueden conservar pendientes; una declaración de transporte no concede autoridad de persistencia. Los perfiles de clasificación incluyen propietario, consumidores y alcance de retención, sin sustituir las políticas del dueño.
 
 [Catálogo/gates de historia v2](../catalog/README.md#candidato-f1-08h--clasificación-conjunta-v2-fuente-previa-a-admisión). Schema, catálogo y fixtures mantienen intención `planned` hasta publicación y admisión posteriores autorizadas. No acredita runtime, SQL, autoridad real ni purgas, y no migra consumidores.
+
+## F1-08H — Admisión de errores y clasificación
+
+El candidato local incorpora los catálogos de errores v7/v8 y sus schemas, más el schema de ciclo de vida v2. Versiones y bytes anteriores permanecen intactos; no se reemplaza v6 ni se actualizan consumidores. El schema común v1 conserva intención planned, sin habilitar el catálogo R1 v1 incompleto. [Selección y fuente inmutable](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4); [índice](index.json), [registro](../registry/contracts.json) y [estado/gates pendientes](../../../ESTADO.md).

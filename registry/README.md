@@ -15,3 +15,7 @@ El resolvedor sigue selecciones por operación/pointer, referencias locales/URI 
 F1-08H añade lectura acotada de aliases YAML de valores mediante `tools/architecture/yaml-source.mjs`; límites, rechazos y semántica de hashes en [Grafo e impacto](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#grafo-e-impacto). No modifica fuentes publicadas ni migra admisiones. Las pruebas `test/architecture/yaml-source.test.mjs` incluyen el R4 real y casos adversos.
 
 El reporte separa impacto funcional de documentación/validación y propone pruebas. Cambios de forma o semántica requieren revisión; no son automáticamente compatibles. Requests, responses, errores, headers, seguridad y recuperación forman parte del contrato. `sales.sale.completed.v1` es inmutable; un sucesor incompatible pertenece a F1-10.
+
+## F1-08H — Candidato de admisión seleccionada
+
+El [mapa H](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4) delimita las 24 raíces nuevas desde la fuente publicada y su CI exacto. Se conservan los 85 descriptores previos y se retiran únicamente esas intenciones de planned; los índices catalog/common/identity se derivan del registro, sin ejecutar sync ni regenerar consumidores. Mappings nuevos se limitan a archivos del cierre resuelto; no promueven contratos ajenos. La clasificación v2 conserva sus pins originales y no habilita producción. La admisión permanece como candidato local hasta completar gates, auditoría y publicación; estados y bloqueos en [ESTADO](../../../ESTADO.md).

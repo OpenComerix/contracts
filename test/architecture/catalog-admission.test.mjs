@@ -12,8 +12,10 @@ const registry = readJSON(root, 'registry/contracts.json');
 const baseline = JSON.parse(gitReader(root, revision)('registry/contracts.json'));
 const admissionRevision = '7b3996185ba57879d63a281f067b435a115857cb';
 const admissionBaseline = JSON.parse(gitReader(root, admissionRevision)('registry/contracts.json'));
+const sourceRevision = '28be1edf02a3771629febf554f8b5f4856452877';
+const sourceBaseline = JSON.parse(gitReader(root, sourceRevision)('registry/contracts.json'));
 const previousIds = new Set(baseline.contracts.map(row => row.id));
-const added = registry.contracts.filter(row => !previousIds.has(row.id));
+const added = sourceBaseline.contracts.filter(row => !previousIds.has(row.id));
 // Closed list of the authorized F1-08C candidate intentions; no admission is added.
 const historyPlanned = [
   { id: 'common.data-lifecycle-policy.v1', domain: 'common', owner: 'platform-contracts', materializeIn: 'F1-08C', status: 'planned', constraint: 'Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration.' },
@@ -93,7 +95,7 @@ test('G preserves historical descriptors, consumer exports, pins and deferred sa
   assert.deepEqual(registry.preservedFiles, baseline.preservedFiles);
   assert.deepEqual(registry.requiredConsumers, baseline.requiredConsumers);
   assert.equal(registry.baselineCommit, baseline.baselineCommit);
-  assert.deepEqual(registry.planned, [...baseline.planned.filter(row => row.materializeIn !== 'F1-07'), ...historyPlanned, ...protectionPlanned, ...recoveryPlanned, ...recoveryProtocolPlanned, ...verificationPlanned, ...classificationPlanned]);
+  assert.deepEqual(sourceBaseline.planned, [...baseline.planned.filter(row => row.materializeIn !== 'F1-07'), ...historyPlanned, ...protectionPlanned, ...recoveryPlanned, ...recoveryProtocolPlanned, ...verificationPlanned, ...classificationPlanned]);
   const files = ['registry/consumers/index.json', ...registry.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')];
   for (const file of files) {
     const local = readFileSync(path.join(root, file)).toString('utf8').replaceAll('\r\n', '\n');
@@ -107,7 +109,7 @@ test('G inventory stays intact; F1-08C/E/F/G/H source candidates only append the
     .filter(file => /^(catalog\/(http|events)|identity\/http|common\/(http|errors))\//.test(file));
   assert.equal(new Set(added.map(row => row.path)).size, added.length);
   assert.deepEqual(added.filter(row => row.surface !== 'validation').map(row => row.path).sort(), files.sort());
-  assert.deepEqual(registry.planned.map(row => row.id), ['sales.complete-snapshot.successor', ...historyPlanned.map(row => row.id), ...protectionPlanned.map(row => row.id), ...recoveryPlanned.map(row => row.id), ...recoveryProtocolPlanned.map(row => row.id), ...verificationPlanned.map(row => row.id), ...classificationPlanned.map(row => row.id)]);
+  assert.deepEqual(sourceBaseline.planned.map(row => row.id), ['sales.complete-snapshot.successor', ...historyPlanned.map(row => row.id), ...protectionPlanned.map(row => row.id), ...recoveryPlanned.map(row => row.id), ...recoveryProtocolPlanned.map(row => row.id), ...verificationPlanned.map(row => row.id), ...classificationPlanned.map(row => row.id)]);
   assert.equal(added.filter(row => row.surface === 'events').length, 4);
   assert.equal(added.filter(row => row.id.endsWith('.consumer')).length, 4);
   assert.equal(added.find(row => row.id === 'catalog.events.v1.asyncapi').status, 'draft');
@@ -160,7 +162,7 @@ test('F1-08B envelope admission plus F1-08C/E/F/G/H source intentions preserve a
   assert.equal(envelope.status, 'draft');
   envelope.status = 'active';
   expected.planned.push(...historyPlanned, ...protectionPlanned, ...recoveryPlanned, ...recoveryProtocolPlanned, ...verificationPlanned, ...classificationPlanned);
-  assert.deepEqual(registry, expected);
+  assert.deepEqual(sourceBaseline, expected);
   const source = gitReader(root, envelope.commit)(envelope.path);
   assert.equal(sha256(source), envelope.sha256);
   assert.equal(readFileSync(path.join(root, envelope.path)).toString('utf8').replaceAll('\r\n', '\n'), source.toString('utf8'));
@@ -266,4 +268,251 @@ test('domain schema and example references require registered domain/surface/ver
     const bad = { ...descriptor, uriMappings: [{ uri: 'https://example.invalid/types', path: target }] };
     assert.throws(() => resolveSelection(read, bad, selection, domainRegistry), /REQUIRES_DOMAIN|SURFACE_VERSION|Schema reference to a fixture/);
   }
+});
+
+// Closed H admission from the audited, published classification source. Transport
+// and semantic pins inside these documents remain at their original revisions.
+const historyAdmission = [
+  [
+    "catalog.history-protection.http.v1",
+    "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+    "http-private",
+    "1.0.0"
+  ],
+  [
+    "catalog.history-protection.schema.v1",
+    "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+    "schema",
+    "v1"
+  ],
+  [
+    "catalog.history-protection.policy.v1",
+    "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+    "policy",
+    "1"
+  ],
+  [
+    "catalog.history-protection.fixtures.v1",
+    "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+    "validation",
+    "v1"
+  ],
+  [
+    "common.error-catalog.v7",
+    "common/errors/v7/error-catalog-v7.json",
+    "errors",
+    "7"
+  ],
+  [
+    "common.error-catalog.v7.schema",
+    "common/errors/v7/error-catalog-v7.schema.json",
+    "schema",
+    "v7"
+  ],
+  [
+    "identity.catalog-recovery-authority.v1",
+    "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+    "http-private",
+    "1.0.0"
+  ],
+  [
+    "identity.catalog-recovery-authority.v1.schema",
+    "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+    "schema",
+    "v1"
+  ],
+  [
+    "identity.catalog-recovery-authority-v1-fixtures",
+    "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+    "validation",
+    "v1"
+  ],
+  [
+    "catalog.history-recovery.schema.v1",
+    "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+    "schema",
+    "v1"
+  ],
+  [
+    "catalog.history-recovery.fixtures.v1",
+    "catalog/fixtures/recovery/v1/catalog-history-recovery-v1-fixtures.json",
+    "validation",
+    "v1"
+  ],
+  [
+    "catalog.history-recovery.http.v1",
+    "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+    "http-private",
+    "1.0.0"
+  ],
+  [
+    "catalog.history-recovery.protocol.v1",
+    "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+    "schema",
+    "v1"
+  ],
+  [
+    "catalog.history-recovery.policy.v1",
+    "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+    "policy",
+    "1"
+  ],
+  [
+    "catalog.history-recovery.protocol-fixtures.v1",
+    "catalog/fixtures/recovery/v1/catalog-history-recovery-protocol-v1-vectors.json",
+    "validation",
+    "v1"
+  ],
+  [
+    "common.error-catalog.v8",
+    "common/errors/v8/error-catalog-v8.json",
+    "errors",
+    "8"
+  ],
+  [
+    "common.error-catalog.v8.schema",
+    "common/errors/v8/error-catalog-v8.schema.json",
+    "schema",
+    "v8"
+  ],
+  [
+    "identity.catalog-recovery-verification.http.v2",
+    "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+    "http-private",
+    "2.0.0"
+  ],
+  [
+    "identity.catalog-recovery-verification.schema.v2",
+    "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+    "schema",
+    "v2"
+  ],
+  [
+    "identity.catalog-recovery-verification.policy.v2",
+    "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+    "policy",
+    "2"
+  ],
+  [
+    "identity.catalog-recovery-verification.fixtures.v2",
+    "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+    "validation",
+    "v2"
+  ],
+  [
+    "common.data-lifecycle-policy.v2",
+    "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+    "schema",
+    "v2"
+  ],
+  [
+    "catalog.history-policy.v2",
+    "catalog/http/shared/v2/catalog-history-policy-v2.json",
+    "policy",
+    "2"
+  ],
+  [
+    "catalog.history-policy.fixtures.v2",
+    "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+    "validation",
+    "v2"
+  ]
+];
+const historyIds = new Set(historyAdmission.map(([id]) => id));
+const historyAdded = registry.contracts.filter(row => !sourceBaseline.contracts.some(old => old.id === row.id));
+
+test('H admits exactly the selected 24 roots and preserves every other registry value', () => {
+  assert.equal(sourceBaseline.contracts.length, 85);
+  assert.equal(historyAdded.length, 24);
+  assert.deepEqual(historyAdded.map(row => row.id), [...historyIds]);
+  const { contracts, planned, ...metadata } = registry;
+  const { contracts: previous, planned: previousPlanned, ...previousMetadata } = sourceBaseline;
+  assert.deepEqual(contracts.slice(0, 85), previous);
+  assert.deepEqual(metadata, previousMetadata);
+  assert.deepEqual(planned, previousPlanned.filter(row => !historyIds.has(row.id)));
+  assert.deepEqual(planned.map(row => row.id), [
+    'sales.complete-snapshot.successor', 'common.data-lifecycle-policy.v1', 'catalog.history-policy.v1',
+  ]);
+  for (const [id, file, surface, version] of historyAdmission) {
+    const row = historyAdded.find(item => item.id === id);
+    const intent = previousPlanned.find(item => item.id === id);
+    assert.equal(row.path, file);
+    assert.equal(row.surface, surface);
+    assert.equal(row.version, version);
+    assert.equal(row.domain, intent.domain);
+    assert.equal(row.owner, intent.owner);
+    assert.equal(row.status, 'active');
+    assert.equal(row.commit, sourceRevision);
+    assert.equal(row.tag, null);
+    assert.equal(row.tagObject, null);
+    const bytes = gitReader(root, sourceRevision)(file);
+    assert.equal(row.sha256, sha256(bytes));
+    assert.equal(readFileSync(path.join(root, file)).toString('utf8').replaceAll('\r\n', '\n'), bytes.toString('utf8'));
+  }
+});
+
+for (const [id] of historyAdmission)
+  test('H resolves the exact source and pinned closure without drafts: ' + id, () => {
+    const row = historyAdded.find(item => item.id === id);
+    const roles = row.surface === 'validation' ? ['validation'] : ['producer', 'consumer', 'semantic-owner'];
+    const source = gitReader(root, sourceRevision);
+    for (const role of roles) {
+      const manifest = selectedManifest(row, role, row.operations);
+      const bytes = manifestBytes(manifest);
+      assert.throws(() => makeLock(root, manifest, bytes, sourceBaseline), /Unknown\/unmaterialized contract/);
+      const lock = makeLock(root, manifest, bytes, registry);
+      const entry = lock.entries[0];
+      assert.equal(entry.commit, sourceRevision);
+      assert.equal(entry.root, row.path);
+      assert(entry.files.some(file => file.path === row.path && file.sha256 === row.sha256));
+      for (const file of entry.files) {
+        assert.equal(file.sha256, sha256(source(file.path)));
+        assert(!registry.contracts.some(item => item.status === 'draft' && item.path === file.path));
+      }
+      const independent = resolveSelection(source, row, manifest.contracts[0], registry);
+      assert.deepEqual(entry.files, independent.files);
+      assert.deepEqual(entry.units, independent.units);
+      assert.equal(entry.selectionSha256, independent.selectionSha256);
+      assert.deepEqual(makeLock(root, manifest, bytes, registry, lock.entries), lock);
+      const report = impactForConsumer({ manifest, lock }, registry, source);
+      assert.equal(report.affected, false);
+      assert.deepEqual(report.dependencies, []);
+    }
+  });
+
+test('H R4 and identity v2 reject a transitive draft on initial admission, pinned regeneration and impact', () => {
+  for (const [rootId, dependencyId] of [
+    ['catalog.history-recovery.http.v1', 'catalog.history-recovery.protocol.v1'],
+    ['identity.catalog-recovery-verification.http.v2', 'identity.catalog-recovery-authority.v1.schema'],
+  ]) {
+    const row = registry.contracts.find(item => item.id === rootId);
+    const blocked = structuredClone(registry);
+    blocked.contracts.find(item => item.id === dependencyId).status = 'draft';
+    for (const role of ['producer', 'consumer', 'semantic-owner']) {
+      const manifest = selectedManifest(row, role, row.operations);
+      const bytes = manifestBytes(manifest);
+      const lock = makeLock(root, manifest, bytes, registry);
+      const forbidden = error => error instanceof assert.AssertionError &&
+        error.message === 'New use of a draft is forbidden: ' + dependencyId;
+      assert.throws(() => makeLock(root, manifest, bytes, blocked), forbidden);
+      assert.throws(() => makeLock(root, manifest, bytes, blocked, lock.entries), forbidden);
+      const report = impactForConsumer({ manifest, lock }, blocked, gitReader(root, sourceRevision));
+      assert.equal(report.affected, true);
+      assert.equal(report.dependencies.length, 1);
+      assert.equal(report.dependencies[0].classification, 'unresolved');
+      assert.equal(report.dependencies[0].decision, 'New use of a draft is forbidden: ' + dependencyId);
+    }
+  }
+});
+
+test('H keeps incomplete R1 v1 and the deferred sale successor unmaterialized', () => {
+  for (const id of ['common.data-lifecycle-policy.v1', 'catalog.history-policy.v1', 'sales.complete-snapshot.successor']) {
+    assert(!registry.contracts.some(row => row.id === id));
+    assert(sourceBaseline.planned.some(row => row.id === id));
+    for (const role of ['validation', 'documentation', 'producer', 'consumer', 'semantic-owner']) {
+      const manifest = selectedManifest({ id, version: 'v1' }, role);
+      assert.throws(() => makeLock(root, manifest, manifestBytes(manifest), registry), /Unknown\/unmaterialized contract/);
+    }
+  }
+  assert.equal(registry.contracts.find(row => row.id === 'catalog.events.v1.asyncapi').status, 'draft');
 });

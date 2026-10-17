@@ -7,6 +7,7 @@ import { pathToFileURL } from 'node:url';
 import { parse } from 'yaml';
 import { create, page, cursorHash, bindingHash, limits } from './history-recovery-v1-semantics.mjs';
 import { verify } from '../identity/catalog-recovery-verification-v2-semantics.mjs';
+import { historyAdmissionSource, validateHistoryRegistry } from './validate-history-protection-v1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const schemaPath = 'catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json';
@@ -149,7 +150,7 @@ export function extractSchema(definition, sourceSchemaPath = schemaPath) {
   return { $schema: schema.$schema, ...resolve(schema.$defs[definition], sourceSchemaPath) };
 }
 
-export function validateContract() {
+export function validateContract(registry = read('registry/contracts.json')) {
   const api = parse(fs.readFileSync(path.join(root, apiPath), 'utf8'));
   assert.equal(api.info.version, '1.0.0');
   assert.deepEqual(Object.keys(api.paths), ['/internal/v1/catalog/history/recoveries', '/internal/v1/catalog/history/recoveries/{recovery_id}/pages']);
@@ -172,14 +173,17 @@ export function validateContract() {
   assert.equal(successor.version, 8);
   assert.deepEqual(successor.errors.slice(0, original.errors.length), original.errors, 'R4_ERROR_PRESERVATION');
   assert.equal(new Set(successor.errors.map(row => row.code)).size, successor.errors.length);
-  const registry = read('registry/contracts.json');
+  validateHistoryRegistry(registry);
+  // Preserve the original candidate-source checks against its immutable Git
+  // snapshot; the current H transition is checked independently above.
+  const sourceRegistry = JSON.parse(execFileSync('git', ['show', historyAdmissionSource + ':registry/contracts.json'], { cwd: root, maxBuffer: 4 * 1024 * 1024 }));
   const before = JSON.parse(execFileSync('git', ['show', 'a45e700eadd36790a5480faccd3ed80015b08e13:registry/contracts.json'], { cwd: root, maxBuffer: 4 * 1024 * 1024 }));
-  assert.deepEqual({ ...registry, planned: before.planned }, before, 'R4_NO_ADMISSION');
-  assert.deepEqual(registry.planned.slice(0, before.planned.length), before.planned, 'R4_PRIOR_INTENTIONS');
+  assert.deepEqual({ ...sourceRegistry, planned: before.planned }, before, 'R4_NO_ADMISSION');
+  assert.deepEqual(sourceRegistry.planned.slice(0, before.planned.length), before.planned, 'R4_PRIOR_INTENTIONS');
   const publishedG = JSON.parse(execFileSync('git', ['show', '10c2b44ddbe9f8f1c73a212895dbf5d5ed849000:registry/contracts.json'], { cwd: root, maxBuffer: 4 * 1024 * 1024 }));
-  assert.deepEqual(registry.planned.slice(0, publishedG.planned.length), publishedG.planned, 'R4_PUBLISHED_INTENTIONS');
+  assert.deepEqual(sourceRegistry.planned.slice(0, publishedG.planned.length), publishedG.planned, 'R4_PUBLISHED_INTENTIONS');
   assert.equal(publishedG.planned.length - before.planned.length, 10);
-  assert.deepEqual(registry.planned.slice(publishedG.planned.length).map(row => row.id),
+  assert.deepEqual(sourceRegistry.planned.slice(publishedG.planned.length).map(row => row.id),
     ['common.data-lifecycle-policy.v2', 'catalog.history-policy.v2', 'catalog.history-policy.fixtures.v2'], 'R4_H_SOURCE_INTENTIONS_ONLY');
   return { semantic_negatives: vectors.negative.length, classified_fields: validatePolicy(), runtime_demonstrated: false };
 }

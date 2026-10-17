@@ -14282,6 +14282,639 @@
           "path": "catalog/events/v1/pricing.presentation-price.changed.v1.consumer.schema.json"
         }
       ]
+    },
+    {
+      "id": "catalog.history-protection.http.v1",
+      "domain": "catalog",
+      "surface": "http-private",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-protection.http",
+      "purpose": "R2: recepción privada de obligaciones, holds y cierres de fuentes.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "1.0.0",
+      "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f12b5a67dd954b99a76423ee97b2a81c3189e75ce1c09623f046c7a2e0d19f43",
+      "operations": [
+        "submitCatalogHistoryProtectionMessage"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-protection.schema.v1",
+      "domain": "catalog",
+      "surface": "schema",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-protection.schema",
+      "purpose": "R2: mensajes, inventario, evidencia y recibos de protección.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "07023d9bfb5a50fdf05dab10411395a94f2506d87e8b06044deab5e53949e2b9",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-protection.policy.v1",
+      "domain": "catalog",
+      "surface": "policy",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-protection.policy",
+      "purpose": "R2: semántica, autoridad, límites y clasificación normativa.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "1",
+      "path": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "a241fe9cc94415f5da75cc411f27a2a37d109c078fa04d515854d86e55fcfb45",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.history-protection.fixtures.v1",
+      "domain": "catalog",
+      "surface": "validation",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-protection.fixtures",
+      "purpose": "R2: evidencia sintética positiva y negativa; no acredita runtime.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "bdbb162015adf122bbb4240c5a9220d57ee007cefe6efe189f509914c34c23e1",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.v7",
+      "domain": "common",
+      "surface": "errors",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.error-catalog",
+      "purpose": "Errores canónicos de protección de historia R2.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "7",
+      "path": "common/errors/v7/error-catalog-v7.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3126cb17a740618142e893faa17fcc2f0c9219894035cf6f93a0474981c49bb9",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.v7.schema",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.error-catalog",
+      "purpose": "Forma del catálogo de errores v7; preserva versiones anteriores.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v7",
+      "path": "common/errors/v7/error-catalog-v7.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "5f73fe35774ba65ece9fb06be3c64fda86ca6c06b77ee307ec8c97f377fd8fa2",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/errors/v7/error-catalog-v7.schema.json",
+          "path": "common/errors/v7/error-catalog-v7.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-authority.v1",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-authority",
+      "purpose": "R3: emisión, verificación, renovación y revocación explícitas; catálogo de permisos.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "1.0.0",
+      "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb",
+      "operations": [
+        "issueCatalogRecoveryGrant",
+        "verifyCatalogRecoveryGrant",
+        "renewCatalogRecoveryGrant",
+        "revokeCatalogRecoveryGrant",
+        "getCatalogRecoveryPermissionCatalog"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-authority.v1.schema",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-authority",
+      "purpose": "R3: vínculo de persona, tenant, propósito, selección, sesión y autoridad.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-authority-v1-fixtures",
+      "domain": "identity",
+      "surface": "validation",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-authority-v1-fixtures",
+      "purpose": "R3: contextos sintéticos y negativos de autoridad; sin autorización real.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "477ef82a9d7813cea1451a13d1f0d128f4411432405c1a8dd2adbe7541225183",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.history-recovery.schema.v1",
+      "domain": "catalog",
+      "surface": "schema",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.schema",
+      "purpose": "Selección y destino compartidos R3/R4; no conceden autoridad.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-recovery.fixtures.v1",
+      "domain": "catalog",
+      "surface": "validation",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.fixtures",
+      "purpose": "Selección R3/R4: fixtures negativas de vínculo y autoridad.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/fixtures/recovery/v1/catalog-history-recovery-v1-fixtures.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "dbd3752cfb97d6e2418d06eb5f7044784a70d3cd25e4dd0afe246848d6eb9eeb",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.history-recovery.http.v1",
+      "domain": "catalog",
+      "surface": "http-private",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.http",
+      "purpose": "R4: creación y páginas privadas, con verificación R3 v2 fresca.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "1.0.0",
+      "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "16741def8ead0f7eb90388bf3d71adebcf13cf6e5b5be376668f9e2b87c04b82",
+      "operations": [
+        "createCatalogHistoryRecovery",
+        "readCatalogHistoryRecoveryPage"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog-event-data-v1.schema.json",
+          "path": "catalog/events/v1/catalog-event-data-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.category.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.category.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.product.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.product.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+          "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-recovery.protocol.v1",
+      "domain": "catalog",
+      "surface": "schema",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.protocol",
+      "purpose": "R4: sesiones, páginas, cursor, cobertura y metadatos mínimos.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "c1e011e4a0917f1fe8a7f964433cdc2fa51413bf4bb4d88dc305dd6676cad7e2",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog-event-data-v1.schema.json",
+          "path": "catalog/events/v1/catalog-event-data-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.category.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.category.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.product.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.product.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+          "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+          "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-recovery.policy.v1",
+      "domain": "catalog",
+      "surface": "policy",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.policy",
+      "purpose": "R4: límites, privacidad, cobertura, replay y pins publicados.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "1",
+      "path": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ad811a5974dea90ffbe8180220e4ba7c73ef9ad16e99bcbe24677bd70f83d7a3",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.history-recovery.protocol-fixtures.v1",
+      "domain": "catalog",
+      "surface": "validation",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-recovery.protocol-fixtures",
+      "purpose": "R4: originales sintéticos y negativos de recuperación.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v1",
+      "path": "catalog/fixtures/recovery/v1/catalog-history-recovery-protocol-v1-vectors.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8d57379f7879c289380d8bde76e7b5fe0916e165d24c0c8169faeb0dea7292b3",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.v8",
+      "domain": "common",
+      "surface": "errors",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.error-catalog",
+      "purpose": "Errores canónicos de recuperación R4; conserva v7 y anteriores.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "8",
+      "path": "common/errors/v8/error-catalog-v8.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f69ecafac976d6a7f13c0e7b91971571676cbe8da2f7e9a0bcfe7ed7ad959e3c",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.v8.schema",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.error-catalog",
+      "purpose": "Forma del catálogo de errores v8; sin reemplazar versiones previas.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v8",
+      "path": "common/errors/v8/error-catalog-v8.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0ba88d523e7a0603e77b8d73907246c37371216db8b31e1324672c930960aed9",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/errors/v8/error-catalog-v8.schema.json",
+          "path": "common/errors/v8/error-catalog-v8.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-verification.http.v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-verification.http",
+      "purpose": "Verificación R3 fresca con emisión original del mismo grant; preserva R3 v1.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "62e0c57a11167f8b75114880c79a3c726c6598f2e59633e633120e59a7be80c5",
+      "operations": [
+        "verifyCatalogRecoveryGrantV2"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-verification.schema.v2",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-verification.schema",
+      "purpose": "DTO v2 con issued_at y valid_until verificados por identidad.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v2",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-verification.policy.v2",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-verification.policy",
+      "purpose": "Clasificación y prohibición de conservar decisiones o grants en el caller.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "2",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8b144ebb1e7508afcec67bbf63c5defc707eeb0a2cbef97140fd18274a1c21c9",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.catalog-recovery-verification.fixtures.v2",
+      "domain": "identity",
+      "surface": "validation",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-verification.fixtures",
+      "purpose": "Negativos sintéticos de emisión e intervalo del DTO v2.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v2",
+      "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "4d861a748e6eb93d87c54d41661ed515ca846aff51c7a8b12813b2e7724a0719",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.data-lifecycle-policy.v2",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.data-lifecycle-policy",
+      "purpose": "Forma completa v2 de clasificación por transporte y almacenamiento.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v2",
+      "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "06f26409180b2b553cb8243ce60c84c8da4ecf188ff8ba56e6606bef2a1f3df2",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+          "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.history-policy.v2",
+      "domain": "catalog",
+      "surface": "policy",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-policy",
+      "purpose": "Clasificación conjunta R1–R4; seis almacenamientos, sin habilitación productiva.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "2",
+      "path": "catalog/http/shared/v2/catalog-history-policy-v2.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f3800ca870cb44152bb8b3439c20f67af61390e3194fba054b45587de3381819",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.history-policy.fixtures.v2",
+      "domain": "catalog",
+      "surface": "validation",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.history-policy.fixtures",
+      "purpose": "Clasificación v2: positivos y negativos semánticos y estructurales.",
+      "reasonForChange": "Admisión seleccionada F1-08H desde fuente inmutable auditada y CI exacto; sin migrar consumidores ni habilitar runtime.",
+      "retirement": "Conservar fuentes y versiones publicadas; incompatibilidad exige sucesor y migración explícita aprobados.",
+      "version": "v2",
+      "path": "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+      "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "26be491616925bc61092d661826105f622ef9ae79094082a1b6574e7adca4265",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -15254,198 +15887,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "catalog.history-protection.http.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "catalog.history-protection.schema.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "catalog.history-protection.policy.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "catalog.history-protection.fixtures.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "common.error-catalog.v7",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "common.error-catalog.v7.schema",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-08E",
-      "status": "planned",
-      "constraint": "Candidate R2 source only; admission in separate authorized cut. No enabled sources, runtime or consumer migration."
-    },
-    {
-      "id": "identity.catalog-recovery-authority.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08F",
-      "status": "planned",
-      "constraint": "Candidate R3 authority only; explicit MFA/person/grant binding. No identity runtime, SQL, cryptography, producer or consumer migration."
-    },
-    {
-      "id": "identity.catalog-recovery-authority.v1.schema",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08F",
-      "status": "planned",
-      "constraint": "Candidate R3 schema only; opaque grant reference is not a JWT or password. Admission requires a separate reviewed publication cut."
-    },
-    {
-      "id": "identity.catalog-recovery-authority-v1-fixtures",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08F",
-      "status": "planned",
-      "constraint": "Candidate R3 validation fixtures only; fixtures do not prove authority, MFA, revocation, SQL or cryptography."
-    },
-    {
-      "id": "catalog.history-recovery.schema.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08F",
-      "status": "planned",
-      "constraint": "Candidate R3/R4 selection context only; selection and destination do not grant authority and no recovery API is enabled."
-    },
-    {
-      "id": "catalog.history-recovery.fixtures.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08F",
-      "status": "planned",
-      "constraint": "Candidate negative fixtures only; no runtime recovery or consumer migration."
-    },
-    {
-      "id": "catalog.history-recovery.http.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "catalog.history-recovery.protocol.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "catalog.history-recovery.policy.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "catalog.history-recovery.protocol-fixtures.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "common.error-catalog.v8",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "common.error-catalog.v8.schema",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate R4 only; no runtime, admission, new reader, locks or consumer migration. Preserve published R1/R2/R3 and F1-07 bytes."
-    },
-    {
-      "id": "identity.catalog-recovery-verification.http.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate versioned verification only; original issuance from freshly verified R3 grant. No runtime, admission, locks or consumer migration; preserve published R3 v1 bytes."
-    },
-    {
-      "id": "identity.catalog-recovery-verification.schema.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate versioned verification only; original issuance from freshly verified R3 grant. No runtime, admission, locks or consumer migration; preserve published R3 v1 bytes."
-    },
-    {
-      "id": "identity.catalog-recovery-verification.policy.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate versioned verification only; original issuance from freshly verified R3 grant. No runtime, admission, locks or consumer migration; preserve published R3 v1 bytes."
-    },
-    {
-      "id": "identity.catalog-recovery-verification.fixtures.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08G",
-      "status": "planned",
-      "constraint": "Candidate versioned verification only; original issuance from freshly verified R3 grant. No runtime, admission, locks or consumer migration; preserve published R3 v1 bytes."
-    },
-    {
-      "id": "common.data-lifecycle-policy.v2",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-08H",
-      "status": "planned",
-      "constraint": "Complete classification source candidate only. Immutable publication and CI precede reviewed admission; no runtime or consumer migration."
-    },
-    {
-      "id": "catalog.history-policy.v2",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08H",
-      "status": "planned",
-      "constraint": "Complete classification source candidate only. Immutable publication and CI precede reviewed admission; no runtime or consumer migration."
-    },
-    {
-      "id": "catalog.history-policy.fixtures.v2",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-08H",
-      "status": "planned",
-      "constraint": "Complete classification source candidate only. Immutable publication and CI precede reviewed admission; no runtime or consumer migration."
     }
   ],
   "requiredConsumers": [

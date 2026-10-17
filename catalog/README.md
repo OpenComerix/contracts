@@ -87,6 +87,8 @@ Referencia de release: tag inmutable 'catalog-contracts-v1.0.0' sobre el commit 
 
 Perfil histórico versionado y productor de identidad siguen pendientes de tandas propias antes de F1-08. Este paquete no cierra H3 ni acredita CAF runtime o certificación AsyncAPI completa; tampoco autoriza iniciar servicios, gateway o PWA.
 
+Las secciones candidatas C/E/F/G/H describen las fuentes inmutables anteriores a admisión. Sus menciones a `planned` documentan aquellas entregas; el registro e índice actuales corresponden al [candidato de admisión H](#f1-08h--admisión-seleccionada-r1r4). R1 v1 continúa incompleto y pendiente.
+
 ## Candidato F1-08C — Políticas de historia R1
 
 [catalog-history-policy-v1.json](http/shared/v1/catalog-history-policy-v1.json) materializa como metadatos candidatos ADR-062/R1 bajo el [schema común](../common/http/shared/v1/data-lifecycle-policy-v1.schema.json). El catálogo versiona clasificación, finalidad, hito, retención, configuración restringida, bloqueos por obligaciones/holds, copias y evidencia. Historia original e índice conservan su ciclo propio; transporte, auditoría y evidencia crítica mantienen sus políticas independientes. La interpretación jurídica y el cálculo fiscal existente no se sustituyen.
@@ -187,3 +189,21 @@ sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-
 ~~~
 
 Salida nueva obligatoria. Registro/índices añaden exactamente tres intenciones `planned`, sin descriptores admitidos ni consumo nuevo. Primero se audita/publica esta fuente con permiso y CI del SHA/ref exactos; después H prepara y audita la admisión contra ese commit inmutable. Esta entrega intermedia no cierra H. AsyncAPI y los demás drafts conservan sus bloqueos, al igual que las admisiones consumidoras. El lector acotado de aliases permite resolver el R4 existente sin reescribirlo; límites y evidencia en [la guía contractual](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#grafo-e-impacto).
+
+## F1-08H — Admisión seleccionada R1–R4
+
+Candidato local autorizado el 2026-10-17: registro e índices incorporan 24 raíces activas desde [contracts/dev 28be1edf02a3771629febf554f8b5f4856452877](https://gitlab.com/opencomerix/contracts/-/commit/28be1edf02a3771629febf554f8b5f4856452877), con [CI exacto 2956909991 Passed](https://gitlab.com/opencomerix/contracts/-/pipelines/2956909991), diez jobs obligatorios aprobados. La admisión local requiere completar gates, auditoría y publicación propias; estado y bloqueo vigente en [ESTADO](../../../ESTADO.md). Los estados candidate/planned dentro de los transportes y fixtures originales se preservan como bytes de esas fuentes y no sustituyen el ciclo de vida del registro.
+
+| Selección | Raíces y finalidad |
+| --- | --- |
+| R2: 6 | HTTP, schema, policy y fixtures de protección; catálogo de errores v7 y schema. |
+| R3: 5 | HTTP, schema y fixtures de autoridad de identidad; schema y fixtures de selección de catálogo. |
+| R4: 6 | HTTP, protocolo, policy y fixtures de recuperación; catálogo de errores v8 y schema. |
+| Verificación v2: 4 | HTTP, schema, policy y fixtures de identidad con emisión original comprobada. |
+| Clasificación v2: 3 | Schema común, catálogo de historia y fixtures. |
+
+IDs, versiones, operaciones, hashes y mappings explícitos: [registro](../registry/contracts.json) e índices [catalog](index.json), [identity](../identity/index.json) y [common](../common/index.json). Las 85 admisiones anteriores, transportes, metadatos H2 y pins internos de las fuentes permanecen intactos. No se admite el catálogo R1 v1 incompleto ni su schema común v1; permanecen planned junto al sucesor de venta. AsyncAPI y todos los demás drafts conservan su bloqueo funcional. No se migran consumidores, manifests, locks ni exports y no se habilita runtime.
+
+Gates: regresión arquitectura/catálogo, registro, consumidores/impacto, referencias y cotejo del launcher. Las pruebas de admisión comprueban procedencia inmutable, cierres sin drafts, regeneración con pins, impacto y rechazo transitivo. Las fuentes sin cambios conservan sus validaciones previas Redocly/Sourcemeta con reutilización acotada por bytes. Fixtures no acreditan autoridad, SQL, criptografía, broker ni recuperación real. Productor de identidad y cortes I–O permanecen pendientes.
+
+Los validadores R2/R4 comparten `validateHistoryRegistry` en [el validador de protección](../scripts/catalog/validate-history-protection-v1.mjs): admite el registro candidato publicado exacto o la selección H completa, con procedencias, mappings y bytes comprobados. Las comprobaciones históricas continúan contra snapshots Git inmutables; los tests de ambos puertos rechazan admisión parcial, estados mezclados, drift de fuente y cambios ajenos. Esta transición de metadatos no cambia transporte ni habilita runtime.

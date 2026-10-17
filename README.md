@@ -234,3 +234,7 @@ Cuatro eventos de catálogo/precio, perfiles estrictos de productor y compatible
 ## F1-08H — fuente de clasificación conjunta
 
 [Mapa de clasificación R1–R4 v2](catalog/README.md#candidato-f1-08h--clasificación-conjunta-v2-fuente-previa-a-admisión): catálogo/schema/fixtures candidatos y gates conjuntos, conservando fuentes, versiones y locks publicados. La admisión H requiere primero publicación autorizada y CI de esta fuente inmutable; no hay consumo nuevo ni cierre runtime. El [registro](registry/README.md) documenta el lector acotado de aliases YAML y las intenciones de esta entrega.
+
+## F1-08H — Candidato de admisión
+
+[Selección contractual R1–R4](catalog/README.md#f1-08h--admisión-seleccionada-r1r4): registro e índices locales incorporan clasificación v2, R2/R3/R4, verificación v2 y sus dependencias explícitas, con fuente inmutable y CI exacto. Preserva transportes, pins, las 85 admisiones anteriores y los cuatro consumidores; R1 v1 incompleto y drafts ajenos siguen pendientes. Gates, auditoría y publicación de estos metadatos todavía requeridos; [estado vigente](../../ESTADO.md).

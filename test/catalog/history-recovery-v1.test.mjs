@@ -1,20 +1,38 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { randomUUID } from 'node:crypto';
+import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, rmSync } from 'node:fs';
 import path from 'node:path';
 import { create as createRecovery, page as readPage, cursorHash, bindingHash, encodedBytes, limits } from '../../scripts/catalog/history-recovery-v1-semantics.mjs';
 import { baseScenario, changed, vectors, validateContract, validatePolicy, prepare, root, policyPath, read, evaluateScenario } from '../../scripts/catalog/validate-history-recovery-v1.mjs';
 import { verify } from '../../scripts/identity/catalog-recovery-verification-v2-semantics.mjs';
+import { historyAdmissionSource } from '../../scripts/catalog/validate-history-protection-v1.mjs';
 
 const create = scenario => evaluateScenario('create', scenario);
 const page = scenario => evaluateScenario('page', scenario);
 
-test('R4 candidate preserves published sources, canonical errors, planned admissions and complete metadata classification', () => {
+test('R4 preserves its published source and recognizes only the exact H admission without enabling runtime', () => {
   const result = validateContract();
   assert.equal(result.semantic_negatives, 41);
   assert(result.classified_fields > 50);
   assert.equal(result.runtime_demonstrated, false);
+});
+
+test('R4 still validates the immutable pre-admission source registry', () => {
+  const candidate = JSON.parse(execFileSync('git', ['show', historyAdmissionSource + ':registry/contracts.json'], {cwd:root,maxBuffer:2*1024*1024}));
+  assert.equal(validateContract(candidate).runtime_demonstrated, false);
+});
+
+for (const [name, mutate, reason] of [
+  ['partial-package', r => {r.contracts=r.contracts.filter(row=>row.id!=='catalog.history-recovery.http.v1');}, 'H_SELECTED_ROOTS'],
+  ['draft-verification', r => {r.contracts.find(row=>row.id==='identity.catalog-recovery-verification.http.v2').status='draft';}, 'H_DESCRIPTOR'],
+  ['changed-verification-source', r => {r.contracts.find(row=>row.id==='identity.catalog-recovery-verification.schema.v2').commit='10c2b44ddbe9f8f1c73a212895dbf5d5ed849000';}, 'H_PROVENANCE'],
+  ['draft-original-envelope', r => {r.contracts.find(row=>row.id==='common.event-envelope.v1').status='draft';}, 'H_PRIOR_DESCRIPTORS'],
+  ['r1-intention-promoted', r => {r.planned=r.planned.filter(row=>row.id!=='common.data-lifecycle-policy.v1');}, 'H_REMAINING_INTENTIONS'],
+]) test('R4 entry point rejects registry regression: '+name, () => {
+  const registry = read('registry/contracts.json'); mutate(registry);
+  assert.throws(() => validateContract(registry), new RegExp(reason));
 });
 
 for (const vector of vectors.negative) test('R4 rejects ' + vector.id, () => {
