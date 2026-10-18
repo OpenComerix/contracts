@@ -4,6 +4,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { gitReader, operationPointers, parseSource, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
+import { renewalCandidateView } from './catalog-recovery-renewal-v2-registry.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const identityAdmissionSource = 'f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a';
@@ -56,12 +57,14 @@ export function identityAdmissionRows() {
 // checks keep their own invariants/errors. The caller must validate the full I
 // transition as well; this projection by itself never proves admission.
 export function historyRegistryView(registry) {
+  registry = renewalCandidateView(registry);
   if (!registry.contracts.some(row => ids.has(row.id))) return registry;
   return { ...registry, contracts: registry.contracts.filter(row => !ids.has(row.id)),
     planned: [...registry.planned, ...identitySourceRegistry().planned.filter(row => ids.has(row.id))] };
 }
 
 export function validateIdentityAdmission(registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'))) {
+  registry = renewalCandidateView(registry);
   const baseline = identitySourceRegistry();
   const { contracts, planned, ...metadata } = registry;
   const { contracts: prior, planned: priorPlanned, ...priorMetadata } = baseline;

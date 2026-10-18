@@ -1,0 +1,185 @@
+{
+  "policy_version": 2,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "workload": {
+    "caller": "gateway-bff",
+    "audience": "identity-tenancy.catalog-recovery",
+    "type": "service",
+    "cookie": "__Host-oc_session"
+  },
+  "rules": {
+    "original_grant": "active-unexpired-unchanged",
+    "binding": "exact-account-session-organization-membership-device-selection-destination-purpose-permissions",
+    "other_authority_versions": "all-must-match",
+    "mfa_maximum_age_seconds": 300,
+    "new_mfa_after_original_issuance": true,
+    "new_decision_required": true,
+    "credential_exception": "one-direct-completed-step-up-only",
+    "rotation_operation": "completeSessionStepUp",
+    "rotation_origin": "identity-local-step-up-transaction",
+    "rotation_atomicity": [
+      "credential-rotation",
+      "mfa-consumption",
+      "rotation-evidence",
+      "mandatory-audit"
+    ],
+    "credential_hashes": "server-side-digests-only-never-wire",
+    "credential_versions": "before-equals-original-after-equals-current-and-before-plus-one",
+    "missing_or_ambiguous_proof": "fail-closed",
+    "unchanged_credential": "original-fresh-MFA-renewal-checks-no-bridge",
+    "old_grant": "never-extend-rehabilitate-or-rewrite",
+    "new_grant": "distinct-id-reference-current-snapshot-valid-1-to-900-second-interval",
+    "verification": "v1-and-v2-remain-unchanged-no-credential-bridge",
+    "retries": "no-automatic-retry-of-uncertain-issuance"
+  },
+  "storage_inventory": {
+    "rotation_evidence": [
+      "proof_id",
+      "audit_id",
+      "operation",
+      "origin",
+      "account_id",
+      "session_id",
+      "organization_id",
+      "membership_id",
+      "device_id",
+      "mfa_event_id",
+      "occurred_at",
+      "before_credential_version",
+      "after_credential_version",
+      "before_credential_hash",
+      "after_credential_hash",
+      "source_grant_id",
+      "source_grant_original_expires_at"
+    ],
+    "grant_state": "Existing R3 opaque-reference hash, original binding/snapshot/lifetime and current active/revoked decision; never raw grant_reference."
+  },
+  "rotation_retention": {
+    "anchor": "source-grant-original-expires-at",
+    "seconds": 86400,
+    "minimum_seconds": 86400,
+    "maximum_seconds": 86400,
+    "extend_on_read_or_renewal": false,
+    "purge": "Controlled removal of only minimal rotation evidence after its fixed deadline; never reset the source expiry, keep raw credentials, purge an independent audit, or grant authority when evidence is absent."
+  },
+  "field_inventory": [
+    {
+      "path": "/$defs/RenewRequest",
+      "scope": "entire inherited subtree",
+      "profile": "wire"
+    },
+    {
+      "path": "/$defs/Grant",
+      "scope": "entire inherited subtree",
+      "profile": "wire"
+    },
+    {
+      "path": "/$defs/Problem",
+      "scope": "entire inherited subtree",
+      "profile": "error"
+    },
+    {
+      "path": "/storage_inventory/rotation_evidence",
+      "scope": "all listed internal fields, never request DTO",
+      "profile": "rotation"
+    }
+  ],
+  "profiles": {
+    "wire": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECRET",
+        "AUTHENTICATION",
+        "PERSONAL",
+        "OPERATIONAL"
+      ],
+      "base": "Explicit effective organization permissions and current R3 authority; no OWNER/H2/header inference.",
+      "access": "Private authenticated gateway workload, live person/session/membership/scope and approved device, fresh MFA and current backend decision.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Authorized identity export, new audited facts; never rewrite grants, issuance or rotation evidence.",
+      "third_parties_regions": "none-authorized",
+      "purpose": "Explicit exceptional grant renewal and bound response; opaque reference is a one-purpose bearer, not a password/JWT.",
+      "consumers": [
+        "gateway-bff"
+      ],
+      "retention": "Existing R3 lifecycle and no-store caller handling; no authorization cache, logs or persistent raw grant references."
+    },
+    "rotation": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUTHENTICATION",
+        "PERSONAL",
+        "OPERATIONAL"
+      ],
+      "base": "Explicit effective organization permissions and current R3 authority; no OWNER/H2/header inference.",
+      "access": "Private authenticated gateway workload, live person/session/membership/scope and approved device, fresh MFA and current backend decision.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Authorized identity export, new audited facts; never rewrite grants, issuance or rotation evidence.",
+      "third_parties_regions": "none-authorized",
+      "purpose": "Prove one direct completeSessionStepUp credential transition for one associated original grant, without retaining credentials or factors.",
+      "consumers": [
+        "identity-tenancy"
+      ],
+      "retention": "Exactly 24 hours after associated source grant original expiry, no extension on renewal/read; independent immutable audit retains its own ADR-016/035 policy."
+    },
+    "error": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "AUTHENTICATION",
+        "PERSONAL",
+        "OPERATIONAL"
+      ],
+      "base": "Explicit effective organization permissions and current R3 authority; no OWNER/H2/header inference.",
+      "access": "Private authenticated gateway workload, live person/session/membership/scope and approved device, fresh MFA and current backend decision.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Authorized identity export, new audited facts; never rewrite grants, issuance or rotation evidence.",
+      "third_parties_regions": "none-authorized",
+      "purpose": "Uniform canonical R3 rejection without protected details.",
+      "consumers": [
+        "gateway-bff"
+      ],
+      "retention": "Response only, no values in logs or authority caches."
+    }
+  },
+  "source_pins": [
+    {
+      "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+    },
+    {
+      "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "477ef82a9d7813cea1451a13d1f0d128f4411432405c1a8dd2adbe7541225183"
+    },
+    {
+      "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "62e0c57a11167f8b75114880c79a3c726c6598f2e59633e633120e59a7be80c5"
+    },
+    {
+      "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-catalog-workload-profiles-v1.json",
+      "commit": "a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7",
+      "sha256": "9d1552e9c3d941e66101be4be993d912c6d4d3207d45c8b93829e6cad7ddc59d"
+    }
+  ]
+}

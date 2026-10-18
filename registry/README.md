@@ -23,3 +23,7 @@ El [mapa H](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4) delimita l
 ## F1-08I — Candidato de admisión de identidad
 
 La [selección de identidad](../identity/README.md#f1-08i--candidato-de-admisión-seleccionada) añade seis raíces desde `f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a`, con CI fuente Passed por SHA/ref exactos. Preserva íntegramente las 109 admisiones y 236 artefactos previos; total 115, con tres intenciones planned originales. Solo deriva identity/index.json; no cambia consumers, locks, pins ni bytes de transporte. El gate de I acepta la fuente candidata histórica o el paquete admitido exacto, nunca una admisión parcial; los gates H conservan sus verificaciones. Admisión y runtime mantienen sus permisos y evidencia propios.
+
+## F1-08I — Candidato de renovación R3 v2
+
+La [renovación tras step-up](../identity/README.md#f1-08i--candidato-de-renovación-r3-v2-tras-step-up) agrega únicamente cuatro intenciones planned, sin promover sus fuentes ni cambiar las 115 admisiones/236 artefactos o los cuatro exports. H/I conservan sus comprobaciones históricas; proyectan solo ese sufijo exacto y cerrado, cuya preservación completa se comprueba por separado. No hay tolerancia a intenciones arbitrarias, paquetes parciales o nuevas admisiones. Los siete planned actuales incluyen las tres intenciones originales. Auditoría/publicación/CI y admisión preceden al runtime.

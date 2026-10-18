@@ -74,3 +74,19 @@ Fuente inmutable: contracts/dev `f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a`, [CI 
 El [registro](../registry/contracts.json) fija commit, hash, operaciones y URI mappings acotados al cierre; el [índice](index.json) deriva las seis admisiones nuevas. Total: 115 raíces, con las 109 anteriores y los 236 artefactos preservados. Quedan las tres intenciones originales de venta y R1 v1; no se promueve AsyncAPI ni ningún draft ajeno. El [gate específico](../scripts/identity/validate-catalog-admission-v1.mjs) y sus [tests externos](../test/identity/catalog-admission-v1.test.mjs) verifican el paquete cerrado, procedencia, referencias, bloqueo transitivo de drafts y preservación. Los gates H siguen comprobando su paquete histórico y validan también I antes de aceptar su proyección.
 
 No se ejecuta sync ni se modifican manifiestos, locks, exports, herramientas genéricas o CI. La admisión local requiere su auditoría y publicación propias; luego las admisiones consumidoras y pruebas runtime de identidad. Estado y permisos pendientes en [ESTADO](../../../ESTADO.md). Este candidato no acredita SQL, MFA/firma reales ni cierre de I.
+
+## F1-08I — Candidato de renovación R3 v2 tras step-up
+
+[HTTP privado](http/private/v2/identity-catalog-recovery-renewal-v2.yaml), [schema](http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json), [política](http/shared/v2/identity-catalog-recovery-renewal-v2-policy.json) y [vectores](fixtures/catalog-recovery/v2/catalog-recovery-renewal-v2-vectors.json). Solo `POST /internal/v2/identity/catalog/recovery-grants/{grant_id}/renew`, con H1A gateway de recuperación y cookie vigente. Reutiliza los DTO R3; nunca acepta evidencia de rotación enviada por el cliente. R3 v1 y verificación v2 conservan sus bytes y reglas.
+
+Con credencial cambiada exige prueba durable de una única rotación directa `completeSessionStepUp`, atómica con MFA y auditoría: versiones/hashes antes-después, mismo actor/sesión/tenant/dispositivo y nuevo evento MFA posterior al grant y de hasta 300 s. Revalida las otras versiones, permisos y binding completo; no admite cadenas, otra causa ni autoridad revocada. Emite un grant distinto con snapshot actual, sin extender o rehabilitar el anterior. Evidencia interna mínima hasta 24 h después del vencimiento original del grant asociado, sin extensión por lectura/renovación; auditoría independiente. Sin cambio de credencial conserva las comprobaciones originales de renovación con MFA nuevo.
+
+Son cuatro intenciones `planned`: 115 admisiones y 236 artefactos previos intactos, siete planned totales. [Oráculo sintético](../scripts/identity/catalog-recovery-renewal-v2-semantics.mjs), [extractor](../scripts/identity/validate-catalog-recovery-renewal-v2.mjs), [preservación del registro](../scripts/identity/catalog-recovery-renewal-v2-registry.mjs) y [tests externos](../test/identity/catalog-recovery-renewal-v2.test.mjs) comprueban semántica, referencias y rechazo del consumo no admitido. Los dos jobs de identidad conservan sus pasos previos y agregan lint/bundle Redocly 2.53.3 y metaschema/DTO Sourcemeta 16.10.0 reales:
+
+~~~text
+node --test test/identity/*.test.mjs
+node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2
+~~~
+
+El extractor exige una salida nueva y contrasta el bundle real con los schemas referenciados. Esta entrega no implementa SQL, MFA, firma, retención/purga, consumidores ni excepción runtime; requiere auditoría, publicación/CI exacto y admisión antes del consumo. [Decisión](../../../docs/arquitectura/decisiones/ADR-062-historia-y-recuperacion-de-catalogo.md) y [estado](../../../ESTADO.md).

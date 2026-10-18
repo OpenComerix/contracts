@@ -1,0 +1,111 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity Catalog Recovery Renewal API
+  version: 2.0.0
+  description: F1-08I candidate renewal successor. Preserves R3 v1 and
+    verification v2. No runtime, consumer admission or production enabled.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Private illustrative host; validated HTTPS only.
+tags:
+  - name: CatalogRecoveryRenewal
+    description: Explicit renewal with fresh authority and direct authenticated
+      step-up evidence.
+paths:
+  /internal/v2/identity/catalog/recovery-grants/{grant_id}/renew:
+    post:
+      operationId: renewCatalogRecoveryGrantV2
+      tags:
+        - CatalogRecoveryRenewal
+      summary: Renew after fresh MFA with a verified direct credential rotation
+      description: "The previous grant must remain active and unexpired. Authenticate
+        the gateway workload and current person cookie, preserve the exact
+        account/session/organization/membership/device/binding/permissions, and
+        freshly revalidate all authority. A new decision and distinct MFA event
+        after original issuance, no older than 300 seconds, are mandatory. Only
+        the credential-version mismatch may be bridged, using durable
+        identity-local evidence of one direct completed completeSessionStepUp
+        transition, committed atomically with its audit and rotation:
+        previous/current hashes and versions, same actor/session/tenant/device
+        and the new MFA event. No client evidence, arbitrary version
+        normalization, other rotation reason, chain, missing proof, revoked
+        decision or changed authority is accepted. With an unchanged credential
+        apply the original fresh-MFA renewal checks. Return a different grant
+        ID/reference with a current snapshot and a new 1-900-second interval.
+        Never change, extend or rehabilitate the old grant; old verification
+        continues to reject its stale credential. Request timestamps and
+        identifiers are intent, never authority. No automatic retry, stored raw
+        reference or runtime proof is provided by this contract. Privacy and
+        fixed minimal proof lifecycle are in the renewal policy."
+      x-internal: true
+      x-workload:
+        caller: gateway-bff
+        audience: identity-tenancy.catalog-recovery
+        type: service
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      parameters:
+        - $ref: "#/components/parameters/GrantId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v2/identity-catalog-recovery-renewal-v2.schema.json#/$defs/RenewRequest
+      responses:
+        "201":
+          description: A distinct grant with the current authenticated credential
+            snapshot; the original grant is unchanged.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v2/identity-catalog-recovery-renewal-v2.schema.json#/$defs/Grant
+        "400":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/InvalidRequest
+        "401":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/AuthenticationRequired
+        "403":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/NotAuthorized
+        "404":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/NotFound
+        "409":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/BindingConflict
+        "410":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/ExpiredOrRevoked
+        "503":
+          $ref: ../v1/identity-catalog-recovery-authority-v1.yaml#/components/responses/DependencyUnavailable
+components:
+  securitySchemes:
+    gatewayServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Gateway workload credential; does not carry the user's recovery
+        authority.
+    currentSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Current person session used only on issuance, renewal and revocation.
+  parameters:
+    GrantId:
+      name: grant_id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+  headers:
+    NoStore:
+      required: true
+      description: Never cache grants, decisions or errors.
+      schema:
+        type: string
+        const: no-store

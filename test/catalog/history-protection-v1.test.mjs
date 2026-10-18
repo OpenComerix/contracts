@@ -113,7 +113,9 @@ for (const [name, mutate, reason] of [
   ['redirected-uri-mapping', r => {firstAdmitted(r).uriMappings[0].path='catalog/http/shared/v1/catalog-history-policy-v1.json';}, 'H_URI_MAPPINGS'],
   ['unrelated-uri-mapping', r => {firstAdmitted(r).uriMappings.push({uri:'https://unselected.example',path:'catalog/http/shared/v1/catalog-history-policy-v1.json'});}, 'H_URI_MAPPINGS'],
 ]) test('R2 entry point rejects registry regression: '+name, () => {
-  const registry = read('registry/contracts.json'); mutate(registry);
+  // Keep H's adversarial diagnostic checks against the immutable I admission;
+  // the renewal candidate has its own full-tree and suffix regression tests.
+  const registry = JSON.parse(execFileSync('git',['show','a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7:registry/contracts.json'],{cwd:root,maxBuffer:2*1024*1024})); mutate(registry);
   assert.throws(() => validateProtectionMetadata(undefined, undefined, undefined, registry), new RegExp(reason));
 });
 test('CI retains every pre-existing job command and artifact while adding real R2 gates', () => {

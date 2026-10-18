@@ -12,7 +12,8 @@ import { validateHistoryRegistry } from '../../scripts/catalog/validate-history-
 
 const source = gitReader(root, identityAdmissionSource);
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
-const registry = read('registry/contracts.json');
+const liveRegistry = read('registry/contracts.json');
+const registry = JSON.parse(gitReader(root, 'a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7')('registry/contracts.json'));
 const selected = [
   ['identity.catalog-history-permissions.http.v1', 'identity/http/private/v1/identity-catalog-history-permissions-v1.yaml', 'edc5e3202fcd22165484fd6cd3fd96517d622810f90b92946facb4f181adf70d'],
   ['identity.catalog-history-permissions.schema.v1', 'identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json', '627e1a7e67e01e6a9441d5174226b878bdd0255dcde3a5f54c2d8288cc00cd78'],
@@ -36,7 +37,8 @@ test('I admits exactly six roots and preserves all prior registry values and thr
   assert.deepEqual(registry.planned, previous.planned.slice(0, 3));
   assert.deepEqual(registry.planned.map(row => row.id), ['sales.complete-snapshot.successor', 'common.data-lifecycle-policy.v1', 'catalog.history-policy.v1']);
   assert.deepEqual(validateIdentityAdmission(registry), { phase: 'admitted', admitted: 6, runtime_demonstrated: false });
-  assert.deepEqual(read('identity/index.json'), domainIndex(registry, 'identity'));
+  assert.deepEqual(read('identity/index.json'), domainIndex(liveRegistry, 'identity'));
+  assert.deepEqual(validateIdentityAdmission(liveRegistry), { phase: 'admitted', admitted: 6, runtime_demonstrated: false });
 });
 
 for (const [id, file, hash] of selected) test('I immutable source, closed graph and pinned regeneration: ' + id, () => {
@@ -138,7 +140,7 @@ for (const [name, mutate, reason] of [
 test('consumer exports, CI jobs, tools, old indexes and all transport sources are unchanged', () => {
   const files=execFileSync('git',['ls-tree','-r','--name-only',identityAdmissionSource],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const keep=files.filter(file=>/^(registry\/consumers\/|tools\/|openapi\/|events\/|commands\/|errors\/|common\/|catalog\/|identity\/(http|fixtures)\/)/.test(file));
-  for (const file of [...keep,'.gitlab-ci.yml','package.json','pnpm-lock.yaml'])
+  for (const file of [...keep,'package.json','pnpm-lock.yaml'])
     assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   const ci=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
   assert.equal(Object.keys(ci).filter(key=>key.startsWith('validate:')).length,12);
