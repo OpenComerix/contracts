@@ -1,0 +1,54 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "source_pin": {
+    "path": "openapi/identity-internal-auth-v1.yaml",
+    "commit": "26e8c5b50d04508adec5d1a56f38660944faa27c",
+    "sha256": "4a8624be6f2cae9116ac634bc6e64d59f5382cad91a7f9d0a6eba2dd9b7e451b"
+  },
+  "profiles": [
+    {
+      "client_id": "notifications",
+      "caller": "notifications",
+      "audience": "identity-tenancy.delivery-material",
+      "type": "service",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "gateway-bff",
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.gateway",
+      "type": "service",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "gateway-bff.catalog-recovery",
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.catalog-recovery",
+      "type": "service",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "catalog-pricing",
+      "caller": "catalog-pricing",
+      "audience": "identity-tenancy.catalog-authority",
+      "type": "service",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "catalog-pricing.catalog-recovery",
+      "caller": "catalog-pricing",
+      "audience": "identity-tenancy.catalog-recovery",
+      "type": "service",
+      "maximum_seconds": 300
+    }
+  ],
+  "request": "Preserve H1A v1: HTTP Basic; only grant_type=client_credentials in body. No caller/audience/scope selector; one audience derived from authenticated client_id by the server.",
+  "credentials": "Separate CSPRNG secrets for every client profile, including rotation slots. Retain existing H1A rotation/cutoff checks; reject reuse across any profiles. Profile IDs authenticate clients; caller is the canonical workload fixed by this policy, not necessarily the client_id.",
+  "isolation": "A token for one audience or caller never authenticates another purpose. Verify exact string audience, service type, signature, issuer, kid, expiry and canonical caller. Gateway current profile remains unchanged; delegated catalog user-api is separate from H2 user-api.",
+  "activation": "Candidate policy only. Missing/disabled new profile fails closed; no fallback to another credential or audience. Published old profiles remain unchanged. No new consumer, PWA or runtime is admitted.",
+  "privacy": "Never version real secrets, tokens or authentication payloads. Publish only client/profile identifiers and policy; logs contain no credential values."
+}

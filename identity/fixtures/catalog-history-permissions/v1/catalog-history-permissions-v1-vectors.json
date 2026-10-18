@@ -1,0 +1,221 @@
+{
+  "version": 1,
+  "runtime_demonstrated": false,
+  "context": {
+    "now": "2026-10-17T12:00:00.000Z",
+    "workload": {
+      "authenticated": true,
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.gateway",
+      "type": "service"
+    },
+    "actor": {
+      "account_id": "019a0010-0000-7000-8000-000000000001",
+      "membership_id": "019a0010-0000-7000-8000-000000000003",
+      "organization_id": "019a0010-0000-7000-8000-000000000002",
+      "session_id": "019a0010-0000-7000-8000-000000000006",
+      "active": true,
+      "email_verified": true,
+      "session_active": true,
+      "session_expires_at": "2026-10-17T13:00:00.000Z",
+      "credentials_current": true,
+      "organization_active": true,
+      "membership_active": true,
+      "device_approved": true,
+      "approval_expires_at": "2026-10-18T12:00:00.000Z",
+      "mfa_authenticated_at": "2026-10-17T11:59:00.000Z",
+      "permissions": [
+        "catalog.history.permissions.manage"
+      ],
+      "scope": {
+        "kind": "organization",
+        "organization_id": "019a0010-0000-7000-8000-000000000002"
+      }
+    },
+    "target": {
+      "membership_id": "019a0010-0000-7000-8000-000000000004",
+      "organization_id": "019a0010-0000-7000-8000-000000000002",
+      "active": true
+    },
+    "available": true,
+    "audit_available": true
+  },
+  "state": {
+    "organization_id": "019a0010-0000-7000-8000-000000000002",
+    "membership_id": "019a0010-0000-7000-8000-000000000004",
+    "assignment_version": "0",
+    "permissions": [],
+    "updated_at": null
+  },
+  "command": {
+    "method": "PUT",
+    "target_membership_id": "019a0010-0000-7000-8000-000000000004",
+    "idempotency_key": "019a0010-0000-7000-8000-000000000005",
+    "body": {
+      "expected_version": "0",
+      "permissions": [
+        "catalog.history.authorize",
+        "catalog.history.recover"
+      ]
+    }
+  },
+  "negative": [
+    {
+      "id": "unknown-workload",
+      "field": "workload.authenticated",
+      "value": false,
+      "status": 401,
+      "code": "identity_invalid_credentials"
+    },
+    {
+      "id": "recovery-profile-cannot-administer",
+      "field": "workload.audience",
+      "value": "identity-tenancy.catalog-recovery",
+      "status": 401,
+      "code": "identity_invalid_credentials"
+    },
+    {
+      "id": "foreign-caller",
+      "field": "workload.caller",
+      "value": "catalog-pricing",
+      "status": 401,
+      "code": "identity_invalid_credentials"
+    },
+    {
+      "id": "restricted-session",
+      "field": "actor.session_active",
+      "value": false,
+      "status": 401,
+      "code": "identity_session_invalid_or_expired"
+    },
+    {
+      "id": "stale-credential",
+      "field": "actor.credentials_current",
+      "value": false,
+      "status": 401,
+      "code": "identity_session_invalid_or_expired"
+    },
+    {
+      "id": "expired-session",
+      "field": "actor.session_expires_at",
+      "value": "2026-10-17T12:00:00.000Z",
+      "status": 401,
+      "code": "identity_session_invalid_or_expired"
+    },
+    {
+      "id": "inactive-person",
+      "field": "actor.active",
+      "value": false,
+      "status": 401,
+      "code": "identity_session_invalid_or_expired"
+    },
+    {
+      "id": "unverified-email",
+      "field": "actor.email_verified",
+      "value": false,
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "suspended-organization",
+      "field": "actor.organization_active",
+      "value": false,
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "revoked-membership",
+      "field": "actor.membership_active",
+      "value": false,
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "owner-alone-no-permission",
+      "field": "actor.permissions",
+      "value": [],
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "ordinary-permissions-not-management",
+      "field": "actor.permissions",
+      "value": [
+        "catalog.read",
+        "catalog.manage"
+      ],
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "foreign-scope",
+      "field": "actor.scope.organization_id",
+      "value": "019a0010-0000-7000-8000-000000000004",
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "branch-scope",
+      "field": "actor.scope.kind",
+      "value": "branch",
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "id": "unapproved-device",
+      "field": "actor.device_approved",
+      "value": false,
+      "status": 403,
+      "code": "identity_device_not_approved"
+    },
+    {
+      "id": "expired-approval",
+      "field": "actor.approval_expires_at",
+      "value": "2026-10-17T12:00:00.000Z",
+      "status": 403,
+      "code": "identity_device_not_approved"
+    },
+    {
+      "id": "stale-mfa",
+      "field": "actor.mfa_authenticated_at",
+      "value": "2026-10-17T11:54:59.999Z",
+      "status": 403,
+      "code": "identity_mfa_required"
+    },
+    {
+      "id": "future-mfa",
+      "field": "actor.mfa_authenticated_at",
+      "value": "2026-10-17T12:00:00.001Z",
+      "status": 403,
+      "code": "identity_mfa_required"
+    },
+    {
+      "id": "foreign-target",
+      "field": "target.organization_id",
+      "value": "019a0010-0000-7000-8000-000000000004",
+      "status": 404,
+      "code": "tenancy_membership_invalid"
+    },
+    {
+      "id": "revoked-target",
+      "field": "target.active",
+      "value": false,
+      "status": 404,
+      "code": "tenancy_membership_invalid"
+    },
+    {
+      "id": "missing-authority-storage",
+      "field": "available",
+      "value": false,
+      "status": 503,
+      "code": "platform_dependency_unavailable"
+    },
+    {
+      "id": "missing-audit",
+      "field": "audit_available",
+      "value": false,
+      "status": 503,
+      "code": "platform_dependency_unavailable"
+    }
+  ]
+}

@@ -429,9 +429,17 @@ test('H admits exactly the selected 24 roots and preserves every other registry 
   const { contracts: previous, planned: previousPlanned, ...previousMetadata } = sourceBaseline;
   assert.deepEqual(contracts.slice(0, 85), previous);
   assert.deepEqual(metadata, previousMetadata);
-  assert.deepEqual(planned, previousPlanned.filter(row => !historyIds.has(row.id)));
+  // F1-08I adds candidate intentions only; their complete metadata is checked
+  // independently against the H publication in test/identity/candidate-preservation.test.mjs.
+  const identityCandidateIds = [
+    'identity.catalog-history-permissions.http.v1', 'identity.catalog-history-permissions.schema.v1',
+    'identity.catalog-history-permissions.policy.v1', 'identity.catalog-history-permissions.fixtures.v1',
+    'identity.catalog-workload-profiles.policy.v1', 'identity.catalog-workload-profiles.fixtures.v1',
+  ];
+  assert.deepEqual(planned.filter(row => !identityCandidateIds.includes(row.id)), previousPlanned.filter(row => !historyIds.has(row.id)));
   assert.deepEqual(planned.map(row => row.id), [
     'sales.complete-snapshot.successor', 'common.data-lifecycle-policy.v1', 'catalog.history-policy.v1',
+    ...identityCandidateIds,
   ]);
   for (const [id, file, surface, version] of historyAdmission) {
     const row = historyAdded.find(item => item.id === id);

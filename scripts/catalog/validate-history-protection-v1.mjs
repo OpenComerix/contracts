@@ -67,7 +67,16 @@ export function validateHistoryRegistry(registry = read('registry/contracts.json
   const added = contracts.slice(priorContracts.length);
   same(added.map(row => row.id), historyAdmission.map(([id]) => id), 'H_SELECTED_ROOTS');
   const ids = new Set(added.map(row => row.id));
-  same(planned, priorPlanned.filter(row => !ids.has(row.id)), 'H_REMAINING_INTENTIONS');
+  const originalPlanned = priorPlanned.filter(row => !ids.has(row.id));
+  // I only appends this exact closed candidate package. H source/admission
+  // remains valid independently; no arbitrary intention or admission is allowed.
+  const identityPlanned = [
+    'identity.catalog-history-permissions.http.v1', 'identity.catalog-history-permissions.schema.v1',
+    'identity.catalog-history-permissions.policy.v1', 'identity.catalog-history-permissions.fixtures.v1',
+    'identity.catalog-workload-profiles.policy.v1', 'identity.catalog-workload-profiles.fixtures.v1',
+  ].map(id => ({ id, domain:'identity', owner:'identity-tenancy', materializeIn:'F1-08I', status:'planned',
+    constraint:'Candidate explicit history-permission administration and purpose-bound workload profiles only. Publish immutable sources and verify CI before separate admission; no runtime or consumer migration.' }));
+  same(planned, planned.length === originalPlanned.length ? originalPlanned : [...originalPlanned, ...identityPlanned], 'H_REMAINING_INTENTIONS');
   const mappings = new Map(priorContracts.flatMap(row => row.uriMappings).map(row => [row.uri, row]));
   for (const [index, [id, file, surface, version]] of historyAdmission.entries()) {
     const row = added[index], intent = priorPlanned.find(item => item.id === id);

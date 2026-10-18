@@ -1,0 +1,436 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Identity Catalog History Permission Administration
+  version: 1.0.0
+  description: "F1-08I candidate: explicit organization membership assignments, separate from R3
+    grants and ordinary catalog permissions. No runtime or consumer admission."
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Illustrative private HTTPS host; no public gateway exposure.
+tags:
+  - name: CatalogHistoryPermissions
+    description: Owner-controlled explicit assignment; not recovery or retention configuration.
+security:
+  - gatewayServiceBearer: []
+    currentSessionCookie: []
+paths:
+  /internal/v1/identity/catalog/history-permissions/{membership_id}:
+    parameters:
+      - name: membership_id
+        in: path
+        required: true
+        description: Active target membership within the organization selected and validated from the
+          current person session. Unknown, inactive or foreign targets return uniform 404 after
+          caller authorization.
+        schema:
+          $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/MembershipId
+    get:
+      tags:
+        - CatalogHistoryPermissions
+      x-internal: true
+      x-workload:
+        caller: gateway-bff
+        audience: identity-tenancy.gateway
+        type: service
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      responses:
+        "200":
+          description: Current assignment for GET; recorded mutation result for PUT. This state is descriptive
+            and never grants authority.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/AssignmentState
+        "400":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 400
+        "401":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 401
+        "403":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 403
+        "404":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 404
+        "406":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 406
+        "429":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              description: Required for 429 and retryable in-progress/capacity rejection; absent for nonretryable
+                version/key conflict. Seconds, never authority.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 429
+        "500":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 500
+        "503":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              description: Required for 429 and retryable in-progress/capacity rejection; absent for nonretryable
+                version/key conflict. Seconds, never authority.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 503
+      operationId: getCatalogHistoryPermissionAssignment
+      summary: Read the current explicit permission assignment
+      description: Authenticate gateway workload before interpreting body/path. Require live active
+        selected organization/session/account/membership, approved organization device, current
+        credentials, recent MFA (at most 300 seconds) and effective
+        catalog.history.permissions.manage with explicit organization scope. Initial policy maps
+        only that management permission to OWNER; neither OWNER alone nor this management permission
+        assigns the three exceptional permissions. Return version zero, empty permissions and null
+        updated_at if no assignment has existed. No request body or query parameters. Revalidate on
+        every read; no authority cache.
+    put:
+      tags:
+        - CatalogHistoryPermissions
+      x-internal: true
+      x-workload:
+        caller: gateway-bff
+        audience: identity-tenancy.gateway
+        type: service
+      security:
+        - gatewayServiceBearer: []
+          currentSessionCookie: []
+      responses:
+        "200":
+          description: Current assignment for GET; recorded mutation result for PUT. This state is descriptive
+            and never grants authority.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/json:
+              schema:
+                $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/AssignmentState
+        "400":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 400
+        "401":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 401
+        "403":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 403
+        "404":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 404
+        "406":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 406
+        "409":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              description: Required for 429 and retryable in-progress/capacity rejection; absent for nonretryable
+                version/key conflict. Seconds, never authority.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 409
+        "413":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 413
+        "415":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 415
+        "429":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              description: Required for 429 and retryable in-progress/capacity rejection; absent for nonretryable
+                version/key conflict. Seconds, never authority.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 429
+        "500":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 500
+        "503":
+          description: Generic canonical failure, without protected content or existence disclosure. Identity
+            errors and statuses follow common error catalog v8.
+          headers:
+            Cache-Control:
+              $ref: "#/components/headers/NoStore"
+            Retry-After:
+              description: Required for 429 and retryable in-progress/capacity rejection; absent for nonretryable
+                version/key conflict. Seconds, never authority.
+              schema:
+                type: integer
+                minimum: 1
+                maximum: 60
+          content:
+            application/problem+json:
+              schema:
+                allOf:
+                  - $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/Problem
+                  - properties:
+                      status:
+                        const: 503
+      operationId: replaceCatalogHistoryPermissionAssignment
+      summary: Replace the three exceptional permissions explicitly
+      description: Apply every GET authority check before effect or replay. Body and path are intent,
+        never authority. Only catalog.history.authorize, catalog.history.configure and
+        catalog.history.recover may be assigned; an empty list revokes all three, including
+        self-assignment when authorized. The management permission cannot be assigned through this
+        API. Atomically compare expected_version, replace the set, increment the durable assignment
+        counter and target membership authorization version, store minimal idempotency result and
+        append required audit. A new intent increments versions even when setting the same set.
+        Version max is 9223372036854775807; no reset/wrap. No network IO under SQL locks.
+        Idempotency scope is organization/operation/key and binds original actor account/membership,
+        target, expected version and permission array order. Revalidate current authority before
+        exact replay; return the original historical mutation result without extending
+        ledger/session/MFA or writing another audit. A different actor/target/body with the same
+        scoped key conflicts. Ledger retention is seven days; after expiry the old expected version
+        prevents re-creation. GET obtains current state after a replay. Missing/invalid authority,
+        audit/storage failure or dependency unavailability fails closed. At most 4096 UTF-8 request
+        bytes and a 3000 ms total private deadline; do not infer rollback from response loss. No
+        query parameters.
+      parameters:
+        - name: Idempotency-Key
+          in: header
+          required: true
+          description: UUIDv7 of this explicit replacement intent; replay requires the original key and body.
+          schema:
+            $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/IdempotencyKey
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: ../../shared/v1/identity-catalog-history-permissions-v1.schema.json#/$defs/ReplaceRequest
+components:
+  securitySchemes:
+    gatewayServiceBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: "Existing H1A gateway-bff service profile: canonical caller gateway-bff, exact audience
+        identity-tenancy.gateway. Does not carry the person authority."
+    currentSessionCookie:
+      type: apiKey
+      in: cookie
+      name: __Host-oc_session
+      description: Current person session; never supplied in JSON and never returned to catalog-pricing.
+  headers:
+    NoStore:
+      required: true
+      description: Never cache successful responses or errors.
+      schema:
+        type: string
+        const: no-store

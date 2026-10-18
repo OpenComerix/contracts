@@ -42,3 +42,18 @@ jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verifica
 ## F1-08H — Admisión de autoridad y verificación
 
 El candidato local H registra las tres raíces R3 de identidad y las cuatro de verificación v2 contra la fuente inmutable y CI exacto indicados en [el mapa de admisión](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4). El [índice](index.json) fija su navegación; el [registro](../registry/contracts.json) fija hashes, versiones y procedencia. R3 v1, el puerto v2 y sus pins no cambian. No se asignan permisos a OWNER ni se implementan emisión, MFA, criptografía o SQL; productor, consumidores y publicación del candidato requieren sus cortes y permisos propios.
+
+## Candidato F1-08I — Asignación explícita y perfiles de workload
+
+[API privada](http/private/v1/identity-catalog-history-permissions-v1.yaml), [schema](http/shared/v1/identity-catalog-history-permissions-v1.schema.json), [política](http/shared/v1/identity-catalog-history-permissions-v1-policy.json) y [vectores sintéticos](fixtures/catalog-history-permissions/v1/catalog-history-permissions-v1-vectors.json). GET/PUT administran la asignación por membresía en la organización seleccionada. El mapeo inicial aprobado da a OWNER únicamente `catalog.history.permissions.manage`: `authorize`, `configure` y `recover` requieren asignación explícita, incluso para sí mismo. Cuenta/sesión/membresía vigentes, dispositivo aprobado, scope de organización y MFA de hasta 300 s se verifican en cada solicitud y replay. La versión durable evita recrear una intención antigua; asignación, versión de autorización de la membresía, resultado idempotente y auditoría pertenecen a la misma transacción local. GET lee el estado actual; un replay conserva el resultado histórico.
+
+[Perfiles H1A por finalidad](http/shared/v1/identity-catalog-workload-profiles-v1.json) y [vectores](fixtures/catalog-workload/v1/catalog-workload-profiles-v1-vectors.json) conservan HTTP Basic y el body publicado `grant_type=client_credentials`. Cinco clientes independientes fijan caller/audiencia en servidor; los dos perfiles existentes conservan su identidad. Los clientes nuevos de catálogo y recuperación requieren secretos propios y rechazan fallback o selección de audiencia por request.
+
+Las seis intenciones siguen `planned`; las 109 admisiones, exports consumidor y bytes publicados se preservan. Publicar fuentes, comprobar CI exacto y admitirlas son pasos previos al consumo runtime. No se acredita SQL, firma, entrega de credenciales, MFA real ni cierre de I. Los [tests externos](../test/identity/) recorren [oráculos y extractores](../scripts/identity/); los jobs `validate:identity-catalog-contracts` y `validate:identity-catalog-schema` añaden Redocly 2.53.3 sin warnings y Sourcemeta 16.10.0 con DTO positivos/negativos reales. El extractor exige salida nueva:
+
+~~~text
+node --test test/identity/*.test.mjs
+node scripts/identity/validate-catalog-workload-profiles-v1.mjs
+node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
+sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1
+~~~

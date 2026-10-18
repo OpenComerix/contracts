@@ -1,0 +1,173 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "management_permission": "catalog.history.permissions.manage",
+  "initial_role_mapping": {
+    "OWNER": [
+      "catalog.history.permissions.manage"
+    ]
+  },
+  "assignable_permissions": [
+    "catalog.history.authorize",
+    "catalog.history.configure",
+    "catalog.history.recover"
+  ],
+  "assignment_scope": "organization",
+  "automatic_exceptional_permissions": [],
+  "mfa_maximum_age_seconds": 300,
+  "approved_device_required": true,
+  "active_selected_organization_required": true,
+  "credential_version_current_required": true,
+  "authority_on_every_request": true,
+  "fail_closed": true,
+  "request_bytes_maximum": 4096,
+  "deadline_ms": 3000,
+  "version_semantics": {
+    "initial": "0",
+    "maximum": "9223372036854775807",
+    "increment": "Every accepted new PUT intent increments assignment version, including an identical permission set. Never reset on clearing or ledger expiry.",
+    "membership": "Increment target membership authorization version atomically so previous R3 authority snapshots fail closed.",
+    "concurrency": "Serialize the assignment stream and fresh authority with local SQL locks; compare expected_version before commit. Revocation must win before a later verification. No network IO under SQL locks."
+  },
+  "idempotency": {
+    "namespace": [
+      "organization_id",
+      "operation_id",
+      "idempotency_key"
+    ],
+    "actor_binding": [
+      "account_id",
+      "membership_id"
+    ],
+    "intent": [
+      "target_membership_id",
+      "expected_version",
+      "permissions_in_original_order"
+    ],
+    "retention_seconds": 604800,
+    "precedence": "Revalidate workload, live person/session/device/MFA, organization, management permission and target before ledger lookup. Exact unexpired replay returns original mutation result before checking current expected_version; no new assignment/audit/version or expiry extension.",
+    "conflicts": "Another target, actor or body with the same scoped key is identity_idempotency_key_reused. In-progress is retryable 409; current version mismatch or exhaustion is nonretryable 409.",
+    "expired": "After seven days, an old intent cannot be re-created: its expected version is stale and assignment version never resets. A new mutation requires an explicitly current version. A replay result is historical, never current authority; GET reads live state."
+  },
+  "mutation_atomicity": [
+    "assignment",
+    "membership_authorization_version",
+    "idempotency_result",
+    "mandatory_audit"
+  ],
+  "audit": "Actor and target resolved by backend; tenant/account/membership, before/after permissions, original operation and server time. Replay never rewrites the original audit. No new published event or outbox consumer is introduced.",
+  "privacy": {
+    "classification": "RESTRICTED",
+    "categories": [
+      "PERSONAL",
+      "AUTHENTICATION",
+      "OPERATIONAL"
+    ],
+    "logs": "No cookies, bearer tokens, assignment payloads, keys, person IDs or authority snapshots in logs/traces.",
+    "encryption": "TLS; identity operational state follows its at-rest protection.",
+    "retention": "Current assignment/version follows the membership authority lifecycle and cannot reset after revocation; idempotency minimal result seven days as existing identity sensitive idempotency. Independent immutable audit follows ADR-016/035. No purge implementation or production retention evidence.",
+    "caller_storage": "Only minimal workflow state; no cache of authorization decisions. Cookie/workload credentials retain their existing no-storage rules."
+  },
+  "field_inventory": [
+    {
+      "path": "/$defs/ReplaceRequest",
+      "scope": "entire subtree",
+      "profile": "assignment"
+    },
+    {
+      "path": "/$defs/AssignmentState",
+      "scope": "entire subtree",
+      "profile": "assignment"
+    },
+    {
+      "path": "/$defs/MembershipId",
+      "scope": "path/reference",
+      "profile": "assignment"
+    },
+    {
+      "path": "/$defs/IdempotencyKey",
+      "scope": "header/ledger binding",
+      "profile": "idempotency"
+    },
+    {
+      "path": "/$defs/Version",
+      "scope": "assignment counter",
+      "profile": "assignment"
+    },
+    {
+      "path": "/$defs/Permissions",
+      "scope": "entire subtree",
+      "profile": "assignment"
+    },
+    {
+      "path": "/$defs/Problem",
+      "scope": "inherited common subtree; no free detail",
+      "profile": "error"
+    }
+  ],
+  "profiles": {
+    "assignment": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "PERSONAL",
+        "AUTHENTICATION",
+        "OPERATIONAL"
+      ],
+      "base": "Organization membership authority and explicit authenticated administration; ADR-009/016/035 apply.",
+      "consumers": [
+        "gateway-bff"
+      ],
+      "access": "Private gateway workload plus live selected organization/person authority, organization scope, approved device and recent MFA.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Own-organization authorized access/export; corrections are new audited assignments, never rewrite historical decisions.",
+      "third_parties_regions": "No new third party or region authorized; no production processing demonstrated.",
+      "purpose": "Administer and read the current explicit exceptional-permission assignment.",
+      "retention": "Current assignment and durable counter follow membership authority lifecycle; never reset on clearing. Immutable audit follows ADR-016/035."
+    },
+    "idempotency": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "PERSONAL",
+        "AUTHENTICATION",
+        "OPERATIONAL"
+      ],
+      "base": "Organization membership authority and explicit authenticated administration; ADR-009/016/035 apply.",
+      "consumers": [
+        "gateway-bff"
+      ],
+      "access": "Private gateway workload plus live selected organization/person authority, organization scope, approved device and recent MFA.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Own-organization authorized access/export; corrections are new audited assignments, never rewrite historical decisions.",
+      "third_parties_regions": "No new third party or region authorized; no production processing demonstrated.",
+      "purpose": "Bind and replay one explicit replacement intent without repeating effects.",
+      "retention": "Seven days for minimal bound result, with no extension on replay; immutable audit is separate."
+    },
+    "error": {
+      "owner": "identity-tenancy",
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "PERSONAL",
+        "AUTHENTICATION",
+        "OPERATIONAL"
+      ],
+      "base": "Organization membership authority and explicit authenticated administration; ADR-009/016/035 apply.",
+      "consumers": [
+        "gateway-bff"
+      ],
+      "access": "Private gateway workload plus live selected organization/person authority, organization scope, approved device and recent MFA.",
+      "log_policy": "prohibited-values",
+      "encryption": "TLS and identity operational at-rest protection.",
+      "export_correction": "Own-organization authorized access/export; corrections are new audited assignments, never rewrite historical decisions.",
+      "third_parties_regions": "No new third party or region authorized; no production processing demonstrated.",
+      "purpose": "Minimal uniform rejection, correlation and retry decision without protected detail.",
+      "retention": "Response only; no values in caller logs or authority cache."
+    }
+  }
+}

@@ -251,3 +251,39 @@ validate:catalog-schema:
     - jsonschema metaschema common/http/shared/v2/data-lifecycle-policy-v2.schema.json --verbose
     - jsonschema validate common/http/shared/v2/data-lifecycle-policy-v2.schema.json catalog/http/shared/v2/catalog-history-policy-v2.json --format-assertion --verbose
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2
+
+validate:identity-catalog-contracts:
+  stage: validate
+  variables:
+    GIT_DEPTH: "0"
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile
+  script:
+    - node --test test/identity/*.test.mjs
+    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
+    - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
+    - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-history-permissions-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-permissions-v1.bundle.json
+    - node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
+    - node scripts/identity/validate-catalog-workload-profiles-v1.mjs
+  artifacts:
+    paths:
+      - .ci-artifacts/catalog-history-permissions-v1.bundle.json
+      - .ci-artifacts/catalog-history-permissions-v1/
+    expire_in: 1 day
+
+validate:identity-catalog-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:identity-catalog-contracts
+      artifacts: true
+  script:
+    - jsonschema metaschema identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json --verbose
+    - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1

@@ -1,0 +1,470 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+  "title": "Explicit catalog history permission administration v1 — candidate",
+  "$defs": {
+    "MembershipId": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "IdempotencyKey": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "Version": {
+      "type": "string",
+      "pattern": "^(0|[1-9][0-9]{0,18})$",
+      "description": "Assignment stream version, not membership version. Semantic validation also enforces signed bigint maximum 9223372036854775807; versions never reset or wrap."
+    },
+    "Permissions": {
+      "type": "array",
+      "uniqueItems": true,
+      "minItems": 0,
+      "maxItems": 3,
+      "items": {
+        "enum": [
+          "catalog.history.authorize",
+          "catalog.history.configure",
+          "catalog.history.recover"
+        ]
+      }
+    },
+    "ReplaceRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "permissions",
+        "expected_version"
+      ],
+      "properties": {
+        "permissions": {
+          "$ref": "#/$defs/Permissions"
+        },
+        "expected_version": {
+          "$ref": "#/$defs/Version"
+        }
+      }
+    },
+    "AssignmentState": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "membership_id",
+        "assignment_version",
+        "permissions",
+        "updated_at"
+      ],
+      "properties": {
+        "organization_id": {
+          "$ref": "#/$defs/MembershipId"
+        },
+        "membership_id": {
+          "$ref": "#/$defs/MembershipId"
+        },
+        "assignment_version": {
+          "$ref": "#/$defs/Version"
+        },
+        "permissions": {
+          "$ref": "#/$defs/Permissions"
+        },
+        "updated_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "assignment_version": {
+                "const": "0"
+              }
+            },
+            "required": [
+              "assignment_version"
+            ]
+          },
+          "then": {
+            "properties": {
+              "permissions": {
+                "const": []
+              },
+              "updated_at": {
+                "const": null
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "updated_at": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "Problem": {
+      "allOf": [
+        {
+          "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "properties": {
+            "title": {
+              "const": "Administración de permisos de historial rechazada"
+            },
+            "detail": false,
+            "errors": false,
+            "correlation_id": false
+          },
+          "oneOf": [
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_invalid_request"
+                },
+                "status": {
+                  "const": 400
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_invalid_request"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_invalid_credentials"
+                },
+                "status": {
+                  "const": 401
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_invalid_credentials"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_session_invalid_or_expired"
+                },
+                "status": {
+                  "const": 401
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_session_invalid_or_expired"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_access_denied"
+                },
+                "status": {
+                  "const": 403
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_access_denied"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_mfa_required"
+                },
+                "status": {
+                  "const": 403
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_mfa_required"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_device_not_approved"
+                },
+                "status": {
+                  "const": 403
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_device_not_approved"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "tenancy_membership_invalid"
+                },
+                "status": {
+                  "const": 404
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:tenancy_membership_invalid"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_idempotency_key_reused"
+                },
+                "status": {
+                  "const": 409
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_idempotency_key_reused"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_idempotency_request_in_progress"
+                },
+                "status": {
+                  "const": 409
+                },
+                "retryable": {
+                  "const": true
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_idempotency_request_in_progress"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "identity_state_or_version_conflict"
+                },
+                "status": {
+                  "const": 409
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:identity_state_or_version_conflict"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_payload_too_large"
+                },
+                "status": {
+                  "const": 413
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_payload_too_large"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_unsupported_media_type"
+                },
+                "status": {
+                  "const": 415
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_unsupported_media_type"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_rate_limited"
+                },
+                "status": {
+                  "const": 429
+                },
+                "retryable": {
+                  "const": true
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_rate_limited"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_internal_error"
+                },
+                "status": {
+                  "const": 500
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_internal_error"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_dependency_unavailable"
+                },
+                "status": {
+                  "const": 503
+                },
+                "retryable": {
+                  "const": true
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_dependency_unavailable"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            },
+            {
+              "properties": {
+                "code": {
+                  "const": "platform_not_acceptable"
+                },
+                "status": {
+                  "const": 406
+                },
+                "retryable": {
+                  "const": false
+                },
+                "type": {
+                  "const": "urn:opencomerix:problem:platform_not_acceptable"
+                }
+              },
+              "required": [
+                "code",
+                "status",
+                "retryable"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
