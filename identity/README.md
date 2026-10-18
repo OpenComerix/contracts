@@ -49,7 +49,7 @@ El candidato local H registra las tres raíces R3 de identidad y las cuatro de v
 
 [Perfiles H1A por finalidad](http/shared/v1/identity-catalog-workload-profiles-v1.json) y [vectores](fixtures/catalog-workload/v1/catalog-workload-profiles-v1-vectors.json) conservan HTTP Basic y el body publicado `grant_type=client_credentials`. Cinco clientes independientes fijan caller/audiencia en servidor; los dos perfiles existentes conservan su identidad. Los clientes nuevos de catálogo y recuperación requieren secretos propios y rechazan fallback o selección de audiencia por request.
 
-Las seis intenciones siguen `planned`; las 109 admisiones, exports consumidor y bytes publicados se preservan. Publicar fuentes, comprobar CI exacto y admitirlas son pasos previos al consumo runtime. No se acredita SQL, firma, entrega de credenciales, MFA real ni cierre de I. Los [tests externos](../test/identity/) recorren [oráculos y extractores](../scripts/identity/); los jobs `validate:identity-catalog-contracts` y `validate:identity-catalog-schema` añaden Redocly 2.53.3 sin warnings y Sourcemeta 16.10.0 con DTO positivos/negativos reales. El extractor exige salida nueva:
+La entrega fuente conserva seis intenciones `planned`; su admisión seleccionada se describe debajo. Los exports consumidor y bytes publicados se preservan. Publicar fuentes, comprobar CI exacto y admitirlas son pasos previos al consumo runtime. No se acredita SQL, firma, entrega de credenciales, MFA real ni cierre de I. Los [tests externos](../test/identity/) recorren [oráculos y extractores](../scripts/identity/); los jobs `validate:identity-catalog-contracts` y `validate:identity-catalog-schema` añaden Redocly 2.53.3 sin warnings y Sourcemeta 16.10.0 con DTO positivos/negativos reales. El extractor exige salida nueva:
 
 ~~~text
 node --test test/identity/*.test.mjs
@@ -57,3 +57,20 @@ node scripts/identity/validate-catalog-workload-profiles-v1.mjs
 node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
 sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1
 ~~~
+
+## F1-08I — Candidato de admisión seleccionada
+
+Fuente inmutable: contracts/dev `f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a`, [CI 2959407001 Passed](https://gitlab.com/opencomerix/contracts/-/pipelines/2959407001), doce jobs comprobados por SHA/ref exactos. El candidato local admite únicamente estas raíces; sus archivos/políticas conservan el estado y los bytes originales, sin habilitar producción:
+
+| ID | Superficie / versión |
+| --- | --- |
+| identity.catalog-history-permissions.http.v1 | http-private / 1.0.0 |
+| identity.catalog-history-permissions.schema.v1 | schema / v1 |
+| identity.catalog-history-permissions.policy.v1 | policy / 1 |
+| identity.catalog-history-permissions.fixtures.v1 | validation / v1 |
+| identity.catalog-workload-profiles.policy.v1 | policy / 1 |
+| identity.catalog-workload-profiles.fixtures.v1 | validation / v1 |
+
+El [registro](../registry/contracts.json) fija commit, hash, operaciones y URI mappings acotados al cierre; el [índice](index.json) deriva las seis admisiones nuevas. Total: 115 raíces, con las 109 anteriores y los 236 artefactos preservados. Quedan las tres intenciones originales de venta y R1 v1; no se promueve AsyncAPI ni ningún draft ajeno. El [gate específico](../scripts/identity/validate-catalog-admission-v1.mjs) y sus [tests externos](../test/identity/catalog-admission-v1.test.mjs) verifican el paquete cerrado, procedencia, referencias, bloqueo transitivo de drafts y preservación. Los gates H siguen comprobando su paquete histórico y validan también I antes de aceptar su proyección.
+
+No se ejecuta sync ni se modifican manifiestos, locks, exports, herramientas genéricas o CI. La admisión local requiere su auditoría y publicación propias; luego las admisiones consumidoras y pruebas runtime de identidad. Estado y permisos pendientes en [ESTADO](../../../ESTADO.md). Este candidato no acredita SQL, MFA/firma reales ni cierre de I.

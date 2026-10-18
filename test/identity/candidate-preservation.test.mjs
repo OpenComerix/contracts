@@ -5,13 +5,15 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { parse } from 'yaml';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
+import { identityAdmissionSource } from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 const source=gitReader(root,'e1d073fe5264a4aa97d6d4156ce200101bb20615');
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
-const registry=read('registry/contracts.json'), previous=JSON.parse(source('registry/contracts.json'));
+const registry=JSON.parse(gitReader(root,identityAdmissionSource)('registry/contracts.json'));
+const previous=JSON.parse(source('registry/contracts.json'));
 const candidateIds=['identity.catalog-history-permissions.http.v1','identity.catalog-history-permissions.schema.v1','identity.catalog-history-permissions.policy.v1','identity.catalog-history-permissions.fixtures.v1','identity.catalog-workload-profiles.policy.v1','identity.catalog-workload-profiles.fixtures.v1'];
-test('I appends exactly six closed planned intentions without changing any of 109 admissions',()=> {
+test('immutable I source appends exactly six planned intentions without changing any of 109 admissions',()=> {
   assert.equal(previous.contracts.length,109);assert.equal(previous.preservedFiles.length,236);
   const expected=structuredClone(previous);
   expected.planned.push(...candidateIds.map(id=>({id,domain:'identity',owner:'identity-tenancy',materializeIn:'F1-08I',status:'planned',constraint:'Candidate explicit history-permission administration and purpose-bound workload profiles only. Publish immutable sources and verify CI before separate admission; no runtime or consumer migration.'})));

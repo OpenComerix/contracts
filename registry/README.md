@@ -19,3 +19,7 @@ El reporte separa impacto funcional de documentación/validación y propone prue
 ## F1-08H — Candidato de admisión seleccionada
 
 El [mapa H](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4) delimita las 24 raíces nuevas desde la fuente publicada y su CI exacto. Se conservan los 85 descriptores previos y se retiran únicamente esas intenciones de planned; los índices catalog/common/identity se derivan del registro, sin ejecutar sync ni regenerar consumidores. Mappings nuevos se limitan a archivos del cierre resuelto; no promueven contratos ajenos. La clasificación v2 conserva sus pins originales y no habilita producción. La admisión permanece como candidato local hasta completar gates, auditoría y publicación; estados y bloqueos en [ESTADO](../../../ESTADO.md).
+
+## F1-08I — Candidato de admisión de identidad
+
+La [selección de identidad](../identity/README.md#f1-08i--candidato-de-admisión-seleccionada) añade seis raíces desde `f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a`, con CI fuente Passed por SHA/ref exactos. Preserva íntegramente las 109 admisiones y 236 artefactos previos; total 115, con tres intenciones planned originales. Solo deriva identity/index.json; no cambia consumers, locks, pins ni bytes de transporte. El gate de I acepta la fuente candidata histórica o el paquete admitido exacto, nunca una admisión parcial; los gates H conservan sus verificaciones. Admisión y runtime mantienen sus permisos y evidencia propios.

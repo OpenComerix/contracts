@@ -5,6 +5,7 @@ import { pathToFileURL } from 'node:url';
 import { parse } from 'yaml';
 import { gitReader, operationPointers, parseSource, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
+import { historyRegistryView, validateIdentityAdmission } from '../identity/validate-catalog-admission-v1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const schemaPath = 'catalog/http/shared/v1/catalog-history-protection-v1.schema.json';
@@ -54,6 +55,8 @@ const historyAdmission = [
 ];
 
 export function validateHistoryRegistry(registry = read('registry/contracts.json')) {
+  const currentRegistry = registry;
+  registry = historyRegistryView(registry);
   const source = gitReader(root, historyAdmissionSource);
   const baseline = JSON.parse(source('registry/contracts.json'));
   if (registry.contracts.length === baseline.contracts.length) {
@@ -105,6 +108,7 @@ export function validateHistoryRegistry(registry = read('registry/contracts.json
         source(file.path).toString('utf8'), 'H_SOURCE_BYTES');
     }
   }
+  if (currentRegistry !== registry) validateIdentityAdmission(currentRegistry);
   return { phase: 'admitted', admitted: added.length };
 }
 const errors = {

@@ -5,10 +5,13 @@ import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { readJSON, sha256, validateShape } from '../../tools/architecture/consumer-gate.mjs';
 import { gitReader, impactForConsumer, makeLock, parseSource, resolveSelection } from '../../tools/architecture/graph.mjs';
+import { historyRegistryView, validateIdentityAdmission } from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const revision = '68d923e903b6341eedb980af3586890c0eab7d5e';
-const registry = readJSON(root, 'registry/contracts.json');
+const currentRegistry = readJSON(root, 'registry/contracts.json');
+validateIdentityAdmission(currentRegistry);
+const registry = historyRegistryView(currentRegistry);
 const baseline = JSON.parse(gitReader(root, revision)('registry/contracts.json'));
 const admissionRevision = '7b3996185ba57879d63a281f067b435a115857cb';
 const admissionBaseline = JSON.parse(gitReader(root, admissionRevision)('registry/contracts.json'));
@@ -429,8 +432,8 @@ test('H admits exactly the selected 24 roots and preserves every other registry 
   const { contracts: previous, planned: previousPlanned, ...previousMetadata } = sourceBaseline;
   assert.deepEqual(contracts.slice(0, 85), previous);
   assert.deepEqual(metadata, previousMetadata);
-  // F1-08I adds candidate intentions only; their complete metadata is checked
-  // independently against the H publication in test/identity/candidate-preservation.test.mjs.
+  // Check H unchanged using the verified projection of I back to its source
+  // intentions; test/identity verifies the complete live I admission separately.
   const identityCandidateIds = [
     'identity.catalog-history-permissions.http.v1', 'identity.catalog-history-permissions.schema.v1',
     'identity.catalog-history-permissions.policy.v1', 'identity.catalog-history-permissions.fixtures.v1',
