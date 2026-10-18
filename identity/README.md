@@ -90,3 +90,18 @@ sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewa
 ~~~
 
 El extractor exige una salida nueva y contrasta el bundle real con los schemas referenciados. Esta entrega no implementa SQL, MFA, firma, retención/purga, consumidores ni excepción runtime; requiere auditoría, publicación/CI exacto y admisión antes del consumo. [Decisión](../../../docs/arquitectura/decisiones/ADR-062-historia-y-recuperacion-de-catalogo.md) y [estado](../../../ESTADO.md).
+
+## F1-08I — Candidato de admisión de renovación R3 v2
+
+Fuente inmutable: contracts/dev `56724471a5460e22d936bd09bef448efe46d87e6`, [CI 2960251901 Passed](https://gitlab.com/opencomerix/contracts/-/pipelines/2960251901), doce jobs por SHA/ref exactos. Este candidato admite únicamente las cuatro fuentes descritas arriba, conservando sus bytes y sus estados internos de candidato; la admisión de registro no habilita producción.
+
+| ID | Superficie / versión |
+| --- | --- |
+| identity.catalog-recovery-renewal.http.v2 | http-private / 2.0.0 |
+| identity.catalog-recovery-renewal.schema.v2 | schema / v2 |
+| identity.catalog-recovery-renewal.policy.v2 | policy / 2 |
+| identity.catalog-recovery-renewal.fixtures.v2 | validation / v2 |
+
+El [registro](../registry/contracts.json) fija commit/hash/operaciones y mappings limitados al cierre; el [índice](index.json) deriva las cuatro altas. Total 119 raíces: 115 descriptores anteriores y 236 artefactos preservados; quedan las tres intenciones originales de venta y R1 v1. Las menciones a cuatro planned arriba describen la fuente publicada, que los tests siguen verificando íntegramente contra Git. El [gate específico](../scripts/identity/catalog-recovery-renewal-v2-registry.mjs) acepta solo esa fuente o la admisión completa exacta, comprueba el árbol actual antes de proyectar su sufijo para H/I y rechaza alteraciones o paquetes parciales. [Pruebas externas de admisión](../test/identity/catalog-recovery-renewal-admission-v2.test.mjs) contrastan procedencia, cierres, locks sintéticos y drafts transitivos, además de la preservación de fuentes y herramientas publicadas.
+
+No se modifica R3 v1, verificación v2, semántica, source_pins, transporte, fixtures, CI, resolvedor genérico ni dependencias; no se ejecuta sync ni se migran consumidores, manifiestos, locks o exports. Auditoría/publicación/CI de esta admisión y admisiones consumidoras conservan sus cortes propios antes del productor. No acredita SQL, MFA/firma, rotación, retención/purga ni autoridad reales; I sigue abierta. [Estado](../../../ESTADO.md).

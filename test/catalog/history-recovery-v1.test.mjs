@@ -31,7 +31,9 @@ for (const [name, mutate, reason] of [
   ['draft-original-envelope', r => {r.contracts.find(row=>row.id==='common.event-envelope.v1').status='draft';}, 'H_PRIOR_DESCRIPTORS'],
   ['r1-intention-promoted', r => {r.planned=r.planned.filter(row=>row.id!=='common.data-lifecycle-policy.v1');}, 'H_REMAINING_INTENTIONS'],
 ]) test('R4 entry point rejects registry regression: '+name, () => {
-  const registry = read('registry/contracts.json'); mutate(registry);
+  // Preserve R4's original H diagnostics against the immutable I admission;
+  // the renewal admission suite checks the live R4 entry point separately.
+  const registry = JSON.parse(execFileSync('git', ['show', 'a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7:registry/contracts.json'], {cwd:root,maxBuffer:2*1024*1024})); mutate(registry);
   assert.throws(() => validateContract(registry), new RegExp(reason));
 });
 

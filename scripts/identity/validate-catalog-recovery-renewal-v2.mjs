@@ -7,7 +7,7 @@ import {pathToFileURL} from 'node:url';
 import {parse} from 'yaml';
 import {extractSchema} from '../catalog/validate-history-recovery-v1.mjs';
 import {renew} from './catalog-recovery-renewal-v2-semantics.mjs';
-import {root,renewalBase,validateRenewalCandidate} from './catalog-recovery-renewal-v2-registry.mjs';
+import {root,renewalBase,validateRenewalRegistry} from './catalog-recovery-renewal-v2-registry.mjs';
 export {root};
 export const apiPath='identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml';
 export const schemaPath='identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json';
@@ -62,7 +62,7 @@ export function validatePolicy(policy=read(policyPath)) {
 }
 
 export function validateContract(bundle) {
-  validatePolicy();validateRenewalCandidate();
+  validatePolicy();validateRenewalRegistry();
   const api=parse(fs.readFileSync(path.join(root,apiPath),'utf8')), schema=read(schemaPath), vectors=read(vectorsPath);
   assert.equal(api.openapi,'3.1.0');assert.equal(api.info.version,'2.0.0');
   assert.deepEqual(Object.keys(api.paths),['/internal/v2/identity/catalog/recovery-grants/{grant_id}/renew']);

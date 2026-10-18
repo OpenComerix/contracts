@@ -15050,6 +15050,110 @@
       "sha256": "b2158aae641f06e84b43cf16a4fad0c3655d4497443e76b3f174d8198f4a221f",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "identity.catalog-recovery-renewal.http.v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-renewal",
+      "purpose": "Admit private renewal after one verified direct step-up; no runtime or consumer migration.",
+      "reasonForChange": "F1-08I selected renewal admission from audited published sources with exact source CI verified before this cut.",
+      "retirement": "Preserve published bytes; incompatible evolution requires a versioned successor and explicit consumer migration.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+      "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "b3d2dbaea72884ff736e413228e15e0c5643ad53fe09dcb6d9fc7b81d5e9312f",
+      "operations": [
+        "renewCatalogRecoveryGrantV2"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-renewal.schema.v2",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-renewal",
+      "purpose": "Admit private renewal after one verified direct step-up; no runtime or consumer migration.",
+      "reasonForChange": "F1-08I selected renewal admission from audited published sources with exact source CI verified before this cut.",
+      "retirement": "Preserve published bytes; incompatible evolution requires a versioned successor and explicit consumer migration.",
+      "version": "v2",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+      "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e9cc0bd60958e0a05ad9a84532db6b1cedd094d3c5d8acdb4fe2ca04e868654f",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+          "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.catalog-recovery-renewal.policy.v2",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-renewal",
+      "purpose": "Admit private renewal after one verified direct step-up; no runtime or consumer migration.",
+      "reasonForChange": "F1-08I selected renewal admission from audited published sources with exact source CI verified before this cut.",
+      "retirement": "Preserve published bytes; incompatible evolution requires a versioned successor and explicit consumer migration.",
+      "version": "2",
+      "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2-policy.json",
+      "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "335e7af3e2df7c0d4ff0544672f7c32adb2244dd7826e9a7c0bf26d4fef1d84e",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.catalog-recovery-renewal.fixtures.v2",
+      "domain": "identity",
+      "surface": "validation",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.catalog-recovery-renewal",
+      "purpose": "Admit private renewal after one verified direct step-up; no runtime or consumer migration.",
+      "reasonForChange": "F1-08I selected renewal admission from audited published sources with exact source CI verified before this cut.",
+      "retirement": "Preserve published bytes; incompatible evolution requires a versioned successor and explicit consumer migration.",
+      "version": "v2",
+      "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-renewal-v2-vectors.json",
+      "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "4a69548779e4b9dc04ac8a8312513a5d197a7ab4272198d136137e66e7c0ad42",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -16022,38 +16126,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "identity.catalog-recovery-renewal.http.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08I",
-      "status": "planned",
-      "constraint": "Candidate renewal v2 after one proven direct step-up credential rotation only. Preserve R3 v1, verification v2, all admissions and consumers; separate publication, CI and admission before runtime."
-    },
-    {
-      "id": "identity.catalog-recovery-renewal.schema.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08I",
-      "status": "planned",
-      "constraint": "Candidate renewal v2 after one proven direct step-up credential rotation only. Preserve R3 v1, verification v2, all admissions and consumers; separate publication, CI and admission before runtime."
-    },
-    {
-      "id": "identity.catalog-recovery-renewal.policy.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08I",
-      "status": "planned",
-      "constraint": "Candidate renewal v2 after one proven direct step-up credential rotation only. Preserve R3 v1, verification v2, all admissions and consumers; separate publication, CI and admission before runtime."
-    },
-    {
-      "id": "identity.catalog-recovery-renewal.fixtures.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-08I",
-      "status": "planned",
-      "constraint": "Candidate renewal v2 after one proven direct step-up credential rotation only. Preserve R3 v1, verification v2, all admissions and consumers; separate publication, CI and admission before runtime."
     }
   ],
   "requiredConsumers": [

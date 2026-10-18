@@ -9,12 +9,14 @@ import {renew,assessRenewal} from '../../scripts/identity/catalog-recovery-renew
 import {assess as assessV1} from '../../scripts/identity/catalog-recovery-authority-v1-semantics.mjs';
 import {verify as verifyV2} from '../../scripts/identity/catalog-recovery-verification-v2-semantics.mjs';
 import {root,read,scenario,change,validatePolicy,validateContract,prepare,policyPath,vectorsPath} from '../../scripts/identity/validate-catalog-recovery-renewal-v2.mjs';
-import {renewalBase,renewalIntentions,renewalCandidateView,validateRenewalCandidate} from '../../scripts/identity/catalog-recovery-renewal-v2-registry.mjs';
+import {renewalBase,renewalSource,renewalIntentions,renewalCandidateView,validateRenewalCandidate} from '../../scripts/identity/catalog-recovery-renewal-v2-registry.mjs';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
 import {validateIdentityAdmission} from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 import {validateHistoryRegistry} from '../../scripts/catalog/validate-history-protection-v1.mjs';
-const vectors=read(vectorsPath), registry=read('registry/contracts.json');
+const vectors=read(vectorsPath), liveRegistry=read('registry/contracts.json');
+// Keep the published planned lifecycle independently testable after admission.
+const registry=JSON.parse(gitReader(root,renewalSource)('registry/contracts.json'));
 const source=gitReader(root,renewalBase), baseline=JSON.parse(source('registry/contracts.json'));
 
 test('renewal v2 contract, policy, source pins and complete negative inventory agree',()=>validateContract());
@@ -102,9 +104,9 @@ test('schema extraction is from actual refs, includes positive/negative DTOs and
 const readAbsolute=file=>JSON.parse(fs.readFileSync(file,'utf8'));
 
 test('four candidates only: all 115 descriptors, 236 preserved artifacts and old planned rows are exact',()=>{
-  assert.deepEqual(validateRenewalCandidate(),{admitted:0,planned:4,prior_roots:115,preserved:236,runtime_demonstrated:false});
+  assert.deepEqual(validateRenewalCandidate(registry),{admitted:0,planned:4,prior_roots:115,preserved:236,runtime_demonstrated:false});
   assert.deepEqual(renewalCandidateView(registry),baseline);
-  assert.deepEqual(read('identity/index.json'),domainIndex(registry,'identity'));
+  assert.deepEqual(read('identity/index.json'),domainIndex(liveRegistry,'identity'));
   assert.equal(validateIdentityAdmission(registry).admitted,6);assert.equal(validateHistoryRegistry(registry).admitted,24);
   for(const item of renewalIntentions)for(const role of ['validation','documentation','producer','consumer','semantic-owner'])
     assert.throws(()=>makeLock(root,{contracts:[{id:item.id,role,version:'2',operations:[],pointers:['']}],assets:[]},Buffer.from('{}'),registry),/Unknown\/unmaterialized contract/);
