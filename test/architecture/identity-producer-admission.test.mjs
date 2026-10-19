@@ -4,6 +4,7 @@ import path from 'node:path';
 import { readFileSync } from 'node:fs';
 import { readJSON,sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { gitReader,makeLock } from '../../tools/architecture/graph.mjs';
+import { foundationBase,foundationRegistryView } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 const root=path.resolve(import.meta.dirname,'../..');
 const previous='e3f39131b32ed136b17acea0a3289fad718029d6';
 const file='registry/consumers/identity-tenancy.json';
@@ -59,7 +60,9 @@ test('F1-08I changes only the selected identity admission and preserves its prev
 });
 test('F1-08I preserves the other three consumers, coverage index and all source descriptors',()=>{
  for(const file of ['registry/consumers/index.json',...['gateway-bff','notifications','web-pos'].map(x=>'registry/consumers/'+x+'.json')]){
-  assert.equal(readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),gitReader(root,previous)(file).toString('utf8'),file);
+  const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file).toString('utf8')
+    : readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n');
+  assert.equal(actual,gitReader(root,previous)(file).toString('utf8'),file);
  }
- assert.deepEqual(registry,JSON.parse(gitReader(root,previous)('registry/contracts.json')));
+ assert.deepEqual(foundationRegistryView(registry),JSON.parse(gitReader(root,previous)('registry/contracts.json')));
 });

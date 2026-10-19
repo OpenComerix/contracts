@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {gitReader,operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
+import {foundationRegistryView} from '../catalog/catalog-foundation-v1-registry.mjs';
 export const root=path.resolve(import.meta.dirname,'../..');
 export const renewalBase='a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7';
 export const renewalSource='56724471a5460e22d936bd09bef448efe46d87e6';
@@ -54,6 +55,7 @@ export function renewalAdmissionRows() {
 // Validate the complete new transition before projecting only its closed suffix
 // for H/I. Older registries pass through, preserving their own adversarial gates.
 export function renewalCandidateView(registry) {
+  registry=foundationRegistryView(registry);
   if(!registry.contracts.some(row=>ids.has(row.id))&&!registry.planned.some(row=>ids.has(row.id))) return registry;
   const result=validateRenewalRegistry(registry);
   return result.phase==='candidate'
@@ -68,6 +70,7 @@ export function validateRenewalCandidate(registry=JSON.parse(fs.readFileSync(pat
 }
 
 export function validateRenewalRegistry(registry=JSON.parse(fs.readFileSync(path.join(root,'registry/contracts.json'),'utf8'))) {
+  registry=foundationRegistryView(registry);
   if(!registry.contracts.some(row=>ids.has(row.id))) {
     return {phase:'candidate',...validateRenewalCandidate(registry)};
   }

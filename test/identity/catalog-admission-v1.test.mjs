@@ -9,6 +9,7 @@ import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { root, identityAdmissionSource, identitySourceRegistry, validateIdentityAdmission } from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 import { validateHistoryRegistry } from '../../scripts/catalog/validate-history-protection-v1.mjs';
+import { foundationBase } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 
 const source = gitReader(root, identityAdmissionSource);
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
@@ -143,7 +144,8 @@ test('consumer exports, CI jobs, tools, old indexes and all transport sources ar
   // Preserve the historical admission; F1-08I checks its current identity export separately.
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   for (const file of [...keep,'package.json','pnpm-lock.yaml']) {
-    const actual=file==='registry/consumers/identity-tenancy.json'
+    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+      : file==='registry/consumers/identity-tenancy.json'
       ? historical(file) : fs.readFileSync(path.join(root,file));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }

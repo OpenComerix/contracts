@@ -10,6 +10,7 @@ import {domainIndex} from '../../tools/architecture/registry.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
 import {validateIdentityAdmission} from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 import {validateHistoryRegistry} from '../../scripts/catalog/validate-history-protection-v1.mjs';
+import {foundationBase,foundationRegistryView} from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 import {validateContract as validateRecoveryContract} from '../../scripts/catalog/validate-history-recovery-v1.mjs';
 
 const registry=JSON.parse(fs.readFileSync(path.join(root,'registry/contracts.json'),'utf8'));
@@ -28,7 +29,7 @@ const first=r=>r.contracts.find(row=>row.id===selected[0][0]);
 test('renewal admission is exactly four roots; prior descriptors, metadata and three intentions survive unchanged',()=>{
   assert.deepEqual(validateRenewalRegistry(),{phase:'admitted',admitted:4,planned:0,prior_roots:115,preserved:236,runtime_demonstrated:false});
   assert.equal(registry.contracts.length,119);assert.equal(registry.preservedFiles.length,236);
-  const {contracts,planned,...metadata}=registry,{contracts:prior,planned:oldPlanned,...oldMetadata}=baseline;
+  const {contracts,planned,...metadata}=foundationRegistryView(registry),{contracts:prior,planned:oldPlanned,...oldMetadata}=baseline;
   assert.deepEqual(metadata,oldMetadata);assert.deepEqual(contracts.slice(0,115),prior);
   assert.deepEqual(contracts.slice(115).map(row=>row.id),selected.map(([id])=>id));
   assert.deepEqual(planned,oldPlanned.slice(0,3));
@@ -151,7 +152,8 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   const producerProofs=new Set(['registry/consumers/identity-tenancy.json',
     'test/architecture/catalog-admission.test.mjs','test/identity/catalog-admission-v1.test.mjs']);
   for(const file of files.filter(file=>!excluded.has(file))) {
-    const actual=producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
+    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+      : producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }
 });

@@ -4,7 +4,7 @@
 
 La [guía contractual del launcher](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14) fija la ubicación física de nuevos contratos: dominio/transporte/superficie/versión y fixtures por capacidad. Las raíces globales anteriores se conservan exclusivamente para los artefactos preservados; no alojan sucesores nuevos. Los READMEs de dominio permiten navegar candidatos sin modificar index.json, planned ni admisiones por inferencia. El gate de layout obtiene los dominios y las excepciones del registro actual.
 
-Los schemas `manifest-v1.schema.json` y `lock-v1.schema.json` describen la intención y admisión de cada consumidor. `consumers/index.json` establece la cobertura conocida; sus cuatro exports derivan de manifiesto/lock, con revisión base y hashes. `local-candidate` no demuestra publicación ni ausencia de consumidores externos.
+Los schemas `manifest-v1.schema.json` y `lock-v1.schema.json` describen la intención y admisión de cada consumidor. `consumers/index.json` establece cinco consumidores conocidos, incluido catalog-pricing exclusivamente para validación; los exports derivan de manifiesto/lock, con revisión base y hashes. `local-candidate` no demuestra publicación ni ausencia de consumidores externos.
 
 Con Node 24.21.0 y pnpm 12.4.2 ejecutar instalación congelada y `pnpm test:architecture`, `pnpm registry:check`, `pnpm contracts:consumers`, `pnpm contracts:impact --output .ci-artifacts/contract-impact.json`. Para verificar los checkouts vecinos del launcher: `node tools/architecture/cli.mjs consumers --local`.
 
@@ -15,6 +15,14 @@ El resolvedor sigue selecciones por operación/pointer, referencias locales/URI 
 F1-08H añade lectura acotada de aliases YAML de valores mediante `tools/architecture/yaml-source.mjs`; límites, rechazos y semántica de hashes en [Grafo e impacto](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#grafo-e-impacto). No modifica fuentes publicadas ni migra admisiones. Las pruebas `test/architecture/yaml-source.test.mjs` incluyen el R4 real y casos adversos.
 
 El reporte separa impacto funcional de documentación/validación y propone pruebas. Cambios de forma o semántica requieren revisión; no son automáticamente compatibles. Requests, responses, errores, headers, seguridad y recuperación forman parte del contrato. `sales.sale.completed.v1` es inmutable; un sucesor incompatible pertenece a F1-10.
+
+## F1-08J — Validación de la base persistente de catálogo
+
+[catalog-pricing.json](consumers/catalog-pricing.json) añade 17 dependencias de validación, sin operaciones, assets runtime ni bindings. Sus fuentes permanecen en `4ec41110d2c4c68139101e0a13109f6fd1cdfcba`, `68d923e903b6341eedb980af3586890c0eab7d5e` y `28be1edf02a3771629febf554f8b5f4856452877`, verificadas por CI exacto antes del consumo. Selecciona schemas completos y secciones técnicas/de almacenamiento de las políticas; no habilita endpoints, productor ni recuperación.
+
+El [validador J](../scripts/catalog/catalog-foundation-v1-registry.mjs) exige preservar íntegramente las 119 raíces, 236 artefactos, tres intenciones y cuatro exports existentes; solo amplía cobertura e índice. H/I/renovación proyectan esa decisión explícita a su cobertura histórica; sin la decisión exacta siguen rechazando una ampliación arbitraria. Las [pruebas J](../test/architecture/catalog-foundation.test.mjs) verifican transición, roles, pins, index y preservación; las pruebas históricas conservan fuentes inmutables para el índice anterior. El tooling genérico y los contratos publicados no cambian. Auditoría, publicaciones y próximo paso se centralizan en [ESTADO](../../../ESTADO.md).
+
+El control J de CI admite `local-candidate` con su base prevista o `published` con SHA completo bien formado, conservando identidad, manifiesto, lock, hashes, roles y pins exactos. Ese control no acredita publicación: `consumers --local` verifica obligatoriamente manifiesto/lock desde el commit Git admitido del consumidor, mediante el mecanismo existente; CI standalone no necesita un checkout vecino. Las pruebas sintéticas de esa separación no acreditan un commit ni pipeline nuevos. Publicar/importar mantiene autorización y CI por SHA/ref exactos.
 
 ## F1-08H — Candidato de admisión seleccionada
 

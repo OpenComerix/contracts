@@ -14,6 +14,7 @@ import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
 import {validateIdentityAdmission} from '../../scripts/identity/validate-catalog-admission-v1.mjs';
 import {validateHistoryRegistry} from '../../scripts/catalog/validate-history-protection-v1.mjs';
+import {foundationBase} from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 const vectors=read(vectorsPath), liveRegistry=read('registry/contracts.json');
 // Keep the published planned lifecycle independently testable after admission.
 const registry=JSON.parse(gitReader(root,renewalSource)('registry/contracts.json'));
@@ -131,7 +132,8 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
   // Preserve the historical candidate; the producer admission checks the live identity export.
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   for(const file of keep) {
-    const actual=file==='registry/consumers/identity-tenancy.json'
+    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+      : file==='registry/consumers/identity-tenancy.json'
       ? historical(file) : fs.readFileSync(path.join(root,file));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }

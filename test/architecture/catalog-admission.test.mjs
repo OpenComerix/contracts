@@ -6,6 +6,7 @@ import { readFileSync } from 'node:fs';
 import { readJSON, sha256, validateShape } from '../../tools/architecture/consumer-gate.mjs';
 import { gitReader, impactForConsumer, makeLock, parseSource, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { historyRegistryView, validateIdentityAdmission } from '../../scripts/identity/validate-catalog-admission-v1.mjs';
+import { foundationBase } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const revision = '68d923e903b6341eedb980af3586890c0eab7d5e';
@@ -102,7 +103,8 @@ test('G preserves historical descriptors, consumer exports, pins and deferred sa
   const files = ['registry/consumers/index.json', ...registry.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')];
   for (const file of files) {
     // F1-08I evolves only identity's consumer export; retain G's immutable proof.
-    const local = (file === 'registry/consumers/identity-tenancy.json'
+    const local = (file === 'registry/consumers/index.json' ? gitReader(root, foundationBase)(file)
+      : file === 'registry/consumers/identity-tenancy.json'
       ? gitReader(root, 'e3f39131b32ed136b17acea0a3289fad718029d6')(file)
       : readFileSync(path.join(root, file))).toString('utf8').replaceAll('\r\n', '\n');
     assert.equal(local, gitReader(root, revision)(file).toString('utf8'), file);
