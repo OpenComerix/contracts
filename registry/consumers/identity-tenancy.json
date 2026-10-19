@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "5a4c1cc537083aa1d1606384fd80c83d96022f40",
-  "manifestSha256": "92c7a7b6b3c2c50a2112c96328529b50bb5abe0bf010c8f055e2a5ed2b6e4fa9",
-  "lockSha256": "c43c38ad6329c6cd255766c454e38f24771188602c7f35d046366b7dcbd86f00",
+  "sourceCommit": "ff83215ee9548e0abc33b4d0ce506a963aa6c348",
+  "manifestSha256": "fcf1239866ef8f91e89ce484a5413cdc79f940af7841760a221e2c400d2bd302",
+  "lockSha256": "9e7b6bcc16e12f02251792c088ae16bb4865dfcea3e669663535e20fefd6c3b6",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -173,6 +173,334 @@
           "pnpm test:step-up-runtime",
           "pnpm test:owner-http-runtime"
         ]
+      },
+      {
+        "id": "identity.catalog-authority.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createCatalogDelegation",
+          "checkCatalogAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-authority.v1.schema",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "catalog.security-policy.v1",
+        "role": "validation",
+        "version": "1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-authority-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-authority-semantic-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "issueCatalogRecoveryGrant",
+          "verifyCatalogRecoveryGrant",
+          "renewCatalogRecoveryGrant",
+          "revokeCatalogRecoveryGrant",
+          "getCatalogRecoveryPermissionCatalog"
+        ],
+        "pointers": [],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1.schema",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-authority-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v8",
+        "role": "validation",
+        "version": "8",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "verifyCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.schema.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.policy.v2",
+        "role": "validation",
+        "version": "2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-history-permissions.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "getCatalogHistoryPermissionAssignment",
+          "replaceCatalogHistoryPermissionAssignment"
+        ],
+        "pointers": [],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-history-permissions.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-history-permissions.policy.v1",
+        "role": "validation",
+        "version": "1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-history-permissions.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-workload-profiles.policy.v1",
+        "role": "validation",
+        "version": "1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-workload-profiles.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "renewCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.schema.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.policy.v2",
+        "role": "validation",
+        "version": "2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "Productor F1-08I: autoridad de catálogo y validación de su política publicada.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all"
+        ]
       }
     ],
     "assets": [],
@@ -181,7 +509,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "92c7a7b6b3c2c50a2112c96328529b50bb5abe0bf010c8f055e2a5ed2b6e4fa9",
+    "manifestSha256": "fcf1239866ef8f91e89ce484a5413cdc79f940af7841760a221e2c400d2bd302",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -1754,6 +2082,2188 @@
         ],
         "selectionSha256": "34cb8a90fc5cd97c841886aa685ebb4e8054fd95b1869311ff7498f5e15b0b6f",
         "runtimeSha256": "34cb8a90fc5cd97c841886aa685ebb4e8054fd95b1869311ff7498f5e15b0b6f"
+      },
+      {
+        "id": "identity.catalog-authority.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+        "operations": [
+          "createCatalogDelegation",
+          "checkCatalogAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/authorization-request.json",
+            "sha256": "73785e16b5ae1ca6a5f3c80290ae2c8813c66c88543bfe7708b42c495e57a0d1"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/authorization-response.json",
+            "sha256": "1e2043a884dd780fa7cdaa55c94fc46e0c66e9f4ab629e6de449378bfa75794e"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/delegation-request.json",
+            "sha256": "f20bf278cfe502089bac8c5f00cd9874b6e8b550d096ebcbf6b17d9559e62dd5"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/delegation-response.json",
+            "sha256": "a6f1c33d732b99a5ed7dca664cf6f50478ccafecc08875f5deaeda5a4116d090"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json",
+            "sha256": "83850c7589d7d2eba88dc01913443a409e7344fa9b5de676c300029a722c4592"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json",
+            "sha256": "f0e0f99989e62d1d218b437bcae1995a5af5d558ff8a04676e87fc416e3ac5f7"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json",
+            "sha256": "4c1b2d7fdd833cea6738b934842e6e13a2c4d9a2738df59708574bdbede56b72"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json",
+            "sha256": "965e415c927c0612f691a960b792b152a50b7e8f4097942bbf5869133da81c24"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json",
+            "sha256": "b749610412fff39e475bdd8cf3a9a4a2e8f3b05685fe770736a4df48e6f1d94a"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json",
+            "sha256": "e137abb1b041af270f772429012c984cb1bb3bebcd6304a4983da5d0e95a9bd9"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json",
+            "sha256": "419cd71eba083fc8733c1ccd94958857da46d9a525b620344cce562d3696da98"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json",
+            "sha256": "9a21e2016f0ab0470ea969e3300d295f476da24f0a6cd8b942c41e59de4bd92b"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json",
+            "sha256": "12a91b5e7bd171a5ada9c677511674fbcdf3ec6ac6bb8e55fa3d69e508ddd70d"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json",
+            "sha256": "26bd56e856e79e81b3bc1d33e4823d5db5f61c594c75732b0aa2b6c3dd694f7d"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json",
+            "sha256": "4b9fa5549418c63b5d1ac4d4016a4f1470af65f037cc9e7963fcfb5fae09965a"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json",
+            "sha256": "88bb57e358e29e9edf4014cb7be02017a0e4bcbfcb318fbe1898ed7070ee2200"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json",
+            "sha256": "c14e03b5fcb718b3efba810342c13c2ad01394b26eb8bbd8e6a64790e904b1e9"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json",
+            "sha256": "e6142106d9850d7c0438c54c0e84151031b050e4c9559bd07a944289e5f37dd7"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json",
+            "sha256": "1742003d1b20dadca058c8e56ea96737ecc940d7da39751da7ce88399293571b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "sha256": "b5c3341fe8fd0de2ef8c85e282553d3a37be218c101fc5b161e79274073ec954"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "sha256": "c9aec935c9ec5fbcf4b29a460fe0b7a3abff14f27e7c25d0bb1c9d25d712e996"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/CacheControl",
+            "sha256": "fdd03bce33dd46e5af4e1a112a3fe785a00c28797b0925db7f38e315c4a04cb8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/CanonicalizationVersion",
+            "sha256": "a2f5c03f2327d885545d088e2629c5f385524f83e1ac5879ee29f5039463ea6f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/DelegationId",
+            "sha256": "c50efa2121abf48f507ebca475fc90b8b1d85c8227d5ce47bff6c279cfb29ced"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/IdentityVersion",
+            "sha256": "52ed3ddfa711833e04ed4bf8d0b7e0922ec137a05fb99ad162112a21e080d381"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Permission",
+            "sha256": "0c0e3f91e60a10a1eb7a97b8cf3bf13bdea1c60c22a9ba5f08b4bc451f94b55e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/RequestHash",
+            "sha256": "67f459c542f6ec4afe79b51471d533c7b954d14e76adcfb186445758052e48d2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/RetryAfter",
+            "sha256": "4a0979d8d8e02a1106b32c2172b86547c3cb0bd5cb3d81668486571e74db80cd"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/authorization-request.json",
+            "pointer": "",
+            "sha256": "9605f8c5b7e109da8a585db34e587ab651deddb81ed240ddb4ee6f0b471437a2"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/authorization-response.json",
+            "pointer": "",
+            "sha256": "5df9e06f5f33655ee16c053e569d1293c2ce99c7b1e5636cb131115a06b67863"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/delegation-request.json",
+            "pointer": "",
+            "sha256": "444a49fcc23aa611ac8ae36412ccd2769772a18277691f11626d91c98e6f9c83"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/delegation-response.json",
+            "pointer": "",
+            "sha256": "0d18c9361778a2cc377bcef22a9e4c47701627aa82cbfdc83caa98b91fb5085d"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_invalid.json",
+            "pointer": "",
+            "sha256": "ab0c8a091b30468d7ad6c9cab51f6c51b0a64b4a97f85c5d0836efb1841a5e95"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-catalog_delegation_request_mismatch.json",
+            "pointer": "",
+            "sha256": "562bc689455423dccf22d7ae58be888c059a3d90fe822a41104786b5e555035c"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_access_denied.json",
+            "pointer": "",
+            "sha256": "13a7b753a1fcad53989e1186fb187b5b2d96c6898e2e2503dc7d175c07142305"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_device_not_approved.json",
+            "pointer": "",
+            "sha256": "ae7acb46d5ce3618a29f0f0bc7ac82d680df1bafd1d26693db27a9df139b252d"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_invalid_request.json",
+            "pointer": "",
+            "sha256": "0b7a9cc3c331cce76d3940b04016398fdc27384288e24b0d415886f8389ee319"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_mfa_required.json",
+            "pointer": "",
+            "sha256": "8060cf5a4d5c128b80083530f3f6f1458b19d58b5d91d822e6cc397d25296ec4"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_reauthentication_required.json",
+            "pointer": "",
+            "sha256": "26b99b356dcf7008b49162fe36d9ad2af1a01d826e624deaeb16ec69f4d358cc"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-identity_session_invalid_or_expired.json",
+            "pointer": "",
+            "sha256": "1c25574edfcf95b351e6cabeb686b05a630053eeeaac4b61d68f442c042df531"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_dependency_unavailable.json",
+            "pointer": "",
+            "sha256": "639b6a04e357fbd5dc53e12273f82869e60192f18d8160f0b122e4a776c9fbb3"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_internal_error.json",
+            "pointer": "",
+            "sha256": "b234f4d04b47c5bb391c56bdc655a256368d6f5fbad7d7b4186c53efe57f6530"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_not_acceptable.json",
+            "pointer": "",
+            "sha256": "e233875724985235b8cebe4573bf71975526a84b08f9a890306d78789e1ab093"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_payload_too_large.json",
+            "pointer": "",
+            "sha256": "63acb86ee31b99eecee861c8986d6ea4be7ba5310ccfe5550fb43269f82fee5b"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_rate_limited.json",
+            "pointer": "",
+            "sha256": "efb8710a36f192050d55f2c189fe78d9891c81629b0dbbfc92073599260e7e8d"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-platform_unsupported_media_type.json",
+            "pointer": "",
+            "sha256": "6191d58338e6f897f2785a941b3df8d400ca9d9b148bc0c1ba1088e7a1a6097b"
+          },
+          {
+            "path": "identity/fixtures/catalog-authority/v1/examples/problem-tenancy_membership_invalid.json",
+            "pointer": "",
+            "sha256": "1976d5feeabebded15444d92472af1b5f5decf7f0b453719bf0c0787a4dcea0f"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "e97d4c5d0564467e15d6773bc7ec28245998bc22f3121faa96e2763c58d55224"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationResponse",
+            "sha256": "745023557a301c1f63c3b8725c21d5fab9d85ba0239782866d4c60e99ac53fd9"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationRequest",
+            "sha256": "d9bcaaeed3f7bdfe2b73924c5505358974a2198d4ede6e76144f24c5e8015d67"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationResponse",
+            "sha256": "ecc490b86c195f96d0954a021dd4f798615813a77085a63e89eddf35dd648035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "cfaab71208145bd6dcdfb84757d80a70b3b1b819b1506d9a52afe1c670352904"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "21cd7dfb4c9f2da8fc19bca49836c725400ad01b989917111cae8ae56dfd8a83"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/headers/RetryAfter",
+            "sha256": "885b95e484a7bc23745437af894da4550737c73b6e53d987b4122fbba3c5b662"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/parameters/ClientSignal",
+            "sha256": "34685aa8d9c0f0c7affa7d49030cc51afcbcf98957b2c53c3f7b803b3ee791d4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/catalogServiceBearer",
+            "sha256": "2bc36c268efb9739da05e0a25407192c2866b787bf9b7e58ecea2ed394645e02"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/currentSessionCookie",
+            "sha256": "1ba40187e4e580e6082a5b3281fa4955498da7f2cbfb23ee82dac552739bdfb0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/gatewayServiceBearer",
+            "sha256": "434488f0c8f8954600d5f1a3f76341b232f5c3dc55ddf86b401532d294bdb02b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1catalog-authorizations/post",
+            "sha256": "1d0fad387f69c9052c382accfa1526f6d4aabcf587154a084d893b91a4ec88f8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1catalog-delegations/post",
+            "sha256": "e92c3b61d64d3494d046aa3b69ccfb51279c35d250f06fd57df5a1728de1a232"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "dc09f4ebfd2acdaf6f8f316e8347cb3a80d79a19892ef1795fb6af1832824017"
+          }
+        ],
+        "selectionSha256": "d16ac585ad82244169873c19a3ccfbc43ba9e2b0054d7144194f0a5915fc1958",
+        "runtimeSha256": "472e3b3d1bd9008434ed721f2b87f432b838a48427e05da7984f81de0a508e62"
+      },
+      {
+        "id": "identity.catalog-authority.v1.schema",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "sha256": "b5c3341fe8fd0de2ef8c85e282553d3a37be218c101fc5b161e79274073ec954"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/CanonicalizationVersion",
+            "sha256": "a2f5c03f2327d885545d088e2629c5f385524f83e1ac5879ee29f5039463ea6f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/DelegationId",
+            "sha256": "c50efa2121abf48f507ebca475fc90b8b1d85c8227d5ce47bff6c279cfb29ced"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/IdentityVersion",
+            "sha256": "52ed3ddfa711833e04ed4bf8d0b7e0922ec137a05fb99ad162112a21e080d381"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Permission",
+            "sha256": "0c0e3f91e60a10a1eb7a97b8cf3bf13bdea1c60c22a9ba5f08b4bc451f94b55e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/RequestHash",
+            "sha256": "67f459c542f6ec4afe79b51471d533c7b954d14e76adcfb186445758052e48d2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "b52c64e4f884b88457508e1a13e03543954f978b58e747c14f848dae6b08486c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "cfaab71208145bd6dcdfb84757d80a70b3b1b819b1506d9a52afe1c670352904"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "eb94489d741cae95a53026025c225da51c461f012cf38486bdd4aacfa685be3e",
+        "runtimeSha256": "eb94489d741cae95a53026025c225da51c461f012cf38486bdd4aacfa685be3e"
+      },
+      {
+        "id": "catalog.security-policy.v1",
+        "role": "validation",
+        "version": "1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-security-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-security-policy-v1.json",
+            "sha256": "77175590a18ef062cbd4427f6977069d0b8375a8e1cf2c49f4bb49d59822c4af"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-security-policy-v1.json",
+            "pointer": "",
+            "sha256": "cae19437eda60638cf568ace365b59b644ba4529a4a2c9a24c76ec28ac21e2d9"
+          }
+        ],
+        "selectionSha256": "e5953f7ca6c67018f70d6111978290d16679c3f0f930513ba99b4a09a76992be",
+        "runtimeSha256": "e5953f7ca6c67018f70d6111978290d16679c3f0f930513ba99b4a09a76992be"
+      },
+      {
+        "id": "identity.catalog-authority-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-authority/v1/identity-catalog-authority-v1-fixtures.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-authority/v1/identity-catalog-authority-v1-fixtures.json",
+            "sha256": "427dead0ad7dc324a467c5fe975cd132823346f1481e69be80a62a8bae15a00b"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-authority/v1/identity-catalog-authority-v1-fixtures.json",
+            "pointer": "",
+            "sha256": "cb484d6fd030a995f48e77b6f769690e8677af117f07cfc4fb0ea02a932b427b"
+          }
+        ],
+        "selectionSha256": "bec53436f2f026e1138da31d04f5dca6269f78bd60c2e1de2cf8bcc7fd9ce0bb",
+        "runtimeSha256": "bec53436f2f026e1138da31d04f5dca6269f78bd60c2e1de2cf8bcc7fd9ce0bb"
+      },
+      {
+        "id": "identity.catalog-authority-semantic-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-authority/v1/catalog-authority-semantic-v1-fixtures.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-authority/v1/catalog-authority-semantic-v1-fixtures.json",
+            "sha256": "04c08a3f180311111b6f8fa2d90c6b8421d86fff4dabeba112ab21e6f54de3e5"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-authority/v1/catalog-authority-semantic-v1-fixtures.json",
+            "pointer": "",
+            "sha256": "e5932fb3c1fac426d9f7113e59ae53bddc50b975c1c8dca88c5d12c17fc55ed6"
+          }
+        ],
+        "selectionSha256": "798d6ffbd2ec857564d09d6b54011f093791b540d5793aba7026968f0203232d",
+        "runtimeSha256": "798d6ffbd2ec857564d09d6b54011f093791b540d5793aba7026968f0203232d"
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+        "operations": [
+          "issueCatalogRecoveryGrant",
+          "verifyCatalogRecoveryGrant",
+          "renewCatalogRecoveryGrant",
+          "revokeCatalogRecoveryGrant",
+          "getCatalogRecoveryPermissionCatalog"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/parameters/GrantId",
+            "sha256": "5c35c7b9aaafd5cb0c4d113387247f4450f641278d38d1e05d71c0e702a83fec"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/AuthenticationRequired",
+            "sha256": "13a6cc1cd6735e460aba6a4846a11729f0ec030b90bdfa62679bbf2dd0581f7d"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/BindingConflict",
+            "sha256": "707673888a945602b1f3e13a428d00de0b1bcecd4a4ab7f72bd18c026c4122a7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/DependencyUnavailable",
+            "sha256": "ca1ecc18619b14652fbf54a3193eb8c1d800415b8fdbe4147e957276b5a5691c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/ExpiredOrRevoked",
+            "sha256": "08a3ab34144506be2b68b702aebc4b4506728da075d96cb757a1ad6dd3ad6035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "8232ead0f33d80cfd7c0f8fb789e798150059e7c977cc92673b216ec51d91fe5"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotAuthorized",
+            "sha256": "32fd9a9f2ac2e46370eeec3a373da5a4485ebdea43a11dee3f74fc80f3eb9009"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "c17de9770bb556b1a5f479208f0b01236b92cd84029efc7b68ad103263bbeee0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/catalogWorkloadBearer",
+            "sha256": "33acdf0773b4d77798f865d90bed3ebb944a0cf11ae34ad7358ac23b6addd1a7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/currentSessionCookie",
+            "sha256": "32149a135f75ca08b159c55a39fb448ed1a7458402f0d176ba10458640cddc76"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/gatewayServiceBearer",
+            "sha256": "bc5b13d7ba3fdb46def834ca8b88d136e7b9f70c17da29a17ca435e3862bb5fd"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-grants/post",
+            "sha256": "58adb4b90ddb364ac81276768cac76dfec03285d37ee74158fae37d5158863ae"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-grants~1{grant_id}~1renew/post",
+            "sha256": "700f954a5f11944135bc0d26ae513bc2e793ddb92d0f26506dffbf97e3877dde"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-grants~1{grant_id}~1revoke/post",
+            "sha256": "ec183a70639e22ebdd03e81e4edcd3e2b3e05beed8e0fe4577d309bb2622ec7c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-grants~1verify/post",
+            "sha256": "281feabf96d3bff1ee60b1ed2d09a0794f21616638755386fb16dc07b5f01d8e"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-permissions/get",
+            "sha256": "12c07f61e0f3e01a89618de733db733465ee13798b6c2b38818faaea04640ac9"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "6e8e5f526e27f6be671ecf6a4113fe0ee7a3455074df0938e30cdabc71a4c3c0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "d97f11b736e9826a2048245688df5e1c48e309a9164b3345a09a245e7d55674b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Grant",
+            "sha256": "606c7862f34f6d825a3eee96caab4b0dff0e3a3b4123e2ea10065391e36a3ef8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantPurposePermission",
+            "sha256": "8b5618261c0cbece4d135ea6a68d6bc2324be7a687ae63dacd8e4389334b6403"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/IssuePurposePermission",
+            "sha256": "71986f683f87025c530bbdd368bc5fa431fe4c2bbd5a947db9630d61303ce659"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/IssueRequest",
+            "sha256": "c8107c19319465dd8de764053fc0e6996b62cd53ce25e1e9114aaa9728a66223"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/PermissionCatalog",
+            "sha256": "634a8c3fe2b6f4e6c508bd427eda54eb4ab2668015ef81b34973306a2784d085"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/RenewRequest",
+            "sha256": "a1b4962cfcf7d7632b2e84a77700feb7f99e74b357e0e6dcf1e90c8083a10ac5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/RevokeRequest",
+            "sha256": "657ee45fefde478cbc032c1034b0fcc900d8f8fcead9956cd0a386a363ecabb6"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/RevokeResponse",
+            "sha256": "a73652e88b3a8076c05b24c82a7e1049f1ea2b931e383456206bc6fd3c27c129"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "dc56828533500d51a1f9dd1d454a977f856204d7966ac847b05683fbeff2ca94"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse",
+            "sha256": "ee42e7c33dd19fa851ece02d3a77bab3d55f6ba00bf9bc2b6e89b072add08fc8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "7b558373689bf3ad0e3bc3cd94f0f702acbeba8c0c43465a97df7cb27ebef64d",
+        "runtimeSha256": "eeed088db52ecfb07e798d916b7130c3307dc31f03e54145310072763467ff58"
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1.schema",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "c5c771c76e45b617f5595f8a61a1c08d1be9c01bfc1b29e9db5bedea509f4792"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantPurposePermission",
+            "sha256": "8b5618261c0cbece4d135ea6a68d6bc2324be7a687ae63dacd8e4389334b6403"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/IssuePurposePermission",
+            "sha256": "71986f683f87025c530bbdd368bc5fa431fe4c2bbd5a947db9630d61303ce659"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ff9660c7ceeab24766366d8ed5fc40cf9fb0f9cd24bddde72dc8a97941af3058",
+        "runtimeSha256": "ff9660c7ceeab24766366d8ed5fc40cf9fb0f9cd24bddde72dc8a97941af3058"
+      },
+      {
+        "id": "identity.catalog-recovery-authority-v1-fixtures",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+            "sha256": "477ef82a9d7813cea1451a13d1f0d128f4411432405c1a8dd2adbe7541225183"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v1/catalog-recovery-authority-v1-fixtures.json",
+            "pointer": "",
+            "sha256": "7aac8c32bd3f039414b6fcbfd0e37ac4eb152ede998e5b5905e1a3c19e29ec51"
+          }
+        ],
+        "selectionSha256": "6433ecea3843f5cc9d1c02bc3563b433b62619a8db8be521d62fe348fbfb20ca",
+        "runtimeSha256": "6433ecea3843f5cc9d1c02bc3563b433b62619a8db8be521d62fe348fbfb20ca"
+      },
+      {
+        "id": "common.error-catalog.v8",
+        "role": "validation",
+        "version": "8",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "common/errors/v8/error-catalog-v8.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/errors/v8/error-catalog-v8.json",
+            "sha256": "f69ecafac976d6a7f13c0e7b91971571676cbe8da2f7e9a0bcfe7ed7ad959e3c"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/errors/v8/error-catalog-v8.json",
+            "pointer": "",
+            "sha256": "9852a6eac5917f5d85e395bc1e0e708d01dfaf5c5fd3fb3117dabee5850f3a2f"
+          }
+        ],
+        "selectionSha256": "2141c7ea7b7611442f856fcd98700b7607c0b829e75a9f29a6329f0392b9801b",
+        "runtimeSha256": "2141c7ea7b7611442f856fcd98700b7607c0b829e75a9f29a6329f0392b9801b"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+        "operations": [
+          "verifyCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "sha256": "62e0c57a11167f8b75114880c79a3c726c6598f2e59633e633120e59a7be80c5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/AuthenticationRequired",
+            "sha256": "13a6cc1cd6735e460aba6a4846a11729f0ec030b90bdfa62679bbf2dd0581f7d"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/DependencyUnavailable",
+            "sha256": "ca1ecc18619b14652fbf54a3193eb8c1d800415b8fdbe4147e957276b5a5691c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/ExpiredOrRevoked",
+            "sha256": "08a3ab34144506be2b68b702aebc4b4506728da075d96cb757a1ad6dd3ad6035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "8232ead0f33d80cfd7c0f8fb789e798150059e7c977cc92673b216ec51d91fe5"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotAuthorized",
+            "sha256": "32fd9a9f2ac2e46370eeec3a373da5a4485ebdea43a11dee3f74fc80f3eb9009"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "c17de9770bb556b1a5f479208f0b01236b92cd84029efc7b68ad103263bbeee0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "30df8737795b2de782eb5ff437573ee547b5f6d9800ee9cd353cf1bfdcec599f"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/components/securitySchemes/catalogWorkloadBearer",
+            "sha256": "886714dbef2526f1d4fdb5f601a5c83b5e19b6a9bfcc0023ed8b6853af104403"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/paths/~1internal~1v2~1identity~1catalog~1recovery-grants~1verify/post",
+            "sha256": "d494e1b928b3c8de5cfc0e16bac86dd06e30fa578086530587bb9a60b1d84e7d"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/security",
+            "sha256": "6e8e5f526e27f6be671ecf6a4113fe0ee7a3455074df0938e30cdabc71a4c3c0"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "f9b9a9ba0d8806fab87c8cab004cd1e3d4a0c7787d9b7c96d665c3476130feb5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "dc56828533500d51a1f9dd1d454a977f856204d7966ac847b05683fbeff2ca94"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/authorized",
+            "sha256": "02e70d99380d0cc184f95bd0d4c286c1c4d5e530ba725618c6321376ec9480b9"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/grant_id",
+            "sha256": "44b2ecffc8606ad9705131859fa57980c41eaf5d5e35ecd101822dc2c2eb6523"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/permission",
+            "sha256": "3ed38c5acaad21c55fb7cc4a8f441ab96355c748609388332d649c4d526f0e88"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/status",
+            "sha256": "542c4c9bd7aeb2de42b6f014e7758816eaa65cfc5794a0d18dc1c29a81cbd9ae"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/valid_until",
+            "sha256": "4f410cd74c87d8ddd21f20e835e06ed7445481c3aeae3c12085e82c54ea2fb7d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "bf9477e0d0b4eb2c4ef5d1ec8669be359413d613f5e904e072b103a51e5d6df2"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$defs/VerifyResponse",
+            "sha256": "98d170b0f984c8f738b06646fabd60b15b1ce7d7da04d5c3ea90d7f19b6b7699"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "64fca798e196315778455f76127ba5cc84c1b4f133b06a04ba9383bcc077f11e"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "d0670cc624515d5b344a58d04e05c0e0c904a50785adf1c9611fb3cb44249348",
+        "runtimeSha256": "ba0100fe1e3e5fc24e327ded34af89f7e765541c01471fc109742eefc2f3d99a"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.schema.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "dc56828533500d51a1f9dd1d454a977f856204d7966ac847b05683fbeff2ca94"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/authorized",
+            "sha256": "02e70d99380d0cc184f95bd0d4c286c1c4d5e530ba725618c6321376ec9480b9"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/grant_id",
+            "sha256": "44b2ecffc8606ad9705131859fa57980c41eaf5d5e35ecd101822dc2c2eb6523"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/permission",
+            "sha256": "3ed38c5acaad21c55fb7cc4a8f441ab96355c748609388332d649c4d526f0e88"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/status",
+            "sha256": "542c4c9bd7aeb2de42b6f014e7758816eaa65cfc5794a0d18dc1c29a81cbd9ae"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/valid_until",
+            "sha256": "4f410cd74c87d8ddd21f20e835e06ed7445481c3aeae3c12085e82c54ea2fb7d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "",
+            "sha256": "f3f9a1e7092be79ac61fa928c2d4e3821981ee0ef7f156f67b00c77883a52a13"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "64fca798e196315778455f76127ba5cc84c1b4f133b06a04ba9383bcc077f11e"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "2f53588f43f584349cdfd4f4aec3561efe297e54c5b1e59e54e49930fa00d7d2",
+        "runtimeSha256": "2f53588f43f584349cdfd4f4aec3561efe297e54c5b1e59e54e49930fa00d7d2"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.policy.v2",
+        "role": "validation",
+        "version": "2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+            "sha256": "8b144ebb1e7508afcec67bbf63c5defc707eeb0a2cbef97140fd18274a1c21c9"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+            "pointer": "",
+            "sha256": "96573403a5e549537f60323c5888f5dfc8503568d4aa60f5567bbd7b1101cc4a"
+          }
+        ],
+        "selectionSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995",
+        "runtimeSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+            "sha256": "4d861a748e6eb93d87c54d41661ed515ca846aff51c7a8b12813b2e7724a0719"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-verification-v2-vectors.json",
+            "pointer": "",
+            "sha256": "26ccf8e80dc1f20103b55cedaf79043d34d0ac1b37137539793b15a7b3703b77"
+          }
+        ],
+        "selectionSha256": "6001094990cf5975d61f6ce36adc1317482b471a9566bfc9de20688e6b06d965",
+        "runtimeSha256": "6001094990cf5975d61f6ce36adc1317482b471a9566bfc9de20688e6b06d965"
+      },
+      {
+        "id": "identity.catalog-history-permissions.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+        "operations": [
+          "getCatalogHistoryPermissionAssignment",
+          "replaceCatalogHistoryPermissionAssignment"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "sha256": "edc5e3202fcd22165484fd6cd3fd96517d622810f90b92946facb4f181adf70d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "sha256": "627e1a7e67e01e6a9441d5174226b878bdd0255dcde3a5f54c2d8288cc00cd78"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "46344cf056152fa43067523420ebab433eae3c65dddc8c2946f82d83136f7e61"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/components/securitySchemes/currentSessionCookie",
+            "sha256": "864fadcb4d6070073dcfca9fa016841ab68311fc554a1756c9e8462d1fa176d3"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/components/securitySchemes/gatewayServiceBearer",
+            "sha256": "17fc856c60146bc05780780445bb5eefe253ad50710fc130d614ab3056227cac"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1history-permissions~1{membership_id}/get",
+            "sha256": "9ab0a659c369ffba6e3e759ce8ac5589212ad276022fc93ac4877cbdb6037870"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1history-permissions~1{membership_id}/parameters",
+            "sha256": "1c37a3f161cfe8bf2a986f02e9a7a7fede5dd834444b2d4d857dd64025ca44c3"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1history-permissions~1{membership_id}/put",
+            "sha256": "073fcf40ba3d7bf420d350ffa9ec3f9f6226c5d914ae19da798de5ae396b3084"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-history-permissions-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "3680f5ca64fa46111e4858bd552cc679259bbb36dd5da532e32034d481726d96"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/AssignmentState",
+            "sha256": "be40e9cfded37c02d02ecf9a31c858c3d34f0677b963723a6211bc7a1f496c59"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/IdempotencyKey",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/MembershipId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/Permissions",
+            "sha256": "22b82186052cd56f6599a8b67955fc6a2d2bf270d319c8b71a54901d89e6d0e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "adbabcb1c5cb3ed865718b45424cfe2f9492e6f047fa4a38d47cfeda04994d9d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/ReplaceRequest",
+            "sha256": "00d0957fe07e739ce4dcf47ce2c4737125eacb6e507b16f296ded8a91342bf4a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/Version",
+            "sha256": "000bc8d5510dc04c2f0c0aec42d82b6072b54033b8cad7dc55d2864eda4a90aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "abb151461530ea89fcdbc8af147718231c6133229a9f57bc818c210ff25f7f59"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "076aef6b5e7a54d36a5633aa3b3f45e47da265f98cf7d6759eff2f50851a40aa",
+        "runtimeSha256": "ba7bc04d8177c4189908767120421a362996aba2cd57585f6f6ad40c45cc8dec"
+      },
+      {
+        "id": "identity.catalog-history-permissions.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "sha256": "627e1a7e67e01e6a9441d5174226b878bdd0255dcde3a5f54c2d8288cc00cd78"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "",
+            "sha256": "3287113b00730d1c14b64a13ee2be183bd669f6afa384ac1302d3754203917ed"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/MembershipId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/Permissions",
+            "sha256": "22b82186052cd56f6599a8b67955fc6a2d2bf270d319c8b71a54901d89e6d0e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$defs/Version",
+            "sha256": "000bc8d5510dc04c2f0c0aec42d82b6072b54033b8cad7dc55d2864eda4a90aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "abb151461530ea89fcdbc8af147718231c6133229a9f57bc818c210ff25f7f59"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "a110e6ac11d9e6c6724d6b08418f130f767269d0286125ebc751ea26b8e436b5",
+        "runtimeSha256": "a110e6ac11d9e6c6724d6b08418f130f767269d0286125ebc751ea26b8e436b5"
+      },
+      {
+        "id": "identity.catalog-history-permissions.policy.v1",
+        "role": "validation",
+        "version": "1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-catalog-history-permissions-v1-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1-policy.json",
+            "sha256": "6da050f84136196fe0db8a26ce6b36eb8ee4e1c66e1d1fce2571f1c8d6eec5d1"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-catalog-history-permissions-v1-policy.json",
+            "pointer": "",
+            "sha256": "081b3feed5a387c3fc8b7e3240a03232908d6afbdec86c2a936711fd29adc842"
+          }
+        ],
+        "selectionSha256": "6cfbea6b3475445af272b759e33c854cd087e848e8eae15d9d87ae4778969799",
+        "runtimeSha256": "6cfbea6b3475445af272b759e33c854cd087e848e8eae15d9d87ae4778969799"
+      },
+      {
+        "id": "identity.catalog-history-permissions.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-history-permissions/v1/catalog-history-permissions-v1-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-history-permissions/v1/catalog-history-permissions-v1-vectors.json",
+            "sha256": "8bf1e94bb4f0a5d8c8f274a3ac91ea24a683afcc77c409720db51f60624812de"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-history-permissions/v1/catalog-history-permissions-v1-vectors.json",
+            "pointer": "",
+            "sha256": "0f3f0197dc7cf8df13246440b06cbd8acaf822f42c7b5f20da263cc35223e442"
+          }
+        ],
+        "selectionSha256": "97403d4755e8fc397436e2489399ac54aa654290e2b45f6bb93dde4b8812970a",
+        "runtimeSha256": "97403d4755e8fc397436e2489399ac54aa654290e2b45f6bb93dde4b8812970a"
+      },
+      {
+        "id": "identity.catalog-workload-profiles.policy.v1",
+        "role": "validation",
+        "version": "1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-catalog-workload-profiles-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-catalog-workload-profiles-v1.json",
+            "sha256": "9d1552e9c3d941e66101be4be993d912c6d4d3207d45c8b93829e6cad7ddc59d"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-catalog-workload-profiles-v1.json",
+            "pointer": "",
+            "sha256": "55d8bae0d4487a85df808f06291a2d460b8ff28d62fcbad2b11e360261b36a2a"
+          }
+        ],
+        "selectionSha256": "ced6577f93bd215d594d12d1c7aa3ca88162e2da841dd4005616c595aab29d91",
+        "runtimeSha256": "ced6577f93bd215d594d12d1c7aa3ca88162e2da841dd4005616c595aab29d91"
+      },
+      {
+        "id": "identity.catalog-workload-profiles.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "f92a68a0bba46a7d96d69b8af8aa6c0d00187d7a",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-workload/v1/catalog-workload-profiles-v1-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-workload/v1/catalog-workload-profiles-v1-vectors.json",
+            "sha256": "b2158aae641f06e84b43cf16a4fad0c3655d4497443e76b3f174d8198f4a221f"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-workload/v1/catalog-workload-profiles-v1-vectors.json",
+            "pointer": "",
+            "sha256": "e90492b0350c991c04833b1c96b171359071fbf78bce22d0b070337942f86c39"
+          }
+        ],
+        "selectionSha256": "e53d67bfc001bdafcf896e5d17dedb9c0079a6a9da549b33d450709c2d804104",
+        "runtimeSha256": "e53d67bfc001bdafcf896e5d17dedb9c0079a6a9da549b33d450709c2d804104"
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+        "operations": [
+          "renewCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "sha256": "b3d2dbaea72884ff736e413228e15e0c5643ad53fe09dcb6d9fc7b81d5e9312f"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "sha256": "e9cc0bd60958e0a05ad9a84532db6b1cedd094d3c5d8acdb4fe2ca04e868654f"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/AuthenticationRequired",
+            "sha256": "13a6cc1cd6735e460aba6a4846a11729f0ec030b90bdfa62679bbf2dd0581f7d"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/BindingConflict",
+            "sha256": "707673888a945602b1f3e13a428d00de0b1bcecd4a4ab7f72bd18c026c4122a7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/DependencyUnavailable",
+            "sha256": "ca1ecc18619b14652fbf54a3193eb8c1d800415b8fdbe4147e957276b5a5691c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/ExpiredOrRevoked",
+            "sha256": "08a3ab34144506be2b68b702aebc4b4506728da075d96cb757a1ad6dd3ad6035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "8232ead0f33d80cfd7c0f8fb789e798150059e7c977cc92673b216ec51d91fe5"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotAuthorized",
+            "sha256": "32fd9a9f2ac2e46370eeec3a373da5a4485ebdea43a11dee3f74fc80f3eb9009"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "c17de9770bb556b1a5f479208f0b01236b92cd84029efc7b68ad103263bbeee0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/components/parameters/GrantId",
+            "sha256": "5c35c7b9aaafd5cb0c4d113387247f4450f641278d38d1e05d71c0e702a83fec"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/components/securitySchemes/currentSessionCookie",
+            "sha256": "32149a135f75ca08b159c55a39fb448ed1a7458402f0d176ba10458640cddc76"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/components/securitySchemes/gatewayServiceBearer",
+            "sha256": "bc5b13d7ba3fdb46def834ca8b88d136e7b9f70c17da29a17ca435e3862bb5fd"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/paths/~1internal~1v2~1identity~1catalog~1recovery-grants~1{grant_id}~1renew/post",
+            "sha256": "f231e1a0c7ce274cea60bb7280a38b6091650af25a673411b63c64fd0bfb3222"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "d97f11b736e9826a2048245688df5e1c48e309a9164b3345a09a245e7d55674b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Grant",
+            "sha256": "606c7862f34f6d825a3eee96caab4b0dff0e3a3b4123e2ea10065391e36a3ef8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantPurposePermission",
+            "sha256": "8b5618261c0cbece4d135ea6a68d6bc2324be7a687ae63dacd8e4389334b6403"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/IssuePurposePermission",
+            "sha256": "71986f683f87025c530bbdd368bc5fa431fe4c2bbd5a947db9630d61303ce659"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/RenewRequest",
+            "sha256": "a1b4962cfcf7d7632b2e84a77700feb7f99e74b357e0e6dcf1e90c8083a10ac5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$defs/Grant",
+            "sha256": "c9ae0ac42af85514a5434ea254c74638d69ab59dc14fd4923d0cf226eaea4cf1"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$defs/RenewRequest",
+            "sha256": "36c578363d2fc8f4ea590141957235952e115e4cc13b908e665e0f1118641f43"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "660c07251d2cbd57600b02bc61593df090da6b6ffeeba56f2cfe17e256c5c419"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ffc105173cf22c85db62f7736e361c0ba7156c0c74e433e3e4e636c44f71a7df",
+        "runtimeSha256": "ec1e13e35fd83b64e2a3284a23cd958ba78f2dd37f931e3aef683e9a8c59ceec"
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.schema.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "sha256": "e9cc0bd60958e0a05ad9a84532db6b1cedd094d3c5d8acdb4fe2ca04e868654f"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Grant",
+            "sha256": "606c7862f34f6d825a3eee96caab4b0dff0e3a3b4123e2ea10065391e36a3ef8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantPurposePermission",
+            "sha256": "8b5618261c0cbece4d135ea6a68d6bc2324be7a687ae63dacd8e4389334b6403"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/IssuePurposePermission",
+            "sha256": "71986f683f87025c530bbdd368bc5fa431fe4c2bbd5a947db9630d61303ce659"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/RenewRequest",
+            "sha256": "a1b4962cfcf7d7632b2e84a77700feb7f99e74b357e0e6dcf1e90c8083a10ac5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "",
+            "sha256": "28ba96843a801cc0e087d05c7e219d73abfbc511deeece8e69b3c4434f1672cc"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "660c07251d2cbd57600b02bc61593df090da6b6ffeeba56f2cfe17e256c5c419"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "54db9901b0c0c7721f8dc7cfcf15bd48e14c252667421ed017f0b4d40808cce1",
+        "runtimeSha256": "54db9901b0c0c7721f8dc7cfcf15bd48e14c252667421ed017f0b4d40808cce1"
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.policy.v2",
+        "role": "validation",
+        "version": "2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2-policy.json",
+            "sha256": "335e7af3e2df7c0d4ff0544672f7c32adb2244dd7826e9a7c0bf26d4fef1d84e"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-renewal-v2-policy.json",
+            "pointer": "",
+            "sha256": "0ab2d80859fd9fc1545bcefa5b8182e9a183331f56c6fcfbc38347c7430fd600"
+          }
+        ],
+        "selectionSha256": "a179e41091d1487f7e455498a3402a9c71a9b32f8df8a48037b532b7a0f6cb4d",
+        "runtimeSha256": "a179e41091d1487f7e455498a3402a9c71a9b32f8df8a48037b532b7a0f6cb4d"
+      },
+      {
+        "id": "identity.catalog-recovery-renewal.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56724471a5460e22d936bd09bef448efe46d87e6",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/catalog-recovery/v2/catalog-recovery-renewal-v2-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-renewal-v2-vectors.json",
+            "sha256": "4a69548779e4b9dc04ac8a8312513a5d197a7ab4272198d136137e66e7c0ad42"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/catalog-recovery/v2/catalog-recovery-renewal-v2-vectors.json",
+            "pointer": "",
+            "sha256": "a6feb25f61437d8d836e745661c662ee1f81967994d35dd8f78700e15687df61"
+          }
+        ],
+        "selectionSha256": "ac84a18ed875095bf02a7bb749596dd4c6abb1107b6b9dbcda430f17cb89d4af",
+        "runtimeSha256": "ac84a18ed875095bf02a7bb749596dd4c6abb1107b6b9dbcda430f17cb89d4af"
       }
     ],
     "assets": []

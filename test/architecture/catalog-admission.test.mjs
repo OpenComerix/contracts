@@ -101,7 +101,10 @@ test('G preserves historical descriptors, consumer exports, pins and deferred sa
   assert.deepEqual(sourceBaseline.planned, [...baseline.planned.filter(row => row.materializeIn !== 'F1-07'), ...historyPlanned, ...protectionPlanned, ...recoveryPlanned, ...recoveryProtocolPlanned, ...verificationPlanned, ...classificationPlanned]);
   const files = ['registry/consumers/index.json', ...registry.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')];
   for (const file of files) {
-    const local = readFileSync(path.join(root, file)).toString('utf8').replaceAll('\r\n', '\n');
+    // F1-08I evolves only identity's consumer export; retain G's immutable proof.
+    const local = (file === 'registry/consumers/identity-tenancy.json'
+      ? gitReader(root, 'e3f39131b32ed136b17acea0a3289fad718029d6')(file)
+      : readFileSync(path.join(root, file))).toString('utf8').replaceAll('\r\n', '\n');
     assert.equal(local, gitReader(root, revision)(file).toString('utf8'), file);
   }
 });
