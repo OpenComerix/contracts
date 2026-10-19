@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {runtimeRegistryView, validateRuntimeSnapshot, runtimeBase} from './catalog-runtime-v1-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
@@ -17,6 +18,7 @@ const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
 // markers or arbitrary additions still reach the original H/I metadata guards.
 // The full J gate below additionally checks the complete registry and export.
 export function foundationRegistryView(registry) {
+  registry = runtimeRegistryView(registry);
   if (registry.coverage !== foundationCoverage) return registry;
   const baseline = prior();
   assert.deepEqual(registry.requiredConsumers, [...baseline.requiredConsumers, 'catalog-pricing'],
@@ -59,6 +61,7 @@ export function foundationManifest(registry = prior()) {
 }
 
 export function validateFoundationRegistry(registry = read('registry/contracts.json'), index = read('registry/consumers/index.json')) {
+  registry = runtimeRegistryView(registry);
   assert.equal(registry.coverage, foundationCoverage, 'J_COVERAGE_DECISION');
   assert.deepEqual(foundationRegistryView(registry), prior(), 'J_REGISTRY_PRESERVATION');
   const before = JSON.parse(gitReader(root, foundationBase)('registry/consumers/index.json'));
@@ -74,6 +77,10 @@ export function validateFoundationRegistry(registry = read('registry/contracts.j
 
 let expectedSnapshot;
 export function validateFoundationSnapshot(snapshot = read('registry/consumers/catalog-pricing.json')) {
+  if (snapshot.manifest?.contracts?.some(row => row.id === 'catalog.http.private.v1')) {
+    validateRuntimeSnapshot(snapshot);
+    snapshot = JSON.parse(gitReader(root, runtimeBase)('registry/consumers/catalog-pricing.json'));
+  }
   if (!expectedSnapshot) {
     const manifest = foundationManifest(), body = Buffer.from(JSON.stringify(manifest, null, 2) + '\n');
     const lock = makeLock(root, manifest, body, prior());

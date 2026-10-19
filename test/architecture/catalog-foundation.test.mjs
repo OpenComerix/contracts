@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {runtimeRegistryView, runtimeBase} from '../../scripts/catalog/catalog-runtime-v1-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,7 +18,7 @@ const registeredSnapshot = read('registry/consumers/catalog-pricing.json'), sour
 // Keep the candidate fixture independent of the live export lifecycle. The first
 // test validates the real registered export; adversarial candidate cases always
 // start from the candidate base, including after a genuine published import.
-const snapshot = {...structuredClone(registeredSnapshot), publication: 'local-candidate', sourceCommit: foundationServiceBase};
+const snapshot = {...JSON.parse(gitReader(root, runtimeBase)('registry/consumers/catalog-pricing.json')), publication: 'local-candidate', sourceCommit: foundationServiceBase};
 
 test('J adds only one validation consumer; all 119 roots, 236 artifacts, intentions and prior exports survive', () => {
   assert.deepEqual(validateFoundationRegistry(), {consumers: 5, new_validation_consumers: 1, runtime_demonstrated: false});
@@ -143,11 +144,11 @@ test('H/I/renewal recognize current coverage, retain the original registry and r
     const withoutDecision = structuredClone(original); withoutDecision.requiredConsumers.push('catalog-pricing');
     assert.throws(() => validate(withoutDecision));
   }
-  assert.equal(registry.coverage, foundationCoverage);
+  assert.equal(runtimeRegistryView(registry).coverage, foundationCoverage);
 });
 
 test('J preserves every other published file, including all transports, tools, CI and the four consumer exports', () => {
-  const changed = new Set(['registry/contracts.json', 'registry/consumers/index.json', 'registry/README.md',
+  const changed = new Set(['scripts/catalog/catalog-foundation-v1-registry.mjs', 'test/architecture/catalog-foundation.test.mjs', 'registry/consumers/catalog-pricing.json', 'registry/contracts.json', 'registry/consumers/index.json', 'registry/README.md',
     'scripts/identity/catalog-recovery-renewal-v2-registry.mjs',
     'test/architecture/identity-producer-admission.test.mjs',
     'test/architecture/catalog-admission.test.mjs', 'test/identity/catalog-admission-v1.test.mjs',
