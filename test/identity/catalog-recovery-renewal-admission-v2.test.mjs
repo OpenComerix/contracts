@@ -146,6 +146,12 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   const excluded=new Set(['registry/contracts.json','identity/index.json','identity/README.md','registry/README.md',
     'scripts/identity/catalog-recovery-renewal-v2-registry.mjs','scripts/identity/validate-catalog-recovery-renewal-v2.mjs',
     'test/identity/catalog-recovery-renewal-v2.test.mjs','test/catalog/history-recovery-v1.test.mjs']);
-  for(const file of files.filter(file=>!excluded.has(file)))
-    assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  // Only these historical proofs evolved with F1-08I; live sources and other consumers stay strict.
+  const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
+  const producerProofs=new Set(['registry/consumers/identity-tenancy.json',
+    'test/architecture/catalog-admission.test.mjs','test/identity/catalog-admission-v1.test.mjs']);
+  for(const file of files.filter(file=>!excluded.has(file))) {
+    const actual=producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
+    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  }
 });

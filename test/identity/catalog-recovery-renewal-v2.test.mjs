@@ -128,7 +128,13 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
   const files=execFileSync('git',['ls-tree','-r','--name-only',renewalBase],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const keep=files.filter(file=>/^(identity\/(http|fixtures)\/|openapi\/|catalog\/|common\/|events\/|commands\/|errors\/|registry\/consumers\/|tools\/)/.test(file));
   keep.push(...files.filter(file=>/^scripts\/identity\//.test(file)&&!file.endsWith('/validate-catalog-admission-v1.mjs')),'package.json','pnpm-lock.yaml');
-  for(const file of keep)assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  // Preserve the historical candidate; the producer admission checks the live identity export.
+  const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
+  for(const file of keep) {
+    const actual=file==='registry/consumers/identity-tenancy.json'
+      ? historical(file) : fs.readFileSync(path.join(root,file));
+    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  }
 });
 
 test('CI appends only real renewal lint/bundle/extraction/schema commands to the two I jobs',()=>{

@@ -140,8 +140,13 @@ for (const [name, mutate, reason] of [
 test('consumer exports, CI jobs, tools, old indexes and all transport sources are unchanged', () => {
   const files=execFileSync('git',['ls-tree','-r','--name-only',identityAdmissionSource],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const keep=files.filter(file=>/^(registry\/consumers\/|tools\/|openapi\/|events\/|commands\/|errors\/|common\/|catalog\/|identity\/(http|fixtures)\/)/.test(file));
-  for (const file of [...keep,'package.json','pnpm-lock.yaml'])
-    assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  // Preserve the historical admission; F1-08I checks its current identity export separately.
+  const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
+  for (const file of [...keep,'package.json','pnpm-lock.yaml']) {
+    const actual=file==='registry/consumers/identity-tenancy.json'
+      ? historical(file) : fs.readFileSync(path.join(root,file));
+    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  }
   const ci=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
   assert.equal(Object.keys(ci).filter(key=>key.startsWith('validate:')).length,12);
 });
