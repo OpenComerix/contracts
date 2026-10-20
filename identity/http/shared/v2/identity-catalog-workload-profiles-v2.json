@@ -1,0 +1,24 @@
+{
+  "policy_version": 2,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "supersedes": {
+    "path": "identity/http/shared/v1/identity-catalog-workload-profiles-v1.json",
+    "sha256": "9d1552e9c3d941e66101be4be993d912c6d4d3207d45c8b93829e6cad7ddc59d"
+  },
+  "profiles": [
+    { "client_id": "notifications", "caller": "notifications", "audience": "identity-tenancy.delivery-material", "type": "service", "maximum_seconds": 300 },
+    { "client_id": "gateway-bff", "caller": "gateway-bff", "audience": "identity-tenancy.gateway", "type": "service", "maximum_seconds": 300 },
+    { "client_id": "gateway-bff.catalog-recovery", "caller": "gateway-bff", "audience": "identity-tenancy.catalog-recovery", "type": "service", "maximum_seconds": 300 },
+    { "client_id": "catalog-pricing", "caller": "catalog-pricing", "audience": "identity-tenancy.catalog-authority", "type": "service", "maximum_seconds": 300 },
+    { "client_id": "catalog-pricing.catalog-recovery", "caller": "catalog-pricing", "audience": "identity-tenancy.catalog-recovery", "type": "service", "maximum_seconds": 300 },
+    { "client_id": "catalog-pricing.history-recovery", "caller": "catalog-pricing", "audience": "catalog-pricing.history-recovery", "type": "service", "maximum_seconds": 300 }
+  ],
+  "request": "Preserve H1A v1 request and authentication semantics: HTTP Basic; only grant_type=client_credentials in body. No caller/audience/scope selector; the server binds one audience to the authenticated client_id.",
+  "credentials": "Separate CSPRNG secrets per profile and rotation slot; reject reuse across profiles. Profile IDs authenticate clients; caller and audience are fixed by server policy.",
+  "isolation": "Every token has one exact audience and canonical caller. The new history-recovery profile is separate from catalog-pricing.catalog-recovery, whose audience remains identity-tenancy.catalog-recovery.",
+  "activation": "Candidate policy only. Existing v1 bytes and admissions remain unchanged. No consumer lock, admission, publication, or production enablement is implied.",
+  "privacy": "Never version real secrets, tokens or authentication payloads. Logs contain no credential values."
+}

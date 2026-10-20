@@ -270,6 +270,7 @@ validate:identity-catalog-contracts:
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-history-permissions-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-permissions-v1.bundle.json
     - node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
     - node scripts/identity/validate-catalog-workload-profiles-v1.mjs
+    - node scripts/identity/validate-catalog-workload-profiles-v2.mjs
     - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json

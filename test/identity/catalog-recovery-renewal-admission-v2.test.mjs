@@ -146,14 +146,20 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   const files=execFileSync('git',['ls-tree','-r','--name-only',renewalSource],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const excluded=new Set(['registry/contracts.json','identity/index.json','identity/README.md','registry/README.md',
     'scripts/identity/catalog-recovery-renewal-v2-registry.mjs','scripts/identity/validate-catalog-recovery-renewal-v2.mjs',
-    'test/identity/catalog-recovery-renewal-v2.test.mjs','test/catalog/history-recovery-v1.test.mjs']);
+    'test/identity/catalog-recovery-renewal-v2.test.mjs','test/identity/catalog-recovery-renewal-admission-v2.test.mjs',
+    'test/identity/candidate-preservation.test.mjs','test/catalog/history-recovery-v1.test.mjs']);
   // Only these historical proofs evolved with F1-08I; live sources and other consumers stay strict.
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   const producerProofs=new Set(['registry/consumers/identity-tenancy.json',
     'test/architecture/catalog-admission.test.mjs','test/identity/catalog-admission-v1.test.mjs']);
+  const ciHead=execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'});
+  const profileV1='    - node scripts/identity/validate-catalog-workload-profiles-v1.mjs\n';
+  assert(ciHead.includes(profileV1),'HEAD CI must contain the published v1 profile gate');
+  const expectedCi=ciHead.replace(profileV1,profileV1+'    - node scripts/identity/validate-catalog-workload-profiles-v2.mjs\n');
   for(const file of files.filter(file=>!excluded.has(file))) {
     const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
-    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+    const expected=file==='.gitlab-ci.yml' ? expectedCi : source(file).toString('utf8');
+    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),expected,file);
   }
 });

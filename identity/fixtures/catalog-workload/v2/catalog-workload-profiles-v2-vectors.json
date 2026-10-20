@@ -1,0 +1,25 @@
+{
+  "version": 2,
+  "runtime_demonstrated": false,
+  "request": { "grant_type": "client_credentials" },
+  "accepted": [
+    { "client_id": "notifications", "caller": "notifications", "audience": "identity-tenancy.delivery-material" },
+    { "client_id": "gateway-bff", "caller": "gateway-bff", "audience": "identity-tenancy.gateway" },
+    { "client_id": "gateway-bff.catalog-recovery", "caller": "gateway-bff", "audience": "identity-tenancy.catalog-recovery" },
+    { "client_id": "catalog-pricing", "caller": "catalog-pricing", "audience": "identity-tenancy.catalog-authority" },
+    { "client_id": "catalog-pricing.catalog-recovery", "caller": "catalog-pricing", "audience": "identity-tenancy.catalog-recovery" },
+    { "client_id": "catalog-pricing.history-recovery", "caller": "catalog-pricing", "audience": "catalog-pricing.history-recovery" }
+  ],
+  "rejected_requests": [
+    { "grant_type": "client_credentials", "audience": "identity-tenancy.catalog-recovery" },
+    { "grant_type": "client_credentials", "caller": "catalog-pricing" },
+    { "grant_type": "client_credentials", "scope": "admin" },
+    { "grant_type": "password" },
+    {}
+  ],
+  "unknown_clients": [ "OWNER", "browser", "gateway-bff.history-admin" ],
+  "cross_purpose": {
+    "client_id": "catalog-pricing.catalog-recovery",
+    "requested_audience": "catalog-pricing.history-recovery"
+  }
+}

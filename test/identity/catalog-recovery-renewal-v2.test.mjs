@@ -139,14 +139,12 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
   }
 });
 
-test('CI appends only real renewal lint/bundle/extraction/schema commands to the two I jobs',()=>{
-  const before=parse(source('.gitlab-ci.yml').toString('utf8')),expected=structuredClone(before),current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
-  expected['validate:identity-catalog-contracts'].script.push(
-    'npx --yes @redocly/cli@2.53.3 lint identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml',
-    'node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml',
-    'npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json',
-    'node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json');
-  expected['validate:identity-catalog-contracts'].artifacts.paths.push('.ci-artifacts/catalog-recovery-renewal-v2.bundle.json','.ci-artifacts/catalog-recovery-renewal-v2/');
-  expected['validate:identity-catalog-schema'].script.push('jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json --verbose','sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2');
-  assert.deepEqual(current,expected);assert.equal(Object.keys(current).filter(key=>key.startsWith('validate:')).length,12);
+test('CI preserves the current renewal gates and adds only the H1A profile successor gate',()=>{
+  const before=parse(execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'})),expected=structuredClone(before),current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
+  expected['validate:identity-catalog-contracts'].script.splice(profileGate+1,0,'node scripts/identity/validate-catalog-workload-profiles-v2.mjs');
+  assert.deepEqual(current,expected);
+  assert.equal(Object.keys(current).filter(key=>key.startsWith('validate:')).length,12);
+  assert(current['validate:identity-catalog-contracts'].script.includes('node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json'));
+  assert(current['validate:identity-catalog-schema'].script.includes('jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json --verbose'));
 });

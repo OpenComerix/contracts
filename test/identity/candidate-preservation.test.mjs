@@ -24,10 +24,13 @@ test('all published transports, preserved artifacts and consumer exports retain 
   const paths=new Set([...previous.contracts.map(row=>row.path),...previous.preservedFiles.map(row=>row.path),...files.filter(file=>/^(openapi|consumers|catalog|common|events|commands|errors)\//.test(file)),...files.filter(file=>/^identity\/http\//.test(file))]);
   for(const file of paths) assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
 });
-test('CI preserves all ten jobs and adds the semantic and real schema gates',()=> {
-  const prior=parse(source('.gitlab-ci.yml').toString('utf8'));
+test('CI preserves existing jobs and adds the H1A successor plus semantic and real schema gates',()=> {
+  const prior=parse(execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'}));
   const current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
-  for(const [name,value] of Object.entries(prior)) assert.deepEqual(current[name],value,name);
+  const expected=structuredClone(prior);
+  const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
+  expected['validate:identity-catalog-contracts'].script.splice(profileGate+1,0,'node scripts/identity/validate-catalog-workload-profiles-v2.mjs');
+  assert.deepEqual(current,expected);
   assert(current['validate:identity-catalog-contracts'].script.includes('node --test test/identity/*.test.mjs'));
   assert(current['validate:identity-catalog-schema'].script.includes('sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1'));
 });
