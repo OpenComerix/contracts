@@ -26,7 +26,7 @@ test('L adds eight R1/R2 selections plus narrow R3 verification and preserves al
   assert(snapshot.lock.entries.slice(29).every(row => row.commit === '28be1edf02a3771629febf554f8b5f4856452877'));
 });
 
-test('L projects only its complete explicit registry decision to K/J', () => {
+test('L projects only its coverage marker to K/J and its gate strictly preserves the full registry', () => {
   const previous = JSON.parse(source('registry/contracts.json'));
   const current = {...structuredClone(previous), coverage: lifecycleCoverage};
   assert.deepEqual(lifecycleRegistryView(current), previous);
@@ -36,12 +36,17 @@ test('L projects only its complete explicit registry decision to K/J', () => {
     r => r.contracts.pop(), r => r.planned.pop(),
     r => r.requiredConsumers.push('unapproved'),
     r => {r.preservedFiles[0].sha256 = '0'.repeat(64);},
+    r => {r.extra = 'unapproved';},
   ]) {
     const wrong = structuredClone(current); change(wrong);
-    assert.throws(() => lifecycleRegistryView(wrong), /L_REGISTRY_PRESERVATION/);
+    const before = structuredClone(wrong);
+    assert.deepEqual(lifecycleRegistryView(wrong), {...wrong, coverage: previous.coverage});
+    assert.deepEqual(wrong, before);
+    assert.throws(() => validateLifecycleRegistry(wrong), /L_REGISTRY_PRESERVATION/);
   }
   const unknown = {...current, coverage: 'unapproved'};
   assert.equal(lifecycleRegistryView(unknown), unknown);
+  assert.throws(() => validateLifecycleRegistry(unknown), /L_COVERAGE_DECISION/);
 });
 
 for (const [name, change] of [

@@ -37,10 +37,9 @@ export function lifecycleManifest() {
 
 export function lifecycleRegistryView(registry) {
   if (registry.coverage !== lifecycleCoverage) return registry;
-  const previous = baseline('registry/contracts.json');
-  const projected = {...registry, coverage: previous.coverage};
-  assert.deepEqual(projected, previous, 'L_REGISTRY_PRESERVATION');
-  return projected;
+  // Historical validators retain their own descriptor/provenance diagnostics.
+  // Full registry preservation is enforced separately by validateLifecycleRegistry.
+  return {...registry, coverage: baseline('registry/contracts.json').coverage};
 }
 
 export function lifecycleSnapshot() {
@@ -68,7 +67,7 @@ export function validateLifecycleSnapshot(snapshot = read('registry/consumers/ca
 
 export function validateLifecycleRegistry(registry = read('registry/contracts.json')) {
   assert.equal(registry.coverage, lifecycleCoverage, 'L_COVERAGE_DECISION');
-  lifecycleRegistryView(registry);
+  assert.deepEqual(lifecycleRegistryView(registry), baseline('registry/contracts.json'), 'L_REGISTRY_PRESERVATION');
   assert.deepEqual(read('registry/consumers/index.json'), baseline('registry/consumers/index.json'), 'L_INDEX_PRESERVATION');
   for (const name of registry.requiredConsumers.filter(name => name !== 'catalog-pricing')) {
     const file = 'registry/consumers/' + name + '.json';
