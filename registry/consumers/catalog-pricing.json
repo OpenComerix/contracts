@@ -1,10 +1,10 @@
 {
   "formatVersion": 1,
-  "publication": "published",
+  "publication": "local-candidate",
   "sourceRepository": "opencomerix/catalog-pricing",
   "sourceCommit": "759b10b96d9439e8ceded4dd2fb16d26362bcd39",
-  "manifestSha256": "e8ced6e040885e182c86792d1673fcb4475b963a9954cc7ec3fcd083af1af6d5",
-  "lockSha256": "f6652348b7a937554e70ecfdbd4b975859002dae14c22f73200e0318ae940225",
+  "manifestSha256": "03473839ec5984b7a0aaa567b02b4c1c118eb116a2674243c8d03d895935591f",
+  "lockSha256": "c47cd0ce2f9778915214d03c57f32b10d2cb430f6cd11cbcd2f40cbd0c0d3289",
   "manifest": {
     "formatVersion": 1,
     "service": "catalog-pricing",
@@ -512,6 +512,150 @@
           "pnpm test:integration",
           "pnpm test:e2e"
         ]
+      },
+      {
+        "id": "catalog.history-protection.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "submitCatalogHistoryProtectionMessage"
+        ],
+        "pointers": [],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-protection.schema.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-protection.policy.v1",
+        "role": "consumer",
+        "version": "1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "common.data-lifecycle-policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-protection.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-policy.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v7",
+        "role": "consumer",
+        "version": "7",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "verifyCatalogRecoveryGrant"
+        ],
+        "pointers": [],
+        "purpose": "F1-08L isolated R1/R2 history lifecycle, protection and controlled disposition; no functional activation, recovery or broker.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
       }
     ],
     "assets": [],
@@ -520,7 +664,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "catalog-pricing",
-    "manifestSha256": "e8ced6e040885e182c86792d1673fcb4475b963a9954cc7ec3fcd083af1af6d5",
+    "manifestSha256": "03473839ec5984b7a0aaa567b02b4c1c118eb116a2674243c8d03d895935591f",
     "entries": [
       {
         "id": "common.event-envelope.v1",
@@ -5186,6 +5330,707 @@
         ],
         "selectionSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98",
         "runtimeSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98"
+      },
+      {
+        "id": "catalog.history-protection.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+        "operations": [
+          "submitCatalogHistoryProtectionMessage"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "sha256": "f12b5a67dd954b99a76423ee97b2a81c3189e75ce1c09623f046c7a2e0d19f43"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "sha256": "07023d9bfb5a50fdf05dab10411395a94f2506d87e8b06044deab5e53949e2b9"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "b244ba46df71e7748467c0b5ac1db273edd67fc15b4b50aa5ff607ff9e53e6ee"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/components/securitySchemes/sourceWorkloadBearer",
+            "sha256": "44db642b0a2e84a7336c302b13a5a4a034d71ec2591d1065497ed82713fe21fe"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1catalog~1history~1protection~1messages/post",
+            "sha256": "fa684ba50ad23ad81411ac12329df57337b9e69986b8343cbca85da4b88bb2a4"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/security",
+            "sha256": "f3831c94c1e3de48189c53d9c8053e5bf7a70072222b4f348a697e292d1994e9"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-protection-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "7da6c70fb89cf44a96ef66da395d47e5ffa99e5d1e19cc88aace4d8c0c128409"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/BaselineComplete",
+            "sha256": "25a675bec2b2010507c6a2494b1a8f3e80000147f16bf2ea09ec630854593071"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/BaselinePage",
+            "sha256": "e01200b7bdbcd244abeb50b39cfeaa2a8fbcc47452a038fa9446c0f3094e867f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Checkpoint",
+            "sha256": "ef83c6a22e305af894ad0004adec71ebaa62faa5a9e2d5102b8065a11c0b2941"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Closure",
+            "sha256": "211d285023d16900cdb7ab3f91f36d3349a60708e65e71669ba67f0d86da112f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Deadline",
+            "sha256": "5d2fdd1a18507d53862dfbe35e415b3a7ad8a33a86e0a4df0b168dcdeee09870"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Evidence",
+            "sha256": "12232200042079c08980e9f44f566ad35d0f1084dc923c79728d491d0e03141e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Hold",
+            "sha256": "8e3ebad397d715f33eba6f0757f2d45a25c0a10ef430328d7ca708a4a86d360e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/HoldRelease",
+            "sha256": "44b9f308d624163b4fc92bbc9c242df60c4e45b5480b259713ed99d01770d58d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Message",
+            "sha256": "ccc22f47f462a38c2d8f0e928f0383f215c55af92897cf81130b4f02cb615ebe"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Obligation",
+            "sha256": "e607a0ff02cf606e12619af3baf24b9eb6e4e41ceffbe76b65a252cf11d035e8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "33f94da733d1a35f41a5310ed40c3c74eb442c1ace5341225e74af5eea931b4b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Receipt",
+            "sha256": "8276c56ab3a1b85d36fca9c5bbd0a6eaa23e3bdd2cd58efafeeb4ff8b9ef6d6c"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "ae430dd9168b95ba494028b1baab4d5eca5d5b5afc8a0ca228028a10c8899f51"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Release",
+            "sha256": "9c7fc9600a46d63960176385418a4e86e6c44630e581b33c52d5bf1c953c8796"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5b35573f27980946b6f083d4c7a35ad10a051dec0b44cd955eb7d3fb69b514e0"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "c58e53b587a5193cb3e5bb7dd9cb2b9ef4c34a8f67e7e3c2424f5a86ae827470",
+        "runtimeSha256": "9372ef04f8cbca11aa25a72c1df89bf3278fa251910f23fc321b748fd51888b8"
+      },
+      {
+        "id": "catalog.history-protection.schema.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "sha256": "07023d9bfb5a50fdf05dab10411395a94f2506d87e8b06044deab5e53949e2b9"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "",
+            "sha256": "f3256546dbf15ba95daa60a8d9a473207f65e957c85c3e34616d7f7b7a1909ad"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Admission",
+            "sha256": "29492a43304ab60ba6171d86b42b0b036bf5819e560d2548acbe519cd71c82ae"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/BaselineComplete",
+            "sha256": "25a675bec2b2010507c6a2494b1a8f3e80000147f16bf2ea09ec630854593071"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/BaselinePage",
+            "sha256": "e01200b7bdbcd244abeb50b39cfeaa2a8fbcc47452a038fa9446c0f3094e867f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Checkpoint",
+            "sha256": "ef83c6a22e305af894ad0004adec71ebaa62faa5a9e2d5102b8065a11c0b2941"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Closure",
+            "sha256": "211d285023d16900cdb7ab3f91f36d3349a60708e65e71669ba67f0d86da112f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Deadline",
+            "sha256": "5d2fdd1a18507d53862dfbe35e415b3a7ad8a33a86e0a4df0b168dcdeee09870"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Evidence",
+            "sha256": "12232200042079c08980e9f44f566ad35d0f1084dc923c79728d491d0e03141e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Hold",
+            "sha256": "8e3ebad397d715f33eba6f0757f2d45a25c0a10ef430328d7ca708a4a86d360e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/HoldRelease",
+            "sha256": "44b9f308d624163b4fc92bbc9c242df60c4e45b5480b259713ed99d01770d58d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Obligation",
+            "sha256": "e607a0ff02cf606e12619af3baf24b9eb6e4e41ceffbe76b65a252cf11d035e8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "ae430dd9168b95ba494028b1baab4d5eca5d5b5afc8a0ca228028a10c8899f51"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Release",
+            "sha256": "9c7fc9600a46d63960176385418a4e86e6c44630e581b33c52d5bf1c953c8796"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$defs/Scope",
+            "sha256": "d5246fd49e4d8f66b5516674bdcd40cad57b74dc0796fda4f474320581a48456"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5b35573f27980946b6f083d4c7a35ad10a051dec0b44cd955eb7d3fb69b514e0"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "235d6e6f43af6bb3826a0bf815f65aa822f56cda460127847b44489cc5741fcf",
+        "runtimeSha256": "235d6e6f43af6bb3826a0bf815f65aa822f56cda460127847b44489cc5741fcf"
+      },
+      {
+        "id": "catalog.history-protection.policy.v1",
+        "role": "consumer",
+        "version": "1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+            "sha256": "a241fe9cc94415f5da75cc411f27a2a37d109c078fa04d515854d86e55fcfb45"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-protection-v1-policy.json",
+            "pointer": "",
+            "sha256": "1e245ceb14e65e82c716405abcf2d21a5aa1abb30be2f6eb96cd75431481de25"
+          }
+        ],
+        "selectionSha256": "307ce5dd47ea9b77d3357ab391128dcd05f842fe1f87dcd6be7708a541f50874",
+        "runtimeSha256": "307ce5dd47ea9b77d3357ab391128dcd05f842fe1f87dcd6be7708a541f50874"
+      },
+      {
+        "id": "catalog.history-policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v2/catalog-history-policy-v2.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v2/catalog-history-policy-v2.json",
+            "sha256": "f3800ca870cb44152bb8b3439c20f67af61390e3194fba054b45587de3381819"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v2/catalog-history-policy-v2.json",
+            "pointer": "",
+            "sha256": "d044c31a07506223e2529b3810b2e8802af5f85190ba17d8e954e26cf7ddcfe4"
+          }
+        ],
+        "selectionSha256": "ed5f1036904501433ce72d5eeb9b0aeabef4107676e0cc73cbc5f07232ec17e0",
+        "runtimeSha256": "ed5f1036904501433ce72d5eeb9b0aeabef4107676e0cc73cbc5f07232ec17e0"
+      },
+      {
+        "id": "common.data-lifecycle-policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "sha256": "06f26409180b2b553cb8243ce60c84c8da4ecf188ff8ba56e6606bef2a1f3df2"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "",
+            "sha256": "f7ab4a4d6a4fda8a3700280b4b9cd4f4752a19d3510a6b5a2ba7f5df9c0737ff"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Classification",
+            "sha256": "9361a608a880e98095ff7487494237d21433a4187e58958bfb3225356f9d2387"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/ClassificationProfile",
+            "sha256": "664b5359a746f34a5d8b84812c7ab72cf55eb9d0a659924451c27e1375a2cd31"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Compatibility",
+            "sha256": "0e41fb261e44f1a3054b5f9d301bb6ce6d7497cfaa45df528f3a3f9b57d192b1"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/FieldSource",
+            "sha256": "898003a9d17d62f8d5e0774330f35b11b344374722e0ee281897cf01f8e6428c"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Profile",
+            "sha256": "b7301569389d3174c390c607091b6ff86e1ffd685a00c517f853b78af6b9390a"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Retention",
+            "sha256": "a7816e7184be647c9bbafa52cd072540ea3bd0bf5df321e5df777d650a086d65"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Selector",
+            "sha256": "bdfc47c30f13c0cb23803aa8e966c2bd8e8c9cd8c60a1768106513c9a1b40f2a"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Source",
+            "sha256": "7f5f4331ab43bd023de4094d1824eb3e49ad563edbe6502d680f4fb1042dc9f1"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/Storage",
+            "sha256": "db742ce1bc52345b4b764cdcd3f471cfc3cd5c237c3c7a8ed5b4b097304a735f"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/StorageField",
+            "sha256": "33a41844637337a98978ec5465931026988d4a8615d1cc10b72147f8ade91adf"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$defs/TransportField",
+            "sha256": "04fb1a7390590326984d9ad910b5e09d937927caa57f35feb9c9534e8a36dac4"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "4c952150b2bcc2ba371b7c8462c59a318c76c5ed407965042cb4a76a9e008fff"
+          },
+          {
+            "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "006b0b807c036f812a37d5053cc0d1dedfe78ef97970e3edf24365613727f44c",
+        "runtimeSha256": "006b0b807c036f812a37d5053cc0d1dedfe78ef97970e3edf24365613727f44c"
+      },
+      {
+        "id": "catalog.history-protection.fixtures.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+            "sha256": "bdbb162015adf122bbb4240c5a9220d57ee007cefe6efe189f509914c34c23e1"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/fixtures/history-protection/v1/history-protection-v1-vectors.json",
+            "pointer": "",
+            "sha256": "5ec8daf008dd042b1ef0079cb42d47b2dd482b0b57d5e5202ffd4db9b2a6cbd0"
+          }
+        ],
+        "selectionSha256": "06cdc531c4a08dd909fd4cbcd47d15a7d5b3a031c5d77a52a16eea9d89bde4a2",
+        "runtimeSha256": "06cdc531c4a08dd909fd4cbcd47d15a7d5b3a031c5d77a52a16eea9d89bde4a2"
+      },
+      {
+        "id": "catalog.history-policy.fixtures.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+            "sha256": "26be491616925bc61092d661826105f622ef9ae79094082a1b6574e7adca4265"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/fixtures/history-policy/v2/history-policy-v2-vectors.json",
+            "pointer": "",
+            "sha256": "3cf2acc0d970f288adcee1add45846e4907feea58313872b8931c453ce7e139f"
+          }
+        ],
+        "selectionSha256": "ca08032ade86e9045fb04f5d1dde0689a1a61bff2fd9bcd0f4d81efd0d0ff369",
+        "runtimeSha256": "ca08032ade86e9045fb04f5d1dde0689a1a61bff2fd9bcd0f4d81efd0d0ff369"
+      },
+      {
+        "id": "common.error-catalog.v7",
+        "role": "consumer",
+        "version": "7",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "common/errors/v7/error-catalog-v7.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/errors/v7/error-catalog-v7.json",
+            "sha256": "3126cb17a740618142e893faa17fcc2f0c9219894035cf6f93a0474981c49bb9"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/errors/v7/error-catalog-v7.json",
+            "pointer": "",
+            "sha256": "287f3d69e6a101b6ab322cafb28c3db1597c889a1078141fc342c695d32e4a5e"
+          }
+        ],
+        "selectionSha256": "a594affe96d2e72aa43a8a313a4e10ce741826dbdfd746ffb17638201e575213",
+        "runtimeSha256": "a594affe96d2e72aa43a8a313a4e10ce741826dbdfd746ffb17638201e575213"
+      },
+      {
+        "id": "identity.catalog-recovery-authority.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+        "operations": [
+          "verifyCatalogRecoveryGrant"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/AuthenticationRequired",
+            "sha256": "13a6cc1cd6735e460aba6a4846a11729f0ec030b90bdfa62679bbf2dd0581f7d"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/DependencyUnavailable",
+            "sha256": "ca1ecc18619b14652fbf54a3193eb8c1d800415b8fdbe4147e957276b5a5691c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/ExpiredOrRevoked",
+            "sha256": "08a3ab34144506be2b68b702aebc4b4506728da075d96cb757a1ad6dd3ad6035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "8232ead0f33d80cfd7c0f8fb789e798150059e7c977cc92673b216ec51d91fe5"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotAuthorized",
+            "sha256": "32fd9a9f2ac2e46370eeec3a373da5a4485ebdea43a11dee3f74fc80f3eb9009"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "c17de9770bb556b1a5f479208f0b01236b92cd84029efc7b68ad103263bbeee0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/catalogWorkloadBearer",
+            "sha256": "33acdf0773b4d77798f865d90bed3ebb944a0cf11ae34ad7358ac23b6addd1a7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1identity~1catalog~1recovery-grants~1verify/post",
+            "sha256": "281feabf96d3bff1ee60b1ed2d09a0794f21616638755386fb16dc07b5f01d8e"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "6e8e5f526e27f6be671ecf6a4113fe0ee7a3455074df0938e30cdabc71a4c3c0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "d97f11b736e9826a2048245688df5e1c48e309a9164b3345a09a245e7d55674b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "dc56828533500d51a1f9dd1d454a977f856204d7966ac847b05683fbeff2ca94"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse",
+            "sha256": "ee42e7c33dd19fa851ece02d3a77bab3d55f6ba00bf9bc2b6e89b072add08fc8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ab078ec219a5c8ad7318423d9bfd5bdfebe3724010e4cb14511a66588368c01f",
+        "runtimeSha256": "27c1867a127fc1ced6d772d864761719c2306c72dc8deea47ef2901d3fd7ecb8"
       }
     ],
     "assets": []

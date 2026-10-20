@@ -153,6 +153,9 @@ test('J preserves every other published file, including all transports, tools, C
     'test/architecture/identity-producer-admission.test.mjs',
     'test/architecture/catalog-admission.test.mjs', 'test/identity/catalog-admission-v1.test.mjs',
     'test/identity/catalog-recovery-renewal-v2.test.mjs', 'test/identity/catalog-recovery-renewal-admission-v2.test.mjs']);
+  // K's validator gains only the separately checked, closed L projection. The
+  // original J registry/descriptors and other consumer exports remain exact.
+  changed.add('scripts/catalog/catalog-runtime-v1-registry.mjs');
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', foundationBase], {cwd: root, encoding: 'utf8'}).trim().split('\n');
   for (const file of files.filter(file => !changed.has(file))) {
     assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), file);

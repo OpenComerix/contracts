@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
+import {lifecycleBase, lifecycleRegistryView, validateLifecycleSnapshot} from './catalog-lifecycle-v1-registry.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const runtimeBase = '86e4c6cb80b743386f349880ff76d7f76b6e9f02';
@@ -40,6 +41,7 @@ export function runtimeManifest() {
 }
 
 export function runtimeRegistryView(registry) {
+  registry = lifecycleRegistryView(registry);
   if (registry.coverage !== runtimeCoverage) return registry;
   const previous = baseline('registry/contracts.json');
   // Project only the approved coverage marker; historical validators retain their
@@ -66,6 +68,10 @@ export function runtimeSnapshot() {
 }
 
 export function validateRuntimeSnapshot(snapshot = read('registry/consumers/catalog-pricing.json')) {
+  if (snapshot.manifest?.contracts?.some(row => row.id === 'catalog.history-protection.http.v1')) {
+    validateLifecycleSnapshot(snapshot);
+    snapshot = JSON.parse(gitReader(root, lifecycleBase)('registry/consumers/catalog-pricing.json'));
+  }
   const candidate = runtimeSnapshot();
   assert(['local-candidate', 'published'].includes(snapshot.publication), 'K_CANDIDATE_SNAPSHOT: invalid lifecycle');
   assert(typeof snapshot.sourceCommit === 'string' && /^[a-f0-9]{40}$/.test(snapshot.sourceCommit), 'K_CANDIDATE_SNAPSHOT: unresolved source revision');
@@ -80,6 +86,7 @@ export function validateRuntimeSnapshot(snapshot = read('registry/consumers/cata
 }
 
 export function validateRuntimeRegistry(registry = read('registry/contracts.json')) {
+  registry = lifecycleRegistryView(registry);
   assert.equal(registry.coverage, runtimeCoverage, 'K_COVERAGE_DECISION');
   assert.deepEqual(runtimeRegistryView(registry), baseline('registry/contracts.json'), 'K_REGISTRY_PRESERVATION');
   assert.deepEqual(read('registry/consumers/index.json'), baseline('registry/consumers/index.json'), 'K_INDEX_PRESERVATION');
