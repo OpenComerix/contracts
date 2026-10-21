@@ -152,9 +152,9 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   const producerProofs=new Set(['registry/consumers/identity-tenancy.json',
     'test/architecture/catalog-admission.test.mjs','test/identity/catalog-admission-v1.test.mjs']);
-  const ciHead=execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'});
+  const ciHead=execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'});
   const profileV1='    - node scripts/identity/validate-catalog-workload-profiles-v1.mjs\n';
-  assert(ciHead.includes(profileV1),'HEAD CI must contain the published v1 profile gate');
+  assert(ciHead.includes(profileV1),'F1-08M base CI must contain the published v1 profile gate');
   const expectedCi=ciHead.replace(profileV1,profileV1+'    - node scripts/identity/validate-catalog-workload-profiles-v2.mjs\n');
   for(const file of files.filter(file=>!excluded.has(file))) {
     const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)

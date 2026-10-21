@@ -140,7 +140,7 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
 });
 
 test('CI preserves the current renewal gates and adds only the H1A profile successor gate',()=>{
-  const before=parse(execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'})),expected=structuredClone(before),current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const before=parse(execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'})),expected=structuredClone(before),current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
   const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
   expected['validate:identity-catalog-contracts'].script.splice(profileGate+1,0,'node scripts/identity/validate-catalog-workload-profiles-v2.mjs');
   assert.deepEqual(current,expected);

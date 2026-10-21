@@ -25,7 +25,7 @@ test('all published transports, preserved artifacts and consumer exports retain 
   for(const file of paths) assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
 });
 test('CI preserves existing jobs and adds the H1A successor plus semantic and real schema gates',()=> {
-  const prior=parse(execFileSync('git',['show','HEAD:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'}));
+  const prior=parse(execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'}));
   const current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
   const expected=structuredClone(prior);
   const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
