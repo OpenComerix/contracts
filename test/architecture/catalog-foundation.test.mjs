@@ -147,6 +147,56 @@ test('H/I/renewal recognize current coverage, retain the original registry and r
   assert.equal(runtimeRegistryView(registry).coverage, foundationCoverage);
 });
 
+// M evolves exactly these three files; every other J comparison stays unchanged.
+// Both the pre-M bytes and the reviewed candidate are immutable Git sources.
+const mBase = gitReader(root, 'ff393889f32426d3674a92ae0bd4a30b50077d18');
+const mReviewed = gitReader(root, 'bb961b862749775fabaaea3b242f6336f1489eec');
+const profileV1Gate = '    - node scripts/identity/validate-catalog-workload-profiles-v1.mjs\n';
+const profileV2Gate = '    - node scripts/identity/validate-catalog-workload-profiles-v2.mjs\n';
+const mReadmeSuffix = '# F1-08M — Sucesor candidato de perfiles H1A\n\n' +
+  '[Política v2](http/shared/v2/identity-catalog-workload-profiles-v2.json) y [vectores](fixtures/catalog-workload/v2/catalog-workload-profiles-v2-vectors.json) conservan las cinco asignaciones anteriores y agregan `catalog-pricing.history-recovery` → `catalog-pricing` / `catalog-pricing.history-recovery`, separado del cliente R3 `catalog-pricing.catalog-recovery`. La política v1, sus bytes, fixtures, admisión y pins permanecen inmutables. [Gate y tests externos](../scripts/identity/validate-catalog-workload-profiles-v2.mjs) prueban aislamiento y preservación; CI ejecuta ambos gates v1/v2. Es sucesor candidato: no cambia locks/admisiones ni autoriza configurar el secreto en producción o consumirlo fuera del alcance aprobado.\n';
+const mExpected = new Map([
+  ['.gitlab-ci.yml', mBase('.gitlab-ci.yml').toString('utf8').replace(profileV1Gate, profileV1Gate + profileV2Gate)],
+  ['identity/README.md', mBase('identity/README.md').toString('utf8') + mReadmeSuffix],
+  ['test/identity/candidate-preservation.test.mjs', mReviewed('test/identity/candidate-preservation.test.mjs').toString('utf8')],
+]);
+function verifyPreservedFile(file, content) {
+  const expected = mExpected.has(file) ? mExpected.get(file) : source(file).toString('utf8');
+  // Report only the path on failure rather than dumping an entire CI document.
+  assert(content === expected, 'J_PRESERVATION: ' + file);
+}
+
+test('J accepts only the exact reviewed M evolution from unchanged immutable baselines', () => {
+  const ci = mBase('.gitlab-ci.yml').toString('utf8');
+  assert.equal(ci.split(profileV1Gate).length, 2, 'one original v1 gate');
+  assert(!ci.includes(profileV2Gate), 'no successor in the original CI');
+  for (const [file, expected] of mExpected) {
+    assert(source(file).equals(mBase(file)), 'J and M baseline bytes: ' + file);
+    assert(mReviewed(file).toString('utf8') === expected, 'reviewed M bytes: ' + file);
+    verifyPreservedFile(file, expected);
+  }
+});
+
+for (const [name, file, mutate] of [
+  ['duplicate v2 gate', '.gitlab-ci.yml', text => text.replace(profileV2Gate, profileV2Gate + profileV2Gate)],
+  ['displaced v2 gate', '.gitlab-ci.yml', text => text.replace(profileV2Gate, '') + profileV2Gate],
+  ['unrelated CI change', '.gitlab-ci.yml', text => text.replace('interruptible: true', 'interruptible: false')],
+  ['changed prior README', 'identity/README.md', text => 'unapproved\n' + text],
+  ['changed README suffix', 'identity/README.md', text => text.replace(mReadmeSuffix, mReadmeSuffix.replace('cinco asignaciones', 'seis asignaciones'))],
+  ['duplicated README suffix', 'identity/README.md', text => text + mReadmeSuffix],
+  ['additional preservation-test change', 'test/identity/candidate-preservation.test.mjs', text => text + '\n// unapproved\n'],
+]) test('J rejects M preservation drift: ' + name, () => {
+  const original = mExpected.get(file), changed = mutate(original);
+  assert.notEqual(changed, original, 'negative must change the reviewed bytes');
+  assert.throws(() => verifyPreservedFile(file, changed), /J_PRESERVATION/);
+});
+
+test('J rejects changes to files outside the three reviewed M evolutions', () => {
+  const file = 'package.json';
+  assert(!mExpected.has(file));
+  assert.throws(() => verifyPreservedFile(file, source(file).toString('utf8') + '\n'), /J_PRESERVATION/);
+});
+
 test('J preserves every other published file, including all transports, tools, CI and the four consumer exports', () => {
   const changed = new Set(['scripts/catalog/catalog-foundation-v1-registry.mjs', 'test/architecture/catalog-foundation.test.mjs', 'registry/consumers/catalog-pricing.json', 'registry/contracts.json', 'registry/consumers/index.json', 'registry/README.md',
     'scripts/identity/catalog-recovery-renewal-v2-registry.mjs',
@@ -158,6 +208,6 @@ test('J preserves every other published file, including all transports, tools, C
   changed.add('scripts/catalog/catalog-runtime-v1-registry.mjs');
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', foundationBase], {cwd: root, encoding: 'utf8'}).trim().split('\n');
   for (const file of files.filter(file => !changed.has(file))) {
-    assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), file);
+    verifyPreservedFile(file, fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'));
   }
 });
