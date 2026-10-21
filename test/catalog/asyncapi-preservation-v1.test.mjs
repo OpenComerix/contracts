@@ -9,11 +9,11 @@ import { parseAllDocuments } from 'yaml';
 const root = path.resolve(import.meta.dirname, '../..');
 const base = '77bc15a4cc8d13867ef5a66945ed8e3de79696cc';
 const proofHashes = {
-  'test/identity/candidate-preservation.test.mjs': '816c7d1b4365cd0adcf963ff525243abc039c6bee7f47a52fe84cd96cc781537',
-  'test/identity/catalog-admission-v1.test.mjs': 'c35c7ace88442b15631a5012a1d57e2efa2a795e2200dfff05a09ae8aa2c491d',
-  'test/identity/catalog-recovery-renewal-v2.test.mjs': 'b8fea28e0ac34217c397ab893042fb77bd58b32b98b011504cb516b8e15555bd',
-  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs': '7ac8d69bccd9abd665139f72186b11bb735adf6f6e623bdc834f8717ac17f317',
-  'test/architecture/catalog-foundation.test.mjs': 'bba9e2a6af3b638d42bfc7d8de7c8062334dea677702f706fcf629693275953f',
+  'test/identity/candidate-preservation.test.mjs': 'd6852b2ab29f3394fa1b00d9f306f1009866fbdfcba9f93e13f015be63211d8e',
+  'test/identity/catalog-admission-v1.test.mjs': 'e6deef4a74e5e60bce4ea9e57fadc632ab03c0f89da11d4614a24b1d9ff8d28b',
+  'test/identity/catalog-recovery-renewal-v2.test.mjs': '103e301429e2d4010b4a939ace1d1eef7c83daa1c0d402c5637dcd8157c1c12a',
+  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs': '637c839316cad406cb720a916ef8fd57d84b34b460a26ec9a76c975074156476',
+  'test/architecture/catalog-foundation.test.mjs': '2434fdd27253b13b9c6798410857e0620fddf1e7f039db6de02c29b603856059',
 };
 const files = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md', ...Object.keys(proofHashes)];
 const normalize = value => value.replaceAll('\r\n', '\n');
@@ -40,7 +40,13 @@ function checkAppend(file, text, marker, expectedHash, expectedPrefix = original
 function checkPreservation(candidate) {
   for (const [file, expected] of Object.entries(proofHashes)) assert(hash(candidate[file]) === expected, 'N_PRESERVATION_PROOF:' + file);
   checkAppend('.gitlab-ci.yml', candidate['.gitlab-ci.yml'], '\nvalidate:catalog-asyncapi:', '33e88587d4d15a40835eff9da4e886f102a22944b04095ac7eb3e59bc6c78154', approvedPriorCi);
-  checkAppend('catalog/README.md', candidate['catalog/README.md'], '\n## F1-08N — Certificación de AsyncAPI (candidato)', 'af4e53ccf2290918d4d23087f5ff901857d2cd17116ed4c0280a79b8b54c9b72');
+  // Keep the published certification proof exact; only the separately admitted
+  // suffix may follow it. Duplication or unrelated documentation still fails.
+  const readme = candidate['catalog/README.md'];
+  const marker = '\n## F1-08N — Admisión seleccionada de AsyncAPI';
+  const admission = readme.indexOf(marker);
+  assert(admission >= 0 && hash(readme.slice(admission)) === '4f318b98f43c6d9f3fe8c817e7be23b1de203bcdd763242530c16f570cfa3c0c', 'N_PRESERVATION_ADMISSION_README');
+  checkAppend('catalog/README.md', readme.slice(0, admission), '\n## F1-08N — Certificación de AsyncAPI (candidato)', 'af4e53ccf2290918d4d23087f5ff901857d2cd17116ed4c0280a79b8b54c9b72');
   const pkg = JSON.parse(candidate['package.json']);
   assert.equal(pkg.devDependencies['@asyncapi/parser'], '3.6.4', 'N_PRESERVATION_PARSER');
   delete pkg.devDependencies['@asyncapi/parser'];
@@ -111,6 +117,9 @@ for (const [name, file, mutate] of [
   ['prior README changed', 'catalog/README.md', text => 'unapproved\n' + text],
   ['new README changed', 'catalog/README.md', text => text.replace('Sourcemeta 16.10.0 valida', 'Sourcemeta 16.10.0 no valida')],
   ['duplicated README suffix', 'catalog/README.md', text => text + text.slice(text.indexOf('\n## F1-08N'))],
+  ['admission README changed', 'catalog/README.md', text => text.replace('únicamente `catalog.events.v1.asyncapi`', 'también `catalog.events.v1.asyncapi`')],
+  ['admission README omitted', 'catalog/README.md', text => text.slice(0, text.indexOf('\n## F1-08N — Admisión seleccionada de AsyncAPI'))],
+  ['admission README duplicated', 'catalog/README.md', text => text + text.slice(text.indexOf('\n## F1-08N — Admisión seleccionada de AsyncAPI'))],
   ['parser revision changed', 'package.json', text => text.replace('"3.6.4"', '"3.6.3"')],
   ['prior YAML dependency changed', 'package.json', text => text.replace('"2.9.1"', '"2.9.0"')],
   ['extra direct dependency', 'package.json', text => { const pkg = JSON.parse(text); pkg.devDependencies.unapproved = '1.0.0'; return JSON.stringify(pkg); }],

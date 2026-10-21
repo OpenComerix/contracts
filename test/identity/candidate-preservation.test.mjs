@@ -12,7 +12,7 @@ const source=gitReader(root,'e1d073fe5264a4aa97d6d4156ce200101bb20615');
 // Preserve these historical proofs independently; N checks the live tooling
 // files and the exact adaptation of this test in asyncapi-preservation-v1.
 const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
-const nToolingFiles=new Set(['catalog/README.md','package.json','pnpm-lock.yaml']);
+const nToolingFiles=new Set(['catalog/README.md','catalog/index.json','package.json','pnpm-lock.yaml']);
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const registry=JSON.parse(gitReader(root,identityAdmissionSource)('registry/contracts.json'));
 const previous=JSON.parse(source('registry/contracts.json'));

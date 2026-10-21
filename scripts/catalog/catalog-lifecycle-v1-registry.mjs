@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
+import {asyncapiAdmissionRegistryView} from './asyncapi-admission-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const lifecycleBase = '651cb22d784fef917bd2e9e2e7f242dbb9ab8c7e';
@@ -36,6 +37,7 @@ export function lifecycleManifest() {
 }
 
 export function lifecycleRegistryView(registry) {
+  registry = asyncapiAdmissionRegistryView(registry);
   if (registry.coverage !== lifecycleCoverage) return registry;
   // Historical validators retain their own descriptor/provenance diagnostics.
   // Full registry preservation is enforced separately by validateLifecycleRegistry.

@@ -225,3 +225,11 @@ sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1
 ~~~
 
 Conservar regresiones de arquitectura/catálogo, registro, consumidores, impacto y referencias. [La prueba de preservación N](../test/catalog/asyncapi-preservation-v1.test.mjs) protege los jobs anteriores y dependencias previas frente a la base publicada, con negativos de cambios ajenos; la excepción acotada del test histórico J no libera transportes, registro, índices ni exports. La certificación local no verifica un pipeline remoto, SQL/broker, G-CAF runtime ni cierre de N. Auditoría/publicación y siguiente entrega de admisión conservan sus permisos propios; situación vigente en [ESTADO](../../../ESTADO.md).
+
+## F1-08N — Admisión seleccionada de AsyncAPI
+
+Candidato local autorizado: únicamente `catalog.events.v1.asyncapi` pasa de draft a active en registro e índice, conservando superficie `documentation`, versión 1.0.0, bytes, mappings y procedencia original `68d923e903b6341eedb980af3586890c0eab7d5e`. La certificación publicada en `280d990b81d684c886c87c7998979edd4f84f288` acredita parser/payloads; no sustituye el SHA fuente del transporte. Las marcas candidate/future_intention dentro del documento publicado permanecen intactas.
+
+[Gate de admisión](../scripts/catalog/asyncapi-admission-v1.mjs) y [tests externos](../test/architecture/asyncapi-admission-v1.test.mjs) comprueban la transición completa contra la base inmutable, el cierre de siete archivos y la preservación de los otros 118 descriptores, doce drafts, 236 artefactos, tres intenciones, CI, dependencias y exports. Las pruebas verifican selección funcional, pins, impacto y rechazo de drafts transitivos; los gates históricos reciben su vista anterior solo después de validar esta transición exacta.
+
+La admisión conserva sus gates, auditoría y publicación propias. No migra manifiestos/locks/exports ni concede permiso de broker, implementa dispatcher, activa consumidores o acredita G-CAF runtime. Topología local y entrega real requieren sus pasos autorizados antes de cerrar N y habilitar O. Situación y próximo paso en [ESTADO](../../../ESTADO.md).

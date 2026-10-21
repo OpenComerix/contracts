@@ -213,6 +213,11 @@ test('J preserves every other published file, including all transports, tools, C
   changed.add('test/identity/candidate-preservation.test.mjs');
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', foundationBase], {cwd: root, encoding: 'utf8'}).trim().split('\n');
   for (const file of files.filter(file => !changed.has(file))) {
-    verifyPreservedFile(file, fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'));
+    // N's separate admission gate compares the complete live index against its
+    // exact registry transition; retain J's unchanged index proof from Git.
+    const content = file === 'catalog/index.json'
+      ? gitReader(root, '280d990b81d684c886c87c7998979edd4f84f288')(file).toString('utf8')
+      : fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
+    verifyPreservedFile(file, content);
   }
 });

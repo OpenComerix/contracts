@@ -21,7 +21,7 @@ const registry=JSON.parse(gitReader(root,renewalSource)('registry/contracts.json
 const source=gitReader(root,renewalBase), baseline=JSON.parse(source('registry/contracts.json'));
 // N checks live tooling and this exact adaptation; retain the historical proof.
 const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
-const nToolingFiles=new Set(['catalog/README.md','package.json','pnpm-lock.yaml']);
+const nToolingFiles=new Set(['catalog/README.md','catalog/index.json','package.json','pnpm-lock.yaml']);
 
 test('renewal v2 contract, policy, source pins and complete negative inventory agree',()=>validateContract());
 for(const row of vectors.negative) test('renewal v2 rejects: '+row.id,()=>assert.equal(assessRenewal(change(scenario(),row.changes)),row.expected));

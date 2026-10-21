@@ -15,7 +15,7 @@ const source = gitReader(root, identityAdmissionSource);
 // N separately checks the live tooling files and this exact proof adaptation.
 // Keep the original admission comparisons against the immutable pre-N source.
 const preN = gitReader(root, '77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
-const nToolingFiles = new Set(['catalog/README.md', 'package.json', 'pnpm-lock.yaml']);
+const nToolingFiles = new Set(['catalog/README.md', 'catalog/index.json', 'package.json', 'pnpm-lock.yaml']);
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
 const liveRegistry = read('registry/contracts.json');
 const registry = JSON.parse(gitReader(root, 'a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7')('registry/contracts.json'));

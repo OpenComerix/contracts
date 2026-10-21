@@ -17,7 +17,7 @@ const registry=JSON.parse(fs.readFileSync(path.join(root,'registry/contracts.jso
 const baseline=renewalSourceRegistry(),source=gitReader(root,renewalSource);
 // N independently checks live tooling and this exact proof adaptation.
 const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
-const nToolingFiles=new Set(['.gitlab-ci.yml','catalog/README.md','package.json','pnpm-lock.yaml']);
+const nToolingFiles=new Set(['.gitlab-ci.yml','catalog/README.md','catalog/index.json','package.json','pnpm-lock.yaml']);
 const selected=[
   ['identity.catalog-recovery-renewal.http.v2','identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml','http-private','2.0.0','b3d2dbaea72884ff736e413228e15e0c5643ad53fe09dcb6d9fc7b81d5e9312f',5],
   ['identity.catalog-recovery-renewal.schema.v2','identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json','schema','v2','e9cc0bd60958e0a05ad9a84532db6b1cedd094d3c5d8acdb4fe2ca04e868654f',3],
