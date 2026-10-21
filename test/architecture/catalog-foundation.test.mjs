@@ -206,6 +206,9 @@ test('J preserves every other published file, including all transports, tools, C
   // K's validator gains only the separately checked, closed L projection. The
   // original J registry/descriptors and other consumer exports remain exact.
   changed.add('scripts/catalog/catalog-runtime-v1-registry.mjs');
+  // N's tooling/CI/documentation evolution is separately and narrowly checked
+  // against the immutable post-M source, including adversarial preservation cases.
+  for (const file of ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md']) changed.add(file);
   const files = execFileSync('git', ['ls-tree', '-r', '--name-only', foundationBase], {cwd: root, encoding: 'utf8'}).trim().split('\n');
   for (const file of files.filter(file => !changed.has(file))) {
     verifyPreservedFile(file, fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'));

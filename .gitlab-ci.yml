@@ -296,3 +296,28 @@ validate:identity-catalog-schema:
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1
     - jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json --verbose
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2
+
+validate:catalog-asyncapi:
+  stage: validate
+  before_script:
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - node --test --test-reporter=tap test/catalog/asyncapi-v1.test.mjs
+    - node scripts/catalog/validate-asyncapi-v1.mjs .ci-artifacts/catalog-asyncapi-v1
+  artifacts:
+    paths:
+      - .ci-artifacts/catalog-asyncapi-v1/
+    expire_in: 1 day
+
+validate:catalog-asyncapi-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:catalog-asyncapi
+      artifacts: true
+  script:
+    - sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1

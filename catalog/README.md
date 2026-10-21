@@ -207,3 +207,21 @@ IDs, versiones, operaciones, hashes y mappings explícitos: [registro](../regist
 Gates: regresión arquitectura/catálogo, registro, consumidores/impacto, referencias y cotejo del launcher. Las pruebas de admisión comprueban procedencia inmutable, cierres sin drafts, regeneración con pins, impacto y rechazo transitivo. Las fuentes sin cambios conservan sus validaciones previas Redocly/Sourcemeta con reutilización acotada por bytes. Fixtures no acreditan autoridad, SQL, criptografía, broker ni recuperación real. Productor de identidad y cortes I–O permanecen pendientes.
 
 Los validadores R2/R4 comparten `validateHistoryRegistry` en [el validador de protección](../scripts/catalog/validate-history-protection-v1.mjs): admite el registro candidato publicado exacto o la selección H completa, con procedencias, mappings y bytes comprobados. Las comprobaciones históricas continúan contra snapshots Git inmutables; los tests de ambos puertos rechazan admisión parcial, estados mezclados, drift de fuente y cambios ajenos. Esta transición de metadatos no cambia transporte ni habilita runtime.
+
+## F1-08N — Certificación de AsyncAPI (candidato)
+
+[Gate estructural](../scripts/catalog/validate-asyncapi-v1.mjs), [gate de payloads](../scripts/catalog/validate-asyncapi-v1.sh) y [tests externos](../test/catalog/asyncapi-v1.test.mjs) certifican conjuntamente el documento AsyncAPI 3.0 publicado y su cierre local. `@asyncapi/parser` 3.6.4 es una dependencia de desarrollo fijada en el lock; no se instala en los servicios. El registro de `catalog.events.v1.asyncapi` conserva `draft`, sin migración de consumidores, permiso de broker ni activación funcional.
+
+El gate valida la estructura mediante el parser y coteja canal/operación/mensaje/tipo/revisión, después de restringir referencias a los siete archivos seleccionados. Los diagnósticos informativos del parser se conservan: `asyncapi-latest-version` recomienda 3.1.0, sin cambiar el documento 3.0.0 publicado. Errores y warnings bloquean. El resultado estructural declara expresamente que necesita el gate Sourcemeta; analizar el documento no acredita sus payloads.
+
+Sourcemeta 16.10.0 valida los seis schemas originales y un control de dialecto, rechaza dos schemas inválidos y comprueba 27 instancias positivas/negativas, incluidos revisión/tipo desconocidos, campos extra, fechas y causalidad ausente. Los controles de `prefixItems`/`items` impiden acreditar Draft 2020-12 con un validador que lo ignore. Las copias de fuentes preservan bytes y hashes; cada salida debe ser nueva. Los dos jobs CI conservan los anteriores y se conectan mediante artefactos efímeros de un día.
+
+Desde contracts, mediante `opencomerix check contracts`, ejecutar ambos pasos; el segundo requiere Sourcemeta 16.10.0:
+
+~~~text
+node --test --test-reporter=tap test/catalog/asyncapi-v1.test.mjs test/catalog/asyncapi-preservation-v1.test.mjs
+node scripts/catalog/validate-asyncapi-v1.mjs .ci-artifacts/catalog-asyncapi-v1
+sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1
+~~~
+
+Conservar regresiones de arquitectura/catálogo, registro, consumidores, impacto y referencias. [La prueba de preservación N](../test/catalog/asyncapi-preservation-v1.test.mjs) protege los jobs anteriores y dependencias previas frente a la base publicada, con negativos de cambios ajenos; la excepción acotada del test histórico J no libera transportes, registro, índices ni exports. La certificación local no verifica un pipeline remoto, SQL/broker, G-CAF runtime ni cierre de N. Auditoría/publicación y siguiente entrega de admisión conservan sus permisos propios; situación vigente en [ESTADO](../../../ESTADO.md).

@@ -5,7 +5,10 @@
   "license": "UNLICENSED",
   "type": "module",
   "packageManager": "pnpm@12.4.2",
-  "engines": { "node": ">=24.21.0 <25", "pnpm": "12.4.2" },
+  "engines": {
+    "node": ">=24.21.0 <25",
+    "pnpm": "12.4.2"
+  },
   "scripts": {
     "test:architecture": "node --test test/architecture/*.test.mjs",
     "registry:check": "node tools/architecture/cli.mjs registry",
@@ -13,5 +16,8 @@
     "contracts:consumers": "node tools/architecture/cli.mjs consumers",
     "contracts:catalog-recovery-authority": "node scripts/identity/validate-catalog-recovery-authority-v1.mjs"
   },
-  "devDependencies": { "yaml": "2.9.1" }
+  "devDependencies": {
+    "@asyncapi/parser": "3.6.4",
+    "yaml": "2.9.1"
+  }
 }
