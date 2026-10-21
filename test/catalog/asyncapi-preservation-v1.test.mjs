@@ -8,10 +8,21 @@ import { parseAllDocuments } from 'yaml';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const base = '77bc15a4cc8d13867ef5a66945ed8e3de79696cc';
-const files = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md'];
+const proofHashes = {
+  'test/identity/candidate-preservation.test.mjs': '816c7d1b4365cd0adcf963ff525243abc039c6bee7f47a52fe84cd96cc781537',
+  'test/identity/catalog-admission-v1.test.mjs': 'c35c7ace88442b15631a5012a1d57e2efa2a795e2200dfff05a09ae8aa2c491d',
+  'test/identity/catalog-recovery-renewal-v2.test.mjs': 'b8fea28e0ac34217c397ab893042fb77bd58b32b98b011504cb516b8e15555bd',
+  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs': '7ac8d69bccd9abd665139f72186b11bb735adf6f6e623bdc834f8717ac17f317',
+  'test/architecture/catalog-foundation.test.mjs': 'bba9e2a6af3b638d42bfc7d8de7c8062334dea677702f706fcf629693275953f',
+};
+const files = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md', ...Object.keys(proofHashes)];
 const normalize = value => value.replaceAll('\r\n', '\n');
 const original = Object.fromEntries(files.map(file => [file, normalize(execFileSync('git', ['show', `${base}:${file}`], { cwd: root, encoding: 'utf8' }))]));
 const current = Object.fromEntries(files.map(file => [file, normalize(fs.readFileSync(path.join(root, file), 'utf8'))]));
+const installJobs = ['validate:contract-architecture', 'validate:catalog-contracts', 'validate:identity-catalog-contracts'];
+const priorInstall = '    - pnpm install --frozen-lockfile\n';
+assert.equal(original['.gitlab-ci.yml'].split(priorInstall).length - 1, installJobs.length);
+const approvedPriorCi = original['.gitlab-ci.yml'].replaceAll(priorInstall, priorInstall.trimEnd() + ' --ignore-scripts\n');
 const hash = value => createHash('sha256').update(value).digest('hex');
 const same = (actual, expected, code) => assert(JSON.stringify(actual) === JSON.stringify(expected), code);
 function yamlDocuments(text) {
@@ -20,14 +31,15 @@ function yamlDocuments(text) {
   return documents.map(document => document.toJSON());
 }
 
-function checkAppend(file, text, marker, expectedHash) {
+function checkAppend(file, text, marker, expectedHash, expectedPrefix = original[file]) {
   const index = text.indexOf(marker);
-  assert(index >= 0 && text.slice(0, index) === original[file], 'N_PRESERVATION_PREFIX:' + file);
+  assert(index >= 0 && text.slice(0, index) === expectedPrefix, 'N_PRESERVATION_PREFIX:' + file);
   assert(hash(text.slice(index)) === expectedHash, 'N_PRESERVATION_SUFFIX:' + file);
 }
 
 function checkPreservation(candidate) {
-  checkAppend('.gitlab-ci.yml', candidate['.gitlab-ci.yml'], '\nvalidate:catalog-asyncapi:', '33e88587d4d15a40835eff9da4e886f102a22944b04095ac7eb3e59bc6c78154');
+  for (const [file, expected] of Object.entries(proofHashes)) assert(hash(candidate[file]) === expected, 'N_PRESERVATION_PROOF:' + file);
+  checkAppend('.gitlab-ci.yml', candidate['.gitlab-ci.yml'], '\nvalidate:catalog-asyncapi:', '33e88587d4d15a40835eff9da4e886f102a22944b04095ac7eb3e59bc6c78154', approvedPriorCi);
   checkAppend('catalog/README.md', candidate['catalog/README.md'], '\n## F1-08N — Certificación de AsyncAPI (candidato)', 'af4e53ccf2290918d4d23087f5ff901857d2cd17116ed4c0280a79b8b54c9b72');
   const pkg = JSON.parse(candidate['package.json']);
   assert.equal(pkg.devDependencies['@asyncapi/parser'], '3.6.4', 'N_PRESERVATION_PARSER');
@@ -59,14 +71,37 @@ function checkPreservation(candidate) {
   same(lock, before[1], 'N_PRESERVATION_LOCK_CONFIGURATION');
 }
 
-test('N permits only the exact added CI/README and the isolated parser dependency closure', () => {
+test('N permits only the exact added CI/README, three script-free installs and isolated parser dependency closure', () => {
   checkPreservation(current);
   const ci = yamlDocuments(current['.gitlab-ci.yml'])[0];
-  const prior = yamlDocuments(original['.gitlab-ci.yml'])[0];
+  const prior = yamlDocuments(approvedPriorCi)[0];
+  for (const name of installJobs) assert.equal(prior[name].before_script.at(-1), 'pnpm install --frozen-lockfile --ignore-scripts');
   for (const [name, value] of Object.entries(prior)) same(ci[name], value, 'N_PRIOR_JOB:' + name);
   assert.deepEqual(Object.keys(ci).filter(key => !Object.hasOwn(prior, key)), ['validate:catalog-asyncapi', 'validate:catalog-asyncapi-schema']);
   assert.deepEqual(ci['validate:catalog-asyncapi-schema'].needs, [{ job: 'validate:catalog-asyncapi', artifacts: true }]);
 });
+
+for (const file of Object.keys(proofHashes)) {
+  for (const [drift, changed] of [
+    ['unapproved change', current[file] + '\n// unapproved\n'],
+    ['pre-N proof restored', original[file]],
+  ]) test('N rejects proof drift: ' + file + ' / ' + drift, () => {
+    assert.notEqual(changed, current[file]);
+    assert.throws(() => checkPreservation({ ...current, [file]: changed }), /N_PRESERVATION_PROOF/);
+  });
+}
+
+for (const name of installJobs) {
+  for (const [drift, replacement] of [
+    ['scripts suppression removed', ''],
+    ['scripts suppression disabled', ' --ignore-scripts=false'],
+  ]) test('N rejects install drift: ' + name + ' / ' + drift, () => {
+    const pattern = new RegExp('(' + name + ':[\\s\\S]*?    - pnpm install --frozen-lockfile) --ignore-scripts');
+    const changed = current['.gitlab-ci.yml'].replace(pattern, '$1' + replacement);
+    assert.notEqual(changed, current['.gitlab-ci.yml']);
+    assert.throws(() => checkPreservation({ ...current, '.gitlab-ci.yml': changed }), /N_PRESERVATION_PREFIX/);
+  });
+}
 
 for (const [name, file, mutate] of [
   ['previous job changed', '.gitlab-ci.yml', text => text.replace('interruptible: true', 'interruptible: false')],

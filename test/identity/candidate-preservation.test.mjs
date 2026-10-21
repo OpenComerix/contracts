@@ -9,6 +9,10 @@ import { identityAdmissionSource } from '../../scripts/identity/validate-catalog
 
 const root=path.resolve(import.meta.dirname,'../..');
 const source=gitReader(root,'e1d073fe5264a4aa97d6d4156ce200101bb20615');
+// Preserve these historical proofs independently; N checks the live tooling
+// files and the exact adaptation of this test in asyncapi-preservation-v1.
+const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
+const nToolingFiles=new Set(['catalog/README.md','package.json','pnpm-lock.yaml']);
 const read=file=>JSON.parse(fs.readFileSync(path.join(root,file),'utf8'));
 const registry=JSON.parse(gitReader(root,identityAdmissionSource)('registry/contracts.json'));
 const previous=JSON.parse(source('registry/contracts.json'));
@@ -22,11 +26,14 @@ test('immutable I source appends exactly six planned intentions without changing
 test('all published transports, preserved artifacts and consumer exports retain their bytes',()=> {
   const files=execFileSync('git',['ls-tree','-r','--name-only','e1d073fe5264a4aa97d6d4156ce200101bb20615'],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const paths=new Set([...previous.contracts.map(row=>row.path),...previous.preservedFiles.map(row=>row.path),...files.filter(file=>/^(openapi|consumers|catalog|common|events|commands|errors)\//.test(file)),...files.filter(file=>/^identity\/http\//.test(file))]);
-  for(const file of paths) assert.equal(fs.readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  for(const file of paths) {
+    const actual=nToolingFiles.has(file)?preN(file):fs.readFileSync(path.join(root,file));
+    assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
+  }
 });
 test('CI preserves existing jobs and adds the H1A successor plus semantic and real schema gates',()=> {
   const prior=parse(execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'}));
-  const current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const current=parse(preN('.gitlab-ci.yml').toString('utf8'));
   const expected=structuredClone(prior);
   const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
   expected['validate:identity-catalog-contracts'].script.splice(profileGate+1,0,'node scripts/identity/validate-catalog-workload-profiles-v2.mjs');

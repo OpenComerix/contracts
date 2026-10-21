@@ -19,6 +19,9 @@ const vectors=read(vectorsPath), liveRegistry=read('registry/contracts.json');
 // Keep the published planned lifecycle independently testable after admission.
 const registry=JSON.parse(gitReader(root,renewalSource)('registry/contracts.json'));
 const source=gitReader(root,renewalBase), baseline=JSON.parse(source('registry/contracts.json'));
+// N checks live tooling and this exact adaptation; retain the historical proof.
+const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
+const nToolingFiles=new Set(['catalog/README.md','package.json','pnpm-lock.yaml']);
 
 test('renewal v2 contract, policy, source pins and complete negative inventory agree',()=>validateContract());
 for(const row of vectors.negative) test('renewal v2 rejects: '+row.id,()=>assert.equal(assessRenewal(change(scenario(),row.changes)),row.expected));
@@ -132,7 +135,8 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
   // Preserve the historical candidate; the producer admission checks the live identity export.
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   for(const file of keep) {
-    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+    const actual=nToolingFiles.has(file) ? preN(file)
+      : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : file==='registry/consumers/identity-tenancy.json'
       ? historical(file) : fs.readFileSync(path.join(root,file));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
@@ -140,7 +144,7 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
 });
 
 test('CI preserves the current renewal gates and adds only the H1A profile successor gate',()=>{
-  const before=parse(execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'})),expected=structuredClone(before),current=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const before=parse(execFileSync('git',['show','ff393889f32426d3674a92ae0bd4a30b50077d18:.gitlab-ci.yml'],{cwd:root,encoding:'utf8'})),expected=structuredClone(before),current=parse(preN('.gitlab-ci.yml').toString('utf8'));
   const profileGate=expected['validate:identity-catalog-contracts'].script.indexOf('node scripts/identity/validate-catalog-workload-profiles-v1.mjs');
   expected['validate:identity-catalog-contracts'].script.splice(profileGate+1,0,'node scripts/identity/validate-catalog-workload-profiles-v2.mjs');
   assert.deepEqual(current,expected);

@@ -12,6 +12,10 @@ import { validateHistoryRegistry } from '../../scripts/catalog/validate-history-
 import { foundationBase } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 
 const source = gitReader(root, identityAdmissionSource);
+// N separately checks the live tooling files and this exact proof adaptation.
+// Keep the original admission comparisons against the immutable pre-N source.
+const preN = gitReader(root, '77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
+const nToolingFiles = new Set(['catalog/README.md', 'package.json', 'pnpm-lock.yaml']);
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
 const liveRegistry = read('registry/contracts.json');
 const registry = JSON.parse(gitReader(root, 'a6cf430dcdbafb515fa3f34b29ec5d98b976e0e7')('registry/contracts.json'));
@@ -144,11 +148,12 @@ test('consumer exports, CI jobs, tools, old indexes and all transport sources ar
   // Preserve the historical admission; F1-08I checks its current identity export separately.
   const historical=gitReader(root,'e3f39131b32ed136b17acea0a3289fad718029d6');
   for (const file of [...keep,'package.json','pnpm-lock.yaml']) {
-    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+    const actual=nToolingFiles.has(file) ? preN(file)
+      : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : file==='registry/consumers/identity-tenancy.json'
       ? historical(file) : fs.readFileSync(path.join(root,file));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }
-  const ci=parse(fs.readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const ci=parse(preN('.gitlab-ci.yml').toString('utf8'));
   assert.equal(Object.keys(ci).filter(key=>key.startsWith('validate:')).length,12);
 });

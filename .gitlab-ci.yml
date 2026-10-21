@@ -137,7 +137,7 @@ validate:contract-architecture:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile
+    - pnpm install --frozen-lockfile --ignore-scripts
   script:
     - pnpm test:architecture
     - pnpm registry:check
@@ -167,7 +167,7 @@ validate:catalog-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile
+    - pnpm install --frozen-lockfile --ignore-scripts
   script:
     - node --test test/catalog/*.test.mjs
     - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-authority-v1.yaml catalog/http/public/v1/catalog-pricing-v1.yaml catalog/http/private/v1/catalog-pricing-internal-v1.yaml
@@ -262,7 +262,7 @@ validate:identity-catalog-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile
+    - pnpm install --frozen-lockfile --ignore-scripts
   script:
     - node --test test/identity/*.test.mjs
     - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-history-permissions-v1.yaml

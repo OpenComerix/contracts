@@ -15,6 +15,9 @@ import {validateContract as validateRecoveryContract} from '../../scripts/catalo
 
 const registry=JSON.parse(fs.readFileSync(path.join(root,'registry/contracts.json'),'utf8'));
 const baseline=renewalSourceRegistry(),source=gitReader(root,renewalSource);
+// N independently checks live tooling and this exact proof adaptation.
+const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
+const nToolingFiles=new Set(['.gitlab-ci.yml','catalog/README.md','package.json','pnpm-lock.yaml']);
 const selected=[
   ['identity.catalog-recovery-renewal.http.v2','identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml','http-private','2.0.0','b3d2dbaea72884ff736e413228e15e0c5643ad53fe09dcb6d9fc7b81d5e9312f',5],
   ['identity.catalog-recovery-renewal.schema.v2','identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json','schema','v2','e9cc0bd60958e0a05ad9a84532db6b1cedd094d3c5d8acdb4fe2ca04e868654f',3],
@@ -157,7 +160,8 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   assert(ciHead.includes(profileV1),'F1-08M base CI must contain the published v1 profile gate');
   const expectedCi=ciHead.replace(profileV1,profileV1+'    - node scripts/identity/validate-catalog-workload-profiles-v2.mjs\n');
   for(const file of files.filter(file=>!excluded.has(file))) {
-    const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
+    const actual=nToolingFiles.has(file) ? preN(file)
+      : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
     const expected=file==='.gitlab-ci.yml' ? expectedCi : source(file).toString('utf8');
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),expected,file);
