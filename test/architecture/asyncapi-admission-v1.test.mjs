@@ -6,6 +6,7 @@ import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock, impactForConsumer, worktreeReader } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { deliverySnapshotPath, validateDeliverySnapshot } from '../../scripts/catalog/catalog-delivery-v1-registry.mjs';
 import { admissionBase, admissionId, admittedRegistry, asyncapiAdmissionRegistryView,
   root, validateAsyncapiAdmission } from '../../scripts/catalog/asyncapi-admission-v1.mjs';
 
@@ -138,6 +139,10 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   allowed.add('test/identity/catalog-admission-v1.test.mjs');
   allowed.add('test/identity/catalog-recovery-renewal-v2.test.mjs');
   allowed.add('test/identity/catalog-recovery-renewal-admission-v2.test.mjs');
+  // The separately approved export is checked in full, not exempted by path.
+  allowed.add(deliverySnapshotPath);
+  allowed.add('scripts/catalog/catalog-delivery-v1-registry.mjs');
+  allowed.add('test/architecture/catalog-delivery.test.mjs');
   const changed = execFileSync('git', ['diff', '--name-only', admissionBase, '--', '.'], { cwd: root, encoding: 'utf8' }).trim();
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).trim();
   for (const file of [changed, untracked].filter(Boolean).flatMap(text => text.split('\n')))
@@ -145,5 +150,8 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   const preserved = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'registry/consumers/index.json',
     ...registry.requiredConsumers.map(name => 'registry/consumers/' + name + '.json'),
     ...registry.contracts.map(item => item.path)];
-  for (const file of new Set(preserved)) assert(read(file).equals(source(file)), 'N_ADMISSION_PRESERVED:' + file);
+  for (const file of new Set(preserved)) {
+    if (file === deliverySnapshotPath) validateDeliverySnapshot(JSON.parse(read(file)));
+    else assert(read(file).equals(source(file)), 'N_ADMISSION_PRESERVED:' + file);
+  }
 });

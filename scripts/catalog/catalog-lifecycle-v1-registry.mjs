@@ -4,6 +4,7 @@ import path from 'node:path';
 import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
 import {asyncapiAdmissionRegistryView} from './asyncapi-admission-v1.mjs';
+import {deliverySnapshotView} from './catalog-delivery-v1-registry.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const lifecycleBase = '651cb22d784fef917bd2e9e2e7f242dbb9ab8c7e';
@@ -58,6 +59,7 @@ export function lifecycleSnapshot() {
 }
 
 export function validateLifecycleSnapshot(snapshot = read('registry/consumers/catalog-pricing.json')) {
+  snapshot = deliverySnapshotView(snapshot);
   const candidate = lifecycleSnapshot();
   assert(['local-candidate', 'published'].includes(snapshot.publication), 'L_CANDIDATE_SNAPSHOT: invalid lifecycle');
   assert(typeof snapshot.sourceCommit === 'string' && /^[a-f0-9]{40}$/.test(snapshot.sourceCommit), 'L_CANDIDATE_SNAPSHOT: unresolved revision');

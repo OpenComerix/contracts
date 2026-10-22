@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/catalog-pricing",
-  "sourceCommit": "8b43a1828a023757047fd58ff27de0db42ac2ab1",
-  "manifestSha256": "03473839ec5984b7a0aaa567b02b4c1c118eb116a2674243c8d03d895935591f",
-  "lockSha256": "c47cd0ce2f9778915214d03c57f32b10d2cb430f6cd11cbcd2f40cbd0c0d3289",
+  "sourceCommit": "e0ba2538a9736cd1c40aa0b01db8f01b90979ddc",
+  "manifestSha256": "6788a1bdb7350a46197d055ea93404453d4da0ed3fe6791b2201440fb337d735",
+  "lockSha256": "2a6642ee980233556fd9ddd2d0090dd8d9f2ea20254eb9518f7d640663ab5b84",
   "manifest": {
     "formatVersion": 1,
     "service": "catalog-pricing",
@@ -656,6 +656,86 @@
           "pnpm test:integration",
           "pnpm test:e2e"
         ]
+      },
+      {
+        "id": "catalog.events.v1.asyncapi",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          "/operations/publishCatalogChanges"
+        ],
+        "purpose": "F1-08N isolated producer delivery validation; no commercial activation before O or business subscriber admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.category.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08N isolated producer delivery validation; no commercial activation before O or business subscriber admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.product.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08N isolated producer delivery validation; no commercial activation before O or business subscriber admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.presentation.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08N isolated producer delivery validation; no commercial activation before O or business subscriber admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "pricing.presentation-price.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08N isolated producer delivery validation; no commercial activation before O or business subscriber admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
       }
     ],
     "assets": [],
@@ -664,7 +744,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "catalog-pricing",
-    "manifestSha256": "03473839ec5984b7a0aaa567b02b4c1c118eb116a2674243c8d03d895935591f",
+    "manifestSha256": "6788a1bdb7350a46197d055ea93404453d4da0ed3fe6791b2201440fb337d735",
     "entries": [
       {
         "id": "common.event-envelope.v1",
@@ -6031,6 +6111,857 @@
         ],
         "selectionSha256": "ab078ec219a5c8ad7318423d9bfd5bdfebe3724010e4cb14511a66588368c01f",
         "runtimeSha256": "27c1867a127fc1ced6d772d864761719c2306c72dc8deea47ef2901d3fd7ecb8"
+      },
+      {
+        "id": "catalog.events.v1.asyncapi",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+        "operations": [],
+        "pointers": [
+          "/operations/publishCatalogChanges"
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "sha256": "31d43b980dcd2d1ca1d5323b0107d78f3f9b04a1be7a94a0ec61a15b0266db88"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/BasePresentationReference",
+            "sha256": "b568f6e5f01226cfbbea66b8b28d307eb7e8fbea7368e52ab9f297a5bdf3ebcd"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/CategoryPayload",
+            "sha256": "4dfe7d56dd4d7e2eaea59811781f7aab92b49f1ef7ff6e0245d030816e07b4ab"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Barcode",
+            "sha256": "beb27bcfe3ed7fbacd9259e5e33bac9bf38d5fa2890212d2d8fb6a52305bf0fb"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Category",
+            "sha256": "879777f6826fee0284e50fcad6fae1cf1b06c2771506257fc9b1b5068829159b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_DefaultVariant",
+            "sha256": "7a2aa98e009f14c4b56658d1f6b54f86347f392dd2c74064b7d1cd07ad07ccd1"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Description",
+            "sha256": "94170a02ec9b2c298ed5374493a94ed4daeb2f135506493ff25357e14865d19f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name80",
+            "sha256": "a6d27c341939ac401a5cc7df2c205cce54fb4510b4a09ab9e4971d1c94aa21c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Plu",
+            "sha256": "9d6a719173fa457fbb6bde7732fc7c106d9c78829463842795596f50299d508e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_PositiveQuantity",
+            "sha256": "55af499b0eca695d942330e686a46d327cb4a7d8908dc64dab6eaa40a45866c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Presentation",
+            "sha256": "0d6e1ba7111222f44cf9f166fbc82e4cc0d486cc80faefcd05af39b1e0f36661"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Product",
+            "sha256": "e0bf6251c4293b096950d8ed14d9a8a23ef0b6d1bc43b6bb7b595e53c0f0eb7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_ProductType",
+            "sha256": "b0709f5d0c8c7797d3639e7c04efdddffd4f09bc03b8b94db824da247fecdd01"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_State",
+            "sha256": "c47df95a82f3184c4e210ebdc4f4adf36c0581a1e71718646b52cf2f41efeb26"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxClassification",
+            "sha256": "b4814cfd410afd8168787dcb2eb6b436e52d8ce0770b12284cf4271ab0cf2abe"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxComponent",
+            "sha256": "85b41f078d664db97fe1e8a2bd79e32e78bf7ac74692bced33b1c4843e14c2e8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxReferenceResponse",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxRule",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_Price",
+            "sha256": "85193b22e392b494a75e0bf081c408a662a9c88c42f667ce86e6d6e13a8dbcd0"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_PriceList",
+            "sha256": "174a7fd38b844607752601065b11a49742b6f6448509bc0a315f252b1d602566"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PresentationPayload",
+            "sha256": "1a3b00a89f54348f6fcdce62f1430fe31a4b1966c6d0a4c90f298b0b781d4c3f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PricePayload",
+            "sha256": "b95fc9c5f333e92bb8fb3b14d2267758e80feec5604ec0ab3ce7f8ca5f89d7ee"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/ProductPayload",
+            "sha256": "b000c392bac990b537388dfead75c802e336f160873cd2b4be32ca36f95eacc4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/channels/catalogEvents",
+            "sha256": "ce86106aaee7224ebdb7ecc098d488def65a23107e3b04ee69e74ea56f5f14c4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/channels/catalogEvents/messages/category",
+            "sha256": "190ab95e5afb8b37a84a42b92cb9c2437b3d0e156bde9215dbc92dfc8374599f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/channels/catalogEvents/messages/presentation",
+            "sha256": "2674c6de485aabd6769ef4cc63b09424ba53b5977763b4a1833af3011d476f98"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/channels/catalogEvents/messages/price",
+            "sha256": "af908c76fbb21d331c9c5637969236e74e36a17dff071354f1faa958f57f36ad"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/channels/catalogEvents/messages/product",
+            "sha256": "ccf90958327aa931ed50404dac7b79bb15b7ba202c3f6ba298b1d4d0dde77574"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/components/messages/category",
+            "sha256": "5dfc8e5ac3bb50bd4095d31d4b07d6bf08b1ef17c6a79998369bfc7d4cac8cb2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/components/messages/presentation",
+            "sha256": "54a9f0af8119128d74a2e1569467c1b5cd074483d00d30c7e7880dec14adf7e4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/components/messages/price",
+            "sha256": "40c23257c9588bafa80023528216bf6db787c8fd7ddd91ad0abae867276c2fda"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/components/messages/product",
+            "sha256": "d140595cf6da94518c1be27de92b4e3cc7ea7978f9dd3bc505e4d7ec0037cbd7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-events-v1.asyncapi.yaml",
+            "pointer": "/operations/publishCatalogChanges",
+            "sha256": "97c254120e22c7ea5a76a4592487300a9ed9740c49901d9b966e235be31311d0"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "54dbdae005a2f51277a2a2d91d69fc63ee507aeee91994d034d7cc558269aa2b"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "013d3da2f33f7f264bc9c54b7054af3bc089f9230bde8c8cce8c86ba2e9642dd"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "8a12a11424edcc257c32c4db435a0a7eb132ed5db15abf3d6f427a55d14f0518"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "35863e709336963175835d3738f21149195198289760de252c779aea32835f8f"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "704d2c73b693c8ef11b7ecca7d3336acb803b82753334231e8fd5aa6cd7ad649"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "bb0285a769ddc985872f2912443c19fe5f7d6b4cca1d1454a9551498f8f7de6a"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "779ce611d408af79142b350ef31aab21bd0c7a1bf6a7aaa0c5ea55270db6b3dc"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9586c34f1cb4d780d481a6d0a67a4181afb123db26c67208559d5c95c8ff94bb"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "801d9ccb0ae6c99cf6a1d9684699213f3d76dbe7af07a77a60790e71499abc20",
+        "runtimeSha256": "801d9ccb0ae6c99cf6a1d9684699213f3d76dbe7af07a77a60790e71499abc20"
+      },
+      {
+        "id": "catalog.category.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/CategoryPayload",
+            "sha256": "4dfe7d56dd4d7e2eaea59811781f7aab92b49f1ef7ff6e0245d030816e07b4ab"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Category",
+            "sha256": "879777f6826fee0284e50fcad6fae1cf1b06c2771506257fc9b1b5068829159b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name80",
+            "sha256": "a6d27c341939ac401a5cc7df2c205cce54fb4510b4a09ab9e4971d1c94aa21c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "54dbdae005a2f51277a2a2d91d69fc63ee507aeee91994d034d7cc558269aa2b"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "013d3da2f33f7f264bc9c54b7054af3bc089f9230bde8c8cce8c86ba2e9642dd"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "303d36ba703d282f347df961a2da9831b31e0763c178a3b3c71733d8a12456eb",
+        "runtimeSha256": "303d36ba703d282f347df961a2da9831b31e0763c178a3b3c71733d8a12456eb"
+      },
+      {
+        "id": "catalog.product.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/BasePresentationReference",
+            "sha256": "b568f6e5f01226cfbbea66b8b28d307eb7e8fbea7368e52ab9f297a5bdf3ebcd"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_DefaultVariant",
+            "sha256": "7a2aa98e009f14c4b56658d1f6b54f86347f392dd2c74064b7d1cd07ad07ccd1"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Description",
+            "sha256": "94170a02ec9b2c298ed5374493a94ed4daeb2f135506493ff25357e14865d19f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Plu",
+            "sha256": "9d6a719173fa457fbb6bde7732fc7c106d9c78829463842795596f50299d508e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Product",
+            "sha256": "e0bf6251c4293b096950d8ed14d9a8a23ef0b6d1bc43b6bb7b595e53c0f0eb7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_ProductType",
+            "sha256": "b0709f5d0c8c7797d3639e7c04efdddffd4f09bc03b8b94db824da247fecdd01"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_State",
+            "sha256": "c47df95a82f3184c4e210ebdc4f4adf36c0581a1e71718646b52cf2f41efeb26"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxClassification",
+            "sha256": "b4814cfd410afd8168787dcb2eb6b436e52d8ce0770b12284cf4271ab0cf2abe"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxComponent",
+            "sha256": "85b41f078d664db97fe1e8a2bd79e32e78bf7ac74692bced33b1c4843e14c2e8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxReferenceResponse",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxRule",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/ProductPayload",
+            "sha256": "b000c392bac990b537388dfead75c802e336f160873cd2b4be32ca36f95eacc4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "704d2c73b693c8ef11b7ecca7d3336acb803b82753334231e8fd5aa6cd7ad649"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "bb0285a769ddc985872f2912443c19fe5f7d6b4cca1d1454a9551498f8f7de6a"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "018f7796743eaadb875b8b64b544aae1902828098bdacad88e4029f31f899d90",
+        "runtimeSha256": "018f7796743eaadb875b8b64b544aae1902828098bdacad88e4029f31f899d90"
+      },
+      {
+        "id": "catalog.presentation.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Barcode",
+            "sha256": "beb27bcfe3ed7fbacd9259e5e33bac9bf38d5fa2890212d2d8fb6a52305bf0fb"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name80",
+            "sha256": "a6d27c341939ac401a5cc7df2c205cce54fb4510b4a09ab9e4971d1c94aa21c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_PositiveQuantity",
+            "sha256": "55af499b0eca695d942330e686a46d327cb4a7d8908dc64dab6eaa40a45866c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Presentation",
+            "sha256": "0d6e1ba7111222f44cf9f166fbc82e4cc0d486cc80faefcd05af39b1e0f36661"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_State",
+            "sha256": "c47df95a82f3184c4e210ebdc4f4adf36c0581a1e71718646b52cf2f41efeb26"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PresentationPayload",
+            "sha256": "1a3b00a89f54348f6fcdce62f1430fe31a4b1966c6d0a4c90f298b0b781d4c3f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "8a12a11424edcc257c32c4db435a0a7eb132ed5db15abf3d6f427a55d14f0518"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "35863e709336963175835d3738f21149195198289760de252c779aea32835f8f"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "1b4bfc4e38e822795fbbb92479115aca0f90ca89c74c438c8d30a2e8c7a5a176",
+        "runtimeSha256": "1b4bfc4e38e822795fbbb92479115aca0f90ca89c74c438c8d30a2e8c7a5a176"
+      },
+      {
+        "id": "pricing.presentation-price.changed.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "68d923e903b6341eedb980af3586890c0eab7d5e",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_Price",
+            "sha256": "85193b22e392b494a75e0bf081c408a662a9c88c42f667ce86e6d6e13a8dbcd0"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_PriceList",
+            "sha256": "174a7fd38b844607752601065b11a49742b6f6448509bc0a315f252b1d602566"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PricePayload",
+            "sha256": "b95fc9c5f333e92bb8fb3b14d2267758e80feec5604ec0ab3ce7f8ca5f89d7ee"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "779ce611d408af79142b350ef31aab21bd0c7a1bf6a7aaa0c5ea55270db6b3dc"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9586c34f1cb4d780d481a6d0a67a4181afb123db26c67208559d5c95c8ff94bb"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98",
+        "runtimeSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98"
       }
     ],
     "assets": []
