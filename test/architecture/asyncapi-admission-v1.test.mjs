@@ -143,6 +143,10 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   allowed.add(deliverySnapshotPath);
   allowed.add('scripts/catalog/catalog-delivery-v1-registry.mjs');
   allowed.add('test/architecture/catalog-delivery.test.mjs');
+  // O2 validates the complete recovery export before the existing N comparison.
+  allowed.add('scripts/catalog/catalog-operational-recovery-v1-registry.mjs');
+  allowed.add('test/architecture/catalog-operational-recovery.test.mjs');
+  allowed.add('registry/README.md');
   const changed = execFileSync('git', ['diff', '--name-only', admissionBase, '--', '.'], { cwd: root, encoding: 'utf8' }).trim();
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).trim();
   for (const file of [changed, untracked].filter(Boolean).flatMap(text => text.split('\n')))

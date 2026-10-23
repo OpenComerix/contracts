@@ -5,6 +5,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { gitReader, makeLock, worktreeReader } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
+import { operationalSnapshotView } from '../../scripts/catalog/catalog-operational-recovery-v1-registry.mjs';
 import { validateLifecycleSnapshot, lifecycleSnapshot } from '../../scripts/catalog/catalog-lifecycle-v1-registry.mjs';
 import { validateRuntimeSnapshot } from '../../scripts/catalog/catalog-runtime-v1-registry.mjs';
 import { validateFoundationSnapshot } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
@@ -14,7 +15,8 @@ import { deliveryBase, deliveryServiceRevision, deliverySnapshotPath, deliverySn
 const root = path.resolve(import.meta.dirname, '../..');
 const source = gitReader(root, deliveryBase);
 const previous = JSON.parse(source(deliverySnapshotPath));
-const actual = JSON.parse(fs.readFileSync(path.join(root, deliverySnapshotPath), 'utf8'));
+// The live O2 export is verified completely before using the immutable N fixture.
+const actual = operationalSnapshotView(JSON.parse(fs.readFileSync(path.join(root, deliverySnapshotPath), 'utf8')));
 const registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'));
 const read = worktreeReader(root);
 const serialized = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -114,7 +116,9 @@ for (const file of ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'registr
 test('N export cut changes only its snapshot, validator, negatives and the two reviewed historical adapters', () => {
   const allowed = new Set([deliverySnapshotPath, 'scripts/catalog/catalog-delivery-v1-registry.mjs',
     'scripts/catalog/catalog-lifecycle-v1-registry.mjs', 'test/architecture/catalog-delivery.test.mjs',
-    'test/architecture/asyncapi-admission-v1.test.mjs']);
+    'test/architecture/asyncapi-admission-v1.test.mjs',
+    'scripts/catalog/catalog-operational-recovery-v1-registry.mjs',
+    'test/architecture/catalog-operational-recovery.test.mjs', 'catalog/README.md', 'registry/README.md']);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   const changed = git(['diff', '--name-only', deliveryBase, '--', '.']);
   const untracked = git(['ls-files', '--others', '--exclude-standard']);

@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/catalog-pricing",
-  "sourceCommit": "e0ba2538a9736cd1c40aa0b01db8f01b90979ddc",
-  "manifestSha256": "6788a1bdb7350a46197d055ea93404453d4da0ed3fe6791b2201440fb337d735",
-  "lockSha256": "2a6642ee980233556fd9ddd2d0090dd8d9f2ea20254eb9518f7d640663ab5b84",
+  "sourceCommit": "7d0ef7afad6eb801820963f534ead8849ffbac46",
+  "manifestSha256": "ce762c7d805fe3be5c07e61e8b5392d1cd76afe74963f4205baaa3da80d7ace0",
+  "lockSha256": "08326b7b4b7cc3c50c2b2f0a4c3db7148eff2c2251caa065383e7b9367469ca1",
   "manifest": {
     "formatVersion": 1,
     "service": "catalog-pricing",
@@ -736,6 +736,87 @@
           "pnpm test:integration",
           "pnpm test:e2e"
         ]
+      },
+      {
+        "id": "catalog.history-recovery.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createCatalogHistoryRecovery",
+          "readCatalogHistoryRecoveryPage"
+        ],
+        "pointers": [],
+        "purpose": "F1-08O2 recovery contract admission prerequisite; no runtime composition or functional activation.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-recovery.protocol.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08O2 recovery contract admission prerequisite; no runtime composition or functional activation.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "catalog.history-recovery.policy.v1",
+        "role": "consumer",
+        "version": "1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08O2 recovery contract admission prerequisite; no runtime composition or functional activation.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.http.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "operations": [
+          "verifyCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "purpose": "F1-08O2 recovery contract admission prerequisite; no runtime composition or functional activation.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "identity.catalog-recovery-verification.policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08O2 recovery contract admission prerequisite; no runtime composition or functional activation.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
       }
     ],
     "assets": [],
@@ -744,7 +825,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "catalog-pricing",
-    "manifestSha256": "6788a1bdb7350a46197d055ea93404453d4da0ed3fe6791b2201440fb337d735",
+    "manifestSha256": "ce762c7d805fe3be5c07e61e8b5392d1cd76afe74963f4205baaa3da80d7ace0",
     "entries": [
       {
         "id": "common.event-envelope.v1",
@@ -6962,6 +7043,1249 @@
         ],
         "selectionSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98",
         "runtimeSha256": "e24a0f554ac497b12899ce32675baa88728148e5bd70f4143d26590ad638fe98"
+      },
+      {
+        "id": "catalog.history-recovery.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+        "operations": [
+          "createCatalogHistoryRecovery",
+          "readCatalogHistoryRecoveryPage"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "sha256": "16741def8ead0f7eb90388bf3d71adebcf13cf6e5b5be376668f9e2b87c04b82"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "sha256": "c1e011e4a0917f1fe8a7f964433cdc2fa51413bf4bb4d88dc305dd6676cad7e2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/BasePresentationReference",
+            "sha256": "b568f6e5f01226cfbbea66b8b28d307eb7e8fbea7368e52ab9f297a5bdf3ebcd"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/CategoryPayload",
+            "sha256": "4dfe7d56dd4d7e2eaea59811781f7aab92b49f1ef7ff6e0245d030816e07b4ab"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Barcode",
+            "sha256": "beb27bcfe3ed7fbacd9259e5e33bac9bf38d5fa2890212d2d8fb6a52305bf0fb"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Category",
+            "sha256": "879777f6826fee0284e50fcad6fae1cf1b06c2771506257fc9b1b5068829159b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_DefaultVariant",
+            "sha256": "7a2aa98e009f14c4b56658d1f6b54f86347f392dd2c74064b7d1cd07ad07ccd1"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Description",
+            "sha256": "94170a02ec9b2c298ed5374493a94ed4daeb2f135506493ff25357e14865d19f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name80",
+            "sha256": "a6d27c341939ac401a5cc7df2c205cce54fb4510b4a09ab9e4971d1c94aa21c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Plu",
+            "sha256": "9d6a719173fa457fbb6bde7732fc7c106d9c78829463842795596f50299d508e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_PositiveQuantity",
+            "sha256": "55af499b0eca695d942330e686a46d327cb4a7d8908dc64dab6eaa40a45866c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Presentation",
+            "sha256": "0d6e1ba7111222f44cf9f166fbc82e4cc0d486cc80faefcd05af39b1e0f36661"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Product",
+            "sha256": "e0bf6251c4293b096950d8ed14d9a8a23ef0b6d1bc43b6bb7b595e53c0f0eb7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_ProductType",
+            "sha256": "b0709f5d0c8c7797d3639e7c04efdddffd4f09bc03b8b94db824da247fecdd01"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_State",
+            "sha256": "c47df95a82f3184c4e210ebdc4f4adf36c0581a1e71718646b52cf2f41efeb26"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxClassification",
+            "sha256": "b4814cfd410afd8168787dcb2eb6b436e52d8ce0770b12284cf4271ab0cf2abe"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxComponent",
+            "sha256": "85b41f078d664db97fe1e8a2bd79e32e78bf7ac74692bced33b1c4843e14c2e8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxReferenceResponse",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxRule",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_Price",
+            "sha256": "85193b22e392b494a75e0bf081c408a662a9c88c42f667ce86e6d6e13a8dbcd0"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_PriceList",
+            "sha256": "174a7fd38b844607752601065b11a49742b6f6448509bc0a315f252b1d602566"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PresentationPayload",
+            "sha256": "1a3b00a89f54348f6fcdce62f1430fe31a4b1966c6d0a4c90f298b0b781d4c3f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PricePayload",
+            "sha256": "b95fc9c5f333e92bb8fb3b14d2267758e80feec5604ec0ab3ce7f8ca5f89d7ee"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/ProductPayload",
+            "sha256": "b000c392bac990b537388dfead75c802e336f160873cd2b4be32ca36f95eacc4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "54dbdae005a2f51277a2a2d91d69fc63ee507aeee91994d034d7cc558269aa2b"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "013d3da2f33f7f264bc9c54b7054af3bc089f9230bde8c8cce8c86ba2e9642dd"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "8a12a11424edcc257c32c4db435a0a7eb132ed5db15abf3d6f427a55d14f0518"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "35863e709336963175835d3738f21149195198289760de252c779aea32835f8f"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "704d2c73b693c8ef11b7ecca7d3336acb803b82753334231e8fd5aa6cd7ad649"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "bb0285a769ddc985872f2912443c19fe5f7d6b4cca1d1454a9551498f8f7de6a"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "779ce611d408af79142b350ef31aab21bd0c7a1bf6a7aaa0c5ea55270db6b3dc"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9586c34f1cb4d780d481a6d0a67a4181afb123db26c67208559d5c95c8ff94bb"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "fca0e2861799d1a4d4601f0f281c359e315a64cc7b6cf08815c77f2825d43a9b"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/components/headers/RetryAfter",
+            "sha256": "8f80891feaeb9fb5963e41070d68bcefadfe46b9e31b3db8be454f10162a0235"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/components/securitySchemes/recoveryWorkloadBearer",
+            "sha256": "3f1c1f39ef958976adb54e5f0cf536ca76e3873285d7ca8e7c6692cb33cad5e5"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1catalog~1history~1recoveries/post",
+            "sha256": "7d20a908a4a5c52f9933a69dbc7944f7eb5833653fe01e62f634e060289156ad"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/paths/~1internal~1v1~1catalog~1history~1recoveries~1{recovery_id}~1pages/post",
+            "sha256": "891e6d6c9b99158739e275ab09eabdef6aa4ecf751cd3d73cdb395d38a8e75e6"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/security",
+            "sha256": "615c3095d16357bbeafcf3c2c56fe4a9727b91abf45ca9dc2efa2acb06f61535"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-history-recovery-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "cc2a771ef6fc16b1281aec7c87828620b3ebf8a24b2a52a395e83ef86e33be45"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Binding",
+            "sha256": "537849a38c69d25d33115dcbf6c0567e597eb5c029e95e0fe441c21b8420bce6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Coverage",
+            "sha256": "bfe11ab922a0a6b2304decfd7177fcefc67b7d4707f03a8bfb9bd73c392ebc7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/CreateRequest",
+            "sha256": "268e68f92339f69081493a98dcc51c2570d2f6014adc7fee9d4d2c05112f637a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "fccbf73dbc404ee1d67c5ce3f7d28f7827f9d62adca50a73ade3abed5ba79dbe"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Interval",
+            "sha256": "d22f39f4d35c361a3c100cb8bfca91a4379e1906055f0ca7518e998e58ad7ca8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/MissingRange",
+            "sha256": "766740e9ede03abd4c89ff55bfdf2f30ce1e5cb580f5cb46f5c4f943cc8e657f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/OriginalEvent",
+            "sha256": "cabb0d1eef5b38869ef3a5b4a5dfe97e76301ca0aa7133c448586db36ff9781f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "462fc74a666041e365aa7d610a1379e7ad6df89b03f31b177ee989bae3fcb99f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/PageRequest",
+            "sha256": "004f25007a5128a9ce63bba5936cea6635b5f884a34293e7f3e62afeff13eb84"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "7f6f79d47d23097460c6fef8740f4b945b34303b0200a48169eeef189dcb67ef"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/PositionedEvent",
+            "sha256": "ee40dfbed78e11f61f001ee6bb52b731ab91b54cb635c4b22fa13a73ca309efa"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/PositivePosition",
+            "sha256": "6b8c29328d126a7dcb293765d149c0fd9cd7cfc150e14e6a807c3f5e2655e0a5"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "7bc5360556f7aaf3936ea13735d9c903bd037b9243e80a49b0db1363309a18db"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Session",
+            "sha256": "532734d1b432be6443bc79c137f9ff6c791c0d7ac4dcb0b09f33053e4f3df7ce"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5085f08ec6ad2a60f3d6fa7dc17212319aa0a4964a3ba133265a691bb7f20335"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "54abc4ed1eaecb4548a969d1ec29a88ae3d88f64de269418f3bcd1abd7e79041",
+        "runtimeSha256": "45e65d7bbf811fcb960a1d1e97692556c0836a93f08a56ec006447d7670dc617"
+      },
+      {
+        "id": "catalog.history-recovery.protocol.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "sha256": "78e3d7cf4cba369d8323e287f1792dc8633be7716ec67f67188151d3abbcf404"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "sha256": "296b7de9c799b429c4a9a4d6f25a8b7750993aee050973007759893820957ed6"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "sha256": "e849ca069600c3a67b418b9a9cf0e757fd5c75a5be23831d6ff11aba45561c11"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "sha256": "3b517c6027170e00531b06a3cc9e6e8b79213e278bb01325f0c7eba093335ed1"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "sha256": "9355c393f2b8b58d48e6e4ded616a84125941a1652d2e7299af3a8d4408dcf0f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "sha256": "c1e011e4a0917f1fe8a7f964433cdc2fa51413bf4bb4d88dc305dd6676cad7e2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/BasePresentationReference",
+            "sha256": "b568f6e5f01226cfbbea66b8b28d307eb7e8fbea7368e52ab9f297a5bdf3ebcd"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_CatalogId",
+            "sha256": "cd7f78bbd629521987bb93b6280be9ae5f81e9a08dd9583ec0c7b637ef0cd9a2"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_IdentityReference",
+            "sha256": "6d168ead301c7c5a331615f04ddb31890d400e62cfee21b80148a9d31109a2f4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/C_UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/CategoryPayload",
+            "sha256": "4dfe7d56dd4d7e2eaea59811781f7aab92b49f1ef7ff6e0245d030816e07b4ab"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Barcode",
+            "sha256": "beb27bcfe3ed7fbacd9259e5e33bac9bf38d5fa2890212d2d8fb6a52305bf0fb"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Category",
+            "sha256": "879777f6826fee0284e50fcad6fae1cf1b06c2771506257fc9b1b5068829159b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_DefaultVariant",
+            "sha256": "7a2aa98e009f14c4b56658d1f6b54f86347f392dd2c74064b7d1cd07ad07ccd1"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Description",
+            "sha256": "94170a02ec9b2c298ed5374493a94ed4daeb2f135506493ff25357e14865d19f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Name80",
+            "sha256": "a6d27c341939ac401a5cc7df2c205cce54fb4510b4a09ab9e4971d1c94aa21c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Plu",
+            "sha256": "9d6a719173fa457fbb6bde7732fc7c106d9c78829463842795596f50299d508e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_PositiveQuantity",
+            "sha256": "55af499b0eca695d942330e686a46d327cb4a7d8908dc64dab6eaa40a45866c3"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Presentation",
+            "sha256": "0d6e1ba7111222f44cf9f166fbc82e4cc0d486cc80faefcd05af39b1e0f36661"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_Product",
+            "sha256": "e0bf6251c4293b096950d8ed14d9a8a23ef0b6d1bc43b6bb7b595e53c0f0eb7b"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_ProductType",
+            "sha256": "b0709f5d0c8c7797d3639e7c04efdddffd4f09bc03b8b94db824da247fecdd01"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_State",
+            "sha256": "c47df95a82f3184c4e210ebdc4f4adf36c0581a1e71718646b52cf2f41efeb26"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxClassification",
+            "sha256": "b4814cfd410afd8168787dcb2eb6b436e52d8ce0770b12284cf4271ab0cf2abe"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxComponent",
+            "sha256": "85b41f078d664db97fe1e8a2bd79e32e78bf7ac74692bced33b1c4843e14c2e8"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxReferenceResponse",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/E_TaxRule",
+            "sha256": "30b843bf7c8e4f78c5c5265737cad469b4fa1e3906dae8ce0698cdfd6a4a43e7"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_Price",
+            "sha256": "85193b22e392b494a75e0bf081c408a662a9c88c42f667ce86e6d6e13a8dbcd0"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/P_PriceList",
+            "sha256": "174a7fd38b844607752601065b11a49742b6f6448509bc0a315f252b1d602566"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PresentationPayload",
+            "sha256": "1a3b00a89f54348f6fcdce62f1430fe31a4b1966c6d0a4c90f298b0b781d4c3f"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/PricePayload",
+            "sha256": "b95fc9c5f333e92bb8fb3b14d2267758e80feec5604ec0ab3ce7f8ca5f89d7ee"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$defs/ProductPayload",
+            "sha256": "b000c392bac990b537388dfead75c802e336f160873cd2b4be32ca36f95eacc4"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "7e7ef9a322e0e06d8b6d2b842f2187f1f49aa7dd6fc7b4d01449193eff9fb44e"
+          },
+          {
+            "path": "catalog/events/v1/catalog-event-data-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "54dbdae005a2f51277a2a2d91d69fc63ee507aeee91994d034d7cc558269aa2b"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "013d3da2f33f7f264bc9c54b7054af3bc089f9230bde8c8cce8c86ba2e9642dd"
+          },
+          {
+            "path": "catalog/events/v1/catalog.category.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "8a12a11424edcc257c32c4db435a0a7eb132ed5db15abf3d6f427a55d14f0518"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "35863e709336963175835d3738f21149195198289760de252c779aea32835f8f"
+          },
+          {
+            "path": "catalog/events/v1/catalog.presentation.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "704d2c73b693c8ef11b7ecca7d3336acb803b82753334231e8fd5aa6cd7ad649"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "bb0285a769ddc985872f2912443c19fe5f7d6b4cca1d1454a9551498f8f7de6a"
+          },
+          {
+            "path": "catalog/events/v1/catalog.product.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "",
+            "sha256": "779ce611d408af79142b350ef31aab21bd0c7a1bf6a7aaa0c5ea55270db6b3dc"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9586c34f1cb4d780d481a6d0a67a4181afb123db26c67208559d5c95c8ff94bb"
+          },
+          {
+            "path": "catalog/events/v1/pricing.presentation-price.changed.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "",
+            "sha256": "74d265cacc1cb72e9af00887171de6aee3c865c068dac758ff42a7c5c4f83785"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Binding",
+            "sha256": "537849a38c69d25d33115dcbf6c0567e597eb5c029e95e0fe441c21b8420bce6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Coverage",
+            "sha256": "bfe11ab922a0a6b2304decfd7177fcefc67b7d4707f03a8bfb9bd73c392ebc7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "fccbf73dbc404ee1d67c5ce3f7d28f7827f9d62adca50a73ade3abed5ba79dbe"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Interval",
+            "sha256": "d22f39f4d35c361a3c100cb8bfca91a4379e1906055f0ca7518e998e58ad7ca8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/MissingRange",
+            "sha256": "766740e9ede03abd4c89ff55bfdf2f30ce1e5cb580f5cb46f5c4f943cc8e657f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/OriginalEvent",
+            "sha256": "cabb0d1eef5b38869ef3a5b4a5dfe97e76301ca0aa7133c448586db36ff9781f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "7f6f79d47d23097460c6fef8740f4b945b34303b0200a48169eeef189dcb67ef"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/PositionedEvent",
+            "sha256": "ee40dfbed78e11f61f001ee6bb52b731ab91b54cb635c4b22fa13a73ca309efa"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$defs/PositivePosition",
+            "sha256": "6b8c29328d126a7dcb293765d149c0fd9cd7cfc150e14e6a807c3f5e2655e0a5"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5085f08ec6ad2a60f3d6fa7dc17212319aa0a4964a3ba133265a691bb7f20335"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-protocol-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "501fbfc184a70f6f9a90822e82521e5386953fc62c61b20b746942f522d1f946",
+        "runtimeSha256": "501fbfc184a70f6f9a90822e82521e5386953fc62c61b20b746942f522d1f946"
+      },
+      {
+        "id": "catalog.history-recovery.policy.v1",
+        "role": "consumer",
+        "version": "1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+            "sha256": "ad811a5974dea90ffbe8180220e4ba7c73ef9ad16e99bcbe24677bd70f83d7a3"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1-policy.json",
+            "pointer": "",
+            "sha256": "34b22c819b8085d8e693829b601aa3ba4f4a5607ca425aad67839d8dab914231"
+          }
+        ],
+        "selectionSha256": "4aa247e4fa158abeeae61df227758dc8e7d61accdd1be6c86a98feb99aa5d890",
+        "runtimeSha256": "4aa247e4fa158abeeae61df227758dc8e7d61accdd1be6c86a98feb99aa5d890"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.http.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+        "operations": [
+          "verifyCatalogRecoveryGrantV2"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "sha256": "b1596f76246cc35b0d94b8a769c006f7d85f8163c941dd630d4ac3834425b7a4"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "sha256": "1a437b61e1b35a42ab135f4326163a190bdf23bf28a242f05d6df5ed740958fb"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "sha256": "62e0c57a11167f8b75114880c79a3c726c6598f2e59633e633120e59a7be80c5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "sha256": "7da988ebc93ba5073d8b87b68ad4ae012c4a277c9a69c5b3c32d0dd8cd310124"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "sha256": "ca0727e6ca5e97afc910e3011997cf43aa092b9e8d892abd6fee368f0b293cde"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/AggregateType",
+            "sha256": "3bd058b1c52c0c3d581b0f42ec38296eb704ab09cd595f780de16cebe42a6b74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "7c7f28905d5508ce0636970a3ecce130c92211660d211266c667cfbd11aa515d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "6b03079d81d969a86de74a74d519c049ffa47dbc24c74839b969c9c1edf03679"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "79d95c0c8656d3964fd41c563dd2d23565044197ca031999a8908f547b5b00d3"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "9f25d5493d0286d7cef6e281eb4cee3411a89e1c8894c8c92601ba1241566f12"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-history-recovery-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "d0a850878adfa66a9f6711a7f92c5a33199b4738907ad21c14c0c226c29529b8"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/AuthenticationRequired",
+            "sha256": "13a6cc1cd6735e460aba6a4846a11729f0ec030b90bdfa62679bbf2dd0581f7d"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/DependencyUnavailable",
+            "sha256": "ca1ecc18619b14652fbf54a3193eb8c1d800415b8fdbe4147e957276b5a5691c"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/ExpiredOrRevoked",
+            "sha256": "08a3ab34144506be2b68b702aebc4b4506728da075d96cb757a1ad6dd3ad6035"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/InvalidRequest",
+            "sha256": "8232ead0f33d80cfd7c0f8fb789e798150059e7c977cc92673b216ec51d91fe5"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotAuthorized",
+            "sha256": "32fd9a9f2ac2e46370eeec3a373da5a4485ebdea43a11dee3f74fc80f3eb9009"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/components/responses/NotFound",
+            "sha256": "c17de9770bb556b1a5f479208f0b01236b92cd84029efc7b68ad103263bbeee0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "30df8737795b2de782eb5ff437573ee547b5f6d9800ee9cd353cf1bfdcec599f"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/components/securitySchemes/catalogWorkloadBearer",
+            "sha256": "886714dbef2526f1d4fdb5f601a5c83b5e19b6a9bfcc0023ed8b6853af104403"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/paths/~1internal~1v2~1identity~1catalog~1recovery-grants~1verify/post",
+            "sha256": "d494e1b928b3c8de5cfc0e16bac86dd06e30fa578086530587bb9a60b1d84e7d"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/security",
+            "sha256": "6e8e5f526e27f6be671ecf6a4113fe0ee7a3455074df0938e30cdabc71a4c3c0"
+          },
+          {
+            "path": "identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "f9b9a9ba0d8806fab87c8cab004cd1e3d4a0c7787d9b7c96d665c3476130feb5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/AuthoritySnapshot",
+            "sha256": "5e3d6058b2984da70ff4178d96d3655a18ed755f27a686be5a5d652f228a8651"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Destination",
+            "sha256": "b8486ae8947ea31e7e2cb92cb7ac03151b0638a5dd4b867e2f7217fc93073ffd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/GrantBinding",
+            "sha256": "8c7e423e1ba00bfc63ae853f582aabe70a716814570fb927b104a31f4fb47140"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Problem",
+            "sha256": "330a55d543e74c2409adead66678599bcff62acecf537887eee6982c7464bd61"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Purpose",
+            "sha256": "419a8aeab19636d875f316e8a732fda72336decc4d4adaad2d769ef3ecfaa5e5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/Selection",
+            "sha256": "f56c51e1887d692f89702acba542eb203756ab8021e2ab56d757d31e35360124"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifiedPurposePermission",
+            "sha256": "81c2159af08e56129f590fb8450977ecff3e399822889f024a124724a6347396"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyPurposePermission",
+            "sha256": "829cffcb58f8222b5bb909de49439e0d3c1dd869558a33410c3de10416ded3f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "dc56828533500d51a1f9dd1d454a977f856204d7966ac847b05683fbeff2ca94"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/authorized",
+            "sha256": "02e70d99380d0cc184f95bd0d4c286c1c4d5e530ba725618c6321376ec9480b9"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/grant_id",
+            "sha256": "44b2ecffc8606ad9705131859fa57980c41eaf5d5e35ecd101822dc2c2eb6523"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/permission",
+            "sha256": "3ed38c5acaad21c55fb7cc4a8f441ab96355c748609388332d649c4d526f0e88"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/status",
+            "sha256": "542c4c9bd7aeb2de42b6f014e7758816eaa65cfc5794a0d18dc1c29a81cbd9ae"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$defs/VerifyResponse/properties/valid_until",
+            "sha256": "4f410cd74c87d8ddd21f20e835e06ed7445481c3aeae3c12085e82c54ea2fb7d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "74d656e6716665ba74b8d151fc4a558557be851c9d87c682a5e1700477521250"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$defs/VerifyRequest",
+            "sha256": "bf9477e0d0b4eb2c4ef5d1ec8669be359413d613f5e904e072b103a51e5d6df2"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$defs/VerifyResponse",
+            "sha256": "98d170b0f984c8f738b06646fabd60b15b1ce7d7da04d5c3ea90d7f19b6b7699"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "64fca798e196315778455f76127ba5cc84c1b4f133b06a04ba9383bcc077f11e"
+          },
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "d0670cc624515d5b344a58d04e05c0e0c904a50785adf1c9611fb3cb44249348",
+        "runtimeSha256": "ba0100fe1e3e5fc24e327ded34af89f7e765541c01471fc109742eefc2f3d99a"
+      },
+      {
+        "id": "identity.catalog-recovery-verification.policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "28be1edf02a3771629febf554f8b5f4856452877",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+            "sha256": "8b144ebb1e7508afcec67bbf63c5defc707eeb0a2cbef97140fd18274a1c21c9"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-recovery-verification-v2-policy.json",
+            "pointer": "",
+            "sha256": "96573403a5e549537f60323c5888f5dfc8503568d4aa60f5567bbd7b1101cc4a"
+          }
+        ],
+        "selectionSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995",
+        "runtimeSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995"
       }
     ],
     "assets": []

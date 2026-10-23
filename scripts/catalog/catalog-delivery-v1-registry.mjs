@@ -4,6 +4,7 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock, worktreeReader } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
+import { operationalSnapshotView } from './catalog-operational-recovery-v1-registry.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const deliveryBase = 'f6204d7b68510560ee1f3bd30b9829b769cca93f';
@@ -56,6 +57,7 @@ export function deliverySnapshot() {
 }
 
 export function validateDeliverySnapshot(snapshot = readSnapshot()) {
+  snapshot = operationalSnapshotView(snapshot);
   assert(isDeepStrictEqual(snapshot, deliverySnapshot()), 'N_DELIVERY_SNAPSHOT');
   return { dependencies: 43, previous_preserved: 38, new_producers: 5, functional_activation: false };
 }
@@ -63,6 +65,7 @@ export function validateDeliverySnapshot(snapshot = readSnapshot()) {
 // Only a complete, verified N export may be projected to the immutable L view.
 // Historical fixtures keep their own original validation and diagnostics.
 export function deliverySnapshotView(snapshot) {
+  snapshot = operationalSnapshotView(snapshot);
   const selections = snapshot?.manifest?.contracts;
   const entries = snapshot?.lock?.entries;
   const delivery = snapshot?.sourceCommit === deliveryServiceRevision ||
