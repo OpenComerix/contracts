@@ -40,9 +40,13 @@ function checkAppend(file, text, marker, expectedHash, expectedPrefix = original
 function checkPreservation(candidate) {
   for (const [file, expected] of Object.entries(proofHashes)) assert(hash(candidate[file]) === expected, 'N_PRESERVATION_PROOF:' + file);
   checkAppend('.gitlab-ci.yml', candidate['.gitlab-ci.yml'], '\nvalidate:catalog-asyncapi:', '33e88587d4d15a40835eff9da4e886f102a22944b04095ac7eb3e59bc6c78154', approvedPriorCi);
-  // Keep the published certification proof exact; only the separately admitted
-  // suffix may follow it. Duplication or unrelated documentation still fails.
-  const readme = candidate['catalog/README.md'];
+  // Validate the complete approved O2 suffix before projecting to the immutable
+  // N README. Original certification/admission hashes and checks stay exact.
+  const currentReadme = candidate['catalog/README.md'];
+  const operational = currentReadme.indexOf('\n## F1-08O2 — Admisiones previas a composición operativa');
+  assert(operational >= 0 && hash(currentReadme.slice(operational)) === 'd66e6048a5bbe2b8181f00c5a7dabe00e99765f3ffb62004f71e345860757b10',
+    'N_PRESERVATION_O2_README');
+  const readme = currentReadme.slice(0, operational);
   const marker = '\n## F1-08N — Admisión seleccionada de AsyncAPI';
   const admission = readme.indexOf(marker);
   assert(admission >= 0 && hash(readme.slice(admission)) === '4f318b98f43c6d9f3fe8c817e7be23b1de203bcdd763242530c16f570cfa3c0c', 'N_PRESERVATION_ADMISSION_README');
@@ -120,6 +124,10 @@ for (const [name, file, mutate] of [
   ['admission README changed', 'catalog/README.md', text => text.replace('únicamente `catalog.events.v1.asyncapi`', 'también `catalog.events.v1.asyncapi`')],
   ['admission README omitted', 'catalog/README.md', text => text.slice(0, text.indexOf('\n## F1-08N — Admisión seleccionada de AsyncAPI'))],
   ['admission README duplicated', 'catalog/README.md', text => text + text.slice(text.indexOf('\n## F1-08N — Admisión seleccionada de AsyncAPI'))],
+  ['O2 README omitted', 'catalog/README.md', text => text.slice(0, text.indexOf('\n## F1-08O2'))],
+  ['O2 README changed', 'catalog/README.md', text => text.replace('metadatos de 48 selecciones', 'metadatos de 49 selecciones')],
+  ['O2 README duplicated', 'catalog/README.md', text => text + text.slice(text.indexOf('\n## F1-08O2'))],
+  ['unrelated text after O2 README', 'catalog/README.md', text => text + '\nUnapproved appendix.\n'],
   ['parser revision changed', 'package.json', text => text.replace('"3.6.4"', '"3.6.3"')],
   ['prior YAML dependency changed', 'package.json', text => text.replace('"2.9.1"', '"2.9.0"')],
   ['extra direct dependency', 'package.json', text => { const pkg = JSON.parse(text); pkg.devDependencies.unapproved = '1.0.0'; return JSON.stringify(pkg); }],

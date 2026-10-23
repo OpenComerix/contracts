@@ -157,7 +157,7 @@ test('O2 confines all tracked, indexed and new changes to its approved contract 
   const allowed = new Set([operationalSnapshotPath, 'scripts/catalog/catalog-operational-recovery-v1-registry.mjs',
     'test/architecture/catalog-operational-recovery.test.mjs', 'scripts/catalog/catalog-delivery-v1-registry.mjs',
     'test/architecture/catalog-delivery.test.mjs', 'test/architecture/asyncapi-admission-v1.test.mjs',
-    'catalog/README.md', 'registry/README.md']);
+    'catalog/README.md', 'registry/README.md', 'test/catalog/asyncapi-preservation-v1.test.mjs']);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   for (const list of [git(['diff', '--name-only', operationalBase, '--', '.']), git(['ls-files', '--others', '--exclude-standard'])])
     for (const file of list.split('\n').filter(Boolean)) assert(allowed.has(file), 'O2_RECOVERY_SCOPE:' + file);

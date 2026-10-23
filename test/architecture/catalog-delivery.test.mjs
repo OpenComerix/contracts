@@ -118,7 +118,8 @@ test('N export cut changes only its snapshot, validator, negatives and the two r
     'scripts/catalog/catalog-lifecycle-v1-registry.mjs', 'test/architecture/catalog-delivery.test.mjs',
     'test/architecture/asyncapi-admission-v1.test.mjs',
     'scripts/catalog/catalog-operational-recovery-v1-registry.mjs',
-    'test/architecture/catalog-operational-recovery.test.mjs', 'catalog/README.md', 'registry/README.md']);
+    'test/architecture/catalog-operational-recovery.test.mjs', 'catalog/README.md', 'registry/README.md',
+    'test/catalog/asyncapi-preservation-v1.test.mjs']);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   const changed = git(['diff', '--name-only', deliveryBase, '--', '.']);
   const untracked = git(['ls-files', '--others', '--exclude-standard']);
