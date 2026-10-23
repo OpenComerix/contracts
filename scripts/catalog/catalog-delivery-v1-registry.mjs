@@ -6,6 +6,8 @@ import { gitReader, makeLock, worktreeReader } from '../../tools/architecture/gr
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { operationalSnapshotView } from './catalog-operational-recovery-v1-registry.mjs';
 
+import { workloadReadView } from '../identity/catalog-workload-profiles-v2-registry.mjs';
+
 const root = path.resolve(import.meta.dirname, '../..');
 export const deliveryBase = 'f6204d7b68510560ee1f3bd30b9829b769cca93f';
 export const deliveryServiceRevision = 'e0ba2538a9736cd1c40aa0b01db8f01b90979ddc';
@@ -78,6 +80,7 @@ export function deliverySnapshotView(snapshot) {
 }
 
 export function validateDeliveryPreservation(read = worktreeReader(root)) {
+  const historicalRead = workloadReadView(read);
   const registry = baseline('registry/contracts.json');
   const files = new Set([
     '.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'registry/contracts.json',
@@ -88,7 +91,11 @@ export function validateDeliveryPreservation(read = worktreeReader(root)) {
     ...registry.preservedFiles.map(row => row.path),
   ]);
   for (const file of files) {
-    const actual = read(file), expected = source(file);
+    let actual;
+    try { actual = historicalRead(file); } catch (error) {
+      throw new Error('N_DELIVERY_PRESERVED:' + file, { cause: error });
+    }
+    const expected = source(file);
     // Same checkout-only LF/CRLF exception as the canonical registry gate.
     assert(actual.equals(expected) || Buffer.from(actual.toString('utf8').replaceAll('\r\n', '\n')).equals(expected),
       'N_DELIVERY_PRESERVED:' + file);

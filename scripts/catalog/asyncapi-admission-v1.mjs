@@ -5,6 +5,8 @@ import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { gitReader, resolveSelection, worktreeReader } from '../../tools/architecture/graph.mjs';
 
+import { workloadRegistryView } from '../identity/catalog-workload-profiles-v2-registry.mjs';
+
 export const root = path.resolve(import.meta.dirname, '../..');
 export const admissionBase = '280d990b81d684c886c87c7998979edd4f84f288';
 export const admissionId = 'catalog.events.v1.asyncapi';
@@ -26,6 +28,7 @@ export function admittedRegistry() {
 // Source revisions remain the original published descriptor revisions. The
 // certification commit is evidence, not a replacement transport provenance.
 export function validateAsyncapiAdmission(registry, read = worktreeReader(root)) {
+  registry = workloadRegistryView(registry, read);
   assert(isDeepStrictEqual(registry, admittedRegistry()), 'N_ADMISSION_REGISTRY');
   const row = registry.contracts.find(row => row.id === admissionId);
   const closureFiles = validateClosure(row, registry, read);
@@ -52,6 +55,7 @@ function validateClosure(row, registry, read) {
 // The complete N gate checks the full registry; J/K/L/H/I retain their original
 // diagnostics for every other field. Source bytes are checked before projection.
 export function asyncapiAdmissionRegistryView(registry) {
+  registry = workloadRegistryView(registry);
   const row = registry.contracts?.find(row => row.id === admissionId);
   // A status-only promotion in a historical fixture is still unauthorized and
   // must reach that cut's original descriptor diagnostic, not select N.

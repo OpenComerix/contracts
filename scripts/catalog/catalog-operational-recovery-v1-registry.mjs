@@ -5,6 +5,8 @@ import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock, worktreeReader } from '../../tools/architecture/graph.mjs';
 import { sha256, validateShape } from '../../tools/architecture/consumer-gate.mjs';
 
+import { workloadReadView } from '../identity/catalog-workload-profiles-v2-registry.mjs';
+
 const root = path.resolve(import.meta.dirname, '../..');
 export const operationalBase = '9e2039713f6ffb33e86d38a4d420db954152fe7f';
 export const operationalServiceBase = 'e13561144c78144a0937eec90c7a2c06f271f2b7';
@@ -76,6 +78,7 @@ export function operationalSnapshotView(snapshot) {
 }
 
 export function validateOperationalPreservation(read = worktreeReader(root)) {
+  const historicalRead = workloadReadView(read);
   const registry = baseline('registry/contracts.json');
   const files = new Set(['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'registry/contracts.json',
     'registry/consumers/index.json', 'catalog/index.json', 'identity/index.json', 'common/index.json',
@@ -83,7 +86,11 @@ export function validateOperationalPreservation(read = worktreeReader(root)) {
     ...registry.contracts.map(row => row.path), ...registry.preservedFiles.map(row => row.path),
     ...['cli', 'graph', 'registry', 'consumer-gate'].map(name => 'tools/architecture/' + name + '.mjs')]);
   for (const file of files) {
-    const actual = read(file), expected = source(file);
+    let actual;
+    try { actual = historicalRead(file); } catch (error) {
+      throw new Error('O2_RECOVERY_PRESERVED:' + file, { cause: error });
+    }
+    const expected = source(file);
     assert(actual.equals(expected) || Buffer.from(actual.toString('utf8').replaceAll('\r\n', '\n')).equals(expected),
       'O2_RECOVERY_PRESERVED:' + file);
   }

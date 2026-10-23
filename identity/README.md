@@ -108,3 +108,14 @@ No se modifica R3 v1, verificación v2, semántica, source_pins, transporte, fix
 # F1-08M — Sucesor candidato de perfiles H1A
 
 [Política v2](http/shared/v2/identity-catalog-workload-profiles-v2.json) y [vectores](fixtures/catalog-workload/v2/catalog-workload-profiles-v2-vectors.json) conservan las cinco asignaciones anteriores y agregan `catalog-pricing.history-recovery` → `catalog-pricing` / `catalog-pricing.history-recovery`, separado del cliente R3 `catalog-pricing.catalog-recovery`. La política v1, sus bytes, fixtures, admisión y pins permanecen inmutables. [Gate y tests externos](../scripts/identity/validate-catalog-workload-profiles-v2.mjs) prueban aislamiento y preservación; CI ejecuta ambos gates v1/v2. Es sucesor candidato: no cambia locks/admisiones ni autoriza configurar el secreto en producción o consumirlo fuera del alcance aprobado.
+
+## F1-08O3 — Admisión seleccionada de perfiles H1A v2
+
+Se admiten únicamente la política v2 y sus vectores desde contracts 9223c3b6b7c5077d7230d14d16da26a8129d0c51, con hashes Git exactos y [CI fuente Passed, 14/14](https://gitlab.com/opencomerix/contracts/-/pipelines/2980742219). El registro conserva las 119 raíces anteriores, 236 artefactos preservados y tres intenciones pendientes: total 121 raíces. La política y los vectores publicados conservan sus bytes y estado candidato; active describe esta admisión contractual, sin afirmar habilitación productiva.
+
+| ID | Superficie / versión |
+| --- | --- |
+| identity.catalog-workload-profiles.policy.v2 | policy / 2 |
+| identity.catalog-workload-profiles.fixtures.v2 | validation / v2 |
+
+El [validador de admisión](../scripts/identity/catalog-workload-profiles-v2-registry.mjs) comprueba el paquete completo antes de proyectarlo para los controles históricos; sus [pruebas externas](../test/identity/catalog-workload-profiles-admission-v2.test.mjs) verifican procedencia, cierre y negativos. Política v1, seis perfiles aislados, herramientas genéricas, CI, dependencias, manifiestos/locks/exports y runtime permanecen intactos. La migración consumidora y la composición operativa requieren cortes y permisos propios. Esta admisión no cierra O/F1-08 ni acredita SQL, criptografía o despliegue.

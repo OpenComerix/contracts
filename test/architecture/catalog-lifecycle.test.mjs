@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { workloadRegistryView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -84,7 +85,7 @@ test('L publication checks exact content; local Git provenance remains mandatory
 });
 
 test('L leaves source transports, descriptors, indexes and four other exports unchanged', () => {
-  const registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'));
+  const registry = workloadRegistryView(JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8')));
   assert.deepEqual(lifecycleRegistryView(registry), JSON.parse(source('registry/contracts.json')));
   assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'registry/consumers/index.json'), 'utf8')),
     JSON.parse(source('registry/consumers/index.json')));

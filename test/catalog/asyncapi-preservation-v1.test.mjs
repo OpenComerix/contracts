@@ -12,8 +12,8 @@ const proofHashes = {
   'test/identity/candidate-preservation.test.mjs': 'd6852b2ab29f3394fa1b00d9f306f1009866fbdfcba9f93e13f015be63211d8e',
   'test/identity/catalog-admission-v1.test.mjs': 'e6deef4a74e5e60bce4ea9e57fadc632ab03c0f89da11d4614a24b1d9ff8d28b',
   'test/identity/catalog-recovery-renewal-v2.test.mjs': '103e301429e2d4010b4a939ace1d1eef7c83daa1c0d402c5637dcd8157c1c12a',
-  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs': '637c839316cad406cb720a916ef8fd57d84b34b460a26ec9a76c975074156476',
-  'test/architecture/catalog-foundation.test.mjs': '2434fdd27253b13b9c6798410857e0620fddf1e7f039db6de02c29b603856059',
+  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs': '850b1312d49ec3298525a1328bbacab82d9d8e882bebcd8a9a0d5fb085301320',
+  'test/architecture/catalog-foundation.test.mjs': 'a6132c0190b4edd8eea201ad6a3a4baf0bc6394a4913b98451e518bfedf41c2d',
 };
 const files = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md', ...Object.keys(proofHashes)];
 const normalize = value => value.replaceAll('\r\n', '\n');

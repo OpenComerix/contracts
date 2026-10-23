@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -120,6 +121,8 @@ test('N export cut changes only its snapshot, validator, negatives and the two r
     'scripts/catalog/catalog-operational-recovery-v1-registry.mjs',
     'test/architecture/catalog-operational-recovery.test.mjs', 'catalog/README.md', 'registry/README.md',
     'test/catalog/asyncapi-preservation-v1.test.mjs']);
+  validateWorkloadPackage();
+  for (const file of workloadChangedFiles) allowed.add(file);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   const changed = git(['diff', '--name-only', deliveryBase, '--', '.']);
   const untracked = git(['ls-files', '--others', '--exclude-standard']);

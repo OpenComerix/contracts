@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
+import { workloadReadView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,7 +14,8 @@ import { admissionBase, admissionId, admittedRegistry, asyncapiAdmissionRegistry
 
 const source = gitReader(root, admissionBase);
 const baseline = JSON.parse(source('registry/contracts.json'));
-const registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'));
+const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
+const registry = JSON.parse(historicalRead('registry/contracts.json'));
 const row = registry.contracts.find(item => item.id === admissionId);
 const read = worktreeReader(root);
 const manifest = role => ({ formatVersion: 1, service: 'catalog-pricing',
@@ -147,6 +150,8 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   allowed.add('scripts/catalog/catalog-operational-recovery-v1-registry.mjs');
   allowed.add('test/architecture/catalog-operational-recovery.test.mjs');
   allowed.add('registry/README.md');
+  validateWorkloadPackage();
+  for (const file of workloadChangedFiles) allowed.add(file);
   const changed = execFileSync('git', ['diff', '--name-only', admissionBase, '--', '.'], { cwd: root, encoding: 'utf8' }).trim();
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).trim();
   for (const file of [changed, untracked].filter(Boolean).flatMap(text => text.split('\n')))

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { workloadReadView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import {runtimeRegistryView, runtimeBase} from '../../scripts/catalog/catalog-runtime-v1-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -13,7 +14,8 @@ import {validateIdentityAdmission} from '../../scripts/identity/validate-catalog
 import {validateHistoryRegistry} from '../../scripts/catalog/validate-history-protection-v1.mjs';
 
 const read = file => JSON.parse(fs.readFileSync(path.join(root, file), 'utf8'));
-const registry = read('registry/contracts.json'), index = read('registry/consumers/index.json');
+const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
+const registry = JSON.parse(historicalRead('registry/contracts.json')), index = read('registry/consumers/index.json');
 const registeredSnapshot = read('registry/consumers/catalog-pricing.json'), source = gitReader(root, foundationBase);
 // Keep the candidate fixture independent of the live export lifecycle. The first
 // test validates the real registered export; adversarial candidate cases always
@@ -217,7 +219,7 @@ test('J preserves every other published file, including all transports, tools, C
     // exact registry transition; retain J's unchanged index proof from Git.
     const content = file === 'catalog/index.json'
       ? gitReader(root, '280d990b81d684c886c87c7998979edd4f84f288')(file).toString('utf8')
-      : fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n');
+      : historicalRead(file).toString('utf8').replaceAll('\r\n', '\n');
     verifyPreservedFile(file, content);
   }
 });

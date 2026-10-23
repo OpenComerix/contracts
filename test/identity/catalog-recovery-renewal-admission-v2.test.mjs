@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { workloadReadView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +14,8 @@ import {validateHistoryRegistry} from '../../scripts/catalog/validate-history-pr
 import {foundationBase,foundationRegistryView} from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 import {validateContract as validateRecoveryContract} from '../../scripts/catalog/validate-history-recovery-v1.mjs';
 
-const registry=JSON.parse(fs.readFileSync(path.join(root,'registry/contracts.json'),'utf8'));
+const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
+const registry=JSON.parse(historicalRead('registry/contracts.json'));
 const baseline=renewalSourceRegistry(),source=gitReader(root,renewalSource);
 // N independently checks live tooling and this exact proof adaptation.
 const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
@@ -37,7 +39,7 @@ test('renewal admission is exactly four roots; prior descriptors, metadata and t
   assert.deepEqual(contracts.slice(115).map(row=>row.id),selected.map(([id])=>id));
   assert.deepEqual(planned,oldPlanned.slice(0,3));
   assert.deepEqual(planned.map(row=>row.id),['sales.complete-snapshot.successor','common.data-lifecycle-policy.v1','catalog.history-policy.v1']);
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root,'identity/index.json'),'utf8')),domainIndex(registry,'identity'));
+  assert.deepEqual(JSON.parse(historicalRead('identity/index.json')),domainIndex(registry,'identity'));
 });
 
 test('historical source candidate and complete current admission are checked before the same H/I projection',()=>{
