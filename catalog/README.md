@@ -2,6 +2,74 @@
 
 Owner semántico: catalog-pricing. La organización física sigue [la guía contractual](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14). [Índice](index.json): admisión G desde la fuente B–F publicada, con los límites funcionales indicados abajo. Los apartados B–F conservan mapas y comandos de cada capacidad; el estado vigente del paquete se fija en G.
 
+## F1-09A — Mapa de consumo ordinario (candidato)
+
+Preparación de metadata para B–G, sin endpoints, cliente HTTP, formularios ni activación nuevos. [Gateway](../registry/consumers/gateway-bff.json) conserva las ocho selecciones H2 y añade nueve; [PWA](../registry/consumers/web-pos.json), siete y cuatro respectivamente. Tras auditoría aislada satisfactoria y autorización de publicación, sus exports `published` se importaron desde gateway/dev `08a3f340c03e0463f0b94627e1a7249d17ae476c` ([CI 2984651871 Passed, 8/8](https://gitlab.com/opencomerix/gateway-bff/-/pipelines/2984651871)) y web-pos/dev `c58a967e250ccac0137aa25af0ef9b89f85de06a` ([CI 2984651926 Passed, 8/8](https://gitlab.com/opencomerix/web-pos/-/pipelines/2984651926)). La importación canónica conserva manifest/lock y hashes auditados; `consumers --local` verifica su procedencia Git exacta. A no acredita runtime ni cierra H3; estado de publicación/integración del paquete en [ESTADO](../../../ESTADO.md).
+
+### Selecciones y procedencia
+
+| Consumidor / rol | Selección nueva | Fuente exacta |
+| --- | --- | --- |
+| Gateway / consumer | `catalog.http.public.v1`, `catalog.http.private.v1`: 25 operationId en cada superficie | `68d923e903b6341eedb980af3586890c0eab7d5e` |
+| Gateway / consumer | `identity.catalog-authority.v1`: solo `createCatalogDelegation`; `catalog.request.v1` y `catalog.security-policy.v1` completos | Misma fuente `68d923e…` |
+| Gateway / validation | Errores v6 y su schema, vectores `catalog-request-v1` completos | Misma fuente `68d923e…` |
+| Gateway / consumer | Perfiles H1A v2: `/policy_version`, `/owner`, `/profiles/1` (gateway ordinario), `/request`, `/credentials`, `/privacy` | `9223c3b6b7c5077d7230d14d16da26a8129d0c51` |
+| PWA / consumer | `catalog.http.public.v1`: las mismas 25 operaciones | Fuente `68d923e…` |
+| PWA / validation | Errores v6/schema completos; política de seguridad solo `/operations` y `/public_security` | Fuente `68d923e…` |
+
+Las fuentes cuentan con [CI de catálogo 2952564669, 10/10](https://gitlab.com/opencomerix/contracts/-/pipelines/2952564669) y [CI H1A v2 2980742219, 14/14](https://gitlab.com/opencomerix/contracts/-/pipelines/2980742219), verificadas por SHA/ref antes de generar. El registro vigente continúa fijando cada raíz; su HEAD no sustituye estas procedencias ni los pins H2.
+
+El cierre exacto por selección (archivos, unidades JSON Pointer y hashes) permanece únicamente en los locks y exports. Las copias `exact` bajo `.contracts/catalog/reference/<ruta-canónica>` conservan las rutas relativas del cierre y los ejemplos positivos/errores referenciados, sin servirlos ni incluirlos en el build. Gateway añade 106 archivos de referencia; PWA, 81. No se copia un puerto HTTP privado a la PWA. El archivo compartido de perfiles conserva bytes completos en gateway, pero solo se admiten los pointers anteriores: ningún perfil de recuperación queda seleccionado.
+
+Los bindings declarativos nuevos están en `.contracts/catalog/operations.mjs` de cada consumidor y `.contracts/catalog/authority.mjs` de gateway. No se importan desde `src`; el registro H2 y la matriz UI H2 conservan sus bytes. Los bindings fijan método, path, permiso, query, headers públicos, statuses y entrega; el [validador A](../scripts/catalog/catalog-consumption-v1-registry.mjs) los coteja completos. No representan handlers ni pruebas de consumo runtime.
+
+### Cobertura de las 25 operaciones
+
+Paths relativos al prefijo público/privado `/api/v1`; ambos transportes mantienen el mismo operationId, método y path. `c.r`/`c.m` significan `catalog.read`/`catalog.manage`; `p.r`/`p.m`, `pricing.read`/`pricing.manage`. La columna PWA indica la primera entrega: G completa los recorridos de precio ya consultables en D.
+
+| operationId | Método y path | Permiso | Gateway | PWA |
+| --- | --- | --- | --- | --- |
+| listCatalogUnits | GET `/catalog/units` | c.r | B | D |
+| listCatalogTaxClassifications | GET `/catalog/tax-classifications` | c.r | B | D |
+| listCatalogCategories | GET `/catalog/categories` | c.r | B | D |
+| createCatalogCategory | POST `/catalog/categories` | c.m | C | E |
+| getCatalogCategory | GET `/catalog/categories/{category_id}` | c.r | B | D |
+| updateCatalogCategory | PATCH `/catalog/categories/{category_id}` | c.m | C | E |
+| moveCatalogCategory | POST `/catalog/categories/{category_id}/move` | c.m | C | E |
+| inactivateCatalogCategory | POST `/catalog/categories/{category_id}/inactivate` | c.m | C | E |
+| listCatalogProducts | GET `/catalog/products` | c.r | B | D |
+| createCatalogProduct | POST `/catalog/products` | c.m | C | E |
+| getCatalogProduct | GET `/catalog/products/{product_id}` | c.r | B | D |
+| updateCatalogProduct | PATCH `/catalog/products/{product_id}` | c.m | C | E |
+| transitionCatalogProduct | POST `/catalog/products/{product_id}/transitions` | c.m | C | E |
+| listCatalogProductPresentations | GET `/catalog/products/{product_id}/presentations` | c.r | B | D |
+| createCatalogPresentation | POST `/catalog/products/{product_id}/presentations` | c.m | C | F |
+| getCatalogPresentation | GET `/catalog/presentations/{presentation_id}` | c.r | B | D |
+| updateCatalogPresentation | PATCH `/catalog/presentations/{presentation_id}` | c.m | C | F |
+| transitionCatalogPresentation | POST `/catalog/presentations/{presentation_id}/transitions` | c.m | C | F |
+| addCatalogPresentationBarcode | POST `/catalog/presentations/{presentation_id}/barcodes` | c.m | C | F |
+| retireCatalogPresentationBarcode | POST `/catalog/presentations/{presentation_id}/barcodes/{barcode_id}/retire` | c.m | C | F |
+| getDefaultPriceList | GET `/pricing/default-list` | p.r | B | D → G |
+| getPresentationCurrentPrice | GET `/pricing/presentations/{presentation_id}/price` | p.r | B | D → G |
+| listPresentationPrices | GET `/pricing/presentations/{presentation_id}/prices` | p.r | B | D → G |
+| createPresentationPrice | POST `/pricing/presentations/{presentation_id}/prices` | p.m | C | G |
+| getPrice | GET `/pricing/prices/{price_id}` | p.r | B | D → G |
+
+### Autoridad, errores y compatibilidad para B–G
+
+- PWA utiliza solo la [superficie pública](http/public/v1/catalog-pricing-v1.yaml), cookie del navegador y Origin/CSRF en las 13 mutaciones. Una organización única no omite la activación explícita de Identity; cambiar cuenta/contexto invalida intenciones y respuestas obsoletas. La UI revela categorías/presentaciones cuando son pertinentes, con variante predeterminada/base conservadas; no depende del plan comercial.
+- Gateway consume `createCatalogDelegation` con su workload H1A ordinario, cookie vigente y señal derivada del ingreso confiable; elimina la copia libre del navegador. El delegado exclusivo `catalog-pricing.user-api` se vincula a operación/hash/señal, sin compartir el delegado H2. Catálogo consume `checkCatalogAuthorization` mediante sus admisiones O4 existentes; ese puerto no se añade a gateway/PWA. Identity conserva toda autoridad y catálogo las transacciones, versiones e idempotencia. [Contrato de autoridad](../identity/http/private/v1/identity-catalog-authority-v1.yaml).
+- [Solicitud canónica](http/shared/v1/catalog-request-v1.schema.json) y [vectores](fixtures/request/v1/catalog-request-v1-vectors.json) conservan método/path/query/body/clave y `catalog-request-v1`; la señal no integra el hash. No equiparar ausencia/null, default omitido/presente ni decimales antes de validar escala. Las mutaciones usan la misma intención/clave/body en replay autorizado durante siete días; resultado incierto no dispara reintento automático. No se incorpora `If-Match`: las versiones esperadas pertenecen al body; ETag describe la representación.
+- La [política](http/shared/v1/catalog-security-policy-v1.json) fija 10 s totales de gateway, 3 s por llamada ordinaria, 1 s para autoridad y 5 s de catálogo; cuerpos cuentan en el presupuesto. La decisión de autoridad dura hasta 2000 ms medidos desde antes del envío, sin caché; el cambio fiscal de producto ya activo exige step-up vigente. B/C deben probar estas reglas con propietarios reales; A solo prepara sus dependencias.
+- Los schemas, ejemplos y statuses por operación están fijados por los dos OpenAPI y el [catálogo v6](../common/errors/v6/error-catalog-v6.json). Públicos y privados conservan sus diferencias: cookie/CSRF y deadline público, delegación inválida o request mismatch privados. Nunca copiar headers, tokens, detalles ni un Problem sin validar al navegador. La PWA interpreta `code`/status contratados: 400 solicitud/cursor, 401 sesión, 403 autoridad/step-up, 404 recurso/ausencia de precio, 409 intención/versión/estado/unicidad, 422 regla comercial; 429/503 respetan Retry-After cuando esté declarado, sin retry automático de mutaciones. No interpreta texto `detail` como autoridad.
+- Todas las respuestas son `no-store`. Paginación usa únicamente los selectores declarados, con cursor ligado al contexto y límite; no prueba unicidad ni snapshot concurrente. Los detalles fijan ETag; mutaciones conservan `Idempotency-Replayed` y Location cuando corresponda. Falta de lista/precio es un estado 404 explícito, nunca cero. Registrar/reemplazar precio conserva historia e intervalos sin activar producto/presentación ni embebido de precio en producto.
+
+### Verificación y siguiente consumo
+
+[Pruebas A](../test/architecture/catalog-consumption.test.mjs): selección completa, cierres, pins H2, fuente/asset/binding alterados, omisiones, draft transitivo y separación de autoridad. Las vistas históricas solo proyectan exports validados íntegramente; no cambian el resolvedor genérico ni conceden una excepción por nombre de archivo. `node scripts/catalog/catalog-consumption-v1-registry.mjs` verifica el paquete; `--write` es generación dirigida de los dos candidatos y exige sus manifests/locks base exactos, sin `sync` global.
+
+Gates: arquitectura/registro/consumidores/impacto, `consumers --local`, `contracts:metadata` y `contract:gate` de ambos consumidores, cotejo contractual y documentación del launcher. Conservar recibos completos y los fallos de captura conocidos. Antes de B: auditoría aislada satisfactoria, publicación autorizada y CI exacto de las revisiones que se consuman; no importar exports como publicados ni mover gitlinks por inferencia. R1–R4, eventos, fuentes R2, offline, fiscalidad productiva y cloud permanecen fuera.
+
 Candidatos F1-07B:
 
 - [Base de transporte](http/shared/v1/catalog-common-v1.schema.json): IDs, decimales, unidades, versiones, paginación y headers de esta capacidad; compartida por sus superficies y puertos de integración.

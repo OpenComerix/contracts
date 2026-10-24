@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import { consumerSnapshotView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import test from 'node:test';
 import path from 'node:path';
@@ -62,7 +63,7 @@ test('F1-08I changes only the selected identity admission and preserves its prev
 test('F1-08I preserves the other three consumers, coverage index and all source descriptors',()=>{
  for(const file of ['registry/consumers/index.json',...['gateway-bff','notifications','web-pos'].map(x=>'registry/consumers/'+x+'.json')]){
   const actual=file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file).toString('utf8')
-    : readFileSync(path.join(root,file),'utf8').replaceAll('\r\n','\n');
+    : consumptionReadView(name=>readFileSync(path.join(root,name)))(file).toString('utf8').replaceAll('\r\n','\n');
   assert.equal(actual,gitReader(root,previous)(file).toString('utf8'),file);
  }
  assert.deepEqual(foundationRegistryView(registry),JSON.parse(gitReader(root,previous)('registry/contracts.json')));

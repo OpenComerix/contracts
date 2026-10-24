@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import test from 'node:test';
 import path from 'node:path';
 import { execFileSync } from 'node:child_process';
@@ -106,7 +107,7 @@ test('G preserves historical descriptors, consumer exports, pins and deferred sa
     const local = (file === 'registry/consumers/index.json' ? gitReader(root, foundationBase)(file)
       : file === 'registry/consumers/identity-tenancy.json'
       ? gitReader(root, 'e3f39131b32ed136b17acea0a3289fad718029d6')(file)
-      : readFileSync(path.join(root, file))).toString('utf8').replaceAll('\r\n', '\n');
+      : consumptionReadView(name => readFileSync(path.join(root, name)))(file)).toString('utf8').replaceAll('\r\n', '\n');
     assert.equal(local, gitReader(root, revision)(file).toString('utf8'), file);
   }
 });

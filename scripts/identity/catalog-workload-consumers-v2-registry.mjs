@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView, consumptionChangedFiles } from '../catalog/catalog-consumption-v1-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -15,6 +16,7 @@ export const ownerBases = Object.freeze({ 'identity-tenancy': '62fe16b1e2ba44b2b
 const policy = 'identity.catalog-workload-profiles.policy.v2', fixtures = 'identity.catalog-workload-profiles.fixtures.v2';
 const selections = { 'identity-tenancy': [[policy, 'semantic-owner'], [fixtures, 'validation']], 'catalog-pricing': [[policy, 'consumer']] };
 export const consumerChangedFiles = Object.freeze([
+  ...consumptionChangedFiles,
   'scripts/catalog/catalog-lifecycle-v1-registry.mjs', 'scripts/catalog/catalog-runtime-v1-registry.mjs',
   'test/architecture/catalog-lifecycle.test.mjs', 'test/architecture/identity-producer-admission.test.mjs',
   'scripts/catalog/catalog-foundation-v1-registry.mjs', 'test/architecture/asyncapi-admission-v1.test.mjs',
@@ -67,6 +69,7 @@ export function consumerSnapshotView(snapshot) {
   return baseline(snapshotPath(snapshot.manifest.service));
 }
 export function consumerReadView(read = worktreeReader(root)) {
+  read = consumptionReadView(read);
   return file => {
     const content = read(file);
     if (Object.keys(selections).some(service => file === snapshotPath(service))) {
@@ -79,7 +82,8 @@ export function consumerReadView(read = worktreeReader(root)) {
 export function validateWorkloadConsumers(read = worktreeReader(root)) {
   assert.deepEqual(JSON.parse(read('registry/contracts.json')), baseline('registry/contracts.json'), 'O4_CONSUMER_REGISTRY');
   const results = Object.keys(selections).map(service => validateWorkloadConsumer(JSON.parse(read(snapshotPath(service)))));
-  for (const service of ['gateway-bff', 'notifications', 'web-pos']) assert.equal(read(snapshotPath(service)).toString('utf8').replaceAll('\r\n','\n'), source(snapshotPath(service)).toString('utf8'), 'O4_CONSUMER_UNRELATED');
+  const catalogConsumers = consumptionReadView(read);
+  for (const service of ['gateway-bff', 'notifications', 'web-pos']) assert.equal(catalogConsumers(snapshotPath(service)).toString('utf8').replaceAll('\r\n','\n'), source(snapshotPath(service)).toString('utf8'), 'O4_CONSUMER_UNRELATED');
   return { consumers: 5, selections: 103, changed: results };
 }
 if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) console.log(JSON.stringify(validateWorkloadConsumers()));
