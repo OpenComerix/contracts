@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
+import { consumerReadView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
+import {gitReader, makeLock, worktreeReader} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
 import {lifecycleBase, lifecycleRegistryView, validateLifecycleSnapshot} from './catalog-lifecycle-v1-registry.mjs';
 
@@ -85,14 +86,15 @@ export function validateRuntimeSnapshot(snapshot = read('registry/consumers/cata
   return {dependencies: expected.lock.entries.length, private_operations: 25, broker_producer: false, functional_activation: false};
 }
 
-export function validateRuntimeRegistry(registry = read('registry/contracts.json')) {
+export function validateRuntimeRegistry(registry = read('registry/contracts.json'), readFiles = worktreeReader(root)) {
+  const consumers = consumerReadView(readFiles);
   registry = lifecycleRegistryView(registry);
   assert.equal(registry.coverage, runtimeCoverage, 'K_COVERAGE_DECISION');
   assert.deepEqual(runtimeRegistryView(registry), baseline('registry/contracts.json'), 'K_REGISTRY_PRESERVATION');
   assert.deepEqual(read('registry/consumers/index.json'), baseline('registry/consumers/index.json'), 'K_INDEX_PRESERVATION');
   for (const name of registry.requiredConsumers.filter(name => name !== 'catalog-pricing')) {
     const file = 'registry/consumers/' + name + '.json';
-    assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), 'K_OTHER_CONSUMER');
+    assert.equal(consumers(file).toString('utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), 'K_OTHER_CONSUMER');
   }
   return validateRuntimeSnapshot();
 }

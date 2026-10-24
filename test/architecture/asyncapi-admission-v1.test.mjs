@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import { workloadReadView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
@@ -161,6 +162,6 @@ test('N preserves published transports, consumers, CI and dependencies and confi
     ...registry.contracts.map(item => item.path)];
   for (const file of new Set(preserved)) {
     if (file === deliverySnapshotPath) validateDeliverySnapshot(JSON.parse(read(file)));
-    else assert(read(file).equals(source(file)), 'N_ADMISSION_PRESERVED:' + file);
+    else assert(consumerReadView(read)(file).equals(source(file)), 'N_ADMISSION_PRESERVED:' + file);
   }
 });

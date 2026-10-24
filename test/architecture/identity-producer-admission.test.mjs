@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerSnapshotView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import test from 'node:test';
 import path from 'node:path';
 import { readFileSync } from 'node:fs';
@@ -9,7 +10,7 @@ const root=path.resolve(import.meta.dirname,'../..');
 const previous='e3f39131b32ed136b17acea0a3289fad718029d6';
 const file='registry/consumers/identity-tenancy.json';
 const prior=JSON.parse(gitReader(root,previous)(file));
-const current=readJSON(root,file),registry=readJSON(root,'registry/contracts.json');
+const current=consumerSnapshotView(readJSON(root,file)),registry=readJSON(root,'registry/contracts.json');
 const addedIds=[
   "identity.catalog-authority.v1",
   "identity.catalog-authority.v1.schema",

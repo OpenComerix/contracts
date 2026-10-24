@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerSnapshotView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
@@ -54,6 +55,7 @@ export function operationalSnapshot() {
 }
 
 export function validateOperationalSnapshot(snapshot = readSnapshot()) {
+  snapshot = consumerSnapshotView(snapshot);
   assert(['local-candidate', 'published'].includes(snapshot?.publication), 'O2_RECOVERY_SNAPSHOT: lifecycle');
   assert(typeof snapshot.sourceCommit === 'string' && /^[a-f0-9]{40}$/.test(snapshot.sourceCommit),
     'O2_RECOVERY_SNAPSHOT: unresolved source revision');
@@ -68,6 +70,7 @@ export function validateOperationalSnapshot(snapshot = readSnapshot()) {
 // arbitrary newer export: first verify the complete reviewed package, then return
 // the immutable published N snapshot. Old fixtures retain their own diagnostics.
 export function operationalSnapshotView(snapshot) {
+  snapshot = consumerSnapshotView(snapshot);
   const selections = snapshot?.manifest?.contracts, entries = snapshot?.lock?.entries;
   const recoverySelection = row => rows.some(([id]) => row?.id === id && row.role !== 'validation');
   const recovery = snapshot?.sourceCommit === operationalServiceBase ||

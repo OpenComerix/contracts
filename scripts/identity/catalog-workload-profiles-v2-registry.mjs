@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerReadView, consumerChangedFiles } from './catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -65,8 +66,9 @@ export function workloadRegistryView(registry, read = worktreeReader(root)) {
 // is retained, so altered files cannot be replaced by an unrelated clean checkout.
 // The current O3 package gate separately requires every complete new artifact.
 export function workloadReadView(read = worktreeReader(root)) {
+  const consumers = consumerReadView(read);
   return file => {
-    const bytes = read(file);
+    const bytes = consumers(file);
     if (file === 'registry/contracts.json') {
       const registry = JSON.parse(bytes);
       if (workloadRegistryView(registry, read) !== registry) return source(file);
@@ -99,6 +101,7 @@ export function validateWorkloadPackage(read = worktreeReader(root)) {
 // Closed review surface; this does not exempt contents from the gates above or
 // the independently pinned historical proof checks and isolated audit.
 export const workloadChangedFiles = Object.freeze([
+  ...consumerChangedFiles,
   'registry/contracts.json', 'identity/index.json', 'identity/README.md',
   'scripts/identity/catalog-workload-profiles-v2-registry.mjs',
   'test/identity/catalog-workload-profiles-admission-v2.test.mjs',

@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/catalog-pricing",
-  "sourceCommit": "7d0ef7afad6eb801820963f534ead8849ffbac46",
-  "manifestSha256": "ce762c7d805fe3be5c07e61e8b5392d1cd76afe74963f4205baaa3da80d7ace0",
-  "lockSha256": "08326b7b4b7cc3c50c2b2f0a4c3db7148eff2c2251caa065383e7b9367469ca1",
+  "sourceCommit": "2267bf8eeb8cdc690a738b69c20445b432464e77",
+  "manifestSha256": "888cd8abf8b3194c8a33150de81384310680c522e3dc596b154e608c61284984",
+  "lockSha256": "74d084770bb7250d6eadbc29a3e116f6ca22d1d75590fda6dfeaac6c0d4cfe6f",
   "manifest": {
     "formatVersion": 1,
     "service": "catalog-pricing",
@@ -817,6 +817,20 @@
           "pnpm test:integration",
           "pnpm test:e2e"
         ]
+      },
+      {
+        "id": "identity.catalog-workload-profiles.policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-08O4 purpose-bound H1A v2 workload profiles; server-owned caller and audience, independent credentials, no v1 fallback.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov"
+        ]
       }
     ],
     "assets": [],
@@ -825,7 +839,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "catalog-pricing",
-    "manifestSha256": "ce762c7d805fe3be5c07e61e8b5392d1cd76afe74963f4205baaa3da80d7ace0",
+    "manifestSha256": "888cd8abf8b3194c8a33150de81384310680c522e3dc596b154e608c61284984",
     "entries": [
       {
         "id": "common.event-envelope.v1",
@@ -8286,6 +8300,35 @@
         ],
         "selectionSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995",
         "runtimeSha256": "b0e7a727a41c62b94c1be5a63d84e20cc07c01b38f44ee52184cd0015948d995"
+      },
+      {
+        "id": "identity.catalog-workload-profiles.policy.v2",
+        "role": "consumer",
+        "version": "2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "9223c3b6b7c5077d7230d14d16da26a8129d0c51",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+            "sha256": "bc868e4970bc8900c8053fce5f79ab34bc2fcf61fa42dffe90e717a144258626"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+            "pointer": "",
+            "sha256": "7c0123c9dcb2c2a6af5f766a2c0210812645b7dda3c0b69a414261b5fc84d74f"
+          }
+        ],
+        "selectionSha256": "a2ba891a85629cc4d6ea08765ceb0a1c719bb1151bc8836b66125154c63eb492",
+        "runtimeSha256": "a2ba891a85629cc4d6ea08765ceb0a1c719bb1151bc8836b66125154c63eb492"
       }
     ],
     "assets": []

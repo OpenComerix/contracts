@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';
+import { consumerReadView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
+import {gitReader, makeLock, worktreeReader} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
 import {asyncapiAdmissionRegistryView} from './asyncapi-admission-v1.mjs';
 import {deliverySnapshotView} from './catalog-delivery-v1-registry.mjs';
@@ -69,13 +70,14 @@ export function validateLifecycleSnapshot(snapshot = read('registry/consumers/ca
   return {dependencies: expected.lock.entries.length, protection_operations: 1, functional_activation: false};
 }
 
-export function validateLifecycleRegistry(registry = read('registry/contracts.json')) {
+export function validateLifecycleRegistry(registry = read('registry/contracts.json'), readFiles = worktreeReader(root)) {
+  const consumers = consumerReadView(readFiles);
   assert.equal(registry.coverage, lifecycleCoverage, 'L_COVERAGE_DECISION');
   assert.deepEqual(lifecycleRegistryView(registry), baseline('registry/contracts.json'), 'L_REGISTRY_PRESERVATION');
   assert.deepEqual(read('registry/consumers/index.json'), baseline('registry/consumers/index.json'), 'L_INDEX_PRESERVATION');
   for (const name of registry.requiredConsumers.filter(name => name !== 'catalog-pricing')) {
     const file = 'registry/consumers/' + name + '.json';
-    assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), 'L_OTHER_CONSUMER');
+    assert.equal(consumers(file).toString('utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), 'L_OTHER_CONSUMER');
   }
   return validateLifecycleSnapshot();
 }

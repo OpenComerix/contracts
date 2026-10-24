@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadRegistryView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -95,6 +96,6 @@ test('L leaves source transports, descriptors, indexes and four other exports un
   }
   for (const name of registry.requiredConsumers.filter(name => name !== 'catalog-pricing')) {
     const file = 'registry/consumers/' + name + '.json';
-    assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), file);
+    assert.equal(consumerReadView(name => fs.readFileSync(path.join(root, name)))(file).toString('utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), file);
   }
 });

@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerSnapshotView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -17,7 +18,7 @@ import { operationalBase, operationalServiceBase, operationalSnapshotPath, opera
 
 const root = path.resolve(import.meta.dirname, '../..'), source = gitReader(root, operationalBase);
 const previous = JSON.parse(source(operationalSnapshotPath));
-const actual = JSON.parse(fs.readFileSync(path.join(root, operationalSnapshotPath), 'utf8'));
+const actual = consumerSnapshotView(JSON.parse(fs.readFileSync(path.join(root, operationalSnapshotPath), 'utf8')));
 const registry = JSON.parse(source('registry/contracts.json'));
 const read = worktreeReader(root);
 const bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');

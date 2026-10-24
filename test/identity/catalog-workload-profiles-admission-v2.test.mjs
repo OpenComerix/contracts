@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumerReadView, validateWorkloadConsumers } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -138,6 +139,8 @@ test('O3 metadata views preserve old bytes only after checking current artifacts
 });
 
 test('O3 preserves all source payloads, indexes, consumers, generic tools, dependencies and CI outside its closed proof surface', () => {
+  validateWorkloadConsumers();
+  const consumers = consumerReadView(read);
   const allowed = new Set(workloadChangedFiles);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }).trim();
   const files = git(['ls-tree', '-r', '--name-only', workloadSource]).split('\n');
@@ -146,5 +149,5 @@ test('O3 preserves all source payloads, indexes, consumers, generic tools, depen
   }
   for (const list of [git(['diff', '--name-only', workloadSource, '--', '.']), git(['ls-files', '--others', '--exclude-standard'])])
     for (const file of list.split('\n').filter(Boolean)) assert(allowed.has(file), 'O3_WORKLOAD_SCOPE:' + file);
-  for (const file of baseline.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')) assert(read(file).equals(source(file)));
+  for (const file of baseline.requiredConsumers.map(name => 'registry/consumers/' + name + '.json')) assert(consumers(file).equals(source(file)));
 });

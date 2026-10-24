@@ -1,8 +1,9 @@
 import assert from 'node:assert/strict';
+import { consumerReadView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import {runtimeRegistryView, validateRuntimeSnapshot, runtimeBase} from './catalog-runtime-v1-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
-import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
+import {gitReader, makeLock, worktreeReader} from '../../tools/architecture/graph.mjs';
 import {sha256, validateShape} from '../../tools/architecture/consumer-gate.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
@@ -60,7 +61,8 @@ export function foundationManifest(registry = prior()) {
   }), assets: [], bindings: []};
 }
 
-export function validateFoundationRegistry(registry = read('registry/contracts.json'), index = read('registry/consumers/index.json')) {
+export function validateFoundationRegistry(registry = read('registry/contracts.json'), index = read('registry/consumers/index.json'), readFiles = worktreeReader(root)) {
+  const consumers = consumerReadView(readFiles);
   registry = runtimeRegistryView(registry);
   assert.equal(registry.coverage, foundationCoverage, 'J_COVERAGE_DECISION');
   assert.deepEqual(foundationRegistryView(registry), prior(), 'J_REGISTRY_PRESERVATION');
@@ -69,7 +71,7 @@ export function validateFoundationRegistry(registry = read('registry/contracts.j
     {service: 'catalog-pricing', file: 'catalog-pricing.json', localDirectory: 'services/catalog-pricing'}]}, 'J_CONSUMER_INDEX');
   for (const service of prior().requiredConsumers) {
     const file = 'registry/consumers/' + service + '.json';
-    assert.equal(fs.readFileSync(path.join(root, file), 'utf8').replaceAll('\r\n', '\n'),
+    assert.equal(consumers(file).toString('utf8').replaceAll('\r\n', '\n'),
       gitReader(root, foundationBase)(file).toString('utf8'), 'J_PRIOR_EXPORT: ' + service);
   }
   return {consumers: 5, new_validation_consumers: 1, runtime_demonstrated: false};
