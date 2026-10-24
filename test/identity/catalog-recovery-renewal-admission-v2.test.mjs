@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import { workloadReadView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -15,6 +16,7 @@ import {foundationBase,foundationRegistryView} from '../../scripts/catalog/catal
 import {validateContract as validateRecoveryContract} from '../../scripts/catalog/validate-history-recovery-v1.mjs';
 
 const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
+const consumerRead = consumptionReadView();
 const registry=JSON.parse(historicalRead('registry/contracts.json'));
 const baseline=renewalSourceRegistry(),source=gitReader(root,renewalSource);
 // N independently checks live tooling and this exact proof adaptation.
@@ -164,7 +166,7 @@ test('all source payloads, semantic oracles, generic tools, CI, consumers and ot
   for(const file of files.filter(file=>!excluded.has(file))) {
     const actual=nToolingFiles.has(file) ? preN(file)
       : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
-      : producerProofs.has(file) ? historical(file) : fs.readFileSync(path.join(root,file));
+      : producerProofs.has(file) ? historical(file) : consumerRead(file);
     const expected=file==='.gitlab-ci.yml' ? expectedCi : source(file).toString('utf8');
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),expected,file);
   }

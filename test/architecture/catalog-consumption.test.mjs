@@ -9,10 +9,42 @@ import { verifyLocalSnapshot } from '../../tools/architecture/registry.mjs';
 import { sha256, validateConsumer } from '../../tools/architecture/consumer-gate.mjs';
 import { root, consumptionBase, ownerBases, consumptionChangedFiles, consumptionOperations, selections,
   snapshotPath, bytes, consumptionSnapshot, consumptionBindingFiles, validateConsumptionSnapshot,
-  consumptionReadView, validateConsumptionPackage, validateConsumptionCheckout, validateConsumptionPaths } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
+  consumptionReadView, consumptionReadmeView, validateConsumptionPackage, validateConsumptionCheckout, validateConsumptionPaths } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 
 const source = gitReader(root, consumptionBase), read = worktreeReader(root);
 const registry = JSON.parse(source('registry/contracts.json'));
+test('A README projection requires the complete approved document and preserves historical bytes', () => {
+  const current = read('catalog/README.md');
+  assert(consumptionReadmeView(current).equals(source('catalog/README.md')));
+  assert(consumptionReadmeView(Buffer.from(current.toString('utf8').replaceAll('\r\n', '\n').replaceAll('\n', '\r\n'))).equals(source('catalog/README.md')));
+});
+for (const [name, mutate] of [
+  ['omitted map', () => source('catalog/README.md').toString('utf8')],
+  ['partial map', text => text.replace('Gateway / consumer', 'Gateway / producer')],
+  ['duplicated map', text => text + text.slice(text.indexOf('\n## F1-09A'), text.indexOf('\nCandidatos F1-07B:'))],
+  ['reordered map', text => {
+    const start = text.indexOf('\n## F1-09A'), end = text.indexOf('\nCandidatos F1-07B:');
+    return text.slice(0, start) + text.slice(end) + text.slice(start, end);
+  }],
+  ['unrelated prefix', text => '# unapproved\n' + text],
+  ['historical text', text => text.replace('## F1-08N — Certificación de AsyncAPI', '## F1-08N — Unapproved')],
+  ['unrelated suffix', text => text + '\nUnapproved appendix.\n'],
+  ['publication proof', text => text.replace('08a3f340c03e0463f0b94627e1a7249d17ae476c', '0'.repeat(40))],
+]) test('A refuses README drift before historical projection: '+name, () => {
+  const current = read('catalog/README.md'), changed = Buffer.from(mutate(current.toString('utf8')));
+  assert(!changed.equals(current));
+  assert.throws(() => consumptionReadmeView(changed), /A_CONSUMPTION_README/);
+  assert.throws(() => validateConsumptionPackage(file => file === 'catalog/README.md' ? changed : read(file)), /A_CONSUMPTION_README/);
+});
+for (const service of Object.keys(ownerBases)) test('A published exports still reject altered contents before historical projection: '+service, () => {
+  const published = {...consumptionSnapshot(service), publication:'published', sourceCommit:'a'.repeat(40)};
+  const reader = snapshot => file => file === snapshotPath(service) ? bytes(snapshot) : read(file);
+  assert(consumptionReadView(reader(published))(snapshotPath(service)).equals(source(snapshotPath(service))));
+  for (const mutate of [s => s.manifest.contracts.pop(), s => {s.lock.entries[0].commit='0'.repeat(40);}]) {
+    const changed = structuredClone(published); mutate(changed);
+    assert.throws(() => consumptionReadView(reader(changed))(snapshotPath(service)), /A_CONSUMPTION/);
+  }
+});
 test('A selects exactly 25 operations and their published public/private pairs, preserving the other owners', () => {
   assert.equal(validateConsumptionPackage().operations, 25);
   assert.equal(consumptionOperations.filter(row => row.method === 'GET').length, 12);

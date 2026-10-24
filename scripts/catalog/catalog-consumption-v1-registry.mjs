@@ -18,6 +18,8 @@ export const consumptionChangedFiles = Object.freeze([
   'registry/consumers/gateway-bff.json', 'registry/consumers/web-pos.json', 'catalog/README.md',
   'scripts/identity/catalog-workload-consumers-v2-registry.mjs', 'test/architecture/catalog-admission.test.mjs',
   'test/architecture/identity-producer-admission.test.mjs',
+  'test/catalog/asyncapi-preservation-v1.test.mjs', 'test/identity/catalog-admission-v1.test.mjs',
+  'test/identity/catalog-recovery-renewal-admission-v2.test.mjs', 'test/identity/catalog-recovery-renewal-v2.test.mjs',
 ]);
 const source = gitReader(root, consumptionBase);
 const baseline = file => JSON.parse(source(file));
@@ -140,7 +142,16 @@ export function consumptionReadView(read = worktreeReader(root)) {
     return source(file);
   };
 }
+// Pin the entire approved publication README before exposing its pre-A bytes to
+// N's historical proof. This is not a marker-based exemption: prior text, the A
+// map, publication references and later historical suffixes must all match.
+export function consumptionReadmeView(content) {
+  const normalized = Buffer.from(content.toString('utf8').replaceAll('\r\n', '\n'));
+  assert.equal(sha256(normalized), 'f11e97568ebf2c7c17e8f93e42aff8e0fc3f399556befde6d090fb1921189110', 'A_CONSUMPTION_README');
+  return source('catalog/README.md');
+}
 export function validateConsumptionPackage(read = worktreeReader(root)) {
+  consumptionReadmeView(read('catalog/README.md'));
   for (const file of ['registry/contracts.json', 'registry/consumers/index.json', 'catalog/index.json', 'identity/index.json', 'common/index.json',
     '.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml',
     ...['identity-tenancy', 'catalog-pricing', 'notifications'].map(snapshotPath)]) {

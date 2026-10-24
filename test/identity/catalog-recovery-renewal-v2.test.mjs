@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import os from 'node:os';
@@ -19,6 +20,7 @@ const vectors=read(vectorsPath), liveRegistry=read('registry/contracts.json');
 // Keep the published planned lifecycle independently testable after admission.
 const registry=JSON.parse(gitReader(root,renewalSource)('registry/contracts.json'));
 const source=gitReader(root,renewalBase), baseline=JSON.parse(source('registry/contracts.json'));
+const consumerRead=consumptionReadView();
 // N checks live tooling and this exact adaptation; retain the historical proof.
 const preN=gitReader(root,'77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
 const nToolingFiles=new Set(['catalog/README.md','catalog/index.json','package.json','pnpm-lock.yaml']);
@@ -138,7 +140,7 @@ test('published transports, fixtures, oracles, tools, consumers and package pins
     const actual=nToolingFiles.has(file) ? preN(file)
       : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : file==='registry/consumers/identity-tenancy.json'
-      ? historical(file) : fs.readFileSync(path.join(root,file));
+      ? historical(file) : consumerRead(file);
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }
 });

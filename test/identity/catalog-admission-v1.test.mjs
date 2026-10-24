@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { consumptionReadView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -12,6 +13,7 @@ import { validateHistoryRegistry } from '../../scripts/catalog/validate-history-
 import { foundationBase } from '../../scripts/catalog/catalog-foundation-v1-registry.mjs';
 
 const source = gitReader(root, identityAdmissionSource);
+const consumerRead = consumptionReadView();
 // N separately checks the live tooling files and this exact proof adaptation.
 // Keep the original admission comparisons against the immutable pre-N source.
 const preN = gitReader(root, '77bc15a4cc8d13867ef5a66945ed8e3de79696cc');
@@ -151,7 +153,7 @@ test('consumer exports, CI jobs, tools, old indexes and all transport sources ar
     const actual=nToolingFiles.has(file) ? preN(file)
       : file==='registry/consumers/index.json' ? gitReader(root,foundationBase)(file)
       : file==='registry/consumers/identity-tenancy.json'
-      ? historical(file) : fs.readFileSync(path.join(root,file));
+      ? historical(file) : consumerRead(file);
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }
   const ci=parse(preN('.gitlab-ci.yml').toString('utf8'));
