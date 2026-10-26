@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { candidateReadView, projectCandidateRegistry } from '../inventory/candidate-v1.mjs';
 import { consumerReadView, consumerChangedFiles } from './catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -44,6 +45,7 @@ export function workloadAdmittedRegistry() {
   return { ...previous, contracts: [...previous.contracts, ...workloadAdmissionRows()] };
 }
 export function validateWorkloadRegistry(registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8')), read = worktreeReader(root)) {
+  registry = projectCandidateRegistry(registry);
   assert(isDeepStrictEqual(registry, workloadAdmittedRegistry()), 'O3_WORKLOAD_REGISTRY');
   for (const row of workloadAdmissionRows()) {
     const closure = resolveSelection(source, row, { version: row.version, operations: [], pointers: [''] }, registry);
@@ -57,6 +59,7 @@ export function validateWorkloadRegistry(registry = JSON.parse(fs.readFileSync(p
 // Historical fixtures retain their own diagnostics. Any partial/new suffix must
 // pass the complete closed transition before only these two rows are removed.
 export function workloadRegistryView(registry, read = worktreeReader(root)) {
+  registry = projectCandidateRegistry(registry);
   if (!registry.contracts?.some(row => ids.has(row.id))) return registry;
   validateWorkloadRegistry(registry, read);
   return { ...registry, contracts: registry.contracts.slice(0, 119) };
@@ -91,6 +94,7 @@ export function workloadReadView(read = worktreeReader(root)) {
   };
 }
 export function validateWorkloadPackage(read = worktreeReader(root)) {
+  read = candidateReadView(read);
   const registry = JSON.parse(read('registry/contracts.json'));
   const result = validateWorkloadRegistry(registry, read);
   assert(isDeepStrictEqual(JSON.parse(read('identity/index.json')), domainIndex(registry, 'identity')), 'O3_WORKLOAD_INDEX');

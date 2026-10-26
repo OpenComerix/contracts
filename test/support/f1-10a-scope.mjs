@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { projectCandidateFile } from '../../scripts/inventory/candidate-v1.mjs';
 import { createHash } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -29,7 +30,7 @@ const correctionFiles = Object.freeze([
 
 export function withF110ADesignScope(historicalAllowed, read = readWorktree) {
   for (const [file, expected] of Object.entries(designHashes)) {
-    const text = decoder.decode(read(file)).replaceAll('\r\n', '\n');
+    const text = decoder.decode(projectCandidateFile(file, read(file))).replaceAll('\r\n', '\n');
     assert.equal(createHash('sha256').update(text).digest('hex'), expected, 'F1_10A_DESIGN_BYTES:' + file);
   }
   return new Set([...historicalAllowed, ...Object.keys(designHashes), ...correctionFiles]);

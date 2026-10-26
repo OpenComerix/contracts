@@ -1,0 +1,152 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+  "title": "inventory.post-sale-stock.result.v1",
+  "allOf": [
+    {
+      "$ref": "../../../commands/command-result-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "result_type": {
+          "const": "inventory.post-sale-stock.result.v1",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "schema_version": {
+          "const": 1,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "producer": {
+          "const": "inventory",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "const": "failed",
+            "x-data-classification": {
+              "sensitivity": "RESTRICTED",
+              "categories": [
+                "COMMERCIAL",
+                "OPERATIONAL"
+              ]
+            },
+            "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+            "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+            "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "retryable": {
+            "const": false,
+            "x-data-classification": {
+              "sensitivity": "RESTRICTED",
+              "categories": [
+                "COMMERCIAL",
+                "OPERATIONAL"
+              ]
+            },
+            "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+            "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+            "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+          },
+          "payload": {
+            "$ref": "../../http/shared/v1/inventory-types-v1.schema.json#/$defs/Failure",
+            "x-data-classification": {
+              "sensitivity": "RESTRICTED",
+              "categories": [
+                "COMMERCIAL",
+                "OPERATIONAL"
+              ]
+            },
+            "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+            "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+            "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+          },
+          "error_code": {
+            "type": "string",
+            "enum": [
+              "inventory_insufficient_stock",
+              "inventory_quantity_invalid",
+              "inventory_catalog_reference_invalid",
+              "inventory_operation_conflict",
+              "inventory_state_conflict",
+              "inventory_version_conflict",
+              "platform_payload_too_large"
+            ],
+            "x-data-classification": {
+              "sensitivity": "RESTRICTED",
+              "categories": [
+                "COMMERCIAL",
+                "OPERATIONAL"
+              ]
+            },
+            "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+            "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+            "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "payload": {
+            "$ref": "../../http/shared/v1/inventory-types-v1.schema.json#/$defs/PostSuccess",
+            "x-data-classification": {
+              "sensitivity": "RESTRICTED",
+              "categories": [
+                "COMMERCIAL",
+                "OPERATIONAL"
+              ]
+            },
+            "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+            "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+            "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+          }
+        }
+      }
+    }
+  ],
+  "x-data-classification": {
+    "sensitivity": "RESTRICTED",
+    "categories": [
+      "COMMERCIAL",
+      "OPERATIONAL"
+    ]
+  },
+  "x-data-purpose": "physical inventory and causal reconciliation",
+  "x-retention-profile": "LEGAL_FISCAL_AR",
+  "x-log-policy": "no-payload-or-field-values"
+}

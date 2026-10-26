@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { projectCandidateFile } from '../../scripts/inventory/candidate-v1.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -27,7 +28,7 @@ test('all published transports, preserved artifacts and consumer exports retain 
   const files=execFileSync('git',['ls-tree','-r','--name-only','e1d073fe5264a4aa97d6d4156ce200101bb20615'],{cwd:root,encoding:'utf8'}).trim().split('\n');
   const paths=new Set([...previous.contracts.map(row=>row.path),...previous.preservedFiles.map(row=>row.path),...files.filter(file=>/^(openapi|consumers|catalog|common|events|commands|errors)\//.test(file)),...files.filter(file=>/^identity\/http\//.test(file))]);
   for(const file of paths) {
-    const actual=nToolingFiles.has(file)?preN(file):fs.readFileSync(path.join(root,file));
+    const actual=nToolingFiles.has(file)?preN(file):projectCandidateFile(file,fs.readFileSync(path.join(root,file)));
     assert.equal(actual.toString('utf8').replaceAll('\r\n','\n'),source(file).toString('utf8'),file);
   }
 });

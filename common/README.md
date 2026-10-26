@@ -39,3 +39,7 @@ Primer catálogo candidato: [historia de catalog-pricing](../catalog/README.md#c
 ## F1-08H — Admisión de errores y clasificación
 
 El candidato local incorpora los catálogos de errores v7/v8 y sus schemas, más el schema de ciclo de vida v2. Versiones y bytes anteriores permanecen intactos; no se reemplaza v6 ni se actualizan consumidores. El schema común v1 conserva intención planned, sin habilitar el catálogo R1 v1 incompleto. [Selección y fuente inmutable](../catalog/README.md#f1-08h--admisión-seleccionada-r1r4); [índice](index.json), [registro](../registry/contracts.json) y [estado/gates pendientes](../../../ESTADO.md).
+
+## F1-10B — Errores v9 candidatos
+
+[Catálogo](errors/v9/error-catalog-v9.json) y [schema](errors/v9/error-catalog-v9.schema.json) preservan las entradas v8 y agregan errores de inventario, credenciales/caller de workload y el puerto de autoridad Sales, con owner explícito, status y retryability definidos en el [mapa B](../inventory/README.md#f1-10b--paquete-candidato). Los sobres de comando/resultado/evento, Problem Details v3 y lifecycle v2 se reutilizan sin modificación. Nuevas intenciones planned; sin reemplazo de pins, admisión funcional ni consumo por nombre de carpeta.

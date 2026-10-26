@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -12,7 +13,7 @@ import { root, consumptionBase, ownerBases, consumptionChangedFiles, consumption
   snapshotPath, bytes, consumptionSnapshot, consumptionBindingFiles, validateConsumptionSnapshot,
   consumptionReadView, consumptionReadmeView, validateConsumptionPackage, validateConsumptionCheckout, validateConsumptionPaths } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 
-const source = gitReader(root, consumptionBase), read = worktreeReader(root);
+const source = gitReader(root, consumptionBase), read = candidateReadView(worktreeReader(root));
 const registry = JSON.parse(source('registry/contracts.json'));
 test('A README projection requires the complete approved document and preserves historical bytes', () => {
   const current = read('catalog/README.md');
@@ -188,7 +189,7 @@ for (const service of Object.keys(ownerBases)) test('A consumer checkout confine
   assert.throws(()=>validateConsumptionPaths(service,tracked,expectedNew.slice(1)),/A_CONSUMER_NEW_FILES/);
 });
 test('A confines changes to the reviewed metadata and its historical adapters',()=>{
-  const allowed=withF110ADesignScope(consumptionChangedFiles);
+  const allowed=withCandidateScope(withF110ADesignScope(consumptionChangedFiles));
   for(const args of [['diff','--name-only',consumptionBase],['ls-files','--others','--exclude-standard']])
     for(const file of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))
       assert(allowed.has(file),'A_SCOPE:'+file);

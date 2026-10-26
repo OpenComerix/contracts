@@ -1,0 +1,76 @@
+{
+  "runtime_demonstrated": false,
+  "session": {
+    "read_session_id": "019a0000-0000-7000-8000-000000000700",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "account_ref": "account-reference-1",
+    "created_at": "2026-10-26T12:00:00Z",
+    "expires_at": "2026-10-26T12:30:00Z",
+    "snapshot_high_watermark": "2",
+    "disposition_generation": 0,
+    "request": {
+      "organization_id": "019a0000-0000-7000-8000-000000000001",
+      "reason_code": "rebuild_own_inventory",
+      "families": [
+        "inventory.sale-stock.posted.v2",
+        "inventory.reconciliation-required.v2"
+      ],
+      "from_sequence": "1",
+      "limit": 50
+    }
+  },
+  "page": {
+    "read_session_id": "019a0000-0000-7000-8000-000000000700",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "items": [
+      {
+        "history_sequence": "1",
+        "event_type": "inventory.sale-stock.posted.v2",
+        "schema_version": 1,
+        "original_json": "{\"aggregate_id\":\"019a0000-0000-7000-8000-000000000004\",\"aggregate_type\":\"sale_stock_posting\",\"aggregate_version\":1,\"branch_id\":\"019a0000-0000-7000-8000-000000000010\",\"causation_id\":\"019a0000-0000-7000-8000-000000000007\",\"correlation_id\":\"019a0000-0000-7000-8000-000000000006\",\"event_id\":\"019a0000-0000-7000-8000-000000000070\",\"event_type\":\"inventory.sale-stock.posted.v2\",\"occurred_at\":\"2026-10-26T12:00:00Z\",\"organization_id\":\"019a0000-0000-7000-8000-000000000001\",\"payload\":{\"context\":{\"branch_id\":\"019a0000-0000-7000-8000-000000000010\",\"location_id\":\"019a0000-0000-7000-8000-000000000003\",\"operation_id\":\"019a0000-0000-7000-8000-000000000004\",\"organization_id\":\"019a0000-0000-7000-8000-000000000001\",\"pos_id\":\"019a0000-0000-7000-8000-000000000011\",\"process_id\":\"019a0000-0000-7000-8000-000000000006\",\"process_version\":1,\"sale_id\":\"019a0000-0000-7000-8000-000000000005\",\"warehouse_id\":\"019a0000-0000-7000-8000-000000000002\"},\"differences\":[{\"after\":\"-1\",\"before\":\"1\",\"issued\":\"2\",\"line_ids\":[\"019a0000-0000-7000-8000-000000000030\",\"019a0000-0000-7000-8000-000000000031\"],\"occurrence_id\":\"019a0000-0000-7000-8000-000000000061\",\"policy\":\"ALLOW_AND_ALERT\",\"policy_version\":1,\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"reason_code\":\"physical_product_present_stock_difference\",\"reconciliation_id\":\"019a0000-0000-7000-8000-000000000060\"}],\"lines\":[{\"line_id\":\"019a0000-0000-7000-8000-000000000030\",\"movement_id\":\"019a0000-0000-7000-8000-000000000050\",\"movement_version\":1,\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"position_version\":1,\"status\":\"posted\"},{\"line_id\":\"019a0000-0000-7000-8000-000000000031\",\"movement_id\":\"019a0000-0000-7000-8000-000000000051\",\"movement_version\":1,\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"position_version\":2,\"status\":\"posted\"}],\"movements\":[{\"after\":\"0\",\"base_quantity\":\"1\",\"before\":\"1\",\"branch_id\":\"019a0000-0000-7000-8000-000000000010\",\"direction\":\"out\",\"line_id\":\"019a0000-0000-7000-8000-000000000030\",\"location_id\":\"019a0000-0000-7000-8000-000000000003\",\"movement_id\":\"019a0000-0000-7000-8000-000000000050\",\"movement_version\":1,\"occurred_at\":\"2026-10-26T12:00:00Z\",\"operation_id\":\"019a0000-0000-7000-8000-000000000004\",\"operational_date\":\"2026-10-26\",\"organization_id\":\"019a0000-0000-7000-8000-000000000001\",\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"position_version\":1,\"quantity\":\"1\",\"reason_code\":\"sale\",\"recorded_at\":\"2026-10-26T12:00:00Z\",\"snapshot\":{\"allows_fractions\":true,\"base_unit\":\"unit\",\"conversion_factor\":\"1\",\"description\":\"Producto sintético\",\"line_id\":\"019a0000-0000-7000-8000-000000000030\",\"minimum_quantity\":\"0.001\",\"presentation_id\":\"019a0000-0000-7000-8000-000000000130\",\"presentation_status\":\"active\",\"presentation_unit\":\"unit\",\"presentation_version\":3,\"product_id\":\"019a0000-0000-7000-8000-000000000020\",\"product_status\":\"active\",\"product_type\":\"STOCKED_GOOD\",\"product_version\":2,\"quantity_increment\":\"0.001\",\"variant_id\":\"019a0000-0000-7000-8000-000000000021\",\"variant_version_source\":\"product_version\"},\"time_policy_version\":\"inventory-time-f1-1\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"warehouse_id\":\"019a0000-0000-7000-8000-000000000002\"},{\"after\":\"-1\",\"base_quantity\":\"1\",\"before\":\"0\",\"branch_id\":\"019a0000-0000-7000-8000-000000000010\",\"direction\":\"out\",\"line_id\":\"019a0000-0000-7000-8000-000000000031\",\"location_id\":\"019a0000-0000-7000-8000-000000000003\",\"movement_id\":\"019a0000-0000-7000-8000-000000000051\",\"movement_version\":1,\"occurred_at\":\"2026-10-26T12:00:00Z\",\"operation_id\":\"019a0000-0000-7000-8000-000000000004\",\"operational_date\":\"2026-10-26\",\"organization_id\":\"019a0000-0000-7000-8000-000000000001\",\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"position_version\":2,\"quantity\":\"0.5\",\"reason_code\":\"sale\",\"recorded_at\":\"2026-10-26T12:00:00Z\",\"snapshot\":{\"allows_fractions\":true,\"base_unit\":\"unit\",\"conversion_factor\":\"2\",\"description\":\"Producto sintético\",\"line_id\":\"019a0000-0000-7000-8000-000000000031\",\"minimum_quantity\":\"0.001\",\"presentation_id\":\"019a0000-0000-7000-8000-000000000131\",\"presentation_status\":\"active\",\"presentation_unit\":\"unit\",\"presentation_version\":3,\"product_id\":\"019a0000-0000-7000-8000-000000000020\",\"product_status\":\"active\",\"product_type\":\"STOCKED_GOOD\",\"product_version\":2,\"quantity_increment\":\"0.001\",\"variant_id\":\"019a0000-0000-7000-8000-000000000021\",\"variant_version_source\":\"product_version\"},\"time_policy_version\":\"inventory-time-f1-1\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"warehouse_id\":\"019a0000-0000-7000-8000-000000000002\"}],\"reconciliation_required\":true,\"recorded_at\":\"2026-10-26T12:00:00Z\",\"stock_status\":\"posted\",\"warnings\":[{\"code\":\"inventory_stock_difference_recorded\",\"occurrence_id\":\"019a0000-0000-7000-8000-000000000061\",\"position_id\":\"019a0000-0000-7000-8000-000000000040\",\"reconciliation_id\":\"019a0000-0000-7000-8000-000000000060\",\"severity\":\"action_required\"}]},\"pos_id\":\"019a0000-0000-7000-8000-000000000011\",\"producer\":\"inventory\",\"schema_version\":1}",
+        "serialized_sha256": "e01a1746bec16bba4083c63010cd9fe1375b9416ff398297694347c492024e23"
+      }
+    ],
+    "page": {
+      "next_cursor": null,
+      "has_more": false,
+      "limit": 50
+    },
+    "snapshot_high_watermark": "2",
+    "data_as_of": "2026-10-26T12:00:00Z",
+    "requested_range": {
+      "from_sequence": "1",
+      "to_sequence": "2"
+    },
+    "available_range": {
+      "from_sequence": "1",
+      "to_sequence": "1"
+    },
+    "missing_ranges": [
+      {
+        "from_sequence": "2",
+        "to_sequence": "2",
+        "reason": "legitimate_disposition"
+      }
+    ],
+    "coverage": "partial",
+    "families": [
+      {
+        "event_type": "inventory.sale-stock.posted.v2",
+        "schema_version": 1
+      },
+      {
+        "event_type": "inventory.reconciliation-required.v2",
+        "schema_version": 1
+      }
+    ],
+    "disposition_generation": 0
+  },
+  "check": {
+    "account_ref": "account-reference-1",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "at": "2026-10-26T12:00:01Z",
+    "last_sequence": "0",
+    "disposition_generation": 0
+  }
+}

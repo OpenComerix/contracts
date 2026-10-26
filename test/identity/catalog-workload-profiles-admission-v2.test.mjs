@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView, validateWorkloadConsumers } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import test from 'node:test';
@@ -18,7 +19,7 @@ import { root, workloadSource, workloadSourceRegistry, workloadAdmittedRegistry,
   workloadRegistryView, workloadReadView, validateWorkloadRegistry, validateWorkloadPackage, workloadChangedFiles
 } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 
-const source = gitReader(root, workloadSource), read = worktreeReader(root);
+const source = gitReader(root, workloadSource), read = candidateReadView(worktreeReader(root));
 const baseline = workloadSourceRegistry(), actual = JSON.parse(read('registry/contracts.json'));
 const rows = [
   ['identity.catalog-workload-profiles.policy.v2', 'identity/http/shared/v2/identity-catalog-workload-profiles-v2.json', 'policy', '2', 'bc868e4970bc8900c8053fce5f79ab34bc2fcf61fa42dffe90e717a144258626'],
@@ -142,7 +143,7 @@ test('O3 metadata views preserve old bytes only after checking current artifacts
 test('O3 preserves all source payloads, indexes, consumers, generic tools, dependencies and CI outside its closed proof surface', () => {
   validateWorkloadConsumers();
   const consumers = consumerReadView(read);
-  const allowed = withF110ADesignScope(workloadChangedFiles);
+  const allowed = withCandidateScope(withF110ADesignScope(workloadChangedFiles));
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }).trim();
   const files = git(['ls-tree', '-r', '--name-only', workloadSource]).split('\n');
   for (const file of files.filter(file => !allowed.has(file))) {

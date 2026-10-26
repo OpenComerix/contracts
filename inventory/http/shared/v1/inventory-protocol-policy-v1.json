@@ -1,0 +1,244 @@
+{
+  "version": 1,
+  "status": "candidate",
+  "owner": "inventory",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "operations": [
+    {
+      "operation_id": "createInitialWarehouse",
+      "method": "POST",
+      "path": "/api/v1/inventory/warehouses",
+      "permission": "inventory.configure"
+    },
+    {
+      "operation_id": "listInventoryWarehouses",
+      "method": "GET",
+      "path": "/api/v1/inventory/warehouses",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "getInventoryWarehouse",
+      "method": "GET",
+      "path": "/api/v1/inventory/warehouses/{warehouse_id}",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "adjustInventoryStock",
+      "method": "POST",
+      "path": "/api/v1/inventory/adjustments",
+      "permission": "inventory.adjust"
+    },
+    {
+      "operation_id": "getInventoryAdjustment",
+      "method": "GET",
+      "path": "/api/v1/inventory/adjustments/{adjustment_id}",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "getInventoryPosition",
+      "method": "GET",
+      "path": "/api/v1/inventory/positions/{position_id}",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "listInventoryPositions",
+      "method": "GET",
+      "path": "/api/v1/inventory/positions",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "listInventoryReconciliations",
+      "method": "GET",
+      "path": "/api/v1/inventory/reconciliations",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "getInventoryReconciliation",
+      "method": "GET",
+      "path": "/api/v1/inventory/reconciliations/{reconciliation_id}",
+      "permission": "inventory.read"
+    },
+    {
+      "operation_id": "createInventoryHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/inventory/history-read-sessions",
+      "permission": "inventory.history.read"
+    },
+    {
+      "operation_id": "readInventoryHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/inventory/history-read-sessions/{read_session_id}/facts",
+      "permission": "inventory.history.read"
+    }
+  ],
+  "messages": [
+    {
+      "kind": "commands",
+      "type": "inventory.post-sale-stock.v1",
+      "file": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+      "definition": "PostRequest"
+    },
+    {
+      "kind": "commands",
+      "type": "inventory.post-sale-stock.result.v1",
+      "file": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+      "definition": "PostSuccess"
+    },
+    {
+      "kind": "commands",
+      "type": "inventory.compensate-sale-stock.v1",
+      "file": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+      "definition": "CompensationRequest"
+    },
+    {
+      "kind": "commands",
+      "type": "inventory.compensate-sale-stock.result.v1",
+      "file": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+      "definition": "CompensationSuccess"
+    },
+    {
+      "kind": "events",
+      "type": "inventory.stock-adjustment.recorded.v1",
+      "file": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+      "definition": "Adjustment"
+    },
+    {
+      "kind": "events",
+      "type": "inventory.sale-stock.posted.v2",
+      "file": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+      "definition": "PostSuccess"
+    },
+    {
+      "kind": "events",
+      "type": "inventory.sale-stock.compensated.v1",
+      "file": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+      "definition": "CompensationSuccess"
+    },
+    {
+      "kind": "events",
+      "type": "inventory.reconciliation-required.v2",
+      "file": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+      "definition": "ReconciliationOccurrence"
+    }
+  ],
+  "authority": {
+    "human": "identity-inventory-authority-v1; fresh <=2000ms, recheck after locks and before read/replay/commit",
+    "technical": "live sales authorization of exact persisted command; payload.step_id is required for post and compensation, included in command_fingerprint and copied unchanged to query.step_id; never trust message grant alone",
+    "stock_difference": "ALLOW_AND_ALERT + current local policy + origin grant bound to lines/quantities/context + physical presence; ordinary sales permission alone insufficient",
+    "preparation_seconds": 60,
+    "delegate_seconds": 60,
+    "history_step_up_seconds": 900
+  },
+  "idempotency": {
+    "http_days": 7,
+    "semantic": "organization + sale operation + line_id + effect_type; one group per immutable intention, even new command_id cannot create second effect",
+    "compensation": "own identity, exact original movement/quantity; terminal closure before late output; no auto finance compensation",
+    "history": "original bytes and IDs retained independently of outbox; replay is read only"
+  },
+  "quantity": {
+    "input_integer_digits": 12,
+    "input_scale": 3,
+    "factor_integer_digits": 12,
+    "factor_scale": 6,
+    "base_integer_digits": 38,
+    "base_scale": 9,
+    "signed_balance": true,
+    "negative_zero": false,
+    "canonical_no_trailing_fraction_zeros": true,
+    "available": "on_hand; no reservations or blocks in F1",
+    "consolidate": "same variant/position within group before stock check; retain line trace"
+  },
+  "atomicity": [
+    "position balances",
+    "all group movements or none",
+    "semantic result",
+    "history",
+    "audit",
+    "inbox",
+    "outbox",
+    "case/occurrence/local alert"
+  ],
+  "reconciliation": {
+    "open_case_key": "organization + position",
+    "occurrence_key": "organization + sale operation + position",
+    "warning": "inventory_stock_difference_recorded",
+    "severity": "action_required",
+    "compensation_resolves_case": false,
+    "positive_balance_resolves_case": false,
+    "resolution": "verified physical correction separately authorized; no generic close action",
+    "origin_evidence": "grant_decision_ref and origin_authorization_ref retained only in RestrictedOriginAudit linked by organization/operation/position/case/occurrence, atomically with effect; never in results, physical events, public reconciliations or retained history facts"
+  },
+  "history": {
+    "session_seconds": 1800,
+    "default_limit": 50,
+    "maximum_limit": 100,
+    "maximum_page_bytes": 1048576,
+    "maximum_fact_bytes": 131072,
+    "sequence": "per-organization transactional counter locked until commit; no MAX/time/precommit sequence",
+    "cursor": "owner-exclusive HMAC with bounded rotation; account/tenant/session/filter/limit/H/last sequence/version/disposition generation; no credential",
+    "coverage": [
+      "complete_for_requested_range",
+      "partial",
+      "unverifiable"
+    ],
+    "concurrent_disposition": "409 inventory_history_coverage_changed; new cut required; keep tombstone ranges",
+    "unknown_versions": "quarantine without effect/checkpoint"
+  },
+  "limits": {
+    "body_bytes": 1048576,
+    "message_bytes": 131072,
+    "gateway_ms": 10000,
+    "owner_ms": 5000,
+    "private_call_ms": 3000,
+    "authority_call_ms": 1000,
+    "authority_validity_ms": 2000,
+    "lock_ms": 1000
+  },
+  "compatibility": {
+    "producer": "strict",
+    "consumer": "known fields strict; only explicitly declared metadata extension zone may evolve; no active extension yet",
+    "pairs": [
+      {
+        "type": "inventory.post-sale-stock.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.post-sale-stock.result.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.compensate-sale-stock.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.compensate-sale-stock.result.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.stock-adjustment.recorded.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.sale-stock.posted.v2",
+        "revision": 1
+      },
+      {
+        "type": "inventory.sale-stock.compensated.v1",
+        "revision": 1
+      },
+      {
+        "type": "inventory.reconciliation-required.v2",
+        "revision": 1
+      }
+    ],
+    "unknown_critical_enum": "reject/quarantine without effect",
+    "historical_v1": "unchanged, no new consumer"
+  },
+  "obligations": [
+    "F1-11 PostgreSQL/RLS/concurrency/rollback and local source reconstruction after outbox cleanup",
+    "Identity and catalogue prerequisite runtimes accepted before adjustment consumer",
+    "Sales process authority runtime accepted before stock-command consumer",
+    "H4 admission/publication and exact source CI before consumers"
+  ]
+}

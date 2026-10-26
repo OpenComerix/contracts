@@ -1,0 +1,108 @@
+{
+  "runtime_demonstrated": false,
+  "arrival": "before_output",
+  "command": {
+    "command_id": "019a0000-0000-7000-8000-000000000501",
+    "command_type": "inventory.compensate-sale-stock.v1",
+    "schema_version": 1,
+    "requested_at": "2026-10-26T12:00:00Z",
+    "producer": "sales-pos",
+    "target": "inventory",
+    "correlation_id": "019a0000-0000-7000-8000-000000000006",
+    "causation_id": "019a0000-0000-7000-8000-000000000502",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "payload": {
+      "context": {
+        "organization_id": "019a0000-0000-7000-8000-000000000001",
+        "branch_id": "019a0000-0000-7000-8000-000000000010",
+        "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+        "location_id": "019a0000-0000-7000-8000-000000000003",
+        "pos_id": "019a0000-0000-7000-8000-000000000011",
+        "operation_id": "019a0000-0000-7000-8000-000000000004",
+        "sale_id": "019a0000-0000-7000-8000-000000000005",
+        "process_id": "019a0000-0000-7000-8000-000000000006",
+        "process_version": 1
+      },
+      "original_operation_id": "019a0000-0000-7000-8000-000000000004",
+      "original_command_id": "019a0000-0000-7000-8000-000000000007",
+      "compensation_operation_id": "019a0000-0000-7000-8000-000000000503",
+      "finance_result_id": "019a0000-0000-7000-8000-000000000502",
+      "reason_code": "terminal_finance_rejection_without_payment",
+      "step_id": "019a0000-0000-7000-8000-000000000500"
+    }
+  },
+  "authority_query": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "019a0000-0000-7000-8000-000000000004",
+    "process_id": "019a0000-0000-7000-8000-000000000006",
+    "process_version": 1,
+    "step_id": "019a0000-0000-7000-8000-000000000500",
+    "step": "inventory.compensate-sale-stock.v1",
+    "command_id": "019a0000-0000-7000-8000-000000000501",
+    "target": "inventory",
+    "command_fingerprint": "e38f7d29daddd58191d48f9c210305550db90b0f510a3ec53d21358d2ad28566"
+  },
+  "authority": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "019a0000-0000-7000-8000-000000000004",
+    "process_id": "019a0000-0000-7000-8000-000000000006",
+    "process_version": 1,
+    "step_id": "019a0000-0000-7000-8000-000000000500",
+    "step": "inventory.compensate-sale-stock.v1",
+    "command_id": "019a0000-0000-7000-8000-000000000501",
+    "target": "inventory",
+    "command_fingerprint": "e38f7d29daddd58191d48f9c210305550db90b0f510a3ec53d21358d2ad28566",
+    "authorized": true,
+    "caller": "inventory",
+    "audience": "sales-pos.process-authority",
+    "checked_at": "2026-10-26T12:00:00Z",
+    "valid_for_ms": 2000,
+    "stock_difference_grant": null,
+    "terminal_finance_rejection": {
+      "finance_result_id": "019a0000-0000-7000-8000-000000000502",
+      "payment_absent": true,
+      "sale_completed": false
+    }
+  },
+  "budget": {
+    "sentAt": 1000,
+    "now": 1500
+  },
+  "result": {
+    "result_id": "019a0000-0000-7000-8000-000000000504",
+    "command_id": "019a0000-0000-7000-8000-000000000501",
+    "result_type": "inventory.compensate-sale-stock.result.v1",
+    "schema_version": 1,
+    "occurred_at": "2026-10-26T12:00:00Z",
+    "producer": "inventory",
+    "correlation_id": "019a0000-0000-7000-8000-000000000006",
+    "causation_id": "019a0000-0000-7000-8000-000000000501",
+    "status": "succeeded",
+    "retryable": false,
+    "payload": {
+      "context": {
+        "organization_id": "019a0000-0000-7000-8000-000000000001",
+        "branch_id": "019a0000-0000-7000-8000-000000000010",
+        "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+        "location_id": "019a0000-0000-7000-8000-000000000003",
+        "pos_id": "019a0000-0000-7000-8000-000000000011",
+        "operation_id": "019a0000-0000-7000-8000-000000000004",
+        "sale_id": "019a0000-0000-7000-8000-000000000005",
+        "process_id": "019a0000-0000-7000-8000-000000000006",
+        "process_version": 1
+      },
+      "compensation_operation_id": "019a0000-0000-7000-8000-000000000503",
+      "original_operation_id": "019a0000-0000-7000-8000-000000000004",
+      "original_command_id": "019a0000-0000-7000-8000-000000000007",
+      "finance_result_id": "019a0000-0000-7000-8000-000000000502",
+      "status": "closed_without_movement",
+      "movements": [],
+      "original_movement_ids": [],
+      "preserved_reconciliations": [],
+      "recorded_at": "2026-10-26T12:00:00Z"
+    }
+  },
+  "events": [],
+  "original": null,
+  "late_output_rejected": true
+}

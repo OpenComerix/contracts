@@ -1,0 +1,150 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "extends_without_changing": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+  "profiles": [
+    {
+      "client_id": "inventory.inventory-authority",
+      "caller": "inventory",
+      "audience": "identity-tenancy.inventory-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "gateway-bff.inventory",
+      "caller": "gateway-bff",
+      "audience": "inventory.user-api",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "inventory.catalog-capture",
+      "caller": "inventory",
+      "audience": "catalog-pricing.inventory-capture",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "catalog-pricing.inventory-capture-authority",
+      "caller": "catalog-pricing",
+      "audience": "inventory.catalog-capture-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "inventory.sales-process-authority",
+      "caller": "inventory",
+      "audience": "sales-pos.process-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "sales-pos.inventory-results",
+      "caller": "sales-pos",
+      "audience": "inventory.process-results",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    }
+  ],
+  "issuance": "H1A HTTP Basic and grant_type=client_credentials only; client_id fixes caller/audience. Separate credentials per profile/rotation, no audience selector or secret reuse.",
+  "permissions": [
+    {
+      "operation_id": "createInitialWarehouse",
+      "method": "POST",
+      "path": "/api/v1/inventory/warehouses",
+      "permission": "inventory.configure",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "listInventoryWarehouses",
+      "method": "GET",
+      "path": "/api/v1/inventory/warehouses",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "getInventoryWarehouse",
+      "method": "GET",
+      "path": "/api/v1/inventory/warehouses/{warehouse_id}",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "adjustInventoryStock",
+      "method": "POST",
+      "path": "/api/v1/inventory/adjustments",
+      "permission": "inventory.adjust",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "getInventoryAdjustment",
+      "method": "GET",
+      "path": "/api/v1/inventory/adjustments/{adjustment_id}",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "getInventoryPosition",
+      "method": "GET",
+      "path": "/api/v1/inventory/positions/{position_id}",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "listInventoryPositions",
+      "method": "GET",
+      "path": "/api/v1/inventory/positions",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "listInventoryReconciliations",
+      "method": "GET",
+      "path": "/api/v1/inventory/reconciliations",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "getInventoryReconciliation",
+      "method": "GET",
+      "path": "/api/v1/inventory/reconciliations/{reconciliation_id}",
+      "permission": "inventory.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": false
+    },
+    {
+      "operation_id": "createInventoryHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/inventory/history-read-sessions",
+      "permission": "inventory.history.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": true
+    },
+    {
+      "operation_id": "readInventoryHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/inventory/history-read-sessions/{read_session_id}/facts",
+      "permission": "inventory.history.read",
+      "scope": "organization plus owner-validated branch/warehouse/POS; no local role authority",
+      "step_up": true
+    }
+  ],
+  "template": "OWNER initial assignable permissions, evaluated by permission, never role string; stock-difference permission originates in sales acceptance, not inventory public requests."
+}

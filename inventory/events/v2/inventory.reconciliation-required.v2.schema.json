@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+  "title": "inventory.reconciliation-required.v2",
+  "allOf": [
+    {
+      "$ref": "../../../events/event-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "event_type": {
+          "const": "inventory.reconciliation-required.v2",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "schema_version": {
+          "const": 1,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "producer": {
+          "const": "inventory",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "payload": {
+          "$ref": "../../http/shared/v1/inventory-types-v1.schema.json#/$defs/ReconciliationOccurrence",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "aggregate_type": {
+          "const": "inventory_reconciliation",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      }
+    }
+  ],
+  "x-data-classification": {
+    "sensitivity": "RESTRICTED",
+    "categories": [
+      "COMMERCIAL",
+      "OPERATIONAL"
+    ]
+  },
+  "x-data-purpose": "physical inventory and causal reconciliation",
+  "x-retention-profile": "LEGAL_FISCAL_AR",
+  "x-log-policy": "no-payload-or-field-values"
+}

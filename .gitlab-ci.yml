@@ -321,3 +321,36 @@ validate:catalog-asyncapi-schema:
       artifacts: true
   script:
     - sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1
+
+validate:inventory-contracts:
+  stage: validate
+  variables:
+    GIT_DEPTH: "0"
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - node --test --test-reporter=tap test/inventory/*.test.mjs
+    - node scripts/inventory/run-gate-v1.mjs openapi
+    - node scripts/inventory/run-gate-v1.mjs asyncapi
+    - node scripts/inventory/schema-v1.mjs .ci-artifacts/inventory-v1-ci
+  artifacts:
+    when: always
+    paths:
+      - .ci-artifacts/inventory-v1-*/
+    expire_in: 7 days
+
+validate:inventory-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:inventory-contracts
+      artifacts: true
+  script:
+    - sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-ci

@@ -1,0 +1,644 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+  "title": "Physical inventory capture v1; no price or fiscal profile",
+  "$defs": {
+    "Reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line_id",
+        "presentation_id",
+        "product_version",
+        "presentation_version",
+        "quantity"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "product_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "quantity": {
+          "allOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/QuantityDecimal"
+            },
+            {
+              "not": {
+                "pattern": "^0(?:\\.0+)?$"
+              }
+            }
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      }
+    },
+    "PhysicalSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line_id",
+        "product_id",
+        "variant_id",
+        "presentation_id",
+        "product_version",
+        "presentation_version",
+        "variant_version_source",
+        "product_type",
+        "product_status",
+        "presentation_status",
+        "description",
+        "base_unit",
+        "presentation_unit",
+        "conversion_factor",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "variant_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "product_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "variant_version_source": {
+          "const": "product_version",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "product_type": {
+          "type": "string",
+          "enum": [
+            "STOCKED_GOOD",
+            "NON_STOCK_GOOD",
+            "SERVICE"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "product_status": {
+          "const": "active",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_status": {
+          "const": "active",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "base_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "presentation_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "conversion_factor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ConversionFactor",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "allows_fractions": {
+          "type": "boolean",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "minimum_quantity": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/PositiveQuantity",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "quantity_increment": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/PositiveQuantity",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false,
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+                "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+                "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$",
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+                "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+                "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$",
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+                "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+                "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CaptureRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "lines"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      }
+    },
+    "Capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_id",
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "captured_at",
+        "consistent_group",
+        "lines"
+      ],
+      "properties": {
+        "capture_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "consistent_group": {
+          "const": true,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/PhysicalSnapshot"
+          },
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Owner operation, causal reconciliation and retained physical evidence",
+          "x-log-policy": "no-payload-or-field-values; bounded diagnostic codes only",
+          "x-retention-profile": "owner-policy; transport-does-not-authorize-storage"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerSnapshotView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -21,7 +22,7 @@ const root = path.resolve(import.meta.dirname, '../..'), source = gitReader(root
 const previous = JSON.parse(source(operationalSnapshotPath));
 const actual = consumerSnapshotView(JSON.parse(fs.readFileSync(path.join(root, operationalSnapshotPath), 'utf8')));
 const registry = JSON.parse(source('registry/contracts.json'));
-const read = worktreeReader(root);
+const read = candidateReadView(worktreeReader(root));
 const bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const rehash = snapshot => {
   snapshot.manifestSha256 = sha256(bytes(snapshot.manifest));
@@ -164,6 +165,7 @@ test('O2 confines all tracked, indexed and new changes to its approved contract 
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
   for (const file of withF110ADesignScope([])) allowed.add(file);
+  for (const file of withCandidateScope([])) allowed.add(file);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   for (const list of [git(['diff', '--name-only', operationalBase, '--', '.']), git(['ls-files', '--others', '--exclude-standard'])])
     for (const file of list.split('\n').filter(Boolean)) assert(allowed.has(file), 'O2_RECOVERY_SCOPE:' + file);

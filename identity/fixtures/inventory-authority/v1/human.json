@@ -1,0 +1,68 @@
+{
+  "request": {
+    "canonicalization_version": "inventory-request-v1",
+    "operation_id": "adjustInventoryStock",
+    "method": "POST",
+    "path": "/api/v1/inventory/adjustments",
+    "query": {},
+    "body": {
+      "organization_id": "019a0000-0000-7000-8000-000000000001",
+      "branch_id": "019a0000-0000-7000-8000-000000000010",
+      "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+      "location_id": "019a0000-0000-7000-8000-000000000003",
+      "operation_id": "019a0000-0000-7000-8000-000000000600",
+      "reason_code": "opening_stock",
+      "lines": [
+        {
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "presentation_id": "019a0000-0000-7000-8000-000000000130",
+          "product_version": 2,
+          "presentation_version": 3,
+          "quantity": "2",
+          "direction": "in",
+          "expected_version": 0
+        }
+      ]
+    },
+    "idempotency_key": "019a0000-0000-7000-8000-000000000600"
+  },
+  "decision": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "adjustInventoryStock",
+    "request_hash": "04664e854ba424b174a0af891a9e69af5be28f8c45927f5cdffb934b6cc81315",
+    "canonicalization_version": "inventory-request-v1",
+    "decision_id": "opaque-fresh-decision",
+    "authorized": true,
+    "account_ref": "account-reference-1",
+    "membership_ref": "membership-reference-1",
+    "device_ref": "device-reference-1",
+    "session_version": "session-v1",
+    "membership_version": "membership-v1",
+    "device_version": "device-v1",
+    "permission": "inventory.adjust",
+    "scope": {
+      "organization_id": "019a0000-0000-7000-8000-000000000001",
+      "branch_ids": [
+        "019a0000-0000-7000-8000-000000000010"
+      ],
+      "warehouse_ids": [
+        "019a0000-0000-7000-8000-000000000002"
+      ],
+      "pos_ids": [
+        "019a0000-0000-7000-8000-000000000011"
+      ]
+    },
+    "checked_at": "2026-10-26T12:00:00Z",
+    "valid_for_ms": 2000,
+    "step_up_at": null
+  },
+  "check": {
+    "sentAt": 1000,
+    "now": 1500,
+    "organization": "019a0000-0000-7000-8000-000000000001",
+    "permission": "inventory.adjust",
+    "branch": "019a0000-0000-7000-8000-000000000010",
+    "warehouse": "019a0000-0000-7000-8000-000000000002",
+    "account": "account-reference-1"
+  }
+}

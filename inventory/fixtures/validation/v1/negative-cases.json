@@ -1,0 +1,373 @@
+{
+  "format_version": 1,
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "id": "unknown-command-revision",
+      "source_case": "normal-command",
+      "path": "/schema_version",
+      "value": 999
+    },
+    {
+      "id": "unknown-command-type",
+      "source_case": "normal-command",
+      "path": "/command_type",
+      "value": "inventory.post-sale-stock.v9"
+    },
+    {
+      "id": "wrong-producer",
+      "source_case": "normal-command",
+      "path": "/producer",
+      "value": "gateway-bff"
+    },
+    {
+      "id": "wrong-command-target",
+      "source_case": "normal-command",
+      "path": "/target",
+      "value": "finance"
+    },
+    {
+      "id": "missing-command-id",
+      "source_case": "normal-command",
+      "path": "/command_id",
+      "remove": true
+    },
+    {
+      "id": "command-extra-property",
+      "source_case": "normal-command",
+      "path": "/permission",
+      "value": "inventory.adjust"
+    },
+    {
+      "id": "quantity-number",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/quantity",
+      "value": 2
+    },
+    {
+      "id": "quantity-exponent",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/quantity",
+      "value": "1e3"
+    },
+    {
+      "id": "quantity-extra-scale",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/quantity",
+      "value": "1.0000"
+    },
+    {
+      "id": "quantity-zero",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/quantity",
+      "value": "0"
+    },
+    {
+      "id": "negative-magnitude",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/base_quantity",
+      "value": "-1"
+    },
+    {
+      "id": "derived-extra-scale",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/base_quantity",
+      "value": "0.0000000001"
+    },
+    {
+      "id": "unknown-product-type",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/product_type",
+      "value": "PHYSICAL"
+    },
+    {
+      "id": "unbounded-catalog-data",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/price",
+      "value": "10.00"
+    },
+    {
+      "id": "factor-extra-scale",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/conversion_factor",
+      "value": "1.0000001"
+    },
+    {
+      "id": "missing-variant",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/variant_id",
+      "remove": true
+    },
+    {
+      "id": "missing-source-version",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/product_version",
+      "remove": true
+    },
+    {
+      "id": "unknown-critical-unit",
+      "source_case": "normal-command",
+      "path": "/payload/lines/0/snapshot/base_unit",
+      "value": "unknown"
+    },
+    {
+      "id": "terminal-result-cannot-be-pending",
+      "source_case": "normal-result",
+      "path": "/status",
+      "value": "pending"
+    },
+    {
+      "id": "successful-result-not-retryable",
+      "source_case": "normal-result",
+      "path": "/retryable",
+      "value": true
+    },
+    {
+      "id": "failure-missing-code",
+      "source_case": "block_rejection-result",
+      "path": "/error_code",
+      "remove": true
+    },
+    {
+      "id": "failure-with-movements",
+      "source_case": "block_rejection-result",
+      "path": "/payload/movements",
+      "value": [
+        {
+          "organization_id": "019a0000-0000-7000-8000-000000000001",
+          "branch_id": "019a0000-0000-7000-8000-000000000010",
+          "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+          "location_id": "019a0000-0000-7000-8000-000000000003",
+          "occurred_at": "2026-10-26T12:00:00Z",
+          "recorded_at": "2026-10-26T12:00:00Z",
+          "operational_date": "2026-10-26",
+          "time_zone": "America/Argentina/Buenos_Aires",
+          "time_policy_version": "inventory-time-f1-1",
+          "movement_id": "019a0000-0000-7000-8000-000000000050",
+          "movement_version": 1,
+          "operation_id": "019a0000-0000-7000-8000-000000000004",
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "position_id": "019a0000-0000-7000-8000-000000000040",
+          "position_version": 1,
+          "snapshot": {
+            "line_id": "019a0000-0000-7000-8000-000000000030",
+            "product_id": "019a0000-0000-7000-8000-000000000020",
+            "variant_id": "019a0000-0000-7000-8000-000000000021",
+            "presentation_id": "019a0000-0000-7000-8000-000000000130",
+            "product_version": 2,
+            "presentation_version": 3,
+            "variant_version_source": "product_version",
+            "product_type": "STOCKED_GOOD",
+            "product_status": "active",
+            "presentation_status": "active",
+            "description": "Producto sintético",
+            "base_unit": "unit",
+            "presentation_unit": "unit",
+            "conversion_factor": "1",
+            "allows_fractions": true,
+            "minimum_quantity": "0.001",
+            "quantity_increment": "0.001"
+          },
+          "quantity": "2",
+          "base_quantity": "2",
+          "direction": "out",
+          "reason_code": "sale",
+          "before": "4",
+          "after": "2"
+        }
+      ]
+    },
+    {
+      "id": "false-posted-event",
+      "source_case": "normal-event-0",
+      "path": "/payload/movements",
+      "value": []
+    },
+    {
+      "id": "unknown-event-revision",
+      "source_case": "normal-event-0",
+      "path": "/schema_version",
+      "value": 999
+    },
+    {
+      "id": "wrong-event-type",
+      "source_case": "normal-event-0",
+      "path": "/event_type",
+      "value": "inventory.sale-stock.posted.v1"
+    },
+    {
+      "id": "signed-negative-zero",
+      "source_case": "normal-event-0",
+      "path": "/payload/movements/0/before",
+      "value": "-0"
+    },
+    {
+      "id": "unknown-warning-severity",
+      "source_case": "zero_with_difference-result",
+      "path": "/payload/warnings/0/severity",
+      "value": "informational"
+    },
+    {
+      "id": "unknown-reconciliation-policy",
+      "source_case": "zero_with_difference-result",
+      "path": "/payload/differences/0/policy",
+      "value": "IGNORE"
+    },
+    {
+      "id": "missing-reconciliation-link",
+      "source_case": "zero_with_difference-result",
+      "path": "/payload/differences/0/reconciliation_id",
+      "remove": true
+    },
+    {
+      "id": "unknown-compensation-reason",
+      "source_case": "after_difference-command",
+      "path": "/payload/reason_code",
+      "value": "user_return"
+    },
+    {
+      "id": "compensation-event-without-movement",
+      "source_case": "after_difference-event-0",
+      "path": "/payload/movements",
+      "value": []
+    },
+    {
+      "id": "human-role-authority",
+      "source_case": "human-decision",
+      "path": "/role",
+      "value": "OWNER"
+    },
+    {
+      "id": "human-budget-too-long",
+      "source_case": "human-decision",
+      "path": "/valid_for_ms",
+      "value": 2001
+    },
+    {
+      "id": "wrong-canonical-version",
+      "source_case": "canonical-request",
+      "path": "/canonicalization_version",
+      "value": "catalog-request-v1"
+    },
+    {
+      "id": "canonical-extra-field",
+      "source_case": "canonical-request",
+      "path": "/cookie",
+      "value": "synthetic-forbidden"
+    },
+    {
+      "id": "canonical-unknown-query",
+      "source_case": "canonical-request",
+      "path": "/query/unknown",
+      "value": "x"
+    },
+    {
+      "id": "catalog-snapshot-price-leak",
+      "source_case": "capture-response",
+      "path": "/lines/0/price",
+      "value": "10.00"
+    },
+    {
+      "id": "catalog-free-factor",
+      "source_case": "capture-request",
+      "path": "/lines/0/conversion_factor",
+      "value": "2"
+    },
+    {
+      "id": "history-unknown-family",
+      "source_case": "history-complete-session",
+      "path": "/request/families/0",
+      "value": "sales.sale.completed.v2"
+    },
+    {
+      "id": "history-unknown-coverage",
+      "source_case": "history-complete-page",
+      "path": "/coverage",
+      "value": "probably_complete"
+    },
+    {
+      "id": "history-limit-exceeded",
+      "source_case": "history-complete-page",
+      "path": "/page/limit",
+      "value": 101
+    },
+    {
+      "id": "history-original-missing",
+      "source_case": "history-complete-page",
+      "path": "/items/0/original_json",
+      "remove": true
+    },
+    {
+      "id": "resource-unknown-unit",
+      "source_case": "resource-Position",
+      "path": "/base_unit",
+      "value": "unknown"
+    },
+    {
+      "id": "resource-float-balance",
+      "source_case": "resource-Position",
+      "path": "/on_hand",
+      "value": 1.5
+    },
+    {
+      "id": "adjustment-free-snapshot",
+      "source_case": "adjust-request",
+      "path": "/lines/0/snapshot",
+      "value": {
+        "line_id": "019a0000-0000-7000-8000-000000000030",
+        "product_id": "019a0000-0000-7000-8000-000000000020",
+        "variant_id": "019a0000-0000-7000-8000-000000000021",
+        "presentation_id": "019a0000-0000-7000-8000-000000000130",
+        "product_version": 2,
+        "presentation_version": 3,
+        "variant_version_source": "product_version",
+        "product_type": "STOCKED_GOOD",
+        "product_status": "active",
+        "presentation_status": "active",
+        "description": "Producto sintético",
+        "base_unit": "unit",
+        "presentation_unit": "unit",
+        "conversion_factor": "1",
+        "allows_fractions": true,
+        "minimum_quantity": "0.001",
+        "quantity_increment": "0.001"
+      }
+    },
+    {
+      "id": "normal-missing-step-id",
+      "source_case": "normal-command",
+      "path": "/payload/step_id",
+      "remove": true
+    },
+    {
+      "id": "after_difference-missing-step-id",
+      "source_case": "after_difference-command",
+      "path": "/payload/step_id",
+      "remove": true
+    },
+    {
+      "id": "restricted-grant-leak-zero_with_difference-result",
+      "source_case": "zero_with_difference-result",
+      "path": "/payload/differences/0/grant_decision_ref",
+      "value": "synthetic-restricted-decision"
+    },
+    {
+      "id": "restricted-grant-leak-zero_with_difference-event-0",
+      "source_case": "zero_with_difference-event-0",
+      "path": "/payload/differences/0/grant_decision_ref",
+      "value": "synthetic-restricted-decision"
+    },
+    {
+      "id": "restricted-grant-leak-zero_with_difference-event-1",
+      "source_case": "zero_with_difference-event-1",
+      "path": "/payload/difference/grant_decision_ref",
+      "value": "synthetic-restricted-decision"
+    },
+    {
+      "id": "restricted-grant-leak-resource-Reconciliation",
+      "source_case": "resource-Reconciliation",
+      "path": "/occurrences/0/difference/grant_decision_ref",
+      "value": "synthetic-restricted-decision"
+    }
+  ]
+}

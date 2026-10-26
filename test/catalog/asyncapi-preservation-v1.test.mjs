@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { projectCandidateFile } from '../../scripts/inventory/candidate-v1.mjs';
 import { consumptionReadmeView } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 import test from 'node:test';
 import fs from 'node:fs';
@@ -19,7 +20,7 @@ const proofHashes = {
 const files = ['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'catalog/README.md', ...Object.keys(proofHashes)];
 const normalize = value => value.replaceAll('\r\n', '\n');
 const original = Object.fromEntries(files.map(file => [file, normalize(execFileSync('git', ['show', `${base}:${file}`], { cwd: root, encoding: 'utf8' }))]));
-const current = Object.fromEntries(files.map(file => [file, normalize(fs.readFileSync(path.join(root, file), 'utf8'))]));
+const current = Object.fromEntries(files.map(file => [file, normalize(projectCandidateFile(file, fs.readFileSync(path.join(root, file))).toString('utf8'))]));
 const installJobs = ['validate:contract-architecture', 'validate:catalog-contracts', 'validate:identity-catalog-contracts'];
 const priorInstall = '    - pnpm install --frozen-lockfile\n';
 assert.equal(original['.gitlab-ci.yml'].split(priorInstall).length - 1, installJobs.length);

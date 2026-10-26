@@ -1,0 +1,40 @@
+{
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "quantity": "0.001",
+      "factor": "0.000001",
+      "expected": "0.000000001"
+    },
+    {
+      "quantity": "999999999999.999",
+      "factor": "999999999999.999999",
+      "expected": "999999999999998999000000.000000001"
+    },
+    {
+      "quantity": "2",
+      "factor": "0.5",
+      "expected": "1"
+    },
+    {
+      "quantity": "1.0000",
+      "factor": "1",
+      "error": "B_DECIMAL_FORMAT"
+    },
+    {
+      "quantity": "1",
+      "factor": "0",
+      "error": "B_POSITIVE"
+    },
+    {
+      "quantity": "1",
+      "factor": "1.0000001",
+      "error": "B_DECIMAL_FORMAT"
+    },
+    {
+      "quantity": "1e3",
+      "factor": "1",
+      "error": "B_DECIMAL_FORMAT"
+    }
+  ]
+}

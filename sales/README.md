@@ -84,3 +84,13 @@ F1-10D: HTTP v2, snapshot/evento v2, contratos privados de autorización de paso
 Obligaciones runtime F1-13: PostgreSQL/RLS, outbox/inbox, operación/numero únicos, captura inmutable, reordenamiento y recuperación tras limpiar outbox, continuidad técnica sin sesión, compensación limitada y proceso reiniciado en cada transición. F1-15: navegación de pending/unknown/atención, reintento con mismo intento y ticket inequívocamente no fiscal, paridad decimal y contexto actual. A solo valida documentos; no acredita contratos ejecutables, SQL, firma, broker, navegador ni H4.
 
 La venta con diferencia autorizada sigue hasta cobro/completed y conserva el pendiente de stock; no se presenta como fallo ni obliga a cobrar dos veces. F1-13/15 deben probar aviso breve, acceso posterior a conciliación y confirmación comprensible de presencia, tanto con stock 0 como ya negativo, además de denegar excepción ajena/ausente. La UI no concede el permiso ni fuerza supervisor si el operador ya lo tiene.
+
+## F1-10B — Selección privada de autoridad de inventario candidata
+
+[HTTP](http/private/v1/sales-inventory-step-authority-v1.yaml) y [schema](http/shared/v1/sales-inventory-step-authority-v1.schema.json) materializan en B únicamente la selección inventory de authorizeSaleProcessStep, POST /api/v1/internal/sales/process-step-authorizations; audiencia sales-pos.process-authority. No materializan API pública, venta completed, captura comercial ni contrato de caja de C/D.
+
+La decisión se vincula al comando ya persistido/habilitado, tenant/proceso/paso/versión/target/huella, caller y consulta, con presupuesto <=2000 ms descontado desde antes de red. Comando no incluye su propio digest circular: inventory calcula SHA-256 del JCS completo para consultar al dueño. Concesión de diferencia solo refiere líneas/cantidades/contexto autorizados al aceptar; no procede del mensaje o sesión revocada. Compensación exige rechazo financiero terminal verificable, ausencia de pago y venta no completada; un cierre terminal local impide efecto tardío aunque la decisión haya sido positiva.
+
+Los comandos de inventory transportan `payload.step_id`, incluido en la huella completa y copiado sin cambios a la solicitud de autorización; no se elige otro paso al consultar. Las referencias de decisión de origen permanecen en auditoría restringida del dueño, fuera de resultados, hechos físicos y consultas públicas.
+
+Fixtures de pasos viven junto a sus comandos/resultados en inventory/fixtures/{effects,compensation}/v1; [gates B](../inventory/README.md#f1-10b--paquete-candidato). Solo planned; no publicación, admisión ni runtime. D completa las superficies restantes y E comprueba H4; el contrato no vuelve existente su implementación.

@@ -1,0 +1,181 @@
+{
+  "request": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "branch_id": "019a0000-0000-7000-8000-000000000010",
+    "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+    "location_id": "019a0000-0000-7000-8000-000000000003",
+    "operation_id": "019a0000-0000-7000-8000-000000000600",
+    "reason_code": "opening_stock",
+    "lines": [
+      {
+        "line_id": "019a0000-0000-7000-8000-000000000030",
+        "presentation_id": "019a0000-0000-7000-8000-000000000130",
+        "product_version": 2,
+        "presentation_version": 3,
+        "quantity": "2",
+        "direction": "in",
+        "expected_version": 0
+      }
+    ]
+  },
+  "capture": {
+    "capture_id": "019a0000-0000-7000-8000-000000000602",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "019a0000-0000-7000-8000-000000000600",
+    "preparation_id": "019a0000-0000-7000-8000-000000000601",
+    "request_hash": "04664e854ba424b174a0af891a9e69af5be28f8c45927f5cdffb934b6cc81315",
+    "captured_at": "2026-10-26T12:00:00Z",
+    "consistent_group": true,
+    "lines": [
+      {
+        "line_id": "019a0000-0000-7000-8000-000000000030",
+        "product_id": "019a0000-0000-7000-8000-000000000020",
+        "variant_id": "019a0000-0000-7000-8000-000000000021",
+        "presentation_id": "019a0000-0000-7000-8000-000000000130",
+        "product_version": 2,
+        "presentation_version": 3,
+        "variant_version_source": "product_version",
+        "product_type": "STOCKED_GOOD",
+        "product_status": "active",
+        "presentation_status": "active",
+        "description": "Producto sintético",
+        "base_unit": "unit",
+        "presentation_unit": "unit",
+        "conversion_factor": "1",
+        "allows_fractions": true,
+        "minimum_quantity": "0.001",
+        "quantity_increment": "0.001"
+      }
+    ]
+  },
+  "result": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "branch_id": "019a0000-0000-7000-8000-000000000010",
+    "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+    "location_id": "019a0000-0000-7000-8000-000000000003",
+    "operation_id": "019a0000-0000-7000-8000-000000000600",
+    "adjustment_id": "019a0000-0000-7000-8000-000000000610",
+    "version": 1,
+    "reason_code": "opening_stock",
+    "movements": [
+      {
+        "organization_id": "019a0000-0000-7000-8000-000000000001",
+        "branch_id": "019a0000-0000-7000-8000-000000000010",
+        "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+        "location_id": "019a0000-0000-7000-8000-000000000003",
+        "occurred_at": "2026-10-26T12:00:00Z",
+        "recorded_at": "2026-10-26T12:00:00Z",
+        "operational_date": "2026-10-26",
+        "time_zone": "America/Argentina/Buenos_Aires",
+        "time_policy_version": "inventory-time-f1-1",
+        "movement_id": "019a0000-0000-7000-8000-000000000611",
+        "movement_version": 1,
+        "operation_id": "019a0000-0000-7000-8000-000000000600",
+        "line_id": "019a0000-0000-7000-8000-000000000030",
+        "position_id": "019a0000-0000-7000-8000-000000000040",
+        "position_version": 1,
+        "snapshot": {
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "product_id": "019a0000-0000-7000-8000-000000000020",
+          "variant_id": "019a0000-0000-7000-8000-000000000021",
+          "presentation_id": "019a0000-0000-7000-8000-000000000130",
+          "product_version": 2,
+          "presentation_version": 3,
+          "variant_version_source": "product_version",
+          "product_type": "STOCKED_GOOD",
+          "product_status": "active",
+          "presentation_status": "active",
+          "description": "Producto sintético",
+          "base_unit": "unit",
+          "presentation_unit": "unit",
+          "conversion_factor": "1",
+          "allows_fractions": true,
+          "minimum_quantity": "0.001",
+          "quantity_increment": "0.001"
+        },
+        "quantity": "2",
+        "base_quantity": "2",
+        "direction": "in",
+        "reason_code": "opening_stock",
+        "before": "0",
+        "after": "2"
+      }
+    ],
+    "recorded_at": "2026-10-26T12:00:00Z"
+  },
+  "position_before": {
+    "position_id": "019a0000-0000-7000-8000-000000000040",
+    "on_hand": "0",
+    "version": 0
+  },
+  "event": {
+    "event_id": "019a0000-0000-7000-8000-000000000612",
+    "event_type": "inventory.stock-adjustment.recorded.v1",
+    "schema_version": 1,
+    "occurred_at": "2026-10-26T12:00:00Z",
+    "producer": "inventory",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "branch_id": "019a0000-0000-7000-8000-000000000010",
+    "pos_id": "019a0000-0000-7000-8000-000000000011",
+    "aggregate_type": "stock_adjustment",
+    "aggregate_id": "019a0000-0000-7000-8000-000000000610",
+    "aggregate_version": 1,
+    "correlation_id": "019a0000-0000-7000-8000-000000000600",
+    "causation_id": "019a0000-0000-7000-8000-000000000600",
+    "payload": {
+      "organization_id": "019a0000-0000-7000-8000-000000000001",
+      "branch_id": "019a0000-0000-7000-8000-000000000010",
+      "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+      "location_id": "019a0000-0000-7000-8000-000000000003",
+      "operation_id": "019a0000-0000-7000-8000-000000000600",
+      "adjustment_id": "019a0000-0000-7000-8000-000000000610",
+      "version": 1,
+      "reason_code": "opening_stock",
+      "movements": [
+        {
+          "organization_id": "019a0000-0000-7000-8000-000000000001",
+          "branch_id": "019a0000-0000-7000-8000-000000000010",
+          "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+          "location_id": "019a0000-0000-7000-8000-000000000003",
+          "occurred_at": "2026-10-26T12:00:00Z",
+          "recorded_at": "2026-10-26T12:00:00Z",
+          "operational_date": "2026-10-26",
+          "time_zone": "America/Argentina/Buenos_Aires",
+          "time_policy_version": "inventory-time-f1-1",
+          "movement_id": "019a0000-0000-7000-8000-000000000611",
+          "movement_version": 1,
+          "operation_id": "019a0000-0000-7000-8000-000000000600",
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "position_id": "019a0000-0000-7000-8000-000000000040",
+          "position_version": 1,
+          "snapshot": {
+            "line_id": "019a0000-0000-7000-8000-000000000030",
+            "product_id": "019a0000-0000-7000-8000-000000000020",
+            "variant_id": "019a0000-0000-7000-8000-000000000021",
+            "presentation_id": "019a0000-0000-7000-8000-000000000130",
+            "product_version": 2,
+            "presentation_version": 3,
+            "variant_version_source": "product_version",
+            "product_type": "STOCKED_GOOD",
+            "product_status": "active",
+            "presentation_status": "active",
+            "description": "Producto sintético",
+            "base_unit": "unit",
+            "presentation_unit": "unit",
+            "conversion_factor": "1",
+            "allows_fractions": true,
+            "minimum_quantity": "0.001",
+            "quantity_increment": "0.001"
+          },
+          "quantity": "2",
+          "base_quantity": "2",
+          "direction": "in",
+          "reason_code": "opening_stock",
+          "before": "0",
+          "after": "2"
+        }
+      ],
+      "recorded_at": "2026-10-26T12:00:00Z"
+    }
+  }
+}

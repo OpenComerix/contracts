@@ -1,0 +1,737 @@
+{
+  "base": "062453a717bc49d08b4816fa8e630ea63fcdd64d",
+  "status": "local-candidate",
+  "functional_admission": false,
+  "runtime_demonstrated": false,
+  "planned": [
+    {
+      "id": "inventory.http.public.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/public/v1/inventory-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.http.private.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/private/v1/inventory-internal-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.types.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-types-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.capture-authority.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-capture-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.protocol-policy.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-protocol-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.lifecycle-policy.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-lifecycle-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.flow.asyncapi.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v1/inventory-flow-v1.asyncapi.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.post-sale-stock.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.post-sale-stock.result.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.compensate-sale-stock.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.compensate-sale-stock.result.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.stock-adjustment.recorded.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.sale-stock.posted.v2",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v2/inventory.sale-stock.posted.v2.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.sale-stock.compensated.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.reconciliation-required.v2",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v2/inventory.reconciliation-required.v2.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "identity.inventory-authority.http.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/private/v1/identity-inventory-authority-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "identity.inventory-authority.schema.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/shared/v1/identity-inventory-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "identity.inventory-authority.policy.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/shared/v1/identity-inventory-authority-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "catalog.inventory-capture.http.v1",
+      "domain": "catalog",
+      "owner": "catalog-pricing",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source catalog/http/private/v1/catalog-inventory-capture-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "catalog.inventory-capture.schema.v1",
+      "domain": "catalog",
+      "owner": "catalog-pricing",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "sales.inventory-step-authority.http.v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source sales/http/private/v1/sales-inventory-step-authority-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "sales.inventory-step-authority.schema.v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "common.error-catalog.v9",
+      "domain": "common",
+      "owner": "platform-contracts",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source common/errors/v9/error-catalog-v9.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "common.error-catalog.schema.v9",
+      "domain": "common",
+      "owner": "platform-contracts",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source common/errors/v9/error-catalog-v9.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
+    },
+    {
+      "id": "inventory.consumer-types.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-consumer-types-v1.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.post-sale-stock.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.post-sale-stock.result.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.compensate-sale-stock.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.compensate-sale-stock.result.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.stock-adjustment.recorded.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.sale-stock.posted.v2.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.sale-stock.compensated.v1.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.reconciliation-required.v2.consumer",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
+    },
+    {
+      "id": "inventory.lifecycle-policy.schema.v1",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-10B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json only; field/retention metadata, no production, purge, runtime or functional admission."
+    }
+  ],
+  "files": [
+    {
+      "path": ".gitlab-ci.yml",
+      "kind": "modified",
+      "sha256": "7c0f304d9bc5950811a171e2a7a8a09d3c929447e3696f8838d6d93ce6552625"
+    },
+    {
+      "path": "catalog/fixtures/inventory-capture/v1/capture.json",
+      "kind": "new",
+      "sha256": "d284d166ff8bcbbc7b1566f565469a7f9cc03c25000ffccde79278de1fbbcfd8"
+    },
+    {
+      "path": "catalog/http/private/v1/catalog-inventory-capture-v1.yaml",
+      "kind": "new",
+      "sha256": "0905b086750cb6ed76691fd88af8012b964c3dcf9d40820b7aae444ca22e4f46"
+    },
+    {
+      "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+      "kind": "new",
+      "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+    },
+    {
+      "path": "catalog/index.json",
+      "kind": "modified",
+      "sha256": "65ea22a0981ab87b6d4d8539a2984e1517145774b21ac064c056cd0143eaf3a6"
+    },
+    {
+      "path": "catalog/README.md",
+      "kind": "modified",
+      "sha256": "f1ccda2903e9ec9528dace421e012a866d9af43b26d1da4ad2412f8e20a99790"
+    },
+    {
+      "path": "common/errors/v9/error-catalog-v9.json",
+      "kind": "new",
+      "sha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7"
+    },
+    {
+      "path": "common/errors/v9/error-catalog-v9.schema.json",
+      "kind": "new",
+      "sha256": "55c7786b649a86c30a85a8c3a06af5ecf9cd6ab002efc8e910ef75cc3e188bf2"
+    },
+    {
+      "path": "common/index.json",
+      "kind": "modified",
+      "sha256": "6334c7e5876ba10c02d06b4e84e9dca17a39443364b34d1c856e1d43136eef81"
+    },
+    {
+      "path": "common/README.md",
+      "kind": "modified",
+      "sha256": "83f4f0abb9965b687025792b20e6b18835da2acdf4106fef349db205eb3dfcae"
+    },
+    {
+      "path": "identity/fixtures/inventory-authority/v1/human.json",
+      "kind": "new",
+      "sha256": "53afac6ac88479c38ce1a83a4a7602f0b543bda014486286d83991906581e058"
+    },
+    {
+      "path": "identity/http/private/v1/identity-inventory-authority-v1.yaml",
+      "kind": "new",
+      "sha256": "3f588e90732bf49fda4804e116df7618b4c9e04ac59466f9ca4eede630b80fff"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+      "kind": "new",
+      "sha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+      "kind": "new",
+      "sha256": "8c672108a7bec6452b0bb349aeb18ba85267bb38021df9753fc6e87e1d7fe4b0"
+    },
+    {
+      "path": "identity/index.json",
+      "kind": "modified",
+      "sha256": "24db7cb237e4f5e7043ad450817d5a2d5e77a529e132a8154d1450a598cafe50"
+    },
+    {
+      "path": "identity/README.md",
+      "kind": "modified",
+      "sha256": "cb4178e47ce7dc53a24f39ff73404e30b73e9e93a5b83a0c87751998c25ee063"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "33c28900449061da08ab49722a32fa6907aaa94415da758f57923374d7607ab4"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+      "kind": "new",
+      "sha256": "adaf54dc98a0d6920f519ca8990bb2a198bcb76de3c5a68a8d518dac9675ebe4"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "42f6e6e19dca505e1d4f8db8d34abdf47ecb484050a40f5751d84cffc18063b5"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+      "kind": "new",
+      "sha256": "cadaac159f89fb7839d0e2040c702a68fed1f9f7b6ae616b9e56d016cb9ed995"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "4f259dbfbf8e7e433f3df25d6cfb5029610d8d8f528a0e17d671c5f6d11665b0"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+      "kind": "new",
+      "sha256": "bdfeade03f3b57d77c973491e5d104f8548f0a1abf2ee3c3c397ff46974796ac"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "64d57209389a81bf5cdc0f8efd26aa6cc801a6548f50812f8e5ee4978a51f0e7"
+    },
+    {
+      "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+      "kind": "new",
+      "sha256": "e1fd91e7ce0522fda347049e120d0cee1c3d8d51cad7011b23f3737aa4cb9724"
+    },
+    {
+      "path": "inventory/events/v1/inventory-flow-v1.asyncapi.yaml",
+      "kind": "new",
+      "sha256": "ba13f18aa7a8fa04a95bf892fed03db5eafd3c68762bd2d4e301ab4c2e6131bb"
+    },
+    {
+      "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "f4bafc2c7f384186a4f045e9b28b89b909aabf6b3e289226fbab94c23a231255"
+    },
+    {
+      "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+      "kind": "new",
+      "sha256": "435367fac5cdb301c9300e8728dbb32ceb742c74fd1572fb8238f84c0bb3f6b0"
+    },
+    {
+      "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "79967b76324cc8f8ed400c6d678bccfd2d5dff844b4110cf7e01257cd51ba26e"
+    },
+    {
+      "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+      "kind": "new",
+      "sha256": "779d7f10b6e2df789bee184f5b3feb2d7970c37a31a00101e9d11882d3f58d4e"
+    },
+    {
+      "path": "inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json",
+      "kind": "new",
+      "sha256": "42ef5b8a9baded5d901cf47760a29fac1fab6a79b6766c9a11b0f8336d2581ad"
+    },
+    {
+      "path": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+      "kind": "new",
+      "sha256": "aaf80b34c69b458df4d7c31e8887b28ea4458fa7d0cb359d84ec138a34f97882"
+    },
+    {
+      "path": "inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json",
+      "kind": "new",
+      "sha256": "7d93d7f6cc6a98689388cd7b688a424c413f40849fdca6f630327de449026ab3"
+    },
+    {
+      "path": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+      "kind": "new",
+      "sha256": "6c18ceb38d7e7abfadfca628068ebbbae3a78daabf490b63d8967f1ee51d421f"
+    },
+    {
+      "path": "inventory/fixtures/adjustment/v1/opening.json",
+      "kind": "new",
+      "sha256": "d5aa80ae1e00e8bff0788deef0a7f03b1eb3ad853c73ef843e09229180ccda37"
+    },
+    {
+      "path": "inventory/fixtures/compensation/v1/after_difference.json",
+      "kind": "new",
+      "sha256": "4c266e2ddf04d4a97ecea82ec5948e8c63b97089434dd37eb46924d5cdb15b66"
+    },
+    {
+      "path": "inventory/fixtures/compensation/v1/before_output.json",
+      "kind": "new",
+      "sha256": "0fd8c37ce59326a63e97aa101923c0a1283766bcbda340e979dec5fe404b9efc"
+    },
+    {
+      "path": "inventory/fixtures/compensation/v1/terminal_failure.json",
+      "kind": "new",
+      "sha256": "73dc4b8baba9c6b7baa91783495972c157ed6e80ec2e9a92ab2436443d716a88"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/block_rejection.json",
+      "kind": "new",
+      "sha256": "0e9d30dd8a21e6fde8cf675457f0b2ac9ee81b2b5350c9bdd9159692c5a9d039"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/first_movement.json",
+      "kind": "new",
+      "sha256": "8af3cd8dc022e538f4f88b6405290f84717156d287dabca236bbe2dbea70de62"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/missing_permission_rejection.json",
+      "kind": "new",
+      "sha256": "b4df22a09866874eaa20d83aaa876da5532e1be54e984ab88de88ff6ea0f9d56"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/missing_presence_rejection.json",
+      "kind": "new",
+      "sha256": "1afa78a223772935671ec89dac1a8e87a98f55b9b17b9c625756797dc6ea5fcf"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/negative_with_difference.json",
+      "kind": "new",
+      "sha256": "2dab3b27da176d8da28035323976d7510350abeb7e78b495d11b5c41f4e79ae9"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/non_stock.json",
+      "kind": "new",
+      "sha256": "03f02dadd2d0393a4807997c4ce5cb9a1412f61a3b9885dc75a904285d0cdd4f"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/normal.json",
+      "kind": "new",
+      "sha256": "aa0d382ef9382f53412c2814509f1bf0c6bff2263481079263249e221ad6b122"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/same_position_presentations.json",
+      "kind": "new",
+      "sha256": "ef8c71ee82c0a4461ba9abb0e71f3d2c364905598f60aa304b2d335e6dc49abe"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/service.json",
+      "kind": "new",
+      "sha256": "97aca432640b9f1bfcb702c9a757c57895ac4cd6140d235761cc7d26e8cc71e4"
+    },
+    {
+      "path": "inventory/fixtures/effects/v1/zero_with_difference.json",
+      "kind": "new",
+      "sha256": "21735a664fcc7bb3c15f437763d805dd83f4f0a8452e9e43c321bd34226c1a38"
+    },
+    {
+      "path": "inventory/fixtures/history/v1/complete.json",
+      "kind": "new",
+      "sha256": "70e16d039537f0c01c5dea28fbfdb7bb1473797b2334c5cec1f6b531d5fc47eb"
+    },
+    {
+      "path": "inventory/fixtures/history/v1/partial.json",
+      "kind": "new",
+      "sha256": "7b58aea12e3e2621598d5c35316c5e1f5d99dc55a9c7e33cb0fe39bb60f320bc"
+    },
+    {
+      "path": "inventory/fixtures/http/v1/resources.json",
+      "kind": "new",
+      "sha256": "99614cf16c7352e3b55a208ecfd7611b58bed73aec8e6078c62928435962d56c"
+    },
+    {
+      "path": "inventory/fixtures/validation/v1/negative-cases.json",
+      "kind": "new",
+      "sha256": "d259a5cd7b88e5cad99145044086ba4b7e828454c74ff3c736c780ac120ef194"
+    },
+    {
+      "path": "inventory/fixtures/vectors/v1/quantities.json",
+      "kind": "new",
+      "sha256": "700c09446a5db1e36fecfa7620d607a77a0515ef043dc48378d542980a134518"
+    },
+    {
+      "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+      "kind": "new",
+      "sha256": "c4517bab25bd42bc1e333535b8385ab5503a860738457ed0829967afea988568"
+    },
+    {
+      "path": "inventory/http/public/v1/inventory-v1.yaml",
+      "kind": "new",
+      "sha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-capture-authority-v1.schema.json",
+      "kind": "new",
+      "sha256": "23c869e52c57ed573383274f8d18a72c87ddd83a74c8d4493302bafdf112b646"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+      "kind": "new",
+      "sha256": "688e36b7e5a507720382f3738d6d613d436f51cb7b3b0ecb65446476a3eda683"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+      "kind": "new",
+      "sha256": "1a7b19c9812184d5803577795d280f1884ca5e8cde314b659521485301a9cf4c"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
+      "kind": "new",
+      "sha256": "395e249363fa50a5036375b45a624eb3f1ab7664e8b2b67b4167d644043f21ca"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+      "kind": "new",
+      "sha256": "1e590eaa84b6edb689f304eb6171905ed908be63106a557771101a2e72a1742c"
+    },
+    {
+      "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+      "kind": "new",
+      "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+    },
+    {
+      "path": "inventory/index.json",
+      "kind": "modified",
+      "sha256": "4e9277fcc2f92cef22addbadf843c656155fbc36dbab3696faca05602a19865e"
+    },
+    {
+      "path": "inventory/README.md",
+      "kind": "modified",
+      "sha256": "3e8b191ba02e45721966ade90abe810293a1f359688a638ae0a7765380b89643"
+    },
+    {
+      "path": "registry/contracts.json",
+      "kind": "modified",
+      "sha256": "7d54cbfdf6c8e36923b955ec8a191eef5540a2acf7fafded4b065d41cf6bde4c"
+    },
+    {
+      "path": "registry/README.md",
+      "kind": "modified",
+      "sha256": "f3fc209d382ed4be2052cccbb3f6506354975e2bdbe10d2adbd3a6790f91a4b2"
+    },
+    {
+      "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+      "kind": "new",
+      "sha256": "5bd1787a77f0a2ac240836ca7cc7e19590f86ef297a801997b21e3e8741fde7a"
+    },
+    {
+      "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+      "kind": "new",
+      "sha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c"
+    },
+    {
+      "path": "sales/index.json",
+      "kind": "modified",
+      "sha256": "0be732ecc21b10a0a2996b80d2efce437e4b3d1c3df9f0831658293d8e0a76ba"
+    },
+    {
+      "path": "sales/README.md",
+      "kind": "modified",
+      "sha256": "156a92d1bedecdcf84d5509844b4cca5dd0a3e5b2051e0639d62e1eb4dfc350b"
+    },
+    {
+      "path": "scripts/catalog/catalog-consumption-v1-registry.mjs",
+      "kind": "modified",
+      "sha256": "29fc232105b9f5db1bbc2d4695aa15eebe0a4a539914da5e6104bc4fa3d9e204"
+    },
+    {
+      "path": "scripts/identity/catalog-workload-consumers-v2-registry.mjs",
+      "kind": "modified",
+      "sha256": "16bdb8bc0841ac3fbcaf309d05eeb783152768024699d6c221f88492012e2e3c"
+    },
+    {
+      "path": "scripts/identity/catalog-workload-profiles-v2-registry.mjs",
+      "kind": "modified",
+      "sha256": "fa623b1cfc2e766dbd1ee84b261ffb492d23897364b61508d75cdfedb1bebbee"
+    },
+    {
+      "path": "scripts/inventory/authority-v1.mjs",
+      "kind": "new",
+      "sha256": "80ffc360c20d41628658d1d39b28e29fa3dba949660c04f7a47ce40f306de035"
+    },
+    {
+      "path": "scripts/inventory/candidate-v1.mjs",
+      "kind": "new",
+      "sha256": "101a091e330a5284cfc665b17e62782908671b31f0bce53bce5e68e28a9236e3"
+    },
+    {
+      "path": "scripts/inventory/effects-v1.mjs",
+      "kind": "new",
+      "sha256": "1d868e11a8cc012636e8eade913306e2ff3cce7da62ab380d66aa102c977016f"
+    },
+    {
+      "path": "scripts/inventory/history-v1.mjs",
+      "kind": "new",
+      "sha256": "693f4be5b1394850aef32eef70ba74ca5c6bf986ccc2643b46b1cf4906d7e75d"
+    },
+    {
+      "path": "scripts/inventory/quantity-v1.mjs",
+      "kind": "new",
+      "sha256": "3a4efa3ca17891ba90f3d8207c2c17ad0f76fd60dd486e53ea5d72a5a235c2fe"
+    },
+    {
+      "path": "scripts/inventory/run-gate-v1.mjs",
+      "kind": "new",
+      "sha256": "4cfde05d9a08599a3757e679004cf95158e5b30d6691a20b5951de147eda8e89"
+    },
+    {
+      "path": "scripts/inventory/schema-v1.mjs",
+      "kind": "new",
+      "sha256": "b63ae6490bbcc896d0bee87d17d16b73595a38eaf045e5dd0e52d1e26a4c6138"
+    },
+    {
+      "path": "scripts/inventory/validate-v1.sh",
+      "kind": "new",
+      "sha256": "c629deddfe07beb16c7924f5df7fc1ef0fb728e3bb0a881c31628731f9c3a717"
+    },
+    {
+      "path": "test/architecture/asyncapi-admission-v1.test.mjs",
+      "kind": "modified",
+      "sha256": "095d12af1ac5aba97c922d1a4424f6493d2826588c9d16edf4be224839d80610"
+    },
+    {
+      "path": "test/architecture/catalog-consumption.test.mjs",
+      "kind": "modified",
+      "sha256": "c26fcd18581f5a2651552131282dbef4eef9c7ff6a71c1dc9a7e4b29aafb8ab3"
+    },
+    {
+      "path": "test/architecture/catalog-delivery.test.mjs",
+      "kind": "modified",
+      "sha256": "85dcc1378c705a43d30a12eb5dd4a87be02b32275db9d51057043115723edaaf"
+    },
+    {
+      "path": "test/architecture/catalog-operational-recovery.test.mjs",
+      "kind": "modified",
+      "sha256": "cb84af9a2e490201f025f011c644517143eadaf5f11d076d612950ff93c0461f"
+    },
+    {
+      "path": "test/architecture/catalog-workload-consumers-v2.test.mjs",
+      "kind": "modified",
+      "sha256": "be0d4a167f22d1398c387df219e8f0135b0a18fe67e44ad0bef5beee8252b63c"
+    },
+    {
+      "path": "test/catalog/asyncapi-preservation-v1.test.mjs",
+      "kind": "modified",
+      "sha256": "59e0b41fcd4b28cad8c6259168a87692cb26aed93c481695e177d7e5dbb657fb"
+    },
+    {
+      "path": "test/identity/candidate-preservation.test.mjs",
+      "kind": "modified",
+      "sha256": "dc4e8c0720c4d0aa2aec492a3fe194a3e8a9ccdb7d23dffae6f5e2cf95b8f543"
+    },
+    {
+      "path": "test/identity/catalog-workload-profiles-admission-v2.test.mjs",
+      "kind": "modified",
+      "sha256": "4970426b92f30c3d1639c3fafe485ff4cfaded6932112fe781951f346e948f7c"
+    },
+    {
+      "path": "test/inventory/package-v1.test.mjs",
+      "kind": "new",
+      "sha256": "cd17c5e309a5100e6b132b6301c8cc3529201fb216200099c9ee8996b767b41b"
+    },
+    {
+      "path": "test/inventory/semantics-v1.test.mjs",
+      "kind": "new",
+      "sha256": "a2e44079a72c375c6efff2c48f4f982e1f7080b3209af3968b2bdaba01f3acbb"
+    },
+    {
+      "path": "test/inventory/transport-v1.test.mjs",
+      "kind": "new",
+      "sha256": "fa204b468e6aff72563a62f3c2e24c2e9ddf3ec36a44a1de00ea694ba60f50c4"
+    },
+    {
+      "path": "test/support/f1-10a-scope.mjs",
+      "kind": "modified",
+      "sha256": "e9c636a98383d400f7fb9b4ba80345d325cb917ffc9dc81b0270086a3963023a"
+    }
+  ]
+}

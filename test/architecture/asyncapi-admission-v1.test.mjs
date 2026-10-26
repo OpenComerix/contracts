@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, projectCandidateFile, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -19,7 +20,7 @@ const baseline = JSON.parse(source('registry/contracts.json'));
 const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
 const registry = JSON.parse(historicalRead('registry/contracts.json'));
 const row = registry.contracts.find(item => item.id === admissionId);
-const read = worktreeReader(root);
+const read = candidateReadView(worktreeReader(root));
 const manifest = role => ({ formatVersion: 1, service: 'catalog-pricing',
   contracts: [{ id: admissionId, version: row.version, role, operations: [], pointers: [''],
     purpose: 'Test selected admission without changing any real consumer.', gates: ['pnpm test:architecture'] }],
@@ -35,7 +36,7 @@ test('N admits only the certified AsyncAPI descriptor and its derived index, pre
   assert.equal(row.status, 'active');
   for (const key of Object.keys(prior).filter(key => !['status', 'purpose', 'reasonForChange'].includes(key)))
     assert.deepEqual(row[key], prior[key], key);
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'catalog/index.json'), 'utf8')), domainIndex(registry, 'catalog'));
+  assert.deepEqual(JSON.parse(projectCandidateFile('catalog/index.json', fs.readFileSync(path.join(root, 'catalog/index.json')))), domainIndex(registry, 'catalog'));
   const before = structuredClone(registry);
   assert.deepEqual(asyncapiAdmissionRegistryView(registry), baseline);
   assert.deepEqual(registry, before, 'projection does not mutate input');
@@ -155,6 +156,7 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
   for (const file of withF110ADesignScope([])) allowed.add(file);
+  for (const file of withCandidateScope([])) allowed.add(file);
   const changed = execFileSync('git', ['diff', '--name-only', admissionBase, '--', '.'], { cwd: root, encoding: 'utf8' }).trim();
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).trim();
   for (const file of [changed, untracked].filter(Boolean).flatMap(text => text.split('\n')))

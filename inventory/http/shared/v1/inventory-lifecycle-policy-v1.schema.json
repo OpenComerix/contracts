@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
+  "title": "Inventory field classification and storage retention metadata v1",
+  "$defs": {},
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format_version",
+    "status",
+    "owner",
+    "runtime_demonstrated",
+    "production_enabled",
+    "decision",
+    "sources",
+    "transport_fields",
+    "storage_policies",
+    "prohibited_persistence",
+    "independent_owner_policies",
+    "production_prerequisites"
+  ],
+  "properties": {
+    "format_version": {
+      "const": 1
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "owner": {
+      "const": "inventory"
+    },
+    "runtime_demonstrated": {
+      "const": false
+    },
+    "production_enabled": {
+      "const": false
+    },
+    "decision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "lifecycle"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "lifecycle": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          }
+        }
+      }
+    },
+    "transport_fields": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20000,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "pointer",
+          "owner",
+          "classification",
+          "persistence"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "pointer": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "classification": {
+            "$ref": "../../../../common/http/shared/v2/data-lifecycle-policy-v2.schema.json#/$defs/Classification"
+          },
+          "persistence": {
+            "enum": [
+              "prohibited",
+              "none-implied-by-transport"
+            ]
+          }
+        }
+      }
+    },
+    "storage_policies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 20,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "owner",
+          "lifecycle_class",
+          "classification",
+          "retention",
+          "bounds",
+          "source_relationship",
+          "guards",
+          "production_enabled"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "owner": {
+            "const": "inventory"
+          },
+          "lifecycle_class": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160
+          },
+          "classification": {
+            "$ref": "../../../../common/http/shared/v2/data-lifecycle-policy-v2.schema.json#/$defs/Classification"
+          },
+          "retention": {
+            "$ref": "../../../../common/http/shared/v2/data-lifecycle-policy-v2.schema.json#/$defs/Retention"
+          },
+          "bounds": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "minimum",
+              "default",
+              "maximum"
+            ],
+            "properties": {
+              "minimum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "default": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              },
+              "maximum": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            }
+          },
+          "source_relationship": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "guards": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 100,
+            "items": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          },
+          "production_enabled": {
+            "const": false
+          }
+        }
+      }
+    },
+    "prohibited_persistence": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "independent_owner_policies": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    },
+    "production_prerequisites": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 100,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160
+      }
+    }
+  }
+}

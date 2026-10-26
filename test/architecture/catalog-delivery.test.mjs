@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
@@ -20,7 +21,7 @@ const previous = JSON.parse(source(deliverySnapshotPath));
 // The live O2 export is verified completely before using the immutable N fixture.
 const actual = operationalSnapshotView(JSON.parse(fs.readFileSync(path.join(root, deliverySnapshotPath), 'utf8')));
 const registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'));
-const read = worktreeReader(root);
+const read = candidateReadView(worktreeReader(root));
 const serialized = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 
 test('N registers exactly the five reviewed producers from the published service and preserves all 38 prior admissions', () => {
@@ -125,6 +126,7 @@ test('N export cut changes only its snapshot, validator, negatives and the two r
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
   for (const file of withF110ADesignScope([])) allowed.add(file);
+  for (const file of withCandidateScope([])) allowed.add(file);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   const changed = git(['diff', '--name-only', deliveryBase, '--', '.']);
   const untracked = git(['ls-files', '--others', '--exclude-standard']);

@@ -1,4 +1,5 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
+import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { validateLifecycleRegistry } from '../../scripts/catalog/catalog-lifecycle-v1-registry.mjs';
@@ -10,7 +11,7 @@ import { verifyLocalSnapshot } from '../../tools/architecture/registry.mjs';
 import { root, consumerBase, ownerBases, snapshotPath, workloadConsumerSnapshot, validateWorkloadConsumer, verifyPublishedConsumer,
   consumerSnapshotView, consumerReadView, validateWorkloadConsumers, consumerChangedFiles } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { validateOperationalSnapshot, operationalSnapshotView } from '../../scripts/catalog/catalog-operational-recovery-v1-registry.mjs';
-const read = worktreeReader(root), source = gitReader(root, consumerBase), bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
+const read = candidateReadView(worktreeReader(root)), source = gitReader(root, consumerBase), bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const registry = JSON.parse(source('registry/contracts.json'));
 test('O4 requires exactly three selections and preserves the other consumers and entire registry', () => {
   assert.equal(validateWorkloadConsumers().selections, 103);
@@ -82,6 +83,6 @@ test('O4 current package content checks retain the published lifecycle without c
   for(const service of Object.keys(ownerBases))assert(consumerReadView(changed)(snapshotPath(service)).equals(source(snapshotPath(service))));
 });
 test('O4 confines registry changes to its exact transition and historical adapters',()=>{
-  const allowed=withF110ADesignScope(consumerChangedFiles);
+  const allowed=withCandidateScope(withF110ADesignScope(consumerChangedFiles));
   for(const args of [['diff','--name-only',consumerBase],['ls-files','--others','--exclude-standard']])for(const file of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(file),'O4_CONSUMER_SCOPE:'+file);
 });

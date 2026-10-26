@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { candidateReadView, projectCandidateFile } from '../inventory/candidate-v1.mjs';
 import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -131,6 +132,7 @@ export function validateConsumptionSnapshot(snapshot) {
 // Strictly validate the entire new package before projecting the old proof.
 // Missing/partial additions and arbitrary changed exports never inherit an exemption.
 export function consumptionReadView(read = worktreeReader(root)) {
+  read = candidateReadView(read);
   return file => {
     const content = read(file);
     const service = Object.keys(ownerBases).find(service => file === snapshotPath(service));
@@ -146,11 +148,13 @@ export function consumptionReadView(read = worktreeReader(root)) {
 // N's historical proof. This is not a marker-based exemption: prior text, the A
 // map, publication references and later historical suffixes must all match.
 export function consumptionReadmeView(content) {
+  content = projectCandidateFile('catalog/README.md', content);
   const normalized = Buffer.from(content.toString('utf8').replaceAll('\r\n', '\n'));
   assert.equal(sha256(normalized), 'f11e97568ebf2c7c17e8f93e42aff8e0fc3f399556befde6d090fb1921189110', 'A_CONSUMPTION_README');
   return source('catalog/README.md');
 }
 export function validateConsumptionPackage(read = worktreeReader(root)) {
+  read = candidateReadView(read);
   consumptionReadmeView(read('catalog/README.md'));
   for (const file of ['registry/contracts.json', 'registry/consumers/index.json', 'catalog/index.json', 'identity/index.json', 'common/index.json',
     '.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml',

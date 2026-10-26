@@ -1,0 +1,431 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Sales persisted step authority for inventory",
+    "version": "1.0.0",
+    "description": "F1-10B candidate. No functional admission or runtime demonstrated. ADR-063 owns authority, commit and recovery obligations.",
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    },
+    "contact": {
+      "name": "OpenComerix"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://owner.internal.example/api/v1",
+      "description": "Illustrative host; TLS outside isolated local tests."
+    }
+  ],
+  "tags": [
+    {
+      "name": "InventoryContract",
+      "description": "Owner-scoped operations and dependencies."
+    }
+  ],
+  "security": [
+    {
+      "workload": []
+    }
+  ],
+  "paths": {
+    "/internal/sales/process-step-authorizations": {
+      "post": {
+        "tags": [
+          "InventoryContract"
+        ],
+        "operationId": "authorizeSaleProcessStep",
+        "summary": "authorizeSaleProcessStep",
+        "description": "Inventory selection only, fixed sales-pos.process-authority audience. Match persisted enabled command/step/target/tenant/hash/version. Decision <=2000ms measured before network; not transferable bearer. Stock difference grant only the exact immutable lines/quantities granted by Identity at acceptance; no grant added after acceptance. Compensation requires verified terminal finance rejection, no payment and no completed sale. Local terminal closure still wins over delayed authorization; missing/unverifiable source waits without effect.",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/sales-inventory-step-authority-v1.schema.json#/$defs/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Original owner result. ",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/sales-inventory-step-authority-v1.schema.json#/$defs/Decision"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "sales_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_workload_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_workload_forbidden",
+                            "sales_process_step_not_authorized"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable; same operation identity.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable problem; no internal detail or authority inferred.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable; same operation identity.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "type": "string",
+                          "enum": [
+                            "platform_dependency_unavailable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-caller": "inventory",
+        "x-audience": "sales-pos.process-authority"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "workload": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "ES256 JWT",
+        "description": "H1A ES256, fixed caller/audience, <=300s, issuer/kid/type/time verified; signature alone grants no authority."
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false,
+  "x-error-catalog": "../../../../common/errors/v9/error-catalog-v9.json"
+}

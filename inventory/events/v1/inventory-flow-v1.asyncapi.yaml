@@ -1,0 +1,248 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Inventory commands, terminal results and retained facts",
+    "version": "1.0.0",
+    "license": {
+      "name": "Proprietary"
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false,
+  "defaultContentType": "application/json",
+  "channels": {
+    "commands": {
+      "address": "inventory.commands",
+      "messages": {
+        "inventory_post-sale-stock_v1": {
+          "$ref": "#/components/messages/inventory_post-sale-stock_v1"
+        },
+        "inventory_compensate-sale-stock_v1": {
+          "$ref": "#/components/messages/inventory_compensate-sale-stock_v1"
+        }
+      },
+      "x-future-consumers": [
+        "sales-pos"
+      ],
+      "x-delivery": "at-least-once; no functional admission; DLQ after five receives, invalid unknown versions quarantine without effect"
+    },
+    "results": {
+      "address": "sales-pos.inventory-results",
+      "messages": {
+        "inventory_post-sale-stock_result_v1": {
+          "$ref": "#/components/messages/inventory_post-sale-stock_result_v1"
+        },
+        "inventory_compensate-sale-stock_result_v1": {
+          "$ref": "#/components/messages/inventory_compensate-sale-stock_result_v1"
+        }
+      },
+      "x-future-consumers": [
+        "sales-pos"
+      ],
+      "x-delivery": "at-least-once; no functional admission; DLQ after five receives, invalid unknown versions quarantine without effect"
+    },
+    "events": {
+      "address": "inventory.events",
+      "messages": {
+        "inventory_stock-adjustment_recorded_v1": {
+          "$ref": "#/components/messages/inventory_stock-adjustment_recorded_v1"
+        },
+        "inventory_sale-stock_posted_v2": {
+          "$ref": "#/components/messages/inventory_sale-stock_posted_v2"
+        },
+        "inventory_sale-stock_compensated_v1": {
+          "$ref": "#/components/messages/inventory_sale-stock_compensated_v1"
+        },
+        "inventory_reconciliation-required_v2": {
+          "$ref": "#/components/messages/inventory_reconciliation-required_v2"
+        }
+      },
+      "x-future-consumers": [
+        "reporting.inventory-physical"
+      ],
+      "x-delivery": "at-least-once; no functional admission; DLQ after five receives, invalid unknown versions quarantine without effect"
+    }
+  },
+  "operations": {
+    "commands": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/commands"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/commands/messages/inventory_post-sale-stock_v1"
+        },
+        {
+          "$ref": "#/channels/commands/messages/inventory_compensate-sale-stock_v1"
+        }
+      ]
+    },
+    "results": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/results"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/results/messages/inventory_post-sale-stock_result_v1"
+        },
+        {
+          "$ref": "#/channels/results/messages/inventory_compensate-sale-stock_result_v1"
+        }
+      ]
+    },
+    "events": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      },
+      "messages": [
+        {
+          "$ref": "#/channels/events/messages/inventory_stock-adjustment_recorded_v1"
+        },
+        {
+          "$ref": "#/channels/events/messages/inventory_sale-stock_posted_v2"
+        },
+        {
+          "$ref": "#/channels/events/messages/inventory_sale-stock_compensated_v1"
+        },
+        {
+          "$ref": "#/channels/events/messages/inventory_reconciliation-required_v2"
+        }
+      ]
+    }
+  },
+  "components": {
+    "messages": {
+      "inventory_post-sale-stock_v1": {
+        "name": "inventory.post-sale-stock.v1",
+        "title": "inventory.post-sale-stock.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "sales-pos",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/inventory.post-sale-stock.v1.schema.json"
+          }
+        }
+      },
+      "inventory_compensate-sale-stock_v1": {
+        "name": "inventory.compensate-sale-stock.v1",
+        "title": "inventory.compensate-sale-stock.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "sales-pos",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/inventory.compensate-sale-stock.v1.schema.json"
+          }
+        }
+      },
+      "inventory_post-sale-stock_result_v1": {
+        "name": "inventory.post-sale-stock.result.v1",
+        "title": "inventory.post-sale-stock.result.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+          }
+        }
+      },
+      "inventory_compensate-sale-stock_result_v1": {
+        "name": "inventory.compensate-sale-stock.result.v1",
+        "title": "inventory.compensate-sale-stock.result.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+          }
+        }
+      },
+      "inventory_stock-adjustment_recorded_v1": {
+        "name": "inventory.stock-adjustment.recorded.v1",
+        "title": "inventory.stock-adjustment.recorded.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "inventory.stock-adjustment.recorded.v1.schema.json"
+          }
+        }
+      },
+      "inventory_sale-stock_posted_v2": {
+        "name": "inventory.sale-stock.posted.v2",
+        "title": "inventory.sale-stock.posted.v2",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../v2/inventory.sale-stock.posted.v2.schema.json"
+          }
+        }
+      },
+      "inventory_sale-stock_compensated_v1": {
+        "name": "inventory.sale-stock.compensated.v1",
+        "title": "inventory.sale-stock.compensated.v1",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "inventory.sale-stock.compensated.v1.schema.json"
+          }
+        }
+      },
+      "inventory_reconciliation-required_v2": {
+        "name": "inventory.reconciliation-required.v2",
+        "title": "inventory.reconciliation-required.v2",
+        "contentType": "application/json",
+        "x-schema-version": 1,
+        "x-producer": "inventory",
+        "correlationId": {
+          "location": "$message.payload#/correlation_id"
+        },
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../v2/inventory.reconciliation-required.v2.schema.json"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+{
+  "runtime_demonstrated": false,
+  "command": {
+    "command_id": "019a0000-0000-7000-8000-000000000007",
+    "command_type": "inventory.post-sale-stock.v1",
+    "schema_version": 1,
+    "requested_at": "2026-10-26T12:00:00Z",
+    "producer": "sales-pos",
+    "target": "inventory",
+    "correlation_id": "019a0000-0000-7000-8000-000000000006",
+    "causation_id": "019a0000-0000-7000-8000-000000000004",
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "payload": {
+      "context": {
+        "organization_id": "019a0000-0000-7000-8000-000000000001",
+        "branch_id": "019a0000-0000-7000-8000-000000000010",
+        "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+        "location_id": "019a0000-0000-7000-8000-000000000003",
+        "pos_id": "019a0000-0000-7000-8000-000000000011",
+        "operation_id": "019a0000-0000-7000-8000-000000000004",
+        "sale_id": "019a0000-0000-7000-8000-000000000005",
+        "process_id": "019a0000-0000-7000-8000-000000000006",
+        "process_version": 1
+      },
+      "origin_authorization_ref": "opaque-origin-decision",
+      "lines": [
+        {
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "snapshot": {
+            "line_id": "019a0000-0000-7000-8000-000000000030",
+            "product_id": "019a0000-0000-7000-8000-000000000020",
+            "variant_id": "019a0000-0000-7000-8000-000000000021",
+            "presentation_id": "019a0000-0000-7000-8000-000000000130",
+            "product_version": 2,
+            "presentation_version": 3,
+            "variant_version_source": "product_version",
+            "product_type": "NON_STOCK_GOOD",
+            "product_status": "active",
+            "presentation_status": "active",
+            "description": "Producto sintético",
+            "base_unit": "unit",
+            "presentation_unit": "unit",
+            "conversion_factor": "1",
+            "allows_fractions": true,
+            "minimum_quantity": "0.001",
+            "quantity_increment": "0.001"
+          },
+          "quantity": "2",
+          "base_quantity": "2",
+          "physical_presence_confirmed": true
+        }
+      ],
+      "step_id": "019a0000-0000-7000-8000-000000000008"
+    }
+  },
+  "authority_query": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "019a0000-0000-7000-8000-000000000004",
+    "process_id": "019a0000-0000-7000-8000-000000000006",
+    "process_version": 1,
+    "step_id": "019a0000-0000-7000-8000-000000000008",
+    "step": "inventory.post-sale-stock.v1",
+    "command_id": "019a0000-0000-7000-8000-000000000007",
+    "target": "inventory",
+    "command_fingerprint": "fee71e9e2fd43929f855d5712b92d5c42e582c46e7bca319ac1f99a22315ba71"
+  },
+  "authority": {
+    "organization_id": "019a0000-0000-7000-8000-000000000001",
+    "operation_id": "019a0000-0000-7000-8000-000000000004",
+    "process_id": "019a0000-0000-7000-8000-000000000006",
+    "process_version": 1,
+    "step_id": "019a0000-0000-7000-8000-000000000008",
+    "step": "inventory.post-sale-stock.v1",
+    "command_id": "019a0000-0000-7000-8000-000000000007",
+    "target": "inventory",
+    "command_fingerprint": "fee71e9e2fd43929f855d5712b92d5c42e582c46e7bca319ac1f99a22315ba71",
+    "authorized": true,
+    "caller": "inventory",
+    "audience": "sales-pos.process-authority",
+    "checked_at": "2026-10-26T12:00:00Z",
+    "valid_for_ms": 2000,
+    "stock_difference_grant": null,
+    "terminal_finance_rejection": null
+  },
+  "budget": {
+    "sentAt": 1000,
+    "now": 1500
+  },
+  "result": {
+    "result_id": "019a0000-0000-7000-8000-000000000009",
+    "command_id": "019a0000-0000-7000-8000-000000000007",
+    "result_type": "inventory.post-sale-stock.result.v1",
+    "schema_version": 1,
+    "occurred_at": "2026-10-26T12:00:00Z",
+    "producer": "inventory",
+    "correlation_id": "019a0000-0000-7000-8000-000000000006",
+    "causation_id": "019a0000-0000-7000-8000-000000000007",
+    "status": "succeeded",
+    "retryable": false,
+    "payload": {
+      "context": {
+        "organization_id": "019a0000-0000-7000-8000-000000000001",
+        "branch_id": "019a0000-0000-7000-8000-000000000010",
+        "warehouse_id": "019a0000-0000-7000-8000-000000000002",
+        "location_id": "019a0000-0000-7000-8000-000000000003",
+        "pos_id": "019a0000-0000-7000-8000-000000000011",
+        "operation_id": "019a0000-0000-7000-8000-000000000004",
+        "sale_id": "019a0000-0000-7000-8000-000000000005",
+        "process_id": "019a0000-0000-7000-8000-000000000006",
+        "process_version": 1
+      },
+      "stock_status": "not_required",
+      "lines": [
+        {
+          "line_id": "019a0000-0000-7000-8000-000000000030",
+          "status": "not_required",
+          "reason_code": "NON_STOCK_GOOD",
+          "snapshot": {
+            "line_id": "019a0000-0000-7000-8000-000000000030",
+            "product_id": "019a0000-0000-7000-8000-000000000020",
+            "variant_id": "019a0000-0000-7000-8000-000000000021",
+            "presentation_id": "019a0000-0000-7000-8000-000000000130",
+            "product_version": 2,
+            "presentation_version": 3,
+            "variant_version_source": "product_version",
+            "product_type": "NON_STOCK_GOOD",
+            "product_status": "active",
+            "presentation_status": "active",
+            "description": "Producto sintético",
+            "base_unit": "unit",
+            "presentation_unit": "unit",
+            "conversion_factor": "1",
+            "allows_fractions": true,
+            "minimum_quantity": "0.001",
+            "quantity_increment": "0.001"
+          }
+        }
+      ],
+      "movements": [],
+      "reconciliation_required": false,
+      "differences": [],
+      "warnings": [],
+      "recorded_at": "2026-10-26T12:00:00Z"
+    }
+  },
+  "events": [],
+  "observations": {
+    "policy": "ALLOW_AND_ALERT",
+    "policy_version": 1,
+    "position_had_previous_movements": true,
+    "lines": [
+      {
+        "line_id": "019a0000-0000-7000-8000-000000000030",
+        "position_id": "019a0000-0000-7000-8000-000000000040",
+        "before": "0",
+        "after": "0"
+      }
+    ],
+    "movements": [],
+    "differences": [],
+    "restricted_origin_audit": []
+  }
+}

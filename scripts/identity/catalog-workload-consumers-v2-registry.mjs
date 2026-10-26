@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { candidateReadView } from '../inventory/candidate-v1.mjs';
 import { consumptionReadView, consumptionChangedFiles } from '../catalog/catalog-consumption-v1-registry.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -80,6 +81,7 @@ export function consumerReadView(read = worktreeReader(root)) {
   };
 }
 export function validateWorkloadConsumers(read = worktreeReader(root)) {
+  read = candidateReadView(read);
   assert.deepEqual(JSON.parse(read('registry/contracts.json')), baseline('registry/contracts.json'), 'O4_CONSUMER_REGISTRY');
   const results = Object.keys(selections).map(service => validateWorkloadConsumer(JSON.parse(read(snapshotPath(service)))));
   const catalogConsumers = consumptionReadView(read);
