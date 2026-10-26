@@ -1,3 +1,4 @@
+import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import assert from 'node:assert/strict';
 import { consumerSnapshotView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -162,6 +163,7 @@ test('O2 confines all tracked, indexed and new changes to its approved contract 
     'catalog/README.md', 'registry/README.md', 'test/catalog/asyncapi-preservation-v1.test.mjs']);
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
+  for (const file of withF110ADesignScope([])) allowed.add(file);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   for (const list of [git(['diff', '--name-only', operationalBase, '--', '.']), git(['ls-files', '--others', '--exclude-standard'])])
     for (const file of list.split('\n').filter(Boolean)) assert(allowed.has(file), 'O2_RECOVERY_SCOPE:' + file);

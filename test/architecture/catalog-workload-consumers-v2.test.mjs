@@ -1,3 +1,4 @@
+import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { validateLifecycleRegistry } from '../../scripts/catalog/catalog-lifecycle-v1-registry.mjs';
@@ -81,6 +82,6 @@ test('O4 current package content checks retain the published lifecycle without c
   for(const service of Object.keys(ownerBases))assert(consumerReadView(changed)(snapshotPath(service)).equals(source(snapshotPath(service))));
 });
 test('O4 confines registry changes to its exact transition and historical adapters',()=>{
-  const allowed=new Set(consumerChangedFiles);
+  const allowed=withF110ADesignScope(consumerChangedFiles);
   for(const args of [['diff','--name-only',consumerBase],['ls-files','--others','--exclude-standard']])for(const file of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(file),'O4_CONSUMER_SCOPE:'+file);
 });

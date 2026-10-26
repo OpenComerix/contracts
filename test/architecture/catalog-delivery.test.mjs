@@ -1,3 +1,4 @@
+import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import assert from 'node:assert/strict';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
 import test from 'node:test';
@@ -123,6 +124,7 @@ test('N export cut changes only its snapshot, validator, negatives and the two r
     'test/catalog/asyncapi-preservation-v1.test.mjs']);
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
+  for (const file of withF110ADesignScope([])) allowed.add(file);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim();
   const changed = git(['diff', '--name-only', deliveryBase, '--', '.']);
   const untracked = git(['ls-files', '--others', '--exclude-standard']);

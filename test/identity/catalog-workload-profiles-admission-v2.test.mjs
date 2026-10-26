@@ -1,3 +1,4 @@
+import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView, validateWorkloadConsumers } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import test from 'node:test';
@@ -141,7 +142,7 @@ test('O3 metadata views preserve old bytes only after checking current artifacts
 test('O3 preserves all source payloads, indexes, consumers, generic tools, dependencies and CI outside its closed proof surface', () => {
   validateWorkloadConsumers();
   const consumers = consumerReadView(read);
-  const allowed = new Set(workloadChangedFiles);
+  const allowed = withF110ADesignScope(workloadChangedFiles);
   const git = args => execFileSync('git', args, { cwd: root, encoding: 'utf8', maxBuffer: 8 * 1024 * 1024 }).trim();
   const files = git(['ls-tree', '-r', '--name-only', workloadSource]).split('\n');
   for (const file of files.filter(file => !allowed.has(file))) {

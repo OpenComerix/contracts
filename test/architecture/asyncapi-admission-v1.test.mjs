@@ -1,3 +1,4 @@
+import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -153,6 +154,7 @@ test('N preserves published transports, consumers, CI and dependencies and confi
   allowed.add('registry/README.md');
   validateWorkloadPackage();
   for (const file of workloadChangedFiles) allowed.add(file);
+  for (const file of withF110ADesignScope([])) allowed.add(file);
   const changed = execFileSync('git', ['diff', '--name-only', admissionBase, '--', '.'], { cwd: root, encoding: 'utf8' }).trim();
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' }).trim();
   for (const file of [changed, untracked].filter(Boolean).flatMap(text => text.split('\n')))
