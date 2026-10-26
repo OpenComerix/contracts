@@ -1,0 +1,1747 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+  "title": "Finance reader v1; declared source_note metadata only",
+  "$defs": {
+    "UUID": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "Opaque": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "UTC": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "Z$"
+    },
+    "Version": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "Money": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+    },
+    "PositiveMoney": {
+      "type": "string",
+      "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$",
+      "not": {
+        "const": "0.00"
+      }
+    },
+    "Context": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "operation_id",
+        "process_id",
+        "process_version",
+        "sale_id",
+        "cash_register_id",
+        "cash_shift_id"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "sale_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        }
+      }
+    },
+    "OperatingDate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "business_date",
+        "time_zone",
+        "date_policy_version"
+      ],
+      "properties": {
+        "business_date": {
+          "type": "string",
+          "format": "date"
+        },
+        "time_zone": {
+          "type": "string",
+          "pattern": "^[A-Za-z_]+(?:/[A-Za-z_+-]+)+$"
+        },
+        "date_policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        }
+      }
+    },
+    "CashRegisterCreate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "name"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        }
+      }
+    },
+    "CashRegister": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cash_register_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "name",
+        "version",
+        "created_at"
+      ],
+      "properties": {
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "Page": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "next_cursor",
+        "has_more",
+        "limit"
+      ],
+      "properties": {
+        "next_cursor": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "has_more": {
+          "type": "boolean"
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        }
+      }
+    },
+    "CashRegisters": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "items",
+        "page"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/CashRegister"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        }
+      }
+    },
+    "OpenShiftRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "currency",
+        "opening_float"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "opening_float": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        }
+      }
+    },
+    "CashShift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cash_shift_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "operation_id",
+        "responsible_account_ref",
+        "responsible_membership_ref",
+        "device_ref",
+        "currency",
+        "opening_float",
+        "opening_movement_id",
+        "opened_at",
+        "operating_date",
+        "status",
+        "version"
+      ],
+      "properties": {
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "responsible_account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "responsible_membership_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "opening_float": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        },
+        "opening_movement_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "opened_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "operating_date": {
+          "$ref": "#/$defs/OperatingDate"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "Expected": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "cash_shift_id",
+        "cash_register_id",
+        "currency",
+        "method",
+        "amount",
+        "shift_version",
+        "as_of"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "method": {
+          "const": "cash"
+        },
+        "amount": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        },
+        "shift_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "StockEvidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "result_id",
+        "command_id",
+        "status",
+        "stock_status",
+        "reconciliation_required"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "result_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "const": "succeeded"
+        },
+        "stock_status": {
+          "type": "string",
+          "enum": [
+            "posted",
+            "not_required"
+          ]
+        },
+        "reconciliation_required": {
+          "type": "boolean"
+        }
+      }
+    },
+    "CashAmounts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "currency",
+        "method",
+        "commercial_total",
+        "applied",
+        "received",
+        "change"
+      ],
+      "properties": {
+        "currency": {
+          "const": "ARS"
+        },
+        "method": {
+          "const": "cash"
+        },
+        "commercial_total": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$",
+          "not": {
+            "const": "0.00"
+          }
+        },
+        "applied": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$",
+          "not": {
+            "const": "0.00"
+          }
+        },
+        "received": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$",
+          "not": {
+            "const": "0.00"
+          }
+        },
+        "change": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        }
+      }
+    },
+    "RecordCash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context",
+        "step_id",
+        "payment_id",
+        "amounts",
+        "stock"
+      ],
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+        "step_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "payment_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "amounts": {
+          "$ref": "#/$defs/CashAmounts"
+        },
+        "stock": {
+          "$ref": "#/$defs/StockEvidence"
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "source_note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        }
+      }
+    },
+    "Payment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context",
+        "payment_id",
+        "movement_id",
+        "payment_version",
+        "shift_version",
+        "amounts",
+        "stock",
+        "recorded_at",
+        "operating_date",
+        "command_id",
+        "result_id",
+        "provenance"
+      ],
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+        "payment_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "movement_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "payment_version": {
+          "const": 1
+        },
+        "shift_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "amounts": {
+          "$ref": "#/$defs/CashAmounts"
+        },
+        "stock": {
+          "$ref": "#/$defs/StockEvidence"
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "operating_date": {
+          "$ref": "#/$defs/OperatingDate"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "result_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "provenance": {
+          "const": "finance.record-sale-cash.v1"
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "source_note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        }
+      }
+    },
+    "Movement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "operation_id",
+        "cash_register_id",
+        "cash_shift_id",
+        "movement_id",
+        "movement_version",
+        "shift_version",
+        "currency",
+        "method",
+        "direction",
+        "kind",
+        "amount",
+        "payment_id",
+        "sale_id",
+        "recorded_at",
+        "operating_date"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "movement_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "movement_version": {
+          "const": 1
+        },
+        "shift_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "method": {
+          "const": "cash"
+        },
+        "direction": {
+          "const": "in"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "opening_float",
+            "sale_cash"
+          ]
+        },
+        "amount": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$",
+          "not": {
+            "const": "0.00"
+          }
+        },
+        "payment_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "sale_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "recorded_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "operating_date": {
+          "$ref": "#/$defs/OperatingDate"
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "source_note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "opening_float"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "payment_id": {
+                "type": "null"
+              },
+              "sale_id": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "payment_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              },
+              "sale_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "ShiftOpened": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cash_shift_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "operation_id",
+        "currency",
+        "opening_float",
+        "opening_movement_id",
+        "opened_at",
+        "operating_date",
+        "version"
+      ],
+      "properties": {
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "opening_float": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        },
+        "opening_movement_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "opened_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "operating_date": {
+          "$ref": "#/$defs/OperatingDate"
+        },
+        "version": {
+          "const": 1
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "source_note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "opening_float": {
+                "const": "0.00"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "opening_movement_id": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "opening_movement_id": {
+                "type": "string",
+                "format": "uuid",
+                "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "FailedCash": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "context",
+        "payment_id",
+        "payment_absent"
+      ],
+      "properties": {
+        "context": {
+          "$ref": "#/$defs/Context"
+        },
+        "payment_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "payment_absent": {
+          "const": true
+        },
+        "extensions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [],
+          "properties": {
+            "source_note": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 120
+            }
+          }
+        }
+      }
+    },
+    "RecordResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "command_id",
+        "status",
+        "result"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "pending",
+            "succeeded",
+            "rejected"
+          ]
+        },
+        "result": {
+          "anyOf": [
+            {
+              "$ref": "../../../commands/v1/finance.record-sale-cash.result.v1.schema.json"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "const": "pending"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "result": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "result": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "HistoryRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation_id",
+        "organization_id",
+        "reason_code",
+        "families",
+        "from_sequence",
+        "to_sequence",
+        "limit"
+      ],
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "reason_code": {
+          "type": "string",
+          "enum": [
+            "reconciliation",
+            "own_data_export",
+            "reconstruction"
+          ]
+        },
+        "families": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "finance.cash-shift.opened.v1",
+              "finance.cash-movement.recorded.v1",
+              "finance.sale-payment.recorded.v2"
+            ]
+          }
+        },
+        "from_sequence": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "to_sequence": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100,
+          "default": 50
+        }
+      }
+    },
+    "HistorySession": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read_session_id",
+        "organization_id",
+        "account_ref",
+        "request",
+        "created_at",
+        "expires_at",
+        "snapshot_high_watermark",
+        "disposition_generation"
+      ],
+      "properties": {
+        "read_session_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "request": {
+          "$ref": "#/$defs/HistoryRequest"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "snapshot_high_watermark": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "disposition_generation": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        }
+      }
+    },
+    "Range": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "from_sequence",
+        "to_sequence"
+      ],
+      "properties": {
+        "from_sequence": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "to_sequence": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        }
+      }
+    },
+    "HistoryItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "history_sequence",
+        "event_id",
+        "event_type",
+        "schema_version",
+        "original_json",
+        "serialized_sha256"
+      ],
+      "properties": {
+        "history_sequence": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "event_type": {
+          "enum": [
+            "finance.cash-shift.opened.v1",
+            "finance.cash-movement.recorded.v1",
+            "finance.sale-payment.recorded.v2"
+          ]
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "original_json": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 131072
+        },
+        "serialized_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "HistoryPage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "read_session_id",
+        "organization_id",
+        "items",
+        "page",
+        "snapshot_high_watermark",
+        "data_as_of",
+        "disposition_generation",
+        "families",
+        "requested_range",
+        "available_range",
+        "missing_ranges",
+        "coverage"
+      ],
+      "properties": {
+        "read_session_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/HistoryItem"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        },
+        "snapshot_high_watermark": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "data_as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "disposition_generation": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "families": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event_type",
+              "schema_version"
+            ],
+            "properties": {
+              "event_type": {
+                "enum": [
+                  "finance.cash-shift.opened.v1",
+                  "finance.cash-movement.recorded.v1",
+                  "finance.sale-payment.recorded.v2"
+                ]
+              },
+              "schema_version": {
+                "const": 1
+              }
+            }
+          }
+        },
+        "requested_range": {
+          "$ref": "#/$defs/Range"
+        },
+        "available_range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Range"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Range"
+          },
+          "maxItems": 100
+        },
+        "coverage": {
+          "enum": [
+            "complete_for_requested_range",
+            "partial",
+            "unverifiable"
+          ]
+        }
+      }
+    },
+    "HttpCashRegister": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "cash_register_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "name",
+        "version",
+        "created_at"
+      ],
+      "properties": {
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "HttpCashRegisters": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "items",
+        "page"
+      ],
+      "properties": {
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/CashRegister"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        }
+      }
+    },
+    "HttpCashShift": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "cash_shift_id",
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "operation_id",
+        "responsible_account_ref",
+        "responsible_membership_ref",
+        "device_ref",
+        "currency",
+        "opening_float",
+        "opening_movement_id",
+        "opened_at",
+        "operating_date",
+        "status",
+        "version"
+      ],
+      "properties": {
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "responsible_account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "responsible_membership_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "opening_float": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        },
+        "opening_movement_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "opened_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "operating_date": {
+          "$ref": "#/$defs/OperatingDate"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "closed"
+          ]
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "HttpExpected": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "organization_id",
+        "cash_shift_id",
+        "cash_register_id",
+        "currency",
+        "method",
+        "amount",
+        "shift_version",
+        "as_of"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "currency": {
+          "const": "ARS"
+        },
+        "method": {
+          "const": "cash"
+        },
+        "amount": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,37})\\.[0-9]{2}$"
+        },
+        "shift_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "HttpHistorySession": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "read_session_id",
+        "organization_id",
+        "account_ref",
+        "request",
+        "created_at",
+        "expires_at",
+        "snapshot_high_watermark",
+        "disposition_generation"
+      ],
+      "properties": {
+        "read_session_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "request": {
+          "$ref": "#/$defs/HistoryRequest"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "snapshot_high_watermark": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "disposition_generation": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        }
+      }
+    },
+    "HttpHistoryPage": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "read_session_id",
+        "organization_id",
+        "items",
+        "page",
+        "snapshot_high_watermark",
+        "data_as_of",
+        "disposition_generation",
+        "families",
+        "requested_range",
+        "available_range",
+        "missing_ranges",
+        "coverage"
+      ],
+      "properties": {
+        "read_session_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "items": {
+          "type": "array",
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/HistoryItem"
+          }
+        },
+        "page": {
+          "$ref": "#/$defs/Page"
+        },
+        "snapshot_high_watermark": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "data_as_of": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "disposition_generation": {
+          "type": "string",
+          "pattern": "^(?:0|[1-9][0-9]{0,19})$"
+        },
+        "families": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "event_type",
+              "schema_version"
+            ],
+            "properties": {
+              "event_type": {
+                "enum": [
+                  "finance.cash-shift.opened.v1",
+                  "finance.cash-movement.recorded.v1",
+                  "finance.sale-payment.recorded.v2"
+                ]
+              },
+              "schema_version": {
+                "const": 1
+              }
+            }
+          }
+        },
+        "requested_range": {
+          "$ref": "#/$defs/Range"
+        },
+        "available_range": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Range"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "missing_ranges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Range"
+          },
+          "maxItems": 100
+        },
+        "coverage": {
+          "enum": [
+            "complete_for_requested_range",
+            "partial",
+            "unverifiable"
+          ]
+        }
+      }
+    }
+  }
+}

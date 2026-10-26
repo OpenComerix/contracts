@@ -1,0 +1,3740 @@
+{
+  "policy_version": 1,
+  "owner": "finance",
+  "status": "candidate",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "sources": [
+    {
+      "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "sha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "sha256": "75b7baa1895511362f2be55af67bb2c17e3ca01187587f604ae984aac8a2a3f1"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "sha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "sha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "sha256": "dc8d96ba45b099dfdf5cddc4b988b65de0779b83321627e37a812a5db88ba6f2"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "sha256": "fdf85514fff6d30086601475b1e9b8af91ad4228b700b707b18afa1691653691"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "sha256": "88bfd467a5ae3aef74e50257eb300dc4f2dddf8f03b1f65d1f7abf7eeeb74195"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "sha256": "0d57a3d4ddcab6caeb04ff000181e2fb87dbc1f2f1ea0a0a2338b831f3d8c1b1"
+    },
+    {
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "sha256": "2a1b0d12fde2b9cd07d11339fd7aab1396bb17c0ecdcaa18c947f9ddfb086320"
+    },
+    {
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "sha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "sha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b"
+    },
+    {
+      "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "sha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
+    }
+  ],
+  "profiles": {
+    "financial": {
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "FINANCIAL",
+        "PAYMENT"
+      ],
+      "purpose": "cash operation, reconciliation, retained reconstruction",
+      "access": "finance and minimal explicitly authorized consumers",
+      "log_policy": "no payload/PII/secrets; bounded codes only",
+      "persistence": "owner policy only; LEGAL_FISCAL_AR resolved before production"
+    },
+    "restricted_authority": {
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "PERSONAL",
+        "AUDIT",
+        "OPERATIONAL"
+      ],
+      "purpose": "current authority or restricted origin audit",
+      "access": "Identity/owner by purpose, never informative financial events",
+      "log_policy": "no values",
+      "persistence": "only minimal restricted audit under owner policy; current decisions RAM only"
+    },
+    "ephemeral_authority": {
+      "sensitivity": "RESTRICTED",
+      "categories": [
+        "SECURITY",
+        "OPERATIONAL"
+      ],
+      "purpose": "request binding and current authority",
+      "access": "gateway/Identity/owner active request only",
+      "log_policy": "prohibited",
+      "persistence": "prohibited; RAM only"
+    }
+  },
+  "transport_fields": [
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/process_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/process_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/business_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/time_zone",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/date_policy_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/next_cursor",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/has_more",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisters/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisters/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/responsible_account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/responsible_membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/stock_status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/reconciliation_required",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/commercial_total",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/applied",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/received",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/change",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/step_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/amounts",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/stock",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/extensions",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/extensions/properties/source_note",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/payment_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/amounts",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/stock",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/recorded_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/provenance",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/extensions",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/extensions/properties/source_note",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/movement_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/direction",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/kind",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/recorded_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/extensions",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/extensions/properties/source_note",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/if/properties/kind",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/then/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/then/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/else/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/else/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/extensions",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/extensions/properties/source_note",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/if/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/then/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/else/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/payment_absent",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/extensions",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/extensions/properties/source_note",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/if/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/then/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/else/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/reason_code",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/from_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/to_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/expires_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Range/properties/from_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/Range/properties/to_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/history_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/original_json",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/serialized_sha256",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/data_as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/requested_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/available_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/missing_ranges",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/coverage",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families/items/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families/items/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegisters/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegisters/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/responsible_account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/responsible_membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/expires_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/data_as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/requested_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/available_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/missing_ranges",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/coverage",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families/items/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families/items/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/process_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/process_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Context/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/business_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/time_zone",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OperatingDate/properties/date_policy_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisterCreate/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegister/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/next_cursor",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/has_more",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Page/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisters/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashRegisters/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/OpenShiftRequest/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/responsible_account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/responsible_membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashShift/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Expected/properties/as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/stock_status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/StockEvidence/properties/reconciliation_required",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/commercial_total",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/applied",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/received",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/CashAmounts/properties/change",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/step_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/amounts",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordCash/properties/stock",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/payment_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/amounts",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/stock",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/recorded_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Payment/properties/provenance",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/movement_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/direction",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/kind",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/recorded_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/if/properties/kind",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/then/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/then/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/else/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Movement/allOf/0/else/properties/sale_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/if/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/then/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/ShiftOpened/allOf/0/else/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/context",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/payment_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/FailedCash/properties/payment_absent",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/if/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/then/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/RecordResult/allOf/0/else/properties/result",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/reason_code",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/from_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/to_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryRequest/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/expires_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistorySession/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Range/properties/from_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/Range/properties/to_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/history_sequence",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/original_json",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryItem/properties/serialized_sha256",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/data_as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/requested_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/available_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/missing_ranges",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/coverage",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families/items/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HistoryPage/properties/families/items/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/name",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegister/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegisters/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashRegisters/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/branch_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/responsible_account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/responsible_membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opening_float",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opening_movement_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/opened_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/operating_date",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpCashShift/properties/version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/cash_shift_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/cash_register_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/currency",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/amount",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/shift_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpExpected/properties/as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/created_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/expires_at",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistorySession/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/read_session_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/items",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/page",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/snapshot_high_watermark",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/data_as_of",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/disposition_generation",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/requested_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/available_range",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/missing_ranges",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/coverage",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families/items/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "pointer": "/$defs/HttpHistoryPage/properties/families/items/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/result_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/retryable",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/allOf/0/if/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/allOf/0/then/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/allOf/0/else/properties/error_code",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "pointer": "/allOf/1/allOf/0/else/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/result_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/result_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/properties/retryable",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/allOf/0/if/properties/status",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/allOf/0/then/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/allOf/0/else/properties/error_code",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "pointer": "/allOf/1/allOf/0/else/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/command_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/target",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/correlation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/command_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/target",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/correlation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/event_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/event_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/schema_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/producer",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_type",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_version",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/aggregate_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/causation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "pointer": "/allOf/1/properties/payload",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/0/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/query/properties/pos_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/query/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/1/properties/query/properties/cursor",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/2/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/3/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/4/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/5/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/method",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/path",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/query",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/body",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/idempotency_key",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/query/properties/limit",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/CanonicalRequest/oneOf/6/properties/query/properties/cursor",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/DelegationRequest/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/DelegationRequest/properties/client_signal",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/request_hash",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/delegation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/delegation_jwt",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/caller",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/audience",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/issued_at",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Delegation/properties/expires_at",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationRequest/properties/request",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationRequest/properties/client_signal",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/AuthorizationRequest/properties/delegation_jwt",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/authorized",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/decision_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/session_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/permission",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/canonicalization_version",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/request_hash",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/checked_at",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/valid_for_ms",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/scope",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/step_up_at",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/scope/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/scope/properties/branch_ids",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/scope/properties/pos_ids",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/account",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/session",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/credential",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/membership",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/authorization",
+      "profile": "financial"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/device",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "pointer": "/$defs/Authorization/properties/versions/properties/approval",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/process_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/process_version",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/step_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/step",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/target",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Request/properties/command_fingerprint",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/organization_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/operation_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/process_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/process_version",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/step_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/step",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/command_id",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/target",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/command_fingerprint",
+      "profile": "ephemeral_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/caller",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/audience",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/checked_at",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/valid_for_ms",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/stock",
+      "profile": "financial"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized_responsible",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized_responsible/properties/account_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized_responsible/properties/membership_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized_responsible/properties/device_ref",
+      "profile": "restricted_authority"
+    },
+    {
+      "source": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "pointer": "/$defs/Decision/properties/authorized_responsible/properties/cash_shift_id",
+      "profile": "financial"
+    }
+  ],
+  "storage_policies": [
+    {
+      "storage": "cash_registers_and_shifts",
+      "category": "FINANCIAL",
+      "retention": "LEGAL_FISCAL_AR",
+      "clock": "original commit; backing obligation and holds resolved before any disposition",
+      "bounds": {
+        "minimum": "LEGAL_FISCAL_AR",
+        "default": "LEGAL_FISCAL_AR",
+        "maximum": "LEGAL_FISCAL_AR"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "payments_and_movements",
+      "category": "PAYMENT",
+      "retention": "LEGAL_FISCAL_AR",
+      "clock": "immutable commit; retain original IDs/versions and semantic uniqueness with fact",
+      "bounds": {
+        "minimum": "LEGAL_FISCAL_AR",
+        "default": "LEGAL_FISCAL_AR",
+        "maximum": "LEGAL_FISCAL_AR"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "retained_history",
+      "category": "FINANCIAL",
+      "retention": "LEGAL_FISCAL_AR",
+      "clock": "append-only original bytes/checksum independent of outbox; same obligation as backing fact",
+      "bounds": {
+        "minimum": "LEGAL_FISCAL_AR",
+        "default": "LEGAL_FISCAL_AR",
+        "maximum": "LEGAL_FISCAL_AR"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "origin_audit",
+      "category": "AUDIT",
+      "retention": "SECURITY_OPERATIONAL",
+      "clock": "restricted audit clock/policy; no bearer/cookie/secret",
+      "bounds": {
+        "minimum": "SECURITY_OPERATIONAL",
+        "default": "SECURITY_OPERATIONAL",
+        "maximum": "SECURITY_OPERATIONAL"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "rejected_reliability",
+      "category": "OPERATIONAL",
+      "retention": "35 days",
+      "clock": "terminal rejection time; HTTP replay only seven days; holds/obligations prevail",
+      "bounds": {
+        "minimum": "35 days",
+        "default": "35 days",
+        "maximum": "35 days"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "rejection_evidence",
+      "category": "AUDIT",
+      "retention": "2 years",
+      "clock": "terminal rejection time, minimum evidence without full payload",
+      "bounds": {
+        "minimum": "2 years",
+        "default": "2 years",
+        "maximum": "2 years"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "http_replay",
+      "category": "OPERATIONAL",
+      "retention": "7 days",
+      "clock": "original result time; reading never extends; semantic uniqueness separately retained",
+      "bounds": {
+        "minimum": "7 days",
+        "default": "7 days",
+        "maximum": "7 days"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "outbox",
+      "category": "OPERATIONAL",
+      "retention": "35/90 days",
+      "clock": "published payload 35d and summary 90d; unresolved delivery not disposable by clock",
+      "bounds": {
+        "minimum": "35/90 days",
+        "default": "35/90 days",
+        "maximum": "35/90 days"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "inbox",
+      "category": "OPERATIONAL",
+      "retention": "35/90 days",
+      "clock": "payload 35d and summary 90d; semantic identity retained with domain fact",
+      "bounds": {
+        "minimum": "35/90 days",
+        "default": "35/90 days",
+        "maximum": "35/90 days"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "history_sessions",
+      "category": "EPHEMERAL",
+      "retention": "30 minutes",
+      "clock": "created_at; no renewal by page, purge expired inactive session only",
+      "bounds": {
+        "minimum": "30 minutes",
+        "default": "30 minutes",
+        "maximum": "30 minutes"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "authority_decisions",
+      "category": "EPHEMERAL",
+      "retention": "<=2000 ms",
+      "clock": "monotonic from before network, RAM only; delegated JWT <=60s; never in queues/history/logs",
+      "bounds": {
+        "minimum": "<=2000 ms",
+        "default": "<=2000 ms",
+        "maximum": "<=2000 ms"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    },
+    {
+      "storage": "disposition_tombstones",
+      "category": "OPERATIONAL",
+      "retention": "owner obligation",
+      "clock": "minimum ranges/generation and coverage evidence; no payload or PII; retain while needed for valid coverage",
+      "bounds": {
+        "minimum": "owner obligation",
+        "default": "owner obligation",
+        "maximum": "owner obligation"
+      },
+      "guards": [
+        "unknown obligation or hold blocks disposition",
+        "no production or purge authorized",
+        "copies obey backing data policy"
+      ],
+      "production_enabled": false
+    }
+  ],
+  "holds": "Unknown obligation/hold blocks disposition. No hold administrator, legal retention duration, commercial purge or production enabled by this contract."
+}

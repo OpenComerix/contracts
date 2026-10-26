@@ -94,3 +94,9 @@ La decisión se vincula al comando ya persistido/habilitado, tenant/proceso/paso
 Los comandos de inventory transportan `payload.step_id`, incluido en la huella completa y copiado sin cambios a la solicitud de autorización; no se elige otro paso al consultar. Las referencias de decisión de origen permanecen en auditoría restringida del dueño, fuera de resultados, hechos físicos y consultas públicas.
 
 Fixtures de pasos viven junto a sus comandos/resultados en inventory/fixtures/{effects,compensation}/v1; [gates B](../inventory/README.md#f1-10b--paquete-candidato). Solo planned; no publicación, admisión ni runtime. D completa las superficies restantes y E comprueba H4; el contrato no vuelve existente su implementación.
+
+## F1-10C — Selección privada de autoridad de finance candidata
+
+[HTTP](http/private/v1/sales-finance-step-authority-v1.yaml) y [schema](http/shared/v1/sales-finance-step-authority-v1.schema.json) materializan exclusivamente la selección finance de `authorizeSaleProcessStep`. Misma URL efectiva de proceso, artefacto separado del perfil B inmutable; caller finance y audiencia sales-pos.process-authority. Decisión ligada a tenant/operación/proceso/versión/step_id/comando/target y SHA-256 JCS del comando completo persistido/habilitado; no hay digest circular dentro del comando. Incluye stock confirmado y responsable/turno originales de la intención; `posted` con conciliación pendiente conserva autorización del cobro, sin conceder o resolver la diferencia.
+
+Presupuesto <=2000ms desde antes de red, sin bearer transferible ni autoridad del humano retenida en colas; cierre terminal de finance prevalece ante decisión atrasada. Solo planned, sin API pública de venta ni completed nuevos; [gates y fixtures C](../finance/README.md#f1-10c--paquete-candidato). Runtime Sales/finance y publicación/admisión exactas son prerrequisitos posteriores.

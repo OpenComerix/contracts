@@ -1,0 +1,622 @@
+{
+  "base": "67cb6f9e45904f5a142912c60aafe08cda851c55",
+  "status": "local-candidate",
+  "runtime_demonstrated": false,
+  "functional_admission": false,
+  "planned": [
+    {
+      "id": "finance.http.public.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/public/v1/finance-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.http.private.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/private/v1/finance-internal-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.types.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/shared/v1/finance-types-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.consumer-types.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/shared/v1/finance-consumer-types-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.protocol-policy.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/shared/v1/finance-protocol-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.lifecycle-policy.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/shared/v1/finance-lifecycle-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.lifecycle-policy.schema.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.flow.asyncapi.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v1/finance-flow-v1.asyncapi.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "identity.finance-authority.http.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/private/v1/identity-finance-authority-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "identity.finance-authority.schema.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/shared/v1/identity-finance-authority-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "identity.finance-authority.policy.v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source identity/http/shared/v1/identity-finance-authority-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "sales.finance-step-authority.http.v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source sales/http/private/v1/sales-finance-step-authority-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "sales.finance-step-authority.schema.v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source sales/http/shared/v1/sales-finance-step-authority-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "common.error-catalog.v10",
+      "domain": "common",
+      "owner": "platform-contracts",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source common/errors/v10/error-catalog-v10.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "common.error-catalog.schema.v10",
+      "domain": "common",
+      "owner": "platform-contracts",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source common/errors/v10/error-catalog-v10.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.record-sale-cash.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.record-sale-cash.v1.consumer",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.record-sale-cash.result.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.result.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.record-sale-cash.result.v1.consumer",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.cash-shift.opened.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v1/finance.cash-shift.opened.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.cash-shift.opened.v1.consumer",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.cash-movement.recorded.v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v1/finance.cash-movement.recorded.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.cash-movement.recorded.v1.consumer",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.sale-payment.recorded.v2",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v2/finance.sale-payment.recorded.v2.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    },
+    {
+      "id": "finance.sale-payment.recorded.v2.consumer",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-10C",
+      "status": "planned",
+      "constraint": "Candidate source finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
+    }
+  ],
+  "files": [
+    {
+      "path": ".gitlab-ci.yml",
+      "kind": "modified",
+      "sha256": "ee514fe72970d80d2b699d09aa857e24dc4e85afad98f6d110da8f135d0191c4",
+      "previous_sha256": "7c0f304d9bc5950811a171e2a7a8a09d3c929447e3696f8838d6d93ce6552625"
+    },
+    {
+      "path": "common/README.md",
+      "kind": "modified",
+      "sha256": "083189928df5b1284dd10fcd0b8c58e941de6c5d586a4e06ed61a63bbfb81a76",
+      "previous_sha256": "83f4f0abb9965b687025792b20e6b18835da2acdf4106fef349db205eb3dfcae"
+    },
+    {
+      "path": "common/errors/v10/error-catalog-v10.json",
+      "kind": "new",
+      "sha256": "6a35e5fe2dfd0eca8bf61d0bb2838c8217872d140a3531583944c4497c42dabb"
+    },
+    {
+      "path": "common/errors/v10/error-catalog-v10.schema.json",
+      "kind": "new",
+      "sha256": "715357158a135aa6702b506c38590a98c1b07992397e8971d8db2bd5df231d13"
+    },
+    {
+      "path": "common/index.json",
+      "kind": "modified",
+      "sha256": "ae39fabdc42f1573842cf8a0f1f87fce5edb32916d906f29b3d878f08bf5262e",
+      "previous_sha256": "6334c7e5876ba10c02d06b4e84e9dca17a39443364b34d1c856e1d43136eef81"
+    },
+    {
+      "path": "finance/README.md",
+      "kind": "modified",
+      "sha256": "40e13915191f618a5762d7507a152d3661731867234aa8bfa40ffd8a3582b702",
+      "previous_sha256": "533c3e400822a3e630e6b36ae5994c5ab157ec951e1738b414b1b70454fc415f"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "75b7baa1895511362f2be55af67bb2c17e3ca01187587f604ae984aac8a2a3f1"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "kind": "new",
+      "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840"
+    },
+    {
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "kind": "new",
+      "sha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca"
+    },
+    {
+      "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+      "kind": "new",
+      "sha256": "4856946f6c53c66bebbb509137c7a3e4942dccff9b019afb07acf774a680b5f3"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "dc8d96ba45b099dfdf5cddc4b988b65de0779b83321627e37a812a5db88ba6f2"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "kind": "new",
+      "sha256": "fdf85514fff6d30086601475b1e9b8af91ad4228b700b707b18afa1691653691"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "kind": "new",
+      "sha256": "88bfd467a5ae3aef74e50257eb300dc4f2dddf8f03b1f65d1f7abf7eeeb74195"
+    },
+    {
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "kind": "new",
+      "sha256": "0d57a3d4ddcab6caeb04ff000181e2fb87dbc1f2f1ea0a0a2338b831f3d8c1b1"
+    },
+    {
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "kind": "new",
+      "sha256": "2a1b0d12fde2b9cd07d11339fd7aab1396bb17c0ecdcaa18c947f9ddfb086320"
+    },
+    {
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "kind": "new",
+      "sha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "kind": "new",
+      "sha256": "2d2b41f2818a5c329af6b0a94b7a96249707ffd5146337b3e7fbda6286ace80d"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/closed_shift.json",
+      "kind": "new",
+      "sha256": "cecbc69b8ec3c2633a7caeba9706da82f0a21fb6be269851b2fcc73af71027bc"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/foreign_responsible.json",
+      "kind": "new",
+      "sha256": "2792d0e33053ecf0516f98f8ca5f1665cb4a07aed850c54c272beea04d7b1da1"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/foreign_shift.json",
+      "kind": "new",
+      "sha256": "2bc6f608c198396370344e048807f1d4db3bad5fb4022edc4bb7b941e74261db"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/incorrect_change.json",
+      "kind": "new",
+      "sha256": "bc697ce51e3293f38834c56d6d7ca76ab13d67f56221fd500af058686f0b1f2b"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/insufficient_received.json",
+      "kind": "new",
+      "sha256": "806272bc9a8b244b53d1a0f1876d5e0ce9195226d168b1a9b1080017c0b01c6b"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/missing_shift.json",
+      "kind": "new",
+      "sha256": "1e88eba436a85cbcb88439654004f6e1d61ee8deaacb8eebbfb79cc019c73b66"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/normal.json",
+      "kind": "new",
+      "sha256": "6e61435d477127c64ae764878522e71f0f681a26805dbc4a4dac3637a0cde05f"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/stock_difference.json",
+      "kind": "new",
+      "sha256": "4089240ef7517c63a7a0554d202bdf8844aeded1fb9deb2d414d1883ef343fb0"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/stock_not_required.json",
+      "kind": "new",
+      "sha256": "c4c3b6adcc16ada35d21810ad449ecfacefe5f3d7c6e24677176cfb26f1010b7"
+    },
+    {
+      "path": "finance/fixtures/cash/v1/total_mismatch.json",
+      "kind": "new",
+      "sha256": "6f94c840281a5c2d113d718d172f95dd36e20ef4a52d60f80c3a7fcaa4e5e920"
+    },
+    {
+      "path": "finance/fixtures/history/v1/complete.json",
+      "kind": "new",
+      "sha256": "341b6f8e75b2e9618d80ff13ffcb704a00c5f16d269f4f8d011165b99c5ec266"
+    },
+    {
+      "path": "finance/fixtures/history/v1/first_page.json",
+      "kind": "new",
+      "sha256": "528c1d805aee5ff10d6ab9f55dd00c2f46140f860cc588787518e4c2b07b1318"
+    },
+    {
+      "path": "finance/fixtures/history/v1/last_page.json",
+      "kind": "new",
+      "sha256": "edcdacfbd2a0906338c5d5f870d5f44f281fedfc71382ea88868f5b0a751c832"
+    },
+    {
+      "path": "finance/fixtures/history/v1/partial.json",
+      "kind": "new",
+      "sha256": "142d7518a6ad1e4726e9dcc53f84db481b9d05fe8fa089f5210851b7a1445e6c"
+    },
+    {
+      "path": "finance/fixtures/history/v1/retained-source.json",
+      "kind": "new",
+      "sha256": "9e83c441319cbe3c80d7c20404563086e99b9d05b7d65a7c9c90d8e1c8c865d7"
+    },
+    {
+      "path": "finance/fixtures/http/v1/csrf.json",
+      "kind": "new",
+      "sha256": "0b0f63233669adc6aefafb8c46b7fc8129032aabaa87c1fd0cdb9ec1ec9666aa"
+    },
+    {
+      "path": "finance/fixtures/http/v1/resources.json",
+      "kind": "new",
+      "sha256": "5e956d58ea7afc3f24296942f6f4f40e7805a4cc3cf891e5d4e1e8456bb3d056"
+    },
+    {
+      "path": "finance/fixtures/opening/v1/positive.json",
+      "kind": "new",
+      "sha256": "1918ed517929aa59fe40c452cea387b940ab0dac3d9bcb72a88bee4503fd0c35"
+    },
+    {
+      "path": "finance/fixtures/opening/v1/zero.json",
+      "kind": "new",
+      "sha256": "1309b1257be51a266abacc6fc42f808188f80c3b32056e9b4ce869f2b77ac8c8"
+    },
+    {
+      "path": "finance/fixtures/reliability/v1/identity-scenarios.json",
+      "kind": "new",
+      "sha256": "6fc5012a6811763e5b6d5c5da7da2bd65f37d5d8c175cd0ab8fa9bb99b0861f9"
+    },
+    {
+      "path": "finance/fixtures/reliability/v1/results.json",
+      "kind": "new",
+      "sha256": "96ffd3a1c11fea1b861ccbeaf97bc03b78007c5431e2bc92610f15c379c59d8e"
+    },
+    {
+      "path": "finance/fixtures/reliability/v1/retained-payments.json",
+      "kind": "new",
+      "sha256": "31b8154d2de75115f92c17e4869e474e0e0a599b1b6c3f308070763065df7033"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/cases.json",
+      "kind": "new",
+      "sha256": "deaa912094cce04020dfd3220ea4d70ddc556ce57b51acb5c644efabd3d00842"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/forbidden-extension.json",
+      "kind": "new",
+      "sha256": "c6ab909c729a1d1e296d750bb4ddd6eed8dc8594c8f441ba75d38edd48b1ca4e"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/future.json",
+      "kind": "new",
+      "sha256": "a31839d828d57a458204c4df3f377e3c434e50909116c4e860b182ee85594450"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/http-future.json",
+      "kind": "new",
+      "sha256": "32f549cf0e9ace2c16fd37d3d063fc3a335bb60f1c8d49ee5c8bb24f1bb3144e"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/negative.json",
+      "kind": "new",
+      "sha256": "0730345986b004793913e82916e560a4cc10555e9842f433ab8f0e1ba231c30a"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/normal-command-consumer.json",
+      "kind": "new",
+      "sha256": "8b05e5e81866c364ab07ba1680859a664f8d2952c00449085fe08535eb620af1"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/normal-event-0-consumer.json",
+      "kind": "new",
+      "sha256": "d31c2be17cec2f449813cadddfce0a569cb6215fdfaff5de980f8e8a1552d0d2"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/normal-result-consumer.json",
+      "kind": "new",
+      "sha256": "a1f8489b664639958ea08baea1c45af499e30e345ae1200e7800c6f174509d6f"
+    },
+    {
+      "path": "finance/fixtures/validation/v1/opening-positive-event-0-consumer.json",
+      "kind": "new",
+      "sha256": "99675a0f2dfa5f28d5fc0ab6ed24b1cc70208bfed00ac368f08cfca78f68d97e"
+    },
+    {
+      "path": "finance/fixtures/vectors/v1/money.json",
+      "kind": "new",
+      "sha256": "504c6b7853ba3209fe211897d390c0444fb6b1217492ccce3e5da3b8552cc7b2"
+    },
+    {
+      "path": "finance/http/private/v1/finance-internal-v1.yaml",
+      "kind": "new",
+      "sha256": "0dbe75acc25cae6f63b85bbdbe7fa2951b3d70535ed85897bc97d17c4bbd6631"
+    },
+    {
+      "path": "finance/http/public/v1/finance-v1.yaml",
+      "kind": "new",
+      "sha256": "935af3e0c532e6c97451480b3476da4d46c32b17bc2bc4b046263f747ded262f"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "kind": "new",
+      "sha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.json",
+      "kind": "new",
+      "sha256": "e15e6631ab8049988399840f55417e11762d446aefd0eabd5065079c62fe4bf2"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json",
+      "kind": "new",
+      "sha256": "751d8369240d6d8d49c6e56ae6cf5404d445fbf0b370475cc62b817c1c779e43"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+      "kind": "new",
+      "sha256": "61653d0094a2cb927a082190c2eba90de39670065765cfd8faf5a5a4ea38f6ca"
+    },
+    {
+      "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "kind": "new",
+      "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+    },
+    {
+      "path": "finance/index.json",
+      "kind": "modified",
+      "sha256": "98df96bb535837118df86cd46651414e1f362d35a6ab16ab58b9cc4901403e86",
+      "previous_sha256": "e317e155393987af48d5d241edf299944d9ac7e922f817e4226311334ffc3b22"
+    },
+    {
+      "path": "identity/README.md",
+      "kind": "modified",
+      "sha256": "c6f2d17fa97f96fc43b4ace86fa8af6989f672c7038b1a13697e81e0a682c39e",
+      "previous_sha256": "cb4178e47ce7dc53a24f39ff73404e30b73e9e93a5b83a0c87751998c25ee063"
+    },
+    {
+      "path": "identity/fixtures/finance-authority/v1/delegation.json",
+      "kind": "new",
+      "sha256": "39858689eb6d55833d8104af053d6f313d8199fa79fd55829b878af8209d0859"
+    },
+    {
+      "path": "identity/fixtures/finance-authority/v1/history.json",
+      "kind": "new",
+      "sha256": "e19dcb63c043336d90b0ae284ed71c9a744ae625b5b395b9280fa1ec00d835cc"
+    },
+    {
+      "path": "identity/fixtures/finance-authority/v1/human.json",
+      "kind": "new",
+      "sha256": "28851d315b991df9259b61f7b4e5567d0fde7cfe7223d04c9948638f677e7cce"
+    },
+    {
+      "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+      "kind": "new",
+      "sha256": "f7649bf83672c734a23db5fc91657defa9b88946f8ae29153201ded98af6b93d"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+      "kind": "new",
+      "sha256": "0803b0247a61c2a557649c066f47a7a6661a86bfadc2de000abef1fb1d0df1ba"
+    },
+    {
+      "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "kind": "new",
+      "sha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b"
+    },
+    {
+      "path": "identity/index.json",
+      "kind": "modified",
+      "sha256": "b8b746dfafe8c215bec957fd6dce9834041689d72e40389318c75b3755c2c3ce",
+      "previous_sha256": "24db7cb237e4f5e7043ad450817d5a2d5e77a529e132a8154d1450a598cafe50"
+    },
+    {
+      "path": "registry/contracts.json",
+      "kind": "modified",
+      "sha256": "6902a006ab1e223ccd8b2a10d1100062906f3aa44e8c2262403e96b2181c0fa7",
+      "previous_sha256": "7d54cbfdf6c8e36923b955ec8a191eef5540a2acf7fafded4b065d41cf6bde4c"
+    },
+    {
+      "path": "sales/README.md",
+      "kind": "modified",
+      "sha256": "1bb5489caecf6b662218dc7efcc98f5b463571dd378350b882604900283e482b",
+      "previous_sha256": "156a92d1bedecdcf84d5509844b4cca5dd0a3e5b2051e0639d62e1eb4dfc350b"
+    },
+    {
+      "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+      "kind": "new",
+      "sha256": "c102741d3576db552080c327a59c07d78d148db8394cd007be9cce4485324e79"
+    },
+    {
+      "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "kind": "new",
+      "sha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
+    },
+    {
+      "path": "sales/index.json",
+      "kind": "modified",
+      "sha256": "89d029716d4ae5c0a4fa17abe14a495b6a3702cd40cf24ce42e3a4fcac4a06b0",
+      "previous_sha256": "0be732ecc21b10a0a2996b80d2efce437e4b3d1c3df9f0831658293d8e0a76ba"
+    },
+    {
+      "path": "scripts/finance/run-gate-v1.mjs",
+      "kind": "new",
+      "sha256": "3c7edb52bc4377b35a3e7761440fdc393e2c5847230ab1e368db7006e2a2de92"
+    },
+    {
+      "path": "scripts/finance/schema-v1.mjs",
+      "kind": "new",
+      "sha256": "4fc362c818c63a87732d9738735f5ea3aff04211e4615a9436f74fc1c20b9753"
+    },
+    {
+      "path": "scripts/finance/semantics-v1.mjs",
+      "kind": "new",
+      "sha256": "de1115fb4a5432f2cdc204dfb3f15b20e979037bc2060d5d8dbf92aa84002cb6"
+    },
+    {
+      "path": "scripts/finance/validate-v1.sh",
+      "kind": "new",
+      "sha256": "d447e0c12a99054347241a3568ed5fe9922e340426361b9fb3c29c52cbaa6c9d"
+    },
+    {
+      "path": "scripts/inventory/candidate-v1.mjs",
+      "kind": "modified",
+      "sha256": "0bd1228950a23455a9eeab15461e69a8d36069a6a3ee127dfcd37f045d967436",
+      "previous_sha256": "101a091e330a5284cfc665b17e62782908671b31f0bce53bce5e68e28a9236e3"
+    },
+    {
+      "path": "test/finance/package-v1.test.mjs",
+      "kind": "new",
+      "sha256": "fb44eaa7fa89f615fd9363cb4f614a8719cfc532d9eae8cebc7f4f6a355f776e"
+    },
+    {
+      "path": "test/finance/semantics-v1.test.mjs",
+      "kind": "new",
+      "sha256": "1da3eccffe8359132410bda2f3b077651335af15374342de356ee498c5b578a3"
+    },
+    {
+      "path": "test/finance/transport-v1.test.mjs",
+      "kind": "new",
+      "sha256": "7162dd58169ae8e294f7747dc914f5bec271352c88bb3695fa4a78376537711f"
+    },
+    {
+      "path": "test/inventory/package-v1.test.mjs",
+      "kind": "modified",
+      "sha256": "e25ef6c5b7ee92ccc796f10b04c285fc330d6ed93fdd15ca8ebf1d9c6b50a0a0",
+      "previous_sha256": "cd17c5e309a5100e6b132b6301c8cc3529201fb216200099c9ee8996b767b41b"
+    }
+  ]
+}

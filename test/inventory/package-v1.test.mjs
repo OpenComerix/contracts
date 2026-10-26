@@ -5,8 +5,9 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {makeLock} from '../../tools/architecture/graph.mjs';
+import {reviewedFinanceHistoricalRead,withReviewedFinanceScope} from '../../scripts/finance/reviewed-package-v1.mjs';
 import {validateCandidatePackage,candidateReadView,projectCandidateRegistry,withCandidateScope,original,root,manifestPath,base} from '../../scripts/inventory/candidate-v1.mjs';
-const bytes=file=>fs.readFileSync(path.join(root,file));
+const bytes=reviewedFinanceHistoricalRead(file=>fs.readFileSync(path.join(root,file)));
 const read=file=>JSON.parse(bytes(file));
 const manifest=read(manifestPath);
 
@@ -16,7 +17,7 @@ test('complete B package preserves prior roots, bytes, consumers and CI; new met
  assert.deepEqual(projectCandidateRegistry(registry),before);assert.deepEqual(registry.planned.slice(3),manifest.planned);
 });
 test('scope includes every modified, indexed or new path from the declared contracts base',()=>{
- const actual=new Set([manifestPath,...manifest.files.map(x=>x.path)]);
+ const actual=withReviewedFinanceScope([manifestPath,...manifest.files.map(x=>x.path)]);
  for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const file of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(actual.has(file),'B_UNDECLARED_PATH:'+file);
  assert(!withCandidateScope([]).has('src/main.ts'));
 });

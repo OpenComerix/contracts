@@ -1,0 +1,1290 @@
+{
+  "version": 10,
+  "errors": [
+    {
+      "code": "identity_invalid_request",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La solicitud no cumple el contrato",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [
+        "field_count"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "identity_email_verification_invalid",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Token inválido, expirado o usado",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_invalid_credentials",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Credenciales incorrectas con respuesta anti-enumeración",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_mfa_required",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La autenticación requiere completar MFA",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_mfa_invalid",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Desafío MFA inválido o expirado",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_not_registered",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo no registrado",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_not_approved",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo pendiente de aprobación para esta organización",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_revoked",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Dispositivo revocado",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_session_invalid_or_expired",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Sesión inválida o expirada",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_membership_invalid",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "Membresía inválida o inactiva",
+      "statuses": [
+        403,
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_organization_not_selectable",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "Organización no seleccionable en el contexto actual",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_idempotency_key_reused",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "UUIDv7 Idempotency-Key se reutilizó con otro payload",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_idempotency_request_in_progress",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Operación idempotente todavía en curso",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "restricted",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "identity_state_or_version_conflict",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "Conflicto de estado o versión esperada",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [
+        "current_version"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "platform_rate_limited",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Límite temporal excedido",
+      "statuses": [
+        429
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "platform_dependency_unavailable",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Dependencia temporalmente no disponible",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_internal_error",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Error interno inesperado",
+      "statuses": [
+        500
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "notifications_dependency_unavailable",
+      "owner": "notifications",
+      "domain": "notifications",
+      "description": "Notifications no pudo aceptar duraderamente la intención",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": true,
+      "exposure": "internal",
+      "allowed_parameters": [
+        "retry_after_seconds"
+      ],
+      "deprecated": false
+    },
+    {
+      "code": "tenancy_invalid_cursor",
+      "owner": "identity-tenancy",
+      "domain": "tenancy",
+      "description": "El cursor es inválido, expiró o no corresponde a la cuenta autenticada",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "gateway_csrf_invalid",
+      "owner": "gateway-bff",
+      "domain": "gateway",
+      "description": "Origin o token CSRF ausente, inválido o no vinculado a la sesión actual",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_access_denied",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La cuenta autenticada no tiene permiso vigente para esta operación",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_device_proof_invalid",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La prueba criptográfica del dispositivo es inválida o expiró",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "identity_reauthentication_required",
+      "owner": "identity-tenancy",
+      "domain": "identity",
+      "description": "La operación requiere reautenticación o step-up reciente",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "gateway_deadline_exceeded",
+      "owner": "gateway-bff",
+      "domain": "gateway",
+      "description": "El plazo máximo de respuesta del gateway se agotó",
+      "statuses": [
+        504
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_invalid_request",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "La solicitud no cumple el contrato",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_invalid_cursor",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Cursor inválido, vencido o no vinculado al contexto",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_resource_not_found",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Recurso no encontrado",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_version_conflict",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Conflicto de versión esperada",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_state_conflict",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Conflicto de estado",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_idempotency_key_reused",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Clave reutilizada para otra solicitud",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_idempotency_request_in_progress",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Solicitud idempotente todavía en curso",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_semantic_validation_failed",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "La solicitud viola una regla comercial",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_invalid_request",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "La solicitud no cumple el contrato",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_invalid_cursor",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Cursor inválido, vencido o no vinculado al contexto",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_resource_not_found",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Recurso no encontrado",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_version_conflict",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Conflicto de versión esperada",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_state_conflict",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Conflicto de estado",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_idempotency_key_reused",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Clave reutilizada para otra solicitud",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_idempotency_request_in_progress",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Solicitud idempotente todavía en curso",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_semantic_validation_failed",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "La solicitud viola una regla comercial",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_uniqueness_conflict",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Conflicto de unicidad",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_price_not_set",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Precio no establecido",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "pricing_default_list_not_initialized",
+      "owner": "catalog-pricing",
+      "domain": "pricing",
+      "description": "Lista predeterminada no inicializada",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_payload_too_large",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Solicitud demasiado grande",
+      "statuses": [
+        413
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_unsupported_media_type",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Tipo de contenido no admitido",
+      "statuses": [
+        415
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_not_acceptable",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Representación no producible",
+      "statuses": [
+        406
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_capacity_exhausted",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Capacidad temporalmente agotada",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": true,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_delegation_invalid",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Delegación ausente o inválida",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_delegation_request_mismatch",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Delegación no vinculada a esta solicitud",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "public",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_workload_invalid",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Credencial de workload ausente o inválida",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_source_not_authorized",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Fuente o ámbito no autorizado",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_hold_authority_required",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Autoridad reforzada de hold no verificable",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_message_conflict",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Identidad, secuencia o versión contradictoria",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_reconciliation_required",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Baseline, checkpoint o secuencia requieren reconciliación",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_history_scope_closed",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Referencia tardía incompatible con un cierre definitivo",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_not_authorized",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Autoridad de recuperación insuficiente",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_not_found",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Recuperación no encontrada",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_intent_conflict",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Intención, selección o corte incompatibles",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_closed",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Recuperación finalizada; solo se permite repetir la página terminal",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_expired",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Recuperación o cursor vencido",
+      "statuses": [
+        410
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_cursor_invalid",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Cursor de recuperación inválido",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_cursor_version_unsupported",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Versión de cursor de recuperación no soportada",
+      "statuses": [
+        410
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_source_unverifiable",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Integridad o cobertura de la fuente no verificable",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "catalog_recovery_event_unrepresentable",
+      "owner": "catalog-pricing",
+      "domain": "catalog",
+      "description": "Un evento original no puede entregarse íntegramente",
+      "statuses": [
+        503
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_invalid_request",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory invalid request",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_invalid_history_cursor",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory invalid history cursor",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_resource_not_found",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory resource not found",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_version_conflict",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory version conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_state_conflict",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory state conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_operation_conflict",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory operation conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_idempotency_key_reused",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory idempotency key reused",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_idempotency_request_in_progress",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory idempotency request in progress",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_insufficient_stock",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory insufficient stock",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_quantity_invalid",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory quantity invalid",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_catalog_reference_invalid",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory catalog reference invalid",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_history_coverage_changed",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory history coverage changed",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_delegation_invalid",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory delegation invalid",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "inventory_delegation_request_mismatch",
+      "owner": "inventory",
+      "domain": "inventory",
+      "description": "inventory delegation request mismatch",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_workload_invalid",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Credencial de workload ausente, inválida o vencida",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "platform_workload_forbidden",
+      "owner": "platform",
+      "domain": "platform",
+      "description": "Caller o audiencia del workload no autorizados para este puerto",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "sales_invalid_request",
+      "owner": "sales-pos",
+      "domain": "sales",
+      "description": "Solicitud de Sales fuera de la forma contractual",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "sales_process_step_not_authorized",
+      "owner": "sales-pos",
+      "domain": "sales",
+      "description": "Paso/comando persistido o vínculo de consulta no autorizado; sin revelar existencia del intento",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "internal",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_invalid_request",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance invalid request",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_invalid_history_cursor",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance invalid history cursor",
+      "statuses": [
+        400
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_delegation_invalid",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance delegation invalid",
+      "statuses": [
+        401
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_delegation_request_mismatch",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance delegation request mismatch",
+      "statuses": [
+        403
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_resource_not_found",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance resource not found",
+      "statuses": [
+        404
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_cash_shift_required",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance cash shift required",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_cash_shift_not_open",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance cash shift not open",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_cash_shift_already_open",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance cash shift already open",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_version_conflict",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance version conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_state_conflict",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance state conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_operation_conflict",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance operation conflict",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_idempotency_key_reused",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance idempotency key reused",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_idempotency_request_in_progress",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance idempotency request in progress",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": true,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_history_coverage_changed",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance history coverage changed",
+      "statuses": [
+        409
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_cash_amount_invalid",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance cash amount invalid",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    },
+    {
+      "code": "finance_currency_unsupported",
+      "owner": "finance",
+      "domain": "finance",
+      "description": "finance currency unsupported",
+      "statuses": [
+        422
+      ],
+      "retryable_by_default": false,
+      "exposure": "restricted",
+      "allowed_parameters": [],
+      "deprecated": false
+    }
+  ]
+}

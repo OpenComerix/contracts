@@ -1,0 +1,1261 @@
+{
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "id": "advanced-shift-version-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "advanced-shift-version-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "advanced-shift-version-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "advanced-shift-version-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "advanced-shift-version-event-0",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "advanced-shift-version-event-1",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/advanced_shift_version.json",
+      "pointer": "/events/1",
+      "expected": "accept"
+    },
+    {
+      "id": "closed-shift-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/closed_shift.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "closed-shift-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/closed_shift.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "closed-shift-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/closed_shift.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "closed-shift-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/closed_shift.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-responsible-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/foreign_responsible.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-responsible-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/foreign_responsible.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-responsible-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/foreign_responsible.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-responsible-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/foreign_responsible.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-shift-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/foreign_shift.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-shift-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/foreign_shift.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-shift-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/foreign_shift.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "foreign-shift-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/foreign_shift.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "incorrect-change-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/incorrect_change.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "incorrect-change-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/incorrect_change.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "incorrect-change-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/incorrect_change.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "incorrect-change-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/incorrect_change.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "insufficient-received-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/insufficient_received.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "insufficient-received-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/insufficient_received.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "insufficient-received-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/insufficient_received.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "insufficient-received-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/insufficient_received.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "missing-shift-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/missing_shift.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "missing-shift-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/missing_shift.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "missing-shift-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/missing_shift.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "missing-shift-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/missing_shift.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-event-0",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-event-1",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/normal.json",
+      "pointer": "/events/1",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-event-0",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-difference-event-1",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_difference.json",
+      "pointer": "/events/1",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-event-0",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "stock-not-required-event-1",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/stock_not_required.json",
+      "pointer": "/events/1",
+      "expected": "accept"
+    },
+    {
+      "id": "total-mismatch-command",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/total_mismatch.json",
+      "pointer": "/command",
+      "expected": "accept"
+    },
+    {
+      "id": "total-mismatch-result",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/cash/v1/total_mismatch.json",
+      "pointer": "/result",
+      "expected": "accept"
+    },
+    {
+      "id": "total-mismatch-query",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Request",
+      "fixture": "finance/fixtures/cash/v1/total_mismatch.json",
+      "pointer": "/authority_query",
+      "expected": "accept"
+    },
+    {
+      "id": "total-mismatch-decision",
+      "schema": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "finance/fixtures/cash/v1/total_mismatch.json",
+      "pointer": "/authority",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-zero-request",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/OpenShiftRequest",
+      "fixture": "finance/fixtures/opening/v1/zero.json",
+      "pointer": "/request",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-zero-shift",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashShift",
+      "fixture": "finance/fixtures/opening/v1/zero.json",
+      "pointer": "/shift",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-zero-event-0",
+      "schema": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/opening/v1/zero.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-positive-request",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/OpenShiftRequest",
+      "fixture": "finance/fixtures/opening/v1/positive.json",
+      "pointer": "/request",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-positive-shift",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashShift",
+      "fixture": "finance/fixtures/opening/v1/positive.json",
+      "pointer": "/shift",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-positive-event-0",
+      "schema": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/opening/v1/positive.json",
+      "pointer": "/events/0",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-positive-event-1",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/opening/v1/positive.json",
+      "pointer": "/events/1",
+      "expected": "accept"
+    },
+    {
+      "id": "history-complete-session",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistorySession",
+      "fixture": "finance/fixtures/history/v1/complete.json",
+      "pointer": "/session",
+      "expected": "accept"
+    },
+    {
+      "id": "history-complete-page",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/history/v1/complete.json",
+      "pointer": "/page",
+      "expected": "accept"
+    },
+    {
+      "id": "history-partial-session",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistorySession",
+      "fixture": "finance/fixtures/history/v1/partial.json",
+      "pointer": "/session",
+      "expected": "accept"
+    },
+    {
+      "id": "history-partial-page",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/history/v1/partial.json",
+      "pointer": "/page",
+      "expected": "accept"
+    },
+    {
+      "id": "history-first-page-session",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistorySession",
+      "fixture": "finance/fixtures/history/v1/first_page.json",
+      "pointer": "/session",
+      "expected": "accept"
+    },
+    {
+      "id": "history-first-page-page",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/history/v1/first_page.json",
+      "pointer": "/page",
+      "expected": "accept"
+    },
+    {
+      "id": "history-last-page-session",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistorySession",
+      "fixture": "finance/fixtures/history/v1/last_page.json",
+      "pointer": "/session",
+      "expected": "accept"
+    },
+    {
+      "id": "history-last-page-page",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/history/v1/last_page.json",
+      "pointer": "/page",
+      "expected": "accept"
+    },
+    {
+      "id": "resource-cashregister",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashRegister",
+      "fixture": "finance/fixtures/http/v1/resources.json",
+      "pointer": "/CashRegister",
+      "expected": "accept"
+    },
+    {
+      "id": "resource-cashregisters",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashRegisters",
+      "fixture": "finance/fixtures/http/v1/resources.json",
+      "pointer": "/CashRegisters",
+      "expected": "accept"
+    },
+    {
+      "id": "resource-cashshift",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashShift",
+      "fixture": "finance/fixtures/http/v1/resources.json",
+      "pointer": "/CashShift",
+      "expected": "accept"
+    },
+    {
+      "id": "resource-expected",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/Expected",
+      "fixture": "finance/fixtures/http/v1/resources.json",
+      "pointer": "/Expected",
+      "expected": "accept"
+    },
+    {
+      "id": "resource-recordresult",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/RecordResult",
+      "fixture": "finance/fixtures/http/v1/resources.json",
+      "pointer": "/RecordResult",
+      "expected": "accept"
+    },
+    {
+      "id": "human-human-request",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "identity/fixtures/finance-authority/v1/human.json",
+      "pointer": "/request",
+      "expected": "accept"
+    },
+    {
+      "id": "human-human-decision",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "identity/fixtures/finance-authority/v1/human.json",
+      "pointer": "/decision",
+      "expected": "accept"
+    },
+    {
+      "id": "human-history-request",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "identity/fixtures/finance-authority/v1/history.json",
+      "pointer": "/request",
+      "expected": "accept"
+    },
+    {
+      "id": "human-history-decision",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "identity/fixtures/finance-authority/v1/history.json",
+      "pointer": "/decision",
+      "expected": "accept"
+    },
+    {
+      "id": "delegation-request",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/DelegationRequest",
+      "fixture": "identity/fixtures/finance-authority/v1/delegation.json",
+      "pointer": "/request",
+      "expected": "accept"
+    },
+    {
+      "id": "delegation-response",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Delegation",
+      "fixture": "identity/fixtures/finance-authority/v1/delegation.json",
+      "pointer": "/response",
+      "expected": "accept"
+    },
+    {
+      "id": "delegation-authorization-request",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/AuthorizationRequest",
+      "fixture": "identity/fixtures/finance-authority/v1/delegation.json",
+      "pointer": "/authorization_request",
+      "expected": "accept"
+    },
+    {
+      "id": "retained-pending",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/RecordResult",
+      "fixture": "finance/fixtures/reliability/v1/results.json",
+      "pointer": "/pending",
+      "expected": "accept"
+    },
+    {
+      "id": "retained-paid",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/RecordResult",
+      "fixture": "finance/fixtures/reliability/v1/results.json",
+      "pointer": "/paid",
+      "expected": "accept"
+    },
+    {
+      "id": "retained-failed",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/RecordResult",
+      "fixture": "finance/fixtures/reliability/v1/results.json",
+      "pointer": "/failed",
+      "expected": "accept"
+    },
+    {
+      "id": "missing-step",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/missing-step",
+      "expected": "reject"
+    },
+    {
+      "id": "unexpected-command-field",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unexpected-command-field",
+      "expected": "reject"
+    },
+    {
+      "id": "bad-command-type",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/bad-command-type",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-command-revision",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-command-revision",
+      "expected": "reject"
+    },
+    {
+      "id": "wrong-command-producer",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/wrong-command-producer",
+      "expected": "reject"
+    },
+    {
+      "id": "wrong-command-target",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/wrong-command-target",
+      "expected": "reject"
+    },
+    {
+      "id": "unsupported-currency",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unsupported-currency",
+      "expected": "reject"
+    },
+    {
+      "id": "unsupported-method",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unsupported-method",
+      "expected": "reject"
+    },
+    {
+      "id": "money-float",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-float",
+      "expected": "reject"
+    },
+    {
+      "id": "money-exponent",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-exponent",
+      "expected": "reject"
+    },
+    {
+      "id": "money-extra-scale",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-extra-scale",
+      "expected": "reject"
+    },
+    {
+      "id": "money-leading-zero",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-leading-zero",
+      "expected": "reject"
+    },
+    {
+      "id": "money-negative-zero",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-negative-zero",
+      "expected": "reject"
+    },
+    {
+      "id": "money-zero-total",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-zero-total",
+      "expected": "reject"
+    },
+    {
+      "id": "money-overflow",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/money-overflow",
+      "expected": "reject"
+    },
+    {
+      "id": "missing-payment",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/missing-payment",
+      "expected": "reject"
+    },
+    {
+      "id": "not-uuidv7",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/not-uuidv7",
+      "expected": "reject"
+    },
+    {
+      "id": "pending-stock",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/pending-stock",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-stock-state",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-stock-state",
+      "expected": "reject"
+    },
+    {
+      "id": "context-free-role",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/context-free-role",
+      "expected": "reject"
+    },
+    {
+      "id": "success-with-error",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/success-with-error",
+      "expected": "reject"
+    },
+    {
+      "id": "retryable-terminal",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/retryable-terminal",
+      "expected": "reject"
+    },
+    {
+      "id": "result-pending",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/result-pending",
+      "expected": "reject"
+    },
+    {
+      "id": "missing-result-id",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/missing-result-id",
+      "expected": "reject"
+    },
+    {
+      "id": "zero-payment",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/zero-payment",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-result-revision",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-result-revision",
+      "expected": "reject"
+    },
+    {
+      "id": "wrong-result-owner",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/wrong-result-owner",
+      "expected": "reject"
+    },
+    {
+      "id": "rejection-without-code",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/rejection-without-code",
+      "expected": "reject"
+    },
+    {
+      "id": "rejection-with-payment",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/rejection-with-payment",
+      "expected": "reject"
+    },
+    {
+      "id": "technical-failure-terminal",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/technical-failure-terminal",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-event-major",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-event-major",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-event-revision",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-event-revision",
+      "expected": "reject"
+    },
+    {
+      "id": "unexpected-fiscal",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unexpected-fiscal",
+      "expected": "reject"
+    },
+    {
+      "id": "pii-in-event",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/pii-in-event",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-money-enum",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/unknown-money-enum",
+      "expected": "reject"
+    },
+    {
+      "id": "scope-role-only",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/scope-role-only",
+      "expected": "reject"
+    },
+    {
+      "id": "authority-over-budget",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/authority-over-budget",
+      "expected": "reject"
+    },
+    {
+      "id": "authority-false",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/authority-false",
+      "expected": "reject"
+    },
+    {
+      "id": "authority-unlisted-permission",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/authority-unlisted-permission",
+      "expected": "reject"
+    },
+    {
+      "id": "authority-free-header",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/authority-free-header",
+      "expected": "reject"
+    },
+    {
+      "id": "canonical-extra-key",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/canonical-extra-key",
+      "expected": "reject"
+    },
+    {
+      "id": "canonical-unknown-query",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/canonical-unknown-query",
+      "expected": "reject"
+    },
+    {
+      "id": "canonical-unknown-profile",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/canonical-unknown-profile",
+      "expected": "reject"
+    },
+    {
+      "id": "canonical-wrong-method",
+      "schema": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/canonical-wrong-method",
+      "expected": "reject"
+    },
+    {
+      "id": "history-limit-overflow",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/history-limit-overflow",
+      "expected": "reject"
+    },
+    {
+      "id": "history-unknown-coverage",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/history-unknown-coverage",
+      "expected": "reject"
+    },
+    {
+      "id": "history-unknown-family",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/history-unknown-family",
+      "expected": "reject"
+    },
+    {
+      "id": "history-unbounded-field",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/history-unbounded-field",
+      "expected": "reject"
+    },
+    {
+      "id": "opening-negative",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/OpenShiftRequest",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/opening-negative",
+      "expected": "reject"
+    },
+    {
+      "id": "zero-fictitious-movement",
+      "schema": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/negative.json",
+      "pointer": "/zero-fictitious-movement",
+      "expected": "reject"
+    },
+    {
+      "id": "producer-rejects-extension",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/future.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "consumer-accepts-extension",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/future.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "consumer-rejects-authority-extension",
+      "schema": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/forbidden-extension.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "normal-command-consumer",
+      "schema": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/normal-command-consumer.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-result-consumer",
+      "schema": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/normal-result-consumer.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "normal-event-0-consumer",
+      "schema": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/normal-event-0-consumer.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "opening-positive-event-0-consumer",
+      "schema": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "fragment": "",
+      "fixture": "finance/fixtures/validation/v1/opening-positive-event-0-consumer.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-reader-extension",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/HttpCashRegister",
+      "fixture": "finance/fixtures/validation/v1/http-future.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-producer-strict",
+      "schema": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "fragment": "/$defs/CashRegister",
+      "fixture": "finance/fixtures/validation/v1/http-future.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "errors-v10",
+      "schema": "common/errors/v10/error-catalog-v10.schema.json",
+      "fragment": "",
+      "fixture": "common/errors/v10/error-catalog-v10.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "lifecycle",
+      "schema": "finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json",
+      "fragment": "",
+      "fixture": "finance/http/shared/v1/finance-lifecycle-policy-v1.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "create-pos-cash-register-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-registers/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "create-pos-cash-register-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-registers/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "list-cash-registers-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-registers/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "list-cash-registers-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-registers/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "open-cash-shift-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "open-cash-shift-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "get-cash-shift-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts~1{cash_shift_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "get-cash-shift-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts~1{cash_shift_id}/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "get-cash-shift-expected-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts~1{cash_shift_id}~1expected/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "get-cash-shift-expected-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1cash-shifts~1{cash_shift_id}~1expected/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "create-finance-history-read-session-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1history-read-sessions/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "create-finance-history-read-session-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1history-read-sessions/post/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    },
+    {
+      "id": "read-finance-history-facts-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1history-read-sessions~1{read_session_id}~1facts/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/problem",
+      "expected": "accept"
+    },
+    {
+      "id": "read-finance-history-facts-unknown-csrf",
+      "schema": "finance/http/public/v1/finance-v1.yaml",
+      "fragment": "/paths/~1finance~1history-read-sessions~1{read_session_id}~1facts/get/responses/403/content/application~1problem+json/schema",
+      "fixture": "finance/fixtures/http/v1/csrf.json",
+      "pointer": "/unknown_code",
+      "expected": "reject"
+    }
+  ]
+}

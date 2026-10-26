@@ -1,0 +1,104 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "finance",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "operations": [
+    {
+      "operation_id": "createPosCashRegister",
+      "method": "POST",
+      "path": "/api/v1/finance/cash-registers",
+      "input": "CashRegisterCreate",
+      "output": "CashRegister",
+      "status": 201,
+      "permission": "finance.cash.configure"
+    },
+    {
+      "operation_id": "listCashRegisters",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-registers",
+      "input": null,
+      "output": "CashRegisters",
+      "status": 200,
+      "permission": "finance.cash.read"
+    },
+    {
+      "operation_id": "openCashShift",
+      "method": "POST",
+      "path": "/api/v1/finance/cash-shifts",
+      "input": "OpenShiftRequest",
+      "output": "CashShift",
+      "status": 201,
+      "permission": "finance.cash.open"
+    },
+    {
+      "operation_id": "getCashShift",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-shifts/{cash_shift_id}",
+      "input": null,
+      "output": "CashShift",
+      "status": 200,
+      "permission": "finance.cash.read"
+    },
+    {
+      "operation_id": "getCashShiftExpected",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-shifts/{cash_shift_id}/expected",
+      "input": null,
+      "output": "Expected",
+      "status": 200,
+      "permission": "finance.cash.read"
+    },
+    {
+      "operation_id": "createFinanceHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/finance/history-read-sessions",
+      "input": "HistoryRequest",
+      "output": "HistorySession",
+      "status": 201,
+      "permission": "finance.history.read"
+    },
+    {
+      "operation_id": "readFinanceHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/finance/history-read-sessions/{read_session_id}/facts",
+      "input": null,
+      "output": "HistoryPage",
+      "status": 200,
+      "permission": "finance.history.read"
+    }
+  ],
+  "canonicalization": "finance-request-v1: exactly version, operation_id, method, public path, present typed query, normalized body/null, idempotency_key/null; JCS SHA-256; no secrets/headers/traces/defaults. Validate scale before normalization. Arrays retain order; omission != null; duplicate/unknown keys/query rejected.",
+  "money": "ARS final strings exactly scale 2, <=38 integer digits, no float/exponent/sign/extra scale or cash rounding; applied=accepted total>0; received>=applied; change=received-applied; ledger +=applied only.",
+  "opening": "One logical register per canonical POS and one open shift per register. Opening zero emits shift fact only; positive adds exactly one movement. Same operation replay never adds funds. No closure by midnight or implicit shift switch.",
+  "payment": "Authenticate sales-pos and fresh persisted step decision including exact command/step_id/hash/stock/context/responsible. Validate current open owned shift, not the stale observed cart counter. Serial local effect; no network under lock. Unknown is not rejection. Terminal deterministic rejection closes attempt against late duplicate.",
+  "atomicity": "One local SQL transaction: payment+movement+expected+semantic identity+result+history+audit+inbox/outbox; failure rolls back all. Rejection retains terminal result without payment or movement. Broker ACK does not prove physical cash or exactly once.",
+  "semantic_identity": "organization+operation+sale+payment_id+method, and command identity; independently unique sale/payment links prevent another command_id from charging again. Retain identity with fact after 7-day HTTP replay and 35/90 transport cleanup.",
+  "history": "ADR-063 section 4: retained original UTF-8 JSON and checksum, per-org sequence serialized until commit, sessions <=30min and current human authority/step-up each page. Cursor HMAC exclusive key binds account/tenant/session/filters/limit/H/last/version/disposition generation; 50 default/100 max, page <=1MiB, fact <=128KiB. Changed generation returns 409; gaps mean partial, unknown source 503; reading never republishes or executes.",
+  "location": "createPosCashRegister Location is the authorized pos-filtered collection (one logical register per POS); openCashShift points to getCashShift; history creation points to session facts. No uncontracted individual GET.",
+  "limits": {
+    "body_bytes": 1048576,
+    "message_bytes": 131072,
+    "page_bytes": 1048576,
+    "gateway_ms": 10000,
+    "private_ms": 3000,
+    "authority_call_ms": 1000,
+    "owner_ms": 5000,
+    "lock_ms": 1000,
+    "decision_ms": 2000
+  },
+  "retries": "Same immutable command; maximum five logical attempts with exponential backoff 1s+jitter capped 30s, Retry-After, attention after exhausted or 15min. Transport redelivery never resets budget; no auto refund or stock compensation on unknown/success.",
+  "compatibility": "Only known type/revision=1. Producer strict; consumer permits declared optional payload.extensions.source_note only, no money/authority effect. Unsupported enums/versions quarantine without effects/checkpoint.",
+  "obligations_runtime": "F1-12: PostgreSQL/RLS, concurrency, terminal uniqueness, rollback, ES256/HMAC/current authority, broker, lost response, retained reconstruction after cleaning outbox. Contracts prove none of these.",
+  "out_of_scope": [
+    "electronic/card/transfer/QR/wallet",
+    "combined payments",
+    "closing/counting",
+    "manual cash in/out",
+    "refund",
+    "receivables",
+    "offline",
+    "H4 admission"
+  ]
+}

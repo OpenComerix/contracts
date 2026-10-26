@@ -1,0 +1,49 @@
+{
+  "valid": [
+    {
+      "amounts": {
+        "currency": "ARS",
+        "method": "cash",
+        "commercial_total": "75.25",
+        "applied": "75.25",
+        "received": "100.00",
+        "change": "24.75"
+      },
+      "net": "75.25"
+    },
+    {
+      "amounts": {
+        "currency": "ARS",
+        "method": "cash",
+        "commercial_total": "0.01",
+        "applied": "0.01",
+        "received": "0.01",
+        "change": "0.00"
+      },
+      "net": "0.01"
+    },
+    {
+      "amounts": {
+        "currency": "ARS",
+        "method": "cash",
+        "commercial_total": "99999999999999999999999999999999999999.99",
+        "applied": "99999999999999999999999999999999999999.99",
+        "received": "99999999999999999999999999999999999999.99",
+        "change": "0.00"
+      },
+      "net": "99999999999999999999999999999999999999.99"
+    }
+  ],
+  "invalid": [
+    "10.000",
+    "1e2",
+    1.25,
+    "-0.00",
+    "+1.00",
+    "01.00",
+    "1,00",
+    "1.0",
+    "100000000000000000000000000000000000000.00"
+  ],
+  "policy": "scale 2 final ARS, no cash rounding; calculation vectors of sales remain D"
+}

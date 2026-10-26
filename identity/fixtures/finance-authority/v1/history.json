@@ -1,0 +1,77 @@
+{
+  "request": {
+    "canonicalization_version": "finance-request-v1",
+    "operation_id": "createFinanceHistoryReadSession",
+    "method": "POST",
+    "path": "/api/v1/finance/history-read-sessions",
+    "query": {},
+    "body": {
+      "operation_id": "019a1a10-0000-7000-8000-000000000040",
+      "organization_id": "019a1a10-0000-7000-8000-000000000001",
+      "reason_code": "reconstruction",
+      "families": [
+        "finance.cash-shift.opened.v1",
+        "finance.cash-movement.recorded.v1",
+        "finance.sale-payment.recorded.v2"
+      ],
+      "from_sequence": "1",
+      "to_sequence": null,
+      "limit": 50
+    },
+    "idempotency_key": "019a1a10-0000-7000-8000-000000000040"
+  },
+  "decision": {
+    "authorized": true,
+    "decision_ref": "synthetic-decision",
+    "account_ref": "synthetic-account",
+    "membership_ref": "synthetic-membership",
+    "session_ref": "synthetic-session",
+    "device_ref": "synthetic-device",
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "operation_id": "createFinanceHistoryReadSession",
+    "permission": "finance.history.read",
+    "canonicalization_version": "finance-request-v1",
+    "request_hash": "2ad114990980ee770418406b1d3290cefc3fecbb5de234a0de29514cc9f4d8dd",
+    "checked_at": "2026-10-26T20:00:00.000Z",
+    "valid_for_ms": 2000,
+    "scope": {
+      "organization_id": "019a1a10-0000-7000-8000-000000000001",
+      "branch_ids": [
+        "019a1a10-0000-7000-8000-000000000002"
+      ],
+      "pos_ids": [
+        "019a1a10-0000-7000-8000-000000000003"
+      ]
+    },
+    "versions": {
+      "account": "a1",
+      "session": "s1",
+      "credential": "c1",
+      "membership": "m1",
+      "authorization": "z1",
+      "device": "d1",
+      "approval": "p1"
+    },
+    "step_up_at": "2026-10-26T19:55:00.000Z"
+  },
+  "check": {
+    "sent_at_ms": 1000,
+    "now_ms": 1100,
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "account_ref": "synthetic-account",
+    "membership_ref": "synthetic-membership",
+    "device_ref": "synthetic-device",
+    "branch_id": "019a1a10-0000-7000-8000-000000000002",
+    "pos_id": "019a1a10-0000-7000-8000-000000000003",
+    "at": "2026-10-26T20:00:00.000Z",
+    "current_versions": {
+      "account": "a1",
+      "session": "s1",
+      "credential": "c1",
+      "membership": "m1",
+      "authorization": "z1",
+      "device": "d1",
+      "approval": "p1"
+    }
+  }
+}

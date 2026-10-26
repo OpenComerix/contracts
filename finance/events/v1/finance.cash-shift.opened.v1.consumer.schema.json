@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+  "title": "finance.cash-shift.opened.v1",
+  "allOf": [
+    {
+      "$ref": "../../../events/event-envelope-v1.schema.json"
+    },
+    {
+      "required": [
+        "causation_id",
+        "branch_id",
+        "pos_id"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "event_type": {
+          "const": "finance.cash-shift.opened.v1"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "producer": {
+          "const": "finance"
+        },
+        "aggregate_type": {
+          "const": "cash_shift"
+        },
+        "aggregate_version": {
+          "const": 1
+        },
+        "aggregate_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "causation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "payload": {
+          "$ref": "../../http/shared/v1/finance-consumer-types-v1.schema.json#/$defs/ShiftOpened"
+        }
+      }
+    }
+  ]
+}

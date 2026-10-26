@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+  "title": "finance.record-sale-cash.v1",
+  "allOf": [
+    {
+      "$ref": "../../../commands/command-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "command_type",
+        "schema_version",
+        "producer",
+        "target",
+        "command_id",
+        "organization_id",
+        "correlation_id",
+        "causation_id",
+        "payload"
+      ],
+      "properties": {
+        "command_type": {
+          "const": "finance.record-sale-cash.v1"
+        },
+        "schema_version": {
+          "const": 1
+        },
+        "producer": {
+          "const": "sales-pos"
+        },
+        "target": {
+          "const": "finance"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "correlation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "causation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "payload": {
+          "$ref": "../../http/shared/v1/finance-consumer-types-v1.schema.json#/$defs/RecordCash"
+        }
+      }
+    }
+  ]
+}

@@ -43,3 +43,7 @@ El candidato local incorpora los catálogos de errores v7/v8 y sus schemas, más
 ## F1-10B — Errores v9 candidatos
 
 [Catálogo](errors/v9/error-catalog-v9.json) y [schema](errors/v9/error-catalog-v9.schema.json) preservan las entradas v8 y agregan errores de inventario, credenciales/caller de workload y el puerto de autoridad Sales, con owner explícito, status y retryability definidos en el [mapa B](../inventory/README.md#f1-10b--paquete-candidato). Los sobres de comando/resultado/evento, Problem Details v3 y lifecycle v2 se reutilizan sin modificación. Nuevas intenciones planned; sin reemplazo de pins, admisión funcional ni consumo por nombre de carpeta.
+
+## F1-10C — Errores v10 candidatos
+
+[Catálogo](errors/v10/error-catalog-v10.json) y [schema](errors/v10/error-catalog-v10.schema.json) preservan íntegramente v9 y añaden únicamente los códigos de finance del [mapa C](../finance/README.md#f1-10c--paquete-candidato), con owner/status/retryability explícitos y sin parámetros sensibles. Problem Details v3 y sobres históricos se conservan; errores técnicos no se fijan como rechazo terminal de cobro. Solo planned, sin migración de pins/consumidores ni admisión funcional.

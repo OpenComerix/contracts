@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+  "title": "Persisted Sales step authority, finance selection v1",
+  "$defs": {
+    "Request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "process_id",
+        "process_version",
+        "step_id",
+        "step",
+        "command_id",
+        "target",
+        "command_fingerprint"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "step_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "step": {
+          "const": "finance.record-sale-cash.v1"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "target": {
+          "const": "finance"
+        },
+        "command_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "process_id",
+        "process_version",
+        "step_id",
+        "step",
+        "command_id",
+        "target",
+        "command_fingerprint",
+        "authorized",
+        "caller",
+        "audience",
+        "checked_at",
+        "valid_for_ms",
+        "stock",
+        "authorized_responsible"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "process_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "step_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "step": {
+          "const": "finance.record-sale-cash.v1"
+        },
+        "command_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "target": {
+          "const": "finance"
+        },
+        "command_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "authorized": {
+          "const": true
+        },
+        "caller": {
+          "const": "finance"
+        },
+        "audience": {
+          "const": "sales-pos.process-authority"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "valid_for_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "stock": {
+          "$ref": "../../../../finance/http/shared/v1/finance-types-v1.schema.json#/$defs/StockEvidence"
+        },
+        "authorized_responsible": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "account_ref",
+            "membership_ref",
+            "device_ref",
+            "cash_shift_id"
+          ],
+          "properties": {
+            "account_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "membership_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "device_ref": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "cash_shift_id": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,125 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Finance cash flow",
+    "version": "1.0.0",
+    "license": {
+      "name": "Proprietary"
+    },
+    "description": "Candidate directed commands/results distinct from informative financial facts."
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "commands": {
+      "address": "finance.commands",
+      "messages": {
+        "record": {
+          "$ref": "#/components/messages/finance.record-sale-cash.v1"
+        }
+      }
+    },
+    "results": {
+      "address": "sales-pos.results",
+      "messages": {
+        "record": {
+          "$ref": "#/components/messages/finance.record-sale-cash.result.v1"
+        }
+      }
+    },
+    "events": {
+      "address": "finance.events",
+      "messages": {
+        "fact0": {
+          "$ref": "#/components/messages/finance.cash-shift.opened.v1"
+        },
+        "fact1": {
+          "$ref": "#/components/messages/finance.cash-movement.recorded.v1"
+        },
+        "fact2": {
+          "$ref": "#/components/messages/finance.sale-payment.recorded.v2"
+        }
+      }
+    }
+  },
+  "operations": {
+    "receiveCash": {
+      "action": "receive",
+      "channel": {
+        "$ref": "#/channels/commands"
+      }
+    },
+    "sendResult": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/results"
+      }
+    },
+    "sendFacts": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "finance.record-sale-cash.v1": {
+        "name": "finance.record-sale-cash.v1",
+        "title": "finance.record-sale-cash.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/finance.record-sale-cash.v1.schema.json"
+          }
+        }
+      },
+      "finance.record-sale-cash.result.v1": {
+        "name": "finance.record-sale-cash.result.v1",
+        "title": "finance.record-sale-cash.result.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../../commands/v1/finance.record-sale-cash.result.v1.schema.json"
+          }
+        }
+      },
+      "finance.cash-shift.opened.v1": {
+        "name": "finance.cash-shift.opened.v1",
+        "title": "finance.cash-shift.opened.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "finance.cash-shift.opened.v1.schema.json"
+          }
+        }
+      },
+      "finance.cash-movement.recorded.v1": {
+        "name": "finance.cash-movement.recorded.v1",
+        "title": "finance.cash-movement.recorded.v1",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "finance.cash-movement.recorded.v1.schema.json"
+          }
+        }
+      },
+      "finance.sale-payment.recorded.v2": {
+        "name": "finance.sale-payment.recorded.v2",
+        "title": "finance.sale-payment.recorded.v2",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "../v2/finance.sale-payment.recorded.v2.schema.json"
+          }
+        }
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false
+}

@@ -1,0 +1,624 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+  "title": "Finance human authority v1; Identity owns decisions",
+  "$defs": {
+    "ClientSignal": {
+      "type": "string",
+      "pattern": "^v1\\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+    },
+    "CanonicalRequest": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "createPosCashRegister"
+            },
+            "method": {
+              "const": "POST"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/cash-registers$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            },
+            "body": {
+              "$ref": "../../../../finance/http/shared/v1/finance-types-v1.schema.json#/$defs/CashRegisterCreate"
+            },
+            "idempotency_key": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "listCashRegisters"
+            },
+            "method": {
+              "const": "GET"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/cash-registers$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pos_id"
+              ],
+              "properties": {
+                "pos_id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 200
+                },
+                "limit": {
+                  "type": "string",
+                  "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+                },
+                "cursor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              }
+            },
+            "body": {
+              "const": null
+            },
+            "idempotency_key": {
+              "const": null
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "openCashShift"
+            },
+            "method": {
+              "const": "POST"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/cash-shifts$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            },
+            "body": {
+              "$ref": "../../../../finance/http/shared/v1/finance-types-v1.schema.json#/$defs/OpenShiftRequest"
+            },
+            "idempotency_key": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "getCashShift"
+            },
+            "method": {
+              "const": "GET"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/cash-shifts/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            },
+            "body": {
+              "const": null
+            },
+            "idempotency_key": {
+              "const": null
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "getCashShiftExpected"
+            },
+            "method": {
+              "const": "GET"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/cash-shifts/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/expected$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            },
+            "body": {
+              "const": null
+            },
+            "idempotency_key": {
+              "const": null
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "createFinanceHistoryReadSession"
+            },
+            "method": {
+              "const": "POST"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/history-read-sessions$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {}
+            },
+            "body": {
+              "$ref": "../../../../finance/http/shared/v1/finance-types-v1.schema.json#/$defs/HistoryRequest"
+            },
+            "idempotency_key": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "canonicalization_version",
+            "operation_id",
+            "method",
+            "path",
+            "query",
+            "body",
+            "idempotency_key"
+          ],
+          "properties": {
+            "canonicalization_version": {
+              "const": "finance-request-v1"
+            },
+            "operation_id": {
+              "const": "readFinanceHistoryFacts"
+            },
+            "method": {
+              "const": "GET"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/v1/finance/history-read-sessions/[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/facts$"
+            },
+            "query": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [],
+              "properties": {
+                "limit": {
+                  "type": "string",
+                  "pattern": "^(?:[1-9]|[1-9][0-9]|100)$"
+                },
+                "cursor": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 2048
+                }
+              }
+            },
+            "body": {
+              "const": null
+            },
+            "idempotency_key": {
+              "const": null
+            }
+          }
+        }
+      ]
+    },
+    "DelegationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request",
+        "client_signal"
+      ],
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/CanonicalRequest"
+        },
+        "client_signal": {
+          "$ref": "#/$defs/ClientSignal"
+        }
+      }
+    },
+    "Delegation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "request_hash",
+        "canonicalization_version",
+        "delegation_id",
+        "delegation_jwt",
+        "caller",
+        "audience",
+        "issued_at",
+        "expires_at"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "enum": [
+            "createPosCashRegister",
+            "listCashRegisters",
+            "openCashShift",
+            "getCashShift",
+            "getCashShiftExpected",
+            "createFinanceHistoryReadSession",
+            "readFinanceHistoryFacts"
+          ]
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "canonicalization_version": {
+          "const": "finance-request-v1"
+        },
+        "delegation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "delegation_jwt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        },
+        "caller": {
+          "const": "gateway-bff"
+        },
+        "audience": {
+          "const": "finance.user-api"
+        },
+        "issued_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        }
+      }
+    },
+    "AuthorizationRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "request",
+        "client_signal",
+        "delegation_jwt"
+      ],
+      "properties": {
+        "request": {
+          "$ref": "#/$defs/CanonicalRequest"
+        },
+        "client_signal": {
+          "$ref": "#/$defs/ClientSignal"
+        },
+        "delegation_jwt": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 8192
+        }
+      }
+    },
+    "Authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorized",
+        "decision_ref",
+        "account_ref",
+        "membership_ref",
+        "session_ref",
+        "device_ref",
+        "organization_id",
+        "operation_id",
+        "permission",
+        "canonicalization_version",
+        "request_hash",
+        "checked_at",
+        "valid_for_ms",
+        "scope",
+        "versions",
+        "step_up_at"
+      ],
+      "properties": {
+        "authorized": {
+          "const": true
+        },
+        "decision_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "membership_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "session_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "operation_id": {
+          "enum": [
+            "createPosCashRegister",
+            "listCashRegisters",
+            "openCashShift",
+            "getCashShift",
+            "getCashShiftExpected",
+            "createFinanceHistoryReadSession",
+            "readFinanceHistoryFacts"
+          ]
+        },
+        "permission": {
+          "enum": [
+            "finance.cash.configure",
+            "finance.cash.read",
+            "finance.cash.open",
+            "finance.history.read"
+          ]
+        },
+        "canonicalization_version": {
+          "const": "finance-request-v1"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$"
+        },
+        "valid_for_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "scope": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "organization_id",
+            "branch_ids",
+            "pos_ids"
+          ],
+          "properties": {
+            "organization_id": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "branch_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            },
+            "pos_ids": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 200
+              }
+            }
+          }
+        },
+        "versions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "account",
+            "session",
+            "credential",
+            "membership",
+            "authorization",
+            "device",
+            "approval"
+          ],
+          "properties": {
+            "account": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "session": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "credential": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "membership": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "authorization": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "device": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            },
+            "approval": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200
+            }
+          }
+        },
+        "step_up_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

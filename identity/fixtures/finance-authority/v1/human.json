@@ -1,0 +1,73 @@
+{
+  "request": {
+    "canonicalization_version": "finance-request-v1",
+    "operation_id": "openCashShift",
+    "method": "POST",
+    "path": "/api/v1/finance/cash-shifts",
+    "query": {},
+    "body": {
+      "operation_id": "019a1a10-0000-7000-8000-000000000020",
+      "organization_id": "019a1a10-0000-7000-8000-000000000001",
+      "branch_id": "019a1a10-0000-7000-8000-000000000002",
+      "pos_id": "019a1a10-0000-7000-8000-000000000003",
+      "cash_register_id": "019a1a10-0000-7000-8000-000000000007",
+      "currency": "ARS",
+      "opening_float": "100.00"
+    },
+    "idempotency_key": "019a1a10-0000-7000-8000-000000000020"
+  },
+  "decision": {
+    "authorized": true,
+    "decision_ref": "synthetic-decision",
+    "account_ref": "synthetic-account",
+    "membership_ref": "synthetic-membership",
+    "session_ref": "synthetic-session",
+    "device_ref": "synthetic-device",
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "operation_id": "openCashShift",
+    "permission": "finance.cash.open",
+    "canonicalization_version": "finance-request-v1",
+    "request_hash": "a86efd79e41966ca2193cd7b127a7155a033a2d91667fee8de8c018e46098f30",
+    "checked_at": "2026-10-26T20:00:00.000Z",
+    "valid_for_ms": 2000,
+    "scope": {
+      "organization_id": "019a1a10-0000-7000-8000-000000000001",
+      "branch_ids": [
+        "019a1a10-0000-7000-8000-000000000002"
+      ],
+      "pos_ids": [
+        "019a1a10-0000-7000-8000-000000000003"
+      ]
+    },
+    "versions": {
+      "account": "a1",
+      "session": "s1",
+      "credential": "c1",
+      "membership": "m1",
+      "authorization": "z1",
+      "device": "d1",
+      "approval": "p1"
+    },
+    "step_up_at": null
+  },
+  "check": {
+    "sent_at_ms": 1000,
+    "now_ms": 1100,
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "account_ref": "synthetic-account",
+    "membership_ref": "synthetic-membership",
+    "device_ref": "synthetic-device",
+    "branch_id": "019a1a10-0000-7000-8000-000000000002",
+    "pos_id": "019a1a10-0000-7000-8000-000000000003",
+    "at": "2026-10-26T20:00:00.000Z",
+    "current_versions": {
+      "account": "a1",
+      "session": "s1",
+      "credential": "c1",
+      "membership": "m1",
+      "authorization": "z1",
+      "device": "d1",
+      "approval": "p1"
+    }
+  }
+}

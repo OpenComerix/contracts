@@ -1,0 +1,103 @@
+{
+  "runtime_demonstrated": false,
+  "session": {
+    "read_session_id": "019a1a10-0000-7000-8000-000000000041",
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "account_ref": "synthetic-account",
+    "request": {
+      "operation_id": "019a1a10-0000-7000-8000-000000000040",
+      "organization_id": "019a1a10-0000-7000-8000-000000000001",
+      "reason_code": "reconstruction",
+      "families": [
+        "finance.cash-shift.opened.v1",
+        "finance.cash-movement.recorded.v1",
+        "finance.sale-payment.recorded.v2"
+      ],
+      "from_sequence": "1",
+      "to_sequence": null,
+      "limit": 50
+    },
+    "created_at": "2026-10-26T20:00:00.000Z",
+    "expires_at": "2026-10-26T20:30:00.000Z",
+    "snapshot_high_watermark": "4",
+    "disposition_generation": "0"
+  },
+  "page": {
+    "read_session_id": "019a1a10-0000-7000-8000-000000000041",
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "items": [
+      {
+        "history_sequence": "1",
+        "event_id": "019a1a10-0000-7000-8000-000000000022",
+        "event_type": "finance.cash-shift.opened.v1",
+        "schema_version": 1,
+        "original_json": "{\"event_id\":\"019a1a10-0000-7000-8000-000000000022\",\"event_type\":\"finance.cash-shift.opened.v1\",\"schema_version\":1,\"occurred_at\":\"2026-10-26T20:00:00.000Z\",\"producer\":\"finance\",\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"aggregate_type\":\"cash_shift\",\"aggregate_id\":\"019a1a10-0000-7000-8000-000000000008\",\"aggregate_version\":1,\"correlation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"causation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"payload\":{\"cash_shift_id\":\"019a1a10-0000-7000-8000-000000000008\",\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"cash_register_id\":\"019a1a10-0000-7000-8000-000000000007\",\"operation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"currency\":\"ARS\",\"opening_float\":\"100.00\",\"opening_movement_id\":\"019a1a10-0000-7000-8000-000000000021\",\"opened_at\":\"2026-10-26T20:00:00.000Z\",\"operating_date\":{\"business_date\":\"2026-10-26\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"date_policy_version\":\"finance-date-v1\"},\"version\":1}}",
+        "serialized_sha256": "d648df14078e363410f7cf5600c77c0a79f5e8d12351a2d5f0ea6d2bb5b35813"
+      },
+      {
+        "history_sequence": "2",
+        "event_id": "019a1a10-0000-7000-8000-000000000023",
+        "event_type": "finance.cash-movement.recorded.v1",
+        "schema_version": 1,
+        "original_json": "{\"event_id\":\"019a1a10-0000-7000-8000-000000000023\",\"event_type\":\"finance.cash-movement.recorded.v1\",\"schema_version\":1,\"occurred_at\":\"2026-10-26T20:00:00.000Z\",\"producer\":\"finance\",\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"aggregate_type\":\"cash_movement\",\"aggregate_id\":\"019a1a10-0000-7000-8000-000000000021\",\"aggregate_version\":1,\"correlation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"causation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"payload\":{\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"operation_id\":\"019a1a10-0000-7000-8000-000000000020\",\"cash_register_id\":\"019a1a10-0000-7000-8000-000000000007\",\"cash_shift_id\":\"019a1a10-0000-7000-8000-000000000008\",\"movement_id\":\"019a1a10-0000-7000-8000-000000000021\",\"movement_version\":1,\"shift_version\":1,\"currency\":\"ARS\",\"method\":\"cash\",\"direction\":\"in\",\"kind\":\"opening_float\",\"amount\":\"100.00\",\"payment_id\":null,\"sale_id\":null,\"recorded_at\":\"2026-10-26T20:00:00.000Z\",\"operating_date\":{\"business_date\":\"2026-10-26\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"date_policy_version\":\"finance-date-v1\"}}}",
+        "serialized_sha256": "a95428b4cad528bd49d621eeff559102b4de5f86acf45862b6f679acc8aaf82f"
+      },
+      {
+        "history_sequence": "3",
+        "event_id": "019a1a10-0000-7000-8000-000000000014",
+        "event_type": "finance.cash-movement.recorded.v1",
+        "schema_version": 1,
+        "original_json": "{\"event_id\":\"019a1a10-0000-7000-8000-000000000014\",\"event_type\":\"finance.cash-movement.recorded.v1\",\"schema_version\":1,\"occurred_at\":\"2026-10-26T20:00:00.000Z\",\"producer\":\"finance\",\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"aggregate_type\":\"cash_movement\",\"aggregate_id\":\"019a1a10-0000-7000-8000-000000000013\",\"aggregate_version\":1,\"correlation_id\":\"019a1a10-0000-7000-8000-000000000005\",\"causation_id\":\"019a1a10-0000-7000-8000-000000000009\",\"payload\":{\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"operation_id\":\"019a1a10-0000-7000-8000-000000000004\",\"cash_register_id\":\"019a1a10-0000-7000-8000-000000000007\",\"cash_shift_id\":\"019a1a10-0000-7000-8000-000000000008\",\"movement_id\":\"019a1a10-0000-7000-8000-000000000013\",\"movement_version\":1,\"shift_version\":5,\"currency\":\"ARS\",\"method\":\"cash\",\"direction\":\"in\",\"kind\":\"sale_cash\",\"amount\":\"75.25\",\"payment_id\":\"019a1a10-0000-7000-8000-000000000011\",\"sale_id\":\"019a1a10-0000-7000-8000-000000000006\",\"recorded_at\":\"2026-10-26T20:00:00.000Z\",\"operating_date\":{\"business_date\":\"2026-10-26\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"date_policy_version\":\"finance-date-v1\"}}}",
+        "serialized_sha256": "ef7649169fce0bcc3e8d142dcacf0ecccf5b42b49341790093ed2349a9ef83d5"
+      },
+      {
+        "history_sequence": "4",
+        "event_id": "019a1a10-0000-7000-8000-000000000015",
+        "event_type": "finance.sale-payment.recorded.v2",
+        "schema_version": 1,
+        "original_json": "{\"event_id\":\"019a1a10-0000-7000-8000-000000000015\",\"event_type\":\"finance.sale-payment.recorded.v2\",\"schema_version\":1,\"occurred_at\":\"2026-10-26T20:00:00.000Z\",\"producer\":\"finance\",\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"aggregate_type\":\"sale_payment\",\"aggregate_id\":\"019a1a10-0000-7000-8000-000000000011\",\"aggregate_version\":1,\"correlation_id\":\"019a1a10-0000-7000-8000-000000000005\",\"causation_id\":\"019a1a10-0000-7000-8000-000000000009\",\"payload\":{\"context\":{\"organization_id\":\"019a1a10-0000-7000-8000-000000000001\",\"branch_id\":\"019a1a10-0000-7000-8000-000000000002\",\"pos_id\":\"019a1a10-0000-7000-8000-000000000003\",\"operation_id\":\"019a1a10-0000-7000-8000-000000000004\",\"process_id\":\"019a1a10-0000-7000-8000-000000000005\",\"process_version\":3,\"sale_id\":\"019a1a10-0000-7000-8000-000000000006\",\"cash_register_id\":\"019a1a10-0000-7000-8000-000000000007\",\"cash_shift_id\":\"019a1a10-0000-7000-8000-000000000008\"},\"payment_id\":\"019a1a10-0000-7000-8000-000000000011\",\"movement_id\":\"019a1a10-0000-7000-8000-000000000013\",\"payment_version\":1,\"shift_version\":5,\"amounts\":{\"currency\":\"ARS\",\"method\":\"cash\",\"commercial_total\":\"75.25\",\"applied\":\"75.25\",\"received\":\"100.00\",\"change\":\"24.75\"},\"stock\":{\"operation_id\":\"019a1a10-0000-7000-8000-000000000004\",\"result_id\":\"019a1a10-0000-7000-8000-000000000030\",\"command_id\":\"019a1a10-0000-7000-8000-000000000031\",\"status\":\"succeeded\",\"stock_status\":\"posted\",\"reconciliation_required\":false},\"recorded_at\":\"2026-10-26T20:00:00.000Z\",\"operating_date\":{\"business_date\":\"2026-10-26\",\"time_zone\":\"America/Argentina/Buenos_Aires\",\"date_policy_version\":\"finance-date-v1\"},\"command_id\":\"019a1a10-0000-7000-8000-000000000009\",\"result_id\":\"019a1a10-0000-7000-8000-000000000012\",\"provenance\":\"finance.record-sale-cash.v1\"}}",
+        "serialized_sha256": "62e6bab8a545914ab9c7a1fd043e4f0a94017694818a7e1d44f538402f331cd0"
+      }
+    ],
+    "page": {
+      "next_cursor": null,
+      "has_more": false,
+      "limit": 50
+    },
+    "snapshot_high_watermark": "4",
+    "data_as_of": "2026-10-26T20:00:00.000Z",
+    "disposition_generation": "0",
+    "families": [
+      {
+        "event_type": "finance.cash-shift.opened.v1",
+        "schema_version": 1
+      },
+      {
+        "event_type": "finance.cash-movement.recorded.v1",
+        "schema_version": 1
+      },
+      {
+        "event_type": "finance.sale-payment.recorded.v2",
+        "schema_version": 1
+      }
+    ],
+    "requested_range": {
+      "from_sequence": "1",
+      "to_sequence": "4"
+    },
+    "available_range": {
+      "from_sequence": "1",
+      "to_sequence": "4"
+    },
+    "missing_ranges": [],
+    "coverage": "complete_for_requested_range"
+  },
+  "check": {
+    "organization_id": "019a1a10-0000-7000-8000-000000000001",
+    "account_ref": "synthetic-account",
+    "at": "2026-10-26T20:01:00.000Z",
+    "last_sequence": "0",
+    "disposition_generation": "0"
+  },
+  "ledger_expected": "175.25"
+}

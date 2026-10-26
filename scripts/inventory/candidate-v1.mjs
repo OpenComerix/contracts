@@ -5,6 +5,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {parse} from 'yaml';
+import {reviewedFinanceHistoricalFile,reviewedFinanceHistoricalRegistry,withReviewedFinanceScope} from '../finance/reviewed-package-v1.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='062453a717bc49d08b4816fa8e630ea63fcdd64d';
@@ -12,7 +13,7 @@ export const manifestPath='inventory/fixtures/acceptance/v1/package.json';
 const decoder=new TextDecoder('utf-8',{fatal:true});
 const text=bytes=>decoder.decode(bytes).replaceAll('\r\n','\n');
 const hash=bytes=>createHash('sha256').update(text(bytes)).digest('hex');
-const readActual=file=>fs.readFileSync(path.join(root,file));
+const readActual=file=>reviewedFinanceHistoricalFile(file,fs.readFileSync(path.join(root,file)));
 const originals=new Map();
 export function original(file) {
  if(!originals.has(file))originals.set(file,execFileSync('git',['show',base+':'+file],{cwd:root,maxBuffer:16*1024*1024}));
@@ -74,6 +75,7 @@ export function validateCandidatePackage(read=readActual) {
 // reviewed B file is projected, after validating the complete actual B package.
 // Malformed/modified caller-supplied bytes pass through to the original guard.
 export function projectCandidateFile(file,bytes) {
+ bytes=reviewedFinanceHistoricalFile(file,bytes);
  if(!fs.existsSync(path.join(root,manifestPath)))return bytes;
  const {manifest}=validateCandidatePackage();
  const entry=manifest.files.find(x=>x.kind==='modified'&&x.path===file);
@@ -83,6 +85,7 @@ export function projectCandidateFile(file,bytes) {
 }
 export function candidateReadView(read) {return file=>projectCandidateFile(file,read(file));}
 export function projectCandidateRegistry(registry) {
+ registry=reviewedFinanceHistoricalRegistry(registry);
  if(!fs.existsSync(path.join(root,manifestPath)))return registry;
  const actual=JSON.parse(readActual('registry/contracts.json'));
  if(!isDeepStrictEqual(registry,actual))return registry;
@@ -90,5 +93,5 @@ export function projectCandidateRegistry(registry) {
 }
 export function withCandidateScope(allowed) {
  if(!fs.existsSync(path.join(root,manifestPath)))return new Set(allowed);
- const {manifest}=validateCandidatePackage();return new Set([...allowed,...manifest.files.map(x=>x.path),manifestPath]);
+ const {manifest}=validateCandidatePackage();return withReviewedFinanceScope([...allowed,...manifest.files.map(x=>x.path),manifestPath]);
 }

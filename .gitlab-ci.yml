@@ -354,3 +354,36 @@ validate:inventory-schema:
       artifacts: true
   script:
     - sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-ci
+
+validate:finance-contracts:
+  stage: validate
+  variables:
+    GIT_DEPTH: "0"
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - node --test --test-reporter=tap test/finance/*.test.mjs
+    - node scripts/finance/run-gate-v1.mjs openapi
+    - node scripts/finance/run-gate-v1.mjs asyncapi
+    - node scripts/finance/schema-v1.mjs .ci-artifacts/finance-v1-ci
+  artifacts:
+    when: always
+    paths:
+      - .ci-artifacts/finance-v1-*/
+    expire_in: 7 days
+
+validate:finance-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:finance-contracts
+      artifacts: true
+  script:
+    - sh scripts/finance/validate-v1.sh .ci-artifacts/finance-v1-ci

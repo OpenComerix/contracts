@@ -1,0 +1,102 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "extends_without_changing": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+  "profiles": [
+    {
+      "client_id": "finance.finance-authority",
+      "caller": "finance",
+      "audience": "identity-tenancy.finance-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "gateway-bff.finance",
+      "caller": "gateway-bff",
+      "audience": "finance.user-api",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "finance.sales-process-authority",
+      "caller": "finance",
+      "audience": "sales-pos.process-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "sales-pos.finance-results",
+      "caller": "sales-pos",
+      "audience": "finance.process-results",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    }
+  ],
+  "issuance": "H1A HTTP Basic grant_type=client_credentials; client_id fixes caller/audience; distinct credentials and rotation per purpose; no request audience selector or secret fallback.",
+  "permissions": [
+    {
+      "operation_id": "createPosCashRegister",
+      "method": "POST",
+      "path": "/api/v1/finance/cash-registers",
+      "permission": "finance.cash.configure",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "listCashRegisters",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-registers",
+      "permission": "finance.cash.read",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "openCashShift",
+      "method": "POST",
+      "path": "/api/v1/finance/cash-shifts",
+      "permission": "finance.cash.open",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "getCashShift",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-shifts/{cash_shift_id}",
+      "permission": "finance.cash.read",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "getCashShiftExpected",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-shifts/{cash_shift_id}/expected",
+      "permission": "finance.cash.read",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "createFinanceHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/finance/history-read-sessions",
+      "permission": "finance.history.read",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": true
+    },
+    {
+      "operation_id": "readFinanceHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/finance/history-read-sessions/{read_session_id}/facts",
+      "permission": "finance.history.read",
+      "scope": "organization and currently authorized branch/POS; finance validates owned register/shift",
+      "step_up": true
+    }
+  ],
+  "template": "OWNER initial assignable permissions; evaluate permissions/scopes, never role string or plan."
+}

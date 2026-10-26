@@ -1,0 +1,817 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Identity finance human authority v1",
+    "version": "1.0.0",
+    "description": "F1-10C candidate. ADR-063 authority, idempotency, local commits and history; no functional admission or runtime.",
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    },
+    "contact": {
+      "name": "OpenComerix"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://owner.internal.example/api/v1",
+      "description": "Illustrative TLS host."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Finance",
+      "description": "Cash owner operations."
+    }
+  ],
+  "security": [
+    {
+      "workload": []
+    }
+  ],
+  "paths": {
+    "/internal/identity/finance-delegations": {
+      "post": {
+        "tags": [
+          "Finance"
+        ],
+        "operationId": "createFinanceDelegation",
+        "summary": "createFinanceDelegation",
+        "description": "Identity checks current active session, account/membership/credential versions, MFA, proven approved device, permission and branch/POS scope. Bind exact seven-field public request and separate client signal. ES256 delegate <=60s; check lifetime and type/caller/audience. Decision <=2000ms measured from before network; no cache; revalidate after waits. History requires step-up <=900s for each page.",
+        "security": [
+          {
+            "workload": [],
+            "originSession": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/identity-finance-authority-v1.schema.json#/$defs/DelegationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Current bound Identity result.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/identity-finance-authority-v1.schema.json#/$defs/Delegation"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_session_invalid_or_expired",
+                            "platform_workload_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_access_denied",
+                            "identity_reauthentication_required",
+                            "platform_workload_forbidden"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_dependency_unavailable",
+                            "platform_capacity_exhausted"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-caller": "gateway-bff",
+        "x-audience": "identity-tenancy.gateway"
+      }
+    },
+    "/internal/identity/finance-authorizations": {
+      "post": {
+        "tags": [
+          "Finance"
+        ],
+        "operationId": "checkFinanceAuthorization",
+        "summary": "checkFinanceAuthorization",
+        "description": "Identity checks current active session, account/membership/credential versions, MFA, proven approved device, permission and branch/POS scope. Bind exact seven-field public request and separate client signal. ES256 delegate <=60s; check lifetime and type/caller/audience. Decision <=2000ms measured from before network; no cache; revalidate after waits. History requires step-up <=900s for each page.",
+        "security": [
+          {
+            "workload": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/identity-finance-authority-v1.schema.json#/$defs/AuthorizationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Current bound Identity result.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/identity-finance-authority-v1.schema.json#/$defs/Authorization"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_session_invalid_or_expired",
+                            "platform_workload_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_access_denied",
+                            "identity_reauthentication_required",
+                            "platform_workload_forbidden"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable Problem Details; cross-tenant resources are not disclosed.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Normative response header.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds until retry when estimable.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_dependency_unavailable",
+                            "platform_capacity_exhausted"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "x-caller": "finance",
+        "x-audience": "identity-tenancy.finance-authority"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "workload": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "ES256 JWT",
+        "description": "Fixed caller/audience, <=300s, issuer/kid/type/time verified; no authority from signature alone."
+      },
+      "originSession": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-oc_session",
+        "description": "Gateway to Identity only; no cookie at finance."
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false,
+  "x-error-catalog": "../../../../common/errors/v10/error-catalog-v10.json"
+}
