@@ -1,11 +1,11 @@
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, parseSource } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { admissionFiles, admissionReadView, admissionHistoricalFile, admissionHistoricalRegistry } from './inventory-authority-v1-1-admission.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const base = 'fcfbeba3f99c10b292ece4db2452ace71e66d093';
@@ -20,7 +20,7 @@ export const testPath = 'test/identity/inventory-authority-v1-1.test.mjs';
 export const expectedPackageHash = 'b36b4ef8305bc90d534fbe2d863e507992865b94b4c41a2444311f5fcdd525c8';
 export const description = 'F1-11A candidate successor: adds 400 identity_invalid_request to both inventory authority operations. No functional admission or runtime demonstrated; published 1.0.0 and its closure remain unchanged.';
 export const hash = bytes => createHash('sha256').update(new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n')).digest('hex');
-export const actual = file => fs.readFileSync(path.join(root, file));
+export const actual = admissionReadView();
 export const changedPaths = Object.freeze([
   successorPath, fixturePath, runnerPath, testPath,
   'registry/contracts.json', 'identity/index.json', 'identity/README.md',
@@ -91,7 +91,7 @@ export function validateSuccessorPackage(read = actual) {
   for (const file of ['package.json', 'pnpm-lock.yaml', 'registry/consumers/index.json',
     ...previous.requiredConsumers.map(owner => 'registry/consumers/' + owner + '.json')])
     assert.equal(hash(read(file)), hash(source(file)), 'IA11_CONSUMER_OR_DEPENDENCY:' + file);
-  const allowed = new Set([...changedPaths, packagePath, verifierPath]);
+  const allowed = new Set([...changedPaths, packagePath, verifierPath, ...admissionFiles]);
   for (const args of [['diff', '--name-only', base], ['diff', '--cached', '--name-only'], ['ls-files', '--others', '--exclude-standard']])
     for (const file of execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim().split(/\r?\n/).filter(Boolean))
       assert(allowed.has(file), 'IA11_UNDECLARED_PATH:' + file);
@@ -103,16 +103,18 @@ export function validateSuccessorPackage(read = actual) {
 // Validate the complete exact successor before projecting its reviewed delta
 // for older guards. Mutated caller bytes are passed through, never repaired.
 export function successorHistoricalFile(file, bytes) {
+  bytes = admissionHistoricalFile(file, bytes);
   const { manifest } = validateSuccessorPackage();
   const entry = manifest.files.find(row => row.kind === 'modified' && row.path === file);
   return entry && hash(bytes) === entry.sha256 ? source(file) : bytes;
 }
 export function successorHistoricalRegistry(registry) {
+  registry = admissionHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, JSON.parse(actual('registry/contracts.json')))) return registry;
   validateSuccessorPackage();
   return JSON.parse(source('registry/contracts.json'));
 }
 export function withSuccessorScope(paths) {
   validateSuccessorPackage();
-  return new Set([...paths, ...changedPaths, packagePath, verifierPath]);
+  return new Set([...paths, ...changedPaths, packagePath, verifierPath, ...admissionFiles]);
 }

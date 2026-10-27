@@ -17904,6 +17904,45 @@
           "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json"
         }
       ]
+    },
+    {
+      "id": "identity.inventory-authority.http.v1-1",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-11A selected admission of published inventory authority HTTP 1.1.0; no consumer migration or runtime activation.",
+      "reasonForChange": "Admit the reviewed published source with 400 identity_invalid_request and exact SHA/ref CI verified.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.1.0",
+      "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+      "commit": "0bff3a242784599c400875f37e1c2d3ef64f4538",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3044f3772481bd5fcb8d1b46dd5a0c7db491caa31c48a0174c78001074e10d21",
+      "operations": [
+        "createInventoryDelegation",
+        "checkInventoryAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json"
+        }
+      ]
     }
   ],
   "preservedFiles": [
@@ -18868,14 +18907,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "identity.inventory-authority.http.v1-1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-11A",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/private/v1/identity-inventory-authority-v1-1.yaml only; HTTP 1.1.0 adds 400 identity_invalid_request to both operations. No functional admission, consumer migration or runtime; preserve published 1.0.0 and its closure."
     }
   ],
   "requiredConsumers": [

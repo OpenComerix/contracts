@@ -30,7 +30,7 @@ test('full package preserves all 199 roots, transports, consumers, dependencies 
   assert.deepEqual({ roots, planned, operations, functional_admission, runtime_demonstrated },
     { roots: 199, planned: 3, operations: 2, functional_admission: false, runtime_demonstrated: false });
 });
-test('only the exact derived intention and two existing Inventory CI scripts change', () => {
+test('historical source view retains the exact intention and two Inventory CI scripts', () => {
   assert.deepEqual(JSON.parse(actual('registry/contracts.json')), successorRegistry());
   assert.deepEqual(parseSource(actual('.gitlab-ci.yml'), '.gitlab-ci.yml'), successorCI());
   assert.equal(Object.keys(successorCI()).length, Object.keys(parseSource(source('.gitlab-ci.yml'), '.gitlab-ci.yml')).length);
