@@ -4,7 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {makeLock,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {root,source,baseline,validateAdmission,admittedRegistry,validateReleasePackage,releaseHistoricalFile,releaseHistoricalRegistry,withReleaseScope,validateReleaseCI,packagePath} from '../../scripts/sales/release-v1.mjs';
-const bytes=f=>fs.readFileSync(path.join(root,f)),registry=()=>JSON.parse(bytes('registry/contracts.json'));
+import {successorHistoricalFile} from '../../scripts/identity/inventory-authority-v1-1.mjs';
+const bytes=f=>successorHistoricalFile(f,fs.readFileSync(path.join(root,f))),registry=()=>JSON.parse(bytes('registry/contracts.json'));
 test('E exact selected admission preserves 121 roots/236 artifacts and leaves unrelated drafts/planned',()=>assert.deepEqual(validateAdmission(),{roots:199,added:78,preserved:236,planned:2,runtime_demonstrated:false}));
 for(const [name,edit] of [
  ['removed prior root',r=>r.contracts.shift()],['partial set',r=>r.contracts.pop()],['wrong source',r=>r.contracts.at(-1).commit='0'.repeat(40)],

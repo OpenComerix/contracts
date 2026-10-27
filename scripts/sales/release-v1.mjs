@@ -6,6 +6,7 @@ import {execFileSync} from 'node:child_process';
 import {gitReader, parseSource, operationPointers, resolveSelection} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {successorHistoricalFile,successorHistoricalRegistry,withSuccessorScope} from '../identity/inventory-authority-v1-1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const releaseSource = '7cd2b548fb909c5eff47d0319c162c498ee68e92';
@@ -16,7 +17,7 @@ export const verifierPath = 'scripts/sales/release-v1.mjs';
 export const expectedPackageHash = '9d111ecc393a4728ebda6fd9ae128f10a43d70d207d05ee1cdc968f8b916671d';
 export const text = bytes => new TextDecoder('utf-8', {fatal: true}).decode(bytes).replaceAll('\r\n', '\n');
 export const digest = bytes => sha256(text(bytes));
-const raw = file => fs.readFileSync(path.join(root, file));
+const raw = file => successorHistoricalFile(file, fs.readFileSync(path.join(root, file)));
 export const baseline = () => JSON.parse(source('registry/contracts.json'));
 const selected = () => baseline().planned.filter(row => /^F1-10[BCD]$/u.test(row.materializeIn));
 const candidatePath = row => {
@@ -148,7 +149,7 @@ export function validateReleasePackage(read = raw) {
     for (const entry of JSON.parse(source(file)).files) if (!modified.has(entry.path))
       assert.equal(digest(read(entry.path)), digest(source(entry.path)), 'E_BCD_BYTES:' + entry.path);
   }
-  const allowed = new Set([packagePath,verifierPath,...manifest.files.map(entry=>entry.path)]);
+  const allowed = withSuccessorScope([packagePath,verifierPath,...manifest.files.map(entry=>entry.path)]);
   for (const args of [['diff','--name-only',releaseSource],['ls-files','--others','--exclude-standard']])
     for (const file of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean)) assert(allowed.has(file),'E_UNDECLARED_PATH:' + file);
   const result = {manifest, ...validateAdmission(JSON.parse(read('registry/contracts.json')))};
@@ -159,16 +160,18 @@ export function validateReleasePackage(read = raw) {
 // Only the complete pinned E package can project its exact reviewed changes to
 // D's historical view. Mutated caller input is never repaired or normalized.
 export function releaseHistoricalFile(file, bytes) {
+  bytes = successorHistoricalFile(file, bytes);
   const {manifest} = validateReleasePackage();
   const entry = manifest.files.find(row => row.kind === 'modified' && row.path === file);
   return entry && digest(bytes) === entry.sha256 ? source(file) : bytes;
 }
 export function releaseHistoricalRegistry(registry) {
+  registry = successorHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, JSON.parse(raw('registry/contracts.json')))) return registry;
   validateReleasePackage();
   return baseline();
 }
 export function withReleaseScope(paths) {
   const {manifest} = validateReleasePackage();
-  return new Set([...paths, packagePath, verifierPath, ...manifest.files.map(row => row.path)]);
+  return withSuccessorScope([...paths, packagePath, verifierPath, ...manifest.files.map(row => row.path)]);
 }

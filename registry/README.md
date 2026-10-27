@@ -69,3 +69,9 @@ El [export de catálogo](consumers/catalog-pricing.json) incorpora cinco selecci
 B agrega únicamente intenciones planned de inventario, autoridad Identity, captura física de catálogo, autorización Sales para inventory y errores comunes v9; los índices se derivan del mismo registro. Ninguna raíz admitida previa, referencia/hash/tag, manifest/lock/export o consumidor cambia. Las fuentes locales no reciben un commit publicado inventado.
 
 [Gates/fixtures B](../inventory/README.md#f1-10b--paquete-candidato) prueban el paquete completo, el delta exacto de metadata/CI y preservación antes de proyectar las vistas de los controles históricos. Sus negativos originales permanecen activos. Auditoría aislada y permiso de publicación siguen pendientes; E decide admisión/release/H4 y el consumo requiere fuente publicada, CI exacto y runtime propietario aceptado.
+
+## F1-11A — Fuente sucesora de autoridad Inventory 1.1.0
+
+Una intención planned nueva, `identity.inventory-authority.http.v1-1`, identifica el [sucesor HTTP](../identity/http/private/v1/identity-inventory-authority-v1-1.yaml) que incorpora `400 identity_invalid_request` en ambas operaciones. Conserva las 199 raíces admitidas, los 236 artefactos históricos, las dos intenciones previas y los cinco consumidores/pins; no incorpora un commit fuente, admisión activa ni export nuevo.
+
+El [verificador del paquete](../scripts/identity/inventory-authority-v1-1.mjs) coteja el delta completo antes de proyectarlo para los controles históricos de H4; los datos alterados que recibe el llamador conservan sus diagnósticos de rechazo. El índice Identity se deriva del registro. [Alcance, fixtures y gates](../identity/README.md#f1-11a--sucesor-de-autoridad-inventory-110-candidato); auditoría, publicación, CI por SHA/ref exactos y admisión seleccionada preceden a cualquier consumo.

@@ -338,6 +338,9 @@ validate:inventory-contracts:
     - node scripts/inventory/run-gate-v1.mjs openapi
     - node scripts/inventory/run-gate-v1.mjs asyncapi
     - node scripts/inventory/schema-v1.mjs .ci-artifacts/inventory-v1-ci
+    - node --test --test-reporter=tap test/identity/inventory-authority-v1-1.test.mjs
+    - node scripts/identity/run-inventory-authority-v1-1.mjs openapi
+    - node scripts/identity/run-inventory-authority-v1-1.mjs prepare .ci-artifacts/inventory-v1-authority-1-1-ci
   artifacts:
     when: always
     paths:
@@ -354,6 +357,7 @@ validate:inventory-schema:
       artifacts: true
   script:
     - sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-ci
+    - sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-authority-1-1-ci
 
 validate:finance-contracts:
   stage: validate
