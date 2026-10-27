@@ -5,9 +5,36 @@
   "contracts": [
     "sales.sale.completed.v1",
     "sales.sale.reversed.v1",
-    "sales.http.v1"
+    "sales.http.v1",
+    "sales.inventory-step-authority.http.v1",
+    "sales.inventory-step-authority.schema.v1",
+    "sales.finance-step-authority.http.v1",
+    "sales.finance-step-authority.schema.v1",
+    "sales.f1-10d.pos-sales-v2",
+    "sales.f1-10d.pos-sales-internal-v2",
+    "sales.f1-10d.sales-catalog-capture-authority-v2",
+    "sales.f1-10d.sales-consumer-types-v2",
+    "sales.f1-10d.sales-lifecycle-policy-v2",
+    "sales.f1-10d.sales-protocol-policy-v2",
+    "sales.f1-10d.sales-types-v2",
+    "sales.f1-10d.sales-flow-v2.asyncapi",
+    "sales.f1-10d.sales.sale.completed.v2.consumer",
+    "sales.f1-10d.sales.sale.completed.v2",
+    "sales.f1-10e.catalog-capture-authority.schema.v2",
+    "sales.f1-10e.lifecycle-policy.schema.v2"
   ],
   "surfaces": [
+    {
+      "surface": "documentation",
+      "versions": [
+        {
+          "id": "sales.f1-10d.sales-flow-v2.asyncapi",
+          "version": "2.0.0",
+          "path": "sales/events/v2/sales-flow-v2.asyncapi.yaml",
+          "status": "active"
+        }
+      ]
+    },
     {
       "surface": "events",
       "versions": [
@@ -22,6 +49,12 @@
           "version": "v1",
           "path": "events/sales.sale.reversed.v1.schema.json",
           "status": "draft"
+        },
+        {
+          "id": "sales.f1-10d.sales.sale.completed.v2",
+          "version": "v2",
+          "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+          "status": "active"
         }
       ]
     },
@@ -35,23 +68,111 @@
           "status": "draft"
         }
       ]
+    },
+    {
+      "surface": "http-private",
+      "versions": [
+        {
+          "id": "sales.inventory-step-authority.http.v1",
+          "version": "1.0.0",
+          "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+          "status": "active"
+        },
+        {
+          "id": "sales.finance-step-authority.http.v1",
+          "version": "1.0.0",
+          "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.pos-sales-internal-v2",
+          "version": "2.0.0",
+          "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
+          "version": "2.0.0",
+          "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "sales.f1-10d.pos-sales-v2",
+          "version": "2.0.0",
+          "path": "sales/http/public/v2/pos-sales-v2.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "policy",
+      "versions": [
+        {
+          "id": "sales.f1-10d.sales-lifecycle-policy-v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.sales-protocol-policy-v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "schema",
+      "versions": [
+        {
+          "id": "sales.inventory-step-authority.schema.v1",
+          "version": "v1",
+          "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.finance-step-authority.schema.v1",
+          "version": "v1",
+          "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.sales-consumer-types-v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-consumer-types-v2.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.sales-types-v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10d.sales.sale.completed.v2.consumer",
+          "version": "v2",
+          "path": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10e.catalog-capture-authority.schema.v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.f1-10e.lifecycle-policy.schema.v2",
+          "version": "v2",
+          "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json",
+          "status": "active"
+        }
+      ]
     }
   ],
-  "planned": [
-    "sales.complete-snapshot.successor",
-    "sales.inventory-step-authority.http.v1",
-    "sales.inventory-step-authority.schema.v1",
-    "sales.finance-step-authority.http.v1",
-    "sales.finance-step-authority.schema.v1",
-    "sales.f1-10d.pos-sales-v2",
-    "sales.f1-10d.pos-sales-internal-v2",
-    "sales.f1-10d.sales-catalog-capture-authority-v2",
-    "sales.f1-10d.sales-consumer-types-v2",
-    "sales.f1-10d.sales-lifecycle-policy-v2",
-    "sales.f1-10d.sales-protocol-policy-v2",
-    "sales.f1-10d.sales-types-v2",
-    "sales.f1-10d.sales-flow-v2.asyncapi",
-    "sales.f1-10d.sales.sale.completed.v2.consumer",
-    "sales.f1-10d.sales.sale.completed.v2"
-  ]
+  "planned": []
 }

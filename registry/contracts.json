@@ -15192,6 +15192,2718 @@
       "sha256": "22f8e4cd30d6a58dae2fed234eda4ef3cf107091697ed09e844a06eaba09a621",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "inventory.http.public.v1",
+      "domain": "inventory",
+      "surface": "http-public",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "inventory/http/public/v1/inventory-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2",
+      "operations": [
+        "createInitialWarehouse",
+        "listInventoryWarehouses",
+        "getInventoryWarehouse",
+        "adjustInventoryStock",
+        "getInventoryAdjustment",
+        "getInventoryPosition",
+        "listInventoryPositions",
+        "listInventoryReconciliations",
+        "getInventoryReconciliation",
+        "createInventoryHistoryReadSession",
+        "readInventoryHistoryFacts"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.http.private.v1",
+      "domain": "inventory",
+      "surface": "http-private",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "c4517bab25bd42bc1e333535b8385ab5503a860738457ed0829967afea988568",
+      "operations": [
+        "createInitialWarehouse",
+        "listInventoryWarehouses",
+        "getInventoryWarehouse",
+        "adjustInventoryStock",
+        "getInventoryAdjustment",
+        "getInventoryPosition",
+        "listInventoryPositions",
+        "listInventoryReconciliations",
+        "getInventoryReconciliation",
+        "createInventoryHistoryReadSession",
+        "readInventoryHistoryFacts",
+        "getInventorySaleStockResult",
+        "authorizeInventoryCatalogCapture"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-capture-authority-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-capture-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.types.v1",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.capture-authority.v1",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-capture-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "23c869e52c57ed573383274f8d18a72c87ddd83a74c8d4493302bafdf112b646",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-capture-authority-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-capture-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.protocol-policy.v1",
+      "domain": "inventory",
+      "surface": "policy",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1e590eaa84b6edb689f304eb6171905ed908be63106a557771101a2e72a1742c",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "inventory.lifecycle-policy.v1",
+      "domain": "inventory",
+      "surface": "policy",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1a7b19c9812184d5803577795d280f1884ca5e8cde314b659521485301a9cf4c",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "inventory.flow.asyncapi.v1",
+      "domain": "inventory",
+      "surface": "documentation",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "inventory/events/v1/inventory-flow-v1.asyncapi.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ba13f18aa7a8fa04a95bf892fed03db5eafd3c68762bd2d4e301ab4c2e6131bb",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+          "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+          "path": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+          "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+          "path": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.post-sale-stock.v1",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e1fd91e7ce0522fda347049e120d0cee1c3d8d51cad7011b23f3737aa4cb9724",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.post-sale-stock.result.v1",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "bdfeade03f3b57d77c973491e5d104f8548f0a1abf2ee3c3c397ff46974796ac",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.compensate-sale-stock.v1",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "cadaac159f89fb7839d0e2040c702a68fed1f9f7b6ae616b9e56d016cb9ed995",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.compensate-sale-stock.result.v1",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "adaf54dc98a0d6920f519ca8990bb2a198bcb76de3c5a68a8d518dac9675ebe4",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.stock-adjustment.recorded.v1",
+      "domain": "inventory",
+      "surface": "events",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "779d7f10b6e2df789bee184f5b3feb2d7970c37a31a00101e9d11882d3f58d4e",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+          "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.sale-stock.posted.v2",
+      "domain": "inventory",
+      "surface": "events",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "6c18ceb38d7e7abfadfca628068ebbbae3a78daabf490b63d8967f1ee51d421f",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+          "path": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.sale-stock.compensated.v1",
+      "domain": "inventory",
+      "surface": "events",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "435367fac5cdb301c9300e8728dbb32ceb742c74fd1572fb8238f84c0bb3f6b0",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+          "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.reconciliation-required.v2",
+      "domain": "inventory",
+      "surface": "events",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "aaf80b34c69b458df4d7c31e8887b28ea4458fa7d0cb359d84ec138a34f97882",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+          "path": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.inventory-authority.http.v1",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "identity/http/private/v1/identity-inventory-authority-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3f588e90732bf49fda4804e116df7618b4c9e04ac59466f9ca4eede630b80fff",
+      "operations": [
+        "createInventoryDelegation",
+        "checkInventoryAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.inventory-authority.schema.v1",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8c672108a7bec6452b0bb349aeb18ba85267bb38021df9753fc6e87e1d7fe4b0",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.inventory-authority.policy.v1",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.inventory-capture.http.v1",
+      "domain": "catalog",
+      "surface": "http-private",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "catalog/http/private/v1/catalog-inventory-capture-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0905b086750cb6ed76691fd88af8012b964c3dcf9d40820b7aae444ca22e4f46",
+      "operations": [
+        "captureInventoryCatalog"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.inventory-capture.schema.v1",
+      "domain": "catalog",
+      "surface": "schema",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.inventory-step-authority.http.v1",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "5bd1787a77f0a2ac240836ca7cc7e19590f86ef297a801997b21e3e8741fde7a",
+      "operations": [
+        "authorizeSaleProcessStep"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+          "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.inventory-step-authority.schema.v1",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+          "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "common.error-catalog.v9",
+      "domain": "common",
+      "surface": "errors",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "9",
+      "path": "common/errors/v9/error-catalog-v9.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.schema.v9",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v9",
+      "path": "common/errors/v9/error-catalog-v9.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "55c7786b649a86c30a85a8c3a06af5ecf9cd6ab002efc8e910ef75cc3e188bf2",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/errors/v9/error-catalog-v9.schema.json",
+          "path": "common/errors/v9/error-catalog-v9.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.consumer-types.v1",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "688e36b7e5a507720382f3738d6d613d436f51cb7b3b0ecb65446476a3eda683",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.post-sale-stock.v1.consumer",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "64d57209389a81bf5cdc0f8efd26aa6cc801a6548f50812f8e5ee4978a51f0e7",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.post-sale-stock.result.v1.consumer",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "4f259dbfbf8e7e433f3df25d6cfb5029610d8d8f528a0e17d671c5f6d11665b0",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.compensate-sale-stock.v1.consumer",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "42f6e6e19dca505e1d4f8db8d34abdf47ecb484050a40f5751d84cffc18063b5",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.compensate-sale-stock.result.v1.consumer",
+      "domain": "inventory",
+      "surface": "commands",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "33c28900449061da08ab49722a32fa6907aaa94415da758f57923374d7607ab4",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.stock-adjustment.recorded.v1.consumer",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "79967b76324cc8f8ed400c6d678bccfd2d5dff844b4110cf7e01257cd51ba26e",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json",
+          "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.sale-stock.posted.v2.consumer",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "7d93d7f6cc6a98689388cd7b688a424c413f40849fdca6f630327de449026ab3",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json",
+          "path": "inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.sale-stock.compensated.v1.consumer",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f4bafc2c7f384186a4f045e9b28b89b909aabf6b3e289226fbab94c23a231255",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json",
+          "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.reconciliation-required.v2.consumer",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "42ef5b8a9baded5d901cf47760a29fac1fab6a79b6766c9a11b0f8336d2581ad",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json",
+          "path": "inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.lifecycle-policy.schema.v1",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "395e249363fa50a5036375b45a624eb3f1ab7664e8b2b67b4167d644043f21ca",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v2/data-lifecycle-policy-v2.schema.json",
+          "path": "common/http/shared/v2/data-lifecycle-policy-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.http.public.v1",
+      "domain": "finance",
+      "surface": "http-public",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "finance/http/public/v1/finance-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "935af3e0c532e6c97451480b3476da4d46c32b17bc2bc4b046263f747ded262f",
+      "operations": [
+        "createPosCashRegister",
+        "listCashRegisters",
+        "openCashShift",
+        "getCashShift",
+        "getCashShiftExpected",
+        "createFinanceHistoryReadSession",
+        "readFinanceHistoryFacts"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.http.private.v1",
+      "domain": "finance",
+      "surface": "http-private",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "finance/http/private/v1/finance-internal-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0dbe75acc25cae6f63b85bbdbe7fa2951b3d70535ed85897bc97d17c4bbd6631",
+      "operations": [
+        "createPosCashRegister",
+        "listCashRegisters",
+        "openCashShift",
+        "getCashShift",
+        "getCashShiftExpected",
+        "createFinanceHistoryReadSession",
+        "readFinanceHistoryFacts",
+        "getSaleCashResult"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.types.v1",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.consumer-types.v1",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.protocol-policy.v1",
+      "domain": "finance",
+      "surface": "policy",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "61653d0094a2cb927a082190c2eba90de39670065765cfd8faf5a5a4ea38f6ca",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "finance.lifecycle-policy.v1",
+      "domain": "finance",
+      "surface": "policy",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e15e6631ab8049988399840f55417e11762d446aefd0eabd5065079c62fe4bf2",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "finance.lifecycle-policy.schema.v1",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "751d8369240d6d8d49c6e56ae6cf5404d445fbf0b370475cc62b817c1c779e43",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.flow.asyncapi.v1",
+      "domain": "finance",
+      "surface": "documentation",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "4856946f6c53c66bebbb509137c7a3e4942dccff9b019afb07acf774a680b5f3",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+          "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+          "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+          "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.finance-authority.http.v1",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f7649bf83672c734a23db5fc91657defa9b88946f8ae29153201ded98af6b93d",
+      "operations": [
+        "createFinanceDelegation",
+        "checkFinanceAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.finance-authority.schema.v1",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.finance-authority.policy.v1",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0803b0247a61c2a557649c066f47a7a6661a86bfadc2de000abef1fb1d0df1ba",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "sales.finance-step-authority.http.v1",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "c102741d3576db552080c327a59c07d78d148db8394cd007be9cce4485324e79",
+      "operations": [
+        "authorizeSaleProcessStep"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+          "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.finance-step-authority.schema.v1",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+          "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "common.error-catalog.v10",
+      "domain": "common",
+      "surface": "errors",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "10",
+      "path": "common/errors/v10/error-catalog-v10.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "6a35e5fe2dfd0eca8bf61d0bb2838c8217872d140a3531583944c4497c42dabb",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "common.error-catalog.schema.v10",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v10",
+      "path": "common/errors/v10/error-catalog-v10.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "715357158a135aa6702b506c38590a98c1b07992397e8971d8db2bd5df231d13",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/errors/v10/error-catalog-v10.schema.json",
+          "path": "common/errors/v10/error-catalog-v10.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.record-sale-cash.v1",
+      "domain": "finance",
+      "surface": "commands",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.record-sale-cash.v1.consumer",
+      "domain": "finance",
+      "surface": "commands",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-envelope-v1.schema.json",
+          "path": "commands/command-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.record-sale-cash.result.v1",
+      "domain": "finance",
+      "surface": "commands",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.record-sale-cash.result.v1.consumer",
+      "domain": "finance",
+      "surface": "commands",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "75b7baa1895511362f2be55af67bb2c17e3ca01187587f604ae984aac8a2a3f1",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/commands/command-result-envelope-v1.schema.json",
+          "path": "commands/command-result-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.cash-shift.opened.v1",
+      "domain": "finance",
+      "surface": "events",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0d57a3d4ddcab6caeb04ff000181e2fb87dbc1f2f1ea0a0a2338b831f3d8c1b1",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+          "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.cash-shift.opened.v1.consumer",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "88bfd467a5ae3aef74e50257eb300dc4f2dddf8f03b1f65d1f7abf7eeeb74195",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+          "path": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.cash-movement.recorded.v1",
+      "domain": "finance",
+      "surface": "events",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "fdf85514fff6d30086601475b1e9b8af91ad4228b700b707b18afa1691653691",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+          "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.cash-movement.recorded.v1.consumer",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "dc8d96ba45b099dfdf5cddc4b988b65de0779b83321627e37a812a5db88ba6f2",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+          "path": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.sale-payment.recorded.v2",
+      "domain": "finance",
+      "surface": "events",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+          "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.sale-payment.recorded.v2.consumer",
+      "domain": "finance",
+      "surface": "schema",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "2a1b0d12fde2b9cd07d11339fd7aab1396bb17c0ecdcaa18c947f9ddfb086320",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+          "path": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.pos-sales-v2",
+      "domain": "sales",
+      "surface": "http-public",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "sales/http/public/v2/pos-sales-v2.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1c3536b6f52b9b6350e080fdd4be79cd96bf18049b2670bd22f8f1f55033aeea",
+      "operations": [
+        "finalizeOnlineSale",
+        "getSaleFinalization",
+        "getCompletedSale",
+        "resumeSaleFinalization",
+        "createSalesHistoryReadSession",
+        "readSalesHistoryFacts"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.pos-sales-internal-v2",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "2f5ed7c60b45cb1e01cb0781e58c682dd7373a1cec15376d078791931ec86b51",
+      "operations": [
+        "finalizeOnlineSale",
+        "getSaleFinalization",
+        "getCompletedSale",
+        "resumeSaleFinalization",
+        "createSalesHistoryReadSession",
+        "readSalesHistoryFacts"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ef739a6e9a07fd69a4848e6922786908a48a54868b2b0ced80c46d9d0f44d0e5",
+      "operations": [
+        "authorizeSaleCatalogCapture"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales-consumer-types-v2",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-consumer-types-v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "807babc7042e15064458ae2c85c75b12dd76147e648065a022fe84159f4839d9",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-consumer-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-consumer-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales-lifecycle-policy-v2",
+      "domain": "sales",
+      "surface": "policy",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3c5092907e793d227ad248f8377f3e6f71a104eee115bcef1b4581040928d11f",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "sales.f1-10d.sales-protocol-policy-v2",
+      "domain": "sales",
+      "surface": "policy",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0505d4910e3e81e7c498ffaa3a92008d1635ae3c073c573081745a15657fada5",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "sales.f1-10d.sales-types-v2",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales-flow-v2.asyncapi",
+      "domain": "sales",
+      "surface": "documentation",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "sales/events/v2/sales-flow-v2.asyncapi.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "86ede2d5058df4a78426aaa00410937d0349cb4da5bdf9f00ea0332e481ff81d",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/events/v2/sales.sale.completed.v2.schema.json",
+          "path": "sales/events/v2/sales.sale.completed.v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales.sale.completed.v2.consumer",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "df2bd12a34b46db3f79e728b9065d68664862e7a40015fb39419dad432f2b641",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-consumer-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-consumer-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+          "path": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10d.sales.sale.completed.v2",
+      "domain": "sales",
+      "surface": "events",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8df75de9151930618635beffd333d580192d1881923ce7be8ce9f1bc93804b6d",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/events/v2/sales.sale.completed.v2.schema.json",
+          "path": "sales/events/v2/sales.sale.completed.v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-10d.identity-sales-authority-v1",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "12dd660d0c139a140bf7d968e298d5885ceed2361de8b27b81be815dcd676bfe",
+      "operations": [
+        "createSalesDelegation",
+        "checkSalesAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-10d.identity-sales-authority-policy-v1",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ea3c7fb9234c903aa56c0a5007bc427e7a0535336606185fa01ae49eb40d548b",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.f1-10d.catalog-sale-capture-v1",
+      "domain": "catalog",
+      "surface": "http-private",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "1.0.0",
+      "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f7040876fd27f3eeb8517299669de36aba041cb648066b48389f3da42ec85642",
+      "operations": [
+        "captureSaleCatalog"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "common.f1-10d.error-catalog-v11",
+      "domain": "common",
+      "surface": "errors",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "11",
+      "path": "common/errors/v11/error-catalog-v11.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "687198b240a62e70b3ed1cfc572ff757a25a535b1bb09e6259191c7168b2086f",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "catalog.f1-10e.sale-capture.schema.v1",
+      "domain": "catalog",
+      "surface": "schema",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "common.f1-10e.error-catalog.schema.v11",
+      "domain": "common",
+      "surface": "schema",
+      "owner": "platform-contracts",
+      "status": "active",
+      "capability": "common.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v11",
+      "path": "common/errors/v11/error-catalog-v11.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "08d2abbf0d09c25c9fdbefcffbb08898ce933bc6c51204f46d93f9acc710e49a",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/errors/v11/error-catalog-v11.schema.json",
+          "path": "common/errors/v11/error-catalog-v11.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-10e.sales-authority.schema.v1",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v1",
+      "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-types-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-types-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10e.catalog-capture-authority.schema.v2",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8e2b4b5a351ee7276a4f95b7c66f12ed4adc37a0a9cb7ba0153d413e10db1b3b",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-10e.lifecycle-policy.schema.v2",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "F1-10E selected contractual admission; consumers and owner runtimes require their own accepted cuts.",
+      "reasonForChange": "Joint B-D release preparation from audited published sources; source dev/SHA CI verified before admission.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json",
+      "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3544f8cd5f294269f769f21b2604650f8698c9f6def804378df820f8792707db",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json"
+        }
+      ]
     }
   ],
   "preservedFiles": [
@@ -16142,14 +18854,6 @@
   ],
   "planned": [
     {
-      "id": "sales.complete-snapshot.successor",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10",
-      "status": "planned",
-      "constraint": "Preserve sales.sale.completed.v1; incompatible full snapshot requires approved major successor."
-    },
-    {
       "id": "common.data-lifecycle-policy.v1",
       "domain": "common",
       "owner": "platform-contracts",
@@ -16164,590 +18868,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "inventory.http.public.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/public/v1/inventory-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.http.private.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/private/v1/inventory-internal-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.types.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-types-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.capture-authority.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-capture-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.protocol-policy.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-protocol-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.lifecycle-policy.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-lifecycle-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.flow.asyncapi.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v1/inventory-flow-v1.asyncapi.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.post-sale-stock.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.post-sale-stock.result.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.compensate-sale-stock.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.compensate-sale-stock.result.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.stock-adjustment.recorded.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.sale-stock.posted.v2",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v2/inventory.sale-stock.posted.v2.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.sale-stock.compensated.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.reconciliation-required.v2",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v2/inventory.reconciliation-required.v2.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "identity.inventory-authority.http.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/private/v1/identity-inventory-authority-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "identity.inventory-authority.schema.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/shared/v1/identity-inventory-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "identity.inventory-authority.policy.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/shared/v1/identity-inventory-authority-policy-v1.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "catalog.inventory-capture.http.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source catalog/http/private/v1/catalog-inventory-capture-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "catalog.inventory-capture.schema.v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "sales.inventory-step-authority.http.v1",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/private/v1/sales-inventory-step-authority-v1.yaml only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "sales.inventory-step-authority.schema.v1",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "common.error-catalog.v9",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source common/errors/v9/error-catalog-v9.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "common.error-catalog.schema.v9",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source common/errors/v9/error-catalog-v9.schema.json only; no functional admission, provenance claim, consumer migration, runtime or H4 release."
-    },
-    {
-      "id": "inventory.consumer-types.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-consumer-types-v1.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.post-sale-stock.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.post-sale-stock.result.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.compensate-sale-stock.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.compensate-sale-stock.result.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.stock-adjustment.recorded.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.sale-stock.posted.v2.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.sale-stock.compensated.v1.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.reconciliation-required.v2.consumer",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json only; declared optional metadata compatibility; no functional admission, consumers, runtime or H4 release."
-    },
-    {
-      "id": "inventory.lifecycle-policy.schema.v1",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-10B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json only; field/retention metadata, no production, purge, runtime or functional admission."
-    },
-    {
-      "id": "finance.http.public.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/public/v1/finance-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.http.private.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/private/v1/finance-internal-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.types.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/shared/v1/finance-types-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.consumer-types.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/shared/v1/finance-consumer-types-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.protocol-policy.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/shared/v1/finance-protocol-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.lifecycle-policy.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/shared/v1/finance-lifecycle-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.lifecycle-policy.schema.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.flow.asyncapi.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v1/finance-flow-v1.asyncapi.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "identity.finance-authority.http.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/private/v1/identity-finance-authority-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "identity.finance-authority.schema.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/shared/v1/identity-finance-authority-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "identity.finance-authority.policy.v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/shared/v1/identity-finance-authority-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.finance-step-authority.http.v1",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/private/v1/sales-finance-step-authority-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.finance-step-authority.schema.v1",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v1/sales-finance-step-authority-v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "common.error-catalog.v10",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source common/errors/v10/error-catalog-v10.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "common.error-catalog.schema.v10",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source common/errors/v10/error-catalog-v10.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.record-sale-cash.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.record-sale-cash.v1.consumer",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.record-sale-cash.result.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.result.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.record-sale-cash.result.v1.consumer",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.cash-shift.opened.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v1/finance.cash-shift.opened.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.cash-shift.opened.v1.consumer",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.cash-movement.recorded.v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v1/finance.cash-movement.recorded.v1.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.cash-movement.recorded.v1.consumer",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.sale-payment.recorded.v2",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v2/finance.sale-payment.recorded.v2.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "finance.sale-payment.recorded.v2.consumer",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-10C",
-      "status": "planned",
-      "constraint": "Candidate source finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.pos-sales-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/public/v2/pos-sales-v2.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.pos-sales-internal-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/private/v2/pos-sales-internal-v2.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/private/v2/sales-catalog-capture-authority-v2.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-consumer-types-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v2/sales-consumer-types-v2.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-lifecycle-policy-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v2/sales-lifecycle-policy-v2.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-protocol-policy-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v2/sales-protocol-policy-v2.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-types-v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/http/shared/v2/sales-types-v2.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales-flow-v2.asyncapi",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/events/v2/sales-flow-v2.asyncapi.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales.sale.completed.v2.consumer",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/events/v2/sales.sale.completed.v2.consumer.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "sales.f1-10d.sales.sale.completed.v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source sales/events/v2/sales.sale.completed.v2.schema.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "identity.f1-10d.identity-sales-authority-v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/private/v1/identity-sales-authority-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "identity.f1-10d.identity-sales-authority-policy-v1",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source identity/http/shared/v1/identity-sales-authority-policy-v1.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "catalog.f1-10d.catalog-sale-capture-v1",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source catalog/http/private/v1/catalog-sale-capture-v1.yaml only; no functional admission, provenance claim, consumers, runtime or H4 release."
-    },
-    {
-      "id": "common.f1-10d.error-catalog-v11",
-      "domain": "common",
-      "owner": "platform-contracts",
-      "materializeIn": "F1-10D",
-      "status": "planned",
-      "constraint": "Candidate source common/errors/v11/error-catalog-v11.json only; no functional admission, provenance claim, consumers, runtime or H4 release."
     }
   ],
   "requiredConsumers": [

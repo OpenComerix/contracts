@@ -1,6 +1,6 @@
 # Finance — mapa y diseño F1-10A
 
-Propietario: `finance`, autoridad exclusiva de caja, turno, cobro y movimientos de fondos. **Paquete contractual C candidato; sin consumo habilitado ni runtime acreditado.** Secuencia/autoridad/historia en [ADR-063](../../../docs/arquitectura/decisiones/ADR-063-intencion-durable-y-finalizacion-de-venta-online.md), captura/dinero en [ventas](../sales/README.md), corte físico en [inventario](../inventory/README.md), tandas en [F1-10](../../../docs/arquitectura/fase-1/F1-10.md).
+Propietario: `finance`, autoridad exclusiva de caja, turno, cobro y movimientos de fondos. **C publicado como fuente; admisión E candidata local, sin consumo habilitado ni runtime acreditado.** Secuencia/autoridad/historia en [ADR-063](../../../docs/arquitectura/decisiones/ADR-063-intencion-durable-y-finalizacion-de-venta-online.md), captura/dinero en [ventas](../sales/README.md), corte físico en [inventario](../inventory/README.md), tandas en [F1-10](../../../docs/arquitectura/fase-1/F1-10.md). [E](../sales/README.md#f1-10e--conjunto-candidato-y-consumo-posterior) centraliza verificación/admisión conjunta y prerrequisitos de consumo; los apartados A/C describen sus cortes fuente.
 
 ## Base y paquete previsto C
 

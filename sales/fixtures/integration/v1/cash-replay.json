@@ -1,0 +1,197 @@
+{
+  "description": "normal",
+  "runtime_demonstrated": false,
+  "command": {
+    "command_id": "019a1ad0-0000-7000-8000-000000000015",
+    "command_type": "finance.record-sale-cash.v1",
+    "schema_version": 1,
+    "requested_at": "2026-10-26T20:00:00.000Z",
+    "producer": "sales-pos",
+    "target": "finance",
+    "correlation_id": "019a1ad0-0000-7000-8000-000000000011",
+    "causation_id": "019a1ad0-0000-7000-8000-000000000013",
+    "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+    "payload": {
+      "context": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+        "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "process_id": "019a1ad0-0000-7000-8000-000000000011",
+        "process_version": 3,
+        "sale_id": "019a1ad0-0000-7000-8000-000000000009",
+        "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+        "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007"
+      },
+      "step_id": "019a1ad0-0000-7000-8000-000000000202",
+      "payment_id": "019a1ad0-0000-7000-8000-000000000010",
+      "amounts": {
+        "currency": "ARS",
+        "method": "cash",
+        "commercial_total": "75.25",
+        "applied": "75.25",
+        "received": "100.00",
+        "change": "24.75"
+      },
+      "stock": {
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "result_id": "019a1ad0-0000-7000-8000-000000000013",
+        "command_id": "019a1ad0-0000-7000-8000-000000000012",
+        "status": "succeeded",
+        "stock_status": "posted",
+        "reconciliation_required": false
+      }
+    }
+  },
+  "authority_query": {
+    "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+    "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+    "process_id": "019a1ad0-0000-7000-8000-000000000011",
+    "process_version": 3,
+    "step_id": "019a1ad0-0000-7000-8000-000000000202",
+    "step": "finance.record-sale-cash.v1",
+    "command_id": "019a1ad0-0000-7000-8000-000000000015",
+    "target": "finance",
+    "command_fingerprint": "299d8afbcf9993b94f6db7f3e017eb5e24c784bf0d5bd9e63f314403253ab278"
+  },
+  "authority": {
+    "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+    "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+    "process_id": "019a1ad0-0000-7000-8000-000000000011",
+    "process_version": 3,
+    "step_id": "019a1ad0-0000-7000-8000-000000000202",
+    "step": "finance.record-sale-cash.v1",
+    "command_id": "019a1ad0-0000-7000-8000-000000000015",
+    "target": "finance",
+    "command_fingerprint": "299d8afbcf9993b94f6db7f3e017eb5e24c784bf0d5bd9e63f314403253ab278",
+    "authorized": true,
+    "caller": "finance",
+    "audience": "sales-pos.process-authority",
+    "checked_at": "2026-10-26T20:00:00.000Z",
+    "valid_for_ms": 2000,
+    "stock": {
+      "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+      "result_id": "019a1ad0-0000-7000-8000-000000000013",
+      "command_id": "019a1ad0-0000-7000-8000-000000000012",
+      "status": "succeeded",
+      "stock_status": "posted",
+      "reconciliation_required": false
+    },
+    "authorized_responsible": {
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007"
+    }
+  },
+  "check": {
+    "sent_at_ms": 1000,
+    "now_ms": 1100
+  },
+  "before": {
+    "shift": {
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "operation_id": "019a1a10-0000-7000-8000-000000000020",
+      "responsible_account_ref": "synthetic-account",
+      "responsible_membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "currency": "ARS",
+      "opening_float": "100.00",
+      "opening_movement_id": "019a1a10-0000-7000-8000-000000000021",
+      "opened_at": "2026-10-26T20:00:00.000Z",
+      "operating_date": {
+        "business_date": "2026-10-26",
+        "time_zone": "America/Argentina/Buenos_Aires",
+        "date_policy_version": "finance-date-v1"
+      },
+      "status": "open",
+      "version": 5
+    },
+    "expected": "175.25"
+  },
+  "result": {
+    "result_id": "019a1ad0-0000-7000-8000-000000000016",
+    "command_id": "019a1ad0-0000-7000-8000-000000000015",
+    "result_type": "finance.record-sale-cash.result.v1",
+    "schema_version": 1,
+    "occurred_at": "2026-10-26T20:00:00.000Z",
+    "producer": "finance",
+    "correlation_id": "019a1ad0-0000-7000-8000-000000000011",
+    "causation_id": "019a1ad0-0000-7000-8000-000000000015",
+    "status": "succeeded",
+    "retryable": false,
+    "payload": {
+      "context": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+        "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "process_id": "019a1ad0-0000-7000-8000-000000000011",
+        "process_version": 3,
+        "sale_id": "019a1ad0-0000-7000-8000-000000000009",
+        "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+        "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007"
+      },
+      "payment_id": "019a1ad0-0000-7000-8000-000000000010",
+      "movement_id": "019a1ad0-0000-7000-8000-000000000017",
+      "payment_version": 1,
+      "shift_version": 5,
+      "amounts": {
+        "currency": "ARS",
+        "method": "cash",
+        "commercial_total": "75.25",
+        "applied": "75.25",
+        "received": "100.00",
+        "change": "24.75"
+      },
+      "stock": {
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "result_id": "019a1ad0-0000-7000-8000-000000000013",
+        "command_id": "019a1ad0-0000-7000-8000-000000000012",
+        "status": "succeeded",
+        "stock_status": "posted",
+        "reconciliation_required": false
+      },
+      "recorded_at": "2026-10-26T20:00:00.000Z",
+      "operating_date": {
+        "business_date": "2026-10-26",
+        "time_zone": "America/Argentina/Buenos_Aires",
+        "date_policy_version": "finance-date-v1"
+      },
+      "command_id": "019a1ad0-0000-7000-8000-000000000015",
+      "result_id": "019a1ad0-0000-7000-8000-000000000016",
+      "provenance": "finance.record-sale-cash.v1"
+    }
+  },
+  "movements": [],
+  "events": [],
+  "after": {
+    "shift": {
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "operation_id": "019a1a10-0000-7000-8000-000000000020",
+      "responsible_account_ref": "synthetic-account",
+      "responsible_membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "currency": "ARS",
+      "opening_float": "100.00",
+      "opening_movement_id": "019a1a10-0000-7000-8000-000000000021",
+      "opened_at": "2026-10-26T20:00:00.000Z",
+      "operating_date": {
+        "business_date": "2026-10-26",
+        "time_zone": "America/Argentina/Buenos_Aires",
+        "date_policy_version": "finance-date-v1"
+      },
+      "status": "open",
+      "version": 5
+    },
+    "expected": "175.25"
+  }
+}

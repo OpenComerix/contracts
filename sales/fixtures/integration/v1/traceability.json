@@ -1,0 +1,460 @@
+{
+  "runtime_demonstrated": false,
+  "data": [
+    {
+      "id": "D01",
+      "invariant": "accepted/context/operation/process and owner result IDs",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D02",
+      "invariant": "catalog captured_at, owner recorded_at, sales completed_at and operating dates",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D03",
+      "invariant": "request/reference -> catalog -> physical snapshot -> completed snapshot",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "catalog-pricing",
+        "inventory",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D04",
+      "invariant": "quantity/conversion/base, physical vs non-stock/service",
+      "fixtures": [
+        "normal",
+        "service",
+        "non-stock"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D05",
+      "invariant": "commercial total == cash applied; received/change/net movement",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D06",
+      "invariant": "calculation policy, exact vectors, deterministic residue",
+      "fixtures": [
+        "normal",
+        "sales/fixtures/vectors/v2/decimal.json"
+      ],
+      "runtime_owners": [
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D07",
+      "invariant": "immutable catalog classification and provenance",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "catalog-pricing",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D08",
+      "invariant": "resolved synthetic issuer/recipient; absent in pending_profile",
+      "fixtures": [
+        "sales/fixtures/completion/v2/vat.json"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "future fiscal owner"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D09",
+      "invariant": "resolved profile/rule versions; unknown versions rejected",
+      "fixtures": [
+        "sales/fixtures/completion/v2/vat.json",
+        "compatibility"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "future fiscal owner"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D10",
+      "invariant": "resolved synthetic line tax components; no current-master recomputation",
+      "fixtures": [
+        "sales/fixtures/completion/v2/multi.json"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "future fiscal owner"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D11",
+      "invariant": "resolved synthetic groups/totals and exact cent vectors",
+      "fixtures": [
+        "sales/fixtures/vectors/v2/included-snapshots.json"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "future fiscal owner"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D12",
+      "invariant": "owner provenance; origin decisions restricted, no token in facts",
+      "fixtures": [
+        "zero-difference"
+      ],
+      "runtime_owners": [
+        "identity-tenancy",
+        "catalog-pricing",
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "D13",
+      "invariant": "commands/results/movement/payment versions and compensation references",
+      "fixtures": [
+        "normal",
+        "finance-rejected"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    }
+  ],
+  "criteria": [
+    {
+      "id": "CAF-01",
+      "invariant": "immutable bytes and exact admitted source",
+      "fixtures": [
+        "release"
+      ],
+      "runtime_owners": [
+        "contracts"
+      ],
+      "gates": [
+        "node --test test/sales/release-v1.test.mjs"
+      ]
+    },
+    {
+      "id": "CAF-02",
+      "invariant": "human/workload authority contractual bindings; no runtime proof",
+      "fixtures": [
+        "normal",
+        "stock-rejected"
+      ],
+      "runtime_owners": [
+        "identity-tenancy",
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-03",
+      "invariant": "catalog references and exact physical/monetary capture",
+      "fixtures": [
+        "normal",
+        "non-stock",
+        "service"
+      ],
+      "runtime_owners": [
+        "catalog-pricing",
+        "inventory",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-04",
+      "invariant": "owner original facts and immutable joined snapshot",
+      "fixtures": [
+        "normal",
+        "recovery-inventory",
+        "recovery-finance"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-05",
+      "invariant": "pending_profile without fictional fiscal identities/totals",
+      "fixtures": [
+        "normal"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "web-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-06",
+      "invariant": "resolved synthetic forms and adversarial fiscal vectors only",
+      "fixtures": [
+        "sales/fixtures/completion/v2/multi.json"
+      ],
+      "runtime_owners": [
+        "sales-pos",
+        "future fiscal owner"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-07",
+      "invariant": "exact ARS total/cash/net, quantities and fiscal residues",
+      "fixtures": [
+        "normal",
+        "sales/fixtures/vectors/v2/decimal.json"
+      ],
+      "runtime_owners": [
+        "finance",
+        "sales-pos",
+        "web-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-08",
+      "invariant": "strict producer rejects added extension/critical invalidity",
+      "fixtures": [
+        "compatibility"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-09",
+      "invariant": "reader accepts known baseline and declared source_note with identical interpretation",
+      "fixtures": [
+        "compatibility"
+      ],
+      "runtime_owners": [
+        "future admitted consumers"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-10",
+      "invariant": "unknown major/revision/critical enum/snapshot rejects before interpretation",
+      "fixtures": [
+        "compatibility"
+      ],
+      "runtime_owners": [
+        "future admitted consumers"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-11",
+      "invariant": "stable commands/results on loss/replay/conflict; atomicity remains runtime",
+      "fixtures": [
+        "recovery-inventory",
+        "recovery-finance",
+        "cash-replay"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-12",
+      "invariant": "original retained IDs/checksums/coverage; replay after real outbox cleanup remains runtime",
+      "fixtures": [
+        "recovery-inventory",
+        "recovery-finance",
+        "sales/fixtures/history/v2/retained-source.json"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-13",
+      "invariant": "technical compensation only after terminal cash rejection; difference preserved",
+      "fixtures": [
+        "finance-rejected"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-14",
+      "invariant": "field/storage policies and no origin/grant leak in owner facts",
+      "fixtures": [
+        "zero-difference",
+        "release"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    },
+    {
+      "id": "CAF-15",
+      "invariant": "accepted/stock/cash/completed/fiscal separate; no event causes second effect",
+      "fixtures": [
+        "normal",
+        "finance-rejected",
+        "stock-rejected"
+      ],
+      "runtime_owners": [
+        "inventory",
+        "finance",
+        "sales-pos",
+        "web-pos"
+      ],
+      "gates": [
+        "node --test test/sales/*.test.mjs",
+        "node scripts/sales/run-integration-v1.mjs schema"
+      ]
+    }
+  ],
+  "runtime_limits": "Fixtures and schemas do not prove SQL/RLS/atomicity/concurrency, ES256/HMAC authority, broker, physical cash, browser accessibility, purge or real reconstruction after outbox cleanup. Each first owner runtime must prove its obligations before production; CAF-16 and later fiscal/accounting scopes remain deferred."
+}

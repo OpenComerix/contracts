@@ -1,7 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {parse} from 'yaml';
 import {makeLock} from '../../tools/architecture/graph.mjs';
+import {releaseHistoricalFile} from '../../scripts/sales/release-v1.mjs';
 import {root,manifestPath,expectedManifestHash,validateReviewedSales,validateSalesCI,reviewedSalesHistoricalFile,reviewedSalesHistoricalRegistry,withReviewedSalesScope,hash,original} from '../../scripts/sales/reviewed-package-v2.mjs';
-const bytes=f=>fs.readFileSync(path.join(root,f)),read=f=>JSON.parse(bytes(f));
+const bytes=f=>releaseHistoricalFile(f,fs.readFileSync(path.join(root,f))),read=f=>JSON.parse(bytes(f));
 test('D concrete package and metadata are pinned; every published source and B/C preserved',()=>{assert.equal(hash(bytes(manifestPath)),expectedManifestHash);const r=validateReviewedSales();assert(r.new_planned>=14);assert.equal(r.runtime_demonstrated,false);});
 test('forged manifest cannot grant itself scope',()=>{const x=read(manifestPath);x.files.push({path:'unapproved.mjs',kind:'new',sha256:'0'.repeat(64)});assert.throws(()=>validateReviewedSales(f=>f===manifestPath?Buffer.from(JSON.stringify(x)):bytes(f)),/D_SNAPSHOT_DIGEST/);});
 for(const f of ['.gitlab-ci.yml','registry/contracts.json','sales/README.md','scripts/finance/reviewed-package-v1.mjs','sales/http/shared/v2/sales-types-v2.schema.json','catalog/http/shared/v1/catalog-sale-capture-v1.schema.json'])test('D rejects changed source '+f,()=>assert.throws(()=>validateReviewedSales(n=>n===f?Buffer.concat([bytes(n),Buffer.from('\nUnapproved')]):bytes(n)),/D_SOURCE_BYTES/));

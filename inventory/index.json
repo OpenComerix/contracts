@@ -4,28 +4,7 @@
   "registry": "../registry/contracts.json",
   "contracts": [
     "inventory.reconciliation-required.v1",
-    "inventory.sale-stock.posted.v1"
-  ],
-  "surfaces": [
-    {
-      "surface": "events",
-      "versions": [
-        {
-          "id": "inventory.reconciliation-required.v1",
-          "version": "v1",
-          "path": "events/inventory.reconciliation-required.v1.schema.json",
-          "status": "draft"
-        },
-        {
-          "id": "inventory.sale-stock.posted.v1",
-          "version": "v1",
-          "path": "events/inventory.sale-stock.posted.v1.schema.json",
-          "status": "draft"
-        }
-      ]
-    }
-  ],
-  "planned": [
+    "inventory.sale-stock.posted.v1",
     "inventory.http.public.v1",
     "inventory.http.private.v1",
     "inventory.types.v1",
@@ -51,5 +30,205 @@
     "inventory.sale-stock.compensated.v1.consumer",
     "inventory.reconciliation-required.v2.consumer",
     "inventory.lifecycle-policy.schema.v1"
-  ]
+  ],
+  "surfaces": [
+    {
+      "surface": "commands",
+      "versions": [
+        {
+          "id": "inventory.post-sale-stock.v1",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.post-sale-stock.result.v1",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.compensate-sale-stock.v1",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.compensate-sale-stock.result.v1",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.post-sale-stock.v1.consumer",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.post-sale-stock.result.v1.consumer",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.compensate-sale-stock.v1.consumer",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.compensate-sale-stock.result.v1.consumer",
+          "version": "v1",
+          "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "documentation",
+      "versions": [
+        {
+          "id": "inventory.flow.asyncapi.v1",
+          "version": "1.0.0",
+          "path": "inventory/events/v1/inventory-flow-v1.asyncapi.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "events",
+      "versions": [
+        {
+          "id": "inventory.reconciliation-required.v1",
+          "version": "v1",
+          "path": "events/inventory.reconciliation-required.v1.schema.json",
+          "status": "draft"
+        },
+        {
+          "id": "inventory.sale-stock.posted.v1",
+          "version": "v1",
+          "path": "events/inventory.sale-stock.posted.v1.schema.json",
+          "status": "draft"
+        },
+        {
+          "id": "inventory.stock-adjustment.recorded.v1",
+          "version": "v1",
+          "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.sale-stock.posted.v2",
+          "version": "v2",
+          "path": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.sale-stock.compensated.v1",
+          "version": "v1",
+          "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.reconciliation-required.v2",
+          "version": "v2",
+          "path": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-private",
+      "versions": [
+        {
+          "id": "inventory.http.private.v1",
+          "version": "1.0.0",
+          "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "inventory.http.public.v1",
+          "version": "1.0.0",
+          "path": "inventory/http/public/v1/inventory-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "policy",
+      "versions": [
+        {
+          "id": "inventory.protocol-policy.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.lifecycle-policy.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "schema",
+      "versions": [
+        {
+          "id": "inventory.types.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.capture-authority.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-capture-authority-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.consumer-types.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-consumer-types-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.stock-adjustment.recorded.v1.consumer",
+          "version": "v1",
+          "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.sale-stock.posted.v2.consumer",
+          "version": "v2",
+          "path": "inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.sale-stock.compensated.v1.consumer",
+          "version": "v1",
+          "path": "inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.reconciliation-required.v2.consumer",
+          "version": "v2",
+          "path": "inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "inventory.lifecycle-policy.schema.v1",
+          "version": "v1",
+          "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
+          "status": "active"
+        }
+      ]
+    }
+  ],
+  "planned": []
 }

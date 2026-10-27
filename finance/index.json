@@ -4,28 +4,7 @@
   "registry": "../registry/contracts.json",
   "contracts": [
     "finance.customer-receivable.created.v1",
-    "finance.sale-payment.recorded.v1"
-  ],
-  "surfaces": [
-    {
-      "surface": "events",
-      "versions": [
-        {
-          "id": "finance.customer-receivable.created.v1",
-          "version": "v1",
-          "path": "events/finance.customer-receivable.created.v1.schema.json",
-          "status": "draft"
-        },
-        {
-          "id": "finance.sale-payment.recorded.v1",
-          "version": "v1",
-          "path": "events/finance.sale-payment.recorded.v1.schema.json",
-          "status": "draft"
-        }
-      ]
-    }
-  ],
-  "planned": [
+    "finance.sale-payment.recorded.v1",
     "finance.http.public.v1",
     "finance.http.private.v1",
     "finance.types.v1",
@@ -44,5 +23,163 @@
     "finance.cash-movement.recorded.v1.consumer",
     "finance.sale-payment.recorded.v2",
     "finance.sale-payment.recorded.v2.consumer"
-  ]
+  ],
+  "surfaces": [
+    {
+      "surface": "commands",
+      "versions": [
+        {
+          "id": "finance.record-sale-cash.v1",
+          "version": "v1",
+          "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.record-sale-cash.v1.consumer",
+          "version": "v1",
+          "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.record-sale-cash.result.v1",
+          "version": "v1",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.record-sale-cash.result.v1.consumer",
+          "version": "v1",
+          "path": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "documentation",
+      "versions": [
+        {
+          "id": "finance.flow.asyncapi.v1",
+          "version": "1.0.0",
+          "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "events",
+      "versions": [
+        {
+          "id": "finance.customer-receivable.created.v1",
+          "version": "v1",
+          "path": "events/finance.customer-receivable.created.v1.schema.json",
+          "status": "draft"
+        },
+        {
+          "id": "finance.sale-payment.recorded.v1",
+          "version": "v1",
+          "path": "events/finance.sale-payment.recorded.v1.schema.json",
+          "status": "draft"
+        },
+        {
+          "id": "finance.cash-shift.opened.v1",
+          "version": "v1",
+          "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.cash-movement.recorded.v1",
+          "version": "v1",
+          "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.sale-payment.recorded.v2",
+          "version": "v2",
+          "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-private",
+      "versions": [
+        {
+          "id": "finance.http.private.v1",
+          "version": "1.0.0",
+          "path": "finance/http/private/v1/finance-internal-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "finance.http.public.v1",
+          "version": "1.0.0",
+          "path": "finance/http/public/v1/finance-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "policy",
+      "versions": [
+        {
+          "id": "finance.protocol-policy.v1",
+          "version": "v1",
+          "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.lifecycle-policy.v1",
+          "version": "v1",
+          "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "schema",
+      "versions": [
+        {
+          "id": "finance.types.v1",
+          "version": "v1",
+          "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.consumer-types.v1",
+          "version": "v1",
+          "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.lifecycle-policy.schema.v1",
+          "version": "v1",
+          "path": "finance/http/shared/v1/finance-lifecycle-policy-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.cash-shift.opened.v1.consumer",
+          "version": "v1",
+          "path": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.cash-movement.recorded.v1.consumer",
+          "version": "v1",
+          "path": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "finance.sale-payment.recorded.v2.consumer",
+          "version": "v2",
+          "path": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+          "status": "active"
+        }
+      ]
+    }
+  ],
+  "planned": []
 }

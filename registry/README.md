@@ -1,5 +1,13 @@
 # Registro contractual
 
+## F1-10E — Admisión conjunta candidata
+
+E prepara 78 raíces activas locales desde `7cd2b548fb909c5eff47d0319c162c498ee68e92` / dev, fuente publicada y CI exacto Passed: 73 intenciones B–D más cinco schemas auxiliares D ya publicados (captura comercial Catalog, autoridad Sales de Identity, callback de preparación Sales, clasificación Sales y catálogo de errores v11). Se retira la intención original del sucesor de venta al materializar completed v2; permanecen las dos intenciones ajenas de política v1. No se promueven drafts históricos ni otros planned. Las 121 raíces/236 artefactos previos y todos los consumidores/locks/exports/pins se conservan exactamente.
+
+Los descriptores e índices se derivan de esa selección explícita y cierran referencias con el resolvedor existente. La procedencia de cada transporte apunta al SHA fuente; ningún tag de E se inventa dentro de los descriptores. La futura etiqueta del conjunto certificará el release E, sin sustituir las fuentes por su commit de metadata. El [verificador E](../scripts/sales/release-v1.mjs) compara metadata, operaciones, hashes, mappings y fuentes; verifica el paquete completo antes de proyectar exclusivamente sus cambios exactos para los controles D/C/B. Mutaciones y selecciones parciales conservan sus rechazos. Los apartados siguientes conservan el estado de sus cortes históricos.
+
+Auditoría/publicación de E e integración requieren permisos propios. [Mapa conjunto, gates y consumo posterior](../sales/README.md#f1-10e--conjunto-candidato-y-consumo-posterior). H4 sigue abierto; active en un candidato local no permite consumo ni acredita runtime. No ejecutar sync global ni modificar consumidores por preparar esta admisión.
+
 `contracts.json` declara ownership, superficie, estado y versión de cada raíz histórica. Los índices por dominio la referencian. `planned` registra intención y no admite consumo. Las fuentes se leen desde commits/tags exactos, sin trasladar ni normalizar contratos publicados.
 
 La [guía contractual del launcher](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14) fija la ubicación física de nuevos contratos: dominio/transporte/superficie/versión y fixtures por capacidad. Las raíces globales anteriores se conservan exclusivamente para los artefactos preservados; no alojan sucesores nuevos. Los READMEs de dominio permiten navegar candidatos sin modificar index.json, planned ni admisiones por inferencia. El gate de layout obtiene los dominios y las excepciones del registro actual.

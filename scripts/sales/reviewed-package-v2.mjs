@@ -1,7 +1,8 @@
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import {isDeepStrictEqual} from 'node:util';import {parse} from 'yaml';
+import {releaseHistoricalFile,releaseHistoricalRegistry,withReleaseScope} from './release-v1.mjs';
 export const root=path.resolve(import.meta.dirname,'../..'),base='a4919ed4ed90fe478b88c43a418cb4d6500a6948',manifestPath='sales/fixtures/acceptance/v2/package.json',verifierPath='scripts/sales/reviewed-package-v2.mjs';
 export const expectedManifestHash='2607934d172c7a2f30ce611799bc696feeaf34971520d300a5efdea663cf9cf9';
-const raw=f=>fs.readFileSync(path.join(root,f)),text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
+const raw=f=>releaseHistoricalFile(f,fs.readFileSync(path.join(root,f))),text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
 export const hash=b=>createHash('sha256').update(text(b)).digest('hex');
 const old=new Map();export function original(f){if(!old.has(f))old.set(f,execFileSync('git',['show',base+':'+f],{cwd:root,maxBuffer:32*1024*1024}));return old.get(f);}
 const modified=new Set(['.gitlab-ci.yml','registry/contracts.json','sales/index.json','identity/index.json','catalog/index.json','common/index.json','sales/README.md','identity/README.md','catalog/README.md','common/README.md','scripts/finance/reviewed-package-v1.mjs','test/finance/package-v1.test.mjs']);
@@ -20,11 +21,11 @@ export function validateReviewedSales(read=raw){
  for(const f of ['package.json','pnpm-lock.yaml','registry/consumers/index.json',...before.requiredConsumers.map(x=>'registry/consumers/'+x+'.json'),'inventory/index.json','finance/index.json','inventory/fixtures/acceptance/v1/package.json','finance/fixtures/acceptance/v1/package.json'])assert.equal(text(read(f)),text(original(f)),'D_PRIOR_BYTES:'+f);
  for(const e of [...before.contracts,...before.preservedFiles]){const b=read(e.path);assert(createHash('sha256').update(b).digest('hex')===e.sha256||hash(b)===e.sha256,'D_PUBLISHED_BYTES:'+e.path);}
  for(const mf of ['inventory/fixtures/acceptance/v1/package.json','finance/fixtures/acceptance/v1/package.json'])for(const e of JSON.parse(original(mf)).files)if(!modified.has(e.path))assert.equal(hash(read(e.path)),hash(original(e.path)),'D_BC_PRESERVED:'+e.path);
- const allowed=new Set([manifestPath,verifierPath,...m.files.map(x=>x.path)]);for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(f),'D_UNDECLARED_PATH:'+f);
+ const allowed=withReleaseScope([manifestPath,verifierPath,...m.files.map(x=>x.path)]);for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(f),'D_UNDECLARED_PATH:'+f);
  const result={manifest:m,files:m.files.length,new_planned:m.planned.length,runtime_demonstrated:false};if(read===raw)checked=result;return result;
 }
 // Preserve historical negative guards. Only exact approved D bytes are mapped
 // after the full actual D package is verified, never caller drift or new input.
-export function reviewedSalesHistoricalFile(f,b){const {manifest:m}=validateReviewedSales(),e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
-export function reviewedSalesHistoricalRegistry(r){const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(r,actual))return r;validateReviewedSales();return JSON.parse(original('registry/contracts.json'));}
-export function withReviewedSalesScope(paths){const {manifest:m}=validateReviewedSales();return new Set([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}
+export function reviewedSalesHistoricalFile(f,b){b=releaseHistoricalFile(f,b);const {manifest:m}=validateReviewedSales(),e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
+export function reviewedSalesHistoricalRegistry(r){r=releaseHistoricalRegistry(r);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(r,actual))return r;validateReviewedSales();return JSON.parse(original('registry/contracts.json'));}
+export function withReviewedSalesScope(paths){const {manifest:m}=validateReviewedSales();return withReleaseScope([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}

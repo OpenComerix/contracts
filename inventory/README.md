@@ -1,6 +1,6 @@
 # Inventory — diseño A y paquete contractual B
 
-Propietario: `inventory`, única autoridad de posiciones, cantidades, movimientos y disponibilidad. **Paquete B candidato materializado; sin admisión funcional ni runtime acreditado.** Las secciones de diseño A siguientes conservan su alcance original; [B](#f1-10b--paquete-candidato) concreta el transporte actual. [ADR-063](../../../docs/arquitectura/decisiones/ADR-063-intencion-durable-y-finalizacion-de-venta-online.md) fija secuencia/autoridad/historia; [ventas](../sales/README.md) fija captura comercial y dinero; [F1-10](../../../docs/arquitectura/fase-1/F1-10.md) fija las tandas.
+Propietario: `inventory`, única autoridad de posiciones, cantidades, movimientos y disponibilidad. **B publicado como fuente; admisión E candidata local, sin consumo ni runtime acreditado.** Las secciones de diseño A siguientes conservan su alcance original; [B](#f1-10b--paquete-candidato) concreta el transporte y [E](../sales/README.md#f1-10e--conjunto-candidato-y-consumo-posterior) la verificación/admisión conjunta y prerrequisitos de consumo. [ADR-063](../../../docs/arquitectura/decisiones/ADR-063-intencion-durable-y-finalizacion-de-venta-online.md) fija secuencia/autoridad/historia; [ventas](../sales/README.md) fija captura comercial y dinero; [F1-10](../../../docs/arquitectura/fase-1/F1-10.md) fija las tandas.
 
 ## Base y paquete previsto B
 

@@ -1,0 +1,163 @@
+{
+  "runtime_demonstrated": false,
+  "source": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+  "pairs": [
+    {
+      "type": "inventory.post-sale-stock.v1",
+      "revision": 1,
+      "producer": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+      "reader": "inventory/commands/v1/inventory.post-sale-stock.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.post-sale-stock.result.v1",
+      "revision": 1,
+      "producer": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+      "reader": "inventory/commands/v1/inventory.post-sale-stock.result.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.sale-stock.posted.v2",
+      "revision": 1,
+      "producer": "inventory/events/v2/inventory.sale-stock.posted.v2.schema.json",
+      "reader": "inventory/events/v2/inventory.sale-stock.posted.v2.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "finance.record-sale-cash.v1",
+      "revision": 1,
+      "producer": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+      "reader": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "finance.record-sale-cash.result.v1",
+      "revision": 1,
+      "producer": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+      "reader": "finance/commands/v1/finance.record-sale-cash.result.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "finance.cash-movement.recorded.v1",
+      "revision": 1,
+      "producer": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+      "reader": "finance/events/v1/finance.cash-movement.recorded.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "finance.sale-payment.recorded.v2",
+      "revision": 1,
+      "producer": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+      "reader": "finance/events/v2/finance.sale-payment.recorded.v2.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "sales.sale.completed.v2",
+      "revision": 1,
+      "producer": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "reader": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+      "snapshot": 1,
+      "calculation_policy": "sales-f1-ars-1"
+    },
+    {
+      "type": "inventory.reconciliation-required.v2",
+      "revision": 1,
+      "producer": "inventory/events/v2/inventory.reconciliation-required.v2.schema.json",
+      "reader": "inventory/events/v2/inventory.reconciliation-required.v2.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.compensate-sale-stock.v1",
+      "revision": 1,
+      "producer": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+      "reader": "inventory/commands/v1/inventory.compensate-sale-stock.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.compensate-sale-stock.result.v1",
+      "revision": 1,
+      "producer": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+      "reader": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.sale-stock.compensated.v1",
+      "revision": 1,
+      "producer": "inventory/events/v1/inventory.sale-stock.compensated.v1.schema.json",
+      "reader": "inventory/events/v1/inventory.sale-stock.compensated.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "inventory.stock-adjustment.recorded.v1",
+      "revision": 1,
+      "producer": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+      "reader": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    },
+    {
+      "type": "finance.cash-shift.opened.v1",
+      "revision": 1,
+      "producer": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+      "reader": "finance/events/v1/finance.cash-shift.opened.v1.consumer.schema.json",
+      "snapshot": null,
+      "calculation_policy": null
+    }
+  ],
+  "future_owners": [
+    {
+      "owner": "inventory",
+      "cut": "F1-11",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "finance",
+      "cut": "F1-12",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "sales-pos",
+      "cut": "F1-13",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "gateway-bff",
+      "cut": "F1-15",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "web-pos",
+      "cut": "F1-15",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "identity-tenancy",
+      "cut": "owner prerequisite",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    },
+    {
+      "owner": "catalog-pricing",
+      "cut": "owner prerequisite",
+      "runtime_version": null,
+      "consumer_admission": "not_created"
+    }
+  ],
+  "rollout": "Publish audited H4 metadata/tag after permission and exact CI, then admit exact operation/closure selections in each owner cut. No simultaneous deployment assumed, no v1/v2 dual publication or silent fallback."
+}
