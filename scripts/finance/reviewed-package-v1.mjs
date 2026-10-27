@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {reviewedSalesHistoricalFile,reviewedSalesHistoricalRegistry,withReviewedSalesScope} from '../sales/reviewed-package-v2.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
@@ -13,7 +14,7 @@ export const verifierPath='scripts/finance/reviewed-package-v1.mjs';
 // Filled only after the complete concrete candidate exists. A different file
 // list or digest cannot be authorized by editing the manifest itself.
 export const expectedManifestHash='3d88b0b8d1bd30f8ff3dfdc8df300a066615905514b0c081c8abd4bd530143bb';
-const raw=f=>fs.readFileSync(path.join(root,f));
+const raw=f=>reviewedSalesHistoricalFile(f,fs.readFileSync(path.join(root,f)));
 const text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
 export const hash=b=>createHash('sha256').update(text(b)).digest('hex');
 const originals=new Map();
@@ -46,13 +47,13 @@ export function validateReviewedFinance(read=raw){
  const bManifest=JSON.parse(original('inventory/fixtures/acceptance/v1/package.json'));
  for(const e of bManifest.files)if(!permittedModified.has(e.path))assert.equal(text(read(e.path)),text(original(e.path)),'C_B_PRESERVED:'+e.path);
  const allowed=new Set([manifestPath,verifierPath,...m.files.map(x=>x.path)]);
- for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(f),'C_UNDECLARED_PATH:'+f);
+ for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(withReviewedSalesScope(allowed).has(f),'C_UNDECLARED_PATH:'+f);
  const result={files:m.files.length,new_planned:m.planned.length,prior_roots:before.contracts.length,prior_artifacts:before.preservedFiles.length,manifest:m,runtime_demonstrated:false};if(read===raw)checked=result;return result;
 }
 // Historical comparison only: this is NOT the current C validation view.
 // The pinned package above is verified in full before returning any B bytes.
 // Mutated caller-supplied bytes pass unchanged to the original negative gate.
-export function reviewedFinanceHistoricalFile(f,b){const {manifest:m}=validateReviewedFinance();const e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
+export function reviewedFinanceHistoricalFile(f,b){b=reviewedSalesHistoricalFile(f,b);const {manifest:m}=validateReviewedFinance();const e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
 export const reviewedFinanceHistoricalRead=read=>f=>reviewedFinanceHistoricalFile(f,read(f));
-export function reviewedFinanceHistoricalRegistry(registry){const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(registry,actual))return registry;validateReviewedFinance();return JSON.parse(original('registry/contracts.json'));}
-export function withReviewedFinanceScope(paths){const {manifest:m}=validateReviewedFinance();return new Set([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}
+export function reviewedFinanceHistoricalRegistry(registry){registry=reviewedSalesHistoricalRegistry(registry);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(registry,actual))return registry;validateReviewedFinance();return JSON.parse(original('registry/contracts.json'));}
+export function withReviewedFinanceScope(paths){const {manifest:m}=validateReviewedFinance();return withReviewedSalesScope([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}

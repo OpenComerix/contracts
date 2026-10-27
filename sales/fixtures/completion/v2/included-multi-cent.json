@@ -1,0 +1,351 @@
+{
+  "event_id": "019a1ad0-0000-7000-8000-000000000019",
+  "event_type": "sales.sale.completed.v2",
+  "schema_version": 1,
+  "occurred_at": "2026-10-26T20:00:02.000Z",
+  "producer": "sales-pos",
+  "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+  "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+  "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+  "aggregate_type": "sale",
+  "aggregate_id": "019a1ad0-0000-7000-8000-000000000009",
+  "aggregate_version": 1,
+  "correlation_id": "019a1ad0-0000-7000-8000-000000000011",
+  "causation_id": "019a1ad0-0000-7000-8000-000000000008",
+  "payload": {
+    "sale_id": "019a1ad0-0000-7000-8000-000000000009",
+    "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+    "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+    "process_id": "019a1ad0-0000-7000-8000-000000000011",
+    "sale_version": 1,
+    "commercial_number": {
+      "series_id": "019a1ad0-0000-7000-8000-000000000099",
+      "series": "SALE",
+      "owning_domain": "sales-pos",
+      "document_type": "retail_sale",
+      "number": "1",
+      "display_number": "SALE-1",
+      "format_version": "sales-display-v1",
+      "numbering_policy_version": "sales-number-v1"
+    },
+    "commercial_status": "completed",
+    "context": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007"
+    },
+    "occurred_at": "2026-10-26T20:00:00.000Z",
+    "received_at": "2026-10-26T20:00:00.000Z",
+    "accepted_at": "2026-10-26T20:00:00.000Z",
+    "captured_at": "2026-10-26T20:00:00.000Z",
+    "completed_at": "2026-10-26T20:00:02.000Z",
+    "operating_date": {
+      "business_date": "2026-10-26",
+      "time_zone": "America/Argentina/Buenos_Aires",
+      "date_policy_version": "sales-date-v1"
+    },
+    "capture_id": "019a1ad0-0000-7000-8000-000000000018",
+    "currency": "ARS",
+    "tax_included": true,
+    "calculation_policy_version": "sales-f1-ars-1",
+    "lines": [
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000300",
+        "catalog": {
+          "line_id": "019a1ad0-0000-7000-8000-000000000300",
+          "product_id": "019a1ad0-0000-7000-8000-000000000020",
+          "variant_id": "019a1ad0-0000-7000-8000-000000000021",
+          "presentation_id": "019a1ad0-0000-7000-8000-000000000022",
+          "product_version": 2,
+          "presentation_version": 3,
+          "variant_version_source": "product_version",
+          "product_type": "STOCKED_GOOD",
+          "product_status": "active",
+          "presentation_status": "active",
+          "description": "Producto sintético D",
+          "base_unit": "unit",
+          "presentation_unit": "unit",
+          "conversion_factor": "1",
+          "allows_fractions": false,
+          "minimum_quantity": "1",
+          "quantity_increment": "1",
+          "sku": "SYNTH-D",
+          "barcode": null,
+          "price_id": "019a1ad0-0000-7000-8000-000000000023",
+          "price_list_id": "019a1ad0-0000-7000-8000-000000000024",
+          "price_version": 4,
+          "price_list_version": 1,
+          "unit_price": "0.03",
+          "currency": "ARS",
+          "tax_included": true,
+          "price_valid_from": "2026-10-25T00:00:00Z",
+          "price_valid_to": null,
+          "classification": {
+            "code": "SYNTHETIC_F1",
+            "version": 1,
+            "country_code": "AR",
+            "name": "Clasificación sintética",
+            "selectable": true,
+            "components": [
+              {
+                "tax_code": "SYNTHETIC",
+                "jurisdiction_code": "AR",
+                "treatment": "taxable",
+                "rule_ref": {
+                  "code": "SYNTHETIC_RULE",
+                  "version": 1
+                }
+              }
+            ]
+          }
+        },
+        "quantity": "1",
+        "base_quantity": "1",
+        "physical_presence_confirmed": true,
+        "gross_amount": "0.03",
+        "discount_amount": "0.00",
+        "charge_amount": "0.00",
+        "commercial_total": "0.03"
+      }
+    ],
+    "totals": {
+      "gross": "0.03",
+      "discount": "0.00",
+      "charges": "0.00",
+      "commercial_total": "0.03"
+    },
+    "fiscal_context": {
+      "context_status": "resolved",
+      "tax_snapshot_schema_version": 1,
+      "fiscal_status": "pending",
+      "issuer": {
+        "source": "tax-compliance",
+        "source_version": "synthetic-1",
+        "identification_type": "SYNTHETIC",
+        "identification_number": "SYNTHETIC-NOT-A-CUIT",
+        "legal_name": "Emisor sintético",
+        "tax_condition": "SYNTHETIC",
+        "address": {
+          "country": "AR",
+          "province_code": "SYNTHETIC",
+          "locality": "Localidad sintética",
+          "postal_code": "SYNTH",
+          "street": "Domicilio sintético"
+        }
+      },
+      "recipient": {
+        "kind": "anonymous",
+        "reason_code": "identification_not_required",
+        "rule": {
+          "code": "SYNTHETIC_VAT",
+          "version": "1"
+        }
+      },
+      "profile": {
+        "profile_id": "synthetic-profile",
+        "version": "1",
+        "valid_from": "2026-10-25T00:00:00Z",
+        "valid_to": null,
+        "captured_at": "2026-10-26T20:00:00.000Z"
+      },
+      "requested_fiscal_date": "2026-10-26",
+      "operation_purpose": "retail_sale",
+      "requested_document_profile": "SYNTHETIC_NO_EMISSION",
+      "jurisdictions": [
+        {
+          "country": "AR",
+          "level": "national",
+          "code": "AR"
+        },
+        {
+          "country": "AR",
+          "level": "provincial",
+          "code": "AR-SYNTH"
+        }
+      ],
+      "rules": [
+        {
+          "code": "SYNTHETIC_VAT",
+          "version": "1"
+        },
+        {
+          "code": "SYNTHETIC_OTHER",
+          "version": "1"
+        }
+      ],
+      "lines": [
+        {
+          "line_id": "019a1ad0-0000-7000-8000-000000000300",
+          "components": [
+            {
+              "component_id": "vat",
+              "jurisdiction": {
+                "country": "AR",
+                "level": "national",
+                "code": "AR"
+              },
+              "tax_code": "SYNTH_VAT",
+              "treatment": "taxable",
+              "concept_code": "SYNTHETIC_GOODS",
+              "category": "vat",
+              "base": "0.0241935483870967741935483870967742",
+              "rate": "21",
+              "amount": "0.01",
+              "included": true,
+              "rule": {
+                "code": "SYNTHETIC_VAT",
+                "version": "1"
+              },
+              "reason": null,
+              "theoretical_amount": "0.0050806451612903225806451612903226",
+              "allocated_residue": "0.0049193548387096774193548387096774",
+              "allocated_base": "0.02",
+              "base_residue": "-0.0041935483870967741935483870967742"
+            },
+            {
+              "component_id": "provincial",
+              "jurisdiction": {
+                "country": "AR",
+                "level": "provincial",
+                "code": "AR-SYNTH"
+              },
+              "tax_code": "SYNTH_OTHER",
+              "treatment": "taxable",
+              "concept_code": "SYNTHETIC_GOODS",
+              "category": "other",
+              "base": "0.0241935483870967741935483870967742",
+              "rate": "3",
+              "amount": "0.00",
+              "included": true,
+              "rule": {
+                "code": "SYNTHETIC_OTHER",
+                "version": "1"
+              },
+              "reason": null,
+              "theoretical_amount": "0.0007258064516129032258064516129032",
+              "allocated_residue": "-0.0007258064516129032258064516129032",
+              "allocated_base": "0.02",
+              "base_residue": "-0.0041935483870967741935483870967742"
+            }
+          ]
+        }
+      ],
+      "groups": [
+        {
+          "group_id": "vat",
+          "jurisdiction": {
+            "country": "AR",
+            "level": "national",
+            "code": "AR"
+          },
+          "tax_code": "SYNTH_VAT",
+          "treatment": "taxable",
+          "concept_code": "SYNTHETIC_GOODS",
+          "category": "vat",
+          "rate": "21",
+          "base": "0.0241935483870967741935483870967742",
+          "amount": "0.01",
+          "rule": {
+            "code": "SYNTHETIC_VAT",
+            "version": "1"
+          },
+          "line_ids": [
+            "019a1ad0-0000-7000-8000-000000000300"
+          ],
+          "allocated_base": "0.02",
+          "base_residue": "-0.0041935483870967741935483870967742"
+        },
+        {
+          "group_id": "provincial",
+          "jurisdiction": {
+            "country": "AR",
+            "level": "provincial",
+            "code": "AR-SYNTH"
+          },
+          "tax_code": "SYNTH_OTHER",
+          "treatment": "taxable",
+          "concept_code": "SYNTHETIC_GOODS",
+          "category": "other",
+          "rate": "3",
+          "base": "0.0241935483870967741935483870967742",
+          "amount": "0.00",
+          "rule": {
+            "code": "SYNTHETIC_OTHER",
+            "version": "1"
+          },
+          "line_ids": [
+            "019a1ad0-0000-7000-8000-000000000300"
+          ],
+          "allocated_base": "0.02",
+          "base_residue": "-0.0041935483870967741935483870967742"
+        }
+      ],
+      "totals": {
+        "taxable_net": "0.02",
+        "vat": "0.01",
+        "not_taxable": "0.00",
+        "exempt": "0.00",
+        "other_taxes": "0.00",
+        "total": "0.03"
+      },
+      "exchange": {
+        "currency": "ARS",
+        "base_currency": "ARS",
+        "rate": "1",
+        "source": "same_currency",
+        "captured_at": "2026-10-26T20:00:00.000Z"
+      },
+      "decisions": [
+        {
+          "code": "SYNTHETIC_ONLY",
+          "rule": {
+            "code": "SYNTHETIC_VAT",
+            "version": "1"
+          }
+        }
+      ]
+    },
+    "stock": {
+      "status": "posted",
+      "command_id": "019a1ad0-0000-7000-8000-000000000012",
+      "result_id": "019a1ad0-0000-7000-8000-000000000013",
+      "recorded_at": "2026-10-26T20:00:00.000Z",
+      "movements": [
+        {
+          "movement_id": "019a1ad0-0000-7000-8000-000000000400",
+          "movement_version": 1,
+          "line_ids": [
+            "019a1ad0-0000-7000-8000-000000000300"
+          ]
+        }
+      ],
+      "reconciliation_required": false,
+      "reconciliations": []
+    },
+    "payment": {
+      "status": "paid",
+      "command_id": "019a1ad0-0000-7000-8000-000000000015",
+      "result_id": "019a1ad0-0000-7000-8000-000000000016",
+      "payment_id": "019a1ad0-0000-7000-8000-000000000010",
+      "movement_id": "019a1ad0-0000-7000-8000-000000000017",
+      "payment_version": 1,
+      "shift_version": 5,
+      "recorded_at": "2026-10-26T20:00:00.000Z",
+      "method": "cash",
+      "currency": "ARS",
+      "applied": "0.03",
+      "received": "0.03",
+      "change": "0.00"
+    },
+    "provenance": {
+      "catalog": "catalog-pricing.captureSaleCatalog.v1",
+      "context": "backend_validated",
+      "calculation": "sales-pos",
+      "snapshot": "immutable_at_acceptance"
+    }
+  }
+}

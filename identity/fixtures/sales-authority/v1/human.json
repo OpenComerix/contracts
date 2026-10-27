@@ -1,0 +1,490 @@
+[
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "finalizeOnlineSale",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations",
+      "query": {},
+      "body": {
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "sale_id": "019a1ad0-0000-7000-8000-000000000009",
+        "context": {
+          "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+          "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+          "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+          "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+          "location_id": "019a1ad0-0000-7000-8000-000000000005",
+          "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+          "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+          "device_ref": "synthetic-device"
+        },
+        "occurred_at": "2026-10-26T20:00:00.000Z",
+        "operating_date": {
+          "business_date": "2026-10-26",
+          "time_zone": "America/Argentina/Buenos_Aires",
+          "date_policy_version": "sales-date-v1"
+        },
+        "lines": [
+          {
+            "reference": {
+              "line_id": "019a1ad0-0000-7000-8000-000000000030",
+              "presentation_id": "019a1ad0-0000-7000-8000-000000000022",
+              "quantity": "1",
+              "product_version": 2,
+              "presentation_version": 3,
+              "price_id": "019a1ad0-0000-7000-8000-000000000023",
+              "price_version": 4,
+              "price_list_id": "019a1ad0-0000-7000-8000-000000000024",
+              "price_list_version": 1,
+              "classification_code": "SYNTHETIC_F1",
+              "classification_version": 1,
+              "observed_unit_price": "75.25"
+            },
+            "physical_presence_confirmed": true
+          }
+        ],
+        "observed_total": "75.25",
+        "payment": {
+          "payment_id": "019a1ad0-0000-7000-8000-000000000010",
+          "method": "cash",
+          "currency": "ARS",
+          "applied": "75.25",
+          "received": "100.00"
+        }
+      },
+      "idempotency_key": "019a1ad0-0000-7000-8000-000000000008"
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "finalizeOnlineSale",
+      "permission": "sales.finalize",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "234090e1658beeb20dcb7fbcaa14e26c72f64141e0b7dc92cb8b22a3f7b2e815",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": null,
+      "stock_difference": {
+        "permission": "inventory.sell_with_stock_difference",
+        "granted": true,
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+        "request_hash": "234090e1658beeb20dcb7fbcaa14e26c72f64141e0b7dc92cb8b22a3f7b2e815",
+        "lines": [
+          {
+            "line_id": "019a1ad0-0000-7000-8000-000000000030",
+            "quantity": "1",
+            "physical_presence_confirmed": true
+          }
+        ]
+      }
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  },
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "getSaleFinalization",
+      "method": "GET",
+      "path": "/api/v1/sales/finalizations/019a1ad0-0000-7000-8000-000000000008",
+      "query": {},
+      "body": null,
+      "idempotency_key": null
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "getSaleFinalization",
+      "permission": "sales.read",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "66973239906587e79d51d801d0756591e66e33ab703dc5779374a6b36dc76150",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": null
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  },
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "getCompletedSale",
+      "method": "GET",
+      "path": "/api/v1/sales/019a1ad0-0000-7000-8000-000000000009",
+      "query": {},
+      "body": null,
+      "idempotency_key": null
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "getCompletedSale",
+      "permission": "sales.read",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "00f180d1a1bb235f31bc29a6195d83ada75119212b0249ceb64bb0a104fbca0a",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": null
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  },
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "resumeSaleFinalization",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations/019a1ad0-0000-7000-8000-000000000008/resume",
+      "query": {},
+      "body": {
+        "operation_id": "019a1ad0-0000-7000-8000-000000000040",
+        "expected_version": 4,
+        "reason_code": "reconcile_unknown"
+      },
+      "idempotency_key": "019a1ad0-0000-7000-8000-000000000040"
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "resumeSaleFinalization",
+      "permission": "sales.process.resume",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "da564a0c3d609ca08b02fd3b3cbb4e3d0be0c167d583c59daaa4bce135e04b42",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": "2026-10-26T20:00:00.000Z"
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  },
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "createSalesHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/sales/history-read-sessions",
+      "query": {},
+      "body": {
+        "operation_id": "019a1ad0-0000-7000-8000-000000000041",
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "reason_code": "reconstruction",
+        "families": [
+          "sales.sale.completed.v2"
+        ],
+        "from_sequence": "1",
+        "to_sequence": null,
+        "limit": 50
+      },
+      "idempotency_key": "019a1ad0-0000-7000-8000-000000000041"
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "createSalesHistoryReadSession",
+      "permission": "sales.history.read",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "23c94811b236bb47d7038e584d7583e8307aa03f845967449730de992ec47b8d",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": "2026-10-26T20:00:00.000Z"
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  },
+  {
+    "request": {
+      "canonicalization_version": "sales-request-v1",
+      "operation_id": "readSalesHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/sales/history-read-sessions/019a1ad0-0000-7000-8000-000000000042/facts",
+      "query": {},
+      "body": null,
+      "idempotency_key": null
+    },
+    "decision": {
+      "authorized": true,
+      "decision_ref": "synthetic-decision",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "session_ref": "synthetic-session",
+      "device_ref": "synthetic-device",
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "operation_id": "readSalesHistoryFacts",
+      "permission": "sales.history.read",
+      "canonicalization_version": "sales-request-v1",
+      "request_hash": "9ad6127e5c9d0b32cc3a621ca085fcf434b121f3beef7e83d58e2cef55a4f52c",
+      "checked_at": "2026-10-26T20:00:00.000Z",
+      "valid_for_ms": 2000,
+      "scope": {
+        "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+        "branch_ids": [
+          "019a1ad0-0000-7000-8000-000000000002"
+        ],
+        "pos_ids": [
+          "019a1ad0-0000-7000-8000-000000000003"
+        ]
+      },
+      "versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "step_up_at": "2026-10-26T20:00:00.000Z"
+    },
+    "check": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007",
+      "account_ref": "synthetic-account",
+      "membership_ref": "synthetic-membership",
+      "device_ref": "synthetic-device",
+      "current_versions": {
+        "account": "1",
+        "session": "1",
+        "credential": "1",
+        "membership": "1",
+        "authorization": "1",
+        "device": "1",
+        "approval": "1"
+      },
+      "at": "2026-10-26T20:00:00.000Z",
+      "sent_at_ms": 1000,
+      "now_ms": 1100
+    }
+  }
+]

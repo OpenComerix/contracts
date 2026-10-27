@@ -1,0 +1,47 @@
+{
+  "asyncapi": "3.0.0",
+  "info": {
+    "title": "Sales autosufficient completion v2",
+    "version": "2.0.0",
+    "license": {
+      "name": "Proprietary"
+    },
+    "description": "Informative completed fact, never a new stock/payment command. B/C own directed transports."
+  },
+  "defaultContentType": "application/json",
+  "channels": {
+    "events": {
+      "address": "sales.events",
+      "messages": {
+        "completed": {
+          "$ref": "#/components/messages/sales.sale.completed.v2"
+        }
+      }
+    }
+  },
+  "operations": {
+    "sendCompleted": {
+      "action": "send",
+      "channel": {
+        "$ref": "#/channels/events"
+      }
+    }
+  },
+  "components": {
+    "messages": {
+      "sales.sale.completed.v2": {
+        "name": "sales.sale.completed.v2",
+        "title": "Immutable completed commercial and fiscal snapshot",
+        "contentType": "application/json",
+        "payload": {
+          "schemaFormat": "application/schema+json;version=draft-2020-12",
+          "schema": {
+            "$ref": "sales.sale.completed.v2.schema.json"
+          }
+        }
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false
+}

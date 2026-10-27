@@ -1,0 +1,677 @@
+{
+  "runtime_demonstrated": false,
+  "cases": [
+    {
+      "id": "pending",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/pending.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "pending-reader",
+      "schema": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/pending-reader.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "finalize",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/finalize.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "accepted",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Accepted",
+      "fixture": "sales/fixtures/validation/v2/accepted.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-finalizeonlinesale",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-finalizeonlinesale.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-finalizeonlinesale",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-finalizeonlinesale.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-getsalefinalization",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-getsalefinalization.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-getsalefinalization",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-getsalefinalization.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-getcompletedsale",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-getcompletedsale.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-getcompletedsale",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-getcompletedsale.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-resumesalefinalization",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-resumesalefinalization.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-resumesalefinalization",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-resumesalefinalization.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-createsaleshistoryreadsession",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-createsaleshistoryreadsession.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-createsaleshistoryreadsession",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-createsaleshistoryreadsession.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "canonical-readsaleshistoryfacts",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/CanonicalRequest",
+      "fixture": "sales/fixtures/validation/v2/canonical-readsaleshistoryfacts.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "authority-readsaleshistoryfacts",
+      "schema": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+      "fragment": "/$defs/Authorization",
+      "fixture": "sales/fixtures/validation/v2/authority-readsaleshistoryfacts.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "capture-request",
+      "schema": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+      "fragment": "/$defs/CaptureRequest",
+      "fixture": "sales/fixtures/validation/v2/capture-request.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "capture-result",
+      "schema": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+      "fragment": "/$defs/Capture",
+      "fixture": "sales/fixtures/validation/v2/capture-result.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "capture-authority",
+      "schema": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+      "fragment": "/$defs/Decision",
+      "fixture": "sales/fixtures/validation/v2/capture-authority.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "resolved-vat",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/vat.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "resolved-multi",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/multi.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "resolved-exempt",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/exempt.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "resolved-not-taxable",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/not_taxable.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "extension-reader",
+      "schema": "sales/events/v2/sales.sale.completed.v2.consumer.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/extension-reader.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "extension-producer",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/extension-producer.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "pending-issuer",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/pending-issuer.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "pending-totals",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/pending-totals.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "pending-not-applicable",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/pending-not-applicable.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-type",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-type.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-revision",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-revision.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-snapshot",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-snapshot.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-policy",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-policy.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-status",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-status.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "unknown-field",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/unknown-field.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "money-number",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/money-number.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "over-scale",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/over-scale.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "over-quantity",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/over-quantity.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "future-tax-field",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/future-tax-field.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "secret-field",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/secret-field.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "fiscal-authorized",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/fiscal-authorized.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "uuid-v4",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/uuid-v4.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "missing-profile",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/missing-profile.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "missing-recipient",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/missing-recipient.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "untyped-tax",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/untyped-tax.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "missing-rule",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/missing-rule.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "offline",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/offline.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "free-authority",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/free-authority.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "fiscal-input",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/fiscal-input.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "card",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/card.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "price-scale",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Finalize",
+      "fixture": "sales/fixtures/validation/v2/price-scale.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "operation-accepted",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-accepted.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-stock-pending",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-stock-pending.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-payment-pending",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-payment-pending.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-completion-pending",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-completion-pending.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-compensating",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-compensating.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-completed",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-completed.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-rejected",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-rejected.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "operation-requires-attention",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/operation-requires-attention.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "history-session",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/HistorySession",
+      "fixture": "sales/fixtures/validation/v2/history-session.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "history-page",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/HistoryPage",
+      "fixture": "sales/fixtures/validation/v2/history-page.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "compensation-missing-result",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/compensation-missing-result.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "compensation-unknown-enum",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/compensation-unknown-enum.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "http-sale-public",
+      "schema": "sales/http/public/v2/pos-sales-v2.yaml",
+      "fragment": "/paths/~1sales~1{sale_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/completion/v2/pending.json",
+      "pointer": "/payload",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-public-completed",
+      "schema": "sales/http/public/v2/pos-sales-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-public-completed.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-public-compensating",
+      "schema": "sales/http/public/v2/pos-sales-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-public-compensating.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-public-rejected",
+      "schema": "sales/http/public/v2/pos-sales-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-public-rejected.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-public-requires-attention",
+      "schema": "sales/http/public/v2/pos-sales-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-public-requires-attention.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-sale-private",
+      "schema": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "fragment": "/paths/~1sales~1{sale_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/completion/v2/pending.json",
+      "pointer": "/payload",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-private-completed",
+      "schema": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-private-completed.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-private-compensating",
+      "schema": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-private-compensating.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-private-rejected",
+      "schema": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-private-rejected.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-operation-private-requires-attention",
+      "schema": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+      "fragment": "/paths/~1sales~1finalizations~1{operation_id}/get/responses/200/content/application~1json/schema",
+      "fixture": "sales/fixtures/validation/v2/http-operation-private-requires-attention.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "http-sale-consumer",
+      "schema": "sales/http/shared/v2/sales-consumer-types-v2.schema.json",
+      "fragment": "/$defs/HttpSale",
+      "fixture": "sales/fixtures/completion/v2/pending.json",
+      "pointer": "/payload",
+      "expected": "accept"
+    },
+    {
+      "id": "compensated-without-proof",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/compensated-without-proof.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "succeeded-without-payment",
+      "schema": "sales/http/shared/v2/sales-types-v2.schema.json",
+      "fragment": "/$defs/Operation",
+      "fixture": "sales/fixtures/validation/v2/succeeded-without-payment.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "stocked-without-posting",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/validation/v2/stocked-without-posting.json",
+      "pointer": "",
+      "expected": "reject"
+    },
+    {
+      "id": "included-cent-01",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-cent-01.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-cent-02",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-cent-02.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-cent-03",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-cent-03.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-cent-04",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-cent-04.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-cent-05",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-cent-05.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-two-lines",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-two-lines.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-three-line-tie",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-three-line-tie.json",
+      "pointer": "",
+      "expected": "accept"
+    },
+    {
+      "id": "included-multi-cent",
+      "schema": "sales/events/v2/sales.sale.completed.v2.schema.json",
+      "fragment": "",
+      "fixture": "sales/fixtures/completion/v2/included-multi-cent.json",
+      "pointer": "",
+      "expected": "accept"
+    }
+  ]
+}

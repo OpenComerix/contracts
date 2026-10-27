@@ -387,3 +387,36 @@ validate:finance-schema:
       artifacts: true
   script:
     - sh scripts/finance/validate-v1.sh .ci-artifacts/finance-v1-ci
+
+validate:sales-contracts:
+  stage: validate
+  variables:
+    GIT_DEPTH: "0"
+    REDOCLY_TELEMETRY: "off"
+    REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+  before_script:
+    - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - corepack enable
+    - corepack prepare pnpm@12.4.2 --activate
+    - pnpm install --frozen-lockfile --ignore-scripts
+  script:
+    - node --test --test-reporter=tap test/sales/*.test.mjs
+    - node scripts/sales/run-gate-v2.mjs openapi
+    - node scripts/sales/run-gate-v2.mjs asyncapi
+    - node scripts/sales/schema-v2.mjs .ci-artifacts/sales-v2-ci
+  artifacts:
+    when: always
+    paths:
+      - .ci-artifacts/sales-v2-*/
+    expire_in: 7 days
+
+validate:sales-schema:
+  stage: validate
+  image:
+    name: ghcr.io/sourcemeta/jsonschema:v16.10.0
+    entrypoint: [""]
+  needs:
+    - job: validate:sales-contracts
+      artifacts: true
+  script:
+    - sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci

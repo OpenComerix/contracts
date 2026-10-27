@@ -1,0 +1,1243 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+  "title": "Consistent commercial catalogue capture for Sales v1",
+  "$defs": {
+    "Reference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line_id",
+        "presentation_id",
+        "quantity",
+        "product_version",
+        "presentation_version",
+        "price_id",
+        "price_version",
+        "price_list_id",
+        "price_list_version",
+        "classification_code",
+        "classification_version",
+        "observed_unit_price"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "quantity": {
+          "allOf": [
+            {
+              "$ref": "catalog-common-v1.schema.json#/$defs/QuantityDecimal"
+            },
+            {
+              "not": {
+                "pattern": "^0(?:\\.0+)?$"
+              }
+            }
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "product_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_list_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_list_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "classification_code": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/TaxCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "classification_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "observed_unit_price": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/PriceDecimal",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "barcode": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "Classification": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "version",
+        "country_code",
+        "name",
+        "selectable",
+        "components"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "country_code": {
+          "const": "AR",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "name": {
+          "$ref": "#/$defs/Name160",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "selectable": {
+          "type": "boolean",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClassificationComponent"
+          },
+          "maxItems": 16,
+          "minItems": 1,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "ClassificationComponent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tax_code",
+        "jurisdiction_code",
+        "treatment",
+        "rule_ref"
+      ],
+      "properties": {
+        "tax_code": {
+          "$ref": "#/$defs/TaxCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "jurisdiction_code": {
+          "$ref": "#/$defs/TaxCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "treatment": {
+          "type": "string",
+          "enum": [
+            "taxable",
+            "exempt",
+            "not_taxable"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "rule_ref": {
+          "$ref": "#/$defs/ClassificationRule",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "ClassificationRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "version"
+      ],
+      "properties": {
+        "code": {
+          "$ref": "#/$defs/TaxCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "version": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/AggregateVersion",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "CommercialSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "line_id",
+        "product_id",
+        "variant_id",
+        "presentation_id",
+        "product_version",
+        "presentation_version",
+        "variant_version_source",
+        "product_type",
+        "product_status",
+        "presentation_status",
+        "description",
+        "base_unit",
+        "presentation_unit",
+        "conversion_factor",
+        "allows_fractions",
+        "minimum_quantity",
+        "quantity_increment",
+        "sku",
+        "barcode",
+        "price_id",
+        "price_list_id",
+        "price_version",
+        "price_list_version",
+        "unit_price",
+        "currency",
+        "tax_included",
+        "price_valid_from",
+        "price_valid_to",
+        "classification"
+      ],
+      "properties": {
+        "line_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "product_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "variant_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "product_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "variant_version_source": {
+          "const": "product_version",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "product_type": {
+          "type": "string",
+          "enum": [
+            "STOCKED_GOOD",
+            "NON_STOCK_GOOD",
+            "SERVICE"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "product_status": {
+          "const": "active",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_status": {
+          "const": "active",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "description": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "base_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "presentation_unit": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/UnitCode",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "conversion_factor": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/ConversionFactor",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "allows_fractions": {
+          "type": "boolean",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "minimum_quantity": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/PositiveQuantity",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "quantity_increment": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/PositiveQuantity",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "sku": {
+          "$ref": "catalog-entities-v1.schema.json#/$defs/CanonicalSku",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "barcode": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_list_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_list_version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "unit_price": {
+          "$ref": "catalog-common-v1.schema.json#/$defs/PriceDecimal",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "currency": {
+          "const": "ARS",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "tax_included": {
+          "const": true,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_valid_from": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "price_valid_to": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "Z$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "classification": {
+          "$ref": "#/$defs/Classification",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "allows_fractions": {
+                "const": false,
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "FISCAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "immutable operation and future authorized reconstruction",
+                "x-log-policy": "no payload or field values, bounded codes only",
+                "x-retention-profile": "commercial"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "minimum_quantity": {
+                "pattern": "^[1-9][0-9]{0,11}$",
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "FISCAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "immutable operation and future authorized reconstruction",
+                "x-log-policy": "no payload or field values, bounded codes only",
+                "x-retention-profile": "commercial"
+              },
+              "quantity_increment": {
+                "pattern": "^[1-9][0-9]{0,11}$",
+                "x-data-classification": {
+                  "sensitivity": "RESTRICTED",
+                  "categories": [
+                    "COMMERCIAL",
+                    "FISCAL",
+                    "OPERATIONAL"
+                  ]
+                },
+                "x-data-purpose": "immutable operation and future authorized reconstruction",
+                "x-log-policy": "no payload or field values, bounded codes only",
+                "x-retention-profile": "commercial"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "CaptureRequest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "lines"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/Reference"
+          },
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "Capture": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "capture_id",
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "captured_at",
+        "consistent_group",
+        "lines"
+      ],
+      "properties": {
+        "capture_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "captured_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "consistent_group": {
+          "const": true,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "lines": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/$defs/CommercialSnapshot"
+          },
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    },
+    "Name160": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[^\\s\\x00-\\x1f\\x7f](?:[^\\x00-\\x1f\\x7f]*[^\\s\\x00-\\x1f\\x7f])?$"
+    },
+    "TaxCode": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_.:-]{0,63}$"
+    }
+  }
+}

@@ -1,8 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';
 import {makeLock} from '../../tools/architecture/graph.mjs';
 import {parse} from 'yaml';
+import {reviewedSalesHistoricalFile} from '../../scripts/sales/reviewed-package-v2.mjs';
 import {root,manifestPath,expectedManifestHash,validateReviewedFinance,validateFinanceCI,reviewedFinanceHistoricalFile,reviewedFinanceHistoricalRegistry,withReviewedFinanceScope,hash,original} from '../../scripts/finance/reviewed-package-v1.mjs';
-const bytes=f=>fs.readFileSync(path.join(root,f)),read=f=>JSON.parse(bytes(f));
+const bytes=f=>reviewedSalesHistoricalFile(f,fs.readFileSync(path.join(root,f))),read=f=>JSON.parse(bytes(f));
 test('concrete C snapshot has pinned digest and preserves all earlier roots/artifacts/consumers/CI',()=>{assert.equal(hash(bytes(manifestPath)),expectedManifestHash);const r=validateReviewedFinance();assert.equal(r.new_planned,25);assert.equal(r.prior_roots,121);assert.equal(r.prior_artifacts,236);assert.equal(r.runtime_demonstrated,false);});
 test('a forged manifest cannot authorize a new file or updated digest',()=>{const fake=read(manifestPath);fake.files.push({path:'src/free.ts',kind:'new',sha256:'0'.repeat(64)});assert.throws(()=>validateReviewedFinance(f=>f===manifestPath?Buffer.from(JSON.stringify(fake)):bytes(f)),/C_SNAPSHOT_DIGEST/);});
 for(const f of ['.gitlab-ci.yml','registry/contracts.json','finance/README.md','identity/index.json','scripts/inventory/candidate-v1.mjs','test/inventory/package-v1.test.mjs','finance/http/shared/v1/finance-types-v1.schema.json','common/errors/v10/error-catalog-v10.json'])test('C current view rejects changed or missing source: '+f,()=>{assert.throws(()=>validateReviewedFinance(n=>n===f?Buffer.concat([bytes(n),Buffer.from('\nUnapproved')]):bytes(n)),/C_SNAPSHOT_BYTES/);assert.throws(()=>validateReviewedFinance(n=>{if(n===f)throw Error('Synthetic missing source');return bytes(n);}),/Synthetic missing source/);});

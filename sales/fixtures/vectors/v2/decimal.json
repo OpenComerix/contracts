@@ -1,0 +1,110 @@
+{
+  "policy": "sales-f1-ars-1",
+  "runtime_demonstrated": false,
+  "lines": [
+    {
+      "id": "ten-cents",
+      "input": [
+        "0.10",
+        "3",
+        "1"
+      ],
+      "expected": {
+        "base_quantity": "3",
+        "commercial_total": "0.30"
+      }
+    },
+    {
+      "id": "half-cent",
+      "input": [
+        "1.25",
+        "0.004",
+        "1"
+      ],
+      "expected": {
+        "base_quantity": "0.004",
+        "commercial_total": "0.01"
+      }
+    },
+    {
+      "id": "nano-base",
+      "input": [
+        "10.00",
+        "0.001",
+        "0.000001"
+      ],
+      "expected": {
+        "base_quantity": "0.000000001",
+        "commercial_total": "0.01"
+      }
+    },
+    {
+      "id": "maximum-input",
+      "input": [
+        "999999999999.99",
+        "999999999999.999",
+        "999999999999.999999"
+      ],
+      "expected": {
+        "base_quantity": "999999999999998999000000.000000001",
+        "commercial_total": "999999999999989000000000.00"
+      }
+    }
+  ],
+  "included": [
+    {
+      "gross": "121.00",
+      "rate": "21",
+      "expected": {
+        "net": "100.00",
+        "tax": "21.00",
+        "gross": "121.00"
+      }
+    },
+    {
+      "gross": "1.00",
+      "rate": "21",
+      "expected": {
+        "net": "0.83",
+        "tax": "0.17",
+        "gross": "1.00"
+      }
+    }
+  ],
+  "allocation": {
+    "total": "0.01",
+    "weights": [
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000033",
+        "weight": "1"
+      },
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000031",
+        "weight": "1"
+      },
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000032",
+        "weight": "1"
+      }
+    ],
+    "expected": [
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000033",
+        "amount": "0.00"
+      },
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000031",
+        "amount": "0.01"
+      },
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000032",
+        "amount": "0.00"
+      }
+    ]
+  },
+  "cash": {
+    "received": "100.00",
+    "applied": "75.25",
+    "change": "24.75"
+  }
+}

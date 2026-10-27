@@ -1,0 +1,166 @@
+{
+  "event_id": "019a1ad0-0000-7000-8000-000000000019",
+  "event_type": "sales.sale.completed.v2",
+  "schema_version": 1,
+  "occurred_at": "2026-10-26T20:00:02.000Z",
+  "producer": "sales-pos",
+  "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+  "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+  "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+  "aggregate_type": "sale",
+  "aggregate_id": "019a1ad0-0000-7000-8000-000000000009",
+  "aggregate_version": 1,
+  "correlation_id": "019a1ad0-0000-7000-8000-000000000011",
+  "causation_id": "019a1ad0-0000-7000-8000-000000000008",
+  "payload": {
+    "sale_id": "019a1ad0-0000-7000-8000-000000000009",
+    "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+    "operation_id": "019a1ad0-0000-7000-8000-000000000008",
+    "process_id": "019a1ad0-0000-7000-8000-000000000011",
+    "sale_version": 1,
+    "commercial_number": {
+      "series_id": "019a1ad0-0000-7000-8000-000000000099",
+      "series": "SALE",
+      "owning_domain": "sales-pos",
+      "document_type": "retail_sale",
+      "number": "1",
+      "display_number": "SALE-1",
+      "format_version": "sales-display-v1",
+      "numbering_policy_version": "sales-number-v1"
+    },
+    "commercial_status": "completed",
+    "context": {
+      "organization_id": "019a1ad0-0000-7000-8000-000000000001",
+      "branch_id": "019a1ad0-0000-7000-8000-000000000002",
+      "pos_id": "019a1ad0-0000-7000-8000-000000000003",
+      "warehouse_id": "019a1ad0-0000-7000-8000-000000000004",
+      "location_id": "019a1ad0-0000-7000-8000-000000000005",
+      "cash_register_id": "019a1ad0-0000-7000-8000-000000000006",
+      "cash_shift_id": "019a1ad0-0000-7000-8000-000000000007"
+    },
+    "occurred_at": "2026-10-26T20:00:00.000Z",
+    "received_at": "2026-10-26T20:00:00.000Z",
+    "accepted_at": "2026-10-26T20:00:00.000Z",
+    "captured_at": "2026-10-26T20:00:00.000Z",
+    "completed_at": "2026-10-26T20:00:02.000Z",
+    "operating_date": {
+      "business_date": "2026-10-26",
+      "time_zone": "America/Argentina/Buenos_Aires",
+      "date_policy_version": "sales-date-v1"
+    },
+    "capture_id": "019a1ad0-0000-7000-8000-000000000018",
+    "currency": "ARS",
+    "tax_included": true,
+    "calculation_policy_version": "sales-f1-ars-1",
+    "lines": [
+      {
+        "line_id": "019a1ad0-0000-7000-8000-000000000030",
+        "catalog": {
+          "line_id": "019a1ad0-0000-7000-8000-000000000030",
+          "product_id": "019a1ad0-0000-7000-8000-000000000020",
+          "variant_id": "019a1ad0-0000-7000-8000-000000000021",
+          "presentation_id": "019a1ad0-0000-7000-8000-000000000022",
+          "product_version": 2,
+          "presentation_version": 3,
+          "variant_version_source": "product_version",
+          "product_type": "STOCKED_GOOD",
+          "product_status": "active",
+          "presentation_status": "active",
+          "description": "Producto sintético D",
+          "base_unit": "unit",
+          "presentation_unit": "unit",
+          "conversion_factor": "1",
+          "allows_fractions": false,
+          "minimum_quantity": "1",
+          "quantity_increment": "1",
+          "sku": "SYNTH-D",
+          "barcode": null,
+          "price_id": "019a1ad0-0000-7000-8000-000000000023",
+          "price_list_id": "019a1ad0-0000-7000-8000-000000000024",
+          "price_version": 4,
+          "price_list_version": 1,
+          "unit_price": "75.25",
+          "currency": "ARS",
+          "tax_included": true,
+          "price_valid_from": "2026-10-25T00:00:00Z",
+          "price_valid_to": null,
+          "classification": {
+            "code": "SYNTHETIC_F1",
+            "version": 1,
+            "country_code": "AR",
+            "name": "Clasificación sintética",
+            "selectable": true,
+            "components": [
+              {
+                "tax_code": "SYNTHETIC",
+                "jurisdiction_code": "AR",
+                "treatment": "taxable",
+                "rule_ref": {
+                  "code": "SYNTHETIC_RULE",
+                  "version": 1
+                }
+              }
+            ]
+          }
+        },
+        "quantity": "1",
+        "base_quantity": "1",
+        "physical_presence_confirmed": true,
+        "gross_amount": "75.25",
+        "discount_amount": "0.00",
+        "charge_amount": "0.00",
+        "commercial_total": "75.25"
+      }
+    ],
+    "totals": {
+      "gross": "75.25",
+      "discount": "0.00",
+      "charges": "0.00",
+      "commercial_total": 75.25
+    },
+    "fiscal_context": {
+      "context_status": "pending_profile",
+      "tax_snapshot_schema_version": 1,
+      "reason": "profile_unavailable",
+      "fiscal_status": "pending"
+    },
+    "stock": {
+      "status": "posted",
+      "command_id": "019a1ad0-0000-7000-8000-000000000012",
+      "result_id": "019a1ad0-0000-7000-8000-000000000013",
+      "recorded_at": "2026-10-26T20:00:00.000Z",
+      "movements": [
+        {
+          "movement_id": "019a1ad0-0000-7000-8000-000000000014",
+          "movement_version": 1,
+          "line_ids": [
+            "019a1ad0-0000-7000-8000-000000000030"
+          ]
+        }
+      ],
+      "reconciliation_required": false,
+      "reconciliations": []
+    },
+    "payment": {
+      "status": "paid",
+      "command_id": "019a1ad0-0000-7000-8000-000000000015",
+      "result_id": "019a1ad0-0000-7000-8000-000000000016",
+      "payment_id": "019a1ad0-0000-7000-8000-000000000010",
+      "movement_id": "019a1ad0-0000-7000-8000-000000000017",
+      "payment_version": 1,
+      "shift_version": 5,
+      "recorded_at": "2026-10-26T20:00:00.000Z",
+      "method": "cash",
+      "currency": "ARS",
+      "applied": "75.25",
+      "received": "100.00",
+      "change": "24.75"
+    },
+    "provenance": {
+      "catalog": "catalog-pricing.captureSaleCatalog.v1",
+      "context": "backend_validated",
+      "calculation": "sales-pos",
+      "snapshot": "immutable_at_acceptance"
+    }
+  }
+}

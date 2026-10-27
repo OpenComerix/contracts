@@ -1,0 +1,95 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "extends_without_changing": "identity/http/shared/v2/identity-catalog-workload-profiles-v2.json",
+  "profiles": [
+    {
+      "client_id": "sales-pos.sales-authority",
+      "caller": "sales-pos",
+      "audience": "identity-tenancy.sales-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "gateway-bff.sales",
+      "caller": "gateway-bff",
+      "audience": "sales-pos.user-api",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "sales-pos.catalog-capture",
+      "caller": "sales-pos",
+      "audience": "catalog-pricing.sale-capture",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    },
+    {
+      "client_id": "catalog-pricing.sales-capture-authority",
+      "caller": "catalog-pricing",
+      "audience": "sales-pos.catalog-capture-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300
+    }
+  ],
+  "issuance": "H1A HTTP Basic grant_type=client_credentials; client_id fixes caller/audience; distinct credentials and rotation per purpose; no request audience selector or secret fallback.",
+  "permissions": [
+    {
+      "operation_id": "finalizeOnlineSale",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations",
+      "permission": "sales.finalize",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "getSaleFinalization",
+      "method": "GET",
+      "path": "/api/v1/sales/finalizations/{operation_id}",
+      "permission": "sales.read",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "getCompletedSale",
+      "method": "GET",
+      "path": "/api/v1/sales/{sale_id}",
+      "permission": "sales.read",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": false
+    },
+    {
+      "operation_id": "resumeSaleFinalization",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations/{operation_id}/resume",
+      "permission": "sales.process.resume",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": true
+    },
+    {
+      "operation_id": "createSalesHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/sales/history-read-sessions",
+      "permission": "sales.history.read",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": true
+    },
+    {
+      "operation_id": "readSalesHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/sales/history-read-sessions/{read_session_id}/facts",
+      "permission": "sales.history.read",
+      "scope": "current organization/branch/POS and exact owned resources; owner validates warehouse/location/register/shift",
+      "step_up": true
+    }
+  ],
+  "template": "OWNER initial assignable permissions; evaluate permissions/scopes, never role string or plan.",
+  "optional_stock_permission": "inventory.sell_with_stock_difference evaluated separately for finalize exact tenant/branch/POS/warehouse/location/line/quantity/presence, tied to request hash; no postaccept grant. Denial allows sufficient-stock flow."
+}

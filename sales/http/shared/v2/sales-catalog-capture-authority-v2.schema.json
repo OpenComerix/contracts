@@ -1,0 +1,281 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+  "title": "Sales ephemeral preparation callback v2; no durable human credentials",
+  "$defs": {
+    "Request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "capture_fingerprint"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "capture_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        }
+      }
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "capture_fingerprint",
+        "authorized",
+        "caller",
+        "audience",
+        "checked_at",
+        "valid_for_ms",
+        "expires_at"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "capture_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "bound short-lived request verification",
+          "x-log-policy": "no values or raw digest",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "authorized": {
+          "const": true,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "caller": {
+          "const": "catalog-pricing",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "audience": {
+          "const": "sales-pos.catalog-capture-authority",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "valid_for_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "expires_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    }
+  }
+}

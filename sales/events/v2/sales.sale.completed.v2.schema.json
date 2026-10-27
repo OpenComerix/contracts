@@ -1,0 +1,181 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/sales/events/v2/sales.sale.completed.v2.schema.json",
+  "title": "sales.sale.completed.v2",
+  "allOf": [
+    {
+      "$ref": "../../../events/event-envelope-v1.schema.json"
+    },
+    {
+      "type": "object",
+      "required": [
+        "branch_id",
+        "pos_id",
+        "causation_id"
+      ],
+      "properties": {
+        "event_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "organization_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "branch_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "pos_id": {
+          "type": "string",
+          "format": "uuid",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "causation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "event_type": {
+          "const": "sales.sale.completed.v2",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "schema_version": {
+          "const": 1,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "producer": {
+          "const": "sales-pos",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "aggregate_type": {
+          "const": "sale",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "aggregate_version": {
+          "const": 1,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        },
+        "payload": {
+          "$ref": "../../http/shared/v2/sales-types-v2.schema.json#/$defs/Sale",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "COMMERCIAL",
+              "FISCAL",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "immutable operation and future authorized reconstruction",
+          "x-log-policy": "no payload or field values, bounded codes only",
+          "x-retention-profile": "commercial"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,112 @@
+{
+  "policy_version": 2,
+  "status": "candidate",
+  "owner": "sales-pos",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "operations": [
+    {
+      "operation_id": "finalizeOnlineSale",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations",
+      "input": "Finalize",
+      "output": "Accepted",
+      "status": 202,
+      "permission": "sales.finalize",
+      "step_up": false
+    },
+    {
+      "operation_id": "getSaleFinalization",
+      "method": "GET",
+      "path": "/api/v1/sales/finalizations/{operation_id}",
+      "input": null,
+      "output": "Operation",
+      "status": 200,
+      "permission": "sales.read",
+      "step_up": false
+    },
+    {
+      "operation_id": "getCompletedSale",
+      "method": "GET",
+      "path": "/api/v1/sales/{sale_id}",
+      "input": null,
+      "output": "Sale",
+      "status": 200,
+      "permission": "sales.read",
+      "step_up": false
+    },
+    {
+      "operation_id": "resumeSaleFinalization",
+      "method": "POST",
+      "path": "/api/v1/sales/finalizations/{operation_id}/resume",
+      "input": "Resume",
+      "output": "Accepted",
+      "status": 202,
+      "permission": "sales.process.resume",
+      "step_up": true
+    },
+    {
+      "operation_id": "createSalesHistoryReadSession",
+      "method": "POST",
+      "path": "/api/v1/sales/history-read-sessions",
+      "input": "HistoryRequest",
+      "output": "HistorySession",
+      "status": 201,
+      "permission": "sales.history.read",
+      "step_up": true
+    },
+    {
+      "operation_id": "readSalesHistoryFacts",
+      "method": "GET",
+      "path": "/api/v1/sales/history-read-sessions/{read_session_id}/facts",
+      "input": null,
+      "output": "HistoryPage",
+      "status": 200,
+      "permission": "sales.history.read",
+      "step_up": true
+    }
+  ],
+  "limits": {
+    "body_bytes": 1048576,
+    "message_bytes": 131072,
+    "page_bytes": 1048576,
+    "gateway_ms": 10000,
+    "private_ms": 3000,
+    "authority_call_ms": 1000,
+    "owner_ms": 5000,
+    "lock_ms": 1000,
+    "decision_ms": 2000
+  },
+  "sequence": "durable intention -> stock succeeded (including authorized difference) -> cash succeeded -> completed; no number before completion. Unknown/404 is not rejection.",
+  "snapshot": "Immutable commercial capture at acceptance, distinct completed_at; D01-D13. F1 runtime pending_profile only. Resolved synthetic supported forms do not activate fiscal calculation or emission.",
+  "identity": "Current human authority before lookup/replay/capture/acceptance; semantic uniqueness tenant+operation+sale+payment survives HTTP replay seven days; exact accepted response/Location preserved. Resume preserves intention/steps/commands, expected_version, reason and recent step-up; no editing/cancel/free payment status.",
+  "history": "ADR-063 section 4: retained original UTF-8 JSON and checksum, per-org sequence serialized until commit, sessions <=30min and current human authority/step-up each page. Cursor HMAC exclusive key binds account/tenant/session/filters/limit/H/last/version/disposition generation; 50 default/100 max, page <=1MiB, fact <=128KiB. Changed generation returns 409; gaps mean partial, unknown source 503; reading never republishes or executes.",
+  "retries": "Same immutable command; maximum five logical attempts with exponential backoff 1s+jitter capped 30s, Retry-After, attention after exhausted or 15min. Transport redelivery never resets budget; no auto refund or stock compensation on unknown/success.",
+  "compatibility": "completed.v2 / revision 1 / tax snapshot 1 / sales-f1-ars-1. Strict producer, reader only optional extensions.source_note; unknown critical enums/type/revision/snapshot/policy quarantine without effect or checkpoint.",
+  "obligations_runtime": "F1-13 PostgreSQL/RLS/atomic intention and process transitions/unique numbering/inbox/outbox/history/current authority/crypto/broker/reordering/lost response/restart at each transition; F1-15 browser and decimal parity. Fixtures do not prove runtime.",
+  "out_of_scope": [
+    "runtime",
+    "consumer admission",
+    "H4",
+    "fiscal production",
+    "ARCA",
+    "offline",
+    "identified customer",
+    "discounts/promotions",
+    "returns/refunds",
+    "electronic or combined payments"
+  ],
+  "synthetic_fiscal_vectors": {
+    "status": "synthetic_only_no_production_engine",
+    "intermediate_fraction_digits": 34,
+    "rounding": "HALF_UP only at declared boundaries",
+    "included_base": "For this synthetic parallel-percentage policy: raw base = commercial line gross / (1 + sum supported included taxable rates / 100), represented HALF_UP at 34 fractional digits. No tax is recalculated from a base closed to cents.",
+    "theoretical_amount": "raw captured base * captured rate / 100, represented HALF_UP at 34 fractional digits; zero for explicit exempt/not_taxable.",
+    "group_tax": "Sum raw component calculations within jurisdiction/tax/treatment/concept/category/rate/rule/currency group, then HALF_UP once to 2 decimals.",
+    "tax_allocation": "Floor each exact theoretical component at 2 decimals, distribute group closing cents by descending exact fractional remainder; stable line_id breaks ties. No display/arrival-order tie-break.",
+    "allocated_base": "For each line, commercial gross minus all assigned included tax amounts; all components in this supported parallel-base policy retain that net. Nonnegative required. Totals sum the primary VAT treatment allocated bases once, never double-count another jurisdiction.",
+    "residues": "allocated_residue = assigned tax amount - represented theoretical_amount; base_residue = allocated_base - represented raw base. Signed decimal strings up to 34 fraction digits, negative zero forbidden. Groups preserve sums of raw/allocated bases and their explicit residue.",
+    "rules": "Only SYNTHETIC_VAT@1 and SYNTHETIC_OTHER@1 are supported in this oracle. Validate component/group/recipient/decision references; real profiles/rules require their own accepted cut.",
+    "evidence": "Connected snapshots include 0.01–0.05, two 0.03 lines, three equal cent lines with allocation tie, and multiple jurisdictions. Fiscal vectors do not authorize production emission."
+  }
+}

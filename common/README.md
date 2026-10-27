@@ -47,3 +47,7 @@ El candidato local incorpora los catálogos de errores v7/v8 y sus schemas, más
 ## F1-10C — Errores v10 candidatos
 
 [Catálogo](errors/v10/error-catalog-v10.json) y [schema](errors/v10/error-catalog-v10.schema.json) preservan íntegramente v9 y añaden únicamente los códigos de finance del [mapa C](../finance/README.md#f1-10c--paquete-candidato), con owner/status/retryability explícitos y sin parámetros sensibles. Problem Details v3 y sobres históricos se conservan; errores técnicos no se fijan como rechazo terminal de cobro. Solo planned, sin migración de pins/consumidores ni admisión funcional.
+
+## F1-10D — Errores v11 candidatos
+
+[Catálogo](errors/v11/error-catalog-v11.json) y [schema](errors/v11/error-catalog-v11.schema.json) conservan todas las entradas v10 y agregan los códigos Sales online/historia/delegación. sales_online_invalid_request es aditivo, aprobado por el usuario para el request de venta online; sales_invalid_request interno de B conserva exposición/semántica/bytes. No reemplaza pins ni amplía admisiones; Problem Details v3 y sobres históricos permanecen intactos. [Paquete y gates D](../sales/README.md#f1-10d--paquete-candidato-de-venta-autosuficiente).
