@@ -7,6 +7,7 @@ import { randomUUID } from 'node:crypto';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import { sha256, validateConsumer } from '../../tools/architecture/consumer-gate.mjs';
 import { verifyLocalSnapshot } from '../../tools/architecture/registry.mjs';
+import { captureHistoricalFile, captureHistoricalRegistry, sourceFiles } from '../inventory/capture-authority-v2.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const base = '86abfaaa3fdfd04a66bdb7dc21879417a46d3f08';
@@ -35,7 +36,7 @@ export const guardTransitionFiles = ['scripts/identity/inventory-authority-consu
   'scripts/identity/inventory-authority-v1-1-admission.mjs','scripts/identity/inventory-authority-v1-1.mjs',
   'scripts/catalog/catalog-foundation-v1-registry.mjs',
   'scripts/catalog/catalog-lifecycle-v1-registry.mjs','scripts/catalog/catalog-runtime-v1-registry.mjs'];
-export const admissionScope = [...salesChangedPaths,...guardTransitionFiles.filter(file=>!salesChangedPaths.includes(file))];
+export const admissionScope = [...new Set([...salesChangedPaths,...guardTransitionFiles.filter(file=>!salesChangedPaths.includes(file)),...sourceFiles])];
 const candidates = new Map();
 export function salesManifest() {
   const selections = [
@@ -111,7 +112,8 @@ export function expectedIndex() {
   index.consumers.push({ service: 'sales-pos', file: 'sales-pos.json', localDirectory: 'services/sales-pos' });
   return index;
 }
-export function validateSalesAdmission(readFile = read) {
+export function validateSalesAdmission(rawReadFile = read) {
+  const readFile = file => captureHistoricalFile(file, rawReadFile(file));
   assert.deepEqual(JSON.parse(readFile('registry/contracts.json')), expectedRegistry(), 'SALES_REGISTRY');
   assert.deepEqual(JSON.parse(readFile('registry/consumers/index.json')), expectedIndex(), 'SALES_INDEX');
   for (const service of ['sales-pos', 'identity-tenancy'])
@@ -186,12 +188,14 @@ export function salesHistoricalIndex(value) {
 /** Historical assertions see their immutable input only after full exact transition validation.
  * Mutated caller bytes pass through unchanged and never get repaired/projected. */
 export function salesHistoricalFile(file, bytes) {
+  bytes = captureHistoricalFile(file, bytes);
   const expected = historicalExpected(file, bytes);
   if (!expected || normalize(bytes) !== normalize(expected)) return bytes;
   validateSalesAdmission();
   return source(file);
 }
 export function salesHistoricalRegistry(value) {
+  value = captureHistoricalRegistry(value);
   if (!isDeepStrictEqual(value, expectedRegistry())) return value;
   validateSalesAdmission();
   return structuredClone(registry);

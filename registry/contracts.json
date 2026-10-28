@@ -18907,6 +18907,22 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "inventory.catalog-capture-authority.http.v2",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-11B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/private/v2/inventory-catalog-capture-authority-v2.yaml only; exact capture body binding using capture_fingerprint (JCS/SHA-256). No functional admission, consumer migration or runtime; preserve published v1 and its closure."
+    },
+    {
+      "id": "inventory.catalog-capture-authority.schema.v2",
+      "domain": "inventory",
+      "owner": "inventory",
+      "materializeIn": "F1-11B",
+      "status": "planned",
+      "constraint": "Candidate source inventory/http/shared/v2/inventory-capture-authority-v2.schema.json only; exact capture body binding using capture_fingerprint (JCS/SHA-256). No functional admission, consumer migration or runtime; preserve published v1 and its closure."
     }
   ],
   "requiredConsumers": [

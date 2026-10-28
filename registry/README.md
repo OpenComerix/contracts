@@ -85,3 +85,7 @@ El índice Identity deriva exclusivamente este alta. El [gate de admisión](../s
 ## F1-11A — Selección consumidora Identity para Inventory
 
 Selección Identity: HTTP 1.1.0 productor, schema/v9 de validación y política de permisos/perfil `inventory.inventory-authority` como propietario semántico. Conserva las 32 selecciones/pins anteriores y los otros cuatro consumidores; total Identity 36. El [verificador de transición](../scripts/identity/inventory-authority-consumer-v1.mjs) y sus [pruebas](../test/identity/inventory-authority-consumer-v1.test.mjs) comprueban selección/cierre/pins antes de la proyección histórica. No cambia transporte, registro, dependencias ni CI de contracts. El snapshot identifica estado y SHA propietario; published solo admite `ba13dcda413d6ee7fd04d30b6365d2a7e4e95f06` con el mismo contenido revisado. La importación canónica verifica Git inmutable; autorización y CI exacta son controles operativos separados y el verificador no infiere runtime.
+
+## F1-11B — Fuente de preparación física v2
+
+Dos intenciones `planned` identifican el sucesor HTTP/schema Inventory con `capture_fingerprint` JCS/SHA-256 del cuerpo completo de captura. Se preservan las 200 raíces admitidas, 236 artefactos históricos, dos intenciones previas y seis consumidores/locks/pins. [Mapa, límites y gates](../inventory/README.md#f1-11b--verificación-de-captura-física-v2-candidato). La proyección histórica solo acepta el delta completo verificado; drift y omisiones siguen rechazados. Auditoría, publicación/CI exacta y admisión seleccionada preceden al consumo.
