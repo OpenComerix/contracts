@@ -12,6 +12,14 @@ const workflowPath = '.github/workflows/ci.yml';
 const workflow = parse(actual(workflowPath).toString('utf8'));
 const legacy = parse(readRepositoryFile('.gitlab-ci.yml').toString('utf8'));
 const id = name => name.replaceAll(/[^A-Za-z0-9_]/g, '_');
+const parallelCommands = new Map([
+  ['validate:contract-architecture', new Map([
+    ['pnpm test:architecture', 'node --test --test-concurrency=2 test/architecture/*.test.mjs'],
+  ])],
+  ['validate:identity-catalog-contracts', new Map([
+    ['node --test test/identity/*.test.mjs', 'node --test --test-concurrency=2 test/identity/*.test.mjs'],
+  ])],
+]);
 test('GitHub preserves all 22 contract jobs, exact validation commands and artifact edges', () => {
   const names = Object.keys(legacy).filter(name => name.startsWith('validate:'));
   assert.deepEqual(Object.values(workflow.jobs).map(job => job.name), names);
@@ -22,7 +30,8 @@ test('GitHub preserves all 22 contract jobs, exact validation commands and artif
     const run = job.steps.find(step => step.name === 'Run original validation commands').run;
     let previous = -1;
     for (const command of legacy[name].script) {
-      const position = run.indexOf(command, previous + 1);
+      const expected = parallelCommands.get(name)?.get(command) ?? command;
+      const position = run.indexOf(expected, previous + 1);
       assert(position > previous, name + '/' + command);
       previous = position;
     }

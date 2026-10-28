@@ -42,8 +42,8 @@ const optimizationHashes = Object.freeze({
 });
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
-  ".github/workflows/ci.yml": "dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399",
-  "test/ci/github-v1.test.mjs": "21cf2510e68028cfeb9863b08300fc1565eb13898e29efba98551be2970b1ce2",
+  ".github/workflows/ci.yml": "3d896a9c43edcc400c19e3b3734b30fa041c17deb262d45669bb95b5de5f211c",
+  "test/ci/github-v1.test.mjs": "d6290c2fdda76e4f80429024d02f1bf3cd333bafaa9422fb14a2338e51f62e65",
 });
 const retirementHashes = Object.freeze({
   "test/architecture/asyncapi-admission-v1.test.mjs": "cadabab066fdfaf2f457ef821826388915b5c0899c14dc9beee70ae16f88efe5",

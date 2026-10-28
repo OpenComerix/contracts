@@ -271,7 +271,7 @@ jobs:
           key: node24.21.0-redocly2.53.3-bookworm-v1
       - name: Run original validation commands
         run: |-
-          pnpm test:architecture
+          node --test --test-concurrency=2 test/architecture/*.test.mjs
           node --test --test-reporter=tap test/ci/*.test.mjs
           pnpm registry:check
           pnpm contracts:consumers
@@ -494,7 +494,7 @@ jobs:
           key: node24.21.0-redocly2.53.3-bookworm-v1
       - name: Run original validation commands
         run: |-
-          node --test test/identity/*.test.mjs
+          node --test --test-concurrency=2 test/identity/*.test.mjs
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-history-permissions-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-permissions-v1.bundle.json
           node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
