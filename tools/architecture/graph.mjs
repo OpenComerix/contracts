@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { validateContractPaths } from './layout.mjs';
 import { parseYamlSource } from './yaml-source.mjs';
+import { createGitReader } from './git-source.mjs';
 import {
   canonical,
   sha256,
@@ -51,35 +52,11 @@ const childContext = (kind, name, location) => {
   if (location === '/components' && name === 'schemas') return 'map';
   return name === 'schema' ? 'schema' : 'other';
 };
-const gitCache = new Map();
-const verifiedCommits = new Set();
 export function parseSource(bytes, file) {
   if (file.endsWith('.json')) return parseJSON(bytes.toString('utf8'));
   return parseYamlSource(bytes, file);
 }
-export function gitReader(root, revision) {
-  assert(/^[a-f0-9]{40}$/.test(revision), 'Source revision must be a resolved commit');
-  const identity = path.resolve(root) + ':' + revision;
-  if (!verifiedCommits.has(identity)) {
-    const resolved = execFileSync('git', ['-C', root, 'rev-parse', revision + '^{commit}'])
-      .toString()
-      .trim();
-    assert.equal(resolved, revision, 'Source commit did not resolve exactly');
-    verifiedCommits.add(identity);
-  }
-  return (file) => {
-    safePath(root, file);
-    const key = identity + ':' + file;
-    if (!gitCache.has(key))
-      gitCache.set(
-        key,
-        execFileSync('git', ['-C', root, 'show', revision + ':' + file], {
-          maxBuffer: 8 * 1024 * 1024,
-        }),
-      );
-    return gitCache.get(key);
-  };
-}
+export const gitReader = createGitReader();
 export const worktreeReader = (root) => (file) =>
   Buffer.from(readLocal(root, file).toString('utf8').replaceAll('\r\n', '\n'));
 export function operationPointers(document) {

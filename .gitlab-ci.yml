@@ -5,37 +5,59 @@ default:
   image: node:24.21.0-bookworm-slim
   interruptible: true
 
+.contracts:npm-cache:
+  variables:
+    CONTRACTS_CACHE_POLICY: pull
+    NPM_CONFIG_CACHE: $CI_PROJECT_DIR/.npm-cache
+  cache: &contracts-npm-cache
+    key: node24.21.0-redocly2.53.3-bookworm-v1
+    paths:
+      - .npm-cache/_cacache/
+      - .npm-cache/_npx/
+    policy: $CONTRACTS_CACHE_POLICY
+
+.contracts:pnpm-cache:
+  extends: .contracts:npm-cache
+  variables:
+    COREPACK_HOME: $CI_PROJECT_DIR/.corepack-cache
+  cache:
+    - *contracts-npm-cache
+    - key:
+        prefix: node24.21.0-pnpm12.4.2-bookworm-v1
+        files:
+          - pnpm-lock.yaml
+      paths:
+        - .pnpm-store/
+        - .corepack-cache/
+      policy: $CONTRACTS_CACHE_POLICY
+
 validate:contract-references:
   stage: validate
   script:
     - node scripts/validate-contract-refs.mjs
 
 validate:openapi:
+  extends: .contracts:npm-cache
   stage: validate
   variables:
     REDOCLY_TELEMETRY: "off"
     REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
   script:
     - npx --yes @redocly/cli@2.53.3 lint openapi/pos-sales-v1.yaml openapi/pos-sync-v1.json
-    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-onboarding-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v1.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v1.bundle.json
     - node scripts/prepare-identity-rest-fixtures.mjs /tmp/identity-onboarding-v1.bundle.json .ci-artifacts/identity-rest-fixtures --self-test
-    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-onboarding-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v2.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v2.bundle.json
     - node scripts/validate-gateway-deadline-exceeded-v5.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
     - node scripts/prepare-identity-rest-fixtures-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/identity-rest-v2-fixtures --self-test
     - node scripts/prepare-device-registration-challenge-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/device-registration-challenge-v2 --self-test
-    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-internal-auth-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-internal-auth-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-internal-auth-v1.yaml --dereferenced --ext json --output /tmp/identity-internal-auth-v1.bundle.json
     - node scripts/prepare-identity-internal-auth-fixtures.mjs /tmp/identity-internal-auth-v1.bundle.json .ci-artifacts/identity-internal-auth-fixtures --self-test
-    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-gateway-delegation-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v1.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v1.bundle.json
     - node scripts/validate-gateway-identity-policy.mjs /tmp/identity-onboarding-v1.bundle.json /tmp/identity-gateway-delegation-v1.bundle.json --self-test
-    - npx --yes @redocly/cli@2.53.3 lint openapi/identity-gateway-delegation-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v2.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v2.bundle.json
     - node scripts/validate-gateway-identity-policy-v2.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
@@ -130,6 +152,7 @@ validate:gateway-delegation-schema:
     - sh scripts/validate-gateway-delegation-v2-schemas.sh
 
 validate:contract-architecture:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -137,9 +160,11 @@ validate:contract-architecture:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - pnpm test:architecture
+    - node --test --test-reporter=tap test/ci/*.test.mjs
     - pnpm registry:check
     - pnpm contracts:consumers
     - pnpm contracts:impact --output .ci-artifacts/contract-impact.json
@@ -158,19 +183,22 @@ validate:contract-metadata-schema:
     - jsonschema metaschema registry/manifest-v1.schema.json registry/lock-v1.schema.json --verbose
 
 validate:catalog-contracts:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
+    CONTRACTS_CACHE_POLICY: pull-push
     GIT_DEPTH: "0"
     REDOCLY_TELEMETRY: "off"
     REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
   before_script:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
+    - mkdir -p .npm-cache/_cacache .npm-cache/_npx
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node --test test/catalog/*.test.mjs
-    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-authority-v1.yaml catalog/http/public/v1/catalog-pricing-v1.yaml catalog/http/private/v1/catalog-pricing-internal-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-authority-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs catalog/http/public/v1/catalog-pricing-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-pricing-internal-v1.yaml
@@ -182,18 +210,14 @@ validate:catalog-contracts:
     - node scripts/catalog/validate-pricing-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-pricing-v1 --self-test
     - node scripts/catalog/validate-events-v1.mjs .ci-artifacts/catalog-events-v1 --self-test
     - node scripts/catalog/validate-history-policy-v1.mjs .ci-artifacts/catalog-history-policy-v1 --self-test
-    - npx --yes @redocly/cli@2.53.3 lint catalog/http/private/v1/catalog-history-protection-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-protection-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-protection-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-protection-v1.bundle.json
     - node scripts/catalog/validate-history-protection-v1.mjs .ci-artifacts/catalog-history-protection-v1 --self-test
-    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-authority-v1.bundle.json
     - node scripts/identity/validate-catalog-recovery-authority-v1.mjs .ci-artifacts/catalog-recovery-authority-v1
-    - npx --yes @redocly/cli@2.53.3 lint catalog/http/private/v1/catalog-history-recovery-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-recovery-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-recovery-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-recovery-v1.bundle.json
-    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-verification-v2.bundle.json
     - node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
@@ -253,6 +277,7 @@ validate:catalog-schema:
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2
 
 validate:identity-catalog-contracts:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -262,16 +287,15 @@ validate:identity-catalog-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node --test test/identity/*.test.mjs
-    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-history-permissions-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-permissions-v1.bundle.json
     - node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
     - node scripts/identity/validate-catalog-workload-profiles-v1.mjs
     - node scripts/identity/validate-catalog-workload-profiles-v2.mjs
-    - npx --yes @redocly/cli@2.53.3 lint identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
     - node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
     - npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
     - node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
@@ -298,13 +322,14 @@ validate:identity-catalog-schema:
     - sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2
 
 validate:catalog-asyncapi:
+  extends: .contracts:pnpm-cache
   stage: validate
   before_script:
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
-    - node --test --test-reporter=tap test/catalog/asyncapi-v1.test.mjs
     - node scripts/catalog/validate-asyncapi-v1.mjs .ci-artifacts/catalog-asyncapi-v1
   artifacts:
     paths:
@@ -323,6 +348,7 @@ validate:catalog-asyncapi-schema:
     - sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1
 
 validate:inventory-contracts:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -332,13 +358,13 @@ validate:inventory-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node --test --test-reporter=tap test/inventory/*.test.mjs
     - node scripts/inventory/run-gate-v1.mjs openapi
     - node scripts/inventory/run-gate-v1.mjs asyncapi
     - node scripts/inventory/schema-v1.mjs .ci-artifacts/inventory-v1-ci
-    - node --test --test-reporter=tap test/identity/inventory-authority-v1-1.test.mjs
     - node scripts/identity/run-inventory-authority-v1-1.mjs openapi
     - node scripts/identity/run-inventory-authority-v1-1.mjs prepare .ci-artifacts/inventory-v1-authority-1-1-ci
     - node scripts/inventory/run-capture-authority-v2.mjs openapi
@@ -363,6 +389,7 @@ validate:inventory-schema:
     - sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-capture-authority-v2-ci
 
 validate:finance-contracts:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -372,7 +399,8 @@ validate:finance-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node --test --test-reporter=tap test/finance/*.test.mjs
     - node scripts/finance/run-gate-v1.mjs openapi
@@ -396,6 +424,7 @@ validate:finance-schema:
     - sh scripts/finance/validate-v1.sh .ci-artifacts/finance-v1-ci
 
 validate:sales-contracts:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -405,7 +434,8 @@ validate:sales-contracts:
     - apt-get update && apt-get install -y --no-install-recommends git ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node --test --test-reporter=tap test/sales/*.test.mjs
     - node scripts/sales/run-gate-v2.mjs openapi
@@ -429,6 +459,7 @@ validate:sales-schema:
     - sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci
 
 validate:sale-flow-integration:
+  extends: .contracts:pnpm-cache
   stage: validate
   variables:
     GIT_DEPTH: "0"
@@ -439,7 +470,8 @@ validate:sale-flow-integration:
       ca-certificates
     - corepack enable
     - corepack prepare pnpm@12.4.2 --activate
-    - pnpm install --frozen-lockfile --ignore-scripts
+    - pnpm config set store-dir .pnpm-store
+    - pnpm install --frozen-lockfile --ignore-scripts --prefer-offline
   script:
     - node scripts/sales/run-integration-v1.mjs semantics
     - node scripts/sales/integration-schema-v1.mjs

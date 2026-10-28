@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { makeLock, parseSource } from '../../tools/architecture/graph.mjs';
+import { withoutToolingCI } from '../../scripts/ci/pipeline-v1.mjs';
 import { root, source, actual, text, encode, httpPath, schemaPath, fixturePath, sourceFiles,
   successorSchema, successorHttp, successorRegistry, expectedContents, captureFingerprint,
   validateCaptureBinding, validateCaptureSource, validateSourceScope,
@@ -124,7 +125,7 @@ test('prior gates receive only the exact verified delta and never repaired calle
   const drift = successorRegistry(); drift.planned.push({ id: 'unapproved' });
   assert.equal(captureHistoricalRegistry(drift), drift);
   const before = parseSource(source('.gitlab-ci.yml'), '.gitlab-ci.yml');
-  const after = parseSource(actual('.gitlab-ci.yml'), '.gitlab-ci.yml');
+  const after = parseSource(Buffer.from(withoutToolingCI(text(actual('.gitlab-ci.yml')))), '.gitlab-ci.yml');
   assert.deepEqual(Object.keys(after), Object.keys(before));
   after['validate:inventory-contracts'].script.splice(-2);
   after['validate:inventory-schema'].script.pop();

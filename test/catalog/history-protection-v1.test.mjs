@@ -5,6 +5,7 @@ import { mkdtempSync, readFileSync, readdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { parse } from 'yaml';
+import { withoutToolingCI } from '../../scripts/ci/pipeline-v1.mjs';
 import { root, schemaPath, policyPath, apiPath, vectorsPath, read, evaluateTrace, validateProtectionMetadata, prepareProtection, historyAdmissionSource, validateHistoryRegistry } from '../../scripts/catalog/validate-history-protection-v1.mjs';
 
 const base = '63dbf6ff96fb3d38260c7a5ba5bed4b2947d381b';
@@ -120,7 +121,7 @@ for (const [name, mutate, reason] of [
 });
 test('CI retains every pre-existing job command and artifact while adding real R2 gates', () => {
   const previous=parse(execFileSync('git',['show',base+':.gitlab-ci.yml'],{cwd:root}).toString());
-  const current=parse(readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8'));
+  const current=parse(withoutToolingCI(readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8').replaceAll('\r\n','\n')));
   for(const [name,job] of Object.entries(previous)) {
     assert(Object.hasOwn(current,name));
     if(!job || typeof job !== 'object') continue;
