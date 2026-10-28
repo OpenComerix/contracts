@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,7 +14,7 @@ export const manifestPath='inventory/fixtures/acceptance/v1/package.json';
 const decoder=new TextDecoder('utf-8',{fatal:true});
 const text=bytes=>decoder.decode(bytes).replaceAll('\r\n','\n');
 const hash=bytes=>createHash('sha256').update(text(bytes)).digest('hex');
-const readActual=file=>reviewedFinanceHistoricalFile(file,fs.readFileSync(path.join(root,file)));
+const readActual=file=>reviewedFinanceHistoricalFile(file,readRepositoryFile(file));
 const originals=new Map();
 export function original(file) {
  if(!originals.has(file))originals.set(file,execFileSync('git',['show',base+':'+file],{cwd:root,maxBuffer:16*1024*1024}));

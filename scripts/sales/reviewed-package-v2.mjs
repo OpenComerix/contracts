@@ -1,8 +1,9 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import {isDeepStrictEqual} from 'node:util';import {parse} from 'yaml';
 import {releaseHistoricalFile,releaseHistoricalRegistry,withReleaseScope} from './release-v1.mjs';
 export const root=path.resolve(import.meta.dirname,'../..'),base='a4919ed4ed90fe478b88c43a418cb4d6500a6948',manifestPath='sales/fixtures/acceptance/v2/package.json',verifierPath='scripts/sales/reviewed-package-v2.mjs';
 export const expectedManifestHash='2607934d172c7a2f30ce611799bc696feeaf34971520d300a5efdea663cf9cf9';
-const raw=f=>releaseHistoricalFile(f,fs.readFileSync(path.join(root,f))),text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
+const raw=f=>releaseHistoricalFile(f,readRepositoryFile(f)),text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
 export const hash=b=>createHash('sha256').update(text(b)).digest('hex');
 const old=new Map();export function original(f){if(!old.has(f))old.set(f,execFileSync('git',['show',base+':'+f],{cwd:root,maxBuffer:32*1024*1024}));return old.get(f);}
 const modified=new Set(['.gitlab-ci.yml','registry/contracts.json','sales/index.json','identity/index.json','catalog/index.json','common/index.json','sales/README.md','identity/README.md','catalog/README.md','common/README.md','scripts/finance/reviewed-package-v1.mjs','test/finance/package-v1.test.mjs']);

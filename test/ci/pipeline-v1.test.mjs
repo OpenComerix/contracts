@@ -23,7 +23,7 @@ function resolve(name) {
   return merge(job.extends ? resolve(job.extends) : {}, job);
 }
 
-test('checked-in CI equals the complete closed preparation delta and preserves the capture proof', () => {
+test('immutable retired CI equals the complete closed preparation delta and preserves the capture proof', () => {
   assert.equal(text(actual('.gitlab-ci.yml')), prepared);
   assert.equal(withoutToolingCI(prepared), baseline);
   assert.deepEqual(jobs(after), jobs(before));
@@ -100,7 +100,7 @@ for (const [name, mutate] of [
   ['extra writer', value => value.replace('CONTRACTS_CACHE_POLICY: pull\n', 'CONTRACTS_CACHE_POLICY: pull-push\n')],
   ['schema edge', value => value.replace('    - job: validate:openapi\n', '    - job: unapproved\n')],
   ['unfrozen install', value => value.replaceAll('--frozen-lockfile', '--no-frozen-lockfile')],
-]) test('current source refuses CI drift: ' + name, () => {
+]) test('historical source refuses CI drift: ' + name, () => {
   const wrong = Buffer.from(mutate(prepared));
   assert.notEqual(text(wrong), prepared);
   assert.throws(() => validateCaptureSource(file => file === '.gitlab-ci.yml' ? wrong : actual(file)), /IC2_EXACT_SOURCE/);

@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -21,7 +22,7 @@ export const source = file => {
   return Buffer.from(immutableSources.get(file));
 };
 const launcher = path.resolve(root, '../..');
-const read = file => fs.readFileSync(path.join(root, file));
+const read = readRepositoryFile;
 export const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const prior = file => JSON.parse(source(file));
 const registry = prior('registry/contracts.json');

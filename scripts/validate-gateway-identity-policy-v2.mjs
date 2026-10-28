@@ -56,7 +56,7 @@ async function validateArtifactEncoding(additionalPaths = []) {
     resolve(root, "scripts/validate-gateway-identity-policy-v2.mjs"),
     resolve(root, "scripts/validate-gateway-delegation-v2-schemas.sh"),
     resolve(root, "README.md"),
-    resolve(root, ".gitlab-ci.yml"),
+    resolve(root, ".github/workflows/ci.yml"),
     ...(await readdir(examplesDir)).filter((name) => name.startsWith("identity-gateway-delegation-v2-") && name.endsWith(".json")).map((name) => resolve(examplesDir, name)),
     ...[
       "device-registration-challenge-v2-missing-public-key.json",

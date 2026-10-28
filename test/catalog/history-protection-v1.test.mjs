@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
@@ -121,7 +122,7 @@ for (const [name, mutate, reason] of [
 });
 test('CI retains every pre-existing job command and artifact while adding real R2 gates', () => {
   const previous=parse(execFileSync('git',['show',base+':.gitlab-ci.yml'],{cwd:root}).toString());
-  const current=parse(withoutToolingCI(readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8').replaceAll('\r\n','\n')));
+  const current=parse(withoutToolingCI(readRepositoryFile('.gitlab-ci.yml').toString('utf8').replaceAll('\r\n','\n')));
   for(const [name,job] of Object.entries(previous)) {
     assert(Object.hasOwn(current,name));
     if(!job || typeof job !== 'object') continue;

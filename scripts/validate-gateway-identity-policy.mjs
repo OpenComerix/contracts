@@ -20,7 +20,7 @@ function assertCleanEncoding(text, label) {
   assert(!encodingMarkers.some((marker) => text.includes(marker)), label + ": mojibake marker detected");
 }
 async function validateArtifactEncoding() {
-  const artifactPaths = [resolve(root, "openapi/identity-gateway-delegation-v1.yaml"), resolve(root, "openapi/identity-gateway-delegation-v1.schema.json"), policyFile, resolve(root, "scripts/validate-gateway-identity-policy.mjs"), resolve(root, "scripts/validate-gateway-delegation-schemas.sh"), resolve(root, "README.md"), resolve(root, ".gitlab-ci.yml"), ...(await readdir(examplesDir)).filter((name) => name.endsWith(".json")).map((name) => resolve(examplesDir, name))];
+  const artifactPaths = [resolve(root, "openapi/identity-gateway-delegation-v1.yaml"), resolve(root, "openapi/identity-gateway-delegation-v1.schema.json"), policyFile, resolve(root, "scripts/validate-gateway-identity-policy.mjs"), resolve(root, "scripts/validate-gateway-delegation-schemas.sh"), resolve(root, "README.md"), resolve(root, ".github/workflows/ci.yml"), ...(await readdir(examplesDir)).filter((name) => name.endsWith(".json")).map((name) => resolve(examplesDir, name))];
   for (const path of artifactPaths) assertCleanEncoding(await readFile(path, "utf8"), path);
 }
 async function validateArtifactEncodingSelfControl() {

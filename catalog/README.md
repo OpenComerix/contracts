@@ -130,7 +130,7 @@ CAF-01/02/03/04/07/08/09/10/14 tienen alcance contractual: preservación, víncu
 
 ## Candidato F1-07F — Validación conjunta en CI
 
-La [configuración CI](../.gitlab-ci.yml) añade dos jobs obligatorios y conserva íntegros los ocho anteriores. No añade dependencias, modifica transporte ni admite contratos. Ejecutar los comandos de `before_script` y `script` de cada job desde contracts, con las imágenes fijadas; transferir solo los artefactos declarados por sus `needs`. Usar un checkout limpio y salidas nuevas: los extractores rechazan sobrescrituras.
+La [configuración CI](https://github.com/opencomerix/contracts/blob/4ebc146e7be83713f39a72384bd0dfb7a1575616/.gitlab-ci.yml) añade dos jobs obligatorios y conserva íntegros los ocho anteriores. No añade dependencias, modifica transporte ni admite contratos. Ejecutar los comandos de `before_script` y `script` de cada job desde contracts, con las imágenes fijadas; transferir solo los artefactos declarados por sus `needs`. Usar un checkout limpio y salidas nuevas: los extractores rechazan sobrescrituras.
 
 | Job | Cobertura y transferencia |
 | --- | --- |
@@ -246,7 +246,7 @@ Salida nueva obligatoria. El extractor resuelve schemas reales conservando sibli
 
 Los estados de campos completos son evidencia contractual. `production_enabled` y `runtime_demonstrated` siguen false; fuentes reales, autoridad, SQL, carreras, purga y recuperación requieren I–N. Temporales continúan prohibidos. La matriz `compatibility` vincula las garantías de ciclo de vida, autoridad, minimización y preservación con sus gates.
 
-CI conserva todos los jobs anteriores y agrega extracción v2, metaschema y positivos/negativos Sourcemeta 16.10.0. Además de los comandos de [.gitlab-ci.yml](../.gitlab-ci.yml), desde contracts mediante `opencomerix check contracts`:
+CI conserva todos los jobs anteriores y agrega extracción v2, metaschema y positivos/negativos Sourcemeta 16.10.0. Además de los comandos de [.gitlab-ci.yml](https://github.com/opencomerix/contracts/blob/4ebc146e7be83713f39a72384bd0dfb7a1575616/.gitlab-ci.yml), desde contracts mediante `opencomerix check contracts`:
 
 ~~~text
 node --test --test-reporter=tap test/architecture/*.test.mjs test/catalog/*.test.mjs

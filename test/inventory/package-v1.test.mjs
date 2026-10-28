@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -7,7 +8,7 @@ import {execFileSync} from 'node:child_process';
 import {makeLock} from '../../tools/architecture/graph.mjs';
 import {reviewedFinanceHistoricalRead,withReviewedFinanceScope} from '../../scripts/finance/reviewed-package-v1.mjs';
 import {validateCandidatePackage,candidateReadView,projectCandidateRegistry,withCandidateScope,original,root,manifestPath,base} from '../../scripts/inventory/candidate-v1.mjs';
-const bytes=reviewedFinanceHistoricalRead(file=>fs.readFileSync(path.join(root,file)));
+const bytes=reviewedFinanceHistoricalRead(file=>readRepositoryFile(file));
 const read=file=>JSON.parse(bytes(file));
 const manifest=read(manifestPath);
 

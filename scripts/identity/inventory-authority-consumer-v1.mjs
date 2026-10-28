@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -18,7 +19,7 @@ export const consumerFiles = Object.freeze([
   consumerPath, 'scripts/identity/inventory-authority-consumer-v1.mjs',
   'test/identity/inventory-authority-consumer-v1.test.mjs', producerTestPath,
 ]);
-export const rawConsumerRead = file => salesHistoricalFile(file, fs.readFileSync(path.join(root, file)));
+export const rawConsumerRead = file => salesHistoricalFile(file, readRepositoryFile(file));
 const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n');
 const bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const baseline = file => JSON.parse(consumerSource(file));

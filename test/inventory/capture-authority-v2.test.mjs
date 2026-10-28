@@ -143,7 +143,7 @@ test('new sources and unrelated files are never projected to a nonexistent histo
 });
 
 for (const file of [httpPath, schemaPath, fixturePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml',
+  'inventory/README.md', 'registry/README.md', 'scripts/ci/retired-gitlab-v1.mjs',
   'scripts/sales/inventory-step-consumer-v1.mjs',
   'inventory/http/private/v1/inventory-internal-v1.yaml',
   'inventory/http/shared/v1/inventory-capture-authority-v1.schema.json',

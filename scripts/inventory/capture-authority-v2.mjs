@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +17,7 @@ export const source = file => {
   if (!immutable.has(file)) immutable.set(file, reader(file));
   return Buffer.from(immutable.get(file));
 };
-export const actual = file => fs.readFileSync(path.join(root, file));
+export const actual = readRepositoryFile;
 export const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n');
 export const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const hash = bytes => createHash('sha256').update(bytes).digest('hex');
@@ -32,21 +33,40 @@ const graphPath = 'tools/architecture/graph.mjs';
 const layoutPath = 'tools/architecture/layout.mjs';
 const historyTestPath = 'test/catalog/history-protection-v1.test.mjs';
 const optimizationHashes = Object.freeze({
-  'test/ci/tool-cache-layout.test.mjs': '0ebea93b720afc3889f18f5fa336547130475f198785d79e91c4181cf3085a97',
-  'tools/architecture/git-source.mjs': '5fcde605163171d82dc7280fedce290c8ec517b209b303856837a40ed17020cf',
-  'test/architecture/git-source.test.mjs': '907ec74b43e7f704c1835ae2699c146f2a51cc2762dcb2d636c9da5147d3c47e',
-  'tools/architecture/README.md': 'ba7ea573af9c9ea8f8057d0eba97cfcdee987a56a5789f4b88807349301141b5',
-  'scripts/ci/pipeline-v1.mjs': '5bd45816a1f9ff7d226e335896eb48f014d9ba9ef3f87deb9f8c919a6c25e337',
-  'test/ci/pipeline-v1.test.mjs': 'f56401a2205a64355e2acdbdce57c14666332785594bdd9f6d8c8eaf854e68b2',
+  "test/ci/tool-cache-layout.test.mjs": "0ebea93b720afc3889f18f5fa336547130475f198785d79e91c4181cf3085a97",
+  "tools/architecture/git-source.mjs": "5fcde605163171d82dc7280fedce290c8ec517b209b303856837a40ed17020cf",
+  "test/architecture/git-source.test.mjs": "907ec74b43e7f704c1835ae2699c146f2a51cc2762dcb2d636c9da5147d3c47e",
+  "tools/architecture/README.md": "ba7ea573af9c9ea8f8057d0eba97cfcdee987a56a5789f4b88807349301141b5",
+  "scripts/ci/pipeline-v1.mjs": "5bd45816a1f9ff7d226e335896eb48f014d9ba9ef3f87deb9f8c919a6c25e337",
+  "test/ci/pipeline-v1.test.mjs": "343ea63f502ec4fd24f6d72d678a7eec785ec6cf350cd378e0c868e16e328f61",
 });
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
-  '.github/workflows/ci.yml': 'dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399',
-  'test/ci/github-v1.test.mjs': '0634df07de3badc146e8afb1a14af77795b1abbb68782cf626c85923e68712e1',
+  ".github/workflows/ci.yml": "dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399",
+  "test/ci/github-v1.test.mjs": "1bf38261b876d34dfebc157fcca8bf3b56e2bb99cdcf9dedb5766ef3264ab4e7",
+});
+const retirementHashes = Object.freeze({
+  "test/sales/release-v1.test.mjs": "52894d7a1c5b72f7cdc54e7f4e3f0ae5b812c13d0a066348c5edcc7deb3b894b",
+  "test/sales/package-v2.test.mjs": "e94b7cfdc7fbe36e519abd2d73dfd28e9677afd2d0873df76e31fd031532b4d3",
+  "test/finance/package-v1.test.mjs": "03ce7e547457d94f6d72473ebcd4c2f5b64287d04f75d205aa4bfc63e975428b",
+  "test/inventory/package-v1.test.mjs": "1236860854fe0806dbc88d8c153be5ef83a210c2e83601e6c560b973e0b62c5a",
+  "test/catalog/asyncapi-preservation-v1.test.mjs": "7033488f8c4d3413e51168571efd2d9eb85ea840f01b647ae6dbfd5092148c92",
+  "README.md": "0288fe0382f941f81397ea7cdd0850d8f5682b28f7c27279fc693331e704ee2c",
+  "catalog/README.md": "19d607a9b24b4c5143996bef7bebb01c9f2c91a1de33929333960a4a64843387",
+  "scripts/ci/retired-gitlab-v1.mjs": "aeeada945d9144a09ab25fb7d396784b593ca87d88286d4bc340b2127eda5306",
+  "scripts/finance/reviewed-package-v1.mjs": "10d7bd69dcea6e8a4830f9c08da3d23308750b3d6fa33b3a0611d9dcc0995fce",
+  "scripts/sales/reviewed-package-v2.mjs": "bb365e13dea71e812371833684690558f74d79e281f0f9188e87812657c980d7",
+  "scripts/sales/release-v1.mjs": "0881c80f06abf7b0ab72895bb3fb9d7b5a9157016a85e9c8e531b542b363eb0a",
+  "scripts/inventory/candidate-v1.mjs": "d402546bdddbb10413a02d7923db46f15c34b64d050ea9a3fe67e6fb9a9a50ce",
+  "scripts/identity/inventory-authority-consumer-v1.mjs": "c46ad11193995cd25c5f20cf11d950c5e3c9e42b8d0ef4f395e8a85d2a1030f8",
+  "scripts/sales/inventory-step-consumer-v1.mjs": "4b94012954217f0aae3c276298b4b6ef4a1bbb439969c240b0bc06e651a48053",
+  "scripts/validate-gateway-identity-policy.mjs": "8f15ae6a8795c2a857dbd383de75bf8d3c2d553c49a7729c4ec82a1e42aa0b8b",
+  "scripts/validate-gateway-identity-policy-v2.mjs": "2041a72d76b581b4e3cfe6c3e6145ecfd006bf69f5ce0dfc160286548e872f9e",
+  "test/inventory/capture-authority-v2.test.mjs": "91ea073614425c05a057b53e59b1bd90f11294022769d9a91420f6ed45ffe185"
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes)]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(retirementHashes)]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -126,6 +146,8 @@ export function bridgeBytes() {
     'export const admissionScope = [...new Set([...salesChangedPaths,...guardTransitionFiles.filter(file=>!salesChangedPaths.includes(file)),...sourceFiles])];');
   value = insertOnce(value, 'export function salesHistoricalFile(file, bytes) {', '\n  bytes = captureHistoricalFile(file, bytes);');
   value = insertOnce(value, 'export function salesHistoricalRegistry(value) {', '\n  value = captureHistoricalRegistry(value);');
+  value = "import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';\n" + value.replace(
+    'const read = file => fs.readFileSync(path.join(root, file));', 'const read = readRepositoryFile;');
   return Buffer.from(value);
 }
 export const readmeSuffix = '\n## F1-11B — Verificación de captura física v2 (candidato)\n\n' +
@@ -160,6 +182,8 @@ export function expectedContents() {
   assert.equal(historyTest.split(oldCIRead).length, 2, 'CI3_HISTORY_TEST_ANCHOR');
   historyTest = historyTest.replace(oldCIRead,
     "const current=parse(withoutToolingCI(readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8').replaceAll('\\r\\n','\\n')));");
+  historyTest = "import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';\n" + historyTest.replace(
+    "readFileSync(path.join(root,'.gitlab-ci.yml'),'utf8')", "readRepositoryFile('.gitlab-ci.yml').toString('utf8')");
   return new Map([
     [historyTestPath, Buffer.from(historyTest)],
     [httpPath, encode(successorHttp())], [schemaPath, encode(successorSchema())], [fixturePath, encode(bindingFixture())],
@@ -177,6 +201,7 @@ export function expectedContents() {
 }
 let expectedCache;
 const expectedSnapshot = () => expectedCache ??= expectedContents();
+const retiredToolPaths = new Set(["test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
   'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
 export function validateCaptureSource(read = actual) {
@@ -186,6 +211,8 @@ export function validateCaptureSource(read = actual) {
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'CI1_OPTIMIZATION_BYTES:' + file);
   for (const [file, expected] of Object.entries(githubMigrationHashes))
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'GITHUB_MIGRATION_BYTES:' + file);
+  for (const [file, expected] of Object.entries(retirementHashes))
+    assert.equal(hash(Buffer.from(text(read(file)))), expected, 'RETIRED_CI_TOOL_BYTES:' + file);
   const before = previous('registry/contracts.json');
   for (const entry of [...before.contracts, ...before.preservedFiles]) {
     const bytes = read(entry.path);
@@ -209,6 +236,11 @@ export function validateSourceScope() {
 }
 // Exact delta projection for prior gates, never a repair of mutated caller bytes.
 export function captureHistoricalFile(file, bytes) {
+  if (retiredToolPaths.has(file)) {
+    if (hash(Buffer.from(text(bytes))) !== retirementHashes[file]) return bytes;
+    validateCaptureSource();
+    return source(file);
+  }
   if (!historicalPaths.has(file)) return bytes;
   const expected = expectedSnapshot().get(file);
   if (!expected || text(bytes) !== text(expected)) return bytes;

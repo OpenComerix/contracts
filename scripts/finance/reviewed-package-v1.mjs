@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import {reviewedSalesHistoricalFile,reviewedSalesHistoricalRegistry,withReviewedSalesScope} from '../sales/reviewed-package-v2.mjs';
 import fs from 'node:fs';
@@ -14,7 +15,7 @@ export const verifierPath='scripts/finance/reviewed-package-v1.mjs';
 // Filled only after the complete concrete candidate exists. A different file
 // list or digest cannot be authorized by editing the manifest itself.
 export const expectedManifestHash='3d88b0b8d1bd30f8ff3dfdc8df300a066615905514b0c081c8abd4bd530143bb';
-const raw=f=>reviewedSalesHistoricalFile(f,fs.readFileSync(path.join(root,f)));
+const raw=f=>reviewedSalesHistoricalFile(f,readRepositoryFile(f));
 const text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
 export const hash=b=>createHash('sha256').update(text(b)).digest('hex');
 const originals=new Map();

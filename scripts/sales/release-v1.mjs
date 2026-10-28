@@ -1,3 +1,4 @@
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,7 +18,7 @@ export const verifierPath = 'scripts/sales/release-v1.mjs';
 export const expectedPackageHash = '9d111ecc393a4728ebda6fd9ae128f10a43d70d207d05ee1cdc968f8b916671d';
 export const text = bytes => new TextDecoder('utf-8', {fatal: true}).decode(bytes).replaceAll('\r\n', '\n');
 export const digest = bytes => sha256(text(bytes));
-const raw = file => successorHistoricalFile(file, fs.readFileSync(path.join(root, file)));
+const raw = file => successorHistoricalFile(file, readRepositoryFile(file));
 export const baseline = () => JSON.parse(source('registry/contracts.json'));
 const selected = () => baseline().planned.filter(row => /^F1-10[BCD]$/u.test(row.materializeIn));
 const candidatePath = row => {
