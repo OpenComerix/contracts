@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { verifyLocalSnapshot } from '../../tools/architecture/registry.mjs';
+import { salesHistoricalFile } from '../sales/inventory-step-consumer-v1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const consumerBase = '050ccf40c4ead96fe491715ca30232652744132a';
@@ -17,7 +18,7 @@ export const consumerFiles = Object.freeze([
   consumerPath, 'scripts/identity/inventory-authority-consumer-v1.mjs',
   'test/identity/inventory-authority-consumer-v1.test.mjs', producerTestPath,
 ]);
-export const rawConsumerRead = file => fs.readFileSync(path.join(root, file));
+export const rawConsumerRead = file => salesHistoricalFile(file, fs.readFileSync(path.join(root, file)));
 const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n');
 const bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const baseline = file => JSON.parse(consumerSource(file));
@@ -108,6 +109,7 @@ export function inventoryConsumerReadView(read = rawConsumerRead) {
 }
 const currentView = inventoryConsumerReadView();
 export function inventoryConsumerHistoricalFile(file, content) {
+  content = salesHistoricalFile(file, content);
   if (file !== consumerPath && !['identity/README.md', 'registry/README.md', producerTestPath].includes(file)) return content;
   const actual = rawConsumerRead(file);
   const historical = currentView(file);

@@ -1,3 +1,4 @@
+import { salesHistoricalFile } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadRegistryView } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -88,7 +89,7 @@ test('L publication checks exact content; local Git provenance remains mandatory
 test('L leaves source transports, descriptors, indexes and four other exports unchanged', () => {
   const registry = workloadRegistryView(JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8')));
   assert.deepEqual(lifecycleRegistryView(registry), JSON.parse(source('registry/contracts.json')));
-  assert.deepEqual(JSON.parse(fs.readFileSync(path.join(root, 'registry/consumers/index.json'), 'utf8')),
+  assert.deepEqual(JSON.parse(salesHistoricalFile('registry/consumers/index.json',fs.readFileSync(path.join(root, 'registry/consumers/index.json')))),
     JSON.parse(source('registry/consumers/index.json')));
   for (const contract of registry.contracts) {
     const actual = fs.readFileSync(path.join(root, contract.path), 'utf8').replaceAll('\r\n', '\n');

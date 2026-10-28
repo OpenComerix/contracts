@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "ba13dcda413d6ee7fd04d30b6365d2a7e4e95f06",
-  "manifestSha256": "72b1b080668a327a55b0d3167307f3df1d9c42c42f9820209e814e5ca9629f7a",
-  "lockSha256": "6266c4b66991e3ed6160af35b927faabf0447fe803fe0d8a0c89bd064159505e",
+  "sourceCommit": "dcaf4b8a6fc2b91fa0601365c09d1b613aa10fd1",
+  "manifestSha256": "2b46db2cb63f557262c930ad8e5a4e4caa77c8f99480851687d3066d930e84d1",
+  "lockSha256": "fd8b50a7c9de44cf917ad5a3edf4e6b43138f9b82b270cd06bff8ff8560520ad",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -573,7 +573,8 @@
           "/profiles/0",
           "/permissions",
           "/issuance",
-          "/template"
+          "/template",
+          "/profiles/4"
         ],
         "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
         "gates": [
@@ -604,7 +605,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "72b1b080668a327a55b0d3167307f3df1d9c42c42f9820209e814e5ca9629f7a",
+    "manifestSha256": "2b46db2cb63f557262c930ad8e5a4e4caa77c8f99480851687d3066d930e84d1",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -4698,7 +4699,8 @@
           "/profiles/0",
           "/permissions",
           "/issuance",
-          "/template"
+          "/template",
+          "/profiles/4"
         ],
         "files": [
           {
@@ -4739,12 +4741,17 @@
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/4",
+            "sha256": "351bc4e5b040a0bd7afde26a82ffb3013a7baeb9cf4fed444c900ac56ccbbff7"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
             "pointer": "/template",
             "sha256": "ff130b2fb6e9a8facf33ae137ad2e93102140b4bd74d8c78ba56e7710007bfaa"
           }
         ],
-        "selectionSha256": "cf4bb8663d3113db37da788b26813ad98d8736f6b449938e3f3d66404efd2141",
-        "runtimeSha256": "cf4bb8663d3113db37da788b26813ad98d8736f6b449938e3f3d66404efd2141"
+        "selectionSha256": "bfa24523be06145e4c0d097cf094d203f6dfc56cf4079d2ad26417cc57fd8f97",
+        "runtimeSha256": "bfa24523be06145e4c0d097cf094d203f6dfc56cf4079d2ad26417cc57fd8f97"
       },
       {
         "id": "common.error-catalog.v9",

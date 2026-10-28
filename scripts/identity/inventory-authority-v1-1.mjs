@@ -6,6 +6,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { gitReader, parseSource } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { admissionFiles, admissionReadView, admissionHistoricalFile, admissionHistoricalRegistry } from './inventory-authority-v1-1-admission.mjs';
+import { withSalesAdmissionScope } from '../sales/inventory-step-consumer-v1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const base = 'fcfbeba3f99c10b292ece4db2452ace71e66d093';
@@ -91,7 +92,7 @@ export function validateSuccessorPackage(read = actual) {
   for (const file of ['package.json', 'pnpm-lock.yaml', 'registry/consumers/index.json',
     ...previous.requiredConsumers.map(owner => 'registry/consumers/' + owner + '.json')])
     assert.equal(hash(read(file)), hash(source(file)), 'IA11_CONSUMER_OR_DEPENDENCY:' + file);
-  const allowed = new Set([...changedPaths, packagePath, verifierPath, ...admissionFiles]);
+  const allowed = withSalesAdmissionScope([...changedPaths, packagePath, verifierPath, ...admissionFiles]);
   for (const args of [['diff', '--name-only', base], ['diff', '--cached', '--name-only'], ['ls-files', '--others', '--exclude-standard']])
     for (const file of execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim().split(/\r?\n/).filter(Boolean))
       assert(allowed.has(file), 'IA11_UNDECLARED_PATH:' + file);
@@ -116,5 +117,5 @@ export function successorHistoricalRegistry(registry) {
 }
 export function withSuccessorScope(paths) {
   validateSuccessorPackage();
-  return new Set([...paths, ...changedPaths, packagePath, verifierPath, ...admissionFiles]);
+  return withSalesAdmissionScope([...paths, ...changedPaths, packagePath, verifierPath, ...admissionFiles]);
 }

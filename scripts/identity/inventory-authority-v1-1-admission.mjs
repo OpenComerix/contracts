@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { gitReader, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { consumerFiles, inventoryConsumerReadView, inventoryConsumerHistoricalFile } from './inventory-authority-consumer-v1.mjs';
+import { salesHistoricalRegistry } from '../sales/inventory-step-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const admissionBase = '0bff3a242784599c400875f37e1c2d3ef64f4538';
@@ -102,6 +103,7 @@ export function admissionHistoricalFile(file, bytes) {
   return expected && normalize(bytes) === normalize(expected) ? reviewed : bytes;
 }
 export function admissionHistoricalRegistry(registry) {
+  registry = salesHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, admittedRegistry())) return registry;
   currentView(registryPath);
   return previous();

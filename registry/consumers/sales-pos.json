@@ -1,0 +1,1272 @@
+{
+  "formatVersion": 1,
+  "publication": "published",
+  "sourceRepository": "opencomerix/sales-pos",
+  "sourceCommit": "80cdff837716f00a592caee952e3abce47a5b8d4",
+  "manifestSha256": "1d4161bb3f4121324552b3778470871d592959fd18f2dc98a2995b2f594f45b8",
+  "lockSha256": "1104af195aedea11291064d642ba04e2d6af9349a8b27de316e588d1396fa3a8",
+  "manifest": {
+    "formatVersion": 1,
+    "service": "sales-pos",
+    "contracts": [
+      {
+        "id": "sales.inventory-step-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "authorizeSaleProcessStep"
+        ],
+        "pointers": [],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "sales.inventory-step-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "inventory.post-sale-stock.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "inventory.compensate-sale-stock.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "inventory.post-sale-stock.result.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "inventory.compensate-sale-stock.result.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "sales.f1-10d.sales-protocol-policy-v2",
+        "role": "semantic-owner",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          "/limits",
+          "/sequence",
+          "/identity",
+          "/retries"
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.inventory-authority.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/profiles/4",
+          "/issuance"
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v9",
+        "role": "validation",
+        "version": "9",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/commands/command-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.result.v1",
+        "sourcePath": "commands/command-result-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/commands/command-result-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "common.error-catalog.v9",
+        "sourcePath": "common/errors/v9/error-catalog-v9.json",
+        "destination": "src/modules/sale-process/transport/contracts/common/errors/v9/error-catalog-v9.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.inventory-authority.policy.v1",
+        "sourcePath": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.compensate-sale-stock.result.v1",
+        "sourcePath": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.compensate-sale-stock.v1",
+        "sourcePath": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.result.v1",
+        "sourcePath": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-protocol-policy-v2",
+        "sourcePath": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-protocol-policy-v2.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      }
+    ],
+    "bindings": []
+  },
+  "lock": {
+    "formatVersion": 1,
+    "service": "sales-pos",
+    "manifestSha256": "1d4161bb3f4121324552b3778470871d592959fd18f2dc98a2995b2f594f45b8",
+    "entries": [
+      {
+        "id": "sales.inventory-step-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+        "operations": [
+          "authorizeSaleProcessStep"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "sha256": "5bd1787a77f0a2ac240836ca7cc7e19590f86ef297a801997b21e3e8741fde7a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "sha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "f4206f437220846e4d7be6513a884c15749196e1ff207ff9449884da65020006"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1sales~1process-step-authorizations/post",
+            "sha256": "0b8cba3c2d560f3044a3f80ec8b2f071538b4f48ecca5da1ffea1bc75de346ab"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "8f3dad25bb50c0071d92a96bf9763f18886df2abba1562eef27c38ca4f549057"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "0d885589be470ea5cd2648e37080441da0e9f46b5576073d3db1a10ea16dc72e"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$defs/DifferenceGrant",
+            "sha256": "2b866d42525fa08dc9a3218014249433ca275abf5d7b4cf5babeb86b89769e40"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "4e86644693b39e5292c485620635f7af5ea3931bbacac10c7f0c96a6ec3ca444"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "919e413ddd2ecee4799424bc2102b75e442b460d96bba93390ab2c56d1d2a46a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "07e6f0ce774eef17cbd073076027da5ce3282c01d88164e08920f49814ace877",
+        "runtimeSha256": "abe2daf986488d09c42aa63ce16fa6aae60ff675ff423055d42fdfe0515980d6"
+      },
+      {
+        "id": "sales.inventory-step-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "sha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c"
+          }
+        ],
+        "units": [
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "2833310a242193121f530a048203952ba00958b707e780950e47280879feccdd"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$defs/DifferenceGrant",
+            "sha256": "2b866d42525fa08dc9a3218014249433ca275abf5d7b4cf5babeb86b89769e40"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "919e413ddd2ecee4799424bc2102b75e442b460d96bba93390ab2c56d1d2a46a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "60ed2a1624cd4d0312e436b7b2f1f64a26bb268f30ad763011cdfa446b07fa29",
+        "runtimeSha256": "60ed2a1624cd4d0312e436b7b2f1f64a26bb268f30ad763011cdfa446b07fa29"
+      },
+      {
+        "id": "inventory.post-sale-stock.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+            "sha256": "e1fd91e7ce0522fda347049e120d0cee1c3d8d51cad7011b23f3737aa4cb9724"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+            "pointer": "",
+            "sha256": "90c7927a276c380a44da7e5d847b6a05aed01e737fe8b102daecfa3c79b8b750"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "eac4f8166e3baeeac1f27cee0f979b5035d99c9074004300d9ffba4013b424ca"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/PostRequest",
+            "sha256": "0b6af4283b6157e79a155baff3497341816ca3eea5e133648811759cf8e33514"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/ProcessContext",
+            "sha256": "268f6c0e38707e2f00a0299ff6744a8f888157652ed09655f7cda1e586569064"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/StockLine",
+            "sha256": "e7ec1e23702b5d5f503e41181e964d550e469ff581d5bfca36742b0514726780"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "636ae31cccefcd272feef5979667ac269708d5e8afbe9de84e4f0212bd012ba3",
+        "runtimeSha256": "636ae31cccefcd272feef5979667ac269708d5e8afbe9de84e4f0212bd012ba3"
+      },
+      {
+        "id": "inventory.compensate-sale-stock.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+            "sha256": "cadaac159f89fb7839d0e2040c702a68fed1f9f7b6ae616b9e56d016cb9ed995"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+            "pointer": "",
+            "sha256": "7fbfa1f5dd43cf6123323ab09d1b12a1712fc9808f92edeba32b52c777fdfbfa"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "57f08cf18a3b0f7ea0600c59569efd24b25b27f77a5085df5951689b93608ebf"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/CompensationRequest",
+            "sha256": "c0d6f094e71e14bbf029e0bbd6b1e04b16955dec545fb14d6f1a1e5175708d26"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/ProcessContext",
+            "sha256": "268f6c0e38707e2f00a0299ff6744a8f888157652ed09655f7cda1e586569064"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "0a9390c0745d400a221edb714edbc4bd61aac6eae51453411ff101239a1937f8",
+        "runtimeSha256": "0a9390c0745d400a221edb714edbc4bd61aac6eae51453411ff101239a1937f8"
+      },
+      {
+        "id": "inventory.post-sale-stock.result.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+            "sha256": "bdfeade03f3b57d77c973491e5d104f8548f0a1abf2ee3c3c397ff46974796ac"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "2e1b42ec011b644e0d7021b11621f1e3f085f2d254d065333a148e294a894344"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b8f6c742fd6a984fc94d96d53eb7858e95f8d633bc3c4b9644790984f713a9b8"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Difference",
+            "sha256": "3cccc735dc232184c873fdf5edf0b7cb77311ae9f0184e90f780077e60cec86b"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Failure",
+            "sha256": "61488beaf116405db3bfceec2da8c3aeed9fef01262d20350204e3bdd401c84d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/LineEffect",
+            "sha256": "d4ec7211ef9ee1b5d525aded0c027dd1c1e6a9edf1d7157086b0c3fd9e948f2a"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/PostSuccess",
+            "sha256": "d2865f342a4b358c6d35747ccd44bceedcacdfa33d257e4fa31a54f857418168"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/ProcessContext",
+            "sha256": "268f6c0e38707e2f00a0299ff6744a8f888157652ed09655f7cda1e586569064"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warning",
+            "sha256": "7b55f2dda8e17b642285b1a96af0f6a710b050c8a1c36b6ca81b8d1e05badd3a"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "acc4e2cc46b91690ddc78c0599804ad6274ba686dbd759e986eb2c45b72ff42e",
+        "runtimeSha256": "acc4e2cc46b91690ddc78c0599804ad6274ba686dbd759e986eb2c45b72ff42e"
+      },
+      {
+        "id": "inventory.compensate-sale-stock.result.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+            "sha256": "adaf54dc98a0d6920f519ca8990bb2a198bcb76de3c5a68a8d518dac9675ebe4"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "eac087b2d99f2e853fb3e2c2409b86f9294fb28da22fb825fe6e2829edd429f3"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "6590acb9160ecbad752aa3a6b59c3def2f5eca05051a114073117a025bcc8327"
+          },
+          {
+            "path": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/CompensationFailure",
+            "sha256": "20ae952c452f6ce13d9b0653b45ef3f135cdd56083d32b806b472c4d255ab6ab"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/CompensationSuccess",
+            "sha256": "c1b0ef065975ac16c4978bd2237134e70de2fc492f1317feb29419e9d0e4836a"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/ProcessContext",
+            "sha256": "268f6c0e38707e2f00a0299ff6744a8f888157652ed09655f7cda1e586569064"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "6b9a8190ae8d4f6cde237f538a99242672ab46de52ea1c4452188622e62437e4",
+        "runtimeSha256": "6b9a8190ae8d4f6cde237f538a99242672ab46de52ea1c4452188622e62437e4"
+      },
+      {
+        "id": "sales.f1-10d.sales-protocol-policy-v2",
+        "role": "semantic-owner",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+        "operations": [],
+        "pointers": [
+          "/limits",
+          "/sequence",
+          "/identity",
+          "/retries"
+        ],
+        "files": [
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "sha256": "0505d4910e3e81e7c498ffaa3a92008d1635ae3c073c573081745a15657fada5"
+          }
+        ],
+        "units": [
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "pointer": "/identity",
+            "sha256": "14a1a1fbb0cf603b86b6a7b20627f4e3987157539ccb0ee0aff242fb84bb5b18"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "pointer": "/limits",
+            "sha256": "4c16b3bc0a6f2133259bb69ac80cb3c4074b75db8bb7989417d2ee06cb159487"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "pointer": "/retries",
+            "sha256": "be887520842001bc523f71a2562d6d4e002bd260860311b827b5574734f43d6f"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "pointer": "/sequence",
+            "sha256": "405e270805c05956e3543e2ea2d7822321148f3d932d08a8a5afab4581220e40"
+          }
+        ],
+        "selectionSha256": "666b0a8ffbc8cb0a9588ddbcc337e21b0c6d7ca6cf2e152b4b71b404b4af9b4c",
+        "runtimeSha256": "666b0a8ffbc8cb0a9588ddbcc337e21b0c6d7ca6cf2e152b4b71b404b4af9b4c"
+      },
+      {
+        "id": "identity.inventory-authority.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          "/profiles/4",
+          "/issuance"
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "sha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/issuance",
+            "sha256": "45857f291c963f6b73091db4abf93b90c2944900b3f245c22e388634472387aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/4",
+            "sha256": "351bc4e5b040a0bd7afde26a82ffb3013a7baeb9cf4fed444c900ac56ccbbff7"
+          }
+        ],
+        "selectionSha256": "c19a594ddbe100f4a9f15be0b0cb2d3cac5ae5271b36e95b973a6955d5e5252c",
+        "runtimeSha256": "c19a594ddbe100f4a9f15be0b0cb2d3cac5ae5271b36e95b973a6955d5e5252c"
+      },
+      {
+        "id": "common.error-catalog.v9",
+        "role": "validation",
+        "version": "9",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "common/errors/v9/error-catalog-v9.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/errors/v9/error-catalog-v9.json",
+            "sha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/errors/v9/error-catalog-v9.json",
+            "pointer": "",
+            "sha256": "b8025d531de81bd327c319f38eb1f0b7184fa276ad330807bdcbee431a33b75f"
+          }
+        ],
+        "selectionSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b",
+        "runtimeSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b"
+      }
+    ],
+    "assets": [
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4",
+        "semanticSha256": null,
+        "localSha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24",
+        "semanticSha256": null,
+        "localSha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f",
+        "semanticSha256": null,
+        "localSha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/commands/command-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f",
+        "semanticSha256": null,
+        "localSha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.result.v1",
+        "sourcePath": "commands/command-result-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/commands/command-result-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098",
+        "semanticSha256": null,
+        "localSha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+      },
+      {
+        "contractId": "common.error-catalog.v9",
+        "sourcePath": "common/errors/v9/error-catalog-v9.json",
+        "destination": "src/modules/sale-process/transport/contracts/common/errors/v9/error-catalog-v9.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7",
+        "semanticSha256": null,
+        "localSha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b",
+        "semanticSha256": null,
+        "localSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+      },
+      {
+        "contractId": "identity.inventory-authority.policy.v1",
+        "sourcePath": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d",
+        "semanticSha256": null,
+        "localSha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d"
+      },
+      {
+        "contractId": "inventory.compensate-sale-stock.result.v1",
+        "sourcePath": "inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.compensate-sale-stock.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "adaf54dc98a0d6920f519ca8990bb2a198bcb76de3c5a68a8d518dac9675ebe4",
+        "semanticSha256": null,
+        "localSha256": "adaf54dc98a0d6920f519ca8990bb2a198bcb76de3c5a68a8d518dac9675ebe4"
+      },
+      {
+        "contractId": "inventory.compensate-sale-stock.v1",
+        "sourcePath": "inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.compensate-sale-stock.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "cadaac159f89fb7839d0e2040c702a68fed1f9f7b6ae616b9e56d016cb9ed995",
+        "semanticSha256": null,
+        "localSha256": "cadaac159f89fb7839d0e2040c702a68fed1f9f7b6ae616b9e56d016cb9ed995"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.result.v1",
+        "sourcePath": "inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.post-sale-stock.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "bdfeade03f3b57d77c973491e5d104f8548f0a1abf2ee3c3c397ff46974796ac",
+        "semanticSha256": null,
+        "localSha256": "bdfeade03f3b57d77c973491e5d104f8548f0a1abf2ee3c3c397ff46974796ac"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/commands/v1/inventory.post-sale-stock.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "e1fd91e7ce0522fda347049e120d0cee1c3d8d51cad7011b23f3737aa4cb9724",
+        "semanticSha256": null,
+        "localSha256": "e1fd91e7ce0522fda347049e120d0cee1c3d8d51cad7011b23f3737aa4cb9724"
+      },
+      {
+        "contractId": "inventory.post-sale-stock.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823",
+        "semanticSha256": null,
+        "localSha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v1/sales-inventory-step-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "5bd1787a77f0a2ac240836ca7cc7e19590f86ef297a801997b21e3e8741fde7a",
+        "semanticSha256": null,
+        "localSha256": "5bd1787a77f0a2ac240836ca7cc7e19590f86ef297a801997b21e3e8741fde7a"
+      },
+      {
+        "contractId": "sales.inventory-step-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v1/sales-inventory-step-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c",
+        "semanticSha256": null,
+        "localSha256": "c0d527035ecb6f2e6869d74b45d80904876c44e1716ad2d5ef64766a11b88e6c"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-protocol-policy-v2",
+        "sourcePath": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-protocol-policy-v2.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "0505d4910e3e81e7c498ffaa3a92008d1635ae3c073c573081745a15657fada5",
+        "semanticSha256": null,
+        "localSha256": "0505d4910e3e81e7c498ffaa3a92008d1635ae3c073c573081745a15657fada5"
+      }
+    ]
+  }
+}
