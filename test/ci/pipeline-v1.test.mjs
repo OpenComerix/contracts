@@ -107,7 +107,8 @@ for (const [name, mutate] of [
   assert.equal(captureHistoricalFile('.gitlab-ci.yml', wrong), wrong);
 });
 
-for (const file of ['scripts/ci/pipeline-v1.mjs', 'test/ci/pipeline-v1.test.mjs', '.gitignore', 'test/catalog/history-protection-v1.test.mjs'])
+for (const file of ['scripts/ci/pipeline-v1.mjs', 'test/ci/pipeline-v1.test.mjs', '.gitignore', 'test/catalog/history-protection-v1.test.mjs',
+  'tools/architecture/layout.mjs', 'test/ci/tool-cache-layout.test.mjs'])
   for (const change of ['changed', 'missing'])
     test('warm projections still validate the preparation sources: ' + file + '/' + change, t => {
       const registryBytes = actual('registry/contracts.json'), registry = JSON.parse(registryBytes);

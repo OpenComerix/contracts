@@ -87,6 +87,8 @@ export function checkContractLayout(root) {
     ".git",
     "node_modules",
     ".pnpm-store",
+    ".corepack-cache",
+    ".npm-cache",
     ".ci-artifacts",
     "registry",
     "scripts",

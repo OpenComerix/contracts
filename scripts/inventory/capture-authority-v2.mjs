@@ -29,17 +29,19 @@ export const runnerPath = 'scripts/inventory/run-capture-authority-v2.mjs';
 export const testPath = 'test/inventory/capture-authority-v2.test.mjs';
 export const bridgePath = 'scripts/sales/inventory-step-consumer-v1.mjs';
 const graphPath = 'tools/architecture/graph.mjs';
+const layoutPath = 'tools/architecture/layout.mjs';
 const historyTestPath = 'test/catalog/history-protection-v1.test.mjs';
 const optimizationHashes = Object.freeze({
+  'test/ci/tool-cache-layout.test.mjs': '0ebea93b720afc3889f18f5fa336547130475f198785d79e91c4181cf3085a97',
   'tools/architecture/git-source.mjs': '5fcde605163171d82dc7280fedce290c8ec517b209b303856837a40ed17020cf',
   'test/architecture/git-source.test.mjs': '907ec74b43e7f704c1835ae2699c146f2a51cc2762dcb2d636c9da5147d3c47e',
   'tools/architecture/README.md': 'ba7ea573af9c9ea8f8057d0eba97cfcdee987a56a5789f4b88807349301141b5',
   'scripts/ci/pipeline-v1.mjs': '5bd45816a1f9ff7d226e335896eb48f014d9ba9ef3f87deb9f8c919a6c25e337',
-  'test/ci/pipeline-v1.test.mjs': '733df196e3d5e0bca6523290a285cdfd3ec237fcbd844c6b640aaecff2b9f807',
+  'test/ci/pipeline-v1.test.mjs': 'f56401a2205a64355e2acdbdce57c14666332785594bdd9f6d8c8eaf854e68b2',
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, historyTestPath, ...Object.keys(optimizationHashes)]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes)]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -160,13 +162,14 @@ export function expectedContents() {
     ['inventory/README.md', Buffer.from(text(source('inventory/README.md')) + readmeSuffix)],
     ['registry/README.md', Buffer.from(text(source('registry/README.md')) + '\n## F1-11B — Fuente de preparación física v2\n\nDos intenciones `planned` identifican el sucesor HTTP/schema Inventory con `capture_fingerprint` JCS/SHA-256 del cuerpo completo de captura. Se preservan las 200 raíces admitidas, 236 artefactos históricos, dos intenciones previas y seis consumidores/locks/pins. [Mapa, límites y gates](../inventory/README.md#f1-11b--verificación-de-captura-física-v2-candidato). La proyección histórica solo acepta el delta completo verificado; drift y omisiones siguen rechazados. Auditoría, publicación/CI exacta y admisión seleccionada preceden al consumo.\n')],
     ['.gitlab-ci.yml', Buffer.from(prepareToolingCI(ci))], [bridgePath, bridgeBytes()], [graphPath, optimizedGraphBytes()],
+    [layoutPath, Buffer.from(insertOnce(text(source(layoutPath)), '    ".pnpm-store",', '\n    ".corepack-cache",\n    ".npm-cache",'))],
     ['.gitignore', Buffer.from(text(source('.gitignore')) + '.corepack-cache/\n.npm-cache/\n')],
   ]);
 }
 let expectedCache;
 const expectedSnapshot = () => expectedCache ??= expectedContents();
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, historyTestPath, '.gitignore']);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
 export function validateCaptureSource(read = actual) {
   for (const [file, bytes] of expectedSnapshot())
     assert.equal(text(read(file)), text(bytes), 'IC2_EXACT_SOURCE:' + file);
