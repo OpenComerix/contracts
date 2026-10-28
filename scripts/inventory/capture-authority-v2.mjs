@@ -41,7 +41,7 @@ const optimizationHashes = Object.freeze({
 });
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
-  '.github/workflows/ci.yml': '05ed1bf25b5ac0183b9b6d8b8af7e6329df14d529839919f57a5bce5acb314af',
+  '.github/workflows/ci.yml': 'dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399',
   'test/ci/github-v1.test.mjs': '0634df07de3badc146e8afb1a14af77795b1abbb68782cf626c85923e68712e1',
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,

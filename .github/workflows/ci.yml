@@ -33,6 +33,10 @@ jobs:
           submodules: false
       - name: Run original validation commands
         run: node scripts/validate-contract-refs.mjs
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
   validate_openapi:
     name: validate:openapi
     runs-on: ubuntu-24.04
@@ -93,6 +97,10 @@ jobs:
           node scripts/prepare-session-step-up-v1.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json .ci-artifacts/session-step-up-v1 --self-test
           node scripts/prepare-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/owner-session-flow-v1
           node scripts/validate-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: success()
         shell: bash
@@ -207,6 +215,10 @@ jobs:
           node --check scripts/prepare-session-rotation-replay-v5.mjs
           sh -n scripts/validate-session-rotation-replay-v5.sh
           sh -n scripts/validate-session-step-up-v1.sh
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
   validate_gateway_delegation_schema:
     name: validate:gateway-delegation-schema
     runs-on: ubuntu-24.04
@@ -264,6 +276,10 @@ jobs:
           pnpm registry:check
           pnpm contracts:consumers
           pnpm contracts:impact --output .ci-artifacts/contract-impact.json
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: always()
         shell: bash
@@ -359,6 +375,10 @@ jobs:
           node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
           node scripts/catalog/validate-history-recovery-v1.mjs .ci-artifacts/catalog-history-recovery-v1 --self-test
           node scripts/catalog/validate-history-policy-v2.mjs .ci-artifacts/catalog-history-policy-v2 --self-test
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: success()
         shell: bash
@@ -483,6 +503,10 @@ jobs:
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
           node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: success()
         shell: bash
@@ -561,6 +585,10 @@ jobs:
           key: node24.21.0-redocly2.53.3-bookworm-v1
       - name: Run original validation commands
         run: node scripts/catalog/validate-asyncapi-v1.mjs .ci-artifacts/catalog-asyncapi-v1
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: success()
         shell: bash
@@ -646,6 +674,10 @@ jobs:
           node scripts/identity/run-inventory-authority-v1-1.mjs prepare .ci-artifacts/inventory-v1-authority-1-1-ci
           node scripts/inventory/run-capture-authority-v2.mjs openapi
           node scripts/inventory/run-capture-authority-v2.mjs prepare .ci-artifacts/inventory-v1-capture-authority-v2-ci
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: always()
         shell: bash
@@ -730,6 +762,10 @@ jobs:
           node scripts/finance/run-gate-v1.mjs openapi
           node scripts/finance/run-gate-v1.mjs asyncapi
           node scripts/finance/schema-v1.mjs .ci-artifacts/finance-v1-ci
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: always()
         shell: bash
@@ -811,6 +847,10 @@ jobs:
           node scripts/sales/run-gate-v2.mjs openapi
           node scripts/sales/run-gate-v2.mjs asyncapi
           node scripts/sales/schema-v2.mjs .ci-artifacts/sales-v2-ci
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: always()
         shell: bash
@@ -890,6 +930,10 @@ jobs:
         run: |-
           node scripts/sales/run-integration-v1.mjs semantics
           node scripts/sales/integration-schema-v1.mjs .ci-artifacts/sales-integration-v1-ci
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
       - name: Package original artifact paths
         if: always()
         shell: bash
