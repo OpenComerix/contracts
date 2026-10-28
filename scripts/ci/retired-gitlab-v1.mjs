@@ -12,3 +12,7 @@ export function readRepositoryFile(file) {
   assert(!fs.existsSync(path.join(root, file)), 'RETIRED_GITLAB_CI_REINTRODUCED');
   return historical(file);
 }
+
+// Historical callers retain their original path/symlink checks for every live file.
+// An injected caller reader is never repaired by the preservation validators.
+export const withRetiredCI = read => file => file === '.gitlab-ci.yml' ? readRepositoryFile(file) : read(file);

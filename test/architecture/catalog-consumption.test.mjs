@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
@@ -13,7 +14,7 @@ import { root, consumptionBase, ownerBases, consumptionChangedFiles, consumption
   snapshotPath, bytes, consumptionSnapshot, consumptionBindingFiles, validateConsumptionSnapshot,
   consumptionReadView, consumptionReadmeView, validateConsumptionPackage, validateConsumptionCheckout, validateConsumptionPaths } from '../../scripts/catalog/catalog-consumption-v1-registry.mjs';
 
-const source = gitReader(root, consumptionBase), read = candidateReadView(worktreeReader(root));
+const source = gitReader(root, consumptionBase), read = candidateReadView(withRetiredCI(worktreeReader(root)));
 const registry = JSON.parse(source('registry/contracts.json'));
 test('A README projection requires the complete approved document and preserves historical bytes', () => {
   const current = read('catalog/README.md');

@@ -1,4 +1,4 @@
-import { readRepositoryFile, retiredCIRevision } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { readRepositoryFile, retiredCIRevision, withRetiredCI } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -66,7 +66,7 @@ test('retired GitLab CI comes only from the preserved immutable commit', t => {
   assert.throws(() => validateCaptureSource(), /RETIRED_GITLAB_CI_REINTRODUCED/);
 });
 
-for (const file of ["test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs",'scripts/ci/retired-gitlab-v1.mjs', 'scripts/finance/reviewed-package-v1.mjs',
+for (const file of ["test/architecture/asyncapi-admission-v1.test.mjs","scripts/catalog/catalog-delivery-v1-registry.mjs","scripts/catalog/catalog-operational-recovery-v1-registry.mjs","scripts/catalog/catalog-consumption-v1-registry.mjs","test/architecture/catalog-delivery.test.mjs","test/architecture/catalog-operational-recovery.test.mjs","test/architecture/catalog-consumption.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs",'scripts/ci/retired-gitlab-v1.mjs', 'scripts/finance/reviewed-package-v1.mjs',
   'scripts/sales/reviewed-package-v2.mjs', 'scripts/sales/release-v1.mjs', 'scripts/inventory/candidate-v1.mjs',
   'scripts/identity/inventory-authority-consumer-v1.mjs', 'scripts/sales/inventory-step-consumer-v1.mjs',
   'scripts/validate-gateway-identity-policy.mjs', 'scripts/validate-gateway-identity-policy-v2.mjs',
@@ -87,3 +87,11 @@ for (const file of ["test/sales/release-v1.test.mjs","test/sales/package-v2.test
       assert.throws(() => validateCaptureSource());
       assert.throws(() => captureHistoricalFile('registry/contracts.json', registry));
     });
+
+test('retired CI adapter preserves the live reader and all its errors', () => {
+  const bytes = Buffer.from('synthetic live source');
+  const read = withRetiredCI(file => { assert.equal(file, 'current.json'); return bytes; });
+  assert.equal(read('current.json'), bytes);
+  assert.equal(read('.gitlab-ci.yml').toString('utf8'), readRepositoryFile('.gitlab-ci.yml').toString('utf8'));
+  assert.throws(() => withRetiredCI(() => { throw Error('Original path boundary'); })('outside.json'), /Original path boundary/);
+});

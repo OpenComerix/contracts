@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerSnapshotView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
@@ -80,7 +81,7 @@ export function operationalSnapshotView(snapshot) {
   return baseline(operationalSnapshotPath);
 }
 
-export function validateOperationalPreservation(read = worktreeReader(root)) {
+export function validateOperationalPreservation(read = withRetiredCI(worktreeReader(root))) {
   const historicalRead = workloadReadView(read);
   const registry = baseline('registry/contracts.json');
   const files = new Set(['.gitlab-ci.yml', 'package.json', 'pnpm-lock.yaml', 'registry/contracts.json',

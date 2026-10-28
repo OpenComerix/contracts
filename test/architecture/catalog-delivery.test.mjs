@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
@@ -21,7 +22,7 @@ const previous = JSON.parse(source(deliverySnapshotPath));
 // The live O2 export is verified completely before using the immutable N fixture.
 const actual = operationalSnapshotView(JSON.parse(fs.readFileSync(path.join(root, deliverySnapshotPath), 'utf8')));
 const registry = JSON.parse(fs.readFileSync(path.join(root, 'registry/contracts.json'), 'utf8'));
-const read = candidateReadView(worktreeReader(root));
+const read = candidateReadView(withRetiredCI(worktreeReader(root)));
 const serialized = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 
 test('N registers exactly the five reviewed producers from the published service and preserves all 38 prior admissions', () => {

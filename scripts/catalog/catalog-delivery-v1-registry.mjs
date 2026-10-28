@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -79,7 +80,7 @@ export function deliverySnapshotView(snapshot) {
   return baseline(deliverySnapshotPath);
 }
 
-export function validateDeliveryPreservation(read = worktreeReader(root)) {
+export function validateDeliveryPreservation(read = withRetiredCI(worktreeReader(root))) {
   const historicalRead = workloadReadView(read);
   const registry = baseline('registry/contracts.json');
   const files = new Set([

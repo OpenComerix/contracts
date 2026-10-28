@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import { candidateReadView, projectCandidateFile } from '../inventory/candidate-v1.mjs';
 import { execFileSync } from 'node:child_process';
@@ -153,7 +154,7 @@ export function consumptionReadmeView(content) {
   assert.equal(sha256(normalized), 'f11e97568ebf2c7c17e8f93e42aff8e0fc3f399556befde6d090fb1921189110', 'A_CONSUMPTION_README');
   return source('catalog/README.md');
 }
-export function validateConsumptionPackage(read = worktreeReader(root)) {
+export function validateConsumptionPackage(read = withRetiredCI(worktreeReader(root))) {
   read = candidateReadView(read);
   consumptionReadmeView(read('catalog/README.md'));
   for (const file of ['registry/contracts.json', 'registry/consumers/index.json', 'catalog/index.json', 'identity/index.json', 'common/index.json',

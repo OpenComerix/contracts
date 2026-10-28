@@ -1,5 +1,6 @@
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import { candidateReadView, projectCandidateFile, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
+import { withRetiredCI } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../../scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 import { workloadChangedFiles, validateWorkloadPackage } from '../../scripts/identity/catalog-workload-profiles-v2-registry.mjs';
@@ -20,7 +21,7 @@ const baseline = JSON.parse(source('registry/contracts.json'));
 const historicalRead = workloadReadView(file => fs.readFileSync(path.join(root, file)));
 const registry = JSON.parse(historicalRead('registry/contracts.json'));
 const row = registry.contracts.find(item => item.id === admissionId);
-const read = candidateReadView(worktreeReader(root));
+const read = candidateReadView(withRetiredCI(worktreeReader(root)));
 const manifest = role => ({ formatVersion: 1, service: 'catalog-pricing',
   contracts: [{ id: admissionId, version: row.version, role, operations: [], pointers: [''],
     purpose: 'Test selected admission without changing any real consumer.', gates: ['pnpm test:architecture'] }],

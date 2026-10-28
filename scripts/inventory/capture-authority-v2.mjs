@@ -43,9 +43,16 @@ const optimizationHashes = Object.freeze({
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
   ".github/workflows/ci.yml": "dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399",
-  "test/ci/github-v1.test.mjs": "22e905dc16adc4173831ff554613e6ae76df2ff6af2ffb7b42091a60ab15359a",
+  "test/ci/github-v1.test.mjs": "21cf2510e68028cfeb9863b08300fc1565eb13898e29efba98551be2970b1ce2",
 });
 const retirementHashes = Object.freeze({
+  "test/architecture/asyncapi-admission-v1.test.mjs": "cadabab066fdfaf2f457ef821826388915b5c0899c14dc9beee70ae16f88efe5",
+  "scripts/catalog/catalog-delivery-v1-registry.mjs": "905f4e4cc93b87ed16e0d74dccbbdc7734c36ef0eada20ffbe9e2833a58f0690",
+  "scripts/catalog/catalog-operational-recovery-v1-registry.mjs": "82c2cc7711e3c4246e48091a9ec294b09a23a1cd8d5cc3576e390a3798e7c6de",
+  "scripts/catalog/catalog-consumption-v1-registry.mjs": "aab2c89e69b8da6280d2ab94e444e0432862b17b2a607631bf4b911782b73445",
+  "test/architecture/catalog-delivery.test.mjs": "4f382c3dfc818d7dbc8bfe783100204d903d357a78e0edb241eedecc7f20cbb2",
+  "test/architecture/catalog-operational-recovery.test.mjs": "9190b6c8eb2543e35729e428b5e84a79f6e0138bbfee0302d9501713676288b9",
+  "test/architecture/catalog-consumption.test.mjs": "8726dbb1d642de5eaa7758c4d9be81cd3c42575a90bc92e1a5ad0f3c679cf709",
   "test/sales/inventory-step-consumer-v1.test.mjs": "22b184e7b12eb01265a495e6a91d92d0590001177b4cac36aafe57c620566db4",
   "test/sales/release-v1.test.mjs": "52894d7a1c5b72f7cdc54e7f4e3f0ae5b812c13d0a066348c5edcc7deb3b894b",
   "test/sales/package-v2.test.mjs": "e94b7cfdc7fbe36e519abd2d73dfd28e9677afd2d0873df76e31fd031532b4d3",
@@ -54,7 +61,7 @@ const retirementHashes = Object.freeze({
   "test/catalog/asyncapi-preservation-v1.test.mjs": "7033488f8c4d3413e51168571efd2d9eb85ea840f01b647ae6dbfd5092148c92",
   "README.md": "0288fe0382f941f81397ea7cdd0850d8f5682b28f7c27279fc693331e704ee2c",
   "catalog/README.md": "19d607a9b24b4c5143996bef7bebb01c9f2c91a1de33929333960a4a64843387",
-  "scripts/ci/retired-gitlab-v1.mjs": "aeeada945d9144a09ab25fb7d396784b593ca87d88286d4bc340b2127eda5306",
+  "scripts/ci/retired-gitlab-v1.mjs": "0b0afc32e0204939fa392baad9e388ed91758e8ed30581dfd3c0af39bf52fa13",
   "scripts/finance/reviewed-package-v1.mjs": "10d7bd69dcea6e8a4830f9c08da3d23308750b3d6fa33b3a0611d9dcc0995fce",
   "scripts/sales/reviewed-package-v2.mjs": "bb365e13dea71e812371833684690558f74d79e281f0f9188e87812657c980d7",
   "scripts/sales/release-v1.mjs": "0881c80f06abf7b0ab72895bb3fb9d7b5a9157016a85e9c8e531b542b363eb0a",
@@ -202,7 +209,7 @@ export function expectedContents() {
 }
 let expectedCache;
 const expectedSnapshot = () => expectedCache ??= expectedContents();
-const retiredToolPaths = new Set(["test/sales/inventory-step-consumer-v1.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
+const retiredToolPaths = new Set(["test/architecture/asyncapi-admission-v1.test.mjs","scripts/catalog/catalog-delivery-v1-registry.mjs","scripts/catalog/catalog-operational-recovery-v1-registry.mjs","scripts/catalog/catalog-consumption-v1-registry.mjs","test/architecture/catalog-delivery.test.mjs","test/architecture/catalog-operational-recovery.test.mjs","test/architecture/catalog-consumption.test.mjs","test/sales/inventory-step-consumer-v1.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
   'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
 export function validateCaptureSource(read = actual) {

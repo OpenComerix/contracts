@@ -1,3 +1,4 @@
+import { withRetiredCI } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import { withF110ADesignScope } from '../support/f1-10a-scope.mjs';
 import { candidateReadView, withCandidateScope } from '../../scripts/inventory/candidate-v1.mjs';
 import assert from 'node:assert/strict';
@@ -22,7 +23,7 @@ const root = path.resolve(import.meta.dirname, '../..'), source = gitReader(root
 const previous = JSON.parse(source(operationalSnapshotPath));
 const actual = consumerSnapshotView(JSON.parse(fs.readFileSync(path.join(root, operationalSnapshotPath), 'utf8')));
 const registry = JSON.parse(source('registry/contracts.json'));
-const read = candidateReadView(worktreeReader(root));
+const read = candidateReadView(withRetiredCI(worktreeReader(root)));
 const bytes = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const rehash = snapshot => {
   snapshot.manifestSha256 = sha256(bytes(snapshot.manifest));
