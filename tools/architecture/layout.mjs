@@ -102,6 +102,17 @@ export function checkContractLayout(root) {
   ]);
   const presentDomains = new Set();
   for (const entry of readdirSync(root, { withFileTypes: true })) {
+    if (entry.name === ".github") {
+      assert(entry.isDirectory() && !entry.isSymbolicLink(), "LAYOUT_LINK_FORBIDDEN");
+      const start = files.length;
+      visit(path.join(root, entry.name), entry.name);
+      const infrastructureFiles = files.splice(start);
+      assert(
+        infrastructureFiles.every((file) => file === ".github/workflows/ci.yml"),
+        "LAYOUT_UNKNOWN_GITHUB_INFRASTRUCTURE",
+      );
+      continue;
+    }
     if (infrastructure.has(entry.name) || legacyTransports.includes(entry.name))
       continue;
     assert(!entry.isSymbolicLink(), "LAYOUT_LINK_FORBIDDEN");

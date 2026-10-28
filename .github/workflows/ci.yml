@@ -1,0 +1,931 @@
+# GitHub Actions migration; original job commands and artifact edges preserved.
+name: OpenComerix CI
+on:
+  push: null
+  pull_request: null
+  workflow_dispatch: null
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+defaults:
+  run:
+    shell: bash
+jobs:
+  validate_contract_references:
+    name: validate:contract-references
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Run original validation commands
+        run: node scripts/validate-contract-refs.mjs
+  validate_openapi:
+    name: validate:openapi
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          npx --yes @redocly/cli@2.53.3 lint openapi/pos-sales-v1.yaml openapi/pos-sync-v1.json
+          node scripts/validate-redocly-no-warnings.mjs
+          npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v1.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v1.bundle.json
+          node scripts/prepare-identity-rest-fixtures.mjs /tmp/identity-onboarding-v1.bundle.json .ci-artifacts/identity-rest-fixtures --self-test
+          node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
+          npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v2.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v2.bundle.json
+          node scripts/validate-gateway-deadline-exceeded-v5.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+          node scripts/prepare-identity-rest-fixtures-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/identity-rest-v2-fixtures --self-test
+          node scripts/prepare-device-registration-challenge-v2.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/device-registration-challenge-v2 --self-test
+          node scripts/validate-redocly-no-warnings.mjs openapi/identity-internal-auth-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle openapi/identity-internal-auth-v1.yaml --dereferenced --ext json --output /tmp/identity-internal-auth-v1.bundle.json
+          node scripts/prepare-identity-internal-auth-fixtures.mjs /tmp/identity-internal-auth-v1.bundle.json .ci-artifacts/identity-internal-auth-fixtures --self-test
+          node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v1.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v1.bundle.json
+          node scripts/validate-gateway-identity-policy.mjs /tmp/identity-onboarding-v1.bundle.json /tmp/identity-gateway-delegation-v1.bundle.json --self-test
+          node scripts/validate-redocly-no-warnings.mjs openapi/identity-gateway-delegation-v2.yaml
+          npx --yes @redocly/cli@2.53.3 bundle openapi/identity-gateway-delegation-v2.yaml --dereferenced --ext json --output /tmp/identity-gateway-delegation-v2.bundle.json
+          node scripts/validate-gateway-identity-policy-v2.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+          node scripts/validate-client-signal-v1.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+          node scripts/validate-membership-pagination-v2.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+          node scripts/validate-error-catalog-v4.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+          node scripts/validate-csrf-contract-v3.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+          node scripts/validate-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+          node scripts/prepare-session-rotation-replay-v5.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json .ci-artifacts/session-rotation-replay-v5 --self-test
+          node scripts/validate-session-step-up-v1.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json --self-test
+          node scripts/prepare-session-step-up-v1.mjs /tmp/identity-onboarding-v2.bundle.json /tmp/identity-gateway-delegation-v2.bundle.json .ci-artifacts/session-step-up-v1 --self-test
+          node scripts/prepare-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json .ci-artifacts/owner-session-flow-v1
+          node scripts/validate-owner-session-flow-v1.mjs /tmp/identity-onboarding-v2.bundle.json --self-test
+      - name: Package original artifact paths
+        if: success()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/identity-rest-fixtures/ .ci-artifacts/identity-rest-v2-fixtures/ .ci-artifacts/device-registration-challenge-v2/ .ci-artifacts/identity-internal-auth-fixtures/ .ci-artifacts/session-rotation-replay-v5/ .ci-artifacts/session-step-up-v1/ .ci-artifacts/owner-session-flow-v1/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_openapi
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 1
+          if-no-files-found: error
+  validate_json_schema:
+    name: validate:json-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_openapi
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:openapi
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_openapi
+          path: ${{ runner.temp }}/validate_openapi
+      - name: Restore artifact paths from validate:openapi
+        run: tar -xzf "$RUNNER_TEMP/validate_openapi/artifacts.tgz"
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema events commands/*.schema.json openapi/problem-details-v1.schema.json openapi/problem-details-v2.schema.json openapi/device-proof-v1-vectors.schema.json openapi/identity-gateway-delegation-v2.schema.json openapi/client-signal-v1.schema.json openapi/membership-pagination-v2.schema.json openapi/csrf-v3-problem.schema.json openapi/session-step-up-v1-fixtures.schema.json errors/error-catalog-v1.schema.json errors/error-catalog-v2.schema.json errors/error-catalog-v3.schema.json errors/error-catalog-v4.schema.json errors/error-catalog-v5.schema.json --verbose
+          jsonschema metaschema .ci-artifacts/owner-session-flow-v1/*.schema.json --default-dialect https://json-schema.org/draft/2020-12/schema --verbose
+          jsonschema validate openapi/client-signal-v1.schema.json openapi/client-signal-v1-fixtures.json --verbose
+          jsonschema validate openapi/session-step-up-v1-fixtures.schema.json openapi/session-step-up-v1-fixtures.json --verbose
+          jsonschema validate errors/error-catalog-v1.schema.json errors/error-catalog-v1.json --verbose
+          jsonschema validate errors/error-catalog-v2.schema.json errors/error-catalog-v2.json --verbose
+          jsonschema validate errors/error-catalog-v4.schema.json errors/error-catalog-v4.json --verbose
+          sh scripts/validate-gateway-deadline-exceeded-v5.sh
+          sh scripts/validate-csrf-fixtures-v3.sh
+          jsonschema validate openapi/device-proof-v1-vectors.schema.json openapi/device-proof-v1-vectors.json --verbose
+          jsonschema validate commands/notifications.send-email-verification.v1.schema.json commands/examples/notifications.send-email-verification.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
+          jsonschema validate commands/notifications.send-email-verification.result.v1.schema.json commands/examples/notifications.send-email-verification.result.succeeded.v1.example.json commands/examples/notifications.send-email-verification.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
+          jsonschema validate commands/notifications.send-device-approval.v1.schema.json commands/examples/notifications.send-device-approval.v1.example.json --resolve commands/command-envelope-v1.schema.json --verbose
+          jsonschema validate commands/notifications.send-device-approval.result.v1.schema.json commands/examples/notifications.send-device-approval.result.succeeded.v1.example.json commands/examples/notifications.send-device-approval.result.failed-retryable.v1.example.json --resolve commands/command-result-envelope-v1.schema.json --verbose
+          sh scripts/validate-identity-rest-fixtures.sh .ci-artifacts/identity-rest-fixtures
+          sh scripts/validate-identity-rest-fixtures-v2.sh .ci-artifacts/identity-rest-v2-fixtures
+          sh scripts/validate-device-registration-challenge-v2.sh .ci-artifacts/device-registration-challenge-v2
+          sh scripts/validate-membership-pagination-v2.sh
+          sh scripts/validate-session-rotation-replay-v5.sh .ci-artifacts/session-rotation-replay-v5
+          sh scripts/validate-session-step-up-v1.sh .ci-artifacts/session-step-up-v1
+          sh scripts/validate-owner-session-flow-v1.sh .ci-artifacts/owner-session-flow-v1'
+  validate_internal_auth_schema:
+    name: validate:internal-auth-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_openapi
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:openapi
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_openapi
+          path: ${{ runner.temp }}/validate_openapi
+      - name: Restore artifact paths from validate:openapi
+        run: tar -xzf "$RUNNER_TEMP/validate_openapi/artifacts.tgz"
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema .ci-artifacts/identity-internal-auth-fixtures/schema-*.json --verbose
+          sh scripts/validate-identity-internal-auth-fixtures.sh .ci-artifacts/identity-internal-auth-fixtures'
+  validate_identity_checklist:
+    name: validate:identity-checklist
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Run original validation commands
+        run: |-
+          node scripts/validate-contract-refs.mjs --self-test
+          node scripts/validate-identity-onboarding.mjs --self-test
+          node scripts/validate-device-proof-vectors.mjs
+          node --check scripts/validate-client-signal-v1.mjs
+          node --check scripts/validate-session-rotation-replay-v5.mjs
+          node --check scripts/session-step-up-v1-common.mjs
+          node --check scripts/prepare-session-step-up-v1.mjs
+          node --check scripts/validate-session-step-up-v1.mjs
+          node --check scripts/prepare-session-rotation-replay-v5.mjs
+          sh -n scripts/validate-session-rotation-replay-v5.sh
+          sh -n scripts/validate-session-step-up-v1.sh
+  validate_gateway_delegation_schema:
+    name: validate:gateway-delegation-schema
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema openapi/identity-gateway-delegation-v1.schema.json --verbose
+          sh scripts/validate-gateway-delegation-schemas.sh
+          jsonschema metaschema openapi/identity-gateway-delegation-v2.schema.json --verbose
+          sh scripts/validate-gateway-delegation-v2-schemas.sh'
+  validate_contract_architecture:
+    name: validate:contract-architecture
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          pnpm test:architecture
+          node --test --test-reporter=tap test/ci/*.test.mjs
+          pnpm registry:check
+          pnpm contracts:consumers
+          pnpm contracts:impact --output .ci-artifacts/contract-impact.json
+      - name: Package original artifact paths
+        if: always()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/contract-impact.json; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_contract_architecture
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 7
+          if-no-files-found: error
+  validate_contract_metadata_schema:
+    name: validate:contract-metadata-schema
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Run original validation commands
+        run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema registry/manifest-v1.schema.json registry/lock-v1.schema.json --verbose'
+  validate_catalog_contracts:
+    name: validate:catalog-contracts
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull-push
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Prepare job
+        run: mkdir -p .npm-cache/_cacache .npm-cache/_npx
+      - name: Run original validation commands
+        run: |-
+          node --test test/catalog/*.test.mjs
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-authority-v1.yaml
+          node scripts/validate-redocly-no-warnings.mjs catalog/http/public/v1/catalog-pricing-v1.yaml
+          node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-pricing-internal-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-authority-v1.bundle.json
+          npx --yes @redocly/cli@2.53.3 bundle catalog/http/public/v1/catalog-pricing-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-public-v1.bundle.json
+          npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-pricing-internal-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-private-v1.bundle.json
+          node scripts/catalog/validate-security-v1.mjs .ci-artifacts/catalog-authority-v1.bundle.json .ci-artifacts/catalog-security-v1 --self-test
+          node scripts/catalog/validate-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-http-v1 --self-test
+          node scripts/catalog/validate-pricing-http-v1.mjs .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-pricing-v1 --self-test
+          node scripts/catalog/validate-events-v1.mjs .ci-artifacts/catalog-events-v1 --self-test
+          node scripts/catalog/validate-history-policy-v1.mjs .ci-artifacts/catalog-history-policy-v1 --self-test
+          node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-protection-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-protection-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-protection-v1.bundle.json
+          node scripts/catalog/validate-history-protection-v1.mjs .ci-artifacts/catalog-history-protection-v1 --self-test
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-recovery-authority-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-authority-v1.bundle.json
+          node scripts/identity/validate-catalog-recovery-authority-v1.mjs .ci-artifacts/catalog-recovery-authority-v1
+          node scripts/validate-redocly-no-warnings.mjs catalog/http/private/v1/catalog-history-recovery-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle catalog/http/private/v1/catalog-history-recovery-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-recovery-v1.bundle.json
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-verification-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-verification-v2.bundle.json
+          node scripts/identity/validate-catalog-recovery-verification-v2.mjs .ci-artifacts/catalog-recovery-verification-v2
+          node scripts/catalog/validate-history-recovery-v1.mjs .ci-artifacts/catalog-history-recovery-v1 --self-test
+          node scripts/catalog/validate-history-policy-v2.mjs .ci-artifacts/catalog-history-policy-v2 --self-test
+      - name: Package original artifact paths
+        if: success()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/catalog-authority-v1.bundle.json .ci-artifacts/catalog-public-v1.bundle.json .ci-artifacts/catalog-private-v1.bundle.json .ci-artifacts/catalog-security-v1/ .ci-artifacts/catalog-http-v1/ .ci-artifacts/catalog-pricing-v1/ .ci-artifacts/catalog-events-v1/ .ci-artifacts/catalog-history-policy-v1/ .ci-artifacts/catalog-history-protection-v1/ .ci-artifacts/catalog-history-protection-v1.bundle.json .ci-artifacts/catalog-recovery-authority-v1.bundle.json .ci-artifacts/catalog-recovery-authority-v1/ .ci-artifacts/catalog-history-recovery-v1.bundle.json .ci-artifacts/catalog-history-recovery-v1/ .ci-artifacts/catalog-recovery-verification-v2.bundle.json .ci-artifacts/catalog-recovery-verification-v2/ .ci-artifacts/catalog-history-policy-v2/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_catalog_contracts
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 1
+          if-no-files-found: error
+      - name: Save exact dependency cache
+        if: success() && steps.dependencies.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .pnpm-store/
+            .corepack-cache/
+          key: ${{ steps.dependencies.outputs.cache-key }}
+      - name: Save exact Redocly cache
+        if: success() && steps.npm_cache.outputs.cache-hit != 'true'
+        uses: actions/cache/save@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+  validate_catalog_schema:
+    name: validate:catalog-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_catalog_contracts
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:catalog-contracts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_catalog_contracts
+          path: ${{ runner.temp }}/validate_catalog_contracts
+      - name: Restore artifact paths from validate:catalog-contracts
+        run: tar -xzf "$RUNNER_TEMP/validate_catalog_contracts/artifacts.tgz"
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema catalog/http/shared/v1/*.schema.json identity/http/private/v1/identity-catalog-authority-v1.schema.json common/http/shared/v3/problem-details-v3.schema.json common/errors/v6/error-catalog-v6.schema.json catalog/events/v1/*.schema.json --verbose
+          jsonschema metaschema identity/http/shared/v1/identity-catalog-recovery-authority-v1.schema.json --verbose
+          sh scripts/identity/validate-catalog-recovery-authority-v1.sh .ci-artifacts/catalog-recovery-authority-v1
+          jsonschema validate common/errors/v6/error-catalog-v6.schema.json common/errors/v6/error-catalog-v6.json --format-assertion --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-security-v1
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-http-v1
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-pricing-v1
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-events-v1
+          jsonschema metaschema common/http/shared/v1/data-lifecycle-policy-v1.schema.json --verbose
+          jsonschema validate common/http/shared/v1/data-lifecycle-policy-v1.schema.json catalog/http/shared/v1/catalog-history-policy-v1.json --format-assertion --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v1
+          jsonschema metaschema common/errors/v7/error-catalog-v7.schema.json --verbose
+          jsonschema validate common/errors/v7/error-catalog-v7.schema.json common/errors/v7/error-catalog-v7.json --format-assertion --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-protection-v1
+          jsonschema metaschema common/errors/v8/error-catalog-v8.schema.json --verbose
+          jsonschema validate common/errors/v8/error-catalog-v8.schema.json common/errors/v8/error-catalog-v8.json --format-assertion --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-recovery-v1
+          jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-verification-v2.schema.json --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-verification-v2
+          jsonschema metaschema common/http/shared/v2/data-lifecycle-policy-v2.schema.json --verbose
+          jsonschema validate common/http/shared/v2/data-lifecycle-policy-v2.schema.json catalog/http/shared/v2/catalog-history-policy-v2.json --format-assertion --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2'
+  validate_identity_catalog_contracts:
+    name: validate:identity-catalog-contracts
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          node --test test/identity/*.test.mjs
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v1/identity-catalog-history-permissions-v1.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v1/identity-catalog-history-permissions-v1.yaml --dereferenced --ext json --output .ci-artifacts/catalog-history-permissions-v1.bundle.json
+          node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
+          node scripts/identity/validate-catalog-workload-profiles-v1.mjs
+          node scripts/identity/validate-catalog-workload-profiles-v2.mjs
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
+          node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
+      - name: Package original artifact paths
+        if: success()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_identity_catalog_contracts
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 1
+          if-no-files-found: error
+  validate_identity_catalog_schema:
+    name: validate:identity-catalog-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_identity_catalog_contracts
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:identity-catalog-contracts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_identity_catalog_contracts
+          path: ${{ runner.temp }}/validate_identity_catalog_contracts
+      - name: Restore artifact paths from validate:identity-catalog-contracts
+        run: tar -xzf "$RUNNER_TEMP/validate_identity_catalog_contracts/artifacts.tgz"
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema identity/http/shared/v1/identity-catalog-history-permissions-v1.schema.json --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1
+          jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json --verbose
+          sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2'
+  validate_catalog_asyncapi:
+    name: validate:catalog-asyncapi
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: node scripts/catalog/validate-asyncapi-v1.mjs .ci-artifacts/catalog-asyncapi-v1
+      - name: Package original artifact paths
+        if: success()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/catalog-asyncapi-v1/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: success()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_catalog_asyncapi
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 1
+          if-no-files-found: error
+  validate_catalog_asyncapi_schema:
+    name: validate:catalog-asyncapi-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_catalog_asyncapi
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:catalog-asyncapi
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_catalog_asyncapi
+          path: ${{ runner.temp }}/validate_catalog_asyncapi
+      - name: Restore artifact paths from validate:catalog-asyncapi
+        run: tar -xzf "$RUNNER_TEMP/validate_catalog_asyncapi/artifacts.tgz"
+      - name: Run original validation commands
+        run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1'
+  validate_inventory_contracts:
+    name: validate:inventory-contracts
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          node --test --test-reporter=tap test/inventory/*.test.mjs
+          node scripts/inventory/run-gate-v1.mjs openapi
+          node scripts/inventory/run-gate-v1.mjs asyncapi
+          node scripts/inventory/schema-v1.mjs .ci-artifacts/inventory-v1-ci
+          node scripts/identity/run-inventory-authority-v1-1.mjs openapi
+          node scripts/identity/run-inventory-authority-v1-1.mjs prepare .ci-artifacts/inventory-v1-authority-1-1-ci
+          node scripts/inventory/run-capture-authority-v2.mjs openapi
+          node scripts/inventory/run-capture-authority-v2.mjs prepare .ci-artifacts/inventory-v1-capture-authority-v2-ci
+      - name: Package original artifact paths
+        if: always()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/inventory-v1-*/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_inventory_contracts
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 7
+          if-no-files-found: error
+  validate_inventory_schema:
+    name: validate:inventory-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_inventory_contracts
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:inventory-contracts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_inventory_contracts
+          path: ${{ runner.temp }}/validate_inventory_contracts
+      - name: Restore artifact paths from validate:inventory-contracts
+        run: tar -xzf "$RUNNER_TEMP/validate_inventory_contracts/artifacts.tgz"
+      - name: Run original validation commands
+        run: |-
+          docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-ci
+          sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-authority-1-1-ci
+          sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-capture-authority-v2-ci'
+  validate_finance_contracts:
+    name: validate:finance-contracts
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          node --test --test-reporter=tap test/finance/*.test.mjs
+          node scripts/finance/run-gate-v1.mjs openapi
+          node scripts/finance/run-gate-v1.mjs asyncapi
+          node scripts/finance/schema-v1.mjs .ci-artifacts/finance-v1-ci
+      - name: Package original artifact paths
+        if: always()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/finance-v1-*/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_finance_contracts
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 7
+          if-no-files-found: error
+  validate_finance_schema:
+    name: validate:finance-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_finance_contracts
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:finance-contracts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_finance_contracts
+          path: ${{ runner.temp }}/validate_finance_contracts
+      - name: Restore artifact paths from validate:finance-contracts
+        run: tar -xzf "$RUNNER_TEMP/validate_finance_contracts/artifacts.tgz"
+      - name: Run original validation commands
+        run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/finance/validate-v1.sh .ci-artifacts/finance-v1-ci'
+  validate_sales_contracts:
+    name: validate:sales-contracts
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          node --test --test-reporter=tap test/sales/*.test.mjs
+          node scripts/sales/run-gate-v2.mjs openapi
+          node scripts/sales/run-gate-v2.mjs asyncapi
+          node scripts/sales/schema-v2.mjs .ci-artifacts/sales-v2-ci
+      - name: Package original artifact paths
+        if: always()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/sales-v2-*/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_sales_contracts
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 7
+          if-no-files-found: error
+  validate_sales_schema:
+    name: validate:sales-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_sales_contracts
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:sales-contracts
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_sales_contracts
+          path: ${{ runner.temp }}/validate_sales_contracts
+      - name: Restore artifact paths from validate:sales-contracts
+        run: tar -xzf "$RUNNER_TEMP/validate_sales_contracts/artifacts.tgz"
+      - name: Run original validation commands
+        run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci'
+  validate_sale_flow_integration:
+    name: validate:sale-flow-integration
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      CONTRACTS_CACHE_POLICY: pull
+      NPM_CONFIG_CACHE: ${{ github.workspace }}/.npm-cache
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      GIT_DEPTH: "0"
+      REDOCLY_TELEMETRY: off
+      REDOCLY_SUPPRESS_UPDATE_NOTICE: "true"
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Restore exact Redocly cache
+        id: npm_cache
+        uses: actions/cache/restore@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: |-
+            .npm-cache/_cacache/
+            .npm-cache/_npx/
+          key: node24.21.0-redocly2.53.3-bookworm-v1
+      - name: Run original validation commands
+        run: |-
+          node scripts/sales/run-integration-v1.mjs semantics
+          node scripts/sales/integration-schema-v1.mjs .ci-artifacts/sales-integration-v1-ci
+      - name: Package original artifact paths
+        if: always()
+        shell: bash
+        run: |-
+          paths=()
+          for path in .ci-artifacts/sales-integration-v1-*/; do
+            if [ -e "$path" ]; then paths+=("$path"); fi
+          done
+          if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
+          tar -czf "$RUNNER_TEMP/artifacts.tgz" --files-from /dev/null "${paths[@]}"
+      - name: Upload validation artifacts
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9
+        with:
+          name: validate_sale_flow_integration
+          path: ${{ runner.temp }}/artifacts.tgz
+          retention-days: 7
+          if-no-files-found: error
+  validate_sale_flow_integration_schema:
+    name: validate:sale-flow-integration-schema
+    runs-on: ubuntu-24.04
+    needs:
+      - validate_sale_flow_integration
+    steps:
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Download artifacts from validate:sale-flow-integration
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333
+        with:
+          name: validate_sale_flow_integration
+          path: ${{ runner.temp }}/validate_sale_flow_integration
+      - name: Restore artifact paths from validate:sale-flow-integration
+        run: tar -xzf "$RUNNER_TEMP/validate_sale_flow_integration/artifacts.tgz"
+      - name: Run original validation commands
+        run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-v2.sh .ci-artifacts/sales-integration-v1-ci'

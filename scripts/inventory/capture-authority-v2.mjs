@@ -39,9 +39,14 @@ const optimizationHashes = Object.freeze({
   'scripts/ci/pipeline-v1.mjs': '5bd45816a1f9ff7d226e335896eb48f014d9ba9ef3f87deb9f8c919a6c25e337',
   'test/ci/pipeline-v1.test.mjs': 'f56401a2205a64355e2acdbdce57c14666332785594bdd9f6d8c8eaf854e68b2',
 });
+// Hosting-only migration: no public contract, registry, lock or admission delta.
+const githubMigrationHashes = Object.freeze({
+  '.github/workflows/ci.yml': '05ed1bf25b5ac0183b9b6d8b8af7e6329df14d529839919f57a5bce5acb314af',
+  'test/ci/github-v1.test.mjs': '0634df07de3badc146e8afb1a14af77795b1abbb68782cf626c85923e68712e1',
+});
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes)]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes)]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -162,7 +167,11 @@ export function expectedContents() {
     ['inventory/README.md', Buffer.from(text(source('inventory/README.md')) + readmeSuffix)],
     ['registry/README.md', Buffer.from(text(source('registry/README.md')) + '\n## F1-11B — Fuente de preparación física v2\n\nDos intenciones `planned` identifican el sucesor HTTP/schema Inventory con `capture_fingerprint` JCS/SHA-256 del cuerpo completo de captura. Se preservan las 200 raíces admitidas, 236 artefactos históricos, dos intenciones previas y seis consumidores/locks/pins. [Mapa, límites y gates](../inventory/README.md#f1-11b--verificación-de-captura-física-v2-candidato). La proyección histórica solo acepta el delta completo verificado; drift y omisiones siguen rechazados. Auditoría, publicación/CI exacta y admisión seleccionada preceden al consumo.\n')],
     ['.gitlab-ci.yml', Buffer.from(prepareToolingCI(ci))], [bridgePath, bridgeBytes()], [graphPath, optimizedGraphBytes()],
-    [layoutPath, Buffer.from(insertOnce(text(source(layoutPath)), '    ".pnpm-store",', '\n    ".corepack-cache",\n    ".npm-cache",'))],
+    [layoutPath, Buffer.from(insertOnce(
+      insertOnce(text(source(layoutPath)), '    ".pnpm-store",', '\n    ".corepack-cache",\n    ".npm-cache",'),
+      '  for (const entry of readdirSync(root, { withFileTypes: true })) {',
+      '\n    if (entry.name === ".github") {\n      assert(entry.isDirectory() && !entry.isSymbolicLink(), "LAYOUT_LINK_FORBIDDEN");\n      const start = files.length;\n      visit(path.join(root, entry.name), entry.name);\n      const infrastructureFiles = files.splice(start);\n      assert(\n        infrastructureFiles.every((file) => file === ".github/workflows/ci.yml"),\n        "LAYOUT_UNKNOWN_GITHUB_INFRASTRUCTURE",\n      );\n      continue;\n    }',
+    ))],
     ['.gitignore', Buffer.from(text(source('.gitignore')) + '.corepack-cache/\n.npm-cache/\n')],
   ]);
 }
@@ -175,6 +184,8 @@ export function validateCaptureSource(read = actual) {
     assert.equal(text(read(file)), text(bytes), 'IC2_EXACT_SOURCE:' + file);
   for (const [file, expected] of Object.entries(optimizationHashes))
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'CI1_OPTIMIZATION_BYTES:' + file);
+  for (const [file, expected] of Object.entries(githubMigrationHashes))
+    assert.equal(hash(Buffer.from(text(read(file)))), expected, 'GITHUB_MIGRATION_BYTES:' + file);
   const before = previous('registry/contracts.json');
   for (const entry of [...before.contracts, ...before.preservedFiles]) {
     const bytes = read(entry.path);
