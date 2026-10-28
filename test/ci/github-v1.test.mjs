@@ -70,7 +70,7 @@ for (const file of ["test/sales/release-v1.test.mjs","test/sales/package-v2.test
   'scripts/sales/reviewed-package-v2.mjs', 'scripts/sales/release-v1.mjs', 'scripts/inventory/candidate-v1.mjs',
   'scripts/identity/inventory-authority-consumer-v1.mjs', 'scripts/sales/inventory-step-consumer-v1.mjs',
   'scripts/validate-gateway-identity-policy.mjs', 'scripts/validate-gateway-identity-policy-v2.mjs',
-  'README.md', 'catalog/README.md'])
+  'README.md', 'catalog/README.md', 'test/sales/inventory-step-consumer-v1.test.mjs'])
   for (const mutation of ['changed', 'missing'])
     test('warmed historical projections reject retired tooling drift: ' + file + '/' + mutation, t => {
       const registry = actual('registry/contracts.json');

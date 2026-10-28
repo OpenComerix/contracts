@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { candidate,source,root,encode,expectedRegistry,expectedIndex,validateSalesAdmission,salesHistoricalFile,salesHistoricalRegistry,historicalTest,historicalTestBytes,guardTransitionFiles,transitionBytes,salesHistoricalIndex,withSalesAdmissionScope,admissionScope } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
 import { publishedCandidate,publishedOwnerCommits,validateSalesSnapshot,verifyPublishedSalesSnapshot } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
+import { captureHistoricalFile } from '../../scripts/inventory/capture-authority-v2.mjs';
 const read = file => fs.readFileSync(path.join(root,file));
 for (const service of ['sales-pos','identity-tenancy']) test('published '+service+' admits only the reviewed immutable owner commit and unchanged export',()=>{
   const expected=publishedCandidate(service);
@@ -49,7 +50,7 @@ test('historical projection preserves original assertions and never sanitizes ca
   const wrong=expectedRegistry();wrong.requiredConsumers.push('unapproved');assert.equal(salesHistoricalRegistry(wrong),wrong);
   assert.deepEqual(read(historicalTest),historicalTestBytes());
   for(const file of guardTransitionFiles){
-    assert.deepEqual(read(file),transitionBytes(file));
+    assert.deepEqual(captureHistoricalFile(file,read(file)),transitionBytes(file));
     assert.deepEqual(salesHistoricalFile(file,read(file)),source(file));
   }
   assert.deepEqual(salesHistoricalIndex(expectedIndex()),JSON.parse(source('registry/consumers/index.json')));

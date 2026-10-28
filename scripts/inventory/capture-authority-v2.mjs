@@ -43,9 +43,10 @@ const optimizationHashes = Object.freeze({
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
   ".github/workflows/ci.yml": "dd32c8862e03355219754f8b685a97f004815657ed01c47d9f70c304d162b399",
-  "test/ci/github-v1.test.mjs": "1bf38261b876d34dfebc157fcca8bf3b56e2bb99cdcf9dedb5766ef3264ab4e7",
+  "test/ci/github-v1.test.mjs": "22e905dc16adc4173831ff554613e6ae76df2ff6af2ffb7b42091a60ab15359a",
 });
 const retirementHashes = Object.freeze({
+  "test/sales/inventory-step-consumer-v1.test.mjs": "22b184e7b12eb01265a495e6a91d92d0590001177b4cac36aafe57c620566db4",
   "test/sales/release-v1.test.mjs": "52894d7a1c5b72f7cdc54e7f4e3f0ae5b812c13d0a066348c5edcc7deb3b894b",
   "test/sales/package-v2.test.mjs": "e94b7cfdc7fbe36e519abd2d73dfd28e9677afd2d0873df76e31fd031532b4d3",
   "test/finance/package-v1.test.mjs": "03ce7e547457d94f6d72473ebcd4c2f5b64287d04f75d205aa4bfc63e975428b",
@@ -201,7 +202,7 @@ export function expectedContents() {
 }
 let expectedCache;
 const expectedSnapshot = () => expectedCache ??= expectedContents();
-const retiredToolPaths = new Set(["test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
+const retiredToolPaths = new Set(["test/sales/inventory-step-consumer-v1.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
   'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
 export function validateCaptureSource(read = actual) {
