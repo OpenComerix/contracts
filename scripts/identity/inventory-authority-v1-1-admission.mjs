@@ -1,10 +1,10 @@
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { consumerFiles, inventoryConsumerReadView, inventoryConsumerHistoricalFile } from './inventory-authority-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const admissionBase = '0bff3a242784599c400875f37e1c2d3ef64f4538';
@@ -19,8 +19,9 @@ export const admissionFiles = Object.freeze([
   'scripts/identity/inventory-authority-v1-1.mjs', testPath,
   'scripts/identity/inventory-authority-v1-1-admission.mjs',
   'test/identity/inventory-authority-v1-1-admission.test.mjs',
+  ...consumerFiles,
 ]);
-export const admissionRead = file => fs.readFileSync(path.join(root, file));
+export const admissionRead = inventoryConsumerReadView();
 const normalize = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n');
 const digest = bytes => createHash('sha256').update(normalize(bytes)).digest('hex');
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -95,6 +96,7 @@ export function admissionReadView(read = admissionRead) {
 const currentView = admissionReadView();
 const historicalMetadata = admissionMetadata();
 export function admissionHistoricalFile(file, bytes) {
+  bytes = inventoryConsumerHistoricalFile(file, bytes);
   const reviewed = currentView(file);
   const expected = historicalMetadata.get(file);
   return expected && normalize(bytes) === normalize(expected) ? reviewed : bytes;

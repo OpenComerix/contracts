@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "dac3474f062a4262e89ead57f59f777ebe646b61",
-  "manifestSha256": "de2befa140a524c83c28c184c4dfed44a700652015e157800207531ec466b911",
-  "lockSha256": "f3e629acaabcd9e4ea639c55ca5b929871899aa25feee4549e0d8f5c9be0bac0",
+  "sourceCommit": "ba13dcda413d6ee7fd04d30b6365d2a7e4e95f06",
+  "manifestSha256": "72b1b080668a327a55b0d3167307f3df1d9c42c42f9820209e814e5ca9629f7a",
+  "lockSha256": "6266c4b66991e3ed6160af35b927faabf0447fe803fe0d8a0c89bd064159505e",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -529,6 +529,73 @@
           "pnpm contracts:metadata",
           "pnpm test:cov"
         ]
+      },
+      {
+        "id": "identity.inventory-authority.http.v1-1",
+        "role": "producer",
+        "version": "1.1.0",
+        "operations": [
+          "createInventoryDelegation",
+          "checkInventoryAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:inventory-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.inventory-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:inventory-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.inventory-authority.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/policy_version",
+          "/owner",
+          "/extends_without_changing",
+          "/profiles/0",
+          "/permissions",
+          "/issuance",
+          "/template"
+        ],
+        "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:inventory-authority-runtime"
+        ]
+      },
+      {
+        "id": "common.error-catalog.v9",
+        "role": "validation",
+        "version": "9",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:inventory-authority-runtime"
+        ]
       }
     ],
     "assets": [],
@@ -537,7 +604,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "de2befa140a524c83c28c184c4dfed44a700652015e157800207531ec466b911",
+    "manifestSha256": "72b1b080668a327a55b0d3167307f3df1d9c42c42f9820209e814e5ca9629f7a",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -4350,6 +4417,363 @@
         ],
         "selectionSha256": "b2d1cd363e71040de6fa2379fa40ee1fce08b016e74fdc2293fb2b757b51a5db",
         "runtimeSha256": "b2d1cd363e71040de6fa2379fa40ee1fce08b016e74fdc2293fb2b757b51a5db"
+      },
+      {
+        "id": "identity.inventory-authority.http.v1-1",
+        "role": "producer",
+        "version": "1.1.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "0bff3a242784599c400875f37e1c2d3ef64f4538",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+        "operations": [
+          "createInventoryDelegation",
+          "checkInventoryAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "sha256": "3044f3772481bd5fcb8d1b46dd5a0c7db491caa31c48a0174c78001074e10d21"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "sha256": "8c672108a7bec6452b0bb349aeb18ba85267bb38021df9753fc6e87e1d7fe4b0"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "156fbbd2e66a39da6a9844b6fe2ee5dc6f211c73e5420b427153f25aacb72cce"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "f4206f437220846e4d7be6513a884c15749196e1ff207ff9449884da65020006"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/paths/~1internal~1identity~1inventory-authorizations/post",
+            "sha256": "6723fe3199ea5407a96c5826c98a7f9e19bad6fd61d38ad760173e76e4411900"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/paths/~1internal~1identity~1inventory-delegations/post",
+            "sha256": "18637f17d5a0ac607557556dc34cb752fb25f21a87966058715c84a89dffc472"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "identity/http/private/v1/identity-inventory-authority-v1-1.yaml",
+            "pointer": "/servers",
+            "sha256": "8f3dad25bb50c0071d92a96bf9763f18886df2abba1562eef27c38ca4f549057"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "2af1cbabd5c42db7d26dde6b37790e9824eda9281d4712c928a18b3b8b7727b5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "52c40fc036dc78ec0118df63477cccc25fa6a518729a5953744b18628c1aa20e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "96684b2802bb08b1a088eabb89e773edf2e682d5bd977f0ed89efc87dff3b0aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/Delegation",
+            "sha256": "edb4835ca64000d642ac84370e77ab5d6189c789ae6c59ab7287ff2af7c7ad40"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationRequest",
+            "sha256": "557d6d26820d10fd8037c89a176f834fc1a1927d6820c8a5b98cc5046f9ab462"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e58b0131d510dfba9f4bc18a03eb284369ec8c0ce80549c3da9d7568596561e7"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/AdjustmentRequest",
+            "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "d7955b6b0098c1e7123d7418033d2443f6927f1cc55a0e1e918648c506f3b345"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ebc4acbda2ef901f549794605ace6b55318b80ea2ca52db6033dab3b3203953e",
+        "runtimeSha256": "4334656ccda0fcc8e857118bf26c502bb16d9b41dacb5418ecd5e087fb956655"
+      },
+      {
+        "id": "identity.inventory-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "sha256": "8c672108a7bec6452b0bb349aeb18ba85267bb38021df9753fc6e87e1d7fe4b0"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "b27b8e29a1596bb044e91094ac16346678a2c0da4f8112abacf2d4852959297b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "96684b2802bb08b1a088eabb89e773edf2e682d5bd977f0ed89efc87dff3b0aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e58b0131d510dfba9f4bc18a03eb284369ec8c0ce80549c3da9d7568596561e7"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/AdjustmentRequest",
+            "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "d7955b6b0098c1e7123d7418033d2443f6927f1cc55a0e1e918648c506f3b345"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "b650cf1623a3c7200d5aead8080c0485b1beadb66990dcf849f071e8df82624f",
+        "runtimeSha256": "b650cf1623a3c7200d5aead8080c0485b1beadb66990dcf849f071e8df82624f"
+      },
+      {
+        "id": "identity.inventory-authority.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          "/policy_version",
+          "/owner",
+          "/extends_without_changing",
+          "/profiles/0",
+          "/permissions",
+          "/issuance",
+          "/template"
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "sha256": "18b3785d36ee488a6328497bc9238eb83d3d26242ee9e64c28f4a97a76514a7d"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/extends_without_changing",
+            "sha256": "bb53db6d69ceaaab2092e6e65abc80a35d84d5a530229590fe93deacc0774294"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/issuance",
+            "sha256": "45857f291c963f6b73091db4abf93b90c2944900b3f245c22e388634472387aa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/owner",
+            "sha256": "f31a6017d51ab84c9b0e998ab0cce10968f9d7e2c1af48e2cd2eed9bc75e01ec"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions",
+            "sha256": "b178bf6d212f13f14a1cefd32979a9636b25dbf93b6c93229b67bf20ed32abdf"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/policy_version",
+            "sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/0",
+            "sha256": "7b3cbfb29ead59e8c003de259ec1621e22388f1bb1cc094745d786954870f04e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/template",
+            "sha256": "ff130b2fb6e9a8facf33ae137ad2e93102140b4bd74d8c78ba56e7710007bfaa"
+          }
+        ],
+        "selectionSha256": "cf4bb8663d3113db37da788b26813ad98d8736f6b449938e3f3d66404efd2141",
+        "runtimeSha256": "cf4bb8663d3113db37da788b26813ad98d8736f6b449938e3f3d66404efd2141"
+      },
+      {
+        "id": "common.error-catalog.v9",
+        "role": "validation",
+        "version": "9",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "common/errors/v9/error-catalog-v9.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "common/errors/v9/error-catalog-v9.json",
+            "sha256": "a98db28dc2f1206b72015907dcc6eb9ed6610c087480b2dcdfd93d23aa825cf7"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/errors/v9/error-catalog-v9.json",
+            "pointer": "",
+            "sha256": "b8025d531de81bd327c319f38eb1f0b7184fa276ad330807bdcbee431a33b75f"
+          }
+        ],
+        "selectionSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b",
+        "runtimeSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b"
       }
     ],
     "assets": []

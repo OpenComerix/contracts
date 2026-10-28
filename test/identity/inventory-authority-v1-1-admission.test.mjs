@@ -120,6 +120,8 @@ test('historical projection validates first and never repairs mutated caller byt
   assert.deepEqual(admissionHistoricalRegistry(registry), JSON.parse(admissionSource(registryPath)));
   registry.contracts[0].status = 'draft';
   assert.equal(admissionHistoricalRegistry(registry), registry);
-  assert.equal(admissionFiles.length, 8);
-  assert(!admissionFiles.includes('registry/consumers/identity-tenancy.json'));
+  assert.equal(admissionFiles.length, 12);
+  assert(admissionFiles.includes('test/architecture/identity-producer-admission.test.mjs'));
+  assert(admissionFiles.includes('registry/consumers/identity-tenancy.json'));
+  assert(!admissionFiles.includes('registry/consumers/catalog-pricing.json'));
 });
