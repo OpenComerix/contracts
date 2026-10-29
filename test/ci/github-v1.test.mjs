@@ -5,6 +5,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { tmpdir } from 'node:os';
 import { parse } from 'yaml';
+import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { checkContractLayout } from '../../tools/architecture/layout.mjs';
 import { root, actual, validateCaptureSource, captureHistoricalFile } from '../../scripts/inventory/capture-authority-v2.mjs';
 
@@ -22,7 +23,7 @@ const parallelCommands = new Map([
 ]);
 test('GitHub preserves all 22 contract jobs, exact validation commands and artifact edges', () => {
   const names = Object.keys(legacy).filter(name => name.startsWith('validate:'));
-  assert.deepEqual(Object.values(workflow.jobs).map(job => job.name), names);
+  assert.deepEqual(Object.values(workflow.jobs).map(job => job.name), ['validate:scope', ...names]);
   assert.equal(names.length, 22);
   assert.deepEqual(workflow.permissions, { contents: 'read' });
   for (const name of names) {
@@ -35,7 +36,8 @@ test('GitHub preserves all 22 contract jobs, exact validation commands and artif
       assert(position > previous, name + '/' + command);
       previous = position;
     }
-    assert.deepEqual(job.needs ?? [], (legacy[name].needs ?? []).map(need => id(need.job)));
+    assert.deepEqual(job.needs, ['validation_scope', ...(legacy[name].needs ?? []).map(need => id(need.job))]);
+    assert.equal(job.if, "needs.validation_scope.outputs.mode == 'full'");
     assert(!JSON.stringify(job).includes('continue-on-error'));
     assert(job.steps.filter(step => step.uses).every(step => /@[a-f0-9]{40}$/.test(step.uses)));
     if (legacy[name].artifacts) {
@@ -46,6 +48,32 @@ test('GitHub preserves all 22 contract jobs, exact validation commands and artif
     }
   }
 });
+test('scope selection preserves the entire reviewed full jobs and avoids duplicate PR runs', () => {
+  const prior = parse(createGitReader()(root, '7015bada29c4e291f465d98af7a13ce95f5ce5ab')(workflowPath).toString('utf8'));
+  for (const [key, previous] of Object.entries(prior.jobs)) {
+    const { needs, if: condition, ...current } = workflow.jobs[key];
+    const { needs: originalNeeds, ...original } = previous;
+    assert.deepEqual(current, original, key);
+    assert.deepEqual(needs, ['validation_scope', ...(originalNeeds ?? [])]);
+    assert.equal(condition, "needs.validation_scope.outputs.mode == 'full'");
+  }
+  assert.deepEqual(workflow.on, { push: null, workflow_dispatch: null });
+  const scope = workflow.jobs.validation_scope;
+  assert.equal(scope.name, 'validate:scope');
+  assert.equal(scope.outputs.mode, '${{ steps.scope.outputs.mode }}');
+  assert.equal(scope.steps.find(step => step.id === 'scope').run, 'node scripts/ci/validation-scope-v1.mjs');
+  assert.equal(scope.steps.find(step => step.id === 'dependencies').with['install-mode'], 'ignore-scripts');
+  assert(scope.steps.filter(step => step.uses).every(step => /@[a-f0-9]{40}$/.test(step.uses)));
+  assert.equal(scope.steps.find(step => step.uses?.startsWith('actions/checkout@')).with['fetch-depth'], 0);
+  assert(!JSON.stringify(scope).includes('continue-on-error'));
+});
+
+for (const file of ['scripts/ci/validation-scope-v1.mjs', 'test/ci/validation-scope-v1.test.mjs'])
+  test('warm source guard rejects changed or missing scope infrastructure: ' + file, () => {
+    validateCaptureSource();
+    assert.throws(() => validateCaptureSource(name => name === file ? Buffer.from('changed') : actual(name)), /CI_SCOPE_BYTES/);
+    assert.throws(() => validateCaptureSource(name => { if (name === file) throw Error('Synthetic scope missing'); return actual(name); }), /Synthetic scope missing/);
+  });
 test('warm source validation does not project away changed or missing GitHub workflow bytes', () => {
   validateCaptureSource();
   assert.throws(() => validateCaptureSource(file => file === workflowPath ? Buffer.from('unapproved') : actual(file)), /GITHUB_MIGRATION_BYTES/);

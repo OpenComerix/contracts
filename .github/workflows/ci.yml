@@ -2,7 +2,6 @@
 name: OpenComerix CI
 on:
   push: null
-  pull_request: null
   workflow_dispatch: null
 permissions:
   contents: read
@@ -13,8 +12,42 @@ defaults:
   run:
     shell: bash
 jobs:
+  validation_scope:
+    name: validate:scope
+    runs-on: ubuntu-24.04
+    container:
+      image: node:24.21.0-bookworm-slim
+    env:
+      COREPACK_HOME: ${{ github.workspace }}/.corepack-cache
+      PNPM_VERSION: 12.4.2
+      PNPM_STORE_DIR: .pnpm-store
+    outputs:
+      mode: ${{ steps.scope.outputs.mode }}
+    steps:
+      - name: Install checkout and test tools
+        run: apt-get update && apt-get install -y --no-install-recommends git ca-certificates openssl
+      - name: Checkout exact source
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          submodules: false
+      - name: Prepare frozen dependencies
+        id: dependencies
+        uses: opencomerix/ci-templates/.github/actions/node-pnpm@50993e3a20827ca71db4383e19ac8159aed26404
+        with:
+          install-mode: ignore-scripts
+      - name: Select validation and run partial checks for advances
+        id: scope
+        run: node scripts/ci/validation-scope-v1.mjs
+        env:
+          GIT_CONFIG_COUNT: "1"
+          GIT_CONFIG_KEY_0: safe.directory
+          GIT_CONFIG_VALUE_0: ${{ github.workspace }}
   validate_contract_references:
     name: validate:contract-references
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -39,6 +72,8 @@ jobs:
           GIT_CONFIG_VALUE_0: ${{ github.workspace }}
   validate_openapi:
     name: validate:openapi
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -121,8 +156,10 @@ jobs:
           if-no-files-found: error
   validate_json_schema:
     name: validate:json-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_openapi
     steps:
       - name: Checkout exact source
@@ -163,8 +200,10 @@ jobs:
           sh scripts/validate-owner-session-flow-v1.sh .ci-artifacts/owner-session-flow-v1'
   validate_internal_auth_schema:
     name: validate:internal-auth-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_openapi
     steps:
       - name: Checkout exact source
@@ -186,6 +225,8 @@ jobs:
           sh scripts/validate-identity-internal-auth-fixtures.sh .ci-artifacts/identity-internal-auth-fixtures'
   validate_identity_checklist:
     name: validate:identity-checklist
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -221,6 +262,8 @@ jobs:
           GIT_CONFIG_VALUE_0: ${{ github.workspace }}
   validate_gateway_delegation_schema:
     name: validate:gateway-delegation-schema
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout exact source
@@ -237,6 +280,8 @@ jobs:
           sh scripts/validate-gateway-delegation-v2-schemas.sh'
   validate_contract_architecture:
     name: validate:contract-architecture
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -300,6 +345,8 @@ jobs:
           if-no-files-found: error
   validate_contract_metadata_schema:
     name: validate:contract-metadata-schema
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout exact source
@@ -312,6 +359,8 @@ jobs:
         run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'jsonschema metaschema registry/manifest-v1.schema.json registry/lock-v1.schema.json --verbose'
   validate_catalog_contracts:
     name: validate:catalog-contracts
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -415,8 +464,10 @@ jobs:
           key: node24.21.0-redocly2.53.3-bookworm-v1
   validate_catalog_schema:
     name: validate:catalog-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_catalog_contracts
     steps:
       - name: Checkout exact source
@@ -458,6 +509,8 @@ jobs:
           sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-policy-v2'
   validate_identity_catalog_contracts:
     name: validate:identity-catalog-contracts
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -527,8 +580,10 @@ jobs:
           if-no-files-found: error
   validate_identity_catalog_schema:
     name: validate:identity-catalog-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_identity_catalog_contracts
     steps:
       - name: Checkout exact source
@@ -552,6 +607,8 @@ jobs:
           sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2'
   validate_catalog_asyncapi:
     name: validate:catalog-asyncapi
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -609,8 +666,10 @@ jobs:
           if-no-files-found: error
   validate_catalog_asyncapi_schema:
     name: validate:catalog-asyncapi-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_catalog_asyncapi
     steps:
       - name: Checkout exact source
@@ -630,6 +689,8 @@ jobs:
         run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/catalog/validate-asyncapi-v1.sh .ci-artifacts/catalog-asyncapi-v1'
   validate_inventory_contracts:
     name: validate:inventory-contracts
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -698,8 +759,10 @@ jobs:
           if-no-files-found: error
   validate_inventory_schema:
     name: validate:inventory-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_inventory_contracts
     steps:
       - name: Checkout exact source
@@ -722,6 +785,8 @@ jobs:
           sh scripts/inventory/validate-v1.sh .ci-artifacts/inventory-v1-capture-authority-v2-ci'
   validate_finance_contracts:
     name: validate:finance-contracts
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -786,8 +851,10 @@ jobs:
           if-no-files-found: error
   validate_finance_schema:
     name: validate:finance-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_finance_contracts
     steps:
       - name: Checkout exact source
@@ -807,6 +874,8 @@ jobs:
         run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/finance/validate-v1.sh .ci-artifacts/finance-v1-ci'
   validate_sales_contracts:
     name: validate:sales-contracts
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -871,8 +940,10 @@ jobs:
           if-no-files-found: error
   validate_sales_schema:
     name: validate:sales-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_sales_contracts
     steps:
       - name: Checkout exact source
@@ -892,6 +963,8 @@ jobs:
         run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci'
   validate_sale_flow_integration:
     name: validate:sale-flow-integration
+    needs: [validation_scope]
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim
@@ -954,8 +1027,10 @@ jobs:
           if-no-files-found: error
   validate_sale_flow_integration_schema:
     name: validate:sale-flow-integration-schema
+    if: needs.validation_scope.outputs.mode == 'full'
     runs-on: ubuntu-24.04
     needs:
+      - validation_scope
       - validate_sale_flow_integration
     steps:
       - name: Checkout exact source

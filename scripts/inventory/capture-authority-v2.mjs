@@ -42,8 +42,13 @@ const optimizationHashes = Object.freeze({
 });
 // Hosting-only migration: no public contract, registry, lock or admission delta.
 const githubMigrationHashes = Object.freeze({
-  ".github/workflows/ci.yml": "3d896a9c43edcc400c19e3b3734b30fa041c17deb262d45669bb95b5de5f211c",
-  "test/ci/github-v1.test.mjs": "d6290c2fdda76e4f80429024d02f1bf3cd333bafaa9422fb14a2338e51f62e65",
+  ".github/workflows/ci.yml": "9edb6a95d10dd2cbe0b20f845b596e4f281689916d453a534f1c2338c90dc95d",
+  "test/ci/github-v1.test.mjs": "0167a9386bc00adccea86cc2f88b6a385e09dfe774e5bc377c17a9e6a2b3dffc",
+});
+// Reviewed CI selection infrastructure; no public contract or admission delta.
+const ciScopeHashes = Object.freeze({
+  "scripts/ci/validation-scope-v1.mjs": "1e1cd131af68a7e5e5467b09106c421ae4dcbb513feb4a5aa37bd6839be1a0e1",
+  "test/ci/validation-scope-v1.test.mjs": "24cd494e0b82ca57a9f81196dbf5bfdb28ebf6dae1da2609a0d54b30cf2b4a10"
 });
 const retirementHashes = Object.freeze({
   "test/architecture/asyncapi-admission-v1.test.mjs": "cadabab066fdfaf2f457ef821826388915b5c0899c14dc9beee70ae16f88efe5",
@@ -74,7 +79,7 @@ const retirementHashes = Object.freeze({
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(retirementHashes)]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(ciScopeHashes), ...Object.keys(retirementHashes)]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -219,6 +224,8 @@ export function validateCaptureSource(read = actual) {
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'CI1_OPTIMIZATION_BYTES:' + file);
   for (const [file, expected] of Object.entries(githubMigrationHashes))
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'GITHUB_MIGRATION_BYTES:' + file);
+  for (const [file, expected] of Object.entries(ciScopeHashes))
+    assert.equal(hash(Buffer.from(text(read(file)))), expected, 'CI_SCOPE_BYTES:' + file);
   for (const [file, expected] of Object.entries(retirementHashes))
     assert.equal(hash(Buffer.from(text(read(file)))), expected, 'RETIRED_CI_TOOL_BYTES:' + file);
   const before = previous('registry/contracts.json');
