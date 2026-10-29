@@ -17943,6 +17943,60 @@
           "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json"
         }
       ]
+    },
+    {
+      "id": "inventory.catalog-capture-authority.http.v2",
+      "domain": "inventory",
+      "surface": "http-private",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.catalog-capture-authority",
+      "purpose": "F1-11B selected admission of exact physical capture authority v2; no consumer migration or runtime activation.",
+      "reasonForChange": "Admit reviewed published full-body capture_fingerprint binding; source bytes preserved through GitHub migration and full CI verified.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "inventory/http/private/v2/inventory-catalog-capture-authority-v2.yaml",
+      "commit": "f08aae6f1fdd062c36e09853d24e0eb8395f9e88",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "20926a2fdff2a1143df8c80674bfc267db4d27a3df74ebc4372c7f91e771841a",
+      "operations": [
+        "authorizeInventoryCatalogCapture"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v2/inventory-capture-authority-v2.schema.json",
+          "path": "inventory/http/shared/v2/inventory-capture-authority-v2.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.catalog-capture-authority.schema.v2",
+      "domain": "inventory",
+      "surface": "schema",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.catalog-capture-authority",
+      "purpose": "F1-11B selected admission of exact physical capture authority v2; no consumer migration or runtime activation.",
+      "reasonForChange": "Admit reviewed published full-body capture_fingerprint binding; source bytes preserved through GitHub migration and full CI verified.",
+      "retirement": "Preserve this source and closure; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "inventory/http/shared/v2/inventory-capture-authority-v2.schema.json",
+      "commit": "f08aae6f1fdd062c36e09853d24e0eb8395f9e88",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "2f81e80b6a3e84cb5aa69a73cf3ed84b55b98ce864927fb944522d6cd61598e6",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v2/inventory-capture-authority-v2.schema.json",
+          "path": "inventory/http/shared/v2/inventory-capture-authority-v2.schema.json"
+        }
+      ]
     }
   ],
   "preservedFiles": [
@@ -18907,22 +18961,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "inventory.catalog-capture-authority.http.v2",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-11B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/private/v2/inventory-catalog-capture-authority-v2.yaml only; exact capture body binding using capture_fingerprint (JCS/SHA-256). No functional admission, consumer migration or runtime; preserve published v1 and its closure."
-    },
-    {
-      "id": "inventory.catalog-capture-authority.schema.v2",
-      "domain": "inventory",
-      "owner": "inventory",
-      "materializeIn": "F1-11B",
-      "status": "planned",
-      "constraint": "Candidate source inventory/http/shared/v2/inventory-capture-authority-v2.schema.json only; exact capture body binding using capture_fingerprint (JCS/SHA-256). No functional admission, consumer migration or runtime; preserve published v1 and its closure."
     }
   ],
   "requiredConsumers": [

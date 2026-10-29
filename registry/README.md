@@ -89,3 +89,9 @@ Selección Identity: HTTP 1.1.0 productor, schema/v9 de validación y política 
 ## F1-11B — Fuente de preparación física v2
 
 Dos intenciones `planned` identifican el sucesor HTTP/schema Inventory con `capture_fingerprint` JCS/SHA-256 del cuerpo completo de captura. Se preservan las 200 raíces admitidas, 236 artefactos históricos, dos intenciones previas y seis consumidores/locks/pins. [Mapa, límites y gates](../inventory/README.md#f1-11b--verificación-de-captura-física-v2-candidato). La proyección histórica solo acepta el delta completo verificado; drift y omisiones siguen rechazados. Auditoría, publicación/CI exacta y admisión seleccionada preceden al consumo.
+
+## F1-11B — Admisión seleccionada de preparación física v2
+
+Se admiten únicamente `inventory.catalog-capture-authority.http.v2` (2.0.0, operación `authorizeInventoryCatalogCapture`) y `inventory.catalog-capture-authority.schema.v2` (v2), desde la fuente publicada `f08aae6f1fdd062c36e09853d24e0eb8395f9e88`. Sus bytes Git y cierre se conservan en `49b32eb7a7e8694a68a0bc9d58252c5d68dfab13`, con [CI completa Passed](https://github.com/opencomerix/contracts/actions/runs/40792015065) por SHA/ref exactos. Se fijan hashes y mappings mínimos; 202 raíces, 236 artefactos preservados, dos intenciones previas y seis consumidores/pins intactos. Las secciones fuente anteriores describen su snapshot histórico.
+
+Solo se deriva el índice Inventory y se retiran las dos intenciones seleccionadas. El [gate de admisión](../scripts/inventory/capture-authority-v2-admission.mjs) preserva las admisiones anteriores, CI y dependencias; rechaza admisiones parciales, cierre/procedencia alterados y consumidores agregados. [Mapa Inventory](../inventory/README.md#f1-11b--admisión-seleccionada-de-preparación-física-v2). Candidato pendiente de auditoría/publicación; consumo y runtime requieren sus cortes propios.

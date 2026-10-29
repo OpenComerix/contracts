@@ -29,7 +29,9 @@
     "inventory.sale-stock.posted.v2.consumer",
     "inventory.sale-stock.compensated.v1.consumer",
     "inventory.reconciliation-required.v2.consumer",
-    "inventory.lifecycle-policy.schema.v1"
+    "inventory.lifecycle-policy.schema.v1",
+    "inventory.catalog-capture-authority.http.v2",
+    "inventory.catalog-capture-authority.schema.v2"
   ],
   "surfaces": [
     {
@@ -145,6 +147,12 @@
           "version": "1.0.0",
           "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
           "status": "active"
+        },
+        {
+          "id": "inventory.catalog-capture-authority.http.v2",
+          "version": "2.0.0",
+          "path": "inventory/http/private/v2/inventory-catalog-capture-authority-v2.yaml",
+          "status": "active"
         }
       ]
     },
@@ -226,12 +234,15 @@
           "version": "v1",
           "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.schema.json",
           "status": "active"
+        },
+        {
+          "id": "inventory.catalog-capture-authority.schema.v2",
+          "version": "v2",
+          "path": "inventory/http/shared/v2/inventory-capture-authority-v2.schema.json",
+          "status": "active"
         }
       ]
     }
   ],
-  "planned": [
-    "inventory.catalog-capture-authority.http.v2",
-    "inventory.catalog-capture-authority.schema.v2"
-  ]
+  "planned": []
 }

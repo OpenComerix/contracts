@@ -9,6 +9,7 @@ import { gitReader } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { fingerprint } from './authority-v1.mjs';
 import { prepareToolingCI } from '../ci/pipeline-v1.mjs';
+import { admissionFiles, withAdmissionDelta, admissionHistoricalFile, admissionHistoricalRegistry } from './capture-authority-v2-admission.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const base = 'e9ab2798c9f0b581ff44c64137acfc8ff1e5e5a0';
@@ -79,7 +80,7 @@ const retirementHashes = Object.freeze({
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(ciScopeHashes), ...Object.keys(retirementHashes)]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(ciScopeHashes), ...Object.keys(retirementHashes), ...admissionFiles]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -217,7 +218,8 @@ const expectedSnapshot = () => expectedCache ??= expectedContents();
 const retiredToolPaths = new Set(["test/architecture/asyncapi-admission-v1.test.mjs","scripts/catalog/catalog-delivery-v1-registry.mjs","scripts/catalog/catalog-operational-recovery-v1-registry.mjs","scripts/catalog/catalog-consumption-v1-registry.mjs","test/architecture/catalog-delivery.test.mjs","test/architecture/catalog-operational-recovery.test.mjs","test/architecture/catalog-consumption.test.mjs","test/sales/inventory-step-consumer-v1.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
   'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
-export function validateCaptureSource(read = actual) {
+export function validateCaptureSource(rawRead = actual) {
+  return withAdmissionDelta(rawRead, read => {
   for (const [file, bytes] of expectedSnapshot())
     assert.equal(text(read(file)), text(bytes), 'IC2_EXACT_SOURCE:' + file);
   for (const [file, expected] of Object.entries(optimizationHashes))
@@ -240,6 +242,7 @@ export function validateCaptureSource(read = actual) {
   const result = { admitted: 0, addedPlanned: 2, roots: before.contracts.length, preserved: before.preservedFiles.length,
     consumers: before.requiredConsumers.length, runtime_demonstrated: false };
   return result;
+  });
 }
 export function validateSourceScope() {
   validateCaptureSource();
@@ -251,6 +254,7 @@ export function validateSourceScope() {
 }
 // Exact delta projection for prior gates, never a repair of mutated caller bytes.
 export function captureHistoricalFile(file, bytes) {
+  bytes = admissionHistoricalFile(file, bytes);
   if (retiredToolPaths.has(file)) {
     if (hash(Buffer.from(text(bytes))) !== retirementHashes[file]) return bytes;
     validateCaptureSource();
@@ -263,6 +267,7 @@ export function captureHistoricalFile(file, bytes) {
   return source(file);
 }
 export function captureHistoricalRegistry(value) {
+  value = admissionHistoricalRegistry(value);
   const expected = JSON.parse(expectedSnapshot().get('registry/contracts.json'));
   if (!isDeepStrictEqual(value, expected)) return value;
   validateCaptureSource();
