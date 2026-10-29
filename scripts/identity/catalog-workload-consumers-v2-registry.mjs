@@ -1,3 +1,4 @@
+import { captureConsumerHistoricalSnapshot } from '../inventory/capture-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import { candidateReadView } from '../inventory/candidate-v1.mjs';
 import { consumptionReadView, consumptionChangedFiles } from '../catalog/catalog-consumption-v1-registry.mjs';
@@ -65,6 +66,7 @@ export function verifyPublishedConsumer(snapshot, readPublished) {
   verifyLocalSnapshot(workloadConsumerSnapshot(snapshot.manifest.service), snapshot, readPublished);
 }
 export function consumerSnapshotView(snapshot) {
+  snapshot = captureConsumerHistoricalSnapshot(snapshot);
   if (![snapshot?.manifest?.contracts, snapshot?.lock?.entries].some(rows => Array.isArray(rows) && rows.some(row => row?.id === policy || row?.id === fixtures))) return snapshot;
   validateWorkloadConsumer(snapshot);
   return baseline(snapshotPath(snapshot.manifest.service));

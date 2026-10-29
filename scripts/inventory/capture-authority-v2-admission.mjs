@@ -5,6 +5,7 @@ import path from 'node:path';
 import { gitReader, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
+import { captureConsumerFiles, withCaptureConsumers, captureConsumerReadView, captureConsumerHistoricalFile, captureConsumerHistoricalRegistry } from './capture-consumers-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const admissionBase = '49b32eb7a7e8694a68a0bc9d58252c5d68dfab13';
@@ -23,7 +24,7 @@ export const admissionIds = Object.freeze([
 ]);
 export const admissionFiles = Object.freeze([
   registryPath, 'inventory/index.json', 'inventory/README.md', 'registry/README.md',
-  verifierPath, modulePath, testPath,
+  verifierPath, modulePath, testPath, ...captureConsumerFiles,
 ]);
 const text = bytes => new TextDecoder('utf-8', { fatal: true }).decode(bytes).replaceAll('\r\n', '\n');
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -137,19 +138,22 @@ function immutableInputs() {
     consumers: 6, closureFiles: closureFiles.size, runtimeDemonstrated: false } };
   return inputsCache;
 }
-export function validateAdmission(read = readRepositoryFile) {
+export function validateAdmission(rawRead = readRepositoryFile) {
+  return withCaptureConsumers(rawRead, read => {
   const { inputs, result } = immutableInputs();
   for (const [file, { value, code }] of inputs)
     assert.equal(text(read(file)), value, code + ':' + file);
   for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'IC2A_TOOL_MISSING:' + file);
   return { ...result };
+  });
 }
 
 // Compose the exact admission delta with the complete existing source guard.
 // That guard still rereads published sources, closures, consumers and CI; the
 // independent validateAdmission entry above continues to check all of them too.
 // No live reads or successful checks survive this synchronous invocation.
-export function withAdmissionDelta(read, verifySource) {
+export function withAdmissionDelta(rawRead, verifySource) {
+  return withCaptureConsumers(rawRead, read => {
   const { inputs } = immutableInputs(); // Immutable source closure, never the checkout.
   for (const [file, bytes] of expected())
     assert.equal(text(read(file)), text(bytes), 'IC2A_EXACT_METADATA:' + file);
@@ -160,26 +164,30 @@ export function withAdmissionDelta(read, verifySource) {
     const bytes = read(file), target = expected().get(file);
     return target && text(bytes) === text(target) ? admissionSource(file) : bytes;
   });
+  });
 }
 
 // Caller mutations are passed through; projection is not a repair mechanism.
 // Reusing a view never retains proof that its live reader is still valid.
 export function admissionReadView(read = readRepositoryFile) {
+  const view = captureConsumerReadView(read);
   return file => {
     const target = expected().get(file);
     if (target) validateAdmission(read);
-    const bytes = read(file);
+    const bytes = view(file);
     if (!target || text(bytes) !== text(target)) return bytes;
     return admissionSource(file);
   };
 }
 export function admissionHistoricalFile(file, bytes) {
+  bytes = captureConsumerHistoricalFile(file, bytes);
   const target = expected().get(file);
   if (!target || text(bytes) !== text(target)) return bytes;
   validateAdmission();
   return admissionSource(file);
 }
 export function admissionHistoricalRegistry(registry) {
+  registry = captureConsumerHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, registrySnapshot())) return registry;
   validateAdmission();
   return structuredClone(before());

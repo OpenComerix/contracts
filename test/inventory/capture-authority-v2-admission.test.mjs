@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { makeLock, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { readRepositoryFile as read } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { captureConsumerReadView, captureConsumerFiles } from '../../scripts/inventory/capture-consumers-v1.mjs';
 import { root, validateCaptureSource, captureHistoricalFile, captureHistoricalRegistry,
   source as historicalSource, successorRegistry } from '../../scripts/inventory/capture-authority-v2.mjs';
 import { admissionBase, sourceCommit, admissionSource, admissionIds, admissionFiles, httpPath, schemaPath,
@@ -15,19 +16,21 @@ const registryPath = 'registry/contracts.json';
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const before = () => JSON.parse(admissionSource(registryPath));
 const mutateRegistry = change => {
-  const value = admittedRegistry(); change(value);
+  const value = JSON.parse(read(registryPath)); change(value);
   return file => file === registryPath ? encode(value) : read(file);
 };
 test('two exact admissions preserve previous descriptors, unrelated intentions and all consumers', () => {
   assert.deepEqual(validateAdmission(), { admitted: 2, roots: 202, priorRoots: 200,
     preserved: 236, planned: 2, consumers: 6, closureFiles: 3, runtimeDemonstrated: false });
-  const current = JSON.parse(read(registryPath)), previous = before();
+  const current = JSON.parse(captureConsumerReadView(read)(registryPath)), previous = before();
   assert.deepEqual(current, admittedRegistry());
   assert.deepEqual(current.contracts.slice(0, 200), previous.contracts);
   assert.deepEqual(current.preservedFiles, previous.preservedFiles);
   assert.deepEqual(current.requiredConsumers, previous.requiredConsumers);
   assert.deepEqual(current.planned, previous.planned.filter(row => !admissionIds.includes(row.id)));
-  assert.equal(admissionFiles.length, 7);
+  assert.deepEqual(admissionFiles.slice(0, 7), [registryPath, 'inventory/index.json', 'inventory/README.md', 'registry/README.md',
+    'scripts/inventory/capture-authority-v2.mjs', 'scripts/inventory/capture-authority-v2-admission.mjs', 'test/inventory/capture-authority-v2-admission.test.mjs']);
+  assert.equal(admissionFiles.length, 7 + captureConsumerFiles.length);
   assert.equal(admissionBase, '49b32eb7a7e8694a68a0bc9d58252c5d68dfab13');
   assert.deepEqual(validateCaptureSource(), { admitted: 0, addedPlanned: 2, roots: 200,
     preserved: 236, consumers: 6, runtime_demonstrated: false });

@@ -1,0 +1,209 @@
+import assert from 'node:assert/strict';
+import { createHash } from 'node:crypto';
+import { isDeepStrictEqual } from 'node:util';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
+import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
+
+const root = path.resolve(import.meta.dirname, '../..');
+const launcher = path.resolve(root, '../..');
+export const captureConsumerBase = 'bcb2d3cfb7296441c13a1cf4e2e32fed9aa59b75';
+const base = gitReader(root, captureConsumerBase);
+const registryPath = 'registry/contracts.json', indexPath = 'registry/consumers/index.json';
+const bridgePath = 'scripts/inventory/capture-authority-v2-admission.mjs';
+const snapshotBridgePath = 'scripts/identity/catalog-workload-consumers-v2-registry.mjs';
+const indexBridgePath = 'scripts/catalog/catalog-foundation-v1-registry.mjs';
+const modulePath = 'scripts/inventory/capture-consumers-v1.mjs', testPath = 'test/inventory/capture-consumers-v1.test.mjs';
+export const captureConsumerSources = Object.freeze({
+  'identity-tenancy': '0de5544f34498e510179354c9f9cd80b099d0fe0',
+  'catalog-pricing': '61d35953cefed2e22ea903cf330c15c4958405d4',
+  inventory: '0d14f9509ade1619bf2112026a28a10a3765da07',
+});
+export const captureConsumerFiles = Object.freeze([
+  registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, 'registry/consumers/identity-tenancy.json',
+  'registry/consumers/catalog-pricing.json', 'registry/consumers/inventory.json',
+  'inventory/README.md', 'registry/README.md', modulePath, testPath,
+]);
+const text = value => new TextDecoder('utf-8', { fatal: true }).decode(value).replaceAll('\r\n', '\n');
+const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
+const hash = value => createHash('sha256').update(value).digest('hex');
+const json = file => JSON.parse(base(file));
+const gates = ['pnpm contracts:metadata', 'pnpm test:cov', 'pnpm test:integration', 'pnpm test:e2e'];
+function selection(id, role, version, operations = [], pointers = []) {
+  return { id, role, version, operations, pointers,
+    purpose: 'F1-11B physical capture only: exact preparation binding, current human authority and no stock effect.', gates: [...gates] };
+}
+function manifestFor(owner) {
+  if (owner === 'identity-tenancy') {
+    const manifest = json('registry/consumers/identity-tenancy.json').manifest;
+    const policy = manifest.contracts.find(row => row.id === 'identity.inventory-authority.policy.v1' && row.role === 'semantic-owner');
+    policy.pointers.push('/profiles/1', '/profiles/2', '/profiles/3');
+    return manifest;
+  }
+  const capture = [
+    selection('catalog.inventory-capture.http.v1', owner === 'inventory' ? 'consumer' : 'producer', '1.0.0', ['captureInventoryCatalog']),
+    selection('catalog.inventory-capture.schema.v1', 'validation', 'v1', [], ['/$defs/CaptureRequest', '/$defs/Capture']),
+    selection('inventory.catalog-capture-authority.http.v2', owner === 'inventory' ? 'producer' : 'consumer', '2.0.0', ['authorizeInventoryCatalogCapture']),
+    selection('inventory.catalog-capture-authority.schema.v2', 'validation', 'v2', [], ['']),
+    selection('identity.inventory-authority.policy.v1', 'consumer', 'v1', [], owner === 'inventory'
+      ? ['/profiles/0', '/profiles/2', '/profiles/3', '/issuance', '/permissions/3'] : ['/profiles/2', '/profiles/3', '/issuance']),
+  ];
+  if (owner === 'catalog-pricing') {
+    const manifest = json('registry/consumers/catalog-pricing.json').manifest;
+    manifest.contracts.push(...capture);
+    return manifest;
+  }
+  assert.equal(owner, 'inventory', 'ICC_OWNER');
+  return { formatVersion: 1, service: owner, contracts: [
+    ...capture,
+    selection('identity.internal-auth.v1', 'consumer', '1.0.0', ['issueInternalServiceToken', 'getInternalIdentityJwks']),
+    selection('identity.inventory-authority.http.v1-1', 'consumer', '1.1.0', ['checkInventoryAuthorization']),
+    selection('identity.inventory-authority.schema.v1', 'validation', 'v1', [], ['/$defs/Authorization', '/$defs/CanonicalRequest/oneOf/3']),
+    selection('inventory.types.v1', 'validation', 'v1', [], ['/$defs/AdjustmentRequest']),
+  ], assets: [], bindings: [] };
+}
+
+export function captureAdmissionBridge() {
+  let source = text(base(bridgePath));
+  const replace = (before, after) => {
+    assert.equal(source.split(before).length, 2, 'ICC_BRIDGE_ANCHOR'); source = source.replace(before, after);
+  };
+  replace("import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';",
+    "import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';\nimport { captureConsumerFiles, withCaptureConsumers, captureConsumerReadView, captureConsumerHistoricalFile, captureConsumerHistoricalRegistry } from './capture-consumers-v1.mjs';");
+  replace('  verifierPath, modulePath, testPath,', '  verifierPath, modulePath, testPath, ...captureConsumerFiles,');
+  replace('export function validateAdmission(read = readRepositoryFile) {',
+    'export function validateAdmission(rawRead = readRepositoryFile) {\n  return withCaptureConsumers(rawRead, read => {');
+  replace('  return { ...result };\n}', '  return { ...result };\n  });\n}');
+  replace('export function withAdmissionDelta(read, verifySource) {',
+    'export function withAdmissionDelta(rawRead, verifySource) {\n  return withCaptureConsumers(rawRead, read => {');
+  replace('    return target && text(bytes) === text(target) ? admissionSource(file) : bytes;\n  });\n}',
+    '    return target && text(bytes) === text(target) ? admissionSource(file) : bytes;\n  });\n  });\n}');
+  replace('export function admissionReadView(read = readRepositoryFile) {',
+    'export function admissionReadView(read = readRepositoryFile) {\n  const view = captureConsumerReadView(read);');
+  replace('    if (target) validateAdmission(read);\n    const bytes = read(file);',
+    '    if (target) validateAdmission(read);\n    const bytes = view(file);');
+  replace('export function admissionHistoricalFile(file, bytes) {',
+    'export function admissionHistoricalFile(file, bytes) {\n  bytes = captureConsumerHistoricalFile(file, bytes);');
+  replace('export function admissionHistoricalRegistry(registry) {',
+    'export function admissionHistoricalRegistry(registry) {\n  registry = captureConsumerHistoricalRegistry(registry);');
+  return Buffer.from(source);
+}
+
+function captureSnapshotBridge() {
+  const source = text(base(snapshotBridgePath));
+  const anchor = 'export function consumerSnapshotView(snapshot) {';
+  assert.equal(source.split(anchor).length, 2, 'ICC_SNAPSHOT_BRIDGE_ANCHOR');
+  return Buffer.from("import { captureConsumerHistoricalSnapshot } from '../inventory/capture-consumers-v1.mjs';\n" +
+    source.replace(anchor, anchor + '\n  snapshot = captureConsumerHistoricalSnapshot(snapshot);'));
+}
+function captureIndexBridge() {
+  const source = text(base(indexBridgePath));
+  const anchor = '  index = salesHistoricalIndex(index);';
+  assert.equal(source.split(anchor).length, 2, 'ICC_INDEX_BRIDGE_ANCHOR');
+  return Buffer.from("import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';\n" +
+    source.replace(anchor, '  index = salesHistoricalIndex(captureConsumerHistoricalIndex(index));'));
+}
+
+let modelCache;
+function model() {
+  if (modelCache) return modelCache;
+  const registry = json(registryPath);
+  assert.equal(registry.contracts.length, 202, 'ICC_BASE_ROOTS');
+  registry.requiredConsumers.push('inventory');
+  const index = json(indexPath);
+  index.coverage = 'Seven known consumers; F1-11B Inventory physical capture only; external consumers remain unknown.';
+  index.consumers.push({ service: 'inventory', file: 'inventory.json', localDirectory: 'services/inventory' });
+  const metadata = new Map([[registryPath, encode(registry)], [indexPath, encode(index)], [bridgePath, captureAdmissionBridge()], [snapshotBridgePath, captureSnapshotBridge()], [indexBridgePath, captureIndexBridge()]]);
+  const snapshots = new Map(), closures = new Map();
+  for (const owner of Object.keys(captureConsumerSources)) {
+    const manifest = manifestFor(owner), previous = owner === 'inventory' ? undefined : json('registry/consumers/' + owner + '.json');
+    const manifestBytes = encode(manifest), lock = makeLock(root, manifest, manifestBytes, registry, previous?.lock.entries ?? []);
+    if (previous) for (const old of previous.lock.entries) {
+      const next = lock.entries.find(row => row.id === old.id && row.role === old.role && row.version === old.version);
+      assert(next, 'ICC_PRIOR_SELECTION_OMITTED');
+      if (old.id === 'identity.inventory-authority.policy.v1' && owner === 'identity-tenancy') {
+        for (const key of ['commit', 'tag', 'tagObject', 'root', 'files']) assert.deepEqual(next[key], old[key], 'ICC_PRIOR_PIN');
+        for (const unit of old.units) assert(next.units.some(row => isDeepStrictEqual(row, unit)), 'ICC_PRIOR_UNIT');
+      } else assert.deepEqual(next, old, 'ICC_PRIOR_PIN');
+    }
+    const snapshot = { formatVersion: 1, publication: 'published', sourceRepository: 'opencomerix/' + owner,
+      sourceCommit: captureConsumerSources[owner], manifestSha256: hash(manifestBytes), lockSha256: hash(encode(lock)), manifest, lock };
+    snapshots.set(owner, snapshot); metadata.set('registry/consumers/' + owner + '.json', encode(snapshot));
+    for (const entry of lock.entries) for (const file of entry.files)
+      if (!closures.has(file.path)) closures.set(file.path, gitReader(root, entry.commit)(file.path));
+  }
+  const suffix = '\n## F1-11B — Consumo coordinado de captura física\n\n' +
+    'Selecciones publicadas de Identity, Catalog e Inventory para captura física y verificación v2; siete consumidores conocidos. Se conservan las 202 raíces, 236 artefactos y todos los pins previos. Las secciones anteriores describen sus snapshots históricos. Manifiestos/locks y gates propios están en cada servicio; este registro de consumo no acredita por sí solo runtime ni CI. [Gate específico](../scripts/inventory/capture-consumers-v1.mjs).\n';
+  for (const file of ['inventory/README.md', 'registry/README.md']) metadata.set(file, Buffer.from(text(base(file)) + suffix));
+  const unchanged = new Map();
+  for (const owner of json(registryPath).requiredConsumers)
+    if (!snapshots.has(owner)) unchanged.set('registry/consumers/' + owner + '.json', base('registry/consumers/' + owner + '.json'));
+  modelCache = { registry, metadata, snapshots, closures, unchanged };
+  return modelCache;
+}
+export const captureConsumerMetadata = () => new Map([...model().metadata].map(([file, bytes]) => [file, Buffer.from(bytes)]));
+export const captureConsumerManifests = () => new Map([...model().snapshots].map(([owner, snapshot]) => [owner, structuredClone(snapshot.manifest)]));
+export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT') {
+  const expected = model();
+  for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures])
+    assert(text(read(file)) === text(bytes), diagnostic + ':' + file);
+  for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'ICC_TOOL_MISSING:' + file);
+  return { consumers: 7, roots: 202, preserved: 236, previousPinsPreserved: true, runtimeDemonstrated: false };
+}
+export function withCaptureConsumers(read, verify) {
+  validateCaptureConsumers(read, 'IC2A_EXACT_METADATA');
+  return verify(file => {
+    const bytes = read(file), expected = model().metadata.get(file);
+    return expected && file !== 'registry/consumers/inventory.json' && text(bytes) === text(expected) ? base(file) : bytes;
+  });
+}
+export function captureConsumerReadView(read = readRepositoryFile) {
+  return file => {
+    const bytes = read(file), expected = model().metadata.get(file);
+    if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
+    validateCaptureConsumers(read); return base(file);
+  };
+}
+export function captureConsumerHistoricalFile(file, bytes) {
+  const expected = model().metadata.get(file);
+  if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
+  validateCaptureConsumers(); return base(file);
+}
+export function captureConsumerHistoricalRegistry(value) {
+  if (!isDeepStrictEqual(value, model().registry)) return value;
+  validateCaptureConsumers(); return json(registryPath);
+}
+export function captureConsumerHistoricalSnapshot(value) {
+  const service = value?.manifest?.service;
+  const expected = model().snapshots.get(service);
+  if (!expected || service === 'inventory' || !isDeepStrictEqual(value, expected)) return value;
+  validateCaptureConsumers();
+  return json('registry/consumers/' + service + '.json');
+}
+export function captureConsumerHistoricalIndex(value) {
+  if (!isDeepStrictEqual(value, JSON.parse(model().metadata.get(indexPath)))) return value;
+  validateCaptureConsumers();
+  return json(indexPath);
+}
+
+function sync() {
+  const expected = model();
+  for (const [owner, snapshot] of expected.snapshots) {
+    const directory = path.join(launcher, 'services', owner);
+    const files = new Map([['contracts.manifest.json', encode(snapshot.manifest)], ['contracts.lock.json', encode(snapshot.lock)]]);
+    if (owner === 'inventory') {
+      const tooling = [['tools/architecture/consumer-gate.mjs', '.contracts/gate.mjs'], ['registry/manifest-v1.schema.json', '.contracts/manifest-v1.schema.json'], ['registry/lock-v1.schema.json', '.contracts/lock-v1.schema.json']];
+      for (const [source, destination] of tooling) files.set(destination, base(source));
+      files.set('.contracts/provenance.json', encode({ formatVersion: 1, sourceRepository: 'opencomerix/contracts', publication: 'local-candidate',
+        sourceBaseCommit: captureConsumerBase, files: tooling.map(([sourcePath, destination]) => ({ sourcePath, destination, sha256: hash(base(sourcePath)) })) }));
+    }
+    for (const [file, bytes] of files) { const target = path.join(directory, file); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes); }
+  }
+  for (const [file, bytes] of expected.metadata) { const target = path.join(root, file); fs.mkdirSync(path.dirname(target), { recursive: true }); fs.writeFileSync(target, bytes); }
+}
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  if (process.argv.includes('--sync')) sync();
+  console.log(JSON.stringify(validateCaptureConsumers()));
+}

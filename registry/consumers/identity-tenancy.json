@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "dcaf4b8a6fc2b91fa0601365c09d1b613aa10fd1",
-  "manifestSha256": "2b46db2cb63f557262c930ad8e5a4e4caa77c8f99480851687d3066d930e84d1",
-  "lockSha256": "fd8b50a7c9de44cf917ad5a3edf4e6b43138f9b82b270cd06bff8ff8560520ad",
+  "sourceCommit": "0de5544f34498e510179354c9f9cd80b099d0fe0",
+  "manifestSha256": "13cc7b3f549abf5fb3d8dc6e6668614338c3081fd195a744ec8487545cbb8924",
+  "lockSha256": "2b3a35bc7432bd27d07f0c59d1e05b9af9809648cb8e054bf3cb60779c1954f5",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -574,7 +574,10 @@
           "/permissions",
           "/issuance",
           "/template",
-          "/profiles/4"
+          "/profiles/4",
+          "/profiles/1",
+          "/profiles/2",
+          "/profiles/3"
         ],
         "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
         "gates": [
@@ -605,7 +608,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "2b46db2cb63f557262c930ad8e5a4e4caa77c8f99480851687d3066d930e84d1",
+    "manifestSha256": "13cc7b3f549abf5fb3d8dc6e6668614338c3081fd195a744ec8487545cbb8924",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -4700,7 +4703,10 @@
           "/permissions",
           "/issuance",
           "/template",
-          "/profiles/4"
+          "/profiles/4",
+          "/profiles/1",
+          "/profiles/2",
+          "/profiles/3"
         ],
         "files": [
           {
@@ -4741,6 +4747,21 @@
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/1",
+            "sha256": "b4042f7fc336f9e8b5310fa7b1f114362af207c2f1f32c796bbf3cccd3696a3c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/2",
+            "sha256": "96e635a6f781eb2614fbe565f0d9b5f25a4bb0d6d2ed6d33d448776aa0ce0537"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/3",
+            "sha256": "daa7848f238e9638e357aa2e3a4a6695850af30ea12ab8df1de12377e576d11e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
             "pointer": "/profiles/4",
             "sha256": "351bc4e5b040a0bd7afde26a82ffb3013a7baeb9cf4fed444c900ac56ccbbff7"
           },
@@ -4750,8 +4771,8 @@
             "sha256": "ff130b2fb6e9a8facf33ae137ad2e93102140b4bd74d8c78ba56e7710007bfaa"
           }
         ],
-        "selectionSha256": "bfa24523be06145e4c0d097cf094d203f6dfc56cf4079d2ad26417cc57fd8f97",
-        "runtimeSha256": "bfa24523be06145e4c0d097cf094d203f6dfc56cf4079d2ad26417cc57fd8f97"
+        "selectionSha256": "f495811da3800e14fb8b5c2603bfa848539580d3d38bcf9e7c51929ae9bf284f",
+        "runtimeSha256": "f495811da3800e14fb8b5c2603bfa848539580d3d38bcf9e7c51929ae9bf284f"
       },
       {
         "id": "common.error-catalog.v9",
