@@ -2,7 +2,12 @@
 name: OpenComerix CI
 on:
   push: null
-  workflow_dispatch: null
+  workflow_dispatch:
+    inputs:
+      sales_only:
+        description: Sales diagnostic only; full CI remains required for closure
+        type: boolean
+        default: false
 permissions:
   contents: read
 concurrency:
@@ -41,6 +46,7 @@ jobs:
         id: scope
         run: node scripts/ci/validation-scope-v1.mjs
         env:
+          CONTRACTS_SALES_ONLY: ${{ github.event_name == 'workflow_dispatch' && inputs.sales_only }}
           GIT_CONFIG_COUNT: "1"
           GIT_CONFIG_KEY_0: safe.directory
           GIT_CONFIG_VALUE_0: ${{ github.workspace }}
@@ -875,7 +881,7 @@ jobs:
   validate_sales_contracts:
     name: validate:sales-contracts
     needs: [validation_scope]
-    if: needs.validation_scope.outputs.mode == 'full'
+    if: needs.validation_scope.outputs.mode == 'full' || needs.validation_scope.outputs.mode == 'sales-only'
     runs-on: ubuntu-24.04
     container:
       image: node:24.21.0-bookworm-slim

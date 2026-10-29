@@ -121,7 +121,7 @@ export function validateSalesAdmission(rawReadFile = read) {
   for (const service of ['sales-pos', 'identity-tenancy'])
     validateSalesSnapshot(service, JSON.parse(readFile('registry/consumers/' + service + '.json')));
   for (const service of registry.requiredConsumers.filter(owner => owner !== 'identity-tenancy'))
-    assert.deepEqual(readFile('registry/consumers/' + service + '.json'), source('registry/consumers/' + service + '.json'), 'SALES_PRIOR_CONSUMER');
+    assert(readFile('registry/consumers/' + service + '.json').equals(source('registry/consumers/' + service + '.json')), 'SALES_PRIOR_CONSUMER');
   assert.equal(normalize(readFile('sales/README.md')), normalize(source('sales/README.md')) + salesReadmeSuffix, 'SALES_MAP');
   assert.equal(normalize(readFile(historicalTest)), normalize(historicalTestBytes()), 'SALES_HISTORICAL_TEST');
   for (const file of guardTransitionFiles)

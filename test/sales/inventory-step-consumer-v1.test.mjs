@@ -38,7 +38,7 @@ test('Sales adds only the exact six-consumer transition and one Identity profile
 for(const file of ['registry/contracts.json','registry/consumers/index.json','registry/consumers/identity-tenancy.json','registry/consumers/sales-pos.json','sales/README.md',historicalTest,
   ...guardTransitionFiles,
   ...['gateway-bff','notifications','web-pos','catalog-pricing'].map(owner=>'registry/consumers/'+owner+'.json')])test('new admission refuses changed or missing '+file,()=>{
-  assert.throws(()=>validateSalesAdmission(name=>name===file?Buffer.concat([read(name),Buffer.from('\nUnapproved')]):read(name)));
+  assert.throws(()=>validateSalesAdmission(name=>name===file?Buffer.concat([read(name),Buffer.from('\nUnapproved')]):read(name)),file==='registry/consumers/catalog-pricing.json'?/SALES_PRIOR_CONSUMER/:undefined);
   assert.throws(()=>validateSalesAdmission(name=>{if(name===file)throw Error('Synthetic missing source');return read(name);}));
 });
 test('historical projection preserves original assertions and never sanitizes caller drift',()=>{

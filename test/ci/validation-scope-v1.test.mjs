@@ -67,6 +67,11 @@ test('real checkout verifies the pushed range and source identity, falling back 
   assert.throws(() => planFromCheckout(root, { ...env, GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);
   assert.throws(() => planFromCheckout(root, { ...env, GITHUB_REPOSITORY: 'foreign/contracts' }), /SCOPE_REPOSITORY/);
   assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch' }).mode, 'full');
+  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');
+  for (const flag of ['false', '', 'TRUE']) assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: flag }).mode, 'full');
+  put('event.json', JSON.stringify(event));
+  assert.equal(planFromCheckout(root, { ...env, CONTRACTS_SALES_ONLY: 'true' }).mode, 'fast');
+  assert.throws(() => planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true', GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);
   put('event.json', '{'); assert.equal(planFromCheckout(root, env).mode, 'full');
   put('event.json', JSON.stringify(event));
   const executor = (_file, args, options) => args.includes('ls-tree') ? Buffer.from('120000 blob ' + sha + '\tdocs/example.md\0') : execFileSync('git', args, options);

@@ -16,7 +16,9 @@ const bridgePath = 'scripts/inventory/capture-authority-v2-admission.mjs';
 const snapshotBridgePath = 'scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 const indexBridgePath = 'scripts/catalog/catalog-foundation-v1-registry.mjs';
 const salesBridgePath = 'scripts/sales/inventory-step-consumer-v1.mjs';
+const salesTestPath = 'test/sales/inventory-step-consumer-v1.test.mjs';
 const workflowPath = '.github/workflows/ci.yml', workflowTestPath = 'test/ci/github-v1.test.mjs';
+const scopePath = 'scripts/ci/validation-scope-v1.mjs', scopeTestPath = 'test/ci/validation-scope-v1.test.mjs';
 const modulePath = 'scripts/inventory/capture-consumers-v1.mjs', testPath = 'test/inventory/capture-consumers-v1.test.mjs';
 export const captureConsumerSources = Object.freeze({
   'identity-tenancy': '0de5544f34498e510179354c9f9cd80b099d0fe0',
@@ -24,7 +26,7 @@ export const captureConsumerSources = Object.freeze({
   inventory: '0d14f9509ade1619bf2112026a28a10a3765da07',
 });
 export const captureConsumerFiles = Object.freeze([
-  registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, salesBridgePath, workflowPath, workflowTestPath, 'registry/consumers/identity-tenancy.json',
+  registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, salesBridgePath, salesTestPath, workflowPath, workflowTestPath, scopePath, scopeTestPath, 'registry/consumers/identity-tenancy.json',
   'registry/consumers/catalog-pricing.json', 'registry/consumers/inventory.json',
   'inventory/README.md', 'registry/README.md', modulePath, testPath,
 ]);
@@ -113,18 +115,62 @@ function replaceOnce(source, before, after) {
   return source.replace(before, after);
 }
 function captureSalesBridge() {
-  return Buffer.from("import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';\n" +
-    replaceOnce(text(base(salesBridgePath)), 'export function salesHistoricalIndex(value) {',
-      'export function salesHistoricalIndex(value) {\n  value = captureConsumerHistoricalIndex(value);'));
+  let source = replaceOnce(text(base(salesBridgePath)), 'export function salesHistoricalIndex(value) {',
+    'export function salesHistoricalIndex(value) {\n  value = captureConsumerHistoricalIndex(value);');
+  source = replaceOnce(source,
+    "    assert.deepEqual(readFile('registry/consumers/' + service + '.json'), source('registry/consumers/' + service + '.json'), 'SALES_PRIOR_CONSUMER');",
+    "    assert(readFile('registry/consumers/' + service + '.json').equals(source('registry/consumers/' + service + '.json')), 'SALES_PRIOR_CONSUMER');");
+  return Buffer.from("import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';\n" + source);
+}
+function captureSalesTest() {
+  const before = "  assert.throws(()=>validateSalesAdmission(name=>name===file?Buffer.concat([read(name),Buffer.from('\\nUnapproved')]):read(name)));";
+  return Buffer.from(replaceOnce(text(base(salesTestPath)), before,
+    before.slice(0, -2) + ",file==='registry/consumers/catalog-pricing.json'?/SALES_PRIOR_CONSUMER/:undefined);"));
 }
 const salesCommand = 'node --test --test-reporter=tap test/sales/*.test.mjs';
 const boundedSalesCommand = 'node --test --test-reporter=tap --test-concurrency=2 test/sales/*.test.mjs';
+const fullCondition = "needs.validation_scope.outputs.mode == 'full'";
+const salesCondition = fullCondition + " || needs.validation_scope.outputs.mode == 'sales-only'";
+const salesOnlyExpression = "${{ github.event_name == 'workflow_dispatch' && inputs.sales_only }}";
+const salesOnlyInput = { description: 'Sales diagnostic only; full CI remains required for closure', type: 'boolean', default: false };
+function captureWorkflow() {
+  let source = replaceOnce(text(base(workflowPath)), salesCommand, boundedSalesCommand);
+  source = replaceOnce(source, '  workflow_dispatch: null', '  workflow_dispatch:\n    inputs:\n      sales_only:\n        description: ' + salesOnlyInput.description + '\n        type: boolean\n        default: false');
+  source = replaceOnce(source, '        run: node scripts/ci/validation-scope-v1.mjs\n        env:',
+    '        run: node scripts/ci/validation-scope-v1.mjs\n        env:\n          CONTRACTS_SALES_ONLY: ' + salesOnlyExpression);
+  source = replaceOnce(source, "    name: validate:sales-contracts\n    needs: [validation_scope]\n    if: " + fullCondition,
+    '    name: validate:sales-contracts\n    needs: [validation_scope]\n    if: ' + salesCondition);
+  return Buffer.from(source);
+}
+function captureScope() {
+  let source = replaceOnce(text(base(scopePath)), "  const fallback = reason => ({ mode: 'full', reason, files: [], tests: [] });",
+    "  if (env.GITHUB_EVENT_NAME === 'workflow_dispatch' && env.CONTRACTS_SALES_ONLY === 'true')\n    return { mode: 'sales-only', reason: 'EXPLICIT_SALES_DIAGNOSTIC', files: [], tests: [] };\n  const fallback = reason => ({ mode: 'full', reason, files: [], tests: [] });");
+  source = replaceOnce(source, "${plan.mode === 'fast' ? 'Parcial:", "${plan.mode !== 'full' ? 'Parcial:");
+  return Buffer.from(source);
+}
+function captureScopeTest() {
+  const anchor = "  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch' }).mode, 'full');";
+  return Buffer.from(replaceOnce(text(base(scopeTestPath)), anchor, anchor +
+    "\n  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');" +
+    "\n  for (const flag of ['false', '', 'TRUE']) assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: flag }).mode, 'full');" +
+    "\n  put('event.json', JSON.stringify(event));\n  assert.equal(planFromCheckout(root, { ...env, CONTRACTS_SALES_ONLY: 'true' }).mode, 'fast');" +
+    "\n  assert.throws(() => planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true', GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);"));
+}
 function captureWorkflowTest() {
   let source = replaceOnce(text(base(workflowTestPath)), 'const parallelCommands = new Map([',
     "const parallelCommands = new Map([\n  ['validate:sales-contracts', new Map([\n    ['" + salesCommand + "', '" + boundedSalesCommand + "'],\n  ])],");
   source = replaceOnce(source, '    assert.deepEqual(current, original, key);',
     "    if (key === 'validate_sales_contracts') {\n      const step = original.steps.find(step => step.name === 'Run original validation commands');\n      step.run = step.run.replace('" + salesCommand + "', '" + boundedSalesCommand + "');\n    }\n    assert.deepEqual(current, original, key);");
   source = replaceOnce(source, '/GITHUB_MIGRATION_BYTES/);', '/IC2A_EXACT_METADATA/);');
+  source = replaceOnce(source, '/CI_SCOPE_BYTES/);', '/IC2A_EXACT_METADATA/);');
+  source = replaceOnce(source, '    assert.equal(job.if, "' + fullCondition + '");',
+    '    assert.equal(job.if, name === \'validate:sales-contracts\' ? "' + salesCondition + '" : "' + fullCondition + '");');
+  source = replaceOnce(source, '    assert.equal(condition, "' + fullCondition + '");',
+    '    assert.equal(condition, key === \'validate_sales_contracts\' ? "' + salesCondition + '" : "' + fullCondition + '");');
+  source = replaceOnce(source, '  assert.deepEqual(workflow.on, { push: null, workflow_dispatch: null });',
+    '  assert.deepEqual(workflow.on, ' + JSON.stringify({ push: null, workflow_dispatch: { inputs: { sales_only: salesOnlyInput } } }) + ');');
+  source = replaceOnce(source, "  assert.equal(scope.name, 'validate:scope');",
+    "  assert.equal(scope.name, 'validate:scope');\n  assert.equal(scope.steps.find(step => step.id === 'scope').env.CONTRACTS_SALES_ONLY, " + JSON.stringify(salesOnlyExpression) + ');');
   return Buffer.from(source);
 }
 
@@ -139,8 +185,11 @@ function model() {
   index.consumers.push({ service: 'inventory', file: 'inventory.json', localDirectory: 'services/inventory' });
   const metadata = new Map([[registryPath, encode(registry)], [indexPath, encode(index)], [bridgePath, captureAdmissionBridge()], [snapshotBridgePath, captureSnapshotBridge()], [indexBridgePath, captureIndexBridge()]]);
   metadata.set(salesBridgePath, captureSalesBridge());
-  metadata.set(workflowPath, Buffer.from(replaceOnce(text(base(workflowPath)), salesCommand, boundedSalesCommand)));
+  metadata.set(salesTestPath, captureSalesTest());
+  metadata.set(workflowPath, captureWorkflow());
   metadata.set(workflowTestPath, captureWorkflowTest());
+  metadata.set(scopePath, captureScope());
+  metadata.set(scopeTestPath, captureScopeTest());
   const snapshots = new Map(), closures = new Map();
   for (const owner of Object.keys(captureConsumerSources)) {
     const manifest = manifestFor(owner), previous = owner === 'inventory' ? undefined : json('registry/consumers/' + owner + '.json');

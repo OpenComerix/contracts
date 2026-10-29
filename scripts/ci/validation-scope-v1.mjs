@@ -47,6 +47,8 @@ export function planFromCheckout(root, env = process.env, execute = execFileSync
   assert.equal(env.GITHUB_REPOSITORY, 'opencomerix/contracts', 'SCOPE_REPOSITORY');
   assert(exactSHA(env.GITHUB_SHA), 'SCOPE_SOURCE_REQUIRED');
   assert.equal(git(['rev-parse','HEAD']).toString().trim(), env.GITHUB_SHA, 'SCOPE_CHECKOUT_SHA');
+  if (env.GITHUB_EVENT_NAME === 'workflow_dispatch' && env.CONTRACTS_SALES_ONLY === 'true')
+    return { mode: 'sales-only', reason: 'EXPLICIT_SALES_DIAGNOSTIC', files: [], tests: [] };
   const fallback = reason => ({ mode: 'full', reason, files: [], tests: [] });
   if (env.GITHUB_EVENT_NAME !== 'push' || !env.GITHUB_REF?.startsWith('refs/heads/')) return fallback('FULL_EVENT');
   let event, files, message;
@@ -97,6 +99,6 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   assert(process.env.GITHUB_OUTPUT, 'SCOPE_OUTPUT_REQUIRED');
   fs.appendFileSync(process.env.GITHUB_OUTPUT, 'mode=' + plan.mode + '\n');
   if (process.env.GITHUB_STEP_SUMMARY) fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,
-    `Contracts CI: **${plan.mode}** (${plan.reason}). ${plan.mode === 'fast' ? 'Parcial: no habilita cierre, tags, admisión ni consumo.' : 'Ejecuta los 22 jobs completos.'}\n`);
+    `Contracts CI: **${plan.mode}** (${plan.reason}). ${plan.mode !== 'full' ? 'Parcial: no habilita cierre, tags, admisión ni consumo.' : 'Ejecuta los 22 jobs completos.'}\n`);
   console.log(JSON.stringify({ mode: plan.mode, reason: plan.reason, files: plan.files.length, selected_tests: plan.tests }));
 }

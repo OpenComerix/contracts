@@ -40,7 +40,7 @@ test('GitHub preserves all 22 contract jobs, exact validation commands and artif
       previous = position;
     }
     assert.deepEqual(job.needs, ['validation_scope', ...(legacy[name].needs ?? []).map(need => id(need.job))]);
-    assert.equal(job.if, "needs.validation_scope.outputs.mode == 'full'");
+    assert.equal(job.if, name === 'validate:sales-contracts' ? "needs.validation_scope.outputs.mode == 'full' || needs.validation_scope.outputs.mode == 'sales-only'" : "needs.validation_scope.outputs.mode == 'full'");
     assert(!JSON.stringify(job).includes('continue-on-error'));
     assert(job.steps.filter(step => step.uses).every(step => /@[a-f0-9]{40}$/.test(step.uses)));
     if (legacy[name].artifacts) {
@@ -62,11 +62,12 @@ test('scope selection preserves the entire reviewed full jobs and avoids duplica
     }
     assert.deepEqual(current, original, key);
     assert.deepEqual(needs, ['validation_scope', ...(originalNeeds ?? [])]);
-    assert.equal(condition, "needs.validation_scope.outputs.mode == 'full'");
+    assert.equal(condition, key === 'validate_sales_contracts' ? "needs.validation_scope.outputs.mode == 'full' || needs.validation_scope.outputs.mode == 'sales-only'" : "needs.validation_scope.outputs.mode == 'full'");
   }
-  assert.deepEqual(workflow.on, { push: null, workflow_dispatch: null });
+  assert.deepEqual(workflow.on, {"push":null,"workflow_dispatch":{"inputs":{"sales_only":{"description":"Sales diagnostic only; full CI remains required for closure","type":"boolean","default":false}}}});
   const scope = workflow.jobs.validation_scope;
   assert.equal(scope.name, 'validate:scope');
+  assert.equal(scope.steps.find(step => step.id === 'scope').env.CONTRACTS_SALES_ONLY, "${{ github.event_name == 'workflow_dispatch' && inputs.sales_only }}");
   assert.equal(scope.outputs.mode, '${{ steps.scope.outputs.mode }}');
   assert.equal(scope.steps.find(step => step.id === 'scope').run, 'node scripts/ci/validation-scope-v1.mjs');
   assert.equal(scope.steps.find(step => step.id === 'dependencies').with['install-mode'], 'ignore-scripts');
@@ -78,7 +79,7 @@ test('scope selection preserves the entire reviewed full jobs and avoids duplica
 for (const file of ['scripts/ci/validation-scope-v1.mjs', 'test/ci/validation-scope-v1.test.mjs'])
   test('warm source guard rejects changed or missing scope infrastructure: ' + file, () => {
     validateCaptureSource();
-    assert.throws(() => validateCaptureSource(name => name === file ? Buffer.from('changed') : actual(name)), /CI_SCOPE_BYTES/);
+    assert.throws(() => validateCaptureSource(name => name === file ? Buffer.from('changed') : actual(name)), /IC2A_EXACT_METADATA/);
     assert.throws(() => validateCaptureSource(name => { if (name === file) throw Error('Synthetic scope missing'); return actual(name); }), /Synthetic scope missing/);
   });
 test('warm source validation does not project away changed or missing GitHub workflow bytes', () => {
