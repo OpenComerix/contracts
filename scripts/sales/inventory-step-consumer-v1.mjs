@@ -1,3 +1,4 @@
+import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -182,6 +183,7 @@ export function withSalesAdmissionScope(paths) {
   return new Set([...paths,...admissionScope]);
 }
 export function salesHistoricalIndex(value) {
+  value = captureConsumerHistoricalIndex(value);
   if (!isDeepStrictEqual(value,expectedIndex())) return value;
   validateSalesAdmission();
   return prior('registry/consumers/index.json');

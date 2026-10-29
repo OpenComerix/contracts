@@ -6,6 +6,7 @@ import { captureConsumerMetadata, captureConsumerManifests, validateCaptureConsu
 import { validateAdmission, admissionHistoricalFile, admissionHistoricalRegistry } from '../../scripts/inventory/capture-authority-v2-admission.mjs';
 import { validateCaptureSource } from '../../scripts/inventory/capture-authority-v2.mjs';
 import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { salesHistoricalIndex } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
 
 const registryPath = 'registry/contracts.json';
 test('F1-11B admits only the three coordinated consumer selections and preserves prior pins', () => {
@@ -47,9 +48,12 @@ test('direct historical index readers preserve original drift rejection', () => 
   const current = JSON.parse(readRepositoryFile('registry/consumers/index.json'));
   const before = structuredClone(current);
   assert.equal(captureConsumerHistoricalIndex(current).consumers.length, 6);
+  assert.equal(salesHistoricalIndex(current).consumers.length, 5);
   assert.deepEqual(current, before);
   const altered = structuredClone(current); altered.consumers.pop();
   assert.equal(captureConsumerHistoricalIndex(altered), altered);
+  const wrong = structuredClone(current); wrong.coverage = 'unapproved';
+  assert.equal(salesHistoricalIndex(wrong), wrong);
 });
 
 const paths = [...captureConsumerMetadata().keys(),
@@ -82,6 +86,7 @@ for (const file of paths) for (const mutation of ['changed', 'missing']) {
     assert.throws(() => captureConsumerHistoricalFile(registryPath, registry));
     assert.throws(() => captureConsumerHistoricalRegistry(object));
     assert.throws(() => captureConsumerHistoricalIndex(index));
+    assert.throws(() => salesHistoricalIndex(index));
     assert.throws(() => captureConsumerHistoricalSnapshot(snapshot));
     assert.throws(() => admissionHistoricalFile(registryPath, registry));
     assert.throws(() => admissionHistoricalRegistry(object));

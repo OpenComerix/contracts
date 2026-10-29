@@ -14,6 +14,9 @@ const workflow = parse(actual(workflowPath).toString('utf8'));
 const legacy = parse(readRepositoryFile('.gitlab-ci.yml').toString('utf8'));
 const id = name => name.replaceAll(/[^A-Za-z0-9_]/g, '_');
 const parallelCommands = new Map([
+  ['validate:sales-contracts', new Map([
+    ['node --test --test-reporter=tap test/sales/*.test.mjs', 'node --test --test-reporter=tap --test-concurrency=2 test/sales/*.test.mjs'],
+  ])],
   ['validate:contract-architecture', new Map([
     ['pnpm test:architecture', 'node --test --test-concurrency=2 test/architecture/*.test.mjs'],
   ])],
@@ -53,6 +56,10 @@ test('scope selection preserves the entire reviewed full jobs and avoids duplica
   for (const [key, previous] of Object.entries(prior.jobs)) {
     const { needs, if: condition, ...current } = workflow.jobs[key];
     const { needs: originalNeeds, ...original } = previous;
+    if (key === 'validate_sales_contracts') {
+      const step = original.steps.find(step => step.name === 'Run original validation commands');
+      step.run = step.run.replace('node --test --test-reporter=tap test/sales/*.test.mjs', 'node --test --test-reporter=tap --test-concurrency=2 test/sales/*.test.mjs');
+    }
     assert.deepEqual(current, original, key);
     assert.deepEqual(needs, ['validation_scope', ...(originalNeeds ?? [])]);
     assert.equal(condition, "needs.validation_scope.outputs.mode == 'full'");
@@ -76,7 +83,7 @@ for (const file of ['scripts/ci/validation-scope-v1.mjs', 'test/ci/validation-sc
   });
 test('warm source validation does not project away changed or missing GitHub workflow bytes', () => {
   validateCaptureSource();
-  assert.throws(() => validateCaptureSource(file => file === workflowPath ? Buffer.from('unapproved') : actual(file)), /GITHUB_MIGRATION_BYTES/);
+  assert.throws(() => validateCaptureSource(file => file === workflowPath ? Buffer.from('unapproved') : actual(file)), /IC2A_EXACT_METADATA/);
   assert.throws(() => validateCaptureSource(file => { if (file === workflowPath) throw Error('Synthetic workflow missing'); return actual(file); }), /Synthetic workflow missing/);
 });
 test('only the canonical GitHub workflow is infrastructure; hidden contracts remain rejected', t => {

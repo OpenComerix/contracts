@@ -912,7 +912,7 @@ jobs:
           key: node24.21.0-redocly2.53.3-bookworm-v1
       - name: Run original validation commands
         run: |-
-          node --test --test-reporter=tap test/sales/*.test.mjs
+          node --test --test-reporter=tap --test-concurrency=2 test/sales/*.test.mjs
           node scripts/sales/run-gate-v2.mjs openapi
           node scripts/sales/run-gate-v2.mjs asyncapi
           node scripts/sales/schema-v2.mjs .ci-artifacts/sales-v2-ci

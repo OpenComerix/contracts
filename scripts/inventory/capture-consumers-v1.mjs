@@ -15,6 +15,8 @@ const registryPath = 'registry/contracts.json', indexPath = 'registry/consumers/
 const bridgePath = 'scripts/inventory/capture-authority-v2-admission.mjs';
 const snapshotBridgePath = 'scripts/identity/catalog-workload-consumers-v2-registry.mjs';
 const indexBridgePath = 'scripts/catalog/catalog-foundation-v1-registry.mjs';
+const salesBridgePath = 'scripts/sales/inventory-step-consumer-v1.mjs';
+const workflowPath = '.github/workflows/ci.yml', workflowTestPath = 'test/ci/github-v1.test.mjs';
 const modulePath = 'scripts/inventory/capture-consumers-v1.mjs', testPath = 'test/inventory/capture-consumers-v1.test.mjs';
 export const captureConsumerSources = Object.freeze({
   'identity-tenancy': '0de5544f34498e510179354c9f9cd80b099d0fe0',
@@ -22,7 +24,7 @@ export const captureConsumerSources = Object.freeze({
   inventory: '0d14f9509ade1619bf2112026a28a10a3765da07',
 });
 export const captureConsumerFiles = Object.freeze([
-  registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, 'registry/consumers/identity-tenancy.json',
+  registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, salesBridgePath, workflowPath, workflowTestPath, 'registry/consumers/identity-tenancy.json',
   'registry/consumers/catalog-pricing.json', 'registry/consumers/inventory.json',
   'inventory/README.md', 'registry/README.md', modulePath, testPath,
 ]);
@@ -106,6 +108,26 @@ function captureIndexBridge() {
     source.replace(anchor, '  index = salesHistoricalIndex(captureConsumerHistoricalIndex(index));'));
 }
 
+function replaceOnce(source, before, after) {
+  assert.equal(source.split(before).length, 2, 'ICC_COMPATIBILITY_ANCHOR');
+  return source.replace(before, after);
+}
+function captureSalesBridge() {
+  return Buffer.from("import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';\n" +
+    replaceOnce(text(base(salesBridgePath)), 'export function salesHistoricalIndex(value) {',
+      'export function salesHistoricalIndex(value) {\n  value = captureConsumerHistoricalIndex(value);'));
+}
+const salesCommand = 'node --test --test-reporter=tap test/sales/*.test.mjs';
+const boundedSalesCommand = 'node --test --test-reporter=tap --test-concurrency=2 test/sales/*.test.mjs';
+function captureWorkflowTest() {
+  let source = replaceOnce(text(base(workflowTestPath)), 'const parallelCommands = new Map([',
+    "const parallelCommands = new Map([\n  ['validate:sales-contracts', new Map([\n    ['" + salesCommand + "', '" + boundedSalesCommand + "'],\n  ])],");
+  source = replaceOnce(source, '    assert.deepEqual(current, original, key);',
+    "    if (key === 'validate_sales_contracts') {\n      const step = original.steps.find(step => step.name === 'Run original validation commands');\n      step.run = step.run.replace('" + salesCommand + "', '" + boundedSalesCommand + "');\n    }\n    assert.deepEqual(current, original, key);");
+  source = replaceOnce(source, '/GITHUB_MIGRATION_BYTES/);', '/IC2A_EXACT_METADATA/);');
+  return Buffer.from(source);
+}
+
 let modelCache;
 function model() {
   if (modelCache) return modelCache;
@@ -116,6 +138,9 @@ function model() {
   index.coverage = 'Seven known consumers; F1-11B Inventory physical capture only; external consumers remain unknown.';
   index.consumers.push({ service: 'inventory', file: 'inventory.json', localDirectory: 'services/inventory' });
   const metadata = new Map([[registryPath, encode(registry)], [indexPath, encode(index)], [bridgePath, captureAdmissionBridge()], [snapshotBridgePath, captureSnapshotBridge()], [indexBridgePath, captureIndexBridge()]]);
+  metadata.set(salesBridgePath, captureSalesBridge());
+  metadata.set(workflowPath, Buffer.from(replaceOnce(text(base(workflowPath)), salesCommand, boundedSalesCommand)));
+  metadata.set(workflowTestPath, captureWorkflowTest());
   const snapshots = new Map(), closures = new Map();
   for (const owner of Object.keys(captureConsumerSources)) {
     const manifest = manifestFor(owner), previous = owner === 'inventory' ? undefined : json('registry/consumers/' + owner + '.json');
