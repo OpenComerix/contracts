@@ -51,7 +51,7 @@ test('GitHub preserves all 22 contract jobs, exact validation commands and artif
     }
   }
 });
-test('scope selection preserves the entire reviewed full jobs and avoids duplicate PR runs', () => {
+test('miniphase CI preserves full jobs, excludes branch pushes and keeps tags and manual runs', () => {
   const prior = parse(createGitReader()(root, '7015bada29c4e291f465d98af7a13ce95f5ce5ab')(workflowPath).toString('utf8'));
   for (const [key, previous] of Object.entries(prior.jobs)) {
     const { needs, if: condition, ...current } = workflow.jobs[key];
@@ -64,7 +64,7 @@ test('scope selection preserves the entire reviewed full jobs and avoids duplica
     assert.deepEqual(needs, ['validation_scope', ...(originalNeeds ?? [])]);
     assert.equal(condition, key === 'validate_sales_contracts' ? "needs.validation_scope.outputs.mode == 'full' || needs.validation_scope.outputs.mode == 'sales-only'" : "needs.validation_scope.outputs.mode == 'full'");
   }
-  assert.deepEqual(workflow.on, {"push":null,"workflow_dispatch":{"inputs":{"sales_only":{"description":"Sales diagnostic only; full CI remains required for closure","type":"boolean","default":false}}}});
+  assert.deepEqual(workflow.on, {"push":{"tags":["**"]},"workflow_dispatch":{"inputs":{"sales_only":{"description":"Sales diagnostic only; full CI remains required for closure","type":"boolean","default":false}}}});
   const scope = workflow.jobs.validation_scope;
   assert.equal(scope.name, 'validate:scope');
   assert.equal(scope.steps.find(step => step.id === 'scope').env.CONTRACTS_SALES_ONLY, "${{ github.event_name == 'workflow_dispatch' && inputs.sales_only }}");

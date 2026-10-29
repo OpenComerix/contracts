@@ -1,7 +1,9 @@
 # GitHub Actions migration; original job commands and artifact edges preserved.
 name: OpenComerix CI
 on:
-  push: null
+  push:
+    tags:
+      - '**'
   workflow_dispatch:
     inputs:
       sales_only:

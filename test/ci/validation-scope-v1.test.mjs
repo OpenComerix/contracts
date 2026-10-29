@@ -67,6 +67,8 @@ test('real checkout verifies the pushed range and source identity, falling back 
   assert.throws(() => planFromCheckout(root, { ...env, GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);
   assert.throws(() => planFromCheckout(root, { ...env, GITHUB_REPOSITORY: 'foreign/contracts' }), /SCOPE_REPOSITORY/);
   assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch' }).mode, 'full');
+  for (const ref of ['refs/tags/v1.0.0', 'refs/tags/sales/v1.0.0'])
+    assert.equal(planFromCheckout(root, { ...env, GITHUB_REF: ref, CONTRACTS_SALES_ONLY: 'true' }).mode, 'full');
   assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');
   for (const flag of ['false', '', 'TRUE']) assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: flag }).mode, 'full');
   put('event.json', JSON.stringify(event));

@@ -135,6 +135,8 @@ const salesOnlyExpression = "${{ github.event_name == 'workflow_dispatch' && inp
 const salesOnlyInput = { description: 'Sales diagnostic only; full CI remains required for closure', type: 'boolean', default: false };
 function captureWorkflow() {
   let source = replaceOnce(text(base(workflowPath)), salesCommand, boundedSalesCommand);
+  // Exact hosting-policy delta: branch pushes schedule no CI; tags stay full.
+  source = replaceOnce(source, '  push: null', "  push:\n    tags:\n      - '**'");
   source = replaceOnce(source, '  workflow_dispatch: null', '  workflow_dispatch:\n    inputs:\n      sales_only:\n        description: ' + salesOnlyInput.description + '\n        type: boolean\n        default: false');
   source = replaceOnce(source, '        run: node scripts/ci/validation-scope-v1.mjs\n        env:',
     '        run: node scripts/ci/validation-scope-v1.mjs\n        env:\n          CONTRACTS_SALES_ONLY: ' + salesOnlyExpression);
@@ -151,6 +153,7 @@ function captureScope() {
 function captureScopeTest() {
   const anchor = "  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch' }).mode, 'full');";
   return Buffer.from(replaceOnce(text(base(scopeTestPath)), anchor, anchor +
+    "\n  for (const ref of ['refs/tags/v1.0.0', 'refs/tags/sales/v1.0.0'])\n    assert.equal(planFromCheckout(root, { ...env, GITHUB_REF: ref, CONTRACTS_SALES_ONLY: 'true' }).mode, 'full');" +
     "\n  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');" +
     "\n  for (const flag of ['false', '', 'TRUE']) assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: flag }).mode, 'full');" +
     "\n  put('event.json', JSON.stringify(event));\n  assert.equal(planFromCheckout(root, { ...env, CONTRACTS_SALES_ONLY: 'true' }).mode, 'fast');" +
@@ -159,6 +162,9 @@ function captureScopeTest() {
 function captureWorkflowTest() {
   let source = replaceOnce(text(base(workflowTestPath)), 'const parallelCommands = new Map([',
     "const parallelCommands = new Map([\n  ['validate:sales-contracts', new Map([\n    ['" + salesCommand + "', '" + boundedSalesCommand + "'],\n  ])],");
+  source = replaceOnce(source,
+    "test('scope selection preserves the entire reviewed full jobs and avoids duplicate PR runs',",
+    "test('miniphase CI preserves full jobs, excludes branch pushes and keeps tags and manual runs',");
   source = replaceOnce(source, '    assert.deepEqual(current, original, key);',
     "    if (key === 'validate_sales_contracts') {\n      const step = original.steps.find(step => step.name === 'Run original validation commands');\n      step.run = step.run.replace('" + salesCommand + "', '" + boundedSalesCommand + "');\n    }\n    assert.deepEqual(current, original, key);");
   source = replaceOnce(source, '/GITHUB_MIGRATION_BYTES/);', '/IC2A_EXACT_METADATA/);');
@@ -168,7 +174,7 @@ function captureWorkflowTest() {
   source = replaceOnce(source, '    assert.equal(condition, "' + fullCondition + '");',
     '    assert.equal(condition, key === \'validate_sales_contracts\' ? "' + salesCondition + '" : "' + fullCondition + '");');
   source = replaceOnce(source, '  assert.deepEqual(workflow.on, { push: null, workflow_dispatch: null });',
-    '  assert.deepEqual(workflow.on, ' + JSON.stringify({ push: null, workflow_dispatch: { inputs: { sales_only: salesOnlyInput } } }) + ');');
+    '  assert.deepEqual(workflow.on, ' + JSON.stringify({ push: { tags: ['**'] }, workflow_dispatch: { inputs: { sales_only: salesOnlyInput } } }) + ');');
   source = replaceOnce(source, "  assert.equal(scope.name, 'validate:scope');",
     "  assert.equal(scope.name, 'validate:scope');\n  assert.equal(scope.steps.find(step => step.id === 'scope').env.CONTRACTS_SALES_ONLY, " + JSON.stringify(salesOnlyExpression) + ');');
   return Buffer.from(source);
