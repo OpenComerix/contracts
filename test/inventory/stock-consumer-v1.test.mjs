@@ -4,7 +4,9 @@ import { gitReader } from '../../tools/architecture/graph.mjs';
 import path from 'node:path';
 import { stockConsumerCandidate, validateStockConsumer } from '../../scripts/inventory/stock-consumer-v1.mjs';
 import { captureConsumerMetadata, validateCaptureConsumers, captureConsumerReadView } from '../../scripts/inventory/capture-consumers-v1.mjs';
-import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { readRepositoryFile as rawReadRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { saleStockHistoricalRead } from '../../scripts/inventory/sale-stock-consumer-v1.mjs';
+const readRepositoryFile = saleStockHistoricalRead(rawReadRepositoryFile);
 
 const file = 'registry/consumers/inventory.json';
 const baseline = gitReader(path.resolve(import.meta.dirname, '../..'), '4270634ab05b0df7119abb94c769c4ca1ff923a8');

@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "0de5544f34498e510179354c9f9cd80b099d0fe0",
-  "manifestSha256": "13cc7b3f549abf5fb3d8dc6e6668614338c3081fd195a744ec8487545cbb8924",
-  "lockSha256": "2b3a35bc7432bd27d07f0c59d1e05b9af9809648cb8e054bf3cb60779c1954f5",
+  "sourceCommit": "f78df030a7783ede98fe5c473e6a02c3dd18820e",
+  "manifestSha256": "e48701438d27bf359c65f05fcf7a55e4e84f1338949e4800b7a3c5eb5f8d076c",
+  "lockSha256": "05aa475be6dd4cc323b2ea9126166f0da59f10ea4ef79973ae401c0a8186e77b",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -577,9 +577,10 @@
           "/profiles/4",
           "/profiles/1",
           "/profiles/2",
-          "/profiles/3"
+          "/profiles/3",
+          "/profiles/5"
         ],
-        "purpose": "F1-11A Identity producer: Inventory human authority only; preserve existing pins and catalog-only/H2 behavior.",
+        "purpose": "F1-11D sale stock posting/compensation, retained results and authorized reconciliation; no broker delivery or completed sale.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:all",
@@ -608,7 +609,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "13cc7b3f549abf5fb3d8dc6e6668614338c3081fd195a744ec8487545cbb8924",
+    "manifestSha256": "e48701438d27bf359c65f05fcf7a55e4e84f1338949e4800b7a3c5eb5f8d076c",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -4706,7 +4707,8 @@
           "/profiles/4",
           "/profiles/1",
           "/profiles/2",
-          "/profiles/3"
+          "/profiles/3",
+          "/profiles/5"
         ],
         "files": [
           {
@@ -4767,12 +4769,17 @@
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/5",
+            "sha256": "ad38f8b0221c6b98b3e8dbdf2eca01ec95c1505df025198423acb99b37196a19"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
             "pointer": "/template",
             "sha256": "ff130b2fb6e9a8facf33ae137ad2e93102140b4bd74d8c78ba56e7710007bfaa"
           }
         ],
-        "selectionSha256": "f495811da3800e14fb8b5c2603bfa848539580d3d38bcf9e7c51929ae9bf284f",
-        "runtimeSha256": "f495811da3800e14fb8b5c2603bfa848539580d3d38bcf9e7c51929ae9bf284f"
+        "selectionSha256": "33eb82cea954bc1451eab9c88532e50670807ce3b68d37d34807fb6dff956f9f",
+        "runtimeSha256": "33eb82cea954bc1451eab9c88532e50670807ce3b68d37d34807fb6dff956f9f"
       },
       {
         "id": "common.error-catalog.v9",

@@ -7,6 +7,7 @@ import { fileURLToPath } from 'node:url';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import { stockConsumerCandidate, stockConsumerHistoricalFile, stockConsumerHistoricalSnapshot } from './stock-consumer-v1.mjs';
+import { saleStockHistoricalFile, saleStockHistoricalSnapshot, validateSaleStockConsumers } from './sale-stock-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const launcher = path.resolve(root, '../..');
@@ -31,6 +32,7 @@ export const captureConsumerFiles = Object.freeze([
   'registry/consumers/catalog-pricing.json', 'registry/consumers/inventory.json',
   'inventory/README.md', 'registry/README.md', modulePath, testPath,
   'scripts/inventory/stock-consumer-v1.mjs', 'test/inventory/stock-consumer-v1.test.mjs',
+  'scripts/inventory/sale-stock-consumer-v1.mjs', 'test/inventory/sale-stock-consumer-v1.test.mjs',
 ]);
 const text = value => new TextDecoder('utf-8', { fatal: true }).decode(value).replaceAll('\r\n', '\n');
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -247,7 +249,8 @@ export const captureConsumerManifests = () => new Map([...model().snapshots].map
 export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT') {
   const expected = model();
   for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures]) {
-    const current = read(file);
+    const live = read(file), current = saleStockHistoricalFile(file, live);
+    if (current !== live) validateSaleStockConsumers(read);
     if (file === 'registry/consumers/inventory.json' && text(current) !== text(bytes)) {
       // Preserve B's complete source checks. C's additional closure has its own validator;
       // traversing it through a historical reader would recursively re-enter these projections.
@@ -260,13 +263,14 @@ export function validateCaptureConsumers(read = readRepositoryFile, diagnostic =
 export function withCaptureConsumers(read, verify) {
   validateCaptureConsumers(read, 'IC2A_EXACT_METADATA');
   return verify(file => {
-    const bytes = stockConsumerHistoricalFile(file, read(file)), expected = model().metadata.get(file);
+    const bytes = stockConsumerHistoricalFile(file, saleStockHistoricalFile(file, read(file))), expected = model().metadata.get(file);
     return expected && file !== 'registry/consumers/inventory.json' && text(bytes) === text(expected) ? base(file) : bytes;
   });
 }
 export function captureConsumerReadView(read = readRepositoryFile) {
   return file => {
-    const bytes = read(file), expected = model().metadata.get(file);
+    const live = read(file), bytes = saleStockHistoricalFile(file, live), expected = model().metadata.get(file);
+    if (bytes !== live) validateSaleStockConsumers(read);
     const historical = stockConsumerHistoricalFile(file, bytes);
     if (historical !== bytes) { validateCaptureConsumers(read); return historical; }
     if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
@@ -274,6 +278,8 @@ export function captureConsumerReadView(read = readRepositoryFile) {
   };
 }
 export function captureConsumerHistoricalFile(file, bytes) {
+  const live = bytes; bytes = saleStockHistoricalFile(file, bytes);
+  if (live !== bytes) validateSaleStockConsumers();
   const historical = stockConsumerHistoricalFile(file, bytes);
   if (historical !== bytes) { validateCaptureConsumers(); return historical; }
   const expected = model().metadata.get(file);
@@ -285,6 +291,8 @@ export function captureConsumerHistoricalRegistry(value) {
   validateCaptureConsumers(); return json(registryPath);
 }
 export function captureConsumerHistoricalSnapshot(value) {
+  const live = value; value = saleStockHistoricalSnapshot(value);
+  if (live !== value) validateSaleStockConsumers();
   const historical = stockConsumerHistoricalSnapshot(value);
   if (historical !== value) { validateCaptureConsumers(); return historical; }
   const service = value?.manifest?.service;
