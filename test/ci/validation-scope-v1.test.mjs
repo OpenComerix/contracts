@@ -59,6 +59,19 @@ test('real checkout verifies the pushed range and source identity, falling back 
     GITHUB_EVENT_NAME: 'push', GITHUB_EVENT_PATH: path.join(root, 'event.json') };
   put('event.json', JSON.stringify(event));
   assert.equal(planFromCheckout(root, env).mode, 'fast');
+  for (const repository of ['OpenComerix/contracts', 'OPENCOMERIX/CONTRACTS']) {
+    const manual = { ...env, GITHUB_REPOSITORY: repository, GITHUB_EVENT_NAME: 'workflow_dispatch' };
+    assert.equal(planFromCheckout(root, manual).mode, 'full');
+    assert.equal(planFromCheckout(root, { ...manual, CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');
+    assert.throws(() => planFromCheckout(root, { ...manual, GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);
+  }
+  for (const repository of [undefined, null, '', 'foreign/contracts', 'opencomerix/other',
+    'opencomerix/contracts/extra', ' opencomerix/contracts'])
+    assert.throws(() => planFromCheckout(root, { ...env, GITHUB_REPOSITORY: repository }), /SCOPE_REPOSITORY/);
+  put('event.json', JSON.stringify({ ...event, repository: { full_name: 'OpenComerix/contracts' } }));
+  assert.equal(planFromCheckout(root, { ...env, GITHUB_REPOSITORY: 'OpenComerix/contracts' }).mode, 'fast');
+  assert.equal(planFromCheckout(root, env).reason, 'FULL_UNVERIFIED_EVENT');
+  put('event.json', JSON.stringify(event));
   for (const patch of [{ before: 'c'.repeat(40) }, { after: before }, { deleted: true },
     { repository: { full_name: 'foreign/contracts' } }, { head_commit: { id: before } }, { ref: 'refs/heads/other' }]) {
     put('event.json', JSON.stringify({ ...event, ...patch }));

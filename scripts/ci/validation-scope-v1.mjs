@@ -44,7 +44,8 @@ export function selectValidation({ eventName, ref, sha, before, message, files }
 export function planFromCheckout(root, env = process.env, execute = execFileSync) {
   const git = args => execute('git', ['-c', 'safe.directory=' + root, '-C', root, ...args],
     { maxBuffer: 2 * 1024 * 1024, windowsHide: true });
-  assert.equal(env.GITHUB_REPOSITORY, 'opencomerix/contracts', 'SCOPE_REPOSITORY');
+  assert.equal(typeof env.GITHUB_REPOSITORY === 'string' ? env.GITHUB_REPOSITORY.toLowerCase() : undefined,
+    'opencomerix/contracts', 'SCOPE_REPOSITORY');
   assert(exactSHA(env.GITHUB_SHA), 'SCOPE_SOURCE_REQUIRED');
   assert.equal(git(['rev-parse','HEAD']).toString().trim(), env.GITHUB_SHA, 'SCOPE_CHECKOUT_SHA');
   if (env.GITHUB_EVENT_NAME === 'workflow_dispatch' && env.CONTRACTS_SALES_ONLY === 'true')

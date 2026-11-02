@@ -150,16 +150,33 @@ function captureScope() {
   let source = replaceOnce(text(base(scopePath)), "  const fallback = reason => ({ mode: 'full', reason, files: [], tests: [] });",
     "  if (env.GITHUB_EVENT_NAME === 'workflow_dispatch' && env.CONTRACTS_SALES_ONLY === 'true')\n    return { mode: 'sales-only', reason: 'EXPLICIT_SALES_DIAGNOSTIC', files: [], tests: [] };\n  const fallback = reason => ({ mode: 'full', reason, files: [], tests: [] });");
   source = replaceOnce(source, "${plan.mode === 'fast' ? 'Parcial:", "${plan.mode !== 'full' ? 'Parcial:");
+  source = replaceOnce(source, "  assert.equal(env.GITHUB_REPOSITORY, 'opencomerix/contracts', 'SCOPE_REPOSITORY');",
+    "  assert.equal(typeof env.GITHUB_REPOSITORY === 'string' ? env.GITHUB_REPOSITORY.toLowerCase() : undefined,\n    'opencomerix/contracts', 'SCOPE_REPOSITORY');");
   return Buffer.from(source);
 }
 function captureScopeTest() {
   const anchor = "  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch' }).mode, 'full');";
-  return Buffer.from(replaceOnce(text(base(scopeTestPath)), anchor, anchor +
+  let source = replaceOnce(text(base(scopeTestPath)), anchor, anchor +
     "\n  for (const ref of ['refs/tags/v1.0.0', 'refs/tags/sales/v1.0.0'])\n    assert.equal(planFromCheckout(root, { ...env, GITHUB_REF: ref, CONTRACTS_SALES_ONLY: 'true' }).mode, 'full');" +
     "\n  assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');" +
     "\n  for (const flag of ['false', '', 'TRUE']) assert.equal(planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: flag }).mode, 'full');" +
     "\n  put('event.json', JSON.stringify(event));\n  assert.equal(planFromCheckout(root, { ...env, CONTRACTS_SALES_ONLY: 'true' }).mode, 'fast');" +
-    "\n  assert.throws(() => planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true', GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);"));
+    "\n  assert.throws(() => planFromCheckout(root, { ...env, GITHUB_EVENT_NAME: 'workflow_dispatch', CONTRACTS_SALES_ONLY: 'true', GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);");
+  source = replaceOnce(source, "  assert.equal(planFromCheckout(root, env).mode, 'fast');", `  assert.equal(planFromCheckout(root, env).mode, 'fast');
+  for (const repository of ['OpenComerix/contracts', 'OPENCOMERIX/CONTRACTS']) {
+    const manual = { ...env, GITHUB_REPOSITORY: repository, GITHUB_EVENT_NAME: 'workflow_dispatch' };
+    assert.equal(planFromCheckout(root, manual).mode, 'full');
+    assert.equal(planFromCheckout(root, { ...manual, CONTRACTS_SALES_ONLY: 'true' }).mode, 'sales-only');
+    assert.throws(() => planFromCheckout(root, { ...manual, GITHUB_SHA: before }), /SCOPE_CHECKOUT_SHA/);
+  }
+  for (const repository of [undefined, null, '', 'foreign/contracts', 'opencomerix/other',
+    'opencomerix/contracts/extra', ' opencomerix/contracts'])
+    assert.throws(() => planFromCheckout(root, { ...env, GITHUB_REPOSITORY: repository }), /SCOPE_REPOSITORY/);
+  put('event.json', JSON.stringify({ ...event, repository: { full_name: 'OpenComerix/contracts' } }));
+  assert.equal(planFromCheckout(root, { ...env, GITHUB_REPOSITORY: 'OpenComerix/contracts' }).mode, 'fast');
+  assert.equal(planFromCheckout(root, env).reason, 'FULL_UNVERIFIED_EVENT');
+  put('event.json', JSON.stringify(event));`);
+  return Buffer.from(source);
 }
 function captureWorkflowTest() {
   let source = replaceOnce(text(base(workflowTestPath)), 'const parallelCommands = new Map([',
