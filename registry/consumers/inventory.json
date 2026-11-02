@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/inventory",
-  "sourceCommit": "0d14f9509ade1619bf2112026a28a10a3765da07",
-  "manifestSha256": "876cb9f506a2cfaa620b5f5694db7a2c354a7d7c138b8129be51b32496014cc2",
-  "lockSha256": "f6a7db4096adbdf2168c599cbd29a978c7528a7c07c7c9fd752d6b5aa73769ea",
+  "sourceCommit": "57c4323f401b2573832fd2bd48d85b9cdbfd7b33",
+  "manifestSha256": "e013ece697958ed0cb512081981635a5cf41a901b969186cf624eed4a73fbc0b",
+  "lockSha256": "95e20d3df1346db80a7aea598afbc54ed78a7e0b1b7db314cccbae1605e0fa9d",
   "manifest": {
     "formatVersion": 1,
     "service": "inventory",
@@ -84,9 +84,16 @@
           "/profiles/2",
           "/profiles/3",
           "/issuance",
-          "/permissions/3"
+          "/permissions/3",
+          "/profiles/1",
+          "/permissions/0",
+          "/permissions/1",
+          "/permissions/2",
+          "/permissions/4",
+          "/permissions/5",
+          "/permissions/6"
         ],
-        "purpose": "F1-11B physical capture only: exact preparation binding, current human authority and no stock effect.",
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -134,9 +141,15 @@
         "operations": [],
         "pointers": [
           "/$defs/Authorization",
-          "/$defs/CanonicalRequest/oneOf/3"
+          "/$defs/CanonicalRequest/oneOf/3",
+          "/$defs/CanonicalRequest/oneOf/0",
+          "/$defs/CanonicalRequest/oneOf/1",
+          "/$defs/CanonicalRequest/oneOf/2",
+          "/$defs/CanonicalRequest/oneOf/4",
+          "/$defs/CanonicalRequest/oneOf/5",
+          "/$defs/CanonicalRequest/oneOf/6"
         ],
-        "purpose": "F1-11B physical capture only: exact preparation binding, current human authority and no stock effect.",
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -150,13 +163,139 @@
         "version": "v1",
         "operations": [],
         "pointers": [
-          "/$defs/AdjustmentRequest"
+          "/$defs/AdjustmentRequest",
+          "/$defs/WarehouseCreate",
+          "/$defs/Warehouse",
+          "/$defs/HttpWarehouse",
+          "/$defs/Warehouses",
+          "/$defs/HttpWarehouses",
+          "/$defs/Adjustment",
+          "/$defs/HttpAdjustment",
+          "/$defs/Movement",
+          "/$defs/Position",
+          "/$defs/HttpPosition",
+          "/$defs/Positions",
+          "/$defs/HttpPositions"
         ],
-        "purpose": "F1-11B physical capture only: exact preparation binding, current human authority and no stock effect.",
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
           "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "inventory.http.private.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createInitialWarehouse",
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "adjustInventoryStock",
+          "getInventoryAdjustment",
+          "getInventoryPosition",
+          "listInventoryPositions"
+        ],
+        "pointers": [],
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:contracts",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "inventory.http.public.v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "operations": [
+          "createInitialWarehouse",
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "adjustInventoryStock",
+          "getInventoryAdjustment",
+          "getInventoryPosition",
+          "listInventoryPositions"
+        ],
+        "pointers": [],
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:contracts",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "inventory.stock-adjustment.recorded.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:contracts",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "inventory.protocol-policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/operations/0",
+          "/operations/1",
+          "/operations/2",
+          "/operations/3",
+          "/operations/4",
+          "/operations/5",
+          "/operations/6",
+          "/authority/human",
+          "/idempotency/http_days",
+          "/quantity",
+          "/atomicity",
+          "/limits",
+          "/history/sequence",
+          "/history/maximum_fact_bytes"
+        ],
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:contracts",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "inventory.lifecycle-policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/owner",
+          "/production_enabled",
+          "/storage_policies",
+          "/prohibited_persistence",
+          "/production_prerequisites"
+        ],
+        "purpose": "F1-11C human stock core with current authority and exact physical capture; no Sales effects, broker delivery or history HTTP.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:contracts",
           "pnpm test:e2e"
         ]
       }
@@ -167,7 +306,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "inventory",
-    "manifestSha256": "876cb9f506a2cfaa620b5f5694db7a2c354a7d7c138b8129be51b32496014cc2",
+    "manifestSha256": "e013ece697958ed0cb512081981635a5cf41a901b969186cf624eed4a73fbc0b",
     "entries": [
       {
         "id": "catalog.inventory-capture.http.v1",
@@ -578,7 +717,14 @@
           "/profiles/2",
           "/profiles/3",
           "/issuance",
-          "/permissions/3"
+          "/permissions/3",
+          "/profiles/1",
+          "/permissions/0",
+          "/permissions/1",
+          "/permissions/2",
+          "/permissions/4",
+          "/permissions/5",
+          "/permissions/6"
         ],
         "files": [
           {
@@ -594,13 +740,48 @@
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/0",
+            "sha256": "e4a9fb03a126caba919406ee5f6411961c62ccf5437f564e2e2ac6f072ea8c10"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/1",
+            "sha256": "43ec0acd12654fec4356035f8e3ce4ca5d14324197b6bfba1913e05b0d1585f4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/2",
+            "sha256": "6b2c855f448636c3846646c4a2f17ca932e39c972b3f74d6e1890f17276199c5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
             "pointer": "/permissions/3",
             "sha256": "6fcc5726ac843854c8754e2eaa98dcd9d6e867e482bf6e0660375b113cd3920d"
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/4",
+            "sha256": "88b38ef70350b247ecd1ed527d510ed26f7e96f2fa4c5e10f6405ae9508129f5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/5",
+            "sha256": "22fa90d7d5527d6ac80d257bd22b64fc03fe775d0cbd955a675d5f0a41313776"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/permissions/6",
+            "sha256": "3f88b1ae81606c7b233bcbeaed961ca1b72fd4ddf0deffc9bdb3f1e8f93a5fe2"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
             "pointer": "/profiles/0",
             "sha256": "7b3cbfb29ead59e8c003de259ec1621e22388f1bb1cc094745d786954870f04e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
+            "pointer": "/profiles/1",
+            "sha256": "b4042f7fc336f9e8b5310fa7b1f114362af207c2f1f32c796bbf3cccd3696a3c"
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-policy-v1.json",
@@ -613,8 +794,8 @@
             "sha256": "daa7848f238e9638e357aa2e3a4a6695850af30ea12ab8df1de12377e576d11e"
           }
         ],
-        "selectionSha256": "d2453b8b483a21b9f001d47fa64d626da0c834f5891a00f9a091131513b4a3ce",
-        "runtimeSha256": "d2453b8b483a21b9f001d47fa64d626da0c834f5891a00f9a091131513b4a3ce"
+        "selectionSha256": "393390ff6c8993337bfa027b3c8dbb9822c468e00b01dcc8a7827740ec482bf7",
+        "runtimeSha256": "393390ff6c8993337bfa027b3c8dbb9822c468e00b01dcc8a7827740ec482bf7"
       },
       {
         "id": "identity.internal-auth.v1",
@@ -949,7 +1130,13 @@
         "operations": [],
         "pointers": [
           "/$defs/Authorization",
-          "/$defs/CanonicalRequest/oneOf/3"
+          "/$defs/CanonicalRequest/oneOf/3",
+          "/$defs/CanonicalRequest/oneOf/0",
+          "/$defs/CanonicalRequest/oneOf/1",
+          "/$defs/CanonicalRequest/oneOf/2",
+          "/$defs/CanonicalRequest/oneOf/4",
+          "/$defs/CanonicalRequest/oneOf/5",
+          "/$defs/CanonicalRequest/oneOf/6"
         ],
         "files": [
           {
@@ -969,8 +1156,38 @@
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/0",
+            "sha256": "59d1aea9967bb66e3f20bbe7f0a1ac42e32e6125dac4a5bfe301cb8c0e78d06f"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/1",
+            "sha256": "bf04f9c892b9823fb547a596253f7cd1baca61aea5061147ebbd5f4cbc7d3e6b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/2",
+            "sha256": "c6c72791c06023318b74981b8bc495ca6c5852b98e0f677c32f04d0b0dade93a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
             "pointer": "/$defs/CanonicalRequest/oneOf/3",
             "sha256": "26b81d232daac57c545bf4fc570d62c6e09b8a1b6106cdf6e4978cf7a2dee235"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/4",
+            "sha256": "c383b4f99be8b1a286153597e3c54c62f7ad8e8164e96291fa9a6e5fcf165c66"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/5",
+            "sha256": "a47d02583aabafb2ab341c23a7055072e721815b7d8da842b7a116a24c8144f2"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/6",
+            "sha256": "633bab3ba07fe835f8e9742aeaf7012897e64bb2fe29ef4f0f9a42f2224d0ce1"
           },
           {
             "path": "identity/http/shared/v1/identity-inventory-authority-v1.schema.json",
@@ -989,6 +1206,11 @@
           },
           {
             "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
             "pointer": "/$id",
             "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
           },
@@ -998,8 +1220,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "80dcdc1f2a2796fdaf90c03e76a46a8bf4f0c86c0aa8f51a353ee41c0b603f9f",
-        "runtimeSha256": "80dcdc1f2a2796fdaf90c03e76a46a8bf4f0c86c0aa8f51a353ee41c0b603f9f"
+        "selectionSha256": "a2aaa43900fc4adcc80173572bef924df94c1833f632eacba3896c27c2a7ac92",
+        "runtimeSha256": "a2aaa43900fc4adcc80173572bef924df94c1833f632eacba3896c27c2a7ac92"
       },
       {
         "id": "inventory.types.v1",
@@ -1012,9 +1234,33 @@
         "root": "inventory/http/shared/v1/inventory-types-v1.schema.json",
         "operations": [],
         "pointers": [
-          "/$defs/AdjustmentRequest"
+          "/$defs/AdjustmentRequest",
+          "/$defs/WarehouseCreate",
+          "/$defs/Warehouse",
+          "/$defs/HttpWarehouse",
+          "/$defs/Warehouses",
+          "/$defs/HttpWarehouses",
+          "/$defs/Adjustment",
+          "/$defs/HttpAdjustment",
+          "/$defs/Movement",
+          "/$defs/Position",
+          "/$defs/HttpPosition",
+          "/$defs/Positions",
+          "/$defs/HttpPositions"
         ],
         "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
           {
             "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
             "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
@@ -1022,9 +1268,139 @@
         ],
         "units": [
           {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "3e8cf106d4c34f689c631fc34ec9281742a6cf4c67cef01717328109694aec7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "d726a233984c293af96ca72d825c2edeac4edbc240c8f89a5e338067e94c1f74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PageLimit",
+            "sha256": "23162b456d1acb4165ce4f53650cc1718624202d07be52b243c4637f13a5c36b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Adjustment",
+            "sha256": "d643cf7604b4682e6a0a26fd59fdf1352446170db807c71ecedf8e4000f580bb"
+          },
+          {
             "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
             "pointer": "/$defs/AdjustmentRequest",
             "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpAdjustment",
+            "sha256": "73d4da655e31efd85df1a85f6003a2b2fcc16d734efb329d8518ff000da839fc"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPosition",
+            "sha256": "2c2c681179edd8ad70fa5be4e92e7e1dea5ec9e947f1be797626b78464f9078e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPositions",
+            "sha256": "95f4817cde9aa39c579031fb629092970157149cb17abca9af1c83b7d349804c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouse",
+            "sha256": "506b58e1b4239cd88fa52863e5028ee9d1224b78654fe6082c7b83e5cceb2080"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouses",
+            "sha256": "e542f9b719fdd7b915b30d7c99810db52e786edc3b05fe8c471f735c1250334f"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "c28974e2f9c0458f24ed7fd6e5d890c03e41a893bec85087f925f2d1fd4a3e0d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Positions",
+            "sha256": "742a7d315880ffeb69f713d7e842badf933064cb4ca816840e967d39bd580ca7"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warehouse",
+            "sha256": "76c1e95a3f32648ad783f679a0c8d29ea723f4a85b6c2a177de10fba3afdab4e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warehouses",
+            "sha256": "9976cc609246c0bd223b80bb9fa9a8145c43355305a8bd405465edc9f66b6b0c"
           },
           {
             "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
@@ -1037,8 +1413,832 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "9377946cdc8bf20a6cf757dcdf8632d150eb50e3d2755fdfc5798436971bcb5f",
-        "runtimeSha256": "9377946cdc8bf20a6cf757dcdf8632d150eb50e3d2755fdfc5798436971bcb5f"
+        "selectionSha256": "2f85850301505235e0bd8e4d9d1699406697356e55f69e144cf0fb8bf87399bf",
+        "runtimeSha256": "2f85850301505235e0bd8e4d9d1699406697356e55f69e144cf0fb8bf87399bf"
+      },
+      {
+        "id": "inventory.http.private.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/private/v1/inventory-internal-v1.yaml",
+        "operations": [
+          "createInitialWarehouse",
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "adjustInventoryStock",
+          "getInventoryAdjustment",
+          "getInventoryPosition",
+          "listInventoryPositions"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "sha256": "c4517bab25bd42bc1e333535b8385ab5503a860738457ed0829967afea988568"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "3e8cf106d4c34f689c631fc34ec9281742a6cf4c67cef01717328109694aec7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "d726a233984c293af96ca72d825c2edeac4edbc240c8f89a5e338067e94c1f74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PageLimit",
+            "sha256": "23162b456d1acb4165ce4f53650cc1718624202d07be52b243c4637f13a5c36b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/components/securitySchemes/delegated",
+            "sha256": "8a2a5fba6b34bece8a8d247ffe2bde692d9772016bc68365db251e749283cb83"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "f4206f437220846e4d7be6513a884c15749196e1ff207ff9449884da65020006"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments/post",
+            "sha256": "63a93859d8ebbb5bc98e7196481155c90a78237689814dcbd67780a7565ddd77"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments~1{adjustment_id}/get",
+            "sha256": "ddd4cb843f9a2a944c34ab4b355a3940acf9d51d6b881712f2dd595a8d97aa9f"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions/get",
+            "sha256": "531e7a024250a8e9b653e49e1ab73f5d1e53d7a0b915e17b2c62cfa9e027b7db"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions~1{position_id}/get",
+            "sha256": "a2c0a8ec919acde4ac85124015b67bfb345ce630f3697dec4c8149116101bde8"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/get",
+            "sha256": "6e9abe36404d080a41e33013d2d8e0da5848e34dca244cdce246e5353da66ebe"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/post",
+            "sha256": "083c8bc74f787c377803460ca2b89305812aec496df70552fe515adb1197fadb"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses~1{warehouse_id}/get",
+            "sha256": "035cb183f936f2e3967f88e5368cc34b8af264ae4a17dfb4fc4eda06f4ab4f93"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-internal-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "8f3dad25bb50c0071d92a96bf9763f18886df2abba1562eef27c38ca4f549057"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/AdjustmentRequest",
+            "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpAdjustment",
+            "sha256": "73d4da655e31efd85df1a85f6003a2b2fcc16d734efb329d8518ff000da839fc"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPosition",
+            "sha256": "2c2c681179edd8ad70fa5be4e92e7e1dea5ec9e947f1be797626b78464f9078e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPositions",
+            "sha256": "95f4817cde9aa39c579031fb629092970157149cb17abca9af1c83b7d349804c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouse",
+            "sha256": "506b58e1b4239cd88fa52863e5028ee9d1224b78654fe6082c7b83e5cceb2080"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouses",
+            "sha256": "e542f9b719fdd7b915b30d7c99810db52e786edc3b05fe8c471f735c1250334f"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "c28974e2f9c0458f24ed7fd6e5d890c03e41a893bec85087f925f2d1fd4a3e0d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warehouse",
+            "sha256": "76c1e95a3f32648ad783f679a0c8d29ea723f4a85b6c2a177de10fba3afdab4e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "5f275ec6f6aaf34d4defc44cad3fb0acee92856dd32bc59732785c13e1f23f3e",
+        "runtimeSha256": "28d98d42fed3c6f127724aa1838ded1bd6825c5190f5feada54447bdd8836c90"
+      },
+      {
+        "id": "inventory.http.public.v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/public/v1/inventory-v1.yaml",
+        "operations": [
+          "createInitialWarehouse",
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "adjustInventoryStock",
+          "getInventoryAdjustment",
+          "getInventoryPosition",
+          "listInventoryPositions"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "sha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "3e8cf106d4c34f689c631fc34ec9281742a6cf4c67cef01717328109694aec7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "d726a233984c293af96ca72d825c2edeac4edbc240c8f89a5e338067e94c1f74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PageLimit",
+            "sha256": "23162b456d1acb4165ce4f53650cc1718624202d07be52b243c4637f13a5c36b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "cfa9fe622ceda9fedca646d0101c7475a78cb3051c1ce795c8f733651738c6b2"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments/post",
+            "sha256": "8e8b818542690fc858e4445314c8f8a7e38fbe1723b58c6a272ac115fb1be2eb"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments~1{adjustment_id}/get",
+            "sha256": "581f4c21b9b00735ba92bc018f05bec55fbd2ff11b0c9eea8f276b480dec8a9e"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions/get",
+            "sha256": "41d14bf3c360035c3584e55da4e365fd14dde373993bce64ef0ee7b82ebe9531"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions~1{position_id}/get",
+            "sha256": "dfe8f1afca9f6f6960a307459f902ddfba40d5d00c8bf833a35acc59fd815e59"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/get",
+            "sha256": "240fb42d4e22469888b9be263532e3bcf789835d935c84b8800c620294e52597"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/post",
+            "sha256": "74a761c92df71035715eeb20a6d92ee2f12c630411416faf120cf8005e21bae5"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses~1{warehouse_id}/get",
+            "sha256": "a506aa8fac6f2d3735f848976ce8a16a8aed71f5af1749067d35762132e34ba4"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "a7ff76fcfb99ca4f56100c99c0fb5f4bede82bbd38bb9f2b28972eb278bc464c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/AdjustmentRequest",
+            "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpAdjustment",
+            "sha256": "73d4da655e31efd85df1a85f6003a2b2fcc16d734efb329d8518ff000da839fc"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPosition",
+            "sha256": "2c2c681179edd8ad70fa5be4e92e7e1dea5ec9e947f1be797626b78464f9078e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPositions",
+            "sha256": "95f4817cde9aa39c579031fb629092970157149cb17abca9af1c83b7d349804c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouse",
+            "sha256": "506b58e1b4239cd88fa52863e5028ee9d1224b78654fe6082c7b83e5cceb2080"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouses",
+            "sha256": "e542f9b719fdd7b915b30d7c99810db52e786edc3b05fe8c471f735c1250334f"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "c28974e2f9c0458f24ed7fd6e5d890c03e41a893bec85087f925f2d1fd4a3e0d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warehouse",
+            "sha256": "76c1e95a3f32648ad783f679a0c8d29ea723f4a85b6c2a177de10fba3afdab4e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "2b6015bb6d66ef339e4629df2c9e936372f30cfd80e4c9797ebbe339de64b084",
+        "runtimeSha256": "0b1ef7d8b4b1ee694144e1c4a6261ac44fb736d6e14d75a9772f0e1acc1d62de"
+      },
+      {
+        "id": "inventory.stock-adjustment.recorded.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+            "sha256": "779d7f10b6e2df789bee184f5b3feb2d7970c37a31a00101e9d11882d3f58d4e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+            "pointer": "",
+            "sha256": "f9676ebea88fc521e276e88c1de5f1c0c8f53f693054c4dac02456fb955713f7"
+          },
+          {
+            "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "361ffe59835f8002a10f0be7fb5fe3741ecf3432456fcaf3989ff712e8f3d41b"
+          },
+          {
+            "path": "inventory/events/v1/inventory.stock-adjustment.recorded.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Adjustment",
+            "sha256": "d643cf7604b4682e6a0a26fd59fdf1352446170db807c71ecedf8e4000f580bb"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "df0a5eea9025599f1d1b8728a1a21d8dfb17fa1ee5fe54d7a65f9f4d8e9dca56",
+        "runtimeSha256": "df0a5eea9025599f1d1b8728a1a21d8dfb17fa1ee5fe54d7a65f9f4d8e9dca56"
+      },
+      {
+        "id": "inventory.protocol-policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          "/operations/0",
+          "/operations/1",
+          "/operations/2",
+          "/operations/3",
+          "/operations/4",
+          "/operations/5",
+          "/operations/6",
+          "/authority/human",
+          "/idempotency/http_days",
+          "/quantity",
+          "/atomicity",
+          "/limits",
+          "/history/sequence",
+          "/history/maximum_fact_bytes"
+        ],
+        "files": [
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "sha256": "1e590eaa84b6edb689f304eb6171905ed908be63106a557771101a2e72a1742c"
+          }
+        ],
+        "units": [
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/atomicity",
+            "sha256": "086e45742e1bb4c61aa07535152f08858e118ba1bab19a6d0528754941d8e180"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/authority/human",
+            "sha256": "36df4b2e2fdadbb6d2d3f2bee9c1655a12b04cc00cbc9673a7bc0c90d454f6e9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/history/maximum_fact_bytes",
+            "sha256": "f1de634787fe5cc0fe96b0b7f617755847d22b30d06aee392ffb5787d7c9f1c9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/history/sequence",
+            "sha256": "45aaa43c69c2036d8d32f207e02a75c2012c6550bcb237d832a3633b0c1e122e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/idempotency/http_days",
+            "sha256": "7902699be42c8a8e46fbbb4501726517e86b22c56a189f7625a6da49081b2451"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/limits",
+            "sha256": "ae9ed721777f8ea2e5ac57115906f2cd55a5b08fe1b5aea3845737c4ebddcab3"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/0",
+            "sha256": "8bb1d17fd97562f5cd48d4f495b9c44cd157f5567ceb4235a8d719a9be034923"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/1",
+            "sha256": "7fe10204d07e8bc32f7d7336ab99d22b48c1cb6163b1880a4c486788a6ac0410"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/2",
+            "sha256": "51bbb4cfb37f8c259b01af291e6e55899222d71500b4e603689f0802d1d5cbc1"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/3",
+            "sha256": "2f9fabc09af5bcb9840b666572a49310ce7ebf39dd1975d073a5cf407800e910"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/4",
+            "sha256": "1e20acf1f171d8ab1758e93d08b6cd178fa4a3c08a4efeb5f2713d10ac5da173"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/5",
+            "sha256": "d44bc562b7b0020b66af8dbbbb863cef83dfc7d429e22769c64aff2898d8aadd"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/operations/6",
+            "sha256": "0846c9b19e8bb7b03fff4c88804744319832234e0aeeaa2669ac049d59e81253"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-protocol-policy-v1.json",
+            "pointer": "/quantity",
+            "sha256": "35ab0596541d38864e13a4710e03af2ba0c0d5e28c2183d7d1c4b69d8ec0a9ac"
+          }
+        ],
+        "selectionSha256": "d2646876820268939913c978198bbe0bdc3c6b4b03ccdcd9ade00697a227d89b",
+        "runtimeSha256": "d2646876820268939913c978198bbe0bdc3c6b4b03ccdcd9ade00697a227d89b"
+      },
+      {
+        "id": "inventory.lifecycle-policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          "/owner",
+          "/production_enabled",
+          "/storage_policies",
+          "/prohibited_persistence",
+          "/production_prerequisites"
+        ],
+        "files": [
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "sha256": "1a7b19c9812184d5803577795d280f1884ca5e8cde314b659521485301a9cf4c"
+          }
+        ],
+        "units": [
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "pointer": "/owner",
+            "sha256": "50fdf1ccec1055d941ad1583d40aaaf31f7856110b59c560d10f008e321c2d74"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "pointer": "/production_enabled",
+            "sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "pointer": "/production_prerequisites",
+            "sha256": "0f0c1bf63a6689da951fcd9f3768626fae34121271b4d03993ecfe8633c993fe"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "pointer": "/prohibited_persistence",
+            "sha256": "21e98798f4fb94d36f6aeb4e709fa88fd13d0163913c2bd0ce1fb104fe9b7785"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-lifecycle-policy-v1.json",
+            "pointer": "/storage_policies",
+            "sha256": "cd00f52e96c0a79aa6d83cc53f69b226aa98a1812ae77b2a8c8daae839cd060d"
+          }
+        ],
+        "selectionSha256": "6494dc53058d28c0e7f75cfe7699efc657d8b1202d4f3c8665af99898dfa36ac",
+        "runtimeSha256": "6494dc53058d28c0e7f75cfe7699efc657d8b1202d4f3c8665af99898dfa36ac"
       }
     ],
     "assets": []

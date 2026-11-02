@@ -6,6 +6,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
+import { stockConsumerCandidate, stockConsumerHistoricalFile, stockConsumerHistoricalSnapshot } from './stock-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const launcher = path.resolve(root, '../..');
@@ -29,6 +30,7 @@ export const captureConsumerFiles = Object.freeze([
   registryPath, indexPath, bridgePath, snapshotBridgePath, indexBridgePath, salesBridgePath, salesTestPath, workflowPath, workflowTestPath, scopePath, scopeTestPath, 'registry/consumers/identity-tenancy.json',
   'registry/consumers/catalog-pricing.json', 'registry/consumers/inventory.json',
   'inventory/README.md', 'registry/README.md', modulePath, testPath,
+  'scripts/inventory/stock-consumer-v1.mjs', 'test/inventory/stock-consumer-v1.test.mjs',
 ]);
 const text = value => new TextDecoder('utf-8', { fatal: true }).decode(value).replaceAll('\r\n', '\n');
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -227,26 +229,36 @@ export const captureConsumerMetadata = () => new Map([...model().metadata].map((
 export const captureConsumerManifests = () => new Map([...model().snapshots].map(([owner, snapshot]) => [owner, structuredClone(snapshot.manifest)]));
 export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT') {
   const expected = model();
-  for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures])
-    assert(text(read(file)) === text(bytes), diagnostic + ':' + file);
+  for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures]) {
+    const current = read(file);
+    if (file === 'registry/consumers/inventory.json' && text(current) !== text(bytes)) {
+      // Preserve B's complete source checks. C's additional closure has its own validator;
+      // traversing it through a historical reader would recursively re-enter these projections.
+      assert.equal(text(current), text(stockConsumerCandidate()), diagnostic + ':' + file);
+    } else assert(text(current) === text(bytes), diagnostic + ':' + file);
+  }
   for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'ICC_TOOL_MISSING:' + file);
   return { consumers: 7, roots: 202, preserved: 236, previousPinsPreserved: true, runtimeDemonstrated: false };
 }
 export function withCaptureConsumers(read, verify) {
   validateCaptureConsumers(read, 'IC2A_EXACT_METADATA');
   return verify(file => {
-    const bytes = read(file), expected = model().metadata.get(file);
+    const bytes = stockConsumerHistoricalFile(file, read(file)), expected = model().metadata.get(file);
     return expected && file !== 'registry/consumers/inventory.json' && text(bytes) === text(expected) ? base(file) : bytes;
   });
 }
 export function captureConsumerReadView(read = readRepositoryFile) {
   return file => {
     const bytes = read(file), expected = model().metadata.get(file);
+    const historical = stockConsumerHistoricalFile(file, bytes);
+    if (historical !== bytes) { validateCaptureConsumers(read); return historical; }
     if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
     validateCaptureConsumers(read); return base(file);
   };
 }
 export function captureConsumerHistoricalFile(file, bytes) {
+  const historical = stockConsumerHistoricalFile(file, bytes);
+  if (historical !== bytes) { validateCaptureConsumers(); return historical; }
   const expected = model().metadata.get(file);
   if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
   validateCaptureConsumers(); return base(file);
@@ -256,6 +268,8 @@ export function captureConsumerHistoricalRegistry(value) {
   validateCaptureConsumers(); return json(registryPath);
 }
 export function captureConsumerHistoricalSnapshot(value) {
+  const historical = stockConsumerHistoricalSnapshot(value);
+  if (historical !== value) { validateCaptureConsumers(); return historical; }
   const service = value?.manifest?.service;
   const expected = model().snapshots.get(service);
   if (!expected || service === 'inventory' || !isDeepStrictEqual(value, expected)) return value;
