@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader,makeLock } from '../../tools/architecture/graph.mjs';
+import {deliveryHistoryHistoricalFile,deliveryHistoryHistoricalSnapshot,validateDeliveryHistoryConsumer} from './delivery-history-consumer-v1.mjs';
 const root=path.resolve(import.meta.dirname,'../..');
 const base=gitReader(root,'18ffbc6f3dd7b56ecab7d7bd20b04f267ad38021');
 const encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
@@ -53,12 +54,15 @@ function model(){
  cache={snapshots,previous,closures};return cache;
 }
 export const saleStockConsumerMetadata=()=>new Map([...model().snapshots].map(([p,v])=>[p,encode(v)]));
-export function saleStockHistoricalFile(file,bytes){const expected=model().snapshots.get(file);return expected&&text(bytes)===text(encode(expected))?encode(model().previous.get(file)):bytes;}
-export function saleStockHistoricalSnapshot(value){const file='registry/consumers/'+value?.manifest?.service+'.json';return isDeepStrictEqual(value,model().snapshots.get(file))?structuredClone(model().previous.get(file)):value;}
+export function saleStockHistoricalFile(file,bytes){bytes=deliveryHistoryHistoricalFile(file,bytes);const expected=model().snapshots.get(file);return expected&&text(bytes)===text(encode(expected))?encode(model().previous.get(file)):bytes;}
+export function saleStockHistoricalSnapshot(value){value=deliveryHistoryHistoricalSnapshot(value);const file='registry/consumers/'+value?.manifest?.service+'.json';return isDeepStrictEqual(value,model().snapshots.get(file))?structuredClone(model().previous.get(file)):value;}
 const native=file=>fs.readFileSync(path.join(root,file));
 export function validateSaleStockConsumers(read=native){
+ const originalRead=read;let projected=false;
+ read=file=>{const bytes=originalRead(file),current=deliveryHistoryHistoricalFile(file,bytes);if(current!==bytes)projected=true;return current;};
  for(const [file,snapshot]of model().snapshots)assert.equal(text(read(file)),text(encode(snapshot)),'ISD_EXACT_METADATA:'+file);
  for(const [file,bytes]of model().closures)assert.equal(text(read(file)),text(bytes),'ISD_SOURCE_DRIFT:'+file);
+ if(projected)validateDeliveryHistoryConsumer(originalRead);
  return {consumers:2,previousPinsPreserved:true,runtimeDemonstrated:false,publication:'published'};
 }
 export function saleStockHistoricalRead(read=native){return file=>{const bytes=read(file),historical=saleStockHistoricalFile(file,bytes);if(historical!==bytes)validateSaleStockConsumers(read);return historical;};}

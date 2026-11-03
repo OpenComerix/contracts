@@ -33,6 +33,7 @@ export const captureConsumerFiles = Object.freeze([
   'inventory/README.md', 'registry/README.md', modulePath, testPath,
   'scripts/inventory/stock-consumer-v1.mjs', 'test/inventory/stock-consumer-v1.test.mjs',
   'scripts/inventory/sale-stock-consumer-v1.mjs', 'test/inventory/sale-stock-consumer-v1.test.mjs',
+  'scripts/inventory/delivery-history-consumer-v1.mjs', 'test/inventory/delivery-history-consumer-v1.test.mjs',
 ]);
 const text = value => new TextDecoder('utf-8', { fatal: true }).decode(value).replaceAll('\r\n', '\n');
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
