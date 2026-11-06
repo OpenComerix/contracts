@@ -1,3 +1,4 @@
+import {withAuthorityConsumerContext,captureAuthorityContextSource} from '../finance/authority-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
@@ -86,7 +87,7 @@ export function sourceVerifierBytes() {
     'export function captureHistoricalFile(file, bytes) {\n  bytes = admissionHistoricalFile(file, bytes);');
   replaceOnce('export function captureHistoricalRegistry(value) {',
     'export function captureHistoricalRegistry(value) {\n  value = admissionHistoricalRegistry(value);');
-  return Buffer.from(value);
+  return captureAuthorityContextSource(Buffer.from(value));
 }
 export function admissionMetadata() {
   const registry = admittedRegistry();
@@ -138,21 +139,21 @@ function immutableInputs() {
     consumers: 6, closureFiles: closureFiles.size, runtimeDemonstrated: false } };
   return inputsCache;
 }
-export function validateAdmission(rawRead = readRepositoryFile) {
+export function validateAdmission(rawRead = readRepositoryFile, context) {
   return withCaptureConsumers(rawRead, read => {
   const { inputs, result } = immutableInputs();
   for (const [file, { value, code }] of inputs)
     assert.equal(text(read(file)), value, code + ':' + file);
   for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'IC2A_TOOL_MISSING:' + file);
   return { ...result };
-  });
+  }, context);
 }
 
 // Compose the exact admission delta with the complete existing source guard.
 // That guard still rereads published sources, closures, consumers and CI; the
 // independent validateAdmission entry above continues to check all of them too.
 // No live reads or successful checks survive this synchronous invocation.
-export function withAdmissionDelta(rawRead, verifySource) {
+export function withAdmissionDelta(rawRead, verifySource, context) {
   return withCaptureConsumers(rawRead, read => {
   const { inputs } = immutableInputs(); // Immutable source closure, never the checkout.
   for (const [file, bytes] of expected())
@@ -164,7 +165,7 @@ export function withAdmissionDelta(rawRead, verifySource) {
     const bytes = read(file), target = expected().get(file);
     return target && text(bytes) === text(target) ? admissionSource(file) : bytes;
   });
-  });
+  }, context);
 }
 
 // Caller mutations are passed through; projection is not a repair mechanism.
@@ -179,16 +180,20 @@ export function admissionReadView(read = readRepositoryFile) {
     return admissionSource(file);
   };
 }
-export function admissionHistoricalFile(file, bytes) {
-  bytes = captureConsumerHistoricalFile(file, bytes);
+export function admissionHistoricalFile(file, bytes, context) {
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+  bytes = captureConsumerHistoricalFile(file, bytes, current);
   const target = expected().get(file);
   if (!target || text(bytes) !== text(target)) return bytes;
-  validateAdmission();
+  validateAdmission(current.read, current);
   return admissionSource(file);
+  }, context);
 }
-export function admissionHistoricalRegistry(registry) {
-  registry = captureConsumerHistoricalRegistry(registry);
+export function admissionHistoricalRegistry(registry, context) {
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+  registry = captureConsumerHistoricalRegistry(registry, current);
   if (!isDeepStrictEqual(registry, registrySnapshot())) return registry;
-  validateAdmission();
+  validateAdmission(current.read, current);
   return structuredClone(before());
+  }, context);
 }

@@ -18,15 +18,94 @@ const publishedOwnerCommits = {
   'sales-pos': 'b6407da6e3367a6dffd138f667175d4cf57ff9ad',
 };
 let cached;
-export const authorityConsumerFiles=Object.freeze(['scripts/finance/authority-consumers-v1.mjs','test/finance/authority-consumers-v1.test.mjs','scripts/inventory/delivery-history-consumer-v1.mjs','scripts/sales/inventory-step-consumer-v1.mjs','registry/consumers/identity-tenancy.json','registry/consumers/sales-pos.json']);
+export const authorityConsumerFiles=Object.freeze(['scripts/finance/authority-consumers-v1.mjs','test/finance/authority-consumers-v1.test.mjs','test/finance/authority-validation-context.test.mjs','scripts/inventory/delivery-history-consumer-v1.mjs','scripts/sales/inventory-step-consumer-v1.mjs','registry/consumers/identity-tenancy.json','registry/consumers/sales-pos.json']);
+const replaceOnce = (source, before, after) => {
+  assert.equal(source.split(before).length, 2, 'FCA_CONTEXT_BRIDGE_ANCHOR:' + before.split('\n')[0]);
+  return source.replace(before, after);
+};
+// Exact tooling adaptations, reconstructed from immutable historical inputs.
+// They do not recognize arbitrary edits to a path or replace caller drift.
+export function captureAuthorityContextSource(bytes) {
+  let source = text(bytes);
+  source = replaceOnce(source, '...admissionFiles]);', '...admissionFiles, ...authorityConsumerFiles]);');
+  source = replaceOnce(source, 'export function validateCaptureSource(rawRead = actual) {', 'export function validateCaptureSource(rawRead = actual, context) {');
+  source = replaceOnce(source, '  return result;\n  });', '  return result;\n  }, context);');
+  source = replaceOnce(source, 'export function validateSourceScope() {\n  validateCaptureSource();\n  const allowed = new Set(sourceFiles);',
+    'export function validateSourceScope() {\n  return withAuthorityConsumerContext(actual, current => {\n  validateCaptureSource(current.read, current);\n  const allowed = withAuthorityConsumerScope(sourceFiles, current);');
+  source = replaceOnce(source, '  return { paths: sourceFiles.length };\n}', '  return { paths: sourceFiles.length };\n  });\n}');
+  for (const [name, parameter] of [['captureHistoricalFile', 'file, bytes'], ['captureHistoricalRegistry', 'value']]) {
+    source = replaceOnce(source, 'export function ' + name + '(' + parameter + ') {',
+      'export function ' + name + '(' + parameter + ', context) {\n  return withAuthorityConsumerContext(context?.read ?? actual, current => {');
+  }
+  source = replaceOnce(source, 'admissionHistoricalFile(file, bytes);', 'admissionHistoricalFile(file, bytes, current);');
+  source = replaceOnce(source, 'admissionHistoricalRegistry(value);', 'admissionHistoricalRegistry(value, current);');
+  source = source.replaceAll('    validateCaptureSource();', '    validateCaptureSource(current.read, current);');
+  source = replaceOnce(source, '  validateCaptureSource();\n  return source(file);\n}',
+    '  validateCaptureSource(current.read, current);\n  return source(file);\n  }, context);\n}');
+  source = replaceOnce(source, '  validateCaptureSource();\n  return previous(\'registry/contracts.json\');\n}',
+    '  validateCaptureSource(current.read, current);\n  return previous(\'registry/contracts.json\');\n  }, context);\n}');
+  return Buffer.from("import {withAuthorityConsumerContext,withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';\n" + source);
+}
+export function captureAdmissionContextSource(bytes) {
+  let source = text(bytes);
+  source = replaceOnce(source, '  return Buffer.from(value);', '  return captureAuthorityContextSource(Buffer.from(value));');
+  source = replaceOnce(source, 'export function validateAdmission(rawRead = readRepositoryFile) {', 'export function validateAdmission(rawRead = readRepositoryFile, context) {');
+  source = replaceOnce(source, '  return { ...result };\n  });', '  return { ...result };\n  }, context);');
+  source = replaceOnce(source, 'export function withAdmissionDelta(rawRead, verifySource) {', 'export function withAdmissionDelta(rawRead, verifySource, context) {');
+  source = replaceOnce(source, '  });\n  });\n}', '  });\n  }, context);\n}');
+  for (const [name, parameter] of [['admissionHistoricalFile', 'file, bytes'], ['admissionHistoricalRegistry', 'registry']]) {
+    source = replaceOnce(source, 'export function ' + name + '(' + parameter + ') {',
+      'export function ' + name + '(' + parameter + ', context) {\n  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {');
+  }
+  source = replaceOnce(source, 'captureConsumerHistoricalFile(file, bytes);', 'captureConsumerHistoricalFile(file, bytes, current);');
+  source = replaceOnce(source, 'captureConsumerHistoricalRegistry(registry);', 'captureConsumerHistoricalRegistry(registry, current);');
+  source = source.replaceAll('  validateAdmission();', '  validateAdmission(current.read, current);');
+  source = replaceOnce(source, '  return admissionSource(file);\n}\nexport function admissionHistoricalRegistry', '  return admissionSource(file);\n  }, context);\n}\nexport function admissionHistoricalRegistry');
+  source = replaceOnce(source, '  return structuredClone(before());\n}', '  return structuredClone(before());\n  }, context);\n}');
+  return Buffer.from("import {withAuthorityConsumerContext,captureAuthorityContextSource} from '../finance/authority-consumers-v1.mjs';\n" + source);
+}
+export function salesAuthorityContextSource(bytes) {
+  let source = text(bytes);
+  source = replaceOnce(source, 'import {withAuthorityConsumerScope,authorityConsumerFiles}', 'import {withAuthorityConsumerContext,withAuthorityConsumerScope,authorityConsumerFiles}');
+  source = replaceOnce(source, 'export function validateSalesAdmission(rawReadFile = read) {\n  const readFile = file => captureHistoricalFile(file, rawReadFile(file));',
+    'export function validateSalesAdmission(rawReadFile = read, context) {\n  try { return withAuthorityConsumerContext(rawReadFile, current => {\n  const readFile = file => captureHistoricalFile(file, current.read(file), current);');
+  source = replaceOnce(source, 'preservedIdentityPins: 35, runtimeDemonstrated: false };\n}',
+    `preservedIdentityPins: 35, runtimeDemonstrated: false };
+  }, context); } catch (cause) {
+    // Keep Sales' historical rejection codes when Finance detects the same
+    // invalid consumer earlier; preserve the exact upstream cause as evidence.
+    const code = typeof cause?.message === 'string' ? cause.message.split('\\n', 1)[0] : undefined;
+    for (const service of ['sales-pos', 'identity-tenancy'])
+      if (code === 'FCA_EXACT_METADATA:registry/consumers/' + service + '.json')
+        throw new Error('SALES_SNAPSHOT:' + service, {cause});
+    for (const service of registry.requiredConsumers.filter(owner => owner !== 'identity-tenancy'))
+      if (code === 'FCA_SOURCE_DRIFT:registry/consumers/' + service + '.json')
+        throw new Error('SALES_PRIOR_CONSUMER', {cause});
+    throw cause;
+  }
+}`);
+  source = replaceOnce(source, '  validateSalesAdmission();\n  return withAuthorityConsumerScope([...paths,...admissionScope]);',
+    '  return withAuthorityConsumerContext(read, current => {\n    validateSalesAdmission(current.read, current);\n    return withAuthorityConsumerScope([...paths,...admissionScope], current);\n  });');
+  for (const [name, parameter] of [['salesHistoricalFile','file, bytes'],['salesHistoricalRegistry','value'],['salesHistoricalIndex','value']])
+    source = replaceOnce(source, 'export function ' + name + '(' + parameter + ') {',
+      'export function ' + name + '(' + parameter + ') {\n  return withAuthorityConsumerContext(read, current => {');
+  source = replaceOnce(source, 'captureHistoricalFile(file, bytes);', 'captureHistoricalFile(file, bytes, current);');
+  source = replaceOnce(source, 'captureHistoricalRegistry(value);', 'captureHistoricalRegistry(value, current);');
+  source = replaceOnce(source, 'captureConsumerHistoricalIndex(value);', 'captureConsumerHistoricalIndex(value, current);');
+  for (const ending of ["  return prior('registry/consumers/index.json');", '  return source(file);', '  return structuredClone(registry);']) {
+    source = replaceOnce(source, '  validateSalesAdmission();\n' + ending + '\n}',
+      '  validateSalesAdmission(current.read, current);\n' + ending + '\n  });\n}');
+  }
+  return Buffer.from(source);
+}
 function bridges() {
   const changes=new Map();
   let delivery=text(base('scripts/inventory/delivery-history-consumer-v1.mjs'));
-  delivery=delivery.replace("import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';","import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';\nimport {authorityConsumerHistoricalFile,authorityConsumerHistoricalSnapshot,authorityConsumerReadView} from '../finance/authority-consumers-v1.mjs';");
-  delivery=delivery.replace('export function deliveryHistoryHistoricalFile(name,bytes){return','export function deliveryHistoryHistoricalFile(name,bytes){bytes=authorityConsumerHistoricalFile(name,bytes);return').replace('export function deliveryHistoryHistoricalSnapshot(value){return','export function deliveryHistoryHistoricalSnapshot(value){value=authorityConsumerHistoricalSnapshot(value);return').replace('export function validateDeliveryHistoryConsumer(read=native){','export function validateDeliveryHistoryConsumer(read=native){\n const authorityRead=authorityConsumerReadView(read);read=name=>{try{return authorityRead(name);}catch(cause){throw new Error(\'IEH_SOURCE_DRIFT\',{cause});}};');
+  delivery=delivery.replace("import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';","import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';\nimport {authorityConsumerHistoricalFile,authorityConsumerHistoricalSnapshot,withAuthorityConsumerContext} from '../finance/authority-consumers-v1.mjs';");
+  delivery=delivery.replace('export function deliveryHistoryHistoricalFile(name,bytes){return','export function deliveryHistoryHistoricalFile(name,bytes){bytes=authorityConsumerHistoricalFile(name,bytes);return').replace('export function deliveryHistoryHistoricalSnapshot(value){return','export function deliveryHistoryHistoricalSnapshot(value){value=authorityConsumerHistoricalSnapshot(value);return').replace('export function validateDeliveryHistoryConsumer(read=native){','export function validateDeliveryHistoryConsumer(read=native,context){\n return withAuthorityConsumerContext(read,current=>{\n read=name=>{try{return current.read(name);}catch(cause){throw new Error(\'IEH_SOURCE_DRIFT\',{cause});}};').replace('publication:\'published\',runtimeDemonstrated:false};\n}', 'publication:\'published\',runtimeDemonstrated:false};\n },context);\n}');
   changes.set('scripts/inventory/delivery-history-consumer-v1.mjs',Buffer.from(delivery));
   const sales="import {withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';\n"+text(base('scripts/sales/inventory-step-consumer-v1.mjs')).replace('...sourceFiles])];','...sourceFiles,...authorityConsumerFiles])];').replace('return new Set([...paths,...admissionScope]);','return withAuthorityConsumerScope([...paths,...admissionScope]);');
-  changes.set('scripts/sales/inventory-step-consumer-v1.mjs',Buffer.from(sales));
+  changes.set('scripts/sales/inventory-step-consumer-v1.mjs',salesAuthorityContextSource(Buffer.from(sales)));
   return changes;
 }
 function model() {
@@ -135,15 +214,69 @@ export function authorityConsumerHistoricalSnapshot(value) {
   return structuredClone(model().previous.get(file));
 }
 export function authorityConsumerReadView(read = native) {
-  let checked = false;
-  return file => {
-    const bytes = read(file), expected = model().snapshots.get(file),bridge=model().bridges.get(file);
-    if ((!expected || text(bytes) !== text(encode(expected)))&&(!bridge||text(bytes)!==text(bridge))) return bytes;
-    if (!checked) { validateAuthorityConsumers(read); checked = true; }
-    return bridge?base(file):encode(model().previous.get(file));
-  };
+  return file => withAuthorityConsumerContext(read, context => context.read(file));
 }
-export function withAuthorityConsumerScope(paths) {validateAuthorityConsumers();return new Set([...paths,...authorityConsumerFiles]);}
+// One explicit context per synchronous validation and raw reader. Nested guards
+// share Finance's exact proof; live bytes and approvals never survive the call.
+const authorityContextKey = Symbol('Finance validation context');
+class AuthorityConsumerContext {
+  #active = true;
+  #checked = false;
+  #rawRead;
+  constructor(read, key) {
+    assert(key === authorityContextKey, 'FCA_CONTEXT_REQUIRED');
+    this.#rawRead = read;
+    this.read = file => {
+      assert(this.#active, 'FCA_CONTEXT_CLOSED');
+      return this.project(file, this.#rawRead(file));
+    };
+    Object.freeze(this);
+  }
+  validate() {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    if (!this.#checked) {
+      validateAuthorityConsumers(this.#rawRead);
+      this.#checked = true;
+    }
+  }
+  project(file, bytes) {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    const projected = authorityConsumerHistoricalFile(file, bytes);
+    if (projected !== bytes) this.validate();
+    return projected;
+  }
+  snapshot(value) {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    const projected = authorityConsumerHistoricalSnapshot(value);
+    if (projected !== value) this.validate();
+    return projected;
+  }
+  run(read, verify) {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    assert(read === this.read || read === this.#rawRead, 'FCA_CONTEXT_READER');
+    const result = verify(this);
+    assert(!result || typeof result.then !== 'function', 'FCA_CONTEXT_SYNCHRONOUS');
+    return result;
+  }
+  close() { this.#active = false; }
+}
+Object.freeze(AuthorityConsumerContext.prototype);
+Object.freeze(AuthorityConsumerContext);
+export function withAuthorityConsumerContext(read, verify, context) {
+  if (context !== undefined) {
+    assert(context instanceof AuthorityConsumerContext, 'FCA_CONTEXT_REQUIRED');
+    return context.run(read, verify);
+  }
+  const current = new AuthorityConsumerContext(read, authorityContextKey);
+  try { return current.run(read, verify); }
+  finally { current.close(); }
+}
+export function withAuthorityConsumerScope(paths, context) {
+  return withAuthorityConsumerContext(context?.read ?? native, current => {
+    current.validate();
+    return new Set([...paths,...authorityConsumerFiles]);
+  }, context);
+}
 export function writeAuthorityConsumers() {
   for (const [file, snapshot] of model().snapshots) {
     const directory = path.resolve(root, '../../services', snapshot.manifest.service);

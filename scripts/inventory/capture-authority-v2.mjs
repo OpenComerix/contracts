@@ -1,3 +1,4 @@
+import {withAuthorityConsumerContext,withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -80,7 +81,7 @@ const retirementHashes = Object.freeze({
 });
 export const sourceFiles = Object.freeze([httpPath, schemaPath, fixturePath, verifierPath,
   runnerPath, testPath, bridgePath, 'registry/contracts.json', 'inventory/index.json',
-  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(ciScopeHashes), ...Object.keys(retirementHashes), ...admissionFiles]);
+  'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', '.gitignore', graphPath, layoutPath, historyTestPath, ...Object.keys(optimizationHashes), ...Object.keys(githubMigrationHashes), ...Object.keys(ciScopeHashes), ...Object.keys(retirementHashes), ...admissionFiles, ...authorityConsumerFiles]);
 const route = '/internal/inventory/catalog-capture-authorizations';
 export const intentions = Object.freeze([
   ['inventory.catalog-capture-authority.http.v2', httpPath],
@@ -218,7 +219,7 @@ const expectedSnapshot = () => expectedCache ??= expectedContents();
 const retiredToolPaths = new Set(["test/architecture/asyncapi-admission-v1.test.mjs","scripts/catalog/catalog-delivery-v1-registry.mjs","scripts/catalog/catalog-operational-recovery-v1-registry.mjs","scripts/catalog/catalog-consumption-v1-registry.mjs","test/architecture/catalog-delivery.test.mjs","test/architecture/catalog-operational-recovery.test.mjs","test/architecture/catalog-consumption.test.mjs","test/sales/inventory-step-consumer-v1.test.mjs","test/sales/release-v1.test.mjs","test/sales/package-v2.test.mjs","test/finance/package-v1.test.mjs","test/inventory/package-v1.test.mjs","test/catalog/asyncapi-preservation-v1.test.mjs","README.md","catalog/README.md","scripts/finance/reviewed-package-v1.mjs","scripts/sales/reviewed-package-v2.mjs","scripts/sales/release-v1.mjs","scripts/inventory/candidate-v1.mjs","scripts/identity/inventory-authority-consumer-v1.mjs","scripts/sales/inventory-step-consumer-v1.mjs","scripts/validate-gateway-identity-policy.mjs","scripts/validate-gateway-identity-policy-v2.mjs"]);
 const historicalPaths = new Set(['registry/contracts.json', 'inventory/index.json',
   'inventory/README.md', 'registry/README.md', '.gitlab-ci.yml', bridgePath, graphPath, layoutPath, historyTestPath, '.gitignore']);
-export function validateCaptureSource(rawRead = actual) {
+export function validateCaptureSource(rawRead = actual, context) {
   return withAdmissionDelta(rawRead, read => {
   for (const [file, bytes] of expectedSnapshot())
     assert.equal(text(read(file)), text(bytes), 'IC2_EXACT_SOURCE:' + file);
@@ -242,34 +243,40 @@ export function validateCaptureSource(rawRead = actual) {
   const result = { admitted: 0, addedPlanned: 2, roots: before.contracts.length, preserved: before.preservedFiles.length,
     consumers: before.requiredConsumers.length, runtime_demonstrated: false };
   return result;
-  });
+  }, context);
 }
 export function validateSourceScope() {
-  validateCaptureSource();
-  const allowed = new Set(sourceFiles);
+  return withAuthorityConsumerContext(actual, current => {
+  validateCaptureSource(current.read, current);
+  const allowed = withAuthorityConsumerScope(sourceFiles, current);
   for (const args of [['diff', '--name-only', base], ['diff', '--cached', '--name-only'], ['ls-files', '--others', '--exclude-standard']])
     for (const file of execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim().split(/\r?\n/).filter(Boolean))
       assert(allowed.has(file), 'IC2_UNDECLARED_PATH:' + file);
   return { paths: sourceFiles.length };
+  });
 }
 // Exact delta projection for prior gates, never a repair of mutated caller bytes.
-export function captureHistoricalFile(file, bytes) {
-  bytes = admissionHistoricalFile(file, bytes);
+export function captureHistoricalFile(file, bytes, context) {
+  return withAuthorityConsumerContext(context?.read ?? actual, current => {
+  bytes = admissionHistoricalFile(file, bytes, current);
   if (retiredToolPaths.has(file)) {
     if (hash(Buffer.from(text(bytes))) !== retirementHashes[file]) return bytes;
-    validateCaptureSource();
+    validateCaptureSource(current.read, current);
     return source(file);
   }
   if (!historicalPaths.has(file)) return bytes;
   const expected = expectedSnapshot().get(file);
   if (!expected || text(bytes) !== text(expected)) return bytes;
-  validateCaptureSource();
+  validateCaptureSource(current.read, current);
   return source(file);
+  }, context);
 }
-export function captureHistoricalRegistry(value) {
-  value = admissionHistoricalRegistry(value);
+export function captureHistoricalRegistry(value, context) {
+  return withAuthorityConsumerContext(context?.read ?? actual, current => {
+  value = admissionHistoricalRegistry(value, current);
   const expected = JSON.parse(expectedSnapshot().get('registry/contracts.json'));
   if (!isDeepStrictEqual(value, expected)) return value;
-  validateCaptureSource();
+  validateCaptureSource(current.read, current);
   return previous('registry/contracts.json');
+  }, context);
 }

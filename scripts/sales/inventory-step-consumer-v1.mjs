@@ -1,4 +1,4 @@
-import {withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';
+import {withAuthorityConsumerContext,withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';
 import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
@@ -115,8 +115,9 @@ export function expectedIndex() {
   index.consumers.push({ service: 'sales-pos', file: 'sales-pos.json', localDirectory: 'services/sales-pos' });
   return index;
 }
-export function validateSalesAdmission(rawReadFile = read) {
-  const readFile = file => captureHistoricalFile(file, rawReadFile(file));
+export function validateSalesAdmission(rawReadFile = read, context) {
+  try { return withAuthorityConsumerContext(rawReadFile, current => {
+  const readFile = file => captureHistoricalFile(file, current.read(file), current);
   assert.deepEqual(JSON.parse(readFile('registry/contracts.json')), expectedRegistry(), 'SALES_REGISTRY');
   assert.deepEqual(JSON.parse(readFile('registry/consumers/index.json')), expectedIndex(), 'SALES_INDEX');
   for (const service of ['sales-pos', 'identity-tenancy'])
@@ -128,6 +129,18 @@ export function validateSalesAdmission(rawReadFile = read) {
   for (const file of guardTransitionFiles)
     assert.equal(normalize(readFile(file)),normalize(transitionBytes(file)), 'SALES_GUARD_TRANSITION:'+file);
   return { consumers: 6, salesSelections: 9, identitySelections: 36, preservedIdentityPins: 35, runtimeDemonstrated: false };
+  }, context); } catch (cause) {
+    // Keep Sales' historical rejection codes when Finance detects the same
+    // invalid consumer earlier; preserve the exact upstream cause as evidence.
+    const code = typeof cause?.message === 'string' ? cause.message.split('\n', 1)[0] : undefined;
+    for (const service of ['sales-pos', 'identity-tenancy'])
+      if (code === 'FCA_EXACT_METADATA:registry/consumers/' + service + '.json')
+        throw new Error('SALES_SNAPSHOT:' + service, {cause});
+    for (const service of registry.requiredConsumers.filter(owner => owner !== 'identity-tenancy'))
+      if (code === 'FCA_SOURCE_DRIFT:registry/consumers/' + service + '.json')
+        throw new Error('SALES_PRIOR_CONSUMER', {cause});
+    throw cause;
+  }
 }
 const normalize = bytes => new TextDecoder('utf-8',{fatal:true}).decode(bytes).replaceAll('\r\n','\n');
 export const salesReadmeSuffix = '\n## F1-11A — Proveedor mínimo Sales para Inventory\n\n' +
@@ -180,29 +193,37 @@ export function transitionBytes(file) {
   return Buffer.from(text);
 }
 export function withSalesAdmissionScope(paths) {
-  validateSalesAdmission();
-  return withAuthorityConsumerScope([...paths,...admissionScope]);
+  return withAuthorityConsumerContext(read, current => {
+    validateSalesAdmission(current.read, current);
+    return withAuthorityConsumerScope([...paths,...admissionScope], current);
+  });
 }
 export function salesHistoricalIndex(value) {
-  value = captureConsumerHistoricalIndex(value);
+  return withAuthorityConsumerContext(read, current => {
+  value = captureConsumerHistoricalIndex(value, current);
   if (!isDeepStrictEqual(value,expectedIndex())) return value;
-  validateSalesAdmission();
+  validateSalesAdmission(current.read, current);
   return prior('registry/consumers/index.json');
+  });
 }
 /** Historical assertions see their immutable input only after full exact transition validation.
  * Mutated caller bytes pass through unchanged and never get repaired/projected. */
 export function salesHistoricalFile(file, bytes) {
-  bytes = captureHistoricalFile(file, bytes);
+  return withAuthorityConsumerContext(read, current => {
+  bytes = captureHistoricalFile(file, bytes, current);
   const expected = historicalExpected(file, bytes);
   if (!expected || normalize(bytes) !== normalize(expected)) return bytes;
-  validateSalesAdmission();
+  validateSalesAdmission(current.read, current);
   return source(file);
+  });
 }
 export function salesHistoricalRegistry(value) {
-  value = captureHistoricalRegistry(value);
+  return withAuthorityConsumerContext(read, current => {
+  value = captureHistoricalRegistry(value, current);
   if (!isDeepStrictEqual(value, expectedRegistry())) return value;
-  validateSalesAdmission();
+  validateSalesAdmission(current.read, current);
   return structuredClone(registry);
+  });
 }
 export function writeCandidates() {
   const json = (file, value) => { fs.mkdirSync(path.dirname(file), { recursive: true }); fs.writeFileSync(file, encode(value)); };

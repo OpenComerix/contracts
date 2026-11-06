@@ -8,6 +8,7 @@ import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import { stockConsumerCandidate, stockConsumerHistoricalFile, stockConsumerHistoricalSnapshot } from './stock-consumer-v1.mjs';
 import { saleStockHistoricalFile, saleStockHistoricalSnapshot, validateSaleStockConsumers } from './sale-stock-consumer-v1.mjs';
+import { withAuthorityConsumerContext, captureAdmissionContextSource } from '../finance/authority-consumers-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const launcher = path.resolve(root, '../..');
@@ -97,7 +98,7 @@ export function captureAdmissionBridge() {
     'export function admissionHistoricalFile(file, bytes) {\n  bytes = captureConsumerHistoricalFile(file, bytes);');
   replace('export function admissionHistoricalRegistry(registry) {',
     'export function admissionHistoricalRegistry(registry) {\n  registry = captureConsumerHistoricalRegistry(registry);');
-  return Buffer.from(source);
+  return captureAdmissionContextSource(Buffer.from(source));
 }
 
 function captureSnapshotBridge() {
@@ -247,11 +248,14 @@ function model() {
 }
 export const captureConsumerMetadata = () => new Map([...model().metadata].map(([file, bytes]) => [file, Buffer.from(bytes)]));
 export const captureConsumerManifests = () => new Map([...model().snapshots].map(([owner, snapshot]) => [owner, structuredClone(snapshot.manifest)]));
-export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT') {
+export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT', context) {
+  return withAuthorityConsumerContext(read, current => {
+  read = current.read;
   const expected = model();
+  let projected = false;
   for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures]) {
     const live = read(file), current = saleStockHistoricalFile(file, live);
-    if (current !== live) validateSaleStockConsumers(read);
+    if (current !== live) projected = true;
     if (file === 'registry/consumers/inventory.json' && text(current) !== text(bytes)) {
       // Preserve B's complete source checks. C's additional closure has its own validator;
       // traversing it through a historical reader would recursively re-enter these projections.
@@ -259,53 +263,67 @@ export function validateCaptureConsumers(read = readRepositoryFile, diagnostic =
     } else assert(text(current) === text(bytes), diagnostic + ':' + file);
   }
   for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'ICC_TOOL_MISSING:' + file);
+  if (projected) validateSaleStockConsumers(read, current);
   return { consumers: 7, roots: 202, preserved: 236, previousPinsPreserved: true, runtimeDemonstrated: false };
+  }, context);
 }
-export function withCaptureConsumers(read, verify) {
-  validateCaptureConsumers(read, 'IC2A_EXACT_METADATA');
+export function withCaptureConsumers(read, verify, context) {
+  return withAuthorityConsumerContext(read, current => {
+  read = current.read;
+  validateCaptureConsumers(read, 'IC2A_EXACT_METADATA', current);
   return verify(file => {
     const bytes = stockConsumerHistoricalFile(file, saleStockHistoricalFile(file, read(file))), expected = model().metadata.get(file);
     return expected && file !== 'registry/consumers/inventory.json' && text(bytes) === text(expected) ? base(file) : bytes;
   });
+  }, context);
 }
 export function captureConsumerReadView(read = readRepositoryFile) {
-  return file => {
-    const live = read(file), bytes = saleStockHistoricalFile(file, live), expected = model().metadata.get(file);
-    if (bytes !== live) validateSaleStockConsumers(read);
+  return file => withAuthorityConsumerContext(read, current => {
+    const live = current.read(file), bytes = saleStockHistoricalFile(file, live), expected = model().metadata.get(file);
+    if (bytes !== live) validateSaleStockConsumers(current.read, current);
     const historical = stockConsumerHistoricalFile(file, bytes);
-    if (historical !== bytes) { validateCaptureConsumers(read); return historical; }
+    if (historical !== bytes) { validateCaptureConsumers(current.read, undefined, current); return historical; }
     if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
-    validateCaptureConsumers(read); return base(file);
-  };
+    validateCaptureConsumers(current.read, undefined, current); return base(file);
+  });
 }
-export function captureConsumerHistoricalFile(file, bytes) {
+export function captureConsumerHistoricalFile(file, bytes, context) {
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+  bytes = current.project(file, bytes);
   const live = bytes; bytes = saleStockHistoricalFile(file, bytes);
-  if (live !== bytes) validateSaleStockConsumers();
+  if (live !== bytes) validateSaleStockConsumers(current.read, current);
   const historical = stockConsumerHistoricalFile(file, bytes);
-  if (historical !== bytes) { validateCaptureConsumers(); return historical; }
+  if (historical !== bytes) { validateCaptureConsumers(current.read, undefined, current); return historical; }
   const expected = model().metadata.get(file);
   if (!expected || file === 'registry/consumers/inventory.json' || text(bytes) !== text(expected)) return bytes;
-  validateCaptureConsumers(); return base(file);
+  validateCaptureConsumers(current.read, undefined, current); return base(file);
+  }, context);
 }
-export function captureConsumerHistoricalRegistry(value) {
+export function captureConsumerHistoricalRegistry(value, context) {
   if (!isDeepStrictEqual(value, model().registry)) return value;
-  validateCaptureConsumers(); return json(registryPath);
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+    validateCaptureConsumers(current.read, undefined, current); return json(registryPath);
+  }, context);
 }
-export function captureConsumerHistoricalSnapshot(value) {
+export function captureConsumerHistoricalSnapshot(value, context) {
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+  value = current.snapshot(value);
   const live = value; value = saleStockHistoricalSnapshot(value);
-  if (live !== value) validateSaleStockConsumers();
+  if (live !== value) validateSaleStockConsumers(current.read, current);
   const historical = stockConsumerHistoricalSnapshot(value);
-  if (historical !== value) { validateCaptureConsumers(); return historical; }
+  if (historical !== value) { validateCaptureConsumers(current.read, undefined, current); return historical; }
   const service = value?.manifest?.service;
   const expected = model().snapshots.get(service);
   if (!expected || service === 'inventory' || !isDeepStrictEqual(value, expected)) return value;
-  validateCaptureConsumers();
+  validateCaptureConsumers(current.read, undefined, current);
   return json('registry/consumers/' + service + '.json');
+  }, context);
 }
-export function captureConsumerHistoricalIndex(value) {
+export function captureConsumerHistoricalIndex(value, context) {
   if (!isDeepStrictEqual(value, JSON.parse(model().metadata.get(indexPath)))) return value;
-  validateCaptureConsumers();
-  return json(indexPath);
+  return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
+    validateCaptureConsumers(current.read, undefined, current); return json(indexPath);
+  }, context);
 }
 
 function sync() {
