@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "f78df030a7783ede98fe5c473e6a02c3dd18820e",
-  "manifestSha256": "e48701438d27bf359c65f05fcf7a55e4e84f1338949e4800b7a3c5eb5f8d076c",
-  "lockSha256": "05aa475be6dd4cc323b2ea9126166f0da59f10ea4ef79973ae401c0a8186e77b",
+  "sourceCommit": "c206dc39c201a5ff57a946f073dd9e3cb9317b8a",
+  "manifestSha256": "00246a2a1a39f2b1cb516291cfce860695711cc9c5ca9d734b129d2f00d48683",
+  "lockSha256": "a4b043c615b3f4b13725e25263c3cc1dbdca81ecbb2aba9ab0c5bb035d010fc3",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -601,6 +601,52 @@
           "pnpm test:all",
           "pnpm test:inventory-authority-runtime"
         ]
+      },
+      {
+        "id": "identity.finance-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createFinanceDelegation",
+          "checkFinanceAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-12A Finance human authority and exact persisted Sales cash step; no Finance effects or full sale coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:finance-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.finance-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12A Finance human authority and exact persisted Sales cash step; no Finance effects or full sale coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:finance-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.finance-authority.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12A Finance human authority and exact persisted Sales cash step; no Finance effects or full sale coordinator.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:finance-authority-runtime"
+        ]
       }
     ],
     "assets": [],
@@ -609,7 +655,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "e48701438d27bf359c65f05fcf7a55e4e84f1338949e4800b7a3c5eb5f8d076c",
+    "manifestSha256": "00246a2a1a39f2b1cb516291cfce860695711cc9c5ca9d734b129d2f00d48683",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -4809,6 +4855,265 @@
         ],
         "selectionSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b",
         "runtimeSha256": "16e58d17d311f81d25c19ba95f41c1f912e3afe08b6840fc48121db3c7d9102b"
+      },
+      {
+        "id": "identity.finance-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+        "operations": [
+          "createFinanceDelegation",
+          "checkFinanceAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "sha256": "f7649bf83672c734a23db5fc91657defa9b88946f8ae29153201ded98af6b93d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "sha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegisterCreate",
+            "sha256": "9615a1fcf458b3204cbcf9af8f7d123bfbea92fbeffc7d96c1646b1ea148f9a9"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "039c0605db6252fd2f7474a464b8f776ec9bf20beb238d8565e01046303b2cbf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OpenShiftRequest",
+            "sha256": "824b50e5ec518669ed566f6c426728651c4ddbae05d311db5cc2d5952c1cfc71"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "16f9d13cf406b069cfce5435a7c3f49541497d21ba386f5790c60a5f8c592ea7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1finance-authorizations/post",
+            "sha256": "ee31a06282155ce79f0fa060596eaaa41c426e744c9fd80633b9a801acd09380"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1finance-delegations/post",
+            "sha256": "a285a3fb1c2d81fa6fd07bed0c06a4321cf0bc34ab25478ec7b7d1a7e2cc00ec"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "ac0185c092d746b7b4ceafddd7aaa1fa6782aefbfe77db3248409103f6e89556"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "4c368aedf5d1d23ecb8b4d92d37725b9fd527ea969eec78949ea40a944ba3f6e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "20813ed1402e976741ef41464fc330247325d0656b64e53e48de46d2cbdad8f1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/Delegation",
+            "sha256": "67ebf5745efd91cda99c3f54410d2304c921a924995a2bdb83ada2726ae5a3ac"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationRequest",
+            "sha256": "8a23e8aa851d0c50ba51a55e41bfee89841a5c18a2948148b3817405c8ed60fd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c801274f7b6682e2d87e39d12e246bd25c842b1391353e2f98915f93b0041a97"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "92df2e32b1003650513a572f5054ba11ff021eb3e840e16814a43c17f1a60751",
+        "runtimeSha256": "bda0435f5ad44711d308d6ec0d9814a732dde0bd4753dca7ef2daba5dbcef0dc"
+      },
+      {
+        "id": "identity.finance-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "sha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b"
+          }
+        ],
+        "units": [
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegisterCreate",
+            "sha256": "9615a1fcf458b3204cbcf9af8f7d123bfbea92fbeffc7d96c1646b1ea148f9a9"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "039c0605db6252fd2f7474a464b8f776ec9bf20beb238d8565e01046303b2cbf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OpenShiftRequest",
+            "sha256": "824b50e5ec518669ed566f6c426728651c4ddbae05d311db5cc2d5952c1cfc71"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "dcf3e56f69e330f741e527d3e0d216c5a60aacc006454476505a2bb13d9b8038"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "20813ed1402e976741ef41464fc330247325d0656b64e53e48de46d2cbdad8f1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c801274f7b6682e2d87e39d12e246bd25c842b1391353e2f98915f93b0041a97"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "ce877d1f268daa9098f67b1deb5c2566bb2eb6b8f3b8ebdf9ff1e52928251e04",
+        "runtimeSha256": "ce877d1f268daa9098f67b1deb5c2566bb2eb6b8f3b8ebdf9ff1e52928251e04"
+      },
+      {
+        "id": "identity.finance-authority.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "sha256": "0803b0247a61c2a557649c066f47a7a6661a86bfadc2de000abef1fb1d0df1ba"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "pointer": "",
+            "sha256": "bfdc8a4bc2af680e53f0d0a53d5a92de32ce5b80759ea1125d5d5b3f222b179e"
+          }
+        ],
+        "selectionSha256": "99c8ab963d11c1689d060c731e69010d8a848d5d337b8edab61965ed1b93c504",
+        "runtimeSha256": "99c8ab963d11c1689d060c731e69010d8a848d5d337b8edab61965ed1b93c504"
       }
     ],
     "assets": []

@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {spawnSync} from 'node:child_process';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
+import {authorityConsumerHistoricalFile,authorityConsumerHistoricalSnapshot,authorityConsumerReadView} from '../finance/authority-consumers-v1.mjs';
 const root=path.resolve(import.meta.dirname,'../..'),base=gitReader(root,'77bf7e6fa5bf429483ea515504555c55c4890b73');
 const file='registry/consumers/inventory.json',encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n'),hash=bytes=>createHash('sha256').update(bytes).digest('hex'),text=bytes=>new TextDecoder('utf-8',{fatal:true}).decode(bytes).replaceAll('\r\n','\n');
 const purpose='F1-11E owner message delivery and authorized retained history; no new business consumer, purge, completed sale or cloud.';
@@ -32,9 +33,10 @@ function model(){
 }
 const native=file=>fs.readFileSync(path.join(root,file));
 export const deliveryHistoryMetadata=()=>encode(model().snapshot);
-export function deliveryHistoryHistoricalFile(name,bytes){return name===file&&text(bytes)===text(encode(model().snapshot))?encode(model().previous):bytes;}
-export function deliveryHistoryHistoricalSnapshot(value){return isDeepStrictEqual(value,model().snapshot)?structuredClone(model().previous):value;}
+export function deliveryHistoryHistoricalFile(name,bytes){bytes=authorityConsumerHistoricalFile(name,bytes);return name===file&&text(bytes)===text(encode(model().snapshot))?encode(model().previous):bytes;}
+export function deliveryHistoryHistoricalSnapshot(value){value=authorityConsumerHistoricalSnapshot(value);return isDeepStrictEqual(value,model().snapshot)?structuredClone(model().previous):value;}
 export function validateDeliveryHistoryConsumer(read=native){
+ const authorityRead=authorityConsumerReadView(read);read=name=>{try{return authorityRead(name);}catch(cause){throw new Error('IEH_SOURCE_DRIFT',{cause});}};
  assert.equal(text(read(file)),text(encode(model().snapshot)),'IEH_EXACT_METADATA');
  assert.equal(text(read('registry/contracts.json')),text(base('registry/contracts.json')),'IEH_REGISTRY_DRIFT');
  assert.equal(text(read('registry/consumers/index.json')),text(base('registry/consumers/index.json')),'IEH_COVERAGE_DRIFT');

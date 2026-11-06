@@ -1,3 +1,4 @@
+import {withAuthorityConsumerScope,authorityConsumerFiles} from '../finance/authority-consumers-v1.mjs';
 import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';
@@ -38,7 +39,7 @@ export const guardTransitionFiles = ['scripts/identity/inventory-authority-consu
   'scripts/identity/inventory-authority-v1-1-admission.mjs','scripts/identity/inventory-authority-v1-1.mjs',
   'scripts/catalog/catalog-foundation-v1-registry.mjs',
   'scripts/catalog/catalog-lifecycle-v1-registry.mjs','scripts/catalog/catalog-runtime-v1-registry.mjs'];
-export const admissionScope = [...new Set([...salesChangedPaths,...guardTransitionFiles.filter(file=>!salesChangedPaths.includes(file)),...sourceFiles])];
+export const admissionScope = [...new Set([...salesChangedPaths,...guardTransitionFiles.filter(file=>!salesChangedPaths.includes(file)),...sourceFiles,...authorityConsumerFiles])];
 const candidates = new Map();
 export function salesManifest() {
   const selections = [
@@ -180,7 +181,7 @@ export function transitionBytes(file) {
 }
 export function withSalesAdmissionScope(paths) {
   validateSalesAdmission();
-  return new Set([...paths,...admissionScope]);
+  return withAuthorityConsumerScope([...paths,...admissionScope]);
 }
 export function salesHistoricalIndex(value) {
   value = captureConsumerHistoricalIndex(value);
