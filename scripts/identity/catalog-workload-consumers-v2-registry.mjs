@@ -1,4 +1,5 @@
 import { captureConsumerHistoricalSnapshot } from '../inventory/capture-consumers-v1.mjs';
+import {projectReviewedSnapshot} from '../../tools/architecture/validation-history.mjs';
 import assert from 'node:assert/strict';
 import { candidateReadView } from '../inventory/candidate-v1.mjs';
 import { consumptionReadView, consumptionChangedFiles } from '../catalog/catalog-consumption-v1-registry.mjs';
@@ -66,6 +67,18 @@ export function verifyPublishedConsumer(snapshot, readPublished) {
   verifyLocalSnapshot(workloadConsumerSnapshot(snapshot.manifest.service), snapshot, readPublished);
 }
 export function consumerSnapshotView(snapshot) {
+  if (Object.hasOwn(selections, snapshot?.manifest?.service) &&
+      isDeepStrictEqual(snapshot, baseline(snapshotPath(snapshot.manifest.service)))) return snapshot;
+  const reviewed = projectReviewedSnapshot(consumerBase, snapshot);
+  if (reviewed !== snapshot) return reviewed;
+  const limit = snapshot?.manifest?.service === 'identity-tenancy' ? 33 : 50;
+  const lists = [snapshot?.manifest?.contracts, snapshot?.lock?.entries];
+  if (Object.hasOwn(selections, snapshot?.manifest?.service) &&
+      lists.every(rows => Array.isArray(rows) && rows.length <= limit) &&
+      lists.some(rows => rows.some(row => row?.id === policy || row?.id === fixtures))) {
+    validateWorkloadConsumer(snapshot);
+    return baseline(snapshotPath(snapshot.manifest.service));
+  }
   snapshot = captureConsumerHistoricalSnapshot(snapshot);
   if (![snapshot?.manifest?.contracts, snapshot?.lock?.entries].some(rows => Array.isArray(rows) && rows.some(row => row?.id === policy || row?.id === fixtures))) return snapshot;
   validateWorkloadConsumer(snapshot);

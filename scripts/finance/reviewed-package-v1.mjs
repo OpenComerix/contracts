@@ -7,6 +7,7 @@ import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {parse} from 'yaml';
+import {projectReviewedFile,projectReviewedRegistry,isReviewedDocument,projectValidationTooling} from '../../tools/architecture/validation-history.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='67cb6f9e45904f5a142912c60aafe08cda851c55';
@@ -48,13 +49,13 @@ export function validateReviewedFinance(read=raw){
  const bManifest=JSON.parse(original('inventory/fixtures/acceptance/v1/package.json'));
  for(const e of bManifest.files)if(!permittedModified.has(e.path))assert.equal(text(read(e.path)),text(original(e.path)),'C_B_PRESERVED:'+e.path);
  const allowed=new Set([manifestPath,verifierPath,...m.files.map(x=>x.path)]);
- for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(withReviewedSalesScope(allowed).has(f),'C_UNDECLARED_PATH:'+f);
+ const reviewedAllowed=withReviewedSalesScope(allowed);
+ for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(reviewedAllowed.has(f),'C_UNDECLARED_PATH:'+f);
  const result={files:m.files.length,new_planned:m.planned.length,prior_roots:before.contracts.length,prior_artifacts:before.preservedFiles.length,manifest:m,runtime_demonstrated:false};if(read===raw)checked=result;return result;
 }
-// Historical comparison only: this is NOT the current C validation view.
-// The pinned package above is verified in full before returning any B bytes.
-// Mutated caller-supplied bytes pass unchanged to the original negative gate.
-export function reviewedFinanceHistoricalFile(f,b){b=reviewedSalesHistoricalFile(f,b);const {manifest:m}=validateReviewedFinance();const e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
+// Exact immutable views do not re-enter later live gates. The current C proof
+// stays explicit above; older injected fixtures retain their original guards.
+export function reviewedFinanceHistoricalFile(f,b){b=projectValidationTooling(f,b);const projected=projectReviewedFile(base,f,b);if(projected!==undefined)return projected;b=reviewedSalesHistoricalFile(f,b);const {manifest:m}=validateReviewedFinance();const e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
 export const reviewedFinanceHistoricalRead=read=>f=>reviewedFinanceHistoricalFile(f,read(f));
-export function reviewedFinanceHistoricalRegistry(registry){registry=reviewedSalesHistoricalRegistry(registry);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(registry,actual))return registry;validateReviewedFinance();return JSON.parse(original('registry/contracts.json'));}
+export function reviewedFinanceHistoricalRegistry(registry){const projected=projectReviewedRegistry(base,registry);if(projected!==registry||isReviewedDocument(base,'registry/contracts.json',registry))return projected;registry=reviewedSalesHistoricalRegistry(registry);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(registry,actual))return registry;validateReviewedFinance();return JSON.parse(original('registry/contracts.json'));}
 export function withReviewedFinanceScope(paths){const {manifest:m}=validateReviewedFinance();return withReviewedSalesScope([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}

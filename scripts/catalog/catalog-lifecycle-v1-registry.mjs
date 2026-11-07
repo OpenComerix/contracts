@@ -1,4 +1,4 @@
-import { salesHistoricalIndex } from '../sales/inventory-step-consumer-v1.mjs';
+import {projectReviewedDocument} from '../../tools/architecture/validation-history.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import fs from 'node:fs';
@@ -75,7 +75,7 @@ export function validateLifecycleRegistry(registry = read('registry/contracts.js
   const consumers = consumerReadView(readFiles);
   assert.equal(registry.coverage, lifecycleCoverage, 'L_COVERAGE_DECISION');
   assert.deepEqual(lifecycleRegistryView(registry), baseline('registry/contracts.json'), 'L_REGISTRY_PRESERVATION');
-  assert.deepEqual(salesHistoricalIndex(read('registry/consumers/index.json')), baseline('registry/consumers/index.json'), 'L_INDEX_PRESERVATION');
+  assert.deepEqual(projectReviewedDocument(lifecycleBase,'registry/consumers/index.json',read('registry/consumers/index.json')), baseline('registry/consumers/index.json'), 'L_INDEX_PRESERVATION');
   for (const name of lifecycleRegistryView(registry).requiredConsumers.filter(name => name !== 'catalog-pricing')) {
     const file = 'registry/consumers/' + name + '.json';
     assert.equal(consumers(file).toString('utf8').replaceAll('\r\n', '\n'), source(file).toString('utf8'), 'L_OTHER_CONSUMER');

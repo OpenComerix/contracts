@@ -1,6 +1,7 @@
 import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import assert from 'node:assert/strict';import fs from 'node:fs';import path from 'node:path';import {execFileSync} from 'node:child_process';import {createHash} from 'node:crypto';import {isDeepStrictEqual} from 'node:util';import {parse} from 'yaml';
 import {releaseHistoricalFile,releaseHistoricalRegistry,withReleaseScope} from './release-v1.mjs';
+import {projectReviewedFile,projectReviewedRegistry,isReviewedDocument,projectValidationTooling} from '../../tools/architecture/validation-history.mjs';
 export const root=path.resolve(import.meta.dirname,'../..'),base='a4919ed4ed90fe478b88c43a418cb4d6500a6948',manifestPath='sales/fixtures/acceptance/v2/package.json',verifierPath='scripts/sales/reviewed-package-v2.mjs';
 export const expectedManifestHash='2607934d172c7a2f30ce611799bc696feeaf34971520d300a5efdea663cf9cf9';
 const raw=f=>releaseHistoricalFile(f,readRepositoryFile(f)),text=b=>new TextDecoder('utf-8',{fatal:true}).decode(b).replaceAll('\r\n','\n');
@@ -25,8 +26,8 @@ export function validateReviewedSales(read=raw){
  const allowed=withReleaseScope([manifestPath,verifierPath,...m.files.map(x=>x.path)]);for(const args of [['diff','--name-only',base],['ls-files','--others','--exclude-standard']])for(const f of execFileSync('git',args,{cwd:root,encoding:'utf8'}).trim().split('\n').filter(Boolean))assert(allowed.has(f),'D_UNDECLARED_PATH:'+f);
  const result={manifest:m,files:m.files.length,new_planned:m.planned.length,runtime_demonstrated:false};if(read===raw)checked=result;return result;
 }
-// Preserve historical negative guards. Only exact approved D bytes are mapped
-// after the full actual D package is verified, never caller drift or new input.
-export function reviewedSalesHistoricalFile(f,b){b=releaseHistoricalFile(f,b);const {manifest:m}=validateReviewedSales(),e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
-export function reviewedSalesHistoricalRegistry(r){r=releaseHistoricalRegistry(r);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(r,actual))return r;validateReviewedSales();return JSON.parse(original('registry/contracts.json'));}
+// The pure view recognizes exact immutable inputs. Live D validation remains
+// explicit, with the original fallback for other historical injected fixtures.
+export function reviewedSalesHistoricalFile(f,b){b=projectValidationTooling(f,b);const projected=projectReviewedFile(base,f,b);if(projected!==undefined)return projected;b=releaseHistoricalFile(f,b);const {manifest:m}=validateReviewedSales(),e=m.files.find(x=>x.kind==='modified'&&x.path===f);return e&&hash(b)===e.sha256?original(f):b;}
+export function reviewedSalesHistoricalRegistry(r){const projected=projectReviewedRegistry(base,r);if(projected!==r||isReviewedDocument(base,'registry/contracts.json',r))return projected;r=releaseHistoricalRegistry(r);const actual=JSON.parse(raw('registry/contracts.json'));if(!isDeepStrictEqual(r,actual))return r;validateReviewedSales();return JSON.parse(original('registry/contracts.json'));}
 export function withReviewedSalesScope(paths){const {manifest:m}=validateReviewedSales();return withReleaseScope([...paths,manifestPath,verifierPath,...m.files.map(x=>x.path)]);}

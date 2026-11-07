@@ -1,5 +1,4 @@
-import { captureConsumerHistoricalIndex } from '../inventory/capture-consumers-v1.mjs';
-import { salesHistoricalIndex } from '../sales/inventory-step-consumer-v1.mjs';
+import {projectReviewedDocument} from '../../tools/architecture/validation-history.mjs';
 import assert from 'node:assert/strict';
 import { consumerReadView } from '../identity/catalog-workload-consumers-v2-registry.mjs';
 import {runtimeRegistryView, validateRuntimeSnapshot, runtimeBase} from './catalog-runtime-v1-registry.mjs';
@@ -64,7 +63,7 @@ export function foundationManifest(registry = prior()) {
 }
 
 export function validateFoundationRegistry(registry = read('registry/contracts.json'), index = read('registry/consumers/index.json'), readFiles = worktreeReader(root)) {
-  index = salesHistoricalIndex(captureConsumerHistoricalIndex(index));
+  index = projectReviewedDocument(runtimeBase,'registry/consumers/index.json',index);
   const consumers = consumerReadView(readFiles);
   registry = runtimeRegistryView(registry);
   assert.equal(registry.coverage, foundationCoverage, 'J_COVERAGE_DECISION');

@@ -3,7 +3,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { validateContractPaths } from './layout.mjs';
 import { parseYamlSource } from './yaml-source.mjs';
-import { createGitReader } from './git-source.mjs';
+import { createGitReader, gitSourceIdentity } from './git-source.mjs';
 import {
   canonical,
   sha256,
@@ -20,6 +20,22 @@ const DIALECTS = new Set([
   'https://json-schema.org/draft/2020-12/schema',
   'https://spec.openapis.org/oas/3.1/dialect/base',
 ]);
+// Deterministic closures of immutable Git sources only. Serialized values keep
+// callers from modifying another result; this never caches a live validation.
+const closureCache = new Map();
+const closureCacheLimit = 32 * 1024 * 1024;
+let closureCacheBytes = 0;
+function rememberClosure(key, result) {
+  const value = JSON.stringify(result), size = Buffer.byteLength(key) + Buffer.byteLength(value);
+  if (size > closureCacheLimit) return;
+  while (closureCacheBytes + size > closureCacheLimit || closureCache.size >= 256) {
+    const oldest = closureCache.keys().next().value;
+    closureCacheBytes -= closureCache.get(oldest).size;
+    closureCache.delete(oldest);
+  }
+  closureCache.set(key, { value, size });
+  closureCacheBytes += size;
+}
 const SCHEMA_MAPS = new Set([
   '$defs',
   'definitions',
@@ -95,6 +111,19 @@ export function resolveSelection(read, descriptor, dependency, registry = {}) {
     descriptor.version,
     'Declared version differs from registry',
   );
+  const identity = gitSourceIdentity(read);
+  const cacheable = identity && typeof descriptor.path === 'string' && typeof descriptor.version === 'string'
+    && Array.isArray(dependency.operations) && dependency.operations.every(value => typeof value === 'string')
+    && Array.isArray(dependency.pointers) && dependency.pointers.every(value => typeof value === 'string')
+    && domains.every(value => typeof value === 'string');
+  const cacheKey = cacheable && canonical([identity.root, identity.revision,
+    descriptor.path, descriptor.version, descriptor.uriMappings ?? [],
+    dependency.operations, dependency.pointers, [...domains].sort()]);
+  if (cacheKey && closureCache.has(cacheKey)) {
+    const saved = closureCache.get(cacheKey);
+    closureCache.delete(cacheKey); closureCache.set(cacheKey, saved);
+    return JSON.parse(saved.value);
+  }
   const documents = new Map(),
     bytes = new Map(),
     selected = new Map(),
@@ -236,7 +265,7 @@ export function resolveSelection(read, descriptor, dependency, registry = {}) {
   const rows = [...selected.values()].sort((a, b) =>
     (a.path + '#' + a.pointer).localeCompare(b.path + '#' + b.pointer, 'en'),
   );
-  return {
+  const result = {
     files: [...bytes]
       .map(([file, b]) => ({ path: file, sha256: sha256(b) }))
       .sort((a, b) => a.path.localeCompare(b.path, 'en')),
@@ -249,6 +278,8 @@ export function resolveSelection(read, descriptor, dependency, registry = {}) {
     runtimeSha256: sha256(canonical(rows.map((row) => ({ ...row, value: runtimeValue(row) })))),
     values: rows,
   };
+  if (cacheKey) rememberClosure(cacheKey, result);
+  return result;
 }
 function assertFunctionalAdmission(registry, dependency, files) {
   if (!FUNCTIONAL_ROLES.has(dependency.role)) return;

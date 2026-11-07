@@ -9,6 +9,10 @@ const PREFETCH_LIMIT = 16 * MiB;
 const CACHE_LIMIT = 64 * MiB;
 const TREE_LIMIT = 4 * MiB;
 const decoder = new TextDecoder('utf-8', { fatal: true });
+const immutableReaders = new WeakMap();
+
+// Private identity, never inferred from properties supplied by a caller.
+export const gitSourceIdentity = read => immutableReaders.get(read);
 
 // Only Git objects identified by an exact commit are cached. Never cache a
 // worktree read, a tag lookup, a caller's reader or a successful validation.
@@ -89,7 +93,7 @@ export function createGitReader(execute = execFileSync) {
       revisions.set(identity, { files: undefined, prefetched: false });
     }
     const state = revisions.get(identity);
-    return file => {
+    const read = file => {
       safePath(root, file);
       state.files ??= loadTree(root, revision);
       const entry = state.files.get(file);
@@ -112,5 +116,7 @@ export function createGitReader(execute = execFileSync) {
       // Callers can mutate their Buffer without poisoning historical evidence.
       return Buffer.from(getBlob(root, entry.oid));
     };
+    if (execute === execFileSync) immutableReaders.set(read, Object.freeze({ root, revision }));
+    return read;
   };
 }

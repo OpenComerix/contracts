@@ -4,6 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
+import {validationToolingFiles,projectValidationTooling,validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const authorityConsumerBase = '74f63a87ac30d3ad6dc5f874b4b769c44cea3e55';
@@ -18,7 +19,7 @@ const publishedOwnerCommits = {
   'sales-pos': 'b6407da6e3367a6dffd138f667175d4cf57ff9ad',
 };
 let cached;
-export const authorityConsumerFiles=Object.freeze(['scripts/finance/authority-consumers-v1.mjs','test/finance/authority-consumers-v1.test.mjs','test/finance/authority-validation-context.test.mjs','scripts/inventory/delivery-history-consumer-v1.mjs','scripts/sales/inventory-step-consumer-v1.mjs','registry/consumers/identity-tenancy.json','registry/consumers/sales-pos.json']);
+export const authorityConsumerFiles=Object.freeze(['scripts/finance/authority-consumers-v1.mjs','test/finance/authority-consumers-v1.test.mjs','test/finance/authority-validation-context.test.mjs','scripts/inventory/delivery-history-consumer-v1.mjs','scripts/sales/inventory-step-consumer-v1.mjs','registry/consumers/identity-tenancy.json','registry/consumers/sales-pos.json',...validationToolingFiles]);
 const replaceOnce = (source, before, after) => {
   assert.equal(source.split(before).length, 2, 'FCA_CONTEXT_BRIDGE_ANCHOR:' + before.split('\n')[0]);
   return source.replace(before, after);
@@ -202,6 +203,7 @@ export function validateAuthorityConsumers(read = native) {
 // source validation belongs to validateAuthorityConsumers/read-view/scope,
 // rather than being repeated for every file in each nested historical reader.
 export function authorityConsumerHistoricalFile(file, bytes) {
+  bytes=projectValidationTooling(file,bytes);
   const bridge=model().bridges.get(file);
   if(bridge&&text(bytes)===text(bridge))return base(file);
   const expected = model().snapshots.get(file);
@@ -235,12 +237,15 @@ class AuthorityConsumerContext {
   validate() {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
     if (!this.#checked) {
+      validateValidationTooling(this.#rawRead);
       validateAuthorityConsumers(this.#rawRead);
       this.#checked = true;
     }
   }
   project(file, bytes) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    const tooling = projectValidationTooling(file, bytes);
+    if (tooling !== bytes) return tooling;
     const projected = authorityConsumerHistoricalFile(file, bytes);
     if (projected !== bytes) this.validate();
     return projected;

@@ -8,6 +8,7 @@ import {gitReader, parseSource, operationPointers, resolveSelection} from '../..
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
 import {successorHistoricalFile,successorHistoricalRegistry,withSuccessorScope} from '../identity/inventory-authority-v1-1.mjs';
+import {projectReviewedFile,projectReviewedRegistry,isReviewedDocument,projectValidationTooling} from '../../tools/architecture/validation-history.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const releaseSource = '7cd2b548fb909c5eff47d0319c162c498ee68e92';
@@ -158,15 +159,20 @@ export function validateReleasePackage(read = raw) {
   return result;
 }
 
-// Only the complete pinned E package can project its exact reviewed changes to
-// D's historical view. Mutated caller input is never repaired or normalized.
+// Exact immutable data views are independent of E's complete live gate above.
+// Other historical fixtures retain their original closed-delta checks below.
 export function releaseHistoricalFile(file, bytes) {
+  bytes=projectValidationTooling(file,bytes);
+  const projected=projectReviewedFile(releaseSource,file,bytes);
+  if(projected!==undefined)return projected;
   bytes = successorHistoricalFile(file, bytes);
   const {manifest} = validateReleasePackage();
   const entry = manifest.files.find(row => row.kind === 'modified' && row.path === file);
   return entry && digest(bytes) === entry.sha256 ? source(file) : bytes;
 }
 export function releaseHistoricalRegistry(registry) {
+  const projected=projectReviewedRegistry(releaseSource,registry);
+  if(projected!==registry||isReviewedDocument(releaseSource,'registry/contracts.json',registry))return projected;
   registry = successorHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, JSON.parse(raw('registry/contracts.json')))) return registry;
   validateReleasePackage();

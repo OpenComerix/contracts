@@ -4,9 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import {execFileSync} from 'node:child_process';
 import {createHash} from 'node:crypto';
-import {isDeepStrictEqual} from 'node:util';
 import {parse} from 'yaml';
-import {reviewedFinanceHistoricalFile,reviewedFinanceHistoricalRegistry,withReviewedFinanceScope} from '../finance/reviewed-package-v1.mjs';
+import {projectReviewedFile,projectReviewedRegistry,projectValidationTooling,withReviewedValidationScope} from '../../tools/architecture/validation-history.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='062453a717bc49d08b4816fa8e630ea63fcdd64d';
@@ -14,7 +13,10 @@ export const manifestPath='inventory/fixtures/acceptance/v1/package.json';
 const decoder=new TextDecoder('utf-8',{fatal:true});
 const text=bytes=>decoder.decode(bytes).replaceAll('\r\n','\n');
 const hash=bytes=>createHash('sha256').update(text(bytes)).digest('hex');
-const readActual=file=>reviewedFinanceHistoricalFile(file,readRepositoryFile(file));
+const readActual=file=>{
+ const bytes=projectValidationTooling(file,readRepositoryFile(file));
+ return projectReviewedFile('67cb6f9e45904f5a142912c60aafe08cda851c55',file,bytes)??bytes;
+};
 const originals=new Map();
 export function original(file) {
  if(!originals.has(file))originals.set(file,execFileSync('git',['show',base+':'+file],{cwd:root,maxBuffer:16*1024*1024}));
@@ -31,9 +33,7 @@ const allowedChanges=new Set([
 function allowedNew(file) {
  return /^(?:inventory\/(?:http|commands|events|fixtures)\/|scripts\/inventory\/|test\/inventory\/|catalog\/(?:http\/(?:private|shared)\/v1\/catalog-inventory-capture-v1\.|fixtures\/inventory-capture\/)|identity\/(?:http\/(?:private|shared)\/v1\/identity-inventory-authority|fixtures\/inventory-authority\/)|sales\/http\/(?:private|shared)\/v1\/sales-inventory-step-authority-v1\.|common\/errors\/v9\/)/u.test(file);
 }
-let validated;
 export function validateCandidatePackage(read=readActual) {
- if(read===readActual&&validated)return validated;
  const manifest=JSON.parse(read(manifestPath));
  assert.equal(manifest.base,base,'B_PACKAGE_BASE');assert.equal(manifest.status,'local-candidate','B_PACKAGE_STATUS');
  assert.equal(manifest.runtime_demonstrated,false,'B_PACKAGE_RUNTIME');
@@ -69,30 +69,23 @@ export function validateCandidatePackage(read=readActual) {
  for(const [key,value] of Object.entries(priorCi))assert.deepEqual(ci[key],value,'B_PRIOR_CI_JOB:'+key);
  assert.deepEqual(Object.keys(ci).filter(x=>!Object.hasOwn(priorCi,x)),['validate:inventory-contracts','validate:inventory-schema'],'B_CI_SCOPE');
  const result={files:manifest.files.length,new_planned:suffix.length,prior_roots:previous.contracts.length,prior_artifacts:previous.preservedFiles.length,manifest,runtime_demonstrated:false};
- if(read===readActual)validated=result;
  return result;
 }
-// Historical guards retain their original negative diagnostics. Only an exact
-// reviewed B file is projected, after validating the complete actual B package.
-// Malformed/modified caller-supplied bytes pass through to the original guard.
+// Pure historical data view. The explicit package/scope gates above and below
+// validate the live tree; a single projection never re-enters those gates.
+// Malformed/modified caller bytes pass through to the receiving historical guard.
 export function projectCandidateFile(file,bytes) {
- bytes=reviewedFinanceHistoricalFile(file,bytes);
- if(!fs.existsSync(path.join(root,manifestPath)))return bytes;
- const {manifest}=validateCandidatePackage();
- const entry=manifest.files.find(x=>x.kind==='modified'&&x.path===file);
- if(!entry)return bytes;
- try {if(hash(bytes)===entry.sha256)return original(file);}catch{return bytes;}
- return bytes;
+ bytes=projectValidationTooling(file,bytes);
+ return projectReviewedFile(base,file,bytes)??bytes;
 }
-export function candidateReadView(read) {return file=>projectCandidateFile(file,read(file));}
+export function candidateReadView(read) {return file=>{
+ const bytes=projectValidationTooling(file,read(file)), projected=projectReviewedFile(base,file,bytes);
+ return projected??bytes;
+};}
 export function projectCandidateRegistry(registry) {
- registry=reviewedFinanceHistoricalRegistry(registry);
- if(!fs.existsSync(path.join(root,manifestPath)))return registry;
- const actual=JSON.parse(readActual('registry/contracts.json'));
- if(!isDeepStrictEqual(registry,actual))return registry;
- validateCandidatePackage();return JSON.parse(original('registry/contracts.json'));
+ return projectReviewedRegistry(base,registry);
 }
 export function withCandidateScope(allowed) {
  if(!fs.existsSync(path.join(root,manifestPath)))return new Set(allowed);
- const {manifest}=validateCandidatePackage();return withReviewedFinanceScope([...allowed,...manifest.files.map(x=>x.path),manifestPath]);
+ const {manifest}=validateCandidatePackage();return withReviewedValidationScope([...allowed,...manifest.files.map(x=>x.path),manifestPath],readRepositoryFile);
 }

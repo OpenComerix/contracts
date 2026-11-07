@@ -7,6 +7,7 @@ import { gitReader, parseSource } from '../../tools/architecture/graph.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { admissionFiles, admissionReadView, admissionHistoricalFile, admissionHistoricalRegistry } from './inventory-authority-v1-1-admission.mjs';
 import { withSalesAdmissionScope } from '../sales/inventory-step-consumer-v1.mjs';
+import {projectReviewedFile,projectReviewedRegistry,isReviewedDocument,projectValidationTooling} from '../../tools/architecture/validation-history.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 export const base = 'fcfbeba3f99c10b292ece4db2452ace71e66d093';
@@ -101,15 +102,20 @@ export function validateSuccessorPackage(read = actual) {
   if (read === actual) verified = result;
   return result;
 }
-// Validate the complete exact successor before projecting its reviewed delta
-// for older guards. Mutated caller bytes are passed through, never repaired.
+// Immutable historical views avoid live package re-entry. The complete gate
+// above and the original guards for other injected fixtures remain explicit.
 export function successorHistoricalFile(file, bytes) {
+  bytes=projectValidationTooling(file,bytes);
+  const projected=projectReviewedFile(base,file,bytes);
+  if(projected!==undefined)return projected;
   bytes = admissionHistoricalFile(file, bytes);
   const { manifest } = validateSuccessorPackage();
   const entry = manifest.files.find(row => row.kind === 'modified' && row.path === file);
   return entry && hash(bytes) === entry.sha256 ? source(file) : bytes;
 }
 export function successorHistoricalRegistry(registry) {
+  const projected=projectReviewedRegistry(base,registry);
+  if(projected!==registry||isReviewedDocument(base,'registry/contracts.json',registry))return projected;
   registry = admissionHistoricalRegistry(registry);
   if (!isDeepStrictEqual(registry, JSON.parse(actual('registry/contracts.json')))) return registry;
   validateSuccessorPackage();
