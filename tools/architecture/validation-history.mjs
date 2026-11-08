@@ -56,8 +56,14 @@ export const reuseCandidateFiles = Object.freeze([
   'test/architecture/internal-auth-v2-history.test.mjs',
   'scripts/identity/internal-auth-v2-admission.mjs',
   'test/identity/internal-auth-v2-admission.test.mjs',
+  'registry/consumers/identity-tenancy.json',
+  'registry/consumers/inventory.json',
+  'registry/consumers/sales-pos.json',
+  'scripts/identity/workload-reuse-consumers-v2.mjs',
+  'test/identity/workload-reuse-consumers-v2.test.mjs',
 ]);
-const reuseProjectionFiles = new Set(reuseCandidateFiles.slice(0, 10));
+const reuseProjectionFiles = new Set([...reuseCandidateFiles.slice(0, 10),
+  'registry/consumers/identity-tenancy.json','registry/consumers/inventory.json','registry/consumers/sales-pos.json']);
 const reuseAdmissionIds=new Set(['identity.internal-auth.v2','identity.workload-token-reuse.policy.v2',
   'identity.workload-token-reuse.schema.v2','identity.internal-auth.fixtures.v2']);
 // BEGIN H1A V2 CANDIDATE HASHES
@@ -79,9 +85,14 @@ const reuseCandidateHashes = Object.freeze({
   "scripts/identity/validate-internal-auth-v2.mjs": "0d78b1af7392c66a74928529a1a7728936a1d9fdb06580f040f24a948d261ea3",
   "scripts/identity/validate-internal-auth-v2.sh": "04e39db4307136278ecc90bc897a3b2b0704f9425726ef27551cb3e06997a0db",
   "test/identity/internal-auth-v2.test.mjs": "f1f9100ed85d6a62b45c2c5128cee48275297a0af189be772eba78c535baa6a3",
-  "test/architecture/internal-auth-v2-history.test.mjs": "e4164102128fc18bc6b44223d599f7a40598fc42b150960f647ad03ae7f27571",
-  "scripts/identity/internal-auth-v2-admission.mjs": "d87b8defaa7dfa096d318a3a78161e057c2056777db9380d6fd64a6692a4d81f",
-  "test/identity/internal-auth-v2-admission.test.mjs": "bc34acaf35b84db78e6995ecc8a4324c0478864d40c0576cb1c9861be9edba6f"
+  "test/architecture/internal-auth-v2-history.test.mjs": "8b50d48f2fe80ca073292fbc5b3d42611d2e3e47998a20f0dd254cc8f948599b",
+  "scripts/identity/internal-auth-v2-admission.mjs": "364c60fbf88cb6a4a8739fdc9889c491e224e72e4d5416135e126fe2971a0f08",
+  "test/identity/internal-auth-v2-admission.test.mjs": "bc34acaf35b84db78e6995ecc8a4324c0478864d40c0576cb1c9861be9edba6f",
+  "registry/consumers/identity-tenancy.json": "d93e3973865ea284cd7563f7956c2cef00d820cca62ab2576b268f919627177e",
+  "registry/consumers/inventory.json": "5e4de1647a8f2783161fd4391691c03dcf7c76abfc7334c6e7ce2ebb351de072",
+  "registry/consumers/sales-pos.json": "bf8c21a4c511ea04beede911cf04d912d7ec301bc582cae768508dd45665223d",
+  "scripts/identity/workload-reuse-consumers-v2.mjs": "51e4e2e230078d27bd1b43f2784826d3ccf3ee992bdd6447256f85cf53c371ea",
+  "test/identity/workload-reuse-consumers-v2.test.mjs": "6a561f1597375cdc99e11f920753c602e2a033da4713f352a65f36764cdd2a43"
 });
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
@@ -165,6 +176,8 @@ export function projectReviewedSnapshot(revision, snapshot) {
   if (typeof service !== 'string' || !/^[a-z-]+$/.test(service)) return snapshot;
   const file = 'registry/consumers/' + service + '.json';
   if (!metadata.has(file)) return snapshot;
+  if (isReuseCandidateDocument(file,snapshot) && canProject(reuseCandidateBase,revision))
+    return JSON.parse(source(revision)(file));
   for (const from of reviewedInputs) {
     const bytes = optional(source(from), file);
     if (!bytes || !isDeepStrictEqual(snapshot, JSON.parse(bytes)) || !canProject(from,revision)) continue;
@@ -204,7 +217,7 @@ const toolingPaths = Object.freeze([
   'test/architecture/immutable-closure.test.mjs', 'test/architecture/validation-history.test.mjs',
   'tools/architecture/validation-history.mjs',
 ]);
-const toolingReferenceSha256 = '124208be887f45af511f107a229a0b209b152e83b941345eaf995532fb1d739e';
+const toolingReferenceSha256 = '86c8e419420a0d4db954ab7be88204a82c9da347856fb2c89509665e1e02ff16';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

@@ -6,6 +6,7 @@ import {pathToFileURL} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {gitReader,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectReuseConsumerFile} from './workload-reuse-consumers-v2.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const sourceCommit='af6e8b3f5115d51f56a1ef94a36ae9f33cce3337';
@@ -96,7 +97,7 @@ export function validateAdmission(readFile=read){
   const checked=new Set();
   const same=file=>{
     if(checked.has(file))return;
-    assert.equal(text(readFile(file)),text(source(file)),'H1A_ADMISSION_SOURCE:'+file);
+    assert.equal(text(projectReuseConsumerFile(file,readFile(file))),text(source(file)),'H1A_ADMISSION_SOURCE:'+file);
     checked.add(file);
   };
   same('openapi/identity-internal-auth-v1.yaml');

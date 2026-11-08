@@ -1,10 +1,10 @@
 {
   "formatVersion": 1,
-  "publication": "published",
+  "publication": "local-candidate",
   "sourceRepository": "opencomerix/sales-pos",
   "sourceCommit": "b6407da6e3367a6dffd138f667175d4cf57ff9ad",
-  "manifestSha256": "df6b7105b2fbe83744cc73ca51e6097dfa5ec89f8c1098431b1a4fe0d15614d0",
-  "lockSha256": "9cabe0dd59741aa30788724a0fc0f5ddd11a0bfe7475c2465f8e782e00212ca7",
+  "manifestSha256": "087711262579df9d0bed80ce0706770d7c3bcca0ffb57d047933359f4e91f772",
+  "lockSha256": "1aa0dca23d016db51a21efbf36cfe48f8051c129a0ab32379fc3f54d4b9d8f32",
   "manifest": {
     "formatVersion": 1,
     "service": "sales-pos",
@@ -305,6 +305,38 @@
           "pnpm test:integration",
           "pnpm test:process-authority-runtime"
         ]
+      },
+      {
+        "id": "identity.internal-auth.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "operations": [
+          "issueInternalServiceToken"
+        ],
+        "pointers": [],
+        "purpose": "ECO-M6 H1A v2 for the two approved workload reuse profiles; existing v1 selections/pins remain for their prior purposes.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.workload-token-reuse.policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "ECO-M6 bounded private RAM, fixed profiles, per-use verification, deadlines and residual secret/key retirement; no authority cache.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
       }
     ],
     "assets": [
@@ -545,7 +577,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "sales-pos",
-    "manifestSha256": "df6b7105b2fbe83744cc73ca51e6097dfa5ec89f8c1098431b1a4fe0d15614d0",
+    "manifestSha256": "087711262579df9d0bed80ce0706770d7c3bcca0ffb57d047933359f4e91f772",
     "entries": [
       {
         "id": "sales.inventory-step-authority.http.v1",
@@ -2472,6 +2504,167 @@
         ],
         "selectionSha256": "128837965297380d41514da166fadcbf27b90d5f8f7af410e4b2f39f9338d1a8",
         "runtimeSha256": "128837965297380d41514da166fadcbf27b90d5f8f7af410e4b2f39f9338d1a8"
+      },
+      {
+        "id": "identity.internal-auth.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+        "operations": [
+          "issueInternalServiceToken"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "sha256": "9afcacee5d576d7cec1cfd94fb39d3eb29f4ce6a2a64301dc93cf8ef16229cf3"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "sha256": "1a5fa4bbfc9f445a56bd9d33f4a9b93d7d53d26f5ab947172e91ebca1fd98a3f"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "sha256": "2a77bb3fbb64052e95568069f1891ce6b43b5da9328476b890d78bda9c169166"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "sha256": "bd8676729435dc64354407b4ffd02a136b93cf9d1b54a41ffdf833d9e567ce84"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "sha256": "b187c9dd08c0d8051d8105e43db70ec2abe454f78e833fcd67c6e2342ba587e0"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "sha256": "52125fd2bb0535499d0ac5eae6f9788babf29d437847cff2677956bf1fed0713"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "sha256": "0f5b088c764ef9c34f5ba52eefa49870de065724256fa8fc39011b7036162527"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "sha256": "fa532bd7b24744d5d8e24e21cf091a20961dc675b08c6cf9dc0cba433b0e3e6e"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/headers/NoCache",
+            "sha256": "18ca9d07efe39b854719a51cda6f176517206f878009eb761e7395fb903697ab"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "e20e45b76b9dfb27598d934d82a0f27570f76a9e782c41218a948c93801af546"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/schemas/ClientCredentialsRequest",
+            "sha256": "1d64c1f6534e77b5bf5c9266cf1091b8effce588f996046ade3a3c5a04817e78"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/schemas/OAuthError",
+            "sha256": "07e7e90a0843664b8afdb93544ce89562878ef982f5175fa80cb650d5b447249"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/schemas/TokenResponse",
+            "sha256": "9b57e994565bf3250ade89239dddbf2e0a956a7103c653d0b0e3505a1e17de52"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/components/securitySchemes/workloadBasic",
+            "sha256": "82612b0e2110574247e733bd5151bd5b14694c48daf299c769bc5f6c7c49359f"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/paths/~1internal~1identity~1oauth~1token/post",
+            "sha256": "fa6f8dded1cce38f1fd5b6ae69526b01e2ce03021f5f6c5426f49ef5946947c5"
+          },
+          {
+            "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "cdd2192ae50db22dd36ac27fbebc19ae7df673d11950ef97b56aeda3b313b600"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "pointer": "",
+            "sha256": "7fea647e5f15c86fbce494e086e2c9487a3a9e06954e405b82055b6cecfc124b"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "pointer": "",
+            "sha256": "52977cef16ffb1e7392b602fc98ae422b15b03d9403f17ac43ad8e59b51c8782"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "pointer": "",
+            "sha256": "74d505516733379dbb4a80024e593d63d739abb6cbb4fb89ce3cd780c1bcfa27"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "pointer": "",
+            "sha256": "0856809ec8a314e173b301e35291ac07d38ea0ae468b01d086832ccb9fa29dad"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "pointer": "",
+            "sha256": "326a51086889d002cb57fbc397555a9f885b18b36ba814cd3c5ef4262aca794c"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "pointer": "",
+            "sha256": "46333dc00fd2301169f9c46a93be801e6d5010877877b0a20706596580df89f9"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "pointer": "",
+            "sha256": "c54597bd437f04f97971559ab0989bef8538afc0cd633dafb485962a698f28e6"
+          }
+        ],
+        "selectionSha256": "4308e6fad39ea2721899a65d12594df23c02910859adc84319038335d1bdd7de",
+        "runtimeSha256": "88f7f361aafd2c22d134baf0f08c24c117cfe4d28208d1e634a6d09c5fe6ab69"
+      },
+      {
+        "id": "identity.workload-token-reuse.policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
+            "sha256": "efd4ed4579316272c372f8ee96e0986db35ce1c11724b3407589d51017efd411"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
+            "pointer": "",
+            "sha256": "bf073301b0b11016a727d25bef3278c5c1005a4d7b251815244e75357c035038"
+          }
+        ],
+        "selectionSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad",
+        "runtimeSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad"
       }
     ],
     "assets": [

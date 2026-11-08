@@ -205,6 +205,7 @@ export function validateAuthorityConsumers(read = native) {
 // source validation belongs to validateAuthorityConsumers/read-view/scope,
 // rather than being repeated for every file in each nested historical reader.
 export function authorityConsumerHistoricalFile(file, bytes) {
+  bytes=projectReuseCandidateFile(file,bytes);
   bytes=projectValidationTooling(file,bytes);
   const bridge=model().bridges.get(file);
   if(bridge&&text(bytes)===text(bridge))return base(file);
@@ -214,6 +215,7 @@ export function authorityConsumerHistoricalFile(file, bytes) {
 }
 export function authorityConsumerHistoricalSnapshot(value) {
   const file = 'registry/consumers/' + value?.manifest?.service + '.json';
+  value=projectReuseCandidateDocument(file,value);
   if (!isDeepStrictEqual(value, model().snapshots.get(file))) return value;
   return structuredClone(model().previous.get(file));
 }

@@ -15,8 +15,8 @@ const current=new Map(reuseCandidateFiles.map(file=>[file,fs.readFileSync(path.j
 const read=file=>{assert(current.has(file),'Unexpected live path: '+file);return Buffer.from(current.get(file));};
 const changed=bytes=>Buffer.concat([bytes,Buffer.from('\nUnapproved')]);
 
-test('only ten exact candidate metadata, entry-point and test values project; altered and unrelated inputs never do',()=>{
-  for(const file of reuseCandidateFiles.slice(0,10)){
+test('only thirteen exact candidate metadata, entry-point and test values project; altered and unrelated inputs never do',()=>{
+  for(const file of [...reuseCandidateFiles.slice(0,10),...reuseCandidateFiles.slice(20,23)]){
     const input=read(file),expected=base(file);
     const output=projectReuseCandidateFile(file,input);
     assert.deepEqual(output,expected);
@@ -64,7 +64,7 @@ test('candidate scope checks every exact path once and grants no folder exemptio
   const visits=[];
   const scope=withReuseCandidateScope(['synthetic-kept'],file=>{visits.push(file);return read(file);});
   assert.deepEqual([...scope].sort(),['synthetic-kept',...reuseCandidateFiles].sort());
-  assert.equal(visits.length,20);assert.equal(new Set(visits).size,20);
+  assert.equal(visits.length,25);assert.equal(new Set(visits).size,25);
   assert(!scope.has('identity/http/private/v2/unapproved.yaml'));
   assert(!scope.has('registry/consumers/unapproved.json'));
 });
@@ -77,7 +77,7 @@ test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
     return read(name);
   };
   assert.throws(()=>withReuseCandidateScope([],altered));
-  assert.equal(withReuseCandidateScope([],read).size,20);
+  assert.equal(withReuseCandidateScope([],read).size,25);
 });
 
 test('historical scopes gain no candidate paths; partial selected admission is rejected',()=>{
