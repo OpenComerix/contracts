@@ -5,6 +5,7 @@ import {readFileSync,writeFileSync,mkdirSync,existsSync,lstatSync} from 'node:fs
 import path from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {parse} from 'yaml';
+import {sourceCandidateDocument} from './internal-auth-v2-admission.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='e80e760d0ba9f4194beb38a6c385ee35b9675e53';
@@ -90,7 +91,7 @@ export function verifyPreservation(){
   const published=file=>execFileSync('git',['-C',root,'show',base+':'+file],{maxBuffer:4*1024*1024});
   assert.equal(read(files.prior).replaceAll('\r\n','\n'),published(files.prior).toString('utf8').replaceAll('\r\n','\n'),'Published H1A v1 bytes');
   const priorRegistry=JSON.parse(published('registry/contracts.json'));
-  const registry=json('registry/contracts.json');
+  const registry=sourceCandidateDocument('registry/contracts.json',json('registry/contracts.json'));
   for(const key of Object.keys(priorRegistry).filter(key=>key!=='planned'))assert.deepEqual(registry[key],priorRegistry[key],'Existing registry field changed: '+key);
   const priorIds=new Set(priorRegistry.planned.map(row=>row.id));
   assert.deepEqual(registry.planned.filter(row=>priorIds.has(row.id)),priorRegistry.planned,'Existing intentions changed');
@@ -101,10 +102,10 @@ export function verifyPreservation(){
     ['identity.workload-token-reuse.schema.v2',files.schema,'identity','identity-tenancy','F1-ECO-M6','planned'],
     ['identity.internal-auth.fixtures.v2',files.cases,'identity','identity-tenancy','F1-ECO-M6','planned'],
   ],'Only the complete candidate intent set is allowed');
-  const oldIndex=JSON.parse(published('identity/index.json')),index=json('identity/index.json');
+  const oldIndex=JSON.parse(published('identity/index.json')),index=sourceCandidateDocument('identity/index.json',json('identity/index.json'));
   assert.deepEqual({...index,planned:oldIndex.planned},oldIndex,'Existing Identity index changed');
   assert.deepEqual(index.planned,[...oldIndex.planned,...additions.map(row=>row.id)]);
-  return {publishedV1Preserved:true,existingAdmissionsPreserved:true,planned:additions.length};
+  return {view:'published_source_candidate',publishedV1Preserved:true,existingAdmissionsPreserved:true,planned:additions.length};
 }
 export function prepareNative(bundleFile){
   const candidate=readCandidate();

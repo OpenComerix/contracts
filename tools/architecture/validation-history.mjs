@@ -45,6 +45,7 @@ export const reuseCandidateFiles = Object.freeze([
   'scripts/inventory/capture-authority-v2.mjs',
   'scripts/inventory/capture-authority-v2-admission.mjs',
   'test/sales/inventory-step-consumer-v1.test.mjs',
+  'test/inventory/capture-authority-v2-admission.test.mjs',
   'identity/http/private/v2/identity-internal-auth-v2.yaml',
   'identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json',
   'identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json',
@@ -53,27 +54,34 @@ export const reuseCandidateFiles = Object.freeze([
   'scripts/identity/validate-internal-auth-v2.sh',
   'test/identity/internal-auth-v2.test.mjs',
   'test/architecture/internal-auth-v2-history.test.mjs',
+  'scripts/identity/internal-auth-v2-admission.mjs',
+  'test/identity/internal-auth-v2-admission.test.mjs',
 ]);
-const reuseProjectionFiles = new Set(reuseCandidateFiles.slice(0, 9));
+const reuseProjectionFiles = new Set(reuseCandidateFiles.slice(0, 10));
+const reuseAdmissionIds=new Set(['identity.internal-auth.v2','identity.workload-token-reuse.policy.v2',
+  'identity.workload-token-reuse.schema.v2','identity.internal-auth.fixtures.v2']);
 // BEGIN H1A V2 CANDIDATE HASHES
 const reuseCandidateHashes = Object.freeze({
   ".github/workflows/ci.yml": "4580859c505a8e486651aa589d1485cb9bcf51344a622cf31509d0b5191f30e5",
-  "identity/README.md": "35405c0f1d05547bda7b64a777d39fc184f4a9af4661c43d9cb5188bed9689c3",
-  "identity/index.json": "821015d0c5edc41ce78c938f6e7337345441904c051e0697d2b1ca6dbbb1e43f",
-  "registry/README.md": "3a14e5a12f8581334f466c4669e71e85eef7acd2fa5f06e7de25aee050215270",
-  "registry/contracts.json": "196e591c121894c24691204a1d9acea06dd2a8d38890c0eee140dd7148df7192",
+  "identity/README.md": "8f1bf2be9032334d2c00370adeb51ea101ac7a4466874731764b879dc977eeef",
+  "identity/index.json": "ebb11a8f79e6197134e1c0c5a757e7833890296b39a5742d7861dbac21e3d67a",
+  "registry/README.md": "4cb61988f4610010869f9239c7e78720629eda66ebee2d8291adec39e7915b61",
+  "registry/contracts.json": "fd1bde22796faf19eea46b65bc60ffa33004748960efb73c804fd7106d600c09",
   "test/ci/github-v1.test.mjs": "cebe67c658a9297ba9061505eda49ef4a94b92e7afb78e02a9645893e7b2a9f1",
   "scripts/inventory/capture-authority-v2.mjs": "bc3425cea375e780f2704d335925b6bac966bfd42f602426f9f0dfe2c33f19e6",
   "scripts/inventory/capture-authority-v2-admission.mjs": "c14a57b6c1f5dbbbc8e1fda75cda5251b75a6be1618449b14092f6b3bad61914",
   "test/sales/inventory-step-consumer-v1.test.mjs": "e206eb58a36e397aa680d9fcae6775e0c957d1053c6e2b6e52519993ee6b6fe1",
+  "test/inventory/capture-authority-v2-admission.test.mjs": "5ee18c7625b4abceca4b76a330c02f890f84910afa8a2a4372ed27a824e713f6",
   "identity/http/private/v2/identity-internal-auth-v2.yaml": "9afcacee5d576d7cec1cfd94fb39d3eb29f4ce6a2a64301dc93cf8ef16229cf3",
   "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json": "efd4ed4579316272c372f8ee96e0986db35ce1c11724b3407589d51017efd411",
   "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json": "8b2bcf34265b72513fd8d9b2aaceb93d76c8de1ac784f0601711e7cc7a689338",
   "identity/fixtures/internal-auth/v2/policy-cases-v2.json": "e74e406b8235ab1238ceb72edb7e7d509b5f151977dc42c8580360ff0225adb6",
-  "scripts/identity/validate-internal-auth-v2.mjs": "f48e095f4bfee12f6fefaa81fab30e412189ff542471eebf499b672e35c98f04",
+  "scripts/identity/validate-internal-auth-v2.mjs": "0d78b1af7392c66a74928529a1a7728936a1d9fdb06580f040f24a948d261ea3",
   "scripts/identity/validate-internal-auth-v2.sh": "04e39db4307136278ecc90bc897a3b2b0704f9425726ef27551cb3e06997a0db",
-  "test/identity/internal-auth-v2.test.mjs": "42a6c573c7813ec995aed04bd66d7ea2042eda939d63151c330a3666998dfac3",
-  "test/architecture/internal-auth-v2-history.test.mjs": "67ab48135baa22f1ea46c1909964688029a8c69dfaae3ade274bbc1c870d9be7"
+  "test/identity/internal-auth-v2.test.mjs": "f1f9100ed85d6a62b45c2c5128cee48275297a0af189be772eba78c535baa6a3",
+  "test/architecture/internal-auth-v2-history.test.mjs": "e4164102128fc18bc6b44223d599f7a40598fc42b150960f647ad03ae7f27571",
+  "scripts/identity/internal-auth-v2-admission.mjs": "d87b8defaa7dfa096d318a3a78161e057c2056777db9380d6fd64a6692a4d81f",
+  "test/identity/internal-auth-v2-admission.test.mjs": "bc34acaf35b84db78e6995ecc8a4324c0478864d40c0576cb1c9861be9edba6f"
 });
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
@@ -85,7 +93,8 @@ export function withReuseCandidateScope(paths, read) {
   const registry = read('registry/contracts.json');
   if (textHash(registry) !== reuseCandidateHashes['registry/contracts.json']) {
     const value = JSON.parse(text(registry));
-    assert(!value.planned?.some(row => row.materializeIn === 'F1-ECO-M6'), 'H1A_V2_SCOPE_REGISTRY');
+    assert(!value.planned?.some(row => row.materializeIn === 'F1-ECO-M6')&&
+      !value.contracts?.some(row=>reuseAdmissionIds.has(row.id)), 'H1A_V2_SCOPE_REGISTRY');
     return new Set(paths);
   }
   assert.deepEqual(Object.keys(reuseCandidateHashes), reuseCandidateFiles, 'H1A_V2_SCOPE_INVENTORY');
@@ -195,7 +204,7 @@ const toolingPaths = Object.freeze([
   'test/architecture/immutable-closure.test.mjs', 'test/architecture/validation-history.test.mjs',
   'tools/architecture/validation-history.mjs',
 ]);
-const toolingReferenceSha256 = 'ea697918740ac332ce8e6c021a7444a9df472ad581aabd6ccc15fe0c764873a8';
+const toolingReferenceSha256 = '124208be887f45af511f107a229a0b209b152e83b941345eaf995532fb1d739e';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

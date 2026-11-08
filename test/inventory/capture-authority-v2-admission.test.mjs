@@ -79,14 +79,18 @@ for (const [label, change] of [
   ['mapping changed', row => { row.uriMappings[0].path = httpPath; }],
   ['mapping added', row => { row.uriMappings.push({ uri: 'https://unapproved.example/', path: httpPath }); }],
 ]) test('admission rejects incorrect ' + label, () => {
-  const wrong = mutateRegistry(value => change(value.contracts.at(-2)));
+  const wrong = mutateRegistry(value => {
+    const selected = value.contracts.find(row => row.id === admissionIds[0]);
+    assert(selected, 'Inventory HTTP admission required before mutation');
+    change(selected);
+  });
   assert.throws(() => validateAdmission(wrong), /IC2A_EXACT_METADATA/);
   assert.throws(() => admissionReadView(wrong)('inventory/index.json'), /IC2A_EXACT_METADATA/);
 });
 for (const [label, change] of [
-  ['HTTP missing', value => { value.contracts.splice(-2, 1); }],
-  ['schema missing', value => { value.contracts.pop(); }],
-  ['both missing', value => { value.contracts.splice(-2); }],
+  ['HTTP missing', value => { value.contracts = value.contracts.filter(row => row.id !== admissionIds[0]); }],
+  ['schema missing', value => { value.contracts = value.contracts.filter(row => row.id !== admissionIds[1]); }],
+  ['both missing', value => { value.contracts = value.contracts.filter(row => !admissionIds.includes(row.id)); }],
   ['intention retained', value => { value.planned = before().planned; }],
   ['unrelated intention removed', value => { value.planned.pop(); }],
   ['prior descriptor changed', value => { value.contracts[0].purpose = 'Unreviewed'; }],

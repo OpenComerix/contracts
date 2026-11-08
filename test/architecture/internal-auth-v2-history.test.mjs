@@ -15,8 +15,8 @@ const current=new Map(reuseCandidateFiles.map(file=>[file,fs.readFileSync(path.j
 const read=file=>{assert(current.has(file),'Unexpected live path: '+file);return Buffer.from(current.get(file));};
 const changed=bytes=>Buffer.concat([bytes,Buffer.from('\nUnapproved')]);
 
-test('only nine exact candidate metadata, entry-point and test values project; altered and unrelated inputs never do',()=>{
-  for(const file of reuseCandidateFiles.slice(0,9)){
+test('only ten exact candidate metadata, entry-point and test values project; altered and unrelated inputs never do',()=>{
+  for(const file of reuseCandidateFiles.slice(0,10)){
     const input=read(file),expected=base(file);
     const output=projectReuseCandidateFile(file,input);
     assert.deepEqual(output,expected);
@@ -64,7 +64,7 @@ test('candidate scope checks every exact path once and grants no folder exemptio
   const visits=[];
   const scope=withReuseCandidateScope(['synthetic-kept'],file=>{visits.push(file);return read(file);});
   assert.deepEqual([...scope].sort(),['synthetic-kept',...reuseCandidateFiles].sort());
-  assert.equal(visits.length,17);assert.equal(new Set(visits).size,17);
+  assert.equal(visits.length,20);assert.equal(new Set(visits).size,20);
   assert(!scope.has('identity/http/private/v2/unapproved.yaml'));
   assert(!scope.has('registry/consumers/unapproved.json'));
 });
@@ -77,13 +77,13 @@ test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
     return read(name);
   };
   assert.throws(()=>withReuseCandidateScope([],altered));
-  assert.equal(withReuseCandidateScope([],read).size,17);
+  assert.equal(withReuseCandidateScope([],read).size,20);
 });
 
-test('historical scopes gain no candidate paths; partial candidate registration is rejected',()=>{
+test('historical scopes gain no candidate paths; partial selected admission is rejected',()=>{
   assert.deepEqual([...withReuseCandidateScope(['kept'],file=>file==='registry/contracts.json'?base(file):read(file))],['kept']);
   const registry=JSON.parse(read('registry/contracts.json'));
-  registry.planned=registry.planned.filter(row=>row.id!=='identity.internal-auth.v2');
+  registry.contracts=registry.contracts.filter(row=>row.id!=='identity.internal-auth.v2');
   assert.throws(()=>withReuseCandidateScope([],file=>file==='registry/contracts.json'?Buffer.from(JSON.stringify(registry)):read(file)),/H1A_V2_SCOPE_REGISTRY/);
 });
 

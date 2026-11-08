@@ -17997,6 +17997,85 @@
           "path": "inventory/http/shared/v2/inventory-capture-authority-v2.schema.json"
         }
       ]
+    },
+    {
+      "id": "identity.internal-auth.v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "ECO-M6 selected H1A v2 admission for two fixed workload profiles; owner runtime and consumer migration remain separate.",
+      "reasonForChange": "Admit the audited published source after complete exact CI; preserve H1A v1 and every prior consumer pin.",
+      "retirement": "Preserve source bytes and v1 admission; incompatible evolution requires a successor and explicit migration.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+      "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "9afcacee5d576d7cec1cfd94fb39d3eb29f4ce6a2a64301dc93cf8ef16229cf3",
+      "operations": [
+        "issueInternalServiceToken",
+        "getInternalIdentityJwks"
+      ],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.workload-token-reuse.policy.v2",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "ECO-M6 selected H1A v2 admission for two fixed workload profiles; owner runtime and consumer migration remain separate.",
+      "reasonForChange": "Admit the audited published source after complete exact CI; preserve H1A v1 and every prior consumer pin.",
+      "retirement": "Preserve source bytes and v1 admission; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
+      "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "efd4ed4579316272c372f8ee96e0986db35ce1c11724b3407589d51017efd411",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.workload-token-reuse.schema.v2",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "ECO-M6 selected H1A v2 admission for two fixed workload profiles; owner runtime and consumer migration remain separate.",
+      "reasonForChange": "Admit the audited published source after complete exact CI; preserve H1A v1 and every prior consumer pin.",
+      "retirement": "Preserve source bytes and v1 admission; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json",
+      "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "8b2bcf34265b72513fd8d9b2aaceb93d76c8de1ac784f0601711e7cc7a689338",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.internal-auth.fixtures.v2",
+      "domain": "identity",
+      "surface": "validation",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "ECO-M6 selected H1A v2 admission for two fixed workload profiles; owner runtime and consumer migration remain separate.",
+      "reasonForChange": "Admit the audited published source after complete exact CI; preserve H1A v1 and every prior consumer pin.",
+      "retirement": "Preserve source bytes and v1 admission; incompatible evolution requires a successor and explicit migration.",
+      "version": "v2",
+      "path": "identity/fixtures/internal-auth/v2/policy-cases-v2.json",
+      "commit": "af6e8b3f5115d51f56a1ef94a36ae9f33cce3337",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e74e406b8235ab1238ceb72edb7e7d509b5f151977dc42c8580360ff0225adb6",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -18946,42 +19025,6 @@
     }
   ],
   "planned": [
-    {
-      "id": "identity.internal-auth.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-ECO-M6",
-      "status": "planned",
-      "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
-      "constraint": "Candidate H1A v2 only; no admission, consumer lock migration or runtime activation before audited publication and exact CI."
-    },
-    {
-      "id": "identity.workload-token-reuse.policy.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-ECO-M6",
-      "status": "planned",
-      "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
-      "constraint": "Candidate H1A v2 only; no admission, consumer lock migration or runtime activation before audited publication and exact CI."
-    },
-    {
-      "id": "identity.workload-token-reuse.schema.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-ECO-M6",
-      "status": "planned",
-      "path": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json",
-      "constraint": "Candidate H1A v2 only; no admission, consumer lock migration or runtime activation before audited publication and exact CI."
-    },
-    {
-      "id": "identity.internal-auth.fixtures.v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-ECO-M6",
-      "status": "planned",
-      "path": "identity/fixtures/internal-auth/v2/policy-cases-v2.json",
-      "constraint": "Candidate H1A v2 only; no admission, consumer lock migration or runtime activation before audited publication and exact CI."
-    },
     {
       "id": "common.data-lifecycle-policy.v1",
       "domain": "common",

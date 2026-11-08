@@ -1,5 +1,13 @@
 # Contratos de identidad y tenencia
 
+## ECO-M6 — Admisión seleccionada H1A v2 (candidata)
+
+Se admiten localmente solo las cuatro raíces H1A v2 desde `af6e8b3f5115d51f56a1ef94a36ae9f33cce3337`, con hashes y cierres mínimos. [CI fuente completa 23/23](https://github.com/OpenComerix/contracts/actions/runs/42493498581) verificada por SHA/ref exactos. HTTP 2.0.0, política/schema/fixtures v2; 206 raíces, 236 artefactos preservados, dos planned ajenos y siete consumidores intactos. V1 y todos los pins anteriores se conservan. Las secciones candidatas siguientes describen la entrega fuente histórica.
+
+Esta admisión es candidata hasta auditoría/publicación y CI completa de su propia revisión. No migra manifiestos/locks, no actualiza gitlinks y no acredita reutilización runtime ni producción. La política publicada conserva los indicadores de su corte fuente; no se modifica ni se interpreta active como activación runtime.
+
+[HTTP](http/private/v2/identity-internal-auth-v2.yaml), [política](http/shared/v2/identity-workload-token-reuse-policy-v2.json), [schema](http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json) y [fixtures](fixtures/internal-auth/v2/policy-cases-v2.json). Selecciones semánticas de política y operaciones se declaran por separado en los futuros consumidores. Gates: `node scripts/identity/internal-auth-v2-admission.mjs`; `node --test test/identity/internal-auth-v2-admission.test.mjs`.
+
 ## ECO-M6 — Candidato H1A v2 para reutilización técnica acotada
 
 [HTTP H1A v2](http/private/v2/identity-internal-auth-v2.yaml) conserva las dos rutas y la forma wire de H1A v1. Su [política](http/shared/v2/identity-workload-token-reuse-policy-v2.json), [schema](http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json) y [vectores negativos](fixtures/internal-auth/v2/policy-cases-v2.json) permiten RAM privada solo a `inventory.sales-process-authority` y `sales-pos.inventory-results`: una credencial/adquisición en vuelo por perfil/generación, expiración efectiva <=300 s y reutilización con más de 2000 ms restantes. No hay cache HTTP, persistencia, renovación por timer ni cache de autoridad; retirar el secreto no revoca por sí solo JWT emitidos. Los otros perfiles y los bytes H1A v1 conservan sus reglas.

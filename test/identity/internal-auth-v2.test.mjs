@@ -6,7 +6,7 @@ test('H1A v2 retains wire shape and fixes only two bounded private-RAM workload 
   assert.deepEqual(validateCandidate(candidate),{candidate:true,profiles:2,policyNegativeVectors:19,runtime_demonstrated:false});
 });
 test('published H1A v1, registry admissions and prior intentions stay intact',()=>{
-  assert.deepEqual(verifyPreservation(),{publishedV1Preserved:true,existingAdmissionsPreserved:true,planned:4});
+  assert.deepEqual(verifyPreservation(),{view:'published_source_candidate',publishedV1Preserved:true,existingAdmissionsPreserved:true,planned:4});
 });
 for(const row of candidate.cases.negative_mutations)test('reject policy violation: '+row.id,()=>{
   assert.throws(()=>validatePolicy(mutatePolicy(candidate.policy,row)));

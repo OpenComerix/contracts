@@ -1,5 +1,13 @@
 # Registro contractual
 
+## ECO-M6 — Cuatro raíces H1A v2 seleccionadas (candidatas)
+
+Se admiten localmente solo las cuatro raíces H1A v2 desde `af6e8b3f5115d51f56a1ef94a36ae9f33cce3337`, con hashes y cierres mínimos. [CI fuente completa 23/23](https://github.com/OpenComerix/contracts/actions/runs/42493498581) verificada por SHA/ref exactos. HTTP 2.0.0, política/schema/fixtures v2; 206 raíces, 236 artefactos preservados, dos planned ajenos y siete consumidores intactos. V1 y todos los pins anteriores se conservan. Las secciones candidatas siguientes describen la entrega fuente histórica.
+
+Esta admisión es candidata hasta auditoría/publicación y CI completa de su propia revisión. No migra manifiestos/locks, no actualiza gitlinks y no acredita reutilización runtime ni producción. La política publicada conserva los indicadores de su corte fuente; no se modifica ni se interpreta active como activación runtime.
+
+[Mapa y límites](../identity/README.md#eco-m6--admisión-seleccionada-h1a-v2-candidata). El verificador compara metadata exacta, fuente/cierres y consumidores actuales por invocación, sin validar paquetes históricos por fixture.
+
 ## ECO-M6 — Intenciones H1A v2, sin admisión
 
 Se agregan únicamente `identity.internal-auth.v2`, `identity.workload-token-reuse.policy.v2`, `identity.workload-token-reuse.schema.v2` e `identity.internal-auth.fixtures.v2` como **planned**, con rutas canónicas y owner `identity-tenancy`. [Paquete y límites](../identity/README.md#eco-m6--candidato-h1a-v2-para-reutilización-técnica-acotada). Se preservan todas las raíces/admisiones, artefactos publicados, consumidores/locks/exports y las dos intenciones anteriores. El candidato y su publicación no admiten consumo runtime; la admisión usará la fuente inmutable auditada y CI completa exacta, con permiso propio.
