@@ -43,6 +43,8 @@ export const reuseCandidateFiles = Object.freeze([
   '.github/workflows/ci.yml', 'identity/README.md', 'identity/index.json',
   'registry/README.md', 'registry/contracts.json', 'test/ci/github-v1.test.mjs',
   'scripts/inventory/capture-authority-v2.mjs',
+  'scripts/inventory/capture-authority-v2-admission.mjs',
+  'test/sales/inventory-step-consumer-v1.test.mjs',
   'identity/http/private/v2/identity-internal-auth-v2.yaml',
   'identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json',
   'identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json',
@@ -52,7 +54,7 @@ export const reuseCandidateFiles = Object.freeze([
   'test/identity/internal-auth-v2.test.mjs',
   'test/architecture/internal-auth-v2-history.test.mjs',
 ]);
-const reuseProjectionFiles = new Set(reuseCandidateFiles.slice(0, 7));
+const reuseProjectionFiles = new Set(reuseCandidateFiles.slice(0, 9));
 // BEGIN H1A V2 CANDIDATE HASHES
 const reuseCandidateHashes = Object.freeze({
   ".github/workflows/ci.yml": "4580859c505a8e486651aa589d1485cb9bcf51344a622cf31509d0b5191f30e5",
@@ -62,6 +64,8 @@ const reuseCandidateHashes = Object.freeze({
   "registry/contracts.json": "196e591c121894c24691204a1d9acea06dd2a8d38890c0eee140dd7148df7192",
   "test/ci/github-v1.test.mjs": "cebe67c658a9297ba9061505eda49ef4a94b92e7afb78e02a9645893e7b2a9f1",
   "scripts/inventory/capture-authority-v2.mjs": "bc3425cea375e780f2704d335925b6bac966bfd42f602426f9f0dfe2c33f19e6",
+  "scripts/inventory/capture-authority-v2-admission.mjs": "c14a57b6c1f5dbbbc8e1fda75cda5251b75a6be1618449b14092f6b3bad61914",
+  "test/sales/inventory-step-consumer-v1.test.mjs": "e206eb58a36e397aa680d9fcae6775e0c957d1053c6e2b6e52519993ee6b6fe1",
   "identity/http/private/v2/identity-internal-auth-v2.yaml": "9afcacee5d576d7cec1cfd94fb39d3eb29f4ce6a2a64301dc93cf8ef16229cf3",
   "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json": "efd4ed4579316272c372f8ee96e0986db35ce1c11724b3407589d51017efd411",
   "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json": "8b2bcf34265b72513fd8d9b2aaceb93d76c8de1ac784f0601711e7cc7a689338",
@@ -69,7 +73,7 @@ const reuseCandidateHashes = Object.freeze({
   "scripts/identity/validate-internal-auth-v2.mjs": "f48e095f4bfee12f6fefaa81fab30e412189ff542471eebf499b672e35c98f04",
   "scripts/identity/validate-internal-auth-v2.sh": "04e39db4307136278ecc90bc897a3b2b0704f9425726ef27551cb3e06997a0db",
   "test/identity/internal-auth-v2.test.mjs": "42a6c573c7813ec995aed04bd66d7ea2042eda939d63151c330a3666998dfac3",
-  "test/architecture/internal-auth-v2-history.test.mjs": "ee9880d145062ad12953ff7675b66d122e6c4c2de5053aac4c4a66cca5cc5fb8"
+  "test/architecture/internal-auth-v2-history.test.mjs": "67ab48135baa22f1ea46c1909964688029a8c69dfaae3ade274bbc1c870d9be7"
 });
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
@@ -191,7 +195,7 @@ const toolingPaths = Object.freeze([
   'test/architecture/immutable-closure.test.mjs', 'test/architecture/validation-history.test.mjs',
   'tools/architecture/validation-history.mjs',
 ]);
-const toolingReferenceSha256 = '199424286e6b1dc9f00503234c480a5e98ef0d0632884f6c6593cb0c611fcb30';
+const toolingReferenceSha256 = 'ea697918740ac332ce8e6c021a7444a9df472ad581aabd6ccc15fe0c764873a8';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

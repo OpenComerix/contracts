@@ -191,7 +191,7 @@ export function admissionHistoricalFile(file, bytes, context) {
 }
 export function admissionHistoricalRegistry(registry, context) {
   return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
-  registry = captureConsumerHistoricalRegistry(registry, current);
+  registry = captureConsumerHistoricalRegistry(current.registry(registry), current);
   if (!isDeepStrictEqual(registry, registrySnapshot())) return registry;
   validateAdmission(current.read, current);
   return structuredClone(before());

@@ -5,6 +5,7 @@ import path from 'node:path';
 import { candidate,source,root,encode,expectedRegistry,expectedIndex,validateSalesAdmission,salesHistoricalFile,salesHistoricalRegistry,historicalTest,historicalTestBytes,guardTransitionFiles,transitionBytes,salesHistoricalIndex,withSalesAdmissionScope,admissionScope } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
 import { publishedCandidate,publishedOwnerCommits,validateSalesSnapshot,verifyPublishedSalesSnapshot } from '../../scripts/sales/inventory-step-consumer-v1.mjs';
 import { captureHistoricalFile } from '../../scripts/inventory/capture-authority-v2.mjs';
+import { reuseCandidateFiles } from '../../tools/architecture/validation-history.mjs';
 const read = file => fs.readFileSync(path.join(root,file));
 for (const service of ['sales-pos','identity-tenancy']) test('published '+service+' admits only the reviewed immutable owner commit and unchanged export',()=>{
   const expected=publishedCandidate(service);
@@ -56,8 +57,25 @@ test('historical projection preserves original assertions and never sanitizes ca
   assert.deepEqual(salesHistoricalIndex(expectedIndex()),JSON.parse(source('registry/consumers/index.json')));
   const alteredIndex=expectedIndex();alteredIndex.consumers.pop();assert.equal(salesHistoricalIndex(alteredIndex),alteredIndex);
   const scope=withSalesAdmissionScope(['preserved-path']);assert(scope.has('preserved-path'));
-  assert.deepEqual([...scope].sort(),['preserved-path',...admissionScope].sort());
+  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles])].sort());
   assert(!scope.has('scripts/unapproved.mjs'));
+});
+
+test('Sales scope rejects changed or missing H1A policy after warmup',t=>{
+  withSalesAdmissionScope([]);
+  const target=path.join(root,'identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json');
+  const original=fs.readFileSync.bind(fs);
+  let change;
+  t.mock.method(fs,'readFileSync',(file,...options)=>{
+    if(typeof file==='string'&&path.resolve(file)===target){
+      if(change==='missing')throw Error('Synthetic missing H1A policy');
+      if(change==='changed')return Buffer.concat([original(file,...options),Buffer.from('\nUnapproved')]);
+    }
+    return original(file,...options);
+  });
+  for(change of ['changed','missing'])assert.throws(()=>withSalesAdmissionScope([]));
+  change=undefined;
+  assert.doesNotThrow(()=>withSalesAdmissionScope([]));
 });
 test('all Sales runtime assets are exact Git bytes and scoped to its transport',()=>{
   const snapshot=candidate('sales-pos');
