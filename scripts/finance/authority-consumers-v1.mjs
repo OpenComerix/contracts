@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
-import {validationToolingFiles,projectValidationTooling,validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withReuseCandidateScope} from '../../tools/architecture/validation-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const authorityConsumerBase = '74f63a87ac30d3ad6dc5f874b4b769c44cea3e55';
@@ -190,6 +190,8 @@ function model() {
 }
 export const authorityConsumerMetadata = () => new Map([...model().snapshots].map(([file, value]) => [file, encode(value)]));
 export function validateAuthorityConsumers(read = native) {
+  const suppliedRead = read;
+  read = file => projectReuseCandidateFile(file, suppliedRead(file));
   for(const [file,bytes]of model().bridges)assert.equal(text(read(file)),text(bytes),'FCA_EXACT_BRIDGE:'+file);
   for (const [file, snapshot] of model().snapshots)
     assert.equal(text(read(file)), text(encode(snapshot)), 'FCA_EXACT_METADATA:' + file);
@@ -244,6 +246,7 @@ class AuthorityConsumerContext {
   }
   project(file, bytes) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    bytes = projectReuseCandidateFile(file, bytes);
     const tooling = projectValidationTooling(file, bytes);
     if (tooling !== bytes) return tooling;
     const projected = authorityConsumerHistoricalFile(file, bytes);
@@ -255,6 +258,16 @@ class AuthorityConsumerContext {
     const projected = authorityConsumerHistoricalSnapshot(value);
     if (projected !== value) this.validate();
     return projected;
+  }
+  registry(value) {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    const projected = projectReuseCandidateDocument('registry/contracts.json', value);
+    if (projected !== value) this.validate();
+    return projected;
+  }
+  scope(paths) {
+    this.validate();
+    return withReuseCandidateScope([...paths,...authorityConsumerFiles],this.#rawRead);
   }
   run(read, verify) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
@@ -278,8 +291,7 @@ export function withAuthorityConsumerContext(read, verify, context) {
 }
 export function withAuthorityConsumerScope(paths, context) {
   return withAuthorityConsumerContext(context?.read ?? native, current => {
-    current.validate();
-    return new Set([...paths,...authorityConsumerFiles]);
+    return current.scope(paths);
   }, context);
 }
 export function writeAuthorityConsumers() {

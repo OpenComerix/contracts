@@ -7,10 +7,11 @@ import { tmpdir } from 'node:os';
 import { parse } from 'yaml';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { checkContractLayout } from '../../tools/architecture/layout.mjs';
+import { projectReuseCandidateFile } from '../../tools/architecture/validation-history.mjs';
 import { root, actual, validateCaptureSource, captureHistoricalFile } from '../../scripts/inventory/capture-authority-v2.mjs';
 
 const workflowPath = '.github/workflows/ci.yml';
-const workflow = parse(actual(workflowPath).toString('utf8'));
+const workflow = parse(projectReuseCandidateFile(workflowPath, actual(workflowPath)).toString('utf8'));
 const legacy = parse(readRepositoryFile('.gitlab-ci.yml').toString('utf8'));
 const id = name => name.replaceAll(/[^A-Za-z0-9_]/g, '_');
 const parallelCommands = new Map([

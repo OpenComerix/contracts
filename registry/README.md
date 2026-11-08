@@ -1,5 +1,9 @@
 # Registro contractual
 
+## ECO-M6 — Intenciones H1A v2, sin admisión
+
+Se agregan únicamente `identity.internal-auth.v2`, `identity.workload-token-reuse.policy.v2`, `identity.workload-token-reuse.schema.v2` e `identity.internal-auth.fixtures.v2` como **planned**, con rutas canónicas y owner `identity-tenancy`. [Paquete y límites](../identity/README.md#eco-m6--candidato-h1a-v2-para-reutilización-técnica-acotada). Se preservan todas las raíces/admisiones, artefactos publicados, consumidores/locks/exports y las dos intenciones anteriores. El candidato y su publicación no admiten consumo runtime; la admisión usará la fuente inmutable auditada y CI completa exacta, con permiso propio.
+
 ## F1-10E — Admisión conjunta candidata
 
 E prepara 78 raíces activas locales desde `7cd2b548fb909c5eff47d0319c162c498ee68e92` / dev, fuente publicada y CI exacto Passed: 73 intenciones B–D más cinco schemas auxiliares D ya publicados (captura comercial Catalog, autoridad Sales de Identity, callback de preparación Sales, clasificación Sales y catálogo de errores v11). Se retira la intención original del sucesor de venta al materializar completed v2; permanecen las dos intenciones ajenas de política v1. No se promueven drafts históricos ni otros planned. Las 121 raíces/236 artefactos previos y todos los consumidores/locks/exports/pins se conservan exactamente.

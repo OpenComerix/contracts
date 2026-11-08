@@ -1,0 +1,106 @@
+{
+  "format_version": 1,
+  "runtime_demonstrated": false,
+  "positive": "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json",
+  "negative_mutations": [
+    {
+      "id": "no-third-profile",
+      "pointer": "/profiles/2",
+      "value": {
+        "client_id": "gateway-bff",
+        "caller": "gateway-bff",
+        "audience": "identity-tenancy.gateway"
+      }
+    },
+    {
+      "id": "no-cross-purpose-audience",
+      "pointer": "/profiles/0/audience",
+      "value": "inventory.process-results"
+    },
+    {
+      "id": "no-human-profile",
+      "pointer": "/profiles/0/caller",
+      "value": "gateway-bff"
+    },
+    {
+      "id": "no-shared-cache",
+      "pointer": "/storage/location",
+      "value": "shared_cache"
+    },
+    {
+      "id": "no-http-cache",
+      "pointer": "/storage/http_cache",
+      "value": true
+    },
+    {
+      "id": "no-persistence",
+      "pointer": "/storage/persistence",
+      "value": true
+    },
+    {
+      "id": "no-tenant-map",
+      "pointer": "/storage/tenant_or_session_keyed",
+      "value": true
+    },
+    {
+      "id": "bounded-lifetime",
+      "pointer": "/lifetime/maximum_seconds",
+      "value": 301
+    },
+    {
+      "id": "bounded-reuse-threshold",
+      "pointer": "/lifetime/reuse_min_remaining_ms_exclusive",
+      "value": 0
+    },
+    {
+      "id": "no-sliding-expiry",
+      "pointer": "/lifetime/sliding_expiry",
+      "value": true
+    },
+    {
+      "id": "no-refresh-timer",
+      "pointer": "/acquisition/proactive_refresh",
+      "value": true
+    },
+    {
+      "id": "verify-every-use",
+      "pointer": "/authorization/verify_credential_each_use",
+      "value": false
+    },
+    {
+      "id": "no-human-authority-cache",
+      "pointer": "/authorization/cache_human_authority",
+      "value": true
+    },
+    {
+      "id": "no-step-authority-cache",
+      "pointer": "/authorization/cache_step_authority",
+      "value": true
+    },
+    {
+      "id": "no-timeout-extension",
+      "pointer": "/authorization/inventory_authority_http_timeout_ms",
+      "value": 2000
+    },
+    {
+      "id": "no-expired-fallback",
+      "pointer": "/errors/expired_fallback",
+      "value": true
+    },
+    {
+      "id": "no-operation-retry",
+      "pointer": "/errors/automatic_operation_retry",
+      "value": true
+    },
+    {
+      "id": "no-immediate-revocation-claim",
+      "pointer": "/retirement/secret_removal",
+      "value": "revokes_existing_tokens_immediately"
+    },
+    {
+      "id": "closed-policy-fields",
+      "pointer": "/unexpected",
+      "value": true
+    }
+  ]
+}

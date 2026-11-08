@@ -1,0 +1,73 @@
+{
+  "policy_version": 2,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "contract": "identity/http/private/v2/identity-internal-auth-v2.yaml",
+  "supersedes": "openapi/identity-internal-auth-v1.yaml",
+  "profiles": [
+    {
+      "client_id": "inventory.sales-process-authority",
+      "caller": "inventory",
+      "audience": "sales-pos.process-authority"
+    },
+    {
+      "client_id": "sales-pos.inventory-results",
+      "caller": "sales-pos",
+      "audience": "inventory.process-results"
+    }
+  ],
+  "storage": {
+    "location": "private_process_ram",
+    "entries_per_profile_generation": 1,
+    "acquisitions_in_flight_per_profile_generation": 1,
+    "http_cache": false,
+    "persistence": false,
+    "logs_or_events": false,
+    "tenant_or_session_keyed": false
+  },
+  "lifetime": {
+    "maximum_seconds": 300,
+    "reuse_min_remaining_ms_exclusive": 2000,
+    "expires_in_anchor": "before_request",
+    "effective_expiry": "earliest_verified_exp_wall_and_monotonic_expires_in",
+    "sliding_expiry": false,
+    "short_token": "use_once_with_remaining_budget",
+    "clock_rollback": "discard"
+  },
+  "acquisition": {
+    "trigger": "on_demand",
+    "proactive_refresh": false,
+    "shared_per_profile_generation": true,
+    "waiter_deadlines": "independent",
+    "shared_deadline": "fixed_never_extended_by_followers",
+    "waiter_cancel": "does_not_cancel_others",
+    "late_retired_generation": "discard",
+    "restart": "empty"
+  },
+  "authorization": {
+    "verify_credential_each_use": true,
+    "verify_at_receiver": true,
+    "cache_human_authority": false,
+    "cache_step_authority": false,
+    "step_authority": "fresh_per_attempt",
+    "inventory_authority_http_timeout_ms": 1000,
+    "sales_result_total_budget_ms": 2000
+  },
+  "retirement": {
+    "secret_removal": "blocks_new_issuance_only",
+    "maximum_issued_token_seconds": 300,
+    "existing_token": "may_remain_usable_until_effective_expiry_subject_to_receiver_keys",
+    "key_retirement": "receiver_policy_unchanged",
+    "jwks_freshness": "existing_inventory_max_30_seconds_less_age_not_a_universal_revocation_guarantee",
+    "reconfiguration": "discard_local_entry_and_in_flight_generation"
+  },
+  "errors": {
+    "expired_fallback": false,
+    "automatic_operation_retry": false,
+    "authentication_rejection": "discard_and_propagate",
+    "domain_denial": "propagate_without_oauth_retry"
+  },
+  "activation": "Candidate only. Publication, exact CI, registry admission and owner tests precede consumer migration. Existing v1 and other profiles remain unchanged."
+}

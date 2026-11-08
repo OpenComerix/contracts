@@ -1,0 +1,302 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json",
+  "title": "H1A v2 bounded private workload credential reuse policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_version",
+    "status",
+    "owner",
+    "runtime_demonstrated",
+    "production_enabled",
+    "contract",
+    "supersedes",
+    "profiles",
+    "storage",
+    "lifetime",
+    "acquisition",
+    "authorization",
+    "retirement",
+    "errors",
+    "activation"
+  ],
+  "properties": {
+    "policy_version": {
+      "const": 2
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "owner": {
+      "const": "identity-tenancy"
+    },
+    "runtime_demonstrated": {
+      "const": false
+    },
+    "production_enabled": {
+      "const": false
+    },
+    "contract": {
+      "const": "identity/http/private/v2/identity-internal-auth-v2.yaml"
+    },
+    "supersedes": {
+      "const": "openapi/identity-internal-auth-v1.yaml"
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "client_id",
+            "caller",
+            "audience"
+          ],
+          "properties": {
+            "client_id": {
+              "const": "inventory.sales-process-authority"
+            },
+            "caller": {
+              "const": "inventory"
+            },
+            "audience": {
+              "const": "sales-pos.process-authority"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "client_id",
+            "caller",
+            "audience"
+          ],
+          "properties": {
+            "client_id": {
+              "const": "sales-pos.inventory-results"
+            },
+            "caller": {
+              "const": "sales-pos"
+            },
+            "audience": {
+              "const": "inventory.process-results"
+            }
+          }
+        }
+      ],
+      "items": false
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "location",
+        "entries_per_profile_generation",
+        "acquisitions_in_flight_per_profile_generation",
+        "http_cache",
+        "persistence",
+        "logs_or_events",
+        "tenant_or_session_keyed"
+      ],
+      "properties": {
+        "location": {
+          "const": "private_process_ram"
+        },
+        "entries_per_profile_generation": {
+          "const": 1
+        },
+        "acquisitions_in_flight_per_profile_generation": {
+          "const": 1
+        },
+        "http_cache": {
+          "const": false
+        },
+        "persistence": {
+          "const": false
+        },
+        "logs_or_events": {
+          "const": false
+        },
+        "tenant_or_session_keyed": {
+          "const": false
+        }
+      }
+    },
+    "lifetime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_seconds",
+        "reuse_min_remaining_ms_exclusive",
+        "expires_in_anchor",
+        "effective_expiry",
+        "sliding_expiry",
+        "short_token",
+        "clock_rollback"
+      ],
+      "properties": {
+        "maximum_seconds": {
+          "const": 300
+        },
+        "reuse_min_remaining_ms_exclusive": {
+          "const": 2000
+        },
+        "expires_in_anchor": {
+          "const": "before_request"
+        },
+        "effective_expiry": {
+          "const": "earliest_verified_exp_wall_and_monotonic_expires_in"
+        },
+        "sliding_expiry": {
+          "const": false
+        },
+        "short_token": {
+          "const": "use_once_with_remaining_budget"
+        },
+        "clock_rollback": {
+          "const": "discard"
+        }
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger",
+        "proactive_refresh",
+        "shared_per_profile_generation",
+        "waiter_deadlines",
+        "shared_deadline",
+        "waiter_cancel",
+        "late_retired_generation",
+        "restart"
+      ],
+      "properties": {
+        "trigger": {
+          "const": "on_demand"
+        },
+        "proactive_refresh": {
+          "const": false
+        },
+        "shared_per_profile_generation": {
+          "const": true
+        },
+        "waiter_deadlines": {
+          "const": "independent"
+        },
+        "shared_deadline": {
+          "const": "fixed_never_extended_by_followers"
+        },
+        "waiter_cancel": {
+          "const": "does_not_cancel_others"
+        },
+        "late_retired_generation": {
+          "const": "discard"
+        },
+        "restart": {
+          "const": "empty"
+        }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verify_credential_each_use",
+        "verify_at_receiver",
+        "cache_human_authority",
+        "cache_step_authority",
+        "step_authority",
+        "inventory_authority_http_timeout_ms",
+        "sales_result_total_budget_ms"
+      ],
+      "properties": {
+        "verify_credential_each_use": {
+          "const": true
+        },
+        "verify_at_receiver": {
+          "const": true
+        },
+        "cache_human_authority": {
+          "const": false
+        },
+        "cache_step_authority": {
+          "const": false
+        },
+        "step_authority": {
+          "const": "fresh_per_attempt"
+        },
+        "inventory_authority_http_timeout_ms": {
+          "const": 1000
+        },
+        "sales_result_total_budget_ms": {
+          "const": 2000
+        }
+      }
+    },
+    "retirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "secret_removal",
+        "maximum_issued_token_seconds",
+        "existing_token",
+        "key_retirement",
+        "jwks_freshness",
+        "reconfiguration"
+      ],
+      "properties": {
+        "secret_removal": {
+          "const": "blocks_new_issuance_only"
+        },
+        "maximum_issued_token_seconds": {
+          "const": 300
+        },
+        "existing_token": {
+          "const": "may_remain_usable_until_effective_expiry_subject_to_receiver_keys"
+        },
+        "key_retirement": {
+          "const": "receiver_policy_unchanged"
+        },
+        "jwks_freshness": {
+          "const": "existing_inventory_max_30_seconds_less_age_not_a_universal_revocation_guarantee"
+        },
+        "reconfiguration": {
+          "const": "discard_local_entry_and_in_flight_generation"
+        }
+      }
+    },
+    "errors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expired_fallback",
+        "automatic_operation_retry",
+        "authentication_rejection",
+        "domain_denial"
+      ],
+      "properties": {
+        "expired_fallback": {
+          "const": false
+        },
+        "automatic_operation_retry": {
+          "const": false
+        },
+        "authentication_rejection": {
+          "const": "discard_and_propagate"
+        },
+        "domain_denial": {
+          "const": "propagate_without_oauth_retry"
+        }
+      }
+    },
+    "activation": {
+      "const": "Candidate only. Publication, exact CI, registry admission and owner tests precede consumer migration. Existing v1 and other profiles remain unchanged."
+    }
+  }
+}

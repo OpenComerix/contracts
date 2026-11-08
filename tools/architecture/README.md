@@ -1,5 +1,7 @@
 # Herramientas de arquitectura contractual
 
+ECO-M6 añade en `validation-history.mjs` una vista pura de siete valores exactos de metadata/CI y la entrada de registro H1A v2 hacia la base e80, sin admitir contratos ni reconstruir validaciones históricas. El scope del candidato relee los hashes de sus quince rutas por invocación; nunca conserva aprobaciones del checkout. El contexto síncrono existente de Finance consume esa vista, adapta objetos de registro exactos y verifica el scope al conceder rutas, manteniendo sus límites y negativos. Tests externos `test/architecture/internal-auth-v2-history.test.mjs` comprueban alteración/omisión tras calentamiento, scope histórico sin extensiones y lecturas 1/10/100 sin leer otros archivos durante una proyección. Los negativos existentes de Git comprueban también drift de herramientas en ambas entradas públicas, bytes y objetos.
+
 - `cli.mjs`: registro, snapshots, consumidores e impacto; comandos en el README raíz.
 - `graph.mjs`: cierres, selección semántica, locks e impacto. Reutiliza cierres de lectores Git nativos por repositorio/revisión, raíz, versión, selección, mappings y dominios; hasta 256 resultados y 32 MiB serializados. Devuelve valores aislados; los tags y admisiones se comprueban fuera de esa reutilización.
 - `git-source.mjs`: lectura agrupada de blobs desde commits completos e inmutables. Comparte objetos por repositorio, devuelve copias y limita precarga a 16 MiB y caché de bytes a 64 MiB por proceso; cada blob conserva el límite de 8 MiB. Lo que no se precarga se lee bajo demanda.

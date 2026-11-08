@@ -273,7 +273,7 @@ export function captureHistoricalFile(file, bytes, context) {
 }
 export function captureHistoricalRegistry(value, context) {
   return withAuthorityConsumerContext(context?.read ?? actual, current => {
-  value = admissionHistoricalRegistry(value, current);
+  value = admissionHistoricalRegistry(current.registry(value), current);
   const expected = JSON.parse(expectedSnapshot().get('registry/contracts.json'));
   if (!isDeepStrictEqual(value, expected)) return value;
   validateCaptureSource(current.read, current);

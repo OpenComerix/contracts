@@ -1,0 +1,353 @@
+openapi: 3.1.0
+info:
+  title: OpenComerix Internal Identity Authentication API
+  version: 2.0.0
+  description: >-
+    Contrato aditivo H1A para autenticacion privada workload-a-workload de
+    identity-tenancy. Estas rutas no pertenecen al gateway publico ni son
+    utilizables desde navegadores. TLS es obligatorio excepto en desarrollo o
+    pruebas locales aislados. El servicio asigna la audiencia desde una
+    allowlist por cliente; notifications solo puede recibir
+    identity-tenancy.delivery-material. El JWT se limita a ES256 y cinco
+    minutos; no existe refresh token. Los consumidores validan firma, alg, kid,
+    issuer, audience, type, expiry y caller, y luego aplican autorizacion de
+    dominio independientemente. Las respuestas y errores OAuth no admiten cache
+    HTTP ni persistencia. Solo los dos
+    perfiles de la politica referenciada pueden retener su credencial en RAM
+    privada por proceso, hasta su expiracion efectiva y como maximo 300 s. No
+    se cachea autoridad humana ni de paso. El JWKS admite cache HTTP privado
+    con revalidacion y frescura maxima de 30 segundos; esto no garantiza
+    revocacion universal inmediata.
+  license:
+    name: Proprietary
+    identifier: LicenseRef-Proprietary
+servers:
+  - url: https://identity-tenancy.internal.example
+    description: Host interno ilustrativo, sustituido por el hostname privado del ambiente.
+security: []
+x-workload-token-reuse-policy:
+  $ref: ../../shared/v2/identity-workload-token-reuse-policy-v2.json
+tags:
+  - name: InternalWorkloadAuth
+    description: Intercambio privado de credenciales de workload y claves publicas de verificacion.
+paths:
+  /internal/identity/oauth/token:
+    post:
+      tags: [InternalWorkloadAuth]
+      operationId: issueInternalServiceToken
+      summary: Emite un JWT de servicio para un workload autenticado
+      description: >-
+        Autentica el workload con HTTP Basic y procesa exclusivamente
+        grant_type=client_credentials. La audiencia la deriva identity-tenancy
+        de una allowlist del cliente; el request no puede seleccionar una
+        audiencia. Para notifications, la unica audiencia inicial es
+        identity-tenancy.delivery-material. El access token se firma ES256,
+        vence como maximo a los 300 segundos y no incluye refresh_token. Exige
+        TLS fuera del desarrollo y pruebas locales aislados. Respuestas y
+        errores usan Cache-Control no-store y Pragma no-cache. Errores siguen
+        JSON OAuth 2.0; nunca revelan credenciales, existencia de clientes o
+        detalles internos.
+      security:
+        - workloadBasic: []
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ClientCredentialsRequest'
+            examples:
+              valid_client_credentials:
+                externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json
+      responses:
+        '200':
+          description: JWT de servicio emitido; no se emite refresh token.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+              examples:
+                synthetic_service_token:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-response-success.json
+        '400':
+          description: Request OAuth mal formado o grant no soportado; no se revela detalle interno.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              examples:
+                invalid_request:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json
+                unsupported_grant_type:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json
+        '401':
+          description: Credencial HTTP Basic invalida; respuesta indistinguible para cliente inexistente o no autorizado.
+          headers:
+            WWW-Authenticate:
+              description: Desafio HTTP Basic del endpoint de token.
+              schema:
+                type: string
+              example: 'Basic realm="identity-token"'
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              examples:
+                invalid_client:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json
+        '500':
+          description: Fallo interno generico del servidor OAuth, sin detalles ni secretos.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              examples:
+                server_error:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-error-server-error.json
+        '503':
+          description: Servicio temporalmente no disponible; no incluye detalle operativo.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            Pragma:
+              $ref: '#/components/headers/NoCache'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuthError'
+              examples:
+                temporarily_unavailable:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json
+  /internal/identity/jwks.json:
+    get:
+      tags: [InternalWorkloadAuth]
+      operationId: getInternalIdentityJwks
+      summary: Obtiene claves publicas para verificar JWT internos
+      description: >-
+        Devuelve un JWKS publico limitado a claves EC P-256 para ES256. Incluye
+        la clave actual y solo durante la ventana aprobada de rotacion la clave
+        publica anterior; la clave anterior deja de publicarse al vencer su
+        limite de aceptacion, que no supera 300 segundos. Nunca contiene
+        material privado. No requiere bearer
+        token unicamente dentro de la red privada, para evitar una dependencia
+        circular al verificar el token. No es una ruta publica ni del gateway.
+        Cache-Control limita el cache a 30 segundos como maximo. El consumidor
+        valida tambien issuer, audience, type, expiry y caller; una firma valida
+        no concede permisos de dominio.
+      security: []
+      responses:
+        '400':
+          description: Solicitud HTTP mal formada; el recurso no acepta parámetros del cliente.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: urn:opencomerix:problem:identity_invalid_request
+                title: Solicitud no valida
+                status: 400
+                instance: urn:uuid:01991a22-0000-7000-8000-000000000001
+                code: identity_invalid_request
+                trace_id: 018f0000-0000-7000-8000-000000000009
+                retryable: false
+        '200':
+          description: Conjunto de una o dos claves publicas vigentes para ES256.
+          headers:
+            Cache-Control:
+              description: Cache privado con revalidacion y edad maxima de 30 segundos.
+              schema:
+                type: string
+                pattern: '^private, max-age=(?:[0-9]|[12][0-9]|30), must-revalidate$'
+              examples:
+                current_key:
+                  value: private, max-age=30, must-revalidate
+            Content-Type:
+              schema:
+                type: string
+                const: application/json
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JsonWebKeySet'
+              examples:
+                current_key_only:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/jwks-current.json
+                rotation_overlap:
+                  externalValue: ../../../../openapi/examples/identity-internal-auth-v1/jwks-rotation-overlap.json
+        '500':
+          description: Fallo interno generico, sin claves ni detalles operativos.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: urn:opencomerix:problem:platform_internal_error
+                title: Error interno
+                status: 500
+                instance: urn:uuid:01991a22-0000-7000-8000-000000000001
+                code: platform_internal_error
+                trace_id: 018f0000-0000-7000-8000-000000000009
+                retryable: false
+        '503':
+          description: Servicio temporalmente no disponible.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/Problem'
+              example:
+                type: urn:opencomerix:problem:platform_dependency_unavailable
+                title: Servicio no disponible
+                status: 503
+                instance: urn:uuid:01991a22-0000-7000-8000-000000000001
+                code: platform_dependency_unavailable
+                trace_id: 018f0000-0000-7000-8000-000000000009
+                retryable: true
+components:
+  securitySchemes:
+    workloadBasic:
+      type: http
+      scheme: basic
+      description: Credenciales exclusivas del workload por TLS; no reutilizar entre servicios ni ambientes.
+  headers:
+    NoStore:
+      description: Impide cache HTTP y persistencia de tokens, errores OAuth y material sensible. La retencion privada y acotada en RAM solo se permite para los perfiles de la politica H1A v2 referenciada.
+      schema:
+        type: string
+        const: no-store
+    NoCache:
+      description: Evita cachear respuestas del intercambio OAuth.
+      schema:
+        type: string
+        const: no-cache
+  schemas:
+    ClientCredentialsRequest:
+      type: object
+      additionalProperties: false
+      required: [grant_type]
+      properties:
+        grant_type:
+          type: string
+          const: client_credentials
+          description: Unicas credenciales de cliente se envian mediante HTTP Basic, nunca en el body.
+    TokenResponse:
+      type: object
+      additionalProperties: false
+      required: [access_token, token_type, expires_in]
+      properties:
+        access_token:
+          type: string
+          pattern: '^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$'
+          description: >-
+            JWT sintetico en ejemplos; en ejecucion usa encabezado typ=JWT,
+            alg=ES256 y kid, mas claims iss, aud, type=service, caller, jti,
+            iat y exp. caller identifica el workload autenticado; aud se asigna
+            desde la allowlist.
+        token_type:
+          type: string
+          const: Bearer
+        expires_in:
+          type: integer
+          minimum: 1
+          maximum: 300
+          description: Vigencia restante en segundos; el servidor puede emitir menos de 300.
+    OAuthError:
+      type: object
+      additionalProperties: false
+      required: [error]
+      properties:
+        error:
+          type: string
+          enum: [invalid_request, invalid_client, invalid_grant, unauthorized_client, unsupported_grant_type, server_error, temporarily_unavailable]
+        error_description:
+          type: string
+          maxLength: 120
+          description: Opcional y generica; nunca revela si existe un cliente, credenciales, claves ni detalles internos.
+    JsonWebKeySet:
+      type: object
+      additionalProperties: false
+      required: [keys]
+      properties:
+        keys:
+          type: array
+          minItems: 1
+          maxItems: 2
+          description: Clave actual y, durante la rotacion aprobada por un maximo de 300 segundos, clave publica anterior; los kid son unicos.
+          items:
+            $ref: '#/components/schemas/VerificationJsonWebKey'
+    VerificationJsonWebKey:
+      type: object
+      additionalProperties: false
+      required: [kty, crv, x, y, kid, use, alg, key_ops]
+      properties:
+        kty:
+          type: string
+          const: EC
+        crv:
+          type: string
+          const: P-256
+        x:
+          type: string
+          pattern: '^[A-Za-z0-9_-]{43}$'
+          description: Coordenada publica X de 32 bytes en base64url sin relleno.
+        y:
+          type: string
+          pattern: '^[A-Za-z0-9_-]{43}$'
+          description: Coordenada publica Y de 32 bytes en base64url sin relleno.
+        kid:
+          type: string
+          minLength: 1
+          maxLength: 64
+        use:
+          type: string
+          const: sig
+        alg:
+          type: string
+          const: ES256
+        key_ops:
+          type: array
+          const: [verify]
+    Problem:
+      type: object
+      additionalProperties: false
+      required: [type, title, status, instance, code, trace_id, retryable]
+      properties:
+        type:
+          type: string
+          format: uri
+        title:
+          type: string
+        status:
+          type: integer
+          enum: [400, 500, 503]
+        detail:
+          type: string
+          maxLength: 500
+        instance:
+          type: string
+          pattern: '^urn:uuid:[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+        code:
+          type: string
+          enum: [identity_invalid_request, platform_internal_error, platform_dependency_unavailable]
+        trace_id:
+          type: string
+          pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$'
+        retryable:
+          type: boolean

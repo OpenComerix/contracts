@@ -1,5 +1,13 @@
 # Contratos de identidad y tenencia
 
+## ECO-M6 — Candidato H1A v2 para reutilización técnica acotada
+
+[HTTP H1A v2](http/private/v2/identity-internal-auth-v2.yaml) conserva las dos rutas y la forma wire de H1A v1. Su [política](http/shared/v2/identity-workload-token-reuse-policy-v2.json), [schema](http/shared/v2/identity-workload-token-reuse-policy-v2.schema.json) y [vectores negativos](fixtures/internal-auth/v2/policy-cases-v2.json) permiten RAM privada solo a `inventory.sales-process-authority` y `sales-pos.inventory-results`: una credencial/adquisición en vuelo por perfil/generación, expiración efectiva <=300 s y reutilización con más de 2000 ms restantes. No hay cache HTTP, persistencia, renovación por timer ni cache de autoridad; retirar el secreto no revoca por sí solo JWT emitidos. Los otros perfiles y los bytes H1A v1 conservan sus reglas.
+
+Validación: `node --test --test-reporter=tap test/identity/internal-auth-v2.test.mjs`; `node scripts/identity/validate-internal-auth-v2.mjs [bundle-dereferenciado.json]`; Redocly 2.53.3 y `sh scripts/identity/validate-internal-auth-v2.sh` con Sourcemeta 16.10.0. Los ejemplos wire anteriores se referencian sin copiarlos; las pruebas estáticas no acreditan concurrencia, criptografía ni integración runtime. La CI utiliza los jobs existentes de Identity, sin nuevos jobs ni validación global por vector.
+
+Estado **planned/candidato**: cuatro intenciones nuevas en el registro/índice, sin promover active ni modificar admisiones, locks o exports. Fuente publicada, CI completa exacta y admisión requieren sus puntos autorizados antes de consumidores; este paquete no acredita la implementación de reutilización en servicios.
+
 Owner semántico: identity-tenancy. [Índice admitido](index.json) y [registro](../registry/README.md) conservan las fuentes H2 exactas en sus rutas históricas. Organización nueva según [guía contractual](../../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14).
 
 Fuente F1-07B incluida en la admisión G:
