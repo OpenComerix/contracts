@@ -5,6 +5,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
 export const deliveryConsumerBase='dea90c25056334b1e66c73e5a1bfa35095c2037e';
+export const financeDeliveryPublished='b317200fd77c99854b1375225cdf18bda229ebcc';
 const root=path.resolve(import.meta.dirname,'../..'),source=gitReader(root,deliveryConsumerBase);
 const encode=v=>Buffer.from(JSON.stringify(v,null,2)+'\n');
 const text=v=>new TextDecoder('utf-8',{fatal:true}).decode(v).replaceAll('\r\n','\n');
@@ -31,13 +32,14 @@ function model(){
  }
  const manifestBytes=encode(manifest),lock=makeLock(root,manifest,manifestBytes,registry,previous.lock.entries);
  for(const a of lock.assets)a.localSha256=a.sourceSha256;
- const snapshot={formatVersion:1,publication:'local-candidate',sourceRepository:'opencomerix/finance',sourceCommit:previous.sourceCommit,
+ const snapshot={formatVersion:1,publication:'published',sourceRepository:'opencomerix/finance',sourceCommit:financeDeliveryPublished,
   manifestSha256:sha256(manifestBytes),lockSha256:sha256(encode(lock)),manifest,lock};
  const index=JSON.parse(source('registry/consumers/index.json'));
- index.coverage='Eight known consumers; Finance F1-12D candidate adds local delivery and history selections; external consumers remain unknown.';
+ index.coverage='Eight known consumers; Finance F1-12D published delivery and history selections; external consumers remain unknown.';
  const readme=text(source('finance/README.md'))+'\n## F1-12D — Selección de entrega e historia\n\n'+
-  'Candidato local de Finance: dos operaciones históricas, sus DTO/permisos publicados y AsyncAPI. Conserva fuentes, pins B/C y los siete consumidores ajenos; no modifica transportes publicados. '+
-  'La publicación del export requiere la revisión Finance auditada y su CI exacta; este candidato no acredita publicación, broker real, recuperación SQL ni H5. '+
+  'Selección de Finance: dos operaciones históricas, sus DTO/permisos publicados y AsyncAPI. Conserva fuentes, pins B/C y los siete consumidores ajenos; no modifica transportes publicados. '+
+  'Export publicado de Finance `'+financeDeliveryPublished+'`, con [CI completa conforme 8/8](https://github.com/OpenComerix/finance/actions/runs/42627471341). '+
+  'La ampliación de Contracts requiere su CI completa exacta antes de consumo o gitlink; el export no acredita por sí solo broker real, recuperación SQL ni H5. '+
   'Gate propio: `node --test test/finance/delivery-consumer-v1.test.mjs`; estado en ESTADO del launcher.\n';
  immutable={previous,registry,sources,snapshot,metadata:new Map([['registry/consumers/finance.json',encode(snapshot)],['registry/consumers/index.json',encode(index)],['finance/README.md',Buffer.from(readme)]])};
  return immutable;
