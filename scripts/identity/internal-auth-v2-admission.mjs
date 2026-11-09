@@ -7,6 +7,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {gitReader,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
 import {projectReuseConsumerFile} from './workload-reuse-consumers-v2.mjs';
+import {projectCashConsumerFile,projectCashConsumerDocument} from '../finance/cash-consumer-v1.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const sourceCommit='af6e8b3f5115d51f56a1ef94a36ae9f33cce3337';
@@ -74,12 +75,15 @@ export const admissionMetadata=()=>new Map([...facts().metadata].map(([file,byte
 // A pure exact-value view for the historical candidate gate. It never reads or
 // approves the checkout and never repairs unknown, partial or mutated input.
 export function sourceCandidateDocument(file,value){
+  const projected=projectCashConsumerDocument(file,value);
+  if(projected!==value)return sourceCandidateDocument(file,projected);
   const model=facts();
   const current=file===registryPath?model.registry:file===indexPath?model.index:undefined;
   if(!current||!isDeepStrictEqual(value,current))return value;
   return structuredClone(file===registryPath?model.before:model.oldIndex);
 }
 export function validateAdmissionMetadata(registry,index){
+  registry=projectCashConsumerDocument(registryPath,registry);
   assert.deepEqual(registry,facts().registry,'H1A_ADMISSION_REGISTRY');
   assert.deepEqual(index,facts().index,'H1A_ADMISSION_INDEX');
 }
@@ -88,6 +92,8 @@ export function admissionClosures(){
   return model.rows.map(row=>({id:row.id,...resolveSelection(source,row,{version:row.version,operations:row.operations,pointers:['']},model.registry)}));
 }
 export function validateAdmission(readFile=read){
+  const rawRead=readFile;
+  readFile=file=>projectCashConsumerFile(file,rawRead(file));
   const model=facts();
   validateAdmissionMetadata(JSON.parse(readFile(registryPath)),JSON.parse(readFile(indexPath)));
   for(const [file,bytes]of model.metadata)if(file!==registryPath&&file!==indexPath)

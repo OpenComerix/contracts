@@ -4,6 +4,7 @@ import path from 'node:path';
 import test from 'node:test';
 import {parse} from 'yaml';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
+import {cashConsumerFiles} from '../../scripts/finance/cash-consumer-v1.mjs';
 import {
   reuseCandidateBase,reuseCandidateFiles,projectReuseCandidateFile,projectReuseCandidateDocument,
   withReuseCandidateScope,projectReviewedFile,projectReviewedRegistry,reviewedCandidateRevision,
@@ -11,7 +12,8 @@ import {
 
 const root=path.resolve(import.meta.dirname,'../..');
 const git=createGitReader(),base=git(root,reuseCandidateBase),old=git(root,reviewedCandidateRevision);
-const current=new Map(reuseCandidateFiles.map(file=>[file,fs.readFileSync(path.join(root,file))]));
+const exactScopeFiles=[...new Set([...reuseCandidateFiles,...cashConsumerFiles])];
+const current=new Map(exactScopeFiles.map(file=>[file,fs.readFileSync(path.join(root,file))]));
 const read=file=>{assert(current.has(file),'Unexpected live path: '+file);return Buffer.from(current.get(file));};
 const changed=bytes=>Buffer.concat([bytes,Buffer.from('\nUnapproved')]);
 
@@ -63,13 +65,13 @@ for(const count of [1,10,100])test('one supplied-value projection per requested 
 test('candidate scope checks every exact path once and grants no folder exemption',()=>{
   const visits=[];
   const scope=withReuseCandidateScope(['synthetic-kept'],file=>{visits.push(file);return read(file);});
-  assert.deepEqual([...scope].sort(),['synthetic-kept',...reuseCandidateFiles].sort());
-  assert.equal(visits.length,25);assert.equal(new Set(visits).size,25);
+  assert.deepEqual([...scope].sort(),['synthetic-kept',...exactScopeFiles].sort());
+  assert.equal(visits.length,exactScopeFiles.length);assert.equal(new Set(visits).size,exactScopeFiles.length);
   assert(!scope.has('identity/http/private/v2/unapproved.yaml'));
   assert(!scope.has('registry/consumers/unapproved.json'));
 });
 
-for(const file of reuseCandidateFiles)for(const mutation of ['changed','missing'])
+for(const file of exactScopeFiles)for(const mutation of ['changed','missing'])
 test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
   withReuseCandidateScope([],read);
   const altered=name=>{
@@ -77,7 +79,7 @@ test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
     return read(name);
   };
   assert.throws(()=>withReuseCandidateScope([],altered));
-  assert.equal(withReuseCandidateScope([],read).size,25);
+  assert.equal(withReuseCandidateScope([],read).size,exactScopeFiles.length);
 });
 
 test('historical scopes gain no candidate paths; partial selected admission is rejected',()=>{

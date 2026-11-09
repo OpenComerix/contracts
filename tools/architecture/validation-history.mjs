@@ -5,6 +5,7 @@ import {execFileSync} from 'node:child_process';
 import { isDeepStrictEqual } from 'node:util';
 import { createGitReader } from './git-source.mjs';
 import reviewedTooling from './validation-tooling.json' with { type: 'json' };
+import {cashConsumerBase,projectCashConsumerFile,projectCashConsumerDocument,withCashConsumerScope} from '../../scripts/finance/cash-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -85,8 +86,8 @@ const reuseCandidateHashes = Object.freeze({
   "scripts/identity/validate-internal-auth-v2.mjs": "0d78b1af7392c66a74928529a1a7728936a1d9fdb06580f040f24a948d261ea3",
   "scripts/identity/validate-internal-auth-v2.sh": "04e39db4307136278ecc90bc897a3b2b0704f9425726ef27551cb3e06997a0db",
   "test/identity/internal-auth-v2.test.mjs": "f1f9100ed85d6a62b45c2c5128cee48275297a0af189be772eba78c535baa6a3",
-  "test/architecture/internal-auth-v2-history.test.mjs": "8b50d48f2fe80ca073292fbc5b3d42611d2e3e47998a20f0dd254cc8f948599b",
-  "scripts/identity/internal-auth-v2-admission.mjs": "364c60fbf88cb6a4a8739fdc9889c491e224e72e4d5416135e126fe2971a0f08",
+  "test/architecture/internal-auth-v2-history.test.mjs": "038096bf4073804623774b87649fa875019738a0bc7f1ae3b269a29a76e08344",
+  "scripts/identity/internal-auth-v2-admission.mjs": "fdd19db5a25aa256cce93a64356e1da10adc0fb2354e9a2167b995453c194dde",
   "test/identity/internal-auth-v2-admission.test.mjs": "bc34acaf35b84db78e6995ecc8a4324c0478864d40c0576cb1c9861be9edba6f",
   "registry/consumers/identity-tenancy.json": "d93e3973865ea284cd7563f7956c2cef00d820cca62ab2576b268f919627177e",
   "registry/consumers/inventory.json": "5e4de1647a8f2783161fd4391691c03dcf7c76abfc7334c6e7ce2ebb351de072",
@@ -97,10 +98,24 @@ const reuseCandidateHashes = Object.freeze({
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
 export function projectReuseCandidateFile(file, bytes) {
+  bytes=projectCashConsumerFile(file,bytes);
   if (!reuseProjectionFiles.has(file) || textHash(bytes) !== reuseCandidateHashes[file]) return bytes;
   return Buffer.from(source(reuseCandidateBase)(file));
 }
 export function withReuseCandidateScope(paths, read) {
+  // A synchronous invocation reads each current input once. Neither these
+  // bytes nor successful checks survive this call or become cached approval.
+  const suppliedRead=read,live=new Map();
+  const rawRead=file=>{
+    if(!live.has(file))live.set(file,suppliedRead(file));
+    return live.get(file);
+  };
+  const currentRegistry=rawRead('registry/contracts.json');
+  const cashApplied=projectCashConsumerFile('registry/contracts.json',currentRegistry)!==currentRegistry;
+  paths=[...withCashConsumerScope(paths,rawRead)];
+  if(cashApplied)for(const file of ['scripts/finance/cash-consumer-v1.mjs','test/finance/cash-consumer-v1.test.mjs'])
+    assert.equal(toolingFingerprint(file,rawRead(file)),toolingHashes[file],'CASH_SCOPE_TOOLING:'+file);
+  read=file=>projectCashConsumerFile(file,rawRead(file));
   const registry = read('registry/contracts.json');
   if (textHash(registry) !== reuseCandidateHashes['registry/contracts.json']) {
     const value = JSON.parse(text(registry));
@@ -116,6 +131,7 @@ export function withReuseCandidateScope(paths, read) {
   return new Set([...paths, ...reuseCandidateFiles]);
 }
 function isReuseCandidateDocument(file, value) {
+  value=projectCashConsumerDocument(file,value);
   if (!reuseProjectionFiles.has(file) || !file.endsWith('.json')) return false;
   try {
     const encoded = JSON.stringify(value, null, 2) + '\n';
@@ -124,6 +140,7 @@ function isReuseCandidateDocument(file, value) {
   } catch { return false; }
 }
 export function projectReuseCandidateDocument(file, value) {
+  value=projectCashConsumerDocument(file,value);
   return isReuseCandidateDocument(file, value) ? JSON.parse(source(reuseCandidateBase)(file)) : value;
 }
 const metadata = new Set([
@@ -162,6 +179,7 @@ export function projectReviewedFile(revision, file, bytes) {
   const previous = optional(source(revision), file);
   if (previous && text(bytes) === text(previous)) return bytes;
   if (!previous) return undefined;
+  if(metadata.has(file)&&projectCashConsumerFile(file,bytes)!==bytes&&canProject(cashConsumerBase,revision))return previous;
   if (metadata.has(file) && projectReuseCandidateFile(file, bytes) !== bytes &&
       canProject(reuseCandidateBase, revision)) return previous;
   for(const from of file === '.gitlab-ci.yml'
@@ -195,6 +213,8 @@ export function isReviewedDocument(revision,file,value) {
   return metadata.has(file)&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(source(revision)(file)));
 }
 export function projectReviewedDocument(revision,file,value) {
+  const cash=projectCashConsumerDocument(file,value);
+  if(cash!==value&&metadata.has(file)&&canProject(cashConsumerBase,revision))return JSON.parse(source(revision)(file));
   if (!metadata.has(file) || !file.endsWith('.json')) return value;
   const previous = JSON.parse(source(revision)(file));
   if (isDeepStrictEqual(value, previous)) return value;
@@ -216,8 +236,10 @@ const toolingPaths = Object.freeze([
   'scripts/sales/release-v1.mjs', 'scripts/identity/inventory-authority-v1-1.mjs',
   'test/architecture/immutable-closure.test.mjs', 'test/architecture/validation-history.test.mjs',
   'tools/architecture/validation-history.mjs',
+  'scripts/finance/cash-consumer-v1.mjs',
+  'test/finance/cash-consumer-v1.test.mjs',
 ]);
-const toolingReferenceSha256 = '86c8e419420a0d4db954ab7be88204a82c9da347856fb2c89509665e1e02ff16';
+const toolingReferenceSha256 = '814973de339e277eb6e9dad21866cbac66c11dfdab340bef7999f946d0b99602';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
