@@ -3,6 +3,8 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import {admissionToolFiles, projectPreparationAdmissionFile, projectPreparationAdmissionDocument,
+  withPreparationAdmissionScope} from './preparation-admission-v1.mjs';
 
 export const preparationBase = '86259b440a95bbdf4b0d0f47547bd7632a877bfe';
 const root = path.resolve(import.meta.dirname, '../..');
@@ -23,6 +25,7 @@ export const preparationNewFiles = Object.freeze([
   ...preparationRoots.map(row => row[3]),
   'scripts/sales/preparation-v1.mjs', 'scripts/sales/preparation-history-v1.mjs',
   'scripts/sales/validate-preparation-v1.sh', 'test/sales/preparation-v1.test.mjs',
+  ...admissionToolFiles,
 ]);
 const ownerLinks = domain => domain === 'identity'
   ? '[Perfiles técnicos](http/shared/v1/identity-sale-preparation-workloads-v1.json). '
@@ -134,17 +137,26 @@ export function preparationMetadata() {
 // Pure exact per-value projection: no other live file, historical validator or
 // successful approval is consulted. Unknown/drifted caller input is untouched.
 export function projectPreparationFile(file, bytes) {
+  bytes = projectPreparationAdmissionFile(file, bytes);
   if (!metadataFiles.has(file)) return bytes;
   const expected = metadataModel().get(file);
   return expected && text(bytes) === text(expected) ? Buffer.from(source(file)) : bytes;
 }
 export function projectPreparationDocument(file, value) {
+  value = projectPreparationAdmissionDocument(file, value);
   if (!metadataFiles.has(file) || !file.endsWith('.json')) return value;
   const expected = metadataModel().get(file);
   return expected && file.endsWith('.json') && isDeepStrictEqual(value, JSON.parse(expected))
     ? JSON.parse(source(file)) : value;
 }
 export function withPreparationScope(paths, read) {
+  const supplied = read, current = new Map();
+  const rawRead = file => {
+    if (!current.has(file)) current.set(file, supplied(file));
+    return current.get(file);
+  };
+  paths = [...withPreparationAdmissionScope(paths, rawRead)];
+  read = file => projectPreparationAdmissionFile(file, rawRead(file));
   const registry = read('registry/contracts.json');
   if (projectPreparationFile('registry/contracts.json', registry) === registry) {
     assert(!JSON.parse(text(registry)).planned?.some(row => row.materializeIn === 'F1-13A'), 'PREPARATION_PARTIAL_SCOPE');

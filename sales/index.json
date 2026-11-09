@@ -21,7 +21,10 @@
     "sales.f1-10d.sales.sale.completed.v2.consumer",
     "sales.f1-10d.sales.sale.completed.v2",
     "sales.f1-10e.catalog-capture-authority.schema.v2",
-    "sales.f1-10e.lifecycle-policy.schema.v2"
+    "sales.f1-10e.lifecycle-policy.schema.v2",
+    "sales.context-check-authority.http.v1",
+    "sales.context-check-authority.schema.v1",
+    "sales.preparation.fixtures.v1"
   ],
   "surfaces": [
     {
@@ -94,6 +97,12 @@
           "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
           "version": "2.0.0",
           "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+          "status": "active"
+        },
+        {
+          "id": "sales.context-check-authority.http.v1",
+          "version": "1.0.0",
+          "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
           "status": "active"
         }
       ]
@@ -170,13 +179,26 @@
           "version": "v2",
           "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.schema.json",
           "status": "active"
+        },
+        {
+          "id": "sales.context-check-authority.schema.v1",
+          "version": "v1",
+          "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "validation",
+      "versions": [
+        {
+          "id": "sales.preparation.fixtures.v1",
+          "version": "v1",
+          "path": "sales/fixtures/preparation/v1/contexts.json",
+          "status": "active"
         }
       ]
     }
   ],
-  "planned": [
-    "sales.context-check-authority.http.v1",
-    "sales.context-check-authority.schema.v1",
-    "sales.preparation.fixtures.v1"
-  ]
+  "planned": []
 }

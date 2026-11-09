@@ -153,7 +153,7 @@ test('scope checks the small metadata delta once per invocation and rechecks cha
     assert.throws(() => withPreparationScope([], name => name === file ? Buffer.concat([read(name), Buffer.from('drift')]) : read(name)));
     assert.throws(() => withPreparationScope([], name => { if (name === file) throw Error('missing source'); return read(name); }));
   }
-  assert.throws(() => withPreparationScope([], replace('registry/contracts.json', value => value.planned.pop())), /PREPARATION_PARTIAL_SCOPE/);
+  assert.throws(() => withPreparationScope([], replace('registry/contracts.json', value => value.planned.pop())), /PREPARATION_(?:ADMISSION_)?PARTIAL_SCOPE/);
 });
 test('native validation joins existing jobs and checks each distinct metaschema once, outside the fixture loop', () => {
   const workflow = parse(read('.github/workflows/ci.yml').toString());

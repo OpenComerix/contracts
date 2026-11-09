@@ -115,3 +115,7 @@ Selecciones publicadas de Identity, Catalog e Inventory para captura física y v
 ## F1-13A — Fuente de preparación propietaria
 
 Ocho intenciones planned: tres puertos privados/schema, perfiles Identity y fixtures de contexto. Las 206 admisiones, 236 artefactos históricos y ocho consumidores conservan revisiones/bytes/selecciones. [Mapa Sales](../sales/README.md#f1-13a--preparación-de-contexto-de-venta-fuente-candidata). Sin nuevas admisiones, runtime ni consumo. La fuente se publica y verifica antes de admitirla.
+
+## F1-13A — Admisión seleccionada de preparación (candidata)
+
+Ocho raíces desde `748cb69b9301243a32c169b01e2c340b7102f020`: tres puertos/schema privados, cuatro perfiles Identity en una política y fixtures sintéticas. [CI fuente completa 23/23](https://github.com/OpenComerix/contracts/actions/runs/42681353002) verificada por SHA/ref exactos. 214 admisiones, 236 artefactos preservados y dos planned ajenos; ocho consumidores, locks y pins intactos. Las secciones de fuente candidata describen su corte histórico; sus indicadores publicados no se reescriben. La admisión requiere auditoría/publicación y CI completa propias antes del consumo; no activa runtime ni producción, no actualiza gitlinks ni cierra A. Los gates de fuente conservan su vista histórica; el gate de admisión informa el registro actual. Gates: `node scripts/sales/preparation-admission-v1.mjs`; `node --test test/sales/preparation-admission-v1.test.mjs`.
