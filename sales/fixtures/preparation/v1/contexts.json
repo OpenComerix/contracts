@@ -1,0 +1,258 @@
+{
+  "format_version": 1,
+  "runtime_demonstrated": false,
+  "cases": {
+    "inventory": {
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004",
+        "expected_warehouse_version": 1
+      },
+      "callback_request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "target": "inventory",
+        "context_fingerprint": "4260e6e6d7e005e7ac4a9c50e27edbb60cd80271847bd6d00b01bae311990ce2"
+      },
+      "callback_decision": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "target": "inventory",
+        "context_fingerprint": "4260e6e6d7e005e7ac4a9c50e27edbb60cd80271847bd6d00b01bae311990ce2",
+        "authorized": true,
+        "caller": "inventory",
+        "audience": "sales-pos.context-check-authority",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "account_ref": "account-synthetic-a",
+        "membership_ref": "membership-synthetic-a",
+        "device_ref": "device-synthetic-a",
+        "checked_at": "2026-11-09T00:00:00Z",
+        "valid_for_ms": 2000
+      },
+      "result": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "context_fingerprint": "4260e6e6d7e005e7ac4a9c50e27edbb60cd80271847bd6d00b01bae311990ce2",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004",
+        "warehouse_version": 1,
+        "checked_at": "2026-11-09T00:00:00Z",
+        "valid_for_ms": 1500,
+        "verified": true
+      }
+    },
+    "finance": {
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006",
+        "expected_register_version": 1,
+        "expected_shift_version": 2
+      },
+      "callback_request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "target": "finance",
+        "context_fingerprint": "380a9f011ce2bf21062b4ba56501fead343778ea761b737a9ac9608d696a9f39"
+      },
+      "callback_decision": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "target": "finance",
+        "context_fingerprint": "380a9f011ce2bf21062b4ba56501fead343778ea761b737a9ac9608d696a9f39",
+        "authorized": true,
+        "caller": "finance",
+        "audience": "sales-pos.context-check-authority",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "account_ref": "account-synthetic-a",
+        "membership_ref": "membership-synthetic-a",
+        "device_ref": "device-synthetic-a",
+        "checked_at": "2026-11-09T00:00:00Z",
+        "valid_for_ms": 2000
+      },
+      "result": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "context_fingerprint": "380a9f011ce2bf21062b4ba56501fead343778ea761b737a9ac9608d696a9f39",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006",
+        "register_version": 1,
+        "shift_version": 2,
+        "shift_status": "open",
+        "currency": "ARS",
+        "responsibility_verified": true,
+        "checked_at": "2026-11-09T00:00:00Z",
+        "valid_for_ms": 1500,
+        "verified": true
+      }
+    }
+  },
+  "fingerprint_vectors": [
+    {
+      "id": "inventory-complete",
+      "owner": "inventory",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004",
+        "expected_warehouse_version": 1
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"expected_warehouse_version\":1,\"location_id\":\"01998000-0000-7000-8000-000000000004\",\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"warehouse_id\":\"01998000-0000-7000-8000-000000000003\"}",
+      "sha256": "4260e6e6d7e005e7ac4a9c50e27edbb60cd80271847bd6d00b01bae311990ce2"
+    },
+    {
+      "id": "inventory-without-optionals",
+      "owner": "inventory",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004"
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"location_id\":\"01998000-0000-7000-8000-000000000004\",\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"warehouse_id\":\"01998000-0000-7000-8000-000000000003\"}",
+      "sha256": "25f7f25bae37c7a2808464377d8dc1f30d88e04bd287fa80a2cc96f9a230e85e"
+    },
+    {
+      "id": "inventory-changed-optionals",
+      "owner": "inventory",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004",
+        "expected_warehouse_version": 2
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"expected_warehouse_version\":2,\"location_id\":\"01998000-0000-7000-8000-000000000004\",\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"warehouse_id\":\"01998000-0000-7000-8000-000000000003\"}",
+      "sha256": "645c07d56e7fa73df7dbd003f235a695eca298489671cdf65e22d06d81d221ea"
+    },
+    {
+      "id": "inventory-unicode",
+      "owner": "inventory",
+      "request": {
+        "organization_id": "org-é-😀",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "warehouse_id": "01998000-0000-7000-8000-000000000003",
+        "location_id": "01998000-0000-7000-8000-000000000004",
+        "expected_warehouse_version": 1
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"expected_warehouse_version\":1,\"location_id\":\"01998000-0000-7000-8000-000000000004\",\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-é-😀\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\",\"warehouse_id\":\"01998000-0000-7000-8000-000000000003\"}",
+      "sha256": "b64de5782b44cbc43c417be7b60fd16eef26e970ab00a399b05e22fb38d25c79"
+    },
+    {
+      "id": "finance-complete",
+      "owner": "finance",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006",
+        "expected_register_version": 1,
+        "expected_shift_version": 2
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"cash_register_id\":\"01998000-0000-7000-8000-000000000005\",\"cash_shift_id\":\"01998000-0000-7000-8000-000000000006\",\"expected_register_version\":1,\"expected_shift_version\":2,\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "sha256": "380a9f011ce2bf21062b4ba56501fead343778ea761b737a9ac9608d696a9f39"
+    },
+    {
+      "id": "finance-without-optionals",
+      "owner": "finance",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006"
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"cash_register_id\":\"01998000-0000-7000-8000-000000000005\",\"cash_shift_id\":\"01998000-0000-7000-8000-000000000006\",\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "sha256": "acedbf36a2ef463e7275a8e7f8f66779a2b27f34c573695397158194895996ed"
+    },
+    {
+      "id": "finance-changed-optionals",
+      "owner": "finance",
+      "request": {
+        "organization_id": "org-synthetic-a",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006",
+        "expected_register_version": 2,
+        "expected_shift_version": 3
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"cash_register_id\":\"01998000-0000-7000-8000-000000000005\",\"cash_shift_id\":\"01998000-0000-7000-8000-000000000006\",\"expected_register_version\":2,\"expected_shift_version\":3,\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-synthetic-a\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "sha256": "9d747d78f10ceeae68919fa1c7d797ed30627ed7852f1dd9c72ccf86cd83eca6"
+    },
+    {
+      "id": "finance-unicode",
+      "owner": "finance",
+      "request": {
+        "organization_id": "org-é-😀",
+        "operation_id": "01998000-0000-7000-8000-000000000001",
+        "preparation_id": "01998000-0000-7000-8000-000000000002",
+        "request_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "branch_id": "branch-a",
+        "pos_id": "pos-a",
+        "cash_register_id": "01998000-0000-7000-8000-000000000005",
+        "cash_shift_id": "01998000-0000-7000-8000-000000000006",
+        "expected_register_version": 1,
+        "expected_shift_version": 2
+      },
+      "canonical_json": "{\"branch_id\":\"branch-a\",\"cash_register_id\":\"01998000-0000-7000-8000-000000000005\",\"cash_shift_id\":\"01998000-0000-7000-8000-000000000006\",\"expected_register_version\":1,\"expected_shift_version\":2,\"operation_id\":\"01998000-0000-7000-8000-000000000001\",\"organization_id\":\"org-é-😀\",\"pos_id\":\"pos-a\",\"preparation_id\":\"01998000-0000-7000-8000-000000000002\",\"request_hash\":\"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}",
+      "sha256": "09f107d230f197822403af4a77596fd97fcb8eaf214b16152dfb05f041db6fef"
+    }
+  ]
+}

@@ -111,3 +111,7 @@ Solo se deriva el índice Inventory y se retiran las dos intenciones seleccionad
 ## F1-11B — Consumo coordinado de captura física
 
 Selecciones publicadas de Identity, Catalog e Inventory para captura física y verificación v2; siete consumidores conocidos. Se conservan las 202 raíces, 236 artefactos y todos los pins previos. Las secciones anteriores describen sus snapshots históricos. Manifiestos/locks y gates propios están en cada servicio; este registro de consumo no acredita por sí solo runtime ni CI. [Gate específico](../scripts/inventory/capture-consumers-v1.mjs).
+
+## F1-13A — Fuente de preparación propietaria
+
+Ocho intenciones planned: tres puertos privados/schema, perfiles Identity y fixtures de contexto. Las 206 admisiones, 236 artefactos históricos y ocho consumidores conservan revisiones/bytes/selecciones. [Mapa Sales](../sales/README.md#f1-13a--preparación-de-contexto-de-venta-fuente-candidata). Sin nuevas admisiones, runtime ni consumo. La fuente se publica y verifica antes de admitirla.

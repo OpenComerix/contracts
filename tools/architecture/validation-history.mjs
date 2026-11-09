@@ -6,6 +6,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { createGitReader } from './git-source.mjs';
 import reviewedTooling from './validation-tooling.json' with { type: 'json' };
 import {cashConsumerBase,projectCashConsumerFile,projectCashConsumerDocument,withCashConsumerScope} from '../../scripts/finance/cash-consumer-v1.mjs';
+import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -110,6 +111,7 @@ export function withReuseCandidateScope(paths, read) {
     if(!live.has(file))live.set(file,suppliedRead(file));
     return live.get(file);
   };
+  paths=[...withPreparationScope(paths,rawRead)];
   const currentRegistry=rawRead('registry/contracts.json');
   const cashApplied=projectCashConsumerFile('registry/contracts.json',currentRegistry)!==currentRegistry;
   paths=[...withCashConsumerScope(paths,rawRead)];
@@ -243,8 +245,12 @@ const toolingPaths = Object.freeze([
   'scripts/finance/delivery-consumer-v1.mjs',
   'test/finance/delivery-consumer-v1.test.mjs',
   'scripts/inventory/capture-consumers-v1.mjs',
+  'scripts/sales/preparation-history-v1.mjs',
+  'scripts/sales/preparation-v1.mjs',
+  'scripts/sales/validate-preparation-v1.sh',
+  'test/sales/preparation-v1.test.mjs',
 ]);
-const toolingReferenceSha256 = '4902072380334235f4ed1d7a72930102e56215e6e2ad4e01db7b6734d471093a';
+const toolingReferenceSha256 = 'b5b871cd2e46a7e1c16009a9d3894d3133e8881a93441e109cf946148b4ebaf5';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

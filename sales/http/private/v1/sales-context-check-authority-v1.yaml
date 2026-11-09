@@ -1,0 +1,456 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "sales private sale context preparation",
+    "version": "1.0.0",
+    "description": "F1-13A source candidate; publication is not admission or runtime evidence.",
+    "contact": {
+      "name": "OpenComerix"
+    },
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://owner.internal.example/api/v1",
+      "description": "Illustrative TLS host; isolated loopback tests only may use HTTP."
+    }
+  ],
+  "tags": [
+    {
+      "name": "SalePreparation",
+      "description": "Read-only owner context preparation, no commercial effects."
+    }
+  ],
+  "security": [
+    {
+      "workload": []
+    }
+  ],
+  "paths": {
+    "/internal/sales/context-check-authorizations": {
+      "post": {
+        "tags": [
+          "SalePreparation"
+        ],
+        "operationId": "authorizeSaleContextCheck",
+        "summary": "authorizeSaleContextCheck",
+        "description": "No commercial effects or reservations. Fixed ES256 caller/audience, <=300s JWT, no decision caching. Authenticate before existence lookup. Bind tenant, operation, preparation and original human request hash. Preparation <=60s; callbacks revalidate the original human delegate with Identity, held only in Sales request RAM. Missing delegate, restart, revocation or expiry fail closed. Network outside SQL. Decision budget <=2000ms measured monotonically from before network, bounded by credentials/preparation expiry; debit all waits and recheck after locks and before responding. No cross-service SQL. No tenant/header or browser ID grants authority. No guarantee about a later state; acceptance and effect owners recheck their own authority/resources. Compare target to authenticated caller and the fingerprint stored for that owner; revalidate current sales.finalize and the exact authorized branch/POS before returning original actor references. The callback body contains no delegated JWT, cookie, permission flag or resource payload. Unknown/expired/mismatched preparations return the same closed result without owner resource lookup. context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing.",
+        "x-caller": [
+          "inventory",
+          "finance"
+        ],
+        "x-audience": "sales-pos.context-check-authority",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/sales-context-check-authority-v1.schema.json#/$defs/Request"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Exact verified preparation observation; not a reservation, bearer or effect authorization.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/sales-context-check-authority-v1.schema.json#/$defs/Decision"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "enum": [
+                            "sales_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_workload_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_workload_forbidden",
+                            "identity_access_denied"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 404
+                        },
+                        "code": {
+                          "enum": [
+                            "sales_resource_not_found"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Retry-After": {
+                "description": "Seconds before a caller-controlled retry if estimable; no automatic effect.",
+                "schema": {
+                  "type": "string",
+                  "pattern": "^[1-9][0-9]*$"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable bounded Problem; no existence disclosure across tenants.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Never cache preparation or authority.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_dependency_unavailable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "externalDocs": {
+          "description": "Normative JCS serialization",
+          "url": "https://www.rfc-editor.org/rfc/rfc8785.html#section-3"
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "workload": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "ES256 JWT",
+        "description": "H1A issuer/kid/type/signature/time, purpose-specific credential and exact fixed caller/audience; no free audience selector."
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false,
+  "x-error-catalog": "../../../../common/errors/v11/error-catalog-v11.json"
+}

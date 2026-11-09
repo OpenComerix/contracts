@@ -1,0 +1,384 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+  "title": "Sales current human authority for exact owner context preparation v1",
+  "$defs": {
+    "Request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "target",
+        "context_fingerprint"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority",
+          "description": "Opaque hash binding the original normalized human Sales request. Preserve unchanged as a field of the owner request when computing context_fingerprint; it is not the owner-body digest."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "inventory",
+            "finance"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "context_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority",
+          "description": "context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing."
+        }
+      },
+      "description": "context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing."
+    },
+    "Decision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "operation_id",
+        "preparation_id",
+        "request_hash",
+        "target",
+        "context_fingerprint",
+        "authorized",
+        "caller",
+        "audience",
+        "branch_id",
+        "pos_id",
+        "account_ref",
+        "membership_ref",
+        "device_ref",
+        "checked_at",
+        "valid_for_ms"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "operation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "preparation_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "request_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority",
+          "description": "Opaque hash binding the original normalized human Sales request. Preserve unchanged as a field of the owner request when computing context_fingerprint; it is not the owner-body digest."
+        },
+        "target": {
+          "type": "string",
+          "enum": [
+            "inventory",
+            "finance"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "context_fingerprint": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority",
+          "description": "context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing."
+        },
+        "authorized": {
+          "const": true,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "caller": {
+          "type": "string",
+          "enum": [
+            "inventory",
+            "finance"
+          ],
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "audience": {
+          "const": "sales-pos.context-check-authority",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "account_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "membership_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "device_ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "checked_at": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "Z$",
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        },
+        "valid_for_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2000,
+          "x-data-classification": {
+            "sensitivity": "RESTRICTED",
+            "categories": [
+              "SECURITY",
+              "OPERATIONAL"
+            ]
+          },
+          "x-data-purpose": "Exact short-lived sale preparation verification; no commercial effect",
+          "x-log-policy": "no payload, credentials, references or raw digests; bounded codes only",
+          "x-retention-profile": "ephemeral_authority"
+        }
+      },
+      "description": "context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing."
+    }
+  },
+  "x-cross-field-invariants": [
+    "caller equals authenticated workload caller and target; cross-field relations checked by receiver",
+    "all IDs and digests equal the exact active preparation and complete owner request fingerprint"
+  ],
+  "description": "context_fingerprint is the lowercase hexadecimal SHA-256 digest of the UTF-8 bytes of RFC 8785 JCS serialization of the complete validated Inventory or Finance sale-context-check request body received by that owner. Include all required fields and all optional fields present, including request_hash unchanged; preserve string values, omission versus null and array order. No substitutions, defaults, coercion or Unicode normalization are permitted. The input is not the callback, decision, result, raw JSON bytes, HTTP headers or credentials; context_fingerprint itself is absent from the owner request body. It is distinct from request_hash, which binds the original normalized human Sales request. Reject invalid requests, duplicate property names and invalid Unicode before hashing."
+}

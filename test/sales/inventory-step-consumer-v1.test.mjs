@@ -7,6 +7,7 @@ import { publishedCandidate,publishedOwnerCommits,validateSalesSnapshot,verifyPu
 import { captureHistoricalFile } from '../../scripts/inventory/capture-authority-v2.mjs';
 import { reuseCandidateFiles } from '../../tools/architecture/validation-history.mjs';
 import { cashConsumerFiles } from '../../scripts/finance/cash-consumer-v1.mjs';
+import { preparationMetadata, preparationNewFiles } from '../../scripts/sales/preparation-history-v1.mjs';
 const read = file => fs.readFileSync(path.join(root,file));
 for (const service of ['sales-pos','identity-tenancy']) test('published '+service+' admits only the reviewed immutable owner commit and unchanged export',()=>{
   const expected=publishedCandidate(service);
@@ -58,7 +59,7 @@ test('historical projection preserves original assertions and never sanitizes ca
   assert.deepEqual(salesHistoricalIndex(expectedIndex()),JSON.parse(source('registry/consumers/index.json')));
   const alteredIndex=expectedIndex();alteredIndex.consumers.pop();assert.equal(salesHistoricalIndex(alteredIndex),alteredIndex);
   const scope=withSalesAdmissionScope(['preserved-path']);assert(scope.has('preserved-path'));
-  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles])].sort());
+  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles])].sort());
   assert(!scope.has('scripts/unapproved.mjs'));
 });
 

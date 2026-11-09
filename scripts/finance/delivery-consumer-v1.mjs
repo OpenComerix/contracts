@@ -4,6 +4,7 @@ import path from 'node:path';
 import {isDeepStrictEqual} from 'node:util';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
+import {projectPreparationFile,projectPreparationDocument} from '../sales/preparation-history-v1.mjs';
 export const deliveryConsumerBase='dea90c25056334b1e66c73e5a1bfa35095c2037e';
 export const financeDeliveryPublished='b317200fd77c99854b1375225cdf18bda229ebcc';
 const root=path.resolve(import.meta.dirname,'../..'),source=gitReader(root,deliveryConsumerBase);
@@ -49,9 +50,10 @@ export function deliveryConsumerSnapshot(){return structuredClone(model().snapsh
 export function deliveryConsumerMetadata(){return new Map([...model().metadata].map(([f,b])=>[f,Buffer.from(b)]));}
 // Pure per-value projection: deterministic source calculations only, no current
 // validation or recursive historical validator can run from this read path.
-export function projectDeliveryConsumerFile(file,bytes){const expected=model().metadata.get(file);return expected&&text(bytes)===text(expected)?source(file):bytes;}
-export function projectDeliveryConsumerDocument(file,value){const expected=model().metadata.get(file);return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(source(file)):value;}
+export function projectDeliveryConsumerFile(file,bytes){bytes=projectPreparationFile(file,bytes);const expected=model().metadata.get(file);return expected&&text(bytes)===text(expected)?source(file):bytes;}
+export function projectDeliveryConsumerDocument(file,value){value=projectPreparationDocument(file,value);const expected=model().metadata.get(file);return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(source(file)):value;}
 export function validateDeliveryConsumer(read=native){
+ const supplied=read;read=file=>projectPreparationFile(file,supplied(file));
  const facts=model();
  for(const [file,bytes]of facts.metadata)assert.equal(text(read(file)),text(bytes),'DELIVERY_METADATA:'+file);
  assert.equal(text(read('registry/contracts.json')),text(source('registry/contracts.json')),'DELIVERY_REGISTRY');

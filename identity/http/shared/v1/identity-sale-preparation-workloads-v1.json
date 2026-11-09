@@ -1,0 +1,48 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "extends_without_changing": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+  "profiles": [
+    {
+      "client_id": "sales-pos.inventory-context",
+      "caller": "sales-pos",
+      "audience": "inventory.sale-context",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": false
+    },
+    {
+      "client_id": "sales-pos.finance-context",
+      "caller": "sales-pos",
+      "audience": "finance.sale-context",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": false
+    },
+    {
+      "client_id": "inventory.sales-context-authority",
+      "caller": "inventory",
+      "audience": "sales-pos.context-check-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": false
+    },
+    {
+      "client_id": "finance.sales-context-authority",
+      "caller": "finance",
+      "audience": "sales-pos.context-check-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": false
+    }
+  ],
+  "issuance": "H1A HTTP Basic grant_type=client_credentials; distinct credential per fixed client_id, no audience selector, shared-secret fallback or retained-token reuse.",
+  "authority": "Service tokens authenticate caller only. Each owner requires current Sales preparation callback bound to the exact request; no delegated human material leaves Sales RAM."
+}
