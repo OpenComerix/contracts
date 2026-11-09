@@ -163,6 +163,8 @@ test('native validation joins existing jobs and checks each distinct metaschema 
   const step = workflow.jobs.validate_sales_schema.steps.find(step => step.name === 'Validate sale preparation schemas and vectors');
   assert(step.run.includes('jsonschema:v16.10.0'));
   assert(step.run.includes('--network none'));
+  assert(step.run.includes('--user "$(id -u):$(id -g)"'));
+  assert(step.run.includes('--read-only --cap-drop ALL --security-opt no-new-privileges'));
   assert.equal(Object.keys(workflow.jobs).length, 23);
   const shell = read('scripts/sales/validate-preparation-v1.sh').toString();
   assert.equal(shell.match(/jsonschema metaschema/g)?.length, 1);

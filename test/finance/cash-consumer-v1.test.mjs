@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {projectPreparationDocument} from '../../scripts/sales/preparation-history-v1.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
@@ -19,7 +20,7 @@ test('Finance admits only B and preserves the seven prior consumers and all pins
   const allOperations=snapshot.manifest.contracts.flatMap(row=>row.operations);
   assert(!allOperations.some(name=>/Sale|History/.test(name)));
   assert(!snapshot.manifest.contracts.some(row=>/record-sale|sale-payment|sales\./.test(row.id)));
-  const registry=JSON.parse(read('registry/contracts.json')),before=JSON.parse(source('registry/contracts.json'));
+  const registry=projectPreparationDocument('registry/contracts.json',JSON.parse(read('registry/contracts.json'))),before=JSON.parse(source('registry/contracts.json'));
   assert.deepEqual({...registry,requiredConsumers:before.requiredConsumers},before);
   const generated=makeLock(root,snapshot.manifest,Buffer.from(JSON.stringify(snapshot.manifest,null,2)+'\n'),registry);
   assert.deepEqual(generated.entries,snapshot.lock.entries);

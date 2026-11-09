@@ -44,6 +44,7 @@ let immutable;
 const metadataFiles = new Set(['registry/contracts.json', 'registry/README.md', '.github/workflows/ci.yml',
   'test/architecture/internal-auth-v2-history.test.mjs',
   'test/sales/inventory-step-consumer-v1.test.mjs',
+  'test/finance/cash-consumer-v1.test.mjs', 'test/finance/payment-consumer-v1.test.mjs',
   ...['inventory', 'finance', 'sales', 'identity'].flatMap(domain => [domain + '/index.json', domain + '/README.md'])]);
 function metadataModel() {
   if (!immutable) {
@@ -72,7 +73,7 @@ function metadataModel() {
       '          node scripts/sales/preparation-v1.mjs prepare .ci-artifacts/sales-v2-preparation-ci\n');
     next = addAfter(next, "        run: docker run --rm --entrypoint /bin/sh -v \"$PWD:/workspace\" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci'\n",
       '      - name: Validate sale preparation schemas and vectors\n' +
-      "        run: docker run --rm --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v \"$PWD:/workspace\" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-preparation-v1.sh .ci-artifacts/sales-v2-preparation-ci'\n");
+      "        run: docker run --rm --user \"$(id -u):$(id -g)\" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v \"$PWD:/workspace\" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-preparation-v1.sh .ci-artifacts/sales-v2-preparation-ci'\n");
     metadata.set('.github/workflows/ci.yml', Buffer.from(next));
     // Keep the historical H1A fixture closed and exhaustive. Its original live
     // checks remain; only the explicit current metadata inventory is extended.
@@ -109,6 +110,20 @@ function metadataModel() {
     salesFixture = salesFixture.replace(salesScope,
       "...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles])].sort());");
     metadata.set(salesTestPath, Buffer.from(salesFixture));
+    for (const kind of ['cash', 'payment']) {
+      const file = 'test/finance/' + kind + '-consumer-v1.test.mjs';
+      const anchor = kind === 'cash'
+        ? "const registry=JSON.parse(read('registry/contracts.json')),before="
+        : "assert.equal(read('registry/contracts.json').toString().replaceAll('\\r\\n','\\n'),";
+      const replacement = kind === 'cash'
+        ? "const registry=projectPreparationDocument('registry/contracts.json',JSON.parse(read('registry/contracts.json'))),before="
+        : "assert.equal(projectPreparationFile('registry/contracts.json',read('registry/contracts.json')).toString().replaceAll('\\r\\n','\\n'),";
+      let fixture = text(source(file));
+      assert.equal(fixture.split(anchor).length, 2, 'PREPARATION_FINANCE_TEST_ANCHOR:' + kind);
+      fixture = fixture.replace("import test from 'node:test';", "import test from 'node:test';\n" +
+        'import {projectPreparation' + (kind === 'cash' ? 'Document' : 'File') + "} from '../../scripts/sales/preparation-history-v1.mjs';");
+      metadata.set(file, Buffer.from(fixture.replace(anchor, replacement)));
+    }
     immutable = metadata;
   }
   return immutable;

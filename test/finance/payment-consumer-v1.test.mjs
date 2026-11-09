@@ -1,4 +1,5 @@
 import test from 'node:test';
+import {projectPreparationFile} from '../../scripts/sales/preparation-history-v1.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
@@ -16,7 +17,7 @@ test('C extends Finance only with admitted cash contracts, exact source revision
  for(const old of prior.lock.entries){const entry=current.lock.entries.find(row=>row.id===old.id&&row.role===old.role);assert.equal(entry.commit,old.commit);assert.equal(entry.tagObject,old.tagObject);}
  assert(current.lock.entries.filter(row=>!prior.lock.entries.some(old=>old.id===row.id)).every(row=>row.commit==='7cd2b548fb909c5eff47d0319c162c498ee68e92'));
  const operations=current.manifest.contracts.flatMap(row=>row.operations);assert(operations.includes('getSaleCashResult'));assert(!operations.some(name=>/History/.test(name)));
- assert.equal(read('registry/contracts.json').toString().replaceAll('\r\n','\n'),source('registry/contracts.json').toString());
+ assert.equal(projectPreparationFile('registry/contracts.json',read('registry/contracts.json')).toString().replaceAll('\r\n','\n'),source('registry/contracts.json').toString());
 });
 
 test('publication accepts only the reviewed Finance revision and rejects candidate or foreign publication metadata',()=>{

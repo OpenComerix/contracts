@@ -268,7 +268,8 @@ if (import.meta.url === pathToFileURL(process.argv[1] ?? '').href) {
     assert.equal(args.length, 0);
     const prepared = prepare();
     const directory = path.join(root, prepared.output);
-    execute('docker', ['run', '--rm', '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
+    execute('docker', ['run', '--rm', ...(process.platform === 'linux' ? ['--user', process.getuid() + ':' + process.getgid()] : []),
+      '--network', 'none', '--read-only', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
       '--mount', 'type=bind,source=' + directory + ',target=/work', '--workdir', '/work', '--entrypoint', 'sh',
       'ghcr.io/sourcemeta/jsonschema:v16.10.0', 'gate.sh', '.']);
     console.log(JSON.stringify({ ...prepared, result: 'passed', validator: 'Sourcemeta 16.10.0' }));
