@@ -77,7 +77,7 @@ const reuseCandidateHashes = Object.freeze({
   "test/ci/github-v1.test.mjs": "cebe67c658a9297ba9061505eda49ef4a94b92e7afb78e02a9645893e7b2a9f1",
   "scripts/inventory/capture-authority-v2.mjs": "bc3425cea375e780f2704d335925b6bac966bfd42f602426f9f0dfe2c33f19e6",
   "scripts/inventory/capture-authority-v2-admission.mjs": "c14a57b6c1f5dbbbc8e1fda75cda5251b75a6be1618449b14092f6b3bad61914",
-  "test/sales/inventory-step-consumer-v1.test.mjs": "e206eb58a36e397aa680d9fcae6775e0c957d1053c6e2b6e52519993ee6b6fe1",
+  "test/sales/inventory-step-consumer-v1.test.mjs": "992f29d61f49fb6d32739aed84747836a11046c02e7a0cc3689c005144cde5d5",
   "test/inventory/capture-authority-v2-admission.test.mjs": "5ee18c7625b4abceca4b76a330c02f890f84910afa8a2a4372ed27a824e713f6",
   "identity/http/private/v2/identity-internal-auth-v2.yaml": "9afcacee5d576d7cec1cfd94fb39d3eb29f4ce6a2a64301dc93cf8ef16229cf3",
   "identity/http/shared/v2/identity-workload-token-reuse-policy-v2.json": "efd4ed4579316272c372f8ee96e0986db35ce1c11724b3407589d51017efd411",
@@ -238,8 +238,9 @@ const toolingPaths = Object.freeze([
   'tools/architecture/validation-history.mjs',
   'scripts/finance/cash-consumer-v1.mjs',
   'test/finance/cash-consumer-v1.test.mjs',
+  'scripts/inventory/capture-consumers-v1.mjs',
 ]);
-const toolingReferenceSha256 = '814973de339e277eb6e9dad21866cbac66c11dfdab340bef7999f946d0b99602';
+const toolingReferenceSha256 = '3e4cb61596e1237524a34ef70e4fbd22bde705963dcffe832e5104c1ab0bfa5f';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

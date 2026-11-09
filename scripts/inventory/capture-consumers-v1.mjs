@@ -9,6 +9,7 @@ import { readRepositoryFile } from '../ci/retired-gitlab-v1.mjs';
 import { stockConsumerCandidate, stockConsumerHistoricalFile, stockConsumerHistoricalSnapshot } from './stock-consumer-v1.mjs';
 import { saleStockHistoricalFile, saleStockHistoricalSnapshot, validateSaleStockConsumers } from './sale-stock-consumer-v1.mjs';
 import { withAuthorityConsumerContext, captureAdmissionContextSource } from '../finance/authority-consumers-v1.mjs';
+import { projectCashConsumerDocument } from '../finance/cash-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const launcher = path.resolve(root, '../..');
@@ -320,6 +321,7 @@ export function captureConsumerHistoricalSnapshot(value, context) {
   }, context);
 }
 export function captureConsumerHistoricalIndex(value, context) {
+  value = projectCashConsumerDocument(indexPath, value);
   if (!isDeepStrictEqual(value, JSON.parse(model().metadata.get(indexPath)))) return value;
   return withAuthorityConsumerContext(context?.read ?? readRepositoryFile, current => {
     validateCaptureConsumers(current.read, undefined, current); return json(indexPath);
