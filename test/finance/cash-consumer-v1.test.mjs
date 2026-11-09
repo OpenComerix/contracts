@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
-import {cashConsumerBase,cashConsumerSnapshot,cashConsumerMetadata,validateCashConsumer,
+import {cashConsumerBase,financePublished,cashConsumerSnapshot,cashConsumerMetadata,validateCashConsumer,
   projectCashConsumerFile,projectCashConsumerDocument} from '../../scripts/finance/cash-consumer-v1.mjs';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {projectReviewedFile,projectReviewedDocument,withReuseCandidateScope,validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
@@ -13,6 +13,9 @@ test('Finance admits only B and preserves the seven prior consumers and all pins
   assert.equal(result.consumers,8);assert.equal(result.selections,11);
   assert.equal(visits.length,new Set(visits).size);
   const snapshot=cashConsumerSnapshot();
+  assert.equal(snapshot.publication,'published');
+  assert.equal(snapshot.sourceCommit,financePublished);
+  assert.equal(financePublished,'d8d653a4b6a172f3b12885576cf5a2a6883a154f');
   const allOperations=snapshot.manifest.contracts.flatMap(row=>row.operations);
   assert(!allOperations.some(name=>/Sale|History/.test(name)));
   assert(!snapshot.manifest.contracts.some(row=>/record-sale|sale-payment|sales\./.test(row.id)));

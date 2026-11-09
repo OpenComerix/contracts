@@ -240,7 +240,7 @@ const toolingPaths = Object.freeze([
   'test/finance/cash-consumer-v1.test.mjs',
   'scripts/inventory/capture-consumers-v1.mjs',
 ]);
-const toolingReferenceSha256 = '3e4cb61596e1237524a34ef70e4fbd22bde705963dcffe832e5104c1ab0bfa5f';
+const toolingReferenceSha256 = 'dbc0007c7cf78fc40bde986c0ec1105d85ae93fc2a9ab6c206e56840931292c6';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

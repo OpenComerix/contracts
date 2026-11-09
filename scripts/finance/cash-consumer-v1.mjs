@@ -7,6 +7,7 @@ import {sha256} from '../../tools/architecture/consumer-gate.mjs';
 
 export const cashConsumerBase = 'c7cf3a9528320ada1203cc8cf311d8851af74ef5';
 export const financeBase = 'c8ce23f47c76675d68b837c67c58b0c3746a33b2';
+export const financePublished = 'd8d653a4b6a172f3b12885576cf5a2a6883a154f';
 const root = path.resolve(import.meta.dirname, '../..');
 const source = gitReader(root, cashConsumerBase);
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -63,15 +64,16 @@ function facts() {
   const manifestBytes = encode(manifest);
   const lock = makeLock(root,manifest,manifestBytes,previousRegistry);
   for(const asset of lock.assets) asset.localSha256=asset.sourceSha256;
-  const snapshot = {formatVersion:1,publication:'local-candidate',sourceRepository:'opencomerix/finance',sourceCommit:financeBase,
+  const snapshot = {formatVersion:1,publication:'published',sourceRepository:'opencomerix/finance',sourceCommit:financePublished,
     manifestSha256:sha256(manifestBytes),lockSha256:sha256(encode(lock)),manifest,lock};
   const oldReadme = text(source('finance/README.md'));
   const section = '\n## F1-12B — Selección consumidora de caja y apertura\n\n'+
     'Finance se incorpora como octavo consumidor conocido con cinco operaciones de caja/apertura, autoridad humana Identity y hechos de apertura/movimiento. '+
     'Las once selecciones fijan fuentes H4 publicadas; no incluyen cobro, lector histórico, resultado Sales ni entrega al broker. '+
     'El manifiesto/lock/export conserva las siete admisiones consumidoras anteriores y todos los transportes. '+
-    'Candidato hasta auditoría, publicación y CI exacta; materializar en Finance solo después de verificar esa revisión. '+
-    'No acredita runtime. Gate: `node --test test/finance/cash-consumer-v1.test.mjs`; metadata: `node tools/architecture/cli.mjs consumers`.\n';
+    'Export publicado de Finance `'+financePublished+'`, con [CI completa conforme 8/8](https://github.com/OpenComerix/finance/actions/runs/42546858168). '+
+    'Este gate acredita admisión/procedencia; la evidencia runtime pertenece al owner y no habilita C–E ni consumo sin CI de la revisión contractual final. '+
+    'Gate: `node --test test/finance/cash-consumer-v1.test.mjs`; metadata: `node tools/architecture/cli.mjs consumers`.\n';
   const metadata = new Map([
     ['registry/contracts.json',encode(registry)],['registry/consumers/index.json',encode(index)],
     ['registry/consumers/finance.json',encode(snapshot)],['finance/README.md',Buffer.from(oldReadme+section)],
