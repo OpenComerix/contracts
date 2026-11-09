@@ -4,6 +4,7 @@ import path from 'node:path';
 import {isDeepStrictEqual} from 'node:util';
 import {gitReader, makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
+import {projectPaymentConsumerFile,projectPaymentConsumerDocument,withPaymentConsumerScope} from './payment-consumer-v1.mjs';
 
 export const cashConsumerBase = 'c7cf3a9528320ada1203cc8cf311d8851af74ef5';
 export const financeBase = 'c8ce23f47c76675d68b837c67c58b0c3746a33b2';
@@ -86,15 +87,18 @@ export function cashConsumerMetadata(){ return new Map([...facts().metadata].map
 // Pure exact projections adapt older proofs without approving other live files.
 // Altered and partial supplied values are never repaired.
 export function projectCashConsumerFile(file,bytes){
+  bytes=projectPaymentConsumerFile(file,bytes);
   if(!['registry/contracts.json','registry/consumers/index.json','finance/README.md'].includes(file)) return bytes;
   const expected=facts().metadata.get(file);
   return text(bytes)===text(expected)?source(file):bytes;
 }
 export function projectCashConsumerDocument(file,value){
+  value=projectPaymentConsumerDocument(file,value);
   if(!['registry/contracts.json','registry/consumers/index.json'].includes(file)) return value;
   return isDeepStrictEqual(value,JSON.parse(facts().metadata.get(file)))?JSON.parse(source(file)):value;
 }
 export function validateCashConsumer(read=native){
+  const supplied=read;read=file=>projectPaymentConsumerFile(file,supplied(file));
   const model=facts();
   for(const [file,expected]of model.metadata) same(read(file),expected,'CASH_METADATA:'+file);
   for(const service of model.previousRegistry.requiredConsumers){
@@ -105,6 +109,12 @@ export function validateCashConsumer(read=native){
   return {consumers:8,selections:model.snapshot.manifest.contracts.length,assets:model.sources.size,runtime_demonstrated:false};
 }
 export function withCashConsumerScope(paths,read){
+  const registryInput=read('registry/contracts.json');
+  if(projectCashConsumerFile('registry/contracts.json',registryInput)===registryInput)return new Set(paths);
+  // C metadata shares B paths. New tooling belongs to validationToolingFiles,
+  // and must not expand the exact paths of an older historical scope.
+  withPaymentConsumerScope(paths,read);
+  const supplied=read;read=file=>projectPaymentConsumerFile(file,supplied(file));
   const registry=read('registry/contracts.json');
   if(projectCashConsumerFile('registry/contracts.json',registry)===registry)return new Set(paths);
   // Only this closed delta is checked here. The capability gate verifies

@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/finance",
-  "sourceCommit": "d8d653a4b6a172f3b12885576cf5a2a6883a154f",
-  "manifestSha256": "1576866e613a9016efa2eee809a4132a13f2d6c75b1e80922bc7c1c3ca72fd29",
-  "lockSha256": "dd15aea06815d8d7bd94d540a17dfe8c0253d09a38e74e94f6eec126a2aa68e9",
+  "sourceCommit": "8986e5270384017125e2692a1def0827eaf90909",
+  "manifestSha256": "084fcfd0b59dc6bf5451dfcccca9093b8e56b3cd9761f799d9756fb536e8522f",
+  "lockSha256": "feaf6813547ad9e1398c2618979519808e587233ec394e9ac29eeddee2f0ac95",
   "manifest": {
     "formatVersion": 1,
     "service": "finance",
@@ -18,10 +18,11 @@
           "listCashRegisters",
           "openCashShift",
           "getCashShift",
-          "getCashShiftExpected"
+          "getCashShiftExpected",
+          "getSaleCashResult"
         ],
         "pointers": [],
-        "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -64,9 +65,12 @@
           "/$defs/CashShift",
           "/$defs/Expected",
           "/$defs/ShiftOpened",
-          "/$defs/Movement"
+          "/$defs/Movement",
+          "/$defs/RecordCash",
+          "/$defs/Payment",
+          "/$defs/RecordResult"
         ],
-        "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -92,9 +96,13 @@
           "/atomicity",
           "/location",
           "/limits",
-          "/history"
+          "/history",
+          "/payment",
+          "/semantic_identity",
+          "/retries",
+          "/compatibility"
         ],
-        "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -202,9 +210,11 @@
           "/permissions/1",
           "/permissions/2",
           "/permissions/3",
-          "/permissions/4"
+          "/permissions/4",
+          "/profiles/2",
+          "/profiles/3"
         ],
-        "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -223,6 +233,92 @@
         ],
         "pointers": [],
         "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "finance.record-sale-cash.v1.consumer",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "finance.record-sale-cash.result.v1",
+        "role": "producer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "finance.sale-payment.recorded.v2",
+        "role": "producer",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "sales.finance-step-authority.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "authorizeSaleProcessStep"
+        ],
+        "pointers": [],
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "sales.finance-step-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request",
+          "/$defs/Decision"
+        ],
+        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -386,6 +482,62 @@
         "destination": "src/modules/cash/transport/contracts/openapi/identity-internal-auth-v1.yaml",
         "representation": "exact",
         "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.http.private.v1",
+        "sourcePath": "commands/command-result-envelope-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/commands/command-result-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.http.private.v1",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/commands/command-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.sale-payment.recorded.v2",
+        "sourcePath": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.finance-step-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+        "destination": "src/modules/cash/transport/contracts/sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.finance-step-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
       }
     ],
     "bindings": []
@@ -393,7 +545,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "finance",
-    "manifestSha256": "1576866e613a9016efa2eee809a4132a13f2d6c75b1e80922bc7c1c3ca72fd29",
+    "manifestSha256": "084fcfd0b59dc6bf5451dfcccca9093b8e56b3cd9761f799d9756fb536e8522f",
     "entries": [
       {
         "id": "finance.http.private.v1",
@@ -409,13 +561,22 @@
           "listCashRegisters",
           "openCashShift",
           "getCashShift",
-          "getCashShiftExpected"
+          "getCashShiftExpected",
+          "getSaleCashResult"
         ],
         "pointers": [],
         "files": [
           {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
             "path": "common/http/shared/v3/problem-details-v3.schema.json",
             "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
           },
           {
             "path": "finance/http/private/v1/finance-internal-v1.yaml",
@@ -428,6 +589,21 @@
         ],
         "units": [
           {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
             "path": "common/http/shared/v3/problem-details-v3.schema.json",
             "pointer": "",
             "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
@@ -439,6 +615,21 @@
           },
           {
             "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "dc34a289799cbc100fd3becc9c6f8a7ce74d0b1df4cce483a91a1747f51e5738"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5c6356a384a4eb7d4d75beea83a446c5415d18ca754a4890ee2a9659c54b6413"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
             "pointer": "/$schema",
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           },
@@ -489,8 +680,18 @@
           },
           {
             "path": "finance/http/private/v1/finance-internal-v1.yaml",
+            "pointer": "/paths/~1internal~1finance~1sale-cash-results~1{operation_id}/get",
+            "sha256": "4bbdbc95d2a5972fa2b3e238887f18b3168f022040fb22d4bc134364990f773a"
+          },
+          {
+            "path": "finance/http/private/v1/finance-internal-v1.yaml",
             "pointer": "/servers",
             "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -514,8 +715,18 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/Expected",
             "sha256": "43c8f38888449c2ff0766356b5bfe0363dd90a7920dab2504c4494a5f28caf6c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/FailedCash",
+            "sha256": "18041d3fc1a35a5b648d39b533335f8b48a32907184b37cba60d145d543fe08c"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -554,6 +765,21 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Payment",
+            "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/RecordResult",
+            "sha256": "6c82cbe4f3ff3f75616eb083170847bb52463e21f1719e1a5992c758ffc7b19d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$id",
             "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
           },
@@ -563,8 +789,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "29f4ed10540975dcdb396aaf0a06c7b27a67f97ca675768f96f179ecfbb9724f",
-        "runtimeSha256": "aa9236ea4813e04440ca85aeece190fc1e1925c446ad9836f9632eaf225e17ac"
+        "selectionSha256": "0e47e26bf943d501aab0816faee197145357b230b3443a36a3ea8a7d51cbf716",
+        "runtimeSha256": "e826c14c0f6f3924406a4de9ed9cd5eb585f8e922f25a0c84080afbc8fb66237"
       },
       {
         "id": "finance.http.public.v1",
@@ -755,15 +981,61 @@
           "/$defs/CashShift",
           "/$defs/Expected",
           "/$defs/ShiftOpened",
-          "/$defs/Movement"
+          "/$defs/Movement",
+          "/$defs/RecordCash",
+          "/$defs/Payment",
+          "/$defs/RecordResult"
         ],
         "files": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+          },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
           }
         ],
         "units": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "dc34a289799cbc100fd3becc9c6f8a7ce74d0b1df4cce483a91a1747f51e5738"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5c6356a384a4eb7d4d75beea83a446c5415d18ca754a4890ee2a9659c54b6413"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
+          },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/CashRegister",
@@ -786,8 +1058,18 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/Expected",
             "sha256": "43c8f38888449c2ff0766356b5bfe0363dd90a7920dab2504c4494a5f28caf6c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/FailedCash",
+            "sha256": "18041d3fc1a35a5b648d39b533335f8b48a32907184b37cba60d145d543fe08c"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -811,8 +1093,28 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Payment",
+            "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/RecordCash",
+            "sha256": "afa4c7dde737ba5d3af48c7b287cda14ef633ca4198250318392667b2efd1cb5"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/RecordResult",
+            "sha256": "6c82cbe4f3ff3f75616eb083170847bb52463e21f1719e1a5992c758ffc7b19d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/ShiftOpened",
             "sha256": "8e849d2c7583959d7eab999505a6c581c510cb96be919565de5cb563535cb173"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -825,8 +1127,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "8056275b2416e617742e8b839fdb0b17d0dfc757d68a02061b194858a300b113",
-        "runtimeSha256": "8056275b2416e617742e8b839fdb0b17d0dfc757d68a02061b194858a300b113"
+        "selectionSha256": "e566bc8ef4852c676302e476701b0a65cfd446c38281300b6eb092dc1f098405",
+        "runtimeSha256": "e566bc8ef4852c676302e476701b0a65cfd446c38281300b6eb092dc1f098405"
       },
       {
         "id": "finance.protocol-policy.v1",
@@ -850,7 +1152,11 @@
           "/atomicity",
           "/location",
           "/limits",
-          "/history"
+          "/history",
+          "/payment",
+          "/semantic_identity",
+          "/retries",
+          "/compatibility"
         ],
         "files": [
           {
@@ -868,6 +1174,11 @@
             "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
             "pointer": "/canonicalization",
             "sha256": "b69dd5853eeb684151af078618d4e61f01d5c75732829abe042002d8b673aa19"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/compatibility",
+            "sha256": "c5aa732e0cb6882f0951c6b5c6a5aa2ad0fcb09ae9fa664c6b0fce381b52ee92"
           },
           {
             "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
@@ -918,10 +1229,25 @@
             "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
             "pointer": "/operations/4",
             "sha256": "fe12b04e260e992bcd497d4625c1c0df468d690beeb0c821cd9811eac39e002c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/payment",
+            "sha256": "facdc9c216b991e26687f1df059e0900052d54cc954cb070aacffa67ad769187"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/retries",
+            "sha256": "be887520842001bc523f71a2562d6d4e002bd260860311b827b5574734f43d6f"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/semantic_identity",
+            "sha256": "c0c80030f24870033171c786694fa8ea7063804e5d7392cb53e12592aa147f83"
           }
         ],
-        "selectionSha256": "4e4c8546e3e75f95f691757dae7548161d67853af4114c9380745ed2fcb171d4",
-        "runtimeSha256": "4e4c8546e3e75f95f691757dae7548161d67853af4114c9380745ed2fcb171d4"
+        "selectionSha256": "57851430c249e07111bc6c0ae54fe28e0194e1bc92b5c11e0563fff6c071a9fc",
+        "runtimeSha256": "57851430c249e07111bc6c0ae54fe28e0194e1bc92b5c11e0563fff6c071a9fc"
       },
       {
         "id": "finance.lifecycle-policy.v1",
@@ -1349,7 +1675,9 @@
           "/permissions/1",
           "/permissions/2",
           "/permissions/3",
-          "/permissions/4"
+          "/permissions/4",
+          "/profiles/2",
+          "/profiles/3"
         ],
         "files": [
           {
@@ -1397,10 +1725,20 @@
             "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
             "pointer": "/profiles/1",
             "sha256": "02ff0aeb73ea9fe206573195642423a9ee9d0676aa0f80e31df5ee76050cb9fa"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "pointer": "/profiles/2",
+            "sha256": "ab89796bfcfef01b962c2e5cce15f61ffd452603e83e0165968d8b9f86b0bba8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "pointer": "/profiles/3",
+            "sha256": "804ea73f97ca7d9af02eb98aca65c29dc67eebc68461860acfe9f946865a6eea"
           }
         ],
-        "selectionSha256": "10348e5a2ad374560850464fd7b7ece71be8ee7d39177ae49701470039c649fe",
-        "runtimeSha256": "10348e5a2ad374560850464fd7b7ece71be8ee7d39177ae49701470039c649fe"
+        "selectionSha256": "61a89474096571e3f9766c3d6daac4a0d0c5d535aae864e46b253621d9950cd4",
+        "runtimeSha256": "61a89474096571e3f9766c3d6daac4a0d0c5d535aae864e46b253621d9950cd4"
       },
       {
         "id": "identity.internal-auth.v1",
@@ -1572,6 +1910,477 @@
         ],
         "selectionSha256": "0f3869a649c4b0b8f3abeecf9801250e882622299137ad8510defceb06282909",
         "runtimeSha256": "e7aab295696478e3d0a2ce625572f69c4703204fb89e0a93d888dae3a4e5218c"
+      },
+      {
+        "id": "finance.record-sale-cash.v1.consumer",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+            "sha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "sha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+            "pointer": "",
+            "sha256": "8d2cc912bcef7ace47cd4b6520a11d55c2d44b1eb9a412cb6c472dbb03e67e66"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+            "pointer": "/$id",
+            "sha256": "0edf2b12cb1ee9fbacbc96b02be76823e79aee99eef5f8639d51177c36549e1b"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$defs/RecordCash",
+            "sha256": "19cf4ee00550059b5fd6647b913ee41c4fecf46a5c3f24f76d90432fc0a292c0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "52d6029f265e4211cd3fe3b9a355e577a0ee821874664b81153737eb697aef5a"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "cca1c6c8c9d4ea1bba883fef2d04fa22132e44d239dd75319036fc727b72661b",
+        "runtimeSha256": "cca1c6c8c9d4ea1bba883fef2d04fa22132e44d239dd75319036fc727b72661b"
+      },
+      {
+        "id": "finance.record-sale-cash.result.v1",
+        "role": "producer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "dc34a289799cbc100fd3becc9c6f8a7ce74d0b1df4cce483a91a1747f51e5738"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5c6356a384a4eb7d4d75beea83a446c5415d18ca754a4890ee2a9659c54b6413"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/FailedCash",
+            "sha256": "18041d3fc1a35a5b648d39b533335f8b48a32907184b37cba60d145d543fe08c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Payment",
+            "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "dd4e3e2c0039fc282b5b64a42927596baa1e080931708fc3aefbd6c9f613ae7f",
+        "runtimeSha256": "dd4e3e2c0039fc282b5b64a42927596baa1e080931708fc3aefbd6c9f613ae7f"
+      },
+      {
+        "id": "finance.sale-payment.recorded.v2",
+        "role": "producer",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "sha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          }
+        ],
+        "units": [
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "",
+            "sha256": "d76580dbbbc7aa6c94804def031781d72f104448959d9e395c99de1bfdc8ad9a"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "12c092dda65a721aa88e0a462a0d14f64bbba873d0ec4105613b2473a8751a80"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Payment",
+            "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "3bbd620bd7855642de3ebf4f598a25c391e0ce3256fafa1a36a61f70fa196b53",
+        "runtimeSha256": "3bbd620bd7855642de3ebf4f598a25c391e0ce3256fafa1a36a61f70fa196b53"
+      },
+      {
+        "id": "sales.finance-step-authority.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+        "operations": [
+          "authorizeSaleProcessStep"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "sha256": "c102741d3576db552080c327a59c07d78d148db8394cd007be9cce4485324e79"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "sha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1sales~1process-step-authorizations/post",
+            "sha256": "eface70b7d8d1c0c9c7baf55ef716a34fb7c6abf3ac06f965acabe28132cbd07"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "7c867469e5b31621a8363da68362a90e3a69eec86cc844841d9c9785a156d7b3"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "1639210036e9c48bdd97e0a9778522238f3b95b55a14b200934cba149b42832d"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "6416fc5f468336a0e846af5457da3a1de81987c3b94f400dba8236020f78b6cb"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "925a6624f6b348343c3b157aff38602ff52eb1bcb1e1f616c941985f9a5ffee8",
+        "runtimeSha256": "be4198d61de2f810595a991ed88b7409d303a5bfcadca354a0cc5ccf772065a7"
+      },
+      {
+        "id": "sales.finance-step-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request",
+          "/$defs/Decision"
+        ],
+        "files": [
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "sha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
+          }
+        ],
+        "units": [
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "7c867469e5b31621a8363da68362a90e3a69eec86cc844841d9c9785a156d7b3"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "1639210036e9c48bdd97e0a9778522238f3b95b55a14b200934cba149b42832d"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "6416fc5f468336a0e846af5457da3a1de81987c3b94f400dba8236020f78b6cb"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "41a7a1532a992c57ebe249548ac11f7d382eec0a133f0f68184bdc35e7f0a19b",
+        "runtimeSha256": "41a7a1532a992c57ebe249548ac11f7d382eec0a133f0f68184bdc35e7f0a19b"
       }
     ],
     "assets": [
@@ -1794,6 +2603,86 @@
         "sourceSha256": "4a8624be6f2cae9116ac634bc6e64d59f5382cad91a7f9d0a6eba2dd9b7e451b",
         "semanticSha256": null,
         "localSha256": "4a8624be6f2cae9116ac634bc6e64d59f5382cad91a7f9d0a6eba2dd9b7e451b"
+      },
+      {
+        "contractId": "finance.http.private.v1",
+        "sourcePath": "commands/command-result-envelope-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/commands/command-result-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098",
+        "semanticSha256": null,
+        "localSha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+      },
+      {
+        "contractId": "finance.http.private.v1",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5",
+        "semanticSha256": null,
+        "localSha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "commands/command-envelope-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/commands/command-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f",
+        "semanticSha256": null,
+        "localSha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.v1.consumer.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840",
+        "semanticSha256": null,
+        "localSha256": "73a7808c66fa7a1d3ebb40d193e94493c5fe7d0b7fe2c1d1d2fcf368f823f840"
+      },
+      {
+        "contractId": "finance.record-sale-cash.v1.consumer",
+        "sourcePath": "finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/http/shared/v1/finance-consumer-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7",
+        "semanticSha256": null,
+        "localSha256": "f81116f0172089fab6c0ae4b444d01fa602364c2cafb15744d46deb5d8b63fd7"
+      },
+      {
+        "contractId": "finance.sale-payment.recorded.v2",
+        "sourcePath": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04",
+        "semanticSha256": null,
+        "localSha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04"
+      },
+      {
+        "contractId": "sales.finance-step-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+        "destination": "src/modules/cash/transport/contracts/sales/http/private/v1/sales-finance-step-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "c102741d3576db552080c327a59c07d78d148db8394cd007be9cce4485324e79",
+        "semanticSha256": null,
+        "localSha256": "c102741d3576db552080c327a59c07d78d148db8394cd007be9cce4485324e79"
+      },
+      {
+        "contractId": "sales.finance-step-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f",
+        "semanticSha256": null,
+        "localSha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
       }
     ]
   }
