@@ -4,6 +4,7 @@ import path from 'node:path';
 import {isDeepStrictEqual} from 'node:util';
 import {gitReader,makeLock} from '../../tools/architecture/graph.mjs';
 import {sha256} from '../../tools/architecture/consumer-gate.mjs';
+import {projectDeliveryConsumerFile,projectDeliveryConsumerDocument} from './delivery-consumer-v1.mjs';
 
 export const paymentConsumerBase='aa0d856a3e49475930699bef38a3e9cab9a04803';
 export const financePaymentPublished='8986e5270384017125e2692a1def0827eaf90909';
@@ -64,20 +65,24 @@ export function paymentConsumerSnapshot(){return structuredClone(model().snapsho
 export function paymentConsumerMetadata(){return new Map([...model().metadata].map(([file,bytes])=>[file,Buffer.from(bytes)]));}
 // Only deterministic immutable facts are reused. Supplied live bytes are checked on every call.
 export function projectPaymentConsumerFile(file,bytes){
+ bytes=projectDeliveryConsumerFile(file,bytes);
  const expected=model().metadata.get(file);
  return expected&&text(bytes)===text(expected)?source(file):bytes;
 }
 export function projectPaymentConsumerDocument(file,value){
+ value=projectDeliveryConsumerDocument(file,value);
  const expected=model().metadata.get(file);
  return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(source(file)):value;
 }
 export function withPaymentConsumerScope(paths,read){
+ const live=read;read=file=>projectDeliveryConsumerFile(file,live(file));
  const file='registry/consumers/index.json',bytes=read(file);
  if(projectPaymentConsumerFile(file,bytes)===bytes)return new Set(paths);
  for(const [name,expected]of model().metadata)assert.equal(text(name===file?bytes:read(name)),text(expected),'PAYMENT_SCOPE:'+name);
  return new Set([...paths,...paymentConsumerFiles]);
 }
 export function validatePaymentConsumer(read=native){
+ const live=read;read=file=>projectDeliveryConsumerFile(file,live(file));
  const facts=model();
  for(const [file,bytes]of facts.metadata)assert.equal(text(read(file)),text(bytes),'PAYMENT_METADATA:'+file);
  for(const [file,bytes]of facts.sources)assert.equal(text(read(file)),text(bytes),'PAYMENT_SOURCE:'+file);

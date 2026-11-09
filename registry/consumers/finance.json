@@ -1,10 +1,10 @@
 {
   "formatVersion": 1,
-  "publication": "published",
+  "publication": "local-candidate",
   "sourceRepository": "opencomerix/finance",
   "sourceCommit": "8986e5270384017125e2692a1def0827eaf90909",
-  "manifestSha256": "084fcfd0b59dc6bf5451dfcccca9093b8e56b3cd9761f799d9756fb536e8522f",
-  "lockSha256": "feaf6813547ad9e1398c2618979519808e587233ec394e9ac29eeddee2f0ac95",
+  "manifestSha256": "81bb51b42768fa1c5cf93dd5ca6950a59a8b55c004701d38e5c9b2c9daf9b9e5",
+  "lockSha256": "48fa215dfe074de1a5fd8f5a1b386b2a2eb44089dda01f923d5f2ecccdeaf459",
   "manifest": {
     "formatVersion": 1,
     "service": "finance",
@@ -19,10 +19,12 @@
           "openCashShift",
           "getCashShift",
           "getCashShiftExpected",
-          "getSaleCashResult"
+          "getSaleCashResult",
+          "createFinanceHistoryReadSession",
+          "readFinanceHistoryFacts"
         ],
         "pointers": [],
-        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -40,10 +42,12 @@
           "listCashRegisters",
           "openCashShift",
           "getCashShift",
-          "getCashShiftExpected"
+          "getCashShiftExpected",
+          "createFinanceHistoryReadSession",
+          "readFinanceHistoryFacts"
         ],
         "pointers": [],
-        "purpose": "F1-12B authorized cash registers, opening and expected ARS; no sale payment, history reader or broker delivery.",
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -68,9 +72,12 @@
           "/$defs/Movement",
           "/$defs/RecordCash",
           "/$defs/Payment",
-          "/$defs/RecordResult"
+          "/$defs/RecordResult",
+          "/$defs/HistoryRequest",
+          "/$defs/HistorySession",
+          "/$defs/HistoryPage"
         ],
-        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -100,9 +107,11 @@
           "/payment",
           "/semantic_identity",
           "/retries",
-          "/compatibility"
+          "/compatibility",
+          "/operations/5",
+          "/operations/6"
         ],
-        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -212,9 +221,11 @@
           "/permissions/3",
           "/permissions/4",
           "/profiles/2",
-          "/profiles/3"
+          "/profiles/3",
+          "/permissions/5",
+          "/permissions/6"
         ],
-        "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -319,6 +330,23 @@
           "/$defs/Decision"
         ],
         "purpose": "F1-12C atomic cash command and retained result; original financial facts, no broker delivery or history reader.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:contract",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "finance.flow.asyncapi.v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-12D local broker delivery and authorized retained-history recovery; no commercial purge, public routing or H5.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:contract",
@@ -538,6 +566,20 @@
         "destination": "src/modules/cash/transport/contracts/sales/http/shared/v1/sales-finance-step-authority-v1.schema.json",
         "representation": "exact",
         "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.flow.asyncapi.v1",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.flow.asyncapi.v1",
+        "sourcePath": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+        "destination": "src/modules/cash/transport/contracts/finance/events/v1/finance-flow-v1.asyncapi.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
       }
     ],
     "bindings": []
@@ -545,7 +587,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "finance",
-    "manifestSha256": "084fcfd0b59dc6bf5451dfcccca9093b8e56b3cd9761f799d9756fb536e8522f",
+    "manifestSha256": "81bb51b42768fa1c5cf93dd5ca6950a59a8b55c004701d38e5c9b2c9daf9b9e5",
     "entries": [
       {
         "id": "finance.http.private.v1",
@@ -562,7 +604,9 @@
           "openCashShift",
           "getCashShift",
           "getCashShiftExpected",
-          "getSaleCashResult"
+          "getSaleCashResult",
+          "createFinanceHistoryReadSession",
+          "readFinanceHistoryFacts"
         ],
         "pointers": [],
         "files": [
@@ -680,6 +724,16 @@
           },
           {
             "path": "finance/http/private/v1/finance-internal-v1.yaml",
+            "pointer": "/paths/~1finance~1history-read-sessions/post",
+            "sha256": "32420f32ec882054bcd0bed4711434912eb48d5479c4a492420b1768aec5b25d"
+          },
+          {
+            "path": "finance/http/private/v1/finance-internal-v1.yaml",
+            "pointer": "/paths/~1finance~1history-read-sessions~1{read_session_id}~1facts/get",
+            "sha256": "2cb682b42e27637b36bd38e28713e7bcd124c5d375461228bf1e209848cbd730"
+          },
+          {
+            "path": "finance/http/private/v1/finance-internal-v1.yaml",
             "pointer": "/paths/~1internal~1finance~1sale-cash-results~1{operation_id}/get",
             "sha256": "4bbdbc95d2a5972fa2b3e238887f18b3168f022040fb22d4bc134364990f773a"
           },
@@ -730,6 +784,26 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryItem",
+            "sha256": "d428a4a48a36514c2f2f4f6ec0f08794253151af7547c8692afc076dad05c840"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryPage",
+            "sha256": "9dda8acfe3fa11e91aa3c3c835624dbead87947599720e37e005470c5faee710"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "039c0605db6252fd2f7474a464b8f776ec9bf20beb238d8565e01046303b2cbf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistorySession",
+            "sha256": "a94aa28b30dd8333d878761397847417e076a97fbfaf5fac083d690846b0b5a0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/HttpCashRegister",
             "sha256": "55d8b78d09f353e4e14ba9385903eeaaf690692a3eff93150467c63a0fbc9ad3"
           },
@@ -747,6 +821,16 @@
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/HttpExpected",
             "sha256": "7495042afbc97a1ae72da2de49fefc76b8181c30e679a32067f5c20a77279ac0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpHistoryPage",
+            "sha256": "d1e12044aa5d7e8fe0272dfeea3afeb0ff7bc57b06d2021bbf07e7b016c48de7"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpHistorySession",
+            "sha256": "a47b638633dc22cb71148e4e2550aa15d93a2576757ac4c6435dc4874dc4827e"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -770,6 +854,11 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Range",
+            "sha256": "5df3328a97d25286baff45c34ec865e80a5dcc02be95880320cb74b268cbb2ce"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/RecordResult",
             "sha256": "6c82cbe4f3ff3f75616eb083170847bb52463e21f1719e1a5992c758ffc7b19d"
           },
@@ -789,8 +878,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "0e47e26bf943d501aab0816faee197145357b230b3443a36a3ea8a7d51cbf716",
-        "runtimeSha256": "e826c14c0f6f3924406a4de9ed9cd5eb585f8e922f25a0c84080afbc8fb66237"
+        "selectionSha256": "617a644772cb6228f9c22afc7772329d1afdf8e5bc803ff5c8c948268ac270a8",
+        "runtimeSha256": "515765661648afaa9cb858d5ba369024e440eb654507eb4571c3270c26c005af"
       },
       {
         "id": "finance.http.public.v1",
@@ -806,7 +895,9 @@
           "listCashRegisters",
           "openCashShift",
           "getCashShift",
-          "getCashShiftExpected"
+          "getCashShiftExpected",
+          "createFinanceHistoryReadSession",
+          "readFinanceHistoryFacts"
         ],
         "pointers": [],
         "files": [
@@ -881,6 +972,16 @@
           },
           {
             "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/paths/~1finance~1history-read-sessions/post",
+            "sha256": "b79eab7d0ea9c436a2be07bc026adbadfa3ee512a16cd67f74151c985c86c863"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/paths/~1finance~1history-read-sessions~1{read_session_id}~1facts/get",
+            "sha256": "2d5e26c43f5c3aa090ab1c24d620dd29945093d71082f582411f283870e006d4"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
             "pointer": "/security",
             "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
           },
@@ -916,6 +1017,26 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryItem",
+            "sha256": "d428a4a48a36514c2f2f4f6ec0f08794253151af7547c8692afc076dad05c840"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryPage",
+            "sha256": "9dda8acfe3fa11e91aa3c3c835624dbead87947599720e37e005470c5faee710"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "039c0605db6252fd2f7474a464b8f776ec9bf20beb238d8565e01046303b2cbf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistorySession",
+            "sha256": "a94aa28b30dd8333d878761397847417e076a97fbfaf5fac083d690846b0b5a0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/HttpCashRegister",
             "sha256": "55d8b78d09f353e4e14ba9385903eeaaf690692a3eff93150467c63a0fbc9ad3"
           },
@@ -936,6 +1057,16 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpHistoryPage",
+            "sha256": "d1e12044aa5d7e8fe0272dfeea3afeb0ff7bc57b06d2021bbf07e7b016c48de7"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpHistorySession",
+            "sha256": "a47b638633dc22cb71148e4e2550aa15d93a2576757ac4c6435dc4874dc4827e"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/OpenShiftRequest",
             "sha256": "824b50e5ec518669ed566f6c426728651c4ddbae05d311db5cc2d5952c1cfc71"
           },
@@ -951,6 +1082,11 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Range",
+            "sha256": "5df3328a97d25286baff45c34ec865e80a5dcc02be95880320cb74b268cbb2ce"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$id",
             "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
           },
@@ -960,8 +1096,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "4a1e5006aeee30efb056b618ff041ba23a0581500dfba2d9f6b4b40a6d6aac18",
-        "runtimeSha256": "3c6473b5d08523a98e9e378e3e0b8c5b67edd5820cf36b922cc67816f37a432b"
+        "selectionSha256": "59d3aec834fd6724d6e87d118468d5742f882d74bc8a0c249c9e395cb32a0ea5",
+        "runtimeSha256": "cef732f2ca78917ddaa23d37701970c4e52e411fabd93cfdb924008ff13990ed"
       },
       {
         "id": "finance.types.v1",
@@ -984,7 +1120,10 @@
           "/$defs/Movement",
           "/$defs/RecordCash",
           "/$defs/Payment",
-          "/$defs/RecordResult"
+          "/$defs/RecordResult",
+          "/$defs/HistoryRequest",
+          "/$defs/HistorySession",
+          "/$defs/HistoryPage"
         ],
         "files": [
           {
@@ -1073,6 +1212,26 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryItem",
+            "sha256": "d428a4a48a36514c2f2f4f6ec0f08794253151af7547c8692afc076dad05c840"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryPage",
+            "sha256": "9dda8acfe3fa11e91aa3c3c835624dbead87947599720e37e005470c5faee710"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "039c0605db6252fd2f7474a464b8f776ec9bf20beb238d8565e01046303b2cbf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HistorySession",
+            "sha256": "a94aa28b30dd8333d878761397847417e076a97fbfaf5fac083d690846b0b5a0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/Movement",
             "sha256": "e93abacbc67395df574198a3dcfff9d72fe6df4120170c5dad8cbca21aaa772d"
           },
@@ -1095,6 +1254,11 @@
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/Payment",
             "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Range",
+            "sha256": "5df3328a97d25286baff45c34ec865e80a5dcc02be95880320cb74b268cbb2ce"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -1127,8 +1291,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "e566bc8ef4852c676302e476701b0a65cfd446c38281300b6eb092dc1f098405",
-        "runtimeSha256": "e566bc8ef4852c676302e476701b0a65cfd446c38281300b6eb092dc1f098405"
+        "selectionSha256": "946cf6b197f5b69d4f2a1b9bf8b409df2c88e16de72059a742e2bec08d43de94",
+        "runtimeSha256": "946cf6b197f5b69d4f2a1b9bf8b409df2c88e16de72059a742e2bec08d43de94"
       },
       {
         "id": "finance.protocol-policy.v1",
@@ -1156,7 +1320,9 @@
           "/payment",
           "/semantic_identity",
           "/retries",
-          "/compatibility"
+          "/compatibility",
+          "/operations/5",
+          "/operations/6"
         ],
         "files": [
           {
@@ -1232,6 +1398,16 @@
           },
           {
             "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/operations/5",
+            "sha256": "631acccc35c4dcc7e1f2aaa211f709137cf0c5b5db21a0d27c99fd53b068691f"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
+            "pointer": "/operations/6",
+            "sha256": "8423c114c5e6bf401405fd52653f3136b84b859469637914b13ed4452f4e02e2"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-protocol-policy-v1.json",
             "pointer": "/payment",
             "sha256": "facdc9c216b991e26687f1df059e0900052d54cc954cb070aacffa67ad769187"
           },
@@ -1246,8 +1422,8 @@
             "sha256": "c0c80030f24870033171c786694fa8ea7063804e5d7392cb53e12592aa147f83"
           }
         ],
-        "selectionSha256": "57851430c249e07111bc6c0ae54fe28e0194e1bc92b5c11e0563fff6c071a9fc",
-        "runtimeSha256": "57851430c249e07111bc6c0ae54fe28e0194e1bc92b5c11e0563fff6c071a9fc"
+        "selectionSha256": "6bdacb0eef1f080b04ef70a67fa57e4004d58082412c372f294fa2422433734b",
+        "runtimeSha256": "6bdacb0eef1f080b04ef70a67fa57e4004d58082412c372f294fa2422433734b"
       },
       {
         "id": "finance.lifecycle-policy.v1",
@@ -1677,7 +1853,9 @@
           "/permissions/3",
           "/permissions/4",
           "/profiles/2",
-          "/profiles/3"
+          "/profiles/3",
+          "/permissions/5",
+          "/permissions/6"
         ],
         "files": [
           {
@@ -1718,6 +1896,16 @@
           },
           {
             "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "pointer": "/permissions/5",
+            "sha256": "8f6773aa58fc73edb54c917f4c990d100360bf43b3035c223e500aea8d8bcd75"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
+            "pointer": "/permissions/6",
+            "sha256": "042cff6331319f0ded3caf1cb7ab7e00be25b18408f73d4c96bf6a3134905f49"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-authority-policy-v1.json",
             "pointer": "/profiles/0",
             "sha256": "e6bcb212a7dafe4fb8cd4532ea2ea7bb7cdc55792ff76f26bc49f0c5f60b2c5e"
           },
@@ -1737,8 +1925,8 @@
             "sha256": "804ea73f97ca7d9af02eb98aca65c29dc67eebc68461860acfe9f946865a6eea"
           }
         ],
-        "selectionSha256": "61a89474096571e3f9766c3d6daac4a0d0c5d535aae864e46b253621d9950cd4",
-        "runtimeSha256": "61a89474096571e3f9766c3d6daac4a0d0c5d535aae864e46b253621d9950cd4"
+        "selectionSha256": "ced5082c85af75af7ef956a5c580ee073529995993b51d92145d8ce834cb8d42",
+        "runtimeSha256": "ced5082c85af75af7ef956a5c580ee073529995993b51d92145d8ce834cb8d42"
       },
       {
         "id": "identity.internal-auth.v1",
@@ -2381,6 +2569,286 @@
         ],
         "selectionSha256": "41a7a1532a992c57ebe249548ac11f7d382eec0a133f0f68184bdc35e7f0a19b",
         "runtimeSha256": "41a7a1532a992c57ebe249548ac11f7d382eec0a133f0f68184bdc35e7f0a19b"
+      },
+      {
+        "id": "finance.flow.asyncapi.v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "sha256": "357a34778ee40600c115f5725db64d2f011afccb4dc0b09a35195512d113bf5f"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "sha256": "7e1c6de3cf917746f3216f2defd51d8f2b4edce3d766a145c5a51557e0da3098"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "sha256": "856e7fa71a785203cf493851933d719f00ee3e5cbaade8f885fb41bc80f374c5"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+            "sha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "sha256": "4856946f6c53c66bebbb509137c7a3e4942dccff9b019afb07acf774a680b5f3"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+            "sha256": "fdf85514fff6d30086601475b1e9b8af91ad4228b700b707b18afa1691653691"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+            "sha256": "0d57a3d4ddcab6caeb04ff000181e2fb87dbc1f2f1ea0a0a2338b831f3d8c1b1"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "sha256": "bd06fdc046ff190a5028db8f811e14195b6854189d9f841f0e23c9a925056e04"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          }
+        ],
+        "units": [
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "da7d4159182dd8fe234d26a2373b692917b4b3129d2fefba1cc217607b8b0562"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "03ca3208259f5c98b61914b9c5e598c31507347aea16f85d44bfada1e5ebd632"
+          },
+          {
+            "path": "commands/command-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "3afa8ba2191f63ecf0a936bb268916aa8dcb84682645ea2853bb9556a6e3b73d"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a1aaa7e96eeb791cb07517cddba433d954da78f3b235fbce6bb9e525e83bbe74"
+          },
+          {
+            "path": "commands/command-result-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "",
+            "sha256": "dc34a289799cbc100fd3becc9c6f8a7ce74d0b1df4cce483a91a1747f51e5738"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5c6356a384a4eb7d4d75beea83a446c5415d18ca754a4890ee2a9659c54b6413"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.result.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+            "pointer": "",
+            "sha256": "490881f477ef1f56ec058a35df2e881f665c15d5619d833d7ea6b2319a03e883"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a661a2bc7d4f82ded9049f0fc5f6f6430855a61bc42b6e7fcf28670af0299827"
+          },
+          {
+            "path": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "",
+            "sha256": "a082bf82ad7eecfaf890301c79e69434ee402d5dd3ac39bbb60218a1c4942f6c"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/channels/commands",
+            "sha256": "36a0661b561a72ec441a590c8445e228959fc0716ea551098f9345b1afdb61b2"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/channels/events",
+            "sha256": "d2542b13b0e4377275595064f41d5df888ba3be3dd26b021ab4f43746d1e4b60"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/channels/results",
+            "sha256": "e06577a428beb7e2bf6619f8c0a2ffc9f1021d1682ec4c1e98d607ff79626a68"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/components/messages/finance.cash-movement.recorded.v1",
+            "sha256": "c67ab84d08fa7f204ad229ced81eb5e6ebab5e372941f47a8e332bcf988964ba"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/components/messages/finance.cash-shift.opened.v1",
+            "sha256": "010cfbe23c0916e8c0264d7634ffda33847bf77b5a38efd0d5f3c3be1bbbe8b4"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/components/messages/finance.record-sale-cash.result.v1",
+            "sha256": "c6c9389c08f456d985f071a8da148c6329efd8dfba01644cb88ef18e3c71ca45"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/components/messages/finance.record-sale-cash.v1",
+            "sha256": "92ff8b45705d45e28cd3e51fa72e6ce50eabc463c440f8803a203e6c3bb4ccbe"
+          },
+          {
+            "path": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+            "pointer": "/components/messages/finance.sale-payment.recorded.v2",
+            "sha256": "549747d19b0f7db0fa9fbf35a81cfdcf2d4050fe8c6a540f8b788763c2ffaadf"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+            "pointer": "",
+            "sha256": "60279328767f6650d6b74d965c0681e92aeca1c52a966fe3aa2353feb1d24901"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "98aab5af77abda6be8cfca92e87adfd11dd4ee60d5fc4837d1472ea32a5b6c54"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-movement.recorded.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+            "pointer": "",
+            "sha256": "e5a82ba7fbfddd81a0133e27a584d6f9d5953c5d16f7c235239a8b8305149ca1"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "270fcea79d066d8df661b5b33cd50ecc3ae7ae7120abaff215c11d9dc133f478"
+          },
+          {
+            "path": "finance/events/v1/finance.cash-shift.opened.v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "",
+            "sha256": "d76580dbbbc7aa6c94804def031781d72f104448959d9e395c99de1bfdc8ad9a"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "12c092dda65a721aa88e0a462a0d14f64bbba873d0ec4105613b2473a8751a80"
+          },
+          {
+            "path": "finance/events/v2/finance.sale-payment.recorded.v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashAmounts",
+            "sha256": "d5e4c5efdf4480a4252a99e32b1b4f64e28744b4d85f2e4ae0471e5dff93d1a3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "bf376385a5e4afabf89ec972f08d74b7d28a7a8cc93c78e85d63ea326a81b805"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/FailedCash",
+            "sha256": "18041d3fc1a35a5b648d39b533335f8b48a32907184b37cba60d145d543fe08c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "e93abacbc67395df574198a3dcfff9d72fe6df4120170c5dad8cbca21aaa772d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Payment",
+            "sha256": "37b861da9ad4b369c69cce17dcc0accb012b4c00ac72e1c29409b58e012203cf"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/RecordCash",
+            "sha256": "afa4c7dde737ba5d3af48c7b287cda14ef633ca4198250318392667b2efd1cb5"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/ShiftOpened",
+            "sha256": "8e849d2c7583959d7eab999505a6c581c510cb96be919565de5cb563535cb173"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/StockEvidence",
+            "sha256": "73a8954a084e09d81ecd9405261869262a205a9a542b90ecb33bbe79f583ac7d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "52276ccf75e3a69aa68542a03022bfa07bf85aeef0ca51bd95f5b929a8bc579b",
+        "runtimeSha256": "52276ccf75e3a69aa68542a03022bfa07bf85aeef0ca51bd95f5b929a8bc579b"
       }
     ],
     "assets": [
@@ -2683,6 +3151,26 @@
         "sourceSha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f",
         "semanticSha256": null,
         "localSha256": "a374488b5bc2da3b8b544328bcbc1683ac02457a9429cca12197b8943659924f"
+      },
+      {
+        "contractId": "finance.flow.asyncapi.v1",
+        "sourcePath": "finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+        "destination": "src/modules/cash/transport/contracts/finance/commands/v1/finance.record-sale-cash.v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca",
+        "semanticSha256": null,
+        "localSha256": "5488b7151784fa779b85933dbab49fd423bef0c799b4383a87fcc5035a23d6ca"
+      },
+      {
+        "contractId": "finance.flow.asyncapi.v1",
+        "sourcePath": "finance/events/v1/finance-flow-v1.asyncapi.yaml",
+        "destination": "src/modules/cash/transport/contracts/finance/events/v1/finance-flow-v1.asyncapi.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "4856946f6c53c66bebbb509137c7a3e4942dccff9b019afb07acf774a680b5f3",
+        "semanticSha256": null,
+        "localSha256": "4856946f6c53c66bebbb509137c7a3e4942dccff9b019afb07acf774a680b5f3"
       }
     ]
   }

@@ -100,3 +100,7 @@ Finance se incorpora como octavo consumidor conocido con cinco operaciones de ca
 ## F1-12C — Selección consumidora de cobro atómico
 
 Amplía únicamente Finance: comando consumer compatible, resultado productor estricto, payment v2, consulta privada y autoridad Sales. Conserva los pins anteriores y los siete consumidores ajenos; sin cambios en transportes publicados. Export publicado de Finance `8986e5270384017125e2692a1def0827eaf90909`, con [CI completa conforme 8/8](https://github.com/OpenComerix/finance/actions/runs/42566229211). La ampliación de Contracts requiere su CI completa exacta antes de consumo o gitlink; estado en ESTADO del launcher. No acredita runtime, broker, lector histórico ni cierre H5. Gate: `node --test test/finance/payment-consumer-v1.test.mjs`.
+
+## F1-12D — Selección de entrega e historia
+
+Candidato local de Finance: dos operaciones históricas, sus DTO/permisos publicados y AsyncAPI. Conserva fuentes, pins B/C y los siete consumidores ajenos; no modifica transportes publicados. La publicación del export requiere la revisión Finance auditada y su CI exacta; este candidato no acredita publicación, broker real, recuperación SQL ni H5. Gate propio: `node --test test/finance/delivery-consumer-v1.test.mjs`; estado en ESTADO del launcher.
