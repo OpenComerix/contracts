@@ -5,6 +5,7 @@ import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import {admissionToolFiles, projectPreparationAdmissionFile, projectPreparationAdmissionDocument,
   withPreparationAdmissionScope} from './preparation-admission-v1.mjs';
+import {acceptanceConsumerFiles, projectAcceptanceConsumerFile, projectAcceptanceConsumerDocument} from './acceptance-consumer-v1.mjs';
 
 export const preparationBase = '86259b440a95bbdf4b0d0f47547bd7632a877bfe';
 const root = path.resolve(import.meta.dirname, '../..');
@@ -26,6 +27,7 @@ export const preparationNewFiles = Object.freeze([
   'scripts/sales/preparation-v1.mjs', 'scripts/sales/preparation-history-v1.mjs',
   'scripts/sales/validate-preparation-v1.sh', 'test/sales/preparation-v1.test.mjs',
   ...admissionToolFiles,
+  ...acceptanceConsumerFiles,
 ]);
 const ownerLinks = domain => domain === 'identity'
   ? '[Perfiles técnicos](http/shared/v1/identity-sale-preparation-workloads-v1.json). '
@@ -137,12 +139,14 @@ export function preparationMetadata() {
 // Pure exact per-value projection: no other live file, historical validator or
 // successful approval is consulted. Unknown/drifted caller input is untouched.
 export function projectPreparationFile(file, bytes) {
+  bytes = projectAcceptanceConsumerFile(file, bytes);
   bytes = projectPreparationAdmissionFile(file, bytes);
   if (!metadataFiles.has(file)) return bytes;
   const expected = metadataModel().get(file);
   return expected && text(bytes) === text(expected) ? Buffer.from(source(file)) : bytes;
 }
 export function projectPreparationDocument(file, value) {
+  value = projectAcceptanceConsumerDocument(file, value);
   value = projectPreparationAdmissionDocument(file, value);
   if (!metadataFiles.has(file) || !file.endsWith('.json')) return value;
   const expected = metadataModel().get(file);

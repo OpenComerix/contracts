@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "local-candidate",
   "sourceRepository": "opencomerix/sales-pos",
-  "sourceCommit": "b6407da6e3367a6dffd138f667175d4cf57ff9ad",
-  "manifestSha256": "087711262579df9d0bed80ce0706770d7c3bcca0ffb57d047933359f4e91f772",
-  "lockSha256": "1aa0dca23d016db51a21efbf36cfe48f8051c129a0ab32379fc3f54d4b9d8f32",
+  "sourceCommit": "46a4ef811b4095280b382d4a31ca2ea53a4cd4a6",
+  "manifestSha256": "0269b1c50264a2fe3f570276490fd372f1b6955db64160519fe10075ab4b343b",
+  "lockSha256": "ff1d6a908687d6a75ec82f67d0c6cf328cce55b2b7de18440aed0e93c8aa5f7c",
   "manifest": {
     "formatVersion": 1,
     "service": "sales-pos",
@@ -337,6 +337,253 @@
           "pnpm test:integration",
           "pnpm test:process-authority-runtime"
         ]
+      },
+      {
+        "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "authorizeSaleCatalogCapture"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "sales.context-check-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-10e.sales-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/$defs/CanonicalRequest/oneOf/0",
+          "/$defs/ClientSignal",
+          "/$defs/Authorization",
+          "/$defs/AuthorizationRequest/properties/delegation_jwt"
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "checkSalesAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/profiles",
+          "/issuance",
+          "/permissions/0"
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "catalog.f1-10e.sale-capture.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/$defs/CaptureRequest",
+          "/$defs/Capture"
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "inventory.sale-context.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request"
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "finance.sale-context.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request"
+        ],
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:process-authority-runtime"
+        ]
+      },
+      {
+        "id": "sales.f1-10d.pos-sales-internal-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "finalizeOnlineSale",
+          "getSaleFinalization"
+        ],
+        "pointers": [],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
+      },
+      {
+        "id": "sales.f1-10d.sales-lifecycle-policy-v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
+      },
+      {
+        "id": "sales.f1-10d.sales.sale.completed.v2",
+        "role": "validation",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
+      },
+      {
+        "id": "catalog.f1-10d.catalog-sale-capture-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "captureSaleCatalog"
+        ],
+        "pointers": [],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
+      },
+      {
+        "id": "inventory.sale-context.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
+      },
+      {
+        "id": "finance.sale-context.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "checkFinanceSaleContext"
+        ],
+        "pointers": [],
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:integration",
+          "pnpm test:preparation-connected"
+        ]
       }
     ],
     "assets": [
@@ -570,6 +817,139 @@
         "destination": "src/modules/sale-process/transport/contracts/inventory/http/private/v1/inventory-internal-v1.yaml",
         "representation": "exact",
         "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "sourcePath": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "sourcePath": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "sales/http/shared/v2/sales-types-v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-types-v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.f1-10d.identity-sales-authority-v1",
+        "sourcePath": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "sourcePath": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "identity.sale-preparation-workloads.policy.v1",
+        "sourcePath": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.sale-context.schema.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.sale-context.schema.v1",
+        "sourcePath": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/finance/http/shared/v1/finance-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.f1-10d.pos-sales-internal-v2",
+        "sourcePath": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v2/pos-sales-internal-v2.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-lifecycle-policy-v2",
+        "sourcePath": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "sales.f1-10d.sales.sale.completed.v2",
+        "sourcePath": "events/event-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/events/event-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "sales.f1-10d.sales.sale.completed.v2",
+        "sourcePath": "sales/events/v2/sales.sale.completed.v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/events/v2/sales.sale.completed.v2.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "catalog.f1-10d.catalog-sale-capture-v1",
+        "sourcePath": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.sale-context.http.v1",
+        "sourcePath": "finance/http/private/v1/finance-sale-context-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/finance/http/private/v1/finance-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
       }
     ],
     "bindings": []
@@ -577,7 +957,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "sales-pos",
-    "manifestSha256": "087711262579df9d0bed80ce0706770d7c3bcca0ffb57d047933359f4e91f772",
+    "manifestSha256": "0269b1c50264a2fe3f570276490fd372f1b6955db64160519fe10075ab4b343b",
     "entries": [
       {
         "id": "sales.inventory-step-authority.http.v1",
@@ -2665,6 +3045,1939 @@
         ],
         "selectionSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad",
         "runtimeSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad"
+      },
+      {
+        "id": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+        "operations": [
+          "authorizeSaleCatalogCapture"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "sha256": "ef739a6e9a07fd69a4848e6922786908a48a54868b2b0ced80c46d9d0f44d0e5"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+            "sha256": "8e2b4b5a351ee7276a4f95b7c66f12ed4adc37a0a9cb7ba0153d413e10db1b3b"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/paths/~1internal~1sales~1catalog-capture-authorizations/post",
+            "sha256": "fc5726d9f806dd6eee83a96b5da3e6d710898c40aa8a2f1b9c88ea3555b0f77e"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "ddbab80a93ec524fc17de7feb4629eabe973f14844485d10b435fc290c987ae7"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "c8810db85ec8a3c6d4c28a03732313e0bc77d25f753492b0f0ee3a73d7587370"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "be130acfa91e567efb303e97c24a6c68f5cab3bf8655b7c813e311dbfdd93266"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "c74efcae12671c0a91c56e2457582a73172ca063ab893f70ffda08a4d3813792",
+        "runtimeSha256": "023f6a3651692d8b6091d4a611ead470733245db19a0de9e901b02ecdcf4d1f3"
+      },
+      {
+        "id": "sales.context-check-authority.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "sha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "sha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1sales~1context-check-authorizations/post",
+            "sha256": "853b27f6513e394b672844afe6d35477b89d0de06daad7130730d5dc774fa010"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "a782fdb895832404cd677c10636d75f65d4add3209411b4c8ba93995b086ec3a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "9025b7fd7d839730ea151d4bd049b3a8b97ea8b9ceef9d47bba88471f615ad6b"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e03bfa78146f1842bde11e93ddb8e24abcc1e8f533154711d6d7f2a2520e08f4"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "79c31b36656a1ca84e3d2d02e0328746c1b2add2c82e95197a20640cfde986c5",
+        "runtimeSha256": "6b1d3283fd6c6a16a9c24d7ebe8aff13c4433fe3e32c4894721e8f1e89dcdfc1"
+      },
+      {
+        "id": "identity.f1-10e.sales-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          "/$defs/CanonicalRequest/oneOf/0",
+          "/$defs/ClientSignal",
+          "/$defs/Authorization",
+          "/$defs/AuthorizationRequest/properties/delegation_jwt"
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "54481e21e4088f160139c2e976db721b867d0c4b382da870242f5a68c1647b1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest/properties/delegation_jwt",
+            "sha256": "cc38484fd6038d18a66b0a52ac56e6c06205032cb9e3b9e577cd68e1b65c5a9a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/0",
+            "sha256": "e5df1a44a367b55a93ce701f9d55a21e6d158abcc1c979c4bc44e4798d17a2d6"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "a301110e180e0574da475b898d8ec753dd7395a3af3d48a507e25a51527b4e5b",
+        "runtimeSha256": "a301110e180e0574da475b898d8ec753dd7395a3af3d48a507e25a51527b4e5b"
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "operations": [
+          "checkSalesAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "sha256": "12dd660d0c139a140bf7d968e298d5885ceed2361de8b27b81be815dcd676bfe"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1sales-authorizations/post",
+            "sha256": "32121ecd50e2ff1fa651fb26a2b9d05b91cb424427505a1fbe833900a7afe169"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "54481e21e4088f160139c2e976db721b867d0c4b382da870242f5a68c1647b1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "7297dd94e1cc0eeb1e7b042e6173098aa4a508e713d84beb8018b53f6e618c2a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "9613ad9405c06317b125025e6ffbcefa9f193aa0e53a86c8a0490ae025155f18"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "9394242e49999319b96c8326970c08b6e8511c298537c13ded06900e3167b04c",
+        "runtimeSha256": "6f407344a366a31e858037fa22fcabc1b5d5d93b00ba7ed89ba13bb862533ad4"
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          "/profiles",
+          "/issuance",
+          "/permissions/0"
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "sha256": "ea3c7fb9234c903aa56c0a5007bc427e7a0535336606185fa01ae49eb40d548b"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/issuance",
+            "sha256": "d05209826681207bba1f83e5754c83aa073fb95de012f04223320b63eb6b332f"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/0",
+            "sha256": "fd59d31095d11e377baf804d76d1abc8431b3b63e4f8bbcd38a6519cb9e76f9d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/profiles",
+            "sha256": "9d0ca025fe9e46dfa184a5d1f72d9cd03e8c6d53a8b28db485e5187358a8361c"
+          }
+        ],
+        "selectionSha256": "84433e06ad9057c6049d7022a0ca628143b5005fa18d4fc26c6ce4bda1878c0e",
+        "runtimeSha256": "84433e06ad9057c6049d7022a0ca628143b5005fa18d4fc26c6ce4bda1878c0e"
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "sha256": "199a7bbaa207f03794370cddeb5bdf3a240a912b4be07004a105ff5d255ea82a"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "",
+            "sha256": "ef5c7d3767580f229f1f2caffaaa4ca6a154c3992a8ff4360e554fdb885b22b0"
+          }
+        ],
+        "selectionSha256": "b52d087ce1fe74b0af354045eff0bfd8712ad071cc9b61a4f466dfc73dfb18ee",
+        "runtimeSha256": "b52d087ce1fe74b0af354045eff0bfd8712ad071cc9b61a4f466dfc73dfb18ee"
+      },
+      {
+        "id": "catalog.f1-10e.sale-capture.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          "/$defs/CaptureRequest",
+          "/$defs/Capture"
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Capture",
+            "sha256": "4a9893a4fbdf1e49445393f4e833b78d1c75c45b6f29280a4ac1fe962198e26f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CaptureRequest",
+            "sha256": "46903c7d9c8f1f83e397b498b757a25f22cf598597bbd492491f73841ed1b539"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Classification",
+            "sha256": "4b6a72f892928685522cb32e9e0fe58e2594befaa6ff1dc07b661e8baf16fdf2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationComponent",
+            "sha256": "5c9e4c54c16c8ea1a1990ee276a94e07dc6a28acac05138c7734bb1f03761ad1"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationRule",
+            "sha256": "dca13d35885c23a6ce2e9436ae74ef2a695f47e4fa32f1229b77408127238f27"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CommercialSnapshot",
+            "sha256": "1527bd38d1d512d3a1f7a7f7c1be4bdcfc05514f3a03e2e656337a0d2355fb9e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "d560b8fe7b4e50a3819dc826d0ae3cdf6664ff65781981d979b54d82b7a5608f",
+        "runtimeSha256": "d560b8fe7b4e50a3819dc826d0ae3cdf6664ff65781981d979b54d82b7a5608f"
+      },
+      {
+        "id": "inventory.sale-context.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request"
+        ],
+        "files": [
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "sha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+          }
+        ],
+        "units": [
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "7ed16c884371887999d23ae22d26e14749726c5341018bbedddd08f1a228ac07"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "40bce3083e18076d7a59f059b2fa5f7afd6aa49a33e80f1c8307368f16e7d3e2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "268cf9f3061bcf9e5400c390c17f9f02638f34924ebbe2ae749b3ae500d063a0",
+        "runtimeSha256": "268cf9f3061bcf9e5400c390c17f9f02638f34924ebbe2ae749b3ae500d063a0"
+      },
+      {
+        "id": "finance.sale-context.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          "/$defs/Request"
+        ],
+        "files": [
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "sha256": "b05d5f28d2291dbda2ea662edcc419978b9906a92c944f1a732f18f2541636bf"
+          }
+        ],
+        "units": [
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "63f14eb2923510bd67fb095711187ee765145afc2ab6e48260105824b3ca31ec"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "016ef354182aeed2205c836017580626e6f2b067d4e818556549bd0554b30145"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "5b0179e678ff9547f3d2e87c73f74056a55f09bd0c40302ea722a57223c4f466",
+        "runtimeSha256": "5b0179e678ff9547f3d2e87c73f74056a55f09bd0c40302ea722a57223c4f466"
+      },
+      {
+        "id": "sales.f1-10d.pos-sales-internal-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+        "operations": [
+          "finalizeOnlineSale",
+          "getSaleFinalization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "sha256": "2f5ed7c60b45cb1e01cb0781e58c682dd7373a1cec15376d078791931ec86b51"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Classification",
+            "sha256": "4b6a72f892928685522cb32e9e0fe58e2594befaa6ff1dc07b661e8baf16fdf2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationComponent",
+            "sha256": "5c9e4c54c16c8ea1a1990ee276a94e07dc6a28acac05138c7734bb1f03761ad1"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationRule",
+            "sha256": "dca13d35885c23a6ce2e9436ae74ef2a695f47e4fa32f1229b77408127238f27"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CommercialSnapshot",
+            "sha256": "1527bd38d1d512d3a1f7a7f7c1be4bdcfc05514f3a03e2e656337a0d2355fb9e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/components/securitySchemes/delegation",
+            "sha256": "84d2a648d545df2f230f37013d002c67de3edbdcccd07d8b6fd3924ec66162e3"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1finalizations/post",
+            "sha256": "ed64cfa37e3975432d112b586e882268f64c7a2337ff024085912f110eba64c7"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1finalizations~1{operation_id}/get",
+            "sha256": "7bf85be66c0730929652147414c1fa8542c745eb776d1329ff4b7f4ca9111b15"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/security",
+            "sha256": "31bc6fa95175f3ce7bdd040053dca5dbbb17cd76b62133759d3865d434456568"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Accepted",
+            "sha256": "a53c8fc0bc42c00513fbcd4fe5f56532ea07ca6e39514335d5bd37b3fab16ffc"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/BaseQuantity",
+            "sha256": "5d70ef47a7ade479594c1dfcbeed2eaedbfb7a406d3148a4a992343c70142b25"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/CommercialNumber",
+            "sha256": "6ed63dc3fc08e4f7afd338fadc01a4a894bf0e1235631f5b547574f4d0c6b7de"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/CompensationEffect",
+            "sha256": "7638184d5c699a62a35233ff713ce1330173d84417275f500963f50aa7ee0d00"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "8fba41fa511ad4fd281fdecc80316171e54b19dcabdbc645f32999093987cb6a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalContext",
+            "sha256": "8c1840714e52d09b672442f9cb1425e4b55bb877dc0680bcc645194689f06f4c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalPending",
+            "sha256": "e8f44acb4b66d6fc1eb9c609047b7b6c5146a0b0c5e78fec99ee4294fd3e101d"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalResolved",
+            "sha256": "dfa226ed0f79190b6ad3fb2acbf9de06288bef8e9ad1aa5f6a12b1786477c8c9"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HttpAccepted",
+            "sha256": "12a43d35551d674692ce1c15593128764b9793131aa757d8da0686621f9dff5b"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HttpOperation",
+            "sha256": "677cbeaaf7dd0c69c8ff168e9fa90b5bd76d82c5239810c31b75fd644b6ae4d2"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Intermediate",
+            "sha256": "6b3a31f6d6269a20ce49b83a7ee32f4f2d4fd77afb30f6f48b4bbedbac889d8a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Jurisdiction",
+            "sha256": "39fe48159c205e51b399a9f33a14363181e4a21bb37bb2bde5351bac0c2ebbaf"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Line",
+            "sha256": "4fa24992384a058a76cef2b9d053ca315d0bd7692f59bc13d8cccc7dc575a091"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Money",
+            "sha256": "905f5bc01ff1de41ccb2d7aeb20af3c8c9f164c8b1b7421be717ddc4b167979e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Operation",
+            "sha256": "e9b1ddf31eb470c8cb7704eec2a5ba78b352fc4dd17c56092511f0483f70f70c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/PaymentEffect",
+            "sha256": "424b5c0c5239ea554e8d9e3ef135d73d6d91bfb7bed3933446ddd180bd582d63"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Quantity",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Recipient",
+            "sha256": "f8e93b0f648f786c4e9c74f82540be379a1e95c76f019eb59765371a8b8daf71"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Rule",
+            "sha256": "89aba729837e44fc1025b109b9df5ab6084c42291a332ea49875ea54c7244013"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Sale",
+            "sha256": "a6d18ac4392831ece6df041a2233b8820e0e7ec54bedddcc96f1da68d161a8f1"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/SignedIntermediate",
+            "sha256": "23af0f38eb604228d67ccf9835238dde5a3ba9427e56a0f80162b040d32fc6e6"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/StepState",
+            "sha256": "bfe0038754b756c85d6415103390d7c5c2c52a92a9630465d95fce4f89f13a29"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/StockEffect",
+            "sha256": "c533487cc9e45caa082795376ebf0d878b661773b941661a647767cca4f44883"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxComponent",
+            "sha256": "507e2540865ae9810de8518e5ae188e54bc0b2c845e1b0ab9914cb48c7f1245f"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxGroup",
+            "sha256": "07e2399cbf9716b35007f16a11345a49db7b38a7ba80d5fbe95c44aa93c7a28a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxIdentity",
+            "sha256": "c4bf4cc0153772c506920af9e0ab4296aa3745b69e2e4902b215608202070f57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxLine",
+            "sha256": "a2df4c33094f4fc4ab1bc02a6f6b220f52e44502eb593ec708ae171c7c2b4b0f"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "284675df2e1cf2d45ffbcc097ffefc96db88b56e2144617e849a5c90898c0554",
+        "runtimeSha256": "9309496ee3d7dc8c57f79b4d6b5580dcc4ef50d3c9ac082e476ae75e509d5d97"
+      },
+      {
+        "id": "sales.f1-10d.sales-lifecycle-policy-v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+            "sha256": "3c5092907e793d227ad248f8377f3e6f71a104eee115bcef1b4581040928d11f"
+          }
+        ],
+        "units": [
+          {
+            "path": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+            "pointer": "",
+            "sha256": "3dfd9c1b538b9d2b13cb13e218ab779e9e5c024ef0c8fe8dee700636395652ed"
+          }
+        ],
+        "selectionSha256": "86515580dfc99be5642184d6294fbf788d04960ed32b991ea5276923a6c776bc",
+        "runtimeSha256": "86515580dfc99be5642184d6294fbf788d04960ed32b991ea5276923a6c776bc"
+      },
+      {
+        "id": "sales.f1-10d.sales.sale.completed.v2",
+        "role": "validation",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/events/v2/sales.sale.completed.v2.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "sha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+          },
+          {
+            "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+            "sha256": "8df75de9151930618635beffd333d580192d1881923ce7be8ce9f1bc93804b6d"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Classification",
+            "sha256": "4b6a72f892928685522cb32e9e0fe58e2594befaa6ff1dc07b661e8baf16fdf2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationComponent",
+            "sha256": "5c9e4c54c16c8ea1a1990ee276a94e07dc6a28acac05138c7734bb1f03761ad1"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationRule",
+            "sha256": "dca13d35885c23a6ce2e9436ae74ef2a695f47e4fa32f1229b77408127238f27"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CommercialSnapshot",
+            "sha256": "1527bd38d1d512d3a1f7a7f7c1be4bdcfc05514f3a03e2e656337a0d2355fb9e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "",
+            "sha256": "ce198245eae7bccc353df6860e2f10cd3a599a0e235bf307e55ec0c4c8e55c24"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "d4d6e9fbc6f2c5da2978c87d5b6f5cc86665147481ac1107da0bb0fe73565d7d"
+          },
+          {
+            "path": "events/event-envelope-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+            "pointer": "",
+            "sha256": "156b469083742afceebf0605d43b15c4b025971bf25bb612203c6ced062459af"
+          },
+          {
+            "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "fd516aae9ec2db44c61fc426536f5216df5992cf7308f4ec457d67f8d9aede78"
+          },
+          {
+            "path": "sales/events/v2/sales.sale.completed.v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/BaseQuantity",
+            "sha256": "5d70ef47a7ade479594c1dfcbeed2eaedbfb7a406d3148a4a992343c70142b25"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/CommercialNumber",
+            "sha256": "6ed63dc3fc08e4f7afd338fadc01a4a894bf0e1235631f5b547574f4d0c6b7de"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Context",
+            "sha256": "8fba41fa511ad4fd281fdecc80316171e54b19dcabdbc645f32999093987cb6a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalContext",
+            "sha256": "8c1840714e52d09b672442f9cb1425e4b55bb877dc0680bcc645194689f06f4c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalPending",
+            "sha256": "e8f44acb4b66d6fc1eb9c609047b7b6c5146a0b0c5e78fec99ee4294fd3e101d"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FiscalResolved",
+            "sha256": "dfa226ed0f79190b6ad3fb2acbf9de06288bef8e9ad1aa5f6a12b1786477c8c9"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Intermediate",
+            "sha256": "6b3a31f6d6269a20ce49b83a7ee32f4f2d4fd77afb30f6f48b4bbedbac889d8a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Jurisdiction",
+            "sha256": "39fe48159c205e51b399a9f33a14363181e4a21bb37bb2bde5351bac0c2ebbaf"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Line",
+            "sha256": "4fa24992384a058a76cef2b9d053ca315d0bd7692f59bc13d8cccc7dc575a091"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Money",
+            "sha256": "905f5bc01ff1de41ccb2d7aeb20af3c8c9f164c8b1b7421be717ddc4b167979e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/PaymentEffect",
+            "sha256": "424b5c0c5239ea554e8d9e3ef135d73d6d91bfb7bed3933446ddd180bd582d63"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Quantity",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Recipient",
+            "sha256": "f8e93b0f648f786c4e9c74f82540be379a1e95c76f019eb59765371a8b8daf71"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Rule",
+            "sha256": "89aba729837e44fc1025b109b9df5ab6084c42291a332ea49875ea54c7244013"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Sale",
+            "sha256": "a6d18ac4392831ece6df041a2233b8820e0e7ec54bedddcc96f1da68d161a8f1"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/SignedIntermediate",
+            "sha256": "23af0f38eb604228d67ccf9835238dde5a3ba9427e56a0f80162b040d32fc6e6"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/StockEffect",
+            "sha256": "c533487cc9e45caa082795376ebf0d878b661773b941661a647767cca4f44883"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxComponent",
+            "sha256": "507e2540865ae9810de8518e5ae188e54bc0b2c845e1b0ab9914cb48c7f1245f"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxGroup",
+            "sha256": "07e2399cbf9716b35007f16a11345a49db7b38a7ba80d5fbe95c44aa93c7a28a"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxIdentity",
+            "sha256": "c4bf4cc0153772c506920af9e0ab4296aa3745b69e2e4902b215608202070f57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/TaxLine",
+            "sha256": "a2df4c33094f4fc4ab1bc02a6f6b220f52e44502eb593ec708ae171c7c2b4b0f"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "2a5417e9c65184dbae9cf8333095c670b650dc849d96977f59093cc61329a9ce",
+        "runtimeSha256": "2a5417e9c65184dbae9cf8333095c670b650dc849d96977f59093cc61329a9ce"
+      },
+      {
+        "id": "catalog.f1-10d.catalog-sale-capture-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+        "operations": [
+          "captureSaleCatalog"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "sha256": "f7040876fd27f3eeb8517299669de36aba041cb648066b48389f3da42ec85642"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "f4206f437220846e4d7be6513a884c15749196e1ff207ff9449884da65020006"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/paths/~1internal~1catalog~1sale-captures/post",
+            "sha256": "0f6322059d76b0829099043240fb2d500fa88cafd87b49fcda73cfb321630f96"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "8f3dad25bb50c0071d92a96bf9763f18886df2abba1562eef27c38ca4f549057"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/AggregateVersion",
+            "sha256": "ea288f4ef558f5f1682c9ec4c9395734bd8290c18c696889964cd2b24e1dcfe8"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/CanonicalSku",
+            "sha256": "9def4753c8d3465cc923696d3df811ad82688f9850c502df804ef3260fc93b50"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Capture",
+            "sha256": "4a9893a4fbdf1e49445393f4e833b78d1c75c45b6f29280a4ac1fe962198e26f"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CaptureRequest",
+            "sha256": "46903c7d9c8f1f83e397b498b757a25f22cf598597bbd492491f73841ed1b539"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Classification",
+            "sha256": "4b6a72f892928685522cb32e9e0fe58e2594befaa6ff1dc07b661e8baf16fdf2"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationComponent",
+            "sha256": "5c9e4c54c16c8ea1a1990ee276a94e07dc6a28acac05138c7734bb1f03761ad1"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/ClassificationRule",
+            "sha256": "dca13d35885c23a6ce2e9436ae74ef2a695f47e4fa32f1229b77408127238f27"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/CommercialSnapshot",
+            "sha256": "1527bd38d1d512d3a1f7a7f7c1be4bdcfc05514f3a03e2e656337a0d2355fb9e"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Name160",
+            "sha256": "a46e0829cdbcdb1aa38c6839d0cb996ab27b694e38af6ffcf0aaa0605c400493"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "786214e011dc6f9290fba886fa90ca1a37490232e995df87a5bfb9582f999fbf",
+        "runtimeSha256": "373ab6a3f2bbe81a04d4644e250bced64718557858c782737468c7f36c548dbf"
+      },
+      {
+        "id": "inventory.sale-context.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "sha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "sha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/paths/~1internal~1inventory~1sale-context-checks/post",
+            "sha256": "1abc183c5f64bfb85cea54469061450ec2b8cb5b26db4bde99bf934e667e1ad3"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "7ed16c884371887999d23ae22d26e14749726c5341018bbedddd08f1a228ac07"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Result",
+            "sha256": "a4cb38f34d7fef68adc23514ea1099e0adc392bd8ae7d20a5cdcdf80d02630e8"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "40bce3083e18076d7a59f059b2fa5f7afd6aa49a33e80f1c8307368f16e7d3e2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "56dc7b178b27ceff4c0a6d1a0223b2933bef55d33ed619be8a67865375434833",
+        "runtimeSha256": "7e433c56b42700fd66e9694e002b7698b6a76d37cf527b1a6b11c6dd0359346a"
+      },
+      {
+        "id": "finance.sale-context.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/http/private/v1/finance-sale-context-v1.yaml",
+        "operations": [
+          "checkFinanceSaleContext"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "sha256": "e15450d374178a37ea256ba14801b04f8c48389657b54787740a139d3fa511a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "sha256": "b05d5f28d2291dbda2ea662edcc419978b9906a92c944f1a732f18f2541636bf"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/paths/~1internal~1finance~1sale-context-checks/post",
+            "sha256": "dbb422dad38365ce12d8ef2d3c13975862ddd2c1a8f2c8714cf82ab12dbdf6ca"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "finance/http/private/v1/finance-sale-context-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "63f14eb2923510bd67fb095711187ee765145afc2ab6e48260105824b3ca31ec"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$defs/Result",
+            "sha256": "2a4ea7745d8bf1e2d534ec95e5d65ac0a298221d2312e456935d75f3a646176c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "016ef354182aeed2205c836017580626e6f2b067d4e818556549bd0554b30145"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "084ed70a6ce7e53dd54952f5f1c84a35bed68f52783aeffbffeb42e390d7a562",
+        "runtimeSha256": "47d0dc1ff25445b434b7f42f6c64c42c4d6c03a9df36bc7a7b415e71de4fb553"
       }
     ],
     "assets": [
@@ -2997,6 +5310,196 @@
         "sourceSha256": "c4517bab25bd42bc1e333535b8385ab5503a860738457ed0829967afea988568",
         "semanticSha256": null,
         "localSha256": "c4517bab25bd42bc1e333535b8385ab5503a860738457ed0829967afea988568"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "sourcePath": "sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v2/sales-catalog-capture-authority-v2.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "ef739a6e9a07fd69a4848e6922786908a48a54868b2b0ced80c46d9d0f44d0e5",
+        "semanticSha256": null,
+        "localSha256": "ef739a6e9a07fd69a4848e6922786908a48a54868b2b0ced80c46d9d0f44d0e5"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-catalog-capture-authority-v2",
+        "sourcePath": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "8e2b4b5a351ee7276a4f95b7c66f12ed4adc37a0a9cb7ba0153d413e10db1b3b",
+        "semanticSha256": null,
+        "localSha256": "8e2b4b5a351ee7276a4f95b7c66f12ed4adc37a0a9cb7ba0153d413e10db1b3b"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc",
+        "semanticSha256": null,
+        "localSha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934",
+        "semanticSha256": null,
+        "localSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3",
+        "semanticSha256": null,
+        "localSha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860",
+        "semanticSha256": null,
+        "localSha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+      },
+      {
+        "contractId": "identity.f1-10e.sales-authority.schema.v1",
+        "sourcePath": "sales/http/shared/v2/sales-types-v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-types-v2.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833",
+        "semanticSha256": null,
+        "localSha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+      },
+      {
+        "contractId": "identity.f1-10d.identity-sales-authority-v1",
+        "sourcePath": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "12dd660d0c139a140bf7d968e298d5885ceed2361de8b27b81be815dcd676bfe",
+        "semanticSha256": null,
+        "localSha256": "12dd660d0c139a140bf7d968e298d5885ceed2361de8b27b81be815dcd676bfe"
+      },
+      {
+        "contractId": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "sourcePath": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "ea3c7fb9234c903aa56c0a5007bc427e7a0535336606185fa01ae49eb40d548b",
+        "semanticSha256": null,
+        "localSha256": "ea3c7fb9234c903aa56c0a5007bc427e7a0535336606185fa01ae49eb40d548b"
+      },
+      {
+        "contractId": "identity.sale-preparation-workloads.policy.v1",
+        "sourcePath": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "destination": "src/modules/sale-process/transport/contracts/identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "199a7bbaa207f03794370cddeb5bdf3a240a912b4be07004a105ff5d255ea82a",
+        "semanticSha256": null,
+        "localSha256": "199a7bbaa207f03794370cddeb5bdf3a240a912b4be07004a105ff5d255ea82a"
+      },
+      {
+        "contractId": "inventory.sale-context.schema.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c",
+        "semanticSha256": null,
+        "localSha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+      },
+      {
+        "contractId": "finance.sale-context.schema.v1",
+        "sourcePath": "finance/http/shared/v1/finance-sale-context-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/finance/http/shared/v1/finance-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "b05d5f28d2291dbda2ea662edcc419978b9906a92c944f1a732f18f2541636bf",
+        "semanticSha256": null,
+        "localSha256": "b05d5f28d2291dbda2ea662edcc419978b9906a92c944f1a732f18f2541636bf"
+      },
+      {
+        "contractId": "sales.f1-10d.pos-sales-internal-v2",
+        "sourcePath": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/private/v2/pos-sales-internal-v2.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "2f5ed7c60b45cb1e01cb0781e58c682dd7373a1cec15376d078791931ec86b51",
+        "semanticSha256": null,
+        "localSha256": "2f5ed7c60b45cb1e01cb0781e58c682dd7373a1cec15376d078791931ec86b51"
+      },
+      {
+        "contractId": "sales.f1-10d.sales-lifecycle-policy-v2",
+        "sourcePath": "sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/http/shared/v2/sales-lifecycle-policy-v2.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "3c5092907e793d227ad248f8377f3e6f71a104eee115bcef1b4581040928d11f",
+        "semanticSha256": null,
+        "localSha256": "3c5092907e793d227ad248f8377f3e6f71a104eee115bcef1b4581040928d11f"
+      },
+      {
+        "contractId": "sales.f1-10d.sales.sale.completed.v2",
+        "sourcePath": "events/event-envelope-v1.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/events/event-envelope-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6",
+        "semanticSha256": null,
+        "localSha256": "e93a5ac0ccd13c69f6687fde84af755fb3910e8451aa7f188bbecfb6245468d6"
+      },
+      {
+        "contractId": "sales.f1-10d.sales.sale.completed.v2",
+        "sourcePath": "sales/events/v2/sales.sale.completed.v2.schema.json",
+        "destination": "src/modules/sale-process/transport/contracts/sales/events/v2/sales.sale.completed.v2.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8df75de9151930618635beffd333d580192d1881923ce7be8ce9f1bc93804b6d",
+        "semanticSha256": null,
+        "localSha256": "8df75de9151930618635beffd333d580192d1881923ce7be8ce9f1bc93804b6d"
+      },
+      {
+        "contractId": "catalog.f1-10d.catalog-sale-capture-v1",
+        "sourcePath": "catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/catalog/http/private/v1/catalog-sale-capture-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "f7040876fd27f3eeb8517299669de36aba041cb648066b48389f3da42ec85642",
+        "semanticSha256": null,
+        "localSha256": "f7040876fd27f3eeb8517299669de36aba041cb648066b48389f3da42ec85642"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808",
+        "semanticSha256": null,
+        "localSha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808"
+      },
+      {
+        "contractId": "finance.sale-context.http.v1",
+        "sourcePath": "finance/http/private/v1/finance-sale-context-v1.yaml",
+        "destination": "src/modules/sale-process/transport/contracts/finance/http/private/v1/finance-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "e15450d374178a37ea256ba14801b04f8c48389657b54787740a139d3fa511a6",
+        "semanticSha256": null,
+        "localSha256": "e15450d374178a37ea256ba14801b04f8c48389657b54787740a139d3fa511a6"
       }
     ]
   }

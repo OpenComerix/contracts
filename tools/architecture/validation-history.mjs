@@ -251,8 +251,10 @@ const toolingPaths = Object.freeze([
   'test/sales/preparation-v1.test.mjs',
   'scripts/sales/preparation-admission-v1.mjs',
   'test/sales/preparation-admission-v1.test.mjs',
+  'scripts/sales/acceptance-consumer-v1.mjs',
+  'test/architecture/sales-acceptance-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '4c021e846d90ab3005ee33373a9949a6c972fb1f8488c746b497ccf3aadb7e40';
+const toolingReferenceSha256 = '7439c44c1d884197335d8d1d4180af491451a65867077b8d828b551121bc501d';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
