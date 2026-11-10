@@ -17,6 +17,15 @@ test('source has only three read-only owner ports and four separated fixed workl
   assert.deepEqual(verifyPackage(), { apis: 3, schemas: 3, profiles: 4, fixtureGroups: 2, runtime_demonstrated: false });
   assert.deepEqual(verifyMetadata(), { planned: 8, admitted: 0, consumers: 8, runtime_demonstrated: false });
 });
+test('source metadata accepts only the closed Sales snapshot and rechecks missing or foreign consumers', () => {
+  verifyMetadata();
+  const file = 'registry/consumers/sales-pos.json';
+  assert.throws(() => verifyMetadata(replace(file, value => value.manifest.contracts.at(-1).operations.push('unapproved'))),
+    /PREPARATION_CONSUMER_PRESERVATION:sales-pos/);
+  assert.throws(() => verifyMetadata(name => {if (name === file) throw Error('missing consumer'); return read(name);}), /missing consumer/);
+  assert.throws(() => verifyMetadata(replace('registry/consumers/inventory.json', value => value.sourceCommit = 'f'.repeat(40))),
+    /PREPARATION_CONSUMER_PRESERVATION:inventory/);
+});
 for (const [label, change] of [
   ['free audience', policy => policy.profiles[0].audience = '*'],
   ['gateway impersonation', policy => policy.profiles[0].caller = 'gateway-bff'],

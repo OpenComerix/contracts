@@ -9,6 +9,7 @@ import { canonical } from '../../tools/architecture/consumer-gate.mjs';
 import { preparationBase, preparationRoots, preparationMetadata } from './preparation-history-v1.mjs';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import {projectPreparationAdmissionFile} from './preparation-admission-v1.mjs';
+import {projectAcceptanceConsumerFile} from './acceptance-consumer-v1.mjs';
 
 export const root = path.resolve(import.meta.dirname, '../..');
 const source = createGitReader()(root, preparationBase);
@@ -30,7 +31,7 @@ export function verifyMetadata(read = native) {
   // The source gate retains its exact published planned-stage view. Current
   // admission is proved separately by preparation-admission-v1, never here.
   const supplied = read;
-  read = file => projectPreparationAdmissionFile(file, supplied(file));
+  read = file => projectPreparationAdmissionFile(file, projectAcceptanceConsumerFile(file, supplied(file)));
   for (const [file, expected] of preparationMetadata())
     assert.equal(text(read(file)), text(expected), 'PREPARATION_METADATA:' + file);
   const registry = json(read, 'registry/contracts.json');

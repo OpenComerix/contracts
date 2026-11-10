@@ -6,6 +6,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {pathToFileURL} from 'node:url';
 import {gitReader, resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectAcceptanceConsumerFile} from './acceptance-consumer-v1.mjs';
 
 export const admissionSourceCommit = '748cb69b9301243a32c169b01e2c340b7102f020';
 export const root = path.resolve(import.meta.dirname, '../..');
@@ -112,7 +113,7 @@ export function validatePreparationAdmission(read = native) {
     for (const file of closure.files) protectedFiles.add(file.path);
   }
   for (const file of protectedFiles)
-    assert(text(current(file)) === text(admissionSource(file)), 'PREPARATION_ADMISSION_SOURCE:' + file);
+    assert(text(projectAcceptanceConsumerFile(file, current(file))) === text(admissionSource(file)), 'PREPARATION_ADMISSION_SOURCE:' + file);
   return {admitted:8, roots:214, preserved:236, planned:2, consumers:8, closureFiles:9, runtime_demonstrated:false};
 }
 export function materializePreparationAdmission() {

@@ -8,6 +8,7 @@ import {admissionSourceCommit, admissionSource, root, admissionIds, admissionRow
   projectPreparationAdmissionFile, projectPreparationAdmissionDocument, withPreparationAdmissionScope,
 } from '../../scripts/sales/preparation-admission-v1.mjs';
 import {projectPreparationFile, projectPreparationDocument, withPreparationScope} from '../../scripts/sales/preparation-history-v1.mjs';
+import {projectAcceptanceConsumerFile} from '../../scripts/sales/acceptance-consumer-v1.mjs';
 
 const read = file => fs.readFileSync(path.join(root, file));
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
@@ -28,9 +29,17 @@ test('eight exact source admissions preserve every descriptor, unrelated intenti
   assert.equal(admissionMetadata().size, 10);
   for (const owner of current.requiredConsumers) {
     const file = 'registry/consumers/' + owner + '.json';
-    assert(read(file).equals(admissionSource(file)), owner + ' snapshot must remain byte-identical');
+    assert(projectAcceptanceConsumerFile(file, read(file)).equals(admissionSource(file)), owner + ' historical snapshot must remain byte-identical');
   }
 });
+test('admission refuses a valid JSON snapshot with a changed prior Sales pin after warmup', () => {
+  validatePreparationAdmission();
+  const file = 'registry/consumers/sales-pos.json', value = JSON.parse(read(file));
+  value.lock.entries[0].commit = '0'.repeat(40);
+  assert.throws(() => validatePreparationAdmission(name => name === file ? encode(value) : read(name)),
+    /PREPARATION_ADMISSION_SOURCE:registry\/consumers\/sales-pos.json/);
+});
+
 test('selected operations, owners, versions and minimal source closures are fixed', () => {
   const rows = admissionRows(), closures = admissionClosures();
   assert.deepEqual(rows.map(row => [row.owner, row.surface, row.version, row.operations]), [
