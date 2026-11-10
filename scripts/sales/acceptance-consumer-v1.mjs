@@ -4,6 +4,7 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { makeLock } from '../../tools/architecture/graph.mjs';
+import { coordinationFiles, projectCoordinationFile, projectCoordinationDocument } from './coordination-consumer-v1.mjs';
 
 export const acceptanceConsumerPath = 'registry/consumers/sales-pos.json';
 export const acceptanceConsumerBase = '5a1bb96a9ab70f69e6b509b6997654e4b37f34dd';
@@ -11,6 +12,7 @@ export const acceptanceSalesBase = '46a4ef811b4095280b382d4a31ca2ea53a4cd4a6';
 export const acceptanceConsumerFiles = Object.freeze([
   'scripts/sales/acceptance-consumer-v1.mjs',
   'test/architecture/sales-acceptance-consumer.test.mjs',
+  ...coordinationFiles,
 ]);
 const root = path.resolve(import.meta.dirname, '../..');
 const source = createGitReader()(root, acceptanceConsumerBase);
@@ -27,10 +29,12 @@ const priorLockHash = '340303fe892214c31558b7fb0df51c6177c373734965b3c3f0504887e
 // Pure per-value adapters. No live read or capability proof per historical
 // file/fixture, and no remembered successful approval of caller input.
 export function projectAcceptanceConsumerFile(file, bytes) {
+  bytes = projectCoordinationFile(file, bytes);
   if (file !== acceptanceConsumerPath || digest(text(bytes)) !== snapshotHash) return bytes;
   return Buffer.from(source(file));
 }
 export function projectAcceptanceConsumerDocument(file, value) {
+  value = projectCoordinationDocument(file, value);
   if (file !== acceptanceConsumerPath) return value;
   try {
     const bytes = encode(value);
@@ -43,6 +47,7 @@ export function projectAcceptanceConsumerDocument(file, value) {
 // adapters. Recomputes canonical closures from immutable sources, preserving
 // all A pins; does not call another historical package validator.
 export function validateAcceptanceConsumer(snapshot) {
+  snapshot = projectCoordinationDocument(acceptanceConsumerPath, snapshot);
   assert.equal(digest(encode(snapshot)), snapshotHash, 'ACCEPTANCE_SNAPSHOT_EXACT');
   assert.equal(snapshot.publication, 'local-candidate');
   assert.equal(snapshot.sourceRepository, 'opencomerix/sales-pos');

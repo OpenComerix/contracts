@@ -77,6 +77,7 @@ export const admissionMetadata = () => new Map([...facts().metadata].map(([file,
 // Pure exact-value adaptation. Never read/approve another current input, invoke
 // a historical gate or repair an unknown, partial or altered supplied value.
 export function projectPreparationAdmissionFile(file, bytes) {
+  bytes = projectAcceptanceConsumerFile(file, bytes);
   const expected = facts().metadata.get(file);
   return expected && text(bytes) === text(expected) ? Buffer.from(admissionSource(file)) : bytes;
 }
@@ -92,7 +93,7 @@ export function withPreparationAdmissionScope(paths, read) {
     return new Set(paths);
   }
   for (const [file, expected] of facts().metadata)
-    assert(text(file === registryPath ? registry : read(file)) === text(expected), 'PREPARATION_ADMISSION_METADATA:' + file);
+    assert(text(projectAcceptanceConsumerFile(file, file === registryPath ? registry : read(file))) === text(expected), 'PREPARATION_ADMISSION_METADATA:' + file);
   return new Set([...paths, ...facts().metadata.keys(), ...admissionToolFiles]);
 }
 export function admissionClosures() {
@@ -104,7 +105,7 @@ export function validatePreparationAdmission(read = native) {
   const checked = new Map();
   const current = file => {if (!checked.has(file)) checked.set(file, read(file)); return checked.get(file);};
   for (const [file, expected] of facts().metadata)
-    assert(text(current(file)) === text(expected), 'PREPARATION_ADMISSION_METADATA:' + file);
+    assert(text(projectAcceptanceConsumerFile(file, current(file))) === text(expected), 'PREPARATION_ADMISSION_METADATA:' + file);
   const protectedFiles = new Set(['registry/consumers/index.json',
     ...facts().before.requiredConsumers.map(owner => 'registry/consumers/' + owner + '.json')]);
   for (const closure of admissionClosures()) {
