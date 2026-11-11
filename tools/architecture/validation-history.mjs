@@ -7,6 +7,7 @@ import { createGitReader } from './git-source.mjs';
 import reviewedTooling from './validation-tooling.json' with { type: 'json' };
 import {cashConsumerBase,projectCashConsumerFile,projectCashConsumerDocument,withCashConsumerScope} from '../../scripts/finance/cash-consumer-v1.mjs';
 import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.mjs';
+import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -125,6 +126,7 @@ export function withReuseCandidateScope(paths, read) {
       !value.contracts?.some(row=>reuseAdmissionIds.has(row.id)), 'H1A_V2_SCOPE_REGISTRY');
     return new Set(paths);
   }
+  paths=[...withRecoveryScope(paths,rawRead)];
   assert.deepEqual(Object.keys(reuseCandidateHashes), reuseCandidateFiles, 'H1A_V2_SCOPE_INVENTORY');
   for (const file of reuseCandidateFiles) {
     const bytes = file === 'registry/contracts.json' ? registry : read(file);
@@ -255,8 +257,10 @@ const toolingPaths = Object.freeze([
   'test/architecture/sales-acceptance-consumer.test.mjs',
   'scripts/sales/coordination-consumer-v1.mjs',
   'test/architecture/sales-coordination-consumer.test.mjs',
+  'scripts/sales/recovery-consumer-v1.mjs',
+  'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = 'e50875d95da6bb857f7a5dc079832d04a065e4bb60f1b9ac286d9d42a63d1a5c';
+const toolingReferenceSha256 = '29e490634f0eeb2921702ae13464f7577bde0036bfa27d68db4dfa54cc37bd71';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

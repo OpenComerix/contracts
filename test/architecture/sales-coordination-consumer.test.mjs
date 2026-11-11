@@ -9,9 +9,10 @@ import { coordinationBase, coordinationSalesBase, coordinationSnapshotPath as fi
 } from '../../scripts/sales/coordination-consumer-v1.mjs';
 import { withReviewedValidationScope, validateValidationTooling } from '../../tools/architecture/validation-history.mjs';
 import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { projectRecoveryFile } from '../../scripts/sales/recovery-consumer-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
-const read = file => fs.readFileSync(path.join(root, file));
+const read = file => projectRecoveryFile(file, fs.readFileSync(path.join(root, file)));
 const source = createGitReader()(root, coordinationBase);
 const bytes = read(file), snapshot = JSON.parse(bytes);
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');

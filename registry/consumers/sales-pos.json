@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "local-candidate",
   "sourceRepository": "opencomerix/sales-pos",
-  "sourceCommit": "55bebdc745b4ed0cbf4f77107c6c236354ab85b7",
-  "manifestSha256": "7619b029f8bee7ea15464fd998182d849d991c2050a13c510f76f8da7913e9a2",
-  "lockSha256": "21ef42e022dfb033fc0826f40186ac565ab7d76c86ecca2b2da507a8afe2c880",
+  "sourceCommit": "8a73f072439988dc729715054d683cb12ea854f4",
+  "manifestSha256": "612e6fac95f8de8a00318ae4a6b71f7862e296fd1520c9d134d0fd04b33aadcc",
+  "lockSha256": "aab9a67b1ce4c5a760fb36e4515237e4ccba4dbd2e1e8218a9818487f22a9e55",
   "manifest": {
     "formatVersion": 1,
     "service": "sales-pos",
@@ -114,9 +114,10 @@
           "/limits",
           "/sequence",
           "/identity",
-          "/retries"
+          "/retries",
+          "/history"
         ],
-        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator.",
+        "purpose": "F1-11A minimum persisted Sales step authority; no public sale, stock/payment effects or full F1-13 coordinator. F1-13D authorized retained history, completed read and same-intention recovery.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -380,9 +381,14 @@
           "/$defs/CanonicalRequest/oneOf/0",
           "/$defs/ClientSignal",
           "/$defs/Authorization",
-          "/$defs/AuthorizationRequest/properties/delegation_jwt"
+          "/$defs/AuthorizationRequest/properties/delegation_jwt",
+          "/$defs/CanonicalRequest/oneOf/1",
+          "/$defs/CanonicalRequest/oneOf/2",
+          "/$defs/CanonicalRequest/oneOf/3",
+          "/$defs/CanonicalRequest/oneOf/4",
+          "/$defs/CanonicalRequest/oneOf/5"
         ],
-        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects. F1-13D authorized retained history, completed read and same-intention recovery.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -414,9 +420,14 @@
         "pointers": [
           "/profiles",
           "/issuance",
-          "/permissions/0"
+          "/permissions/0",
+          "/permissions/1",
+          "/permissions/2",
+          "/permissions/3",
+          "/permissions/4",
+          "/permissions/5"
         ],
-        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects.",
+        "purpose": "F1-13A ephemeral Sales preparation and fresh private callback authority; no accepted sale or effects. F1-13D authorized retained history, completed read and same-intention recovery.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -495,10 +506,14 @@
         "version": "2.0.0",
         "operations": [
           "finalizeOnlineSale",
-          "getSaleFinalization"
+          "getSaleFinalization",
+          "getCompletedSale",
+          "resumeSaleFinalization",
+          "createSalesHistoryReadSession",
+          "readSalesHistoryFacts"
         ],
         "pointers": [],
-        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations.",
+        "purpose": "F1-13B durable acceptance/read only; no commercial delivery, completed production or later operations. F1-13D authorized retained history, completed read and same-intention recovery.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm test:cov",
@@ -1181,7 +1196,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "sales-pos",
-    "manifestSha256": "7619b029f8bee7ea15464fd998182d849d991c2050a13c510f76f8da7913e9a2",
+    "manifestSha256": "612e6fac95f8de8a00318ae4a6b71f7862e296fd1520c9d134d0fd04b33aadcc",
     "entries": [
       {
         "id": "sales.inventory-step-authority.http.v1",
@@ -1912,7 +1927,8 @@
           "/limits",
           "/sequence",
           "/identity",
-          "/retries"
+          "/retries",
+          "/history"
         ],
         "files": [
           {
@@ -1921,6 +1937,11 @@
           }
         ],
         "units": [
+          {
+            "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+            "pointer": "/history",
+            "sha256": "35b0876e657c1fd1e6ce146e2211e9039faf8519b49ee7ce183da7cd9599f4bb"
+          },
           {
             "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
             "pointer": "/identity",
@@ -1942,8 +1963,8 @@
             "sha256": "405e270805c05956e3543e2ea2d7822321148f3d932d08a8a5afab4581220e40"
           }
         ],
-        "selectionSha256": "666b0a8ffbc8cb0a9588ddbcc337e21b0c6d7ca6cf2e152b4b71b404b4af9b4c",
-        "runtimeSha256": "666b0a8ffbc8cb0a9588ddbcc337e21b0c6d7ca6cf2e152b4b71b404b4af9b4c"
+        "selectionSha256": "4eda2c75b0a82ff6273391b1569c14c755f0f352b3c13f51d77d5e75b13b7b28",
+        "runtimeSha256": "4eda2c75b0a82ff6273391b1569c14c755f0f352b3c13f51d77d5e75b13b7b28"
       },
       {
         "id": "identity.inventory-authority.policy.v1",
@@ -3484,7 +3505,12 @@
           "/$defs/CanonicalRequest/oneOf/0",
           "/$defs/ClientSignal",
           "/$defs/Authorization",
-          "/$defs/AuthorizationRequest/properties/delegation_jwt"
+          "/$defs/AuthorizationRequest/properties/delegation_jwt",
+          "/$defs/CanonicalRequest/oneOf/1",
+          "/$defs/CanonicalRequest/oneOf/2",
+          "/$defs/CanonicalRequest/oneOf/3",
+          "/$defs/CanonicalRequest/oneOf/4",
+          "/$defs/CanonicalRequest/oneOf/5"
         ],
         "files": [
           {
@@ -3576,6 +3602,31 @@
           },
           {
             "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/1",
+            "sha256": "9ba71ec3ea520861fbae56e1b10a52a003c2da7e82deae62f144a1dc963cce57"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/2",
+            "sha256": "4f282c1ba948be57d977b6e95a7bb9e3fee557d6fd0087e7de953ba5ccc5b50f"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/3",
+            "sha256": "fdced33bd243083fd4efc4cafd19cf948470285cd5089602430fc03792942b9c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/4",
+            "sha256": "f4f745bf26fb477a1756a8ad04f7dac6de3ada8a2942ee9380a10a268ca9bcab"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest/oneOf/5",
+            "sha256": "811500d825c27e324d0503dd2636dc2bcb4ead0126dee85c2bdae4e45951f96e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
             "pointer": "/$defs/ClientSignal",
             "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
           },
@@ -3601,6 +3652,11 @@
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/OperatingDate",
             "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
           },
@@ -3608,6 +3664,11 @@
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/RequestContext",
             "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
@@ -3620,8 +3681,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "a301110e180e0574da475b898d8ec753dd7395a3af3d48a507e25a51527b4e5b",
-        "runtimeSha256": "a301110e180e0574da475b898d8ec753dd7395a3af3d48a507e25a51527b4e5b"
+        "selectionSha256": "baeb1a24763ee8a1376502e286fa858150f9580a07092c6ca6b254f1d4ee15c3",
+        "runtimeSha256": "baeb1a24763ee8a1376502e286fa858150f9580a07092c6ca6b254f1d4ee15c3"
       },
       {
         "id": "identity.f1-10d.identity-sales-authority-v1",
@@ -3844,7 +3905,12 @@
         "pointers": [
           "/profiles",
           "/issuance",
-          "/permissions/0"
+          "/permissions/0",
+          "/permissions/1",
+          "/permissions/2",
+          "/permissions/3",
+          "/permissions/4",
+          "/permissions/5"
         ],
         "files": [
           {
@@ -3865,12 +3931,37 @@
           },
           {
             "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/1",
+            "sha256": "c9244c9b0aeec8b3bc07e54547decff46feea38e512f2fb40b9983e59cde3891"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/2",
+            "sha256": "b2bd7667f91665f3837a891cdb2cb695e182d722c52f488dc2948aa5480e2bbe"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/3",
+            "sha256": "d068a2c089e00027e63bed661c4f9e39656f67973340fd54fe5ff4c51d7ee7fd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/4",
+            "sha256": "2c0cc2a11e51635ab526cc83b8f53ef5cc056d2a21395208d0173c5bcfb75688"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "/permissions/5",
+            "sha256": "84100fa2c551c9f31dfeb17b85c257d81dbf4bce0348abd9271736fb076fbcae"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
             "pointer": "/profiles",
             "sha256": "9d0ca025fe9e46dfa184a5d1f72d9cd03e8c6d53a8b28db485e5187358a8361c"
           }
         ],
-        "selectionSha256": "84433e06ad9057c6049d7022a0ca628143b5005fa18d4fc26c6ce4bda1878c0e",
-        "runtimeSha256": "84433e06ad9057c6049d7022a0ca628143b5005fa18d4fc26c6ce4bda1878c0e"
+        "selectionSha256": "b2b7d4217589526dc58aac232fb88149cd5099f5faf0baa03a672ad32d0c5906",
+        "runtimeSha256": "b2b7d4217589526dc58aac232fb88149cd5099f5faf0baa03a672ad32d0c5906"
       },
       {
         "id": "identity.sale-preparation-workloads.policy.v1",
@@ -4138,7 +4229,11 @@
         "root": "sales/http/private/v2/pos-sales-internal-v2.yaml",
         "operations": [
           "finalizeOnlineSale",
-          "getSaleFinalization"
+          "getSaleFinalization",
+          "getCompletedSale",
+          "resumeSaleFinalization",
+          "createSalesHistoryReadSession",
+          "readSalesHistoryFacts"
         ],
         "pointers": [],
         "files": [
@@ -4310,6 +4405,11 @@
           },
           {
             "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1{sale_id}/get",
+            "sha256": "3465408cb01c4f1d7f0d051883fb8b363bdf073b21158846eeeee2ae46507533"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
             "pointer": "/paths/~1sales~1finalizations/post",
             "sha256": "ed64cfa37e3975432d112b586e882268f64c7a2337ff024085912f110eba64c7"
           },
@@ -4317,6 +4417,21 @@
             "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
             "pointer": "/paths/~1sales~1finalizations~1{operation_id}/get",
             "sha256": "7bf85be66c0730929652147414c1fa8542c745eb776d1329ff4b7f4ca9111b15"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1finalizations~1{operation_id}~1resume/post",
+            "sha256": "85975f34a676224f506db0fb7d80da5d204a48bf6743fc40c0ec8cf40317aa88"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1history-read-sessions/post",
+            "sha256": "1d20c0e21061fe35d5150bbbecf925ce19b114f32f0d2cd5aaa7b7f613c17cab"
+          },
+          {
+            "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
+            "pointer": "/paths/~1sales~1history-read-sessions~1{read_session_id}~1facts/get",
+            "sha256": "0b89717b08c24e4d6a69398ca3df4e86d10f4d53d12848e522d0da7deb3bfdd4"
           },
           {
             "path": "sales/http/private/v2/pos-sales-internal-v2.yaml",
@@ -4380,13 +4495,48 @@
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryItem",
+            "sha256": "dc35fcdef98864da14defb92097a056260914c90402479d0ee3b06ea48b360cf"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryPage",
+            "sha256": "465e01ae19d2515f600564e4c3380de9a8b577dd95d3657b50eba34954e42b3e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistorySession",
+            "sha256": "b3e9394976795b95abfd3c3f84c193c62bed9e1dc6c3fb5d4be57317a4fd8803"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/HttpAccepted",
             "sha256": "12a43d35551d674692ce1c15593128764b9793131aa757d8da0686621f9dff5b"
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HttpHistoryPage",
+            "sha256": "2bbeb78fe0294bce5cf7c9c935bd9ad1902d5374115edcfecac1aca84b6d9ccc"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HttpHistorySession",
+            "sha256": "6ba29150b6512678a41b2fd8e5fb2a95d53df6c120f57dbfe9bf076fdca7ee60"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/HttpOperation",
             "sha256": "677cbeaaf7dd0c69c8ff168e9fa90b5bd76d82c5239810c31b75fd644b6ae4d2"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HttpSale",
+            "sha256": "666903205b40064ea77695b4ac2b57d0b4dc48ddb6d4285826413f5443606c32"
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
@@ -4420,6 +4570,11 @@
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "b5933097776cb990a7667b203c4880c5ba5078bb412c7e727b89975a7ffc4d41"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/PaymentEffect",
             "sha256": "424b5c0c5239ea554e8d9e3ef135d73d6d91bfb7bed3933446ddd180bd582d63"
           },
@@ -4430,6 +4585,11 @@
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Range",
+            "sha256": "c1730928e83817c1d74369173e9431cff36c19f602e5e1f8b0f08eafe11c4acf"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/Recipient",
             "sha256": "f8e93b0f648f786c4e9c74f82540be379a1e95c76f019eb59765371a8b8daf71"
           },
@@ -4437,6 +4597,11 @@
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
             "pointer": "/$defs/RequestContext",
             "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
           },
           {
             "path": "sales/http/shared/v2/sales-types-v2.schema.json",
@@ -4494,8 +4659,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "284675df2e1cf2d45ffbcc097ffefc96db88b56e2144617e849a5c90898c0554",
-        "runtimeSha256": "9309496ee3d7dc8c57f79b4d6b5580dcc4ef50d3c9ac082e476ae75e509d5d97"
+        "selectionSha256": "6ce120bd61f917f91732d846a51d1440037cc714b49b20b4b154e8f2ab98c309",
+        "runtimeSha256": "5a59899b841e1ce414e20a983984896ae30e376240cf5bba14c8d8122b62c957"
       },
       {
         "id": "sales.f1-10d.sales-lifecycle-policy-v2",

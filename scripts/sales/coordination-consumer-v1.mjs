@@ -5,6 +5,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { makeLock } from '../../tools/architecture/graph.mjs';
+import { recoveryFiles, projectRecoveryFile, projectRecoveryDocument } from './recovery-consumer-v1.mjs';
 
 export const coordinationBase = '4d5a7db93e65135323471708d61ea403b8ec6c75';
 export const coordinationSalesBase = '55bebdc745b4ed0cbf4f77107c6c236354ab85b7';
@@ -18,6 +19,7 @@ export const coordinationSnapshotPath = 'registry/consumers/sales-pos.json';
 export const coordinationFiles = Object.freeze([
   'scripts/sales/coordination-consumer-v1.mjs',
   'test/architecture/sales-coordination-consumer.test.mjs',
+  ...recoveryFiles,
 ]);
 const root = path.resolve(import.meta.dirname, '../..');
 const source = createGitReader()(root, coordinationBase);
@@ -31,10 +33,12 @@ const hashes = Object.freeze({
 // Each adapter verifies only its supplied value. It neither validates a live
 // package nor remembers approval. The capability proof below runs once.
 export function projectCoordinationFile(file, bytes) {
+  bytes = projectRecoveryFile(file, bytes);
   if (!hashes[file] || digest(text(bytes)) !== hashes[file]) return bytes;
   return Buffer.from(source(file));
 }
 export function projectCoordinationDocument(file, value) {
+  value = projectRecoveryDocument(file, value);
   if (file !== coordinationSnapshotPath) return value;
   try {
     const bytes = encode(value);
@@ -119,6 +123,7 @@ export function createCoordinationSnapshot() {
 }
 
 export function validateCoordinationSnapshot(snapshot) {
+  snapshot = projectRecoveryDocument(coordinationSnapshotPath, snapshot);
   assert.equal(digest(encode(snapshot)), hashes[coordinationSnapshotPath], 'COORDINATION_SNAPSHOT_EXACT');
   assert.deepEqual(snapshot, createCoordinationSnapshot(), 'COORDINATION_CANONICAL_DELTA');
   return { preservedSelections: 35, extendedPolicies: 1, addedSelections: 10,
