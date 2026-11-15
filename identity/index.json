@@ -62,7 +62,13 @@
     "identity.workload-token-reuse.policy.v2",
     "identity.workload-token-reuse.schema.v2",
     "identity.internal-auth.fixtures.v2",
-    "identity.sale-preparation-workloads.policy.v1"
+    "identity.sale-preparation-workloads.policy.v1",
+    "identity.f1-14a.public.identity-operational-options-v1",
+    "identity.f1-14a.private.identity-operational-options-v1",
+    "identity.f1-14a.shared.identity-operational-options-v1",
+    "identity.f1-14a.shared.identity-operational-context-policy-v1",
+    "identity.f1-14a.private.identity-finance-operational-authority-v1",
+    "identity.f1-14a.shared.identity-finance-operational-authority-v1"
   ],
   "surfaces": [
     {
@@ -145,6 +151,29 @@
           "version": "2.0.0",
           "path": "identity/http/private/v2/identity-internal-auth-v2.yaml",
           "status": "active"
+        },
+        {
+          "id": "identity.f1-14a.private.identity-operational-options-v1",
+          "version": "1.0.0",
+          "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+          "status": "active"
+        },
+        {
+          "id": "identity.f1-14a.private.identity-finance-operational-authority-v1",
+          "version": "1.0.0",
+          "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "identity.f1-14a.public.identity-operational-options-v1",
+          "version": "1.0.0",
+          "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+          "status": "active"
         }
       ]
     },
@@ -161,6 +190,29 @@
           "id": "identity.onboarding.v2",
           "version": "2.1.0",
           "path": "openapi/identity-onboarding-v2.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-shared",
+      "versions": [
+        {
+          "id": "identity.f1-14a.shared.identity-operational-options-v1",
+          "version": "v1",
+          "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+          "version": "v1",
+          "path": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+          "status": "active"
+        },
+        {
+          "id": "identity.f1-14a.shared.identity-finance-operational-authority-v1",
+          "version": "v1",
+          "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
           "status": "active"
         }
       ]
@@ -451,12 +503,5 @@
       ]
     }
   ],
-  "planned": [
-    "identity.f1-14a.public.identity-operational-options-v1",
-    "identity.f1-14a.private.identity-operational-options-v1",
-    "identity.f1-14a.shared.identity-operational-options-v1",
-    "identity.f1-14a.shared.identity-operational-context-policy-v1",
-    "identity.f1-14a.private.identity-finance-operational-authority-v1",
-    "identity.f1-14a.shared.identity-finance-operational-authority-v1"
-  ]
+  "planned": []
 }

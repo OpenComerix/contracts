@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {parse} from 'yaml';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {resolveSelection} from '../../tools/architecture/graph.mjs';
+import {validateAdmissionRegistry} from './operational-context-admission-v1.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='73dfe6f1011b472e1520cf5328c1f1d7e1a37fc4';
@@ -89,12 +90,11 @@ export function verify(readFile=file=>fs.readFileSync(path.join(root,file))) {
  assert.deepEqual(json(files.matrix),consumptionMap(),'EXACT_CONSUMPTION_MAP');assert.equal(json(files.matrix).rows.length,20);
  assert.equal(new Set(json(files.matrix).rows.map(row=>row.operation_id)).size,20);
  const registered=JSON.parse(original('registry/contracts.json'));
- const current=json('registry/contracts.json');assert.deepEqual({...current,planned:registered.planned},registered,'REGISTERED_BYTES_UNCHANGED');
- assert.deepEqual(current.planned.slice(0,registered.planned.length),registered.planned,'PRIOR_PLANNED');assert.equal(current.planned.filter(row=>row.materializeIn==='F1-14A').length,9);
+ const current=json('registry/contracts.json');validateAdmissionRegistry(current);
  const preserved=new Set([...registered.contracts,...registered.preservedFiles].map(row=>row.path));
  for(const f of preserved)assert.equal(text(readFile(f)),text(original(f)),'PUBLISHED_BYTES:'+f);
  for(const f of ['package.json','pnpm-lock.yaml','registry/consumers/index.json',...registered.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])assert.equal(text(readFile(f)),text(original(f)),'CONSUMER_OR_DEPENDENCY:'+f);
- return {operations:20,new_roots:9,preserved:preserved.size,admission:false,runtime:false};
+ return {operations:20,new_roots:9,preserved:preserved.size,admission:true,runtime:false};
 }
 
 function execute(command,args,output,name,shell=false){const result=spawnSync(command,args,{cwd:root,encoding:'utf8',shell,windowsHide:true,maxBuffer:32*1024*1024,env:{...process.env,REDOCLY_TELEMETRY:'off',REDOCLY_SUPPRESS_UPDATE_NOTICE:'true'}});write(output,name+'.json',{command,args,status:result.status,error:result.error?.message??null,stdout:result.stdout??'',stderr:result.stderr??''});if(result.status!==0||result.error){process.stderr.write(result.stderr??'');process.stdout.write(result.stdout??'');throw Error('NATIVE_GATE_FAILED:'+name+':'+result.status);}return result.stdout;}
