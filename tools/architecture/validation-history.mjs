@@ -267,7 +267,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = 'b45ef75baa8dc297f493417e488c2c9930d3084b6ed1d97279d17d8c524a4f44';
+const toolingReferenceSha256 = 'd1b75e06aead86d158dfda1990e14e8a55ce3e08277cc7f8416f82bdbe7ac3dd';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

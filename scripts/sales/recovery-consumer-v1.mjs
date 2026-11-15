@@ -6,6 +6,7 @@ import { isDeepStrictEqual } from 'node:util';
 import { pathToFileURL } from 'node:url';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { makeLock } from '../../tools/architecture/graph.mjs';
+import {projectOperationalFile,projectOperationalDocument} from '../identity/operational-context-history-v1.mjs';
 
 export const recoveryBase = '2facbdb45bb7fb72a79fd8874a97afd30a500171';
 export const recoverySalesBase = '8a73f072439988dc729715054d683cb12ea854f4';
@@ -73,9 +74,11 @@ export function createRecoverySnapshot() {
     manifestSha256: lock.manifestSha256, lockSha256: digest(encodeRecovery(lock)), manifest, lock };
 }
 export function projectRecoveryFile(file, bytes) {
+  bytes = projectOperationalFile(file, bytes);
   return hashes[file] && digest(text(bytes)) === hashes[file] ? Buffer.from(source(file)) : bytes;
 }
 export function projectRecoveryDocument(file, value) {
+  value = projectOperationalDocument(file, value);
   if (file !== recoverySnapshotPath) return value;
   try {
     const bytes = encodeRecovery(value);
