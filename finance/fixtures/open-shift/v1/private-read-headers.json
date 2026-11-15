@@ -1,0 +1,60 @@
+[
+  {
+    "name": "canonical",
+    "headers": {
+      "X-OC-Client-Signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "valid": true
+  },
+  {
+    "name": "with-standard-header",
+    "headers": {
+      "X-OC-Client-Signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "Accept": "application/json"
+    },
+    "valid": true
+  },
+  {
+    "name": "missing",
+    "headers": {},
+    "valid": false
+  },
+  {
+    "name": "malformed",
+    "headers": {
+      "X-OC-Client-Signal": "v1.invalid"
+    },
+    "valid": false
+  },
+  {
+    "name": "duplicate-values",
+    "headers": {
+      "X-OC-Client-Signal": [
+        "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      ]
+    },
+    "valid": false
+  },
+  {
+    "name": "joined-values",
+    "headers": {
+      "X-OC-Client-Signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA,v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "valid": false
+  },
+  {
+    "name": "leading-space",
+    "headers": {
+      "X-OC-Client-Signal": " v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+    },
+    "valid": false
+  },
+  {
+    "name": "noncanonical-base64",
+    "headers": {
+      "X-OC-Client-Signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB"
+    },
+    "valid": false
+  }
+]

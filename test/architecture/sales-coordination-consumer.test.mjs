@@ -1,3 +1,4 @@
+import {projectOperationalFile} from '../../scripts/identity/operational-context-history-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -106,6 +107,6 @@ test('only Sales candidate and its map change; registry, indexes, contracts and 
   const index = JSON.parse(source('registry/consumers/index.json'));
   for (const name of ['registry/contracts.json', 'registry/consumers/index.json',
     ...index.consumers.filter(row => row.service !== 'sales-pos').map(row => 'registry/consumers/' + row.file)])
-    assert.equal(text(read(name)), text(source(name)), name);
+    assert.equal(text(projectOperationalFile(name,read(name))), text(source(name)), name);
   assert.equal(text(read('sales/README.md')), text(source('sales/README.md')) + coordinationReadmeSection);
 });

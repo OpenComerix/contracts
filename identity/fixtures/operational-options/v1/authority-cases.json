@@ -1,0 +1,54 @@
+{
+  "discovery": [
+    {
+      "name": "restricted",
+      "state": "restricted",
+      "status": 403,
+      "code": "identity_access_denied"
+    },
+    {
+      "name": "revoked",
+      "state": "revoked",
+      "status": 401,
+      "code": "identity_session_invalid_or_expired"
+    },
+    {
+      "name": "other-tenant",
+      "state": "active",
+      "requested_org": "01991a22-0000-7000-8000-000000000002",
+      "status": 400,
+      "code": "identity_invalid_request"
+    },
+    {
+      "name": "active-scoped",
+      "state": "active",
+      "sales_permission": false,
+      "status": 200
+    }
+  ],
+  "finance": [
+    {
+      "name": "other-responsible",
+      "status": 403,
+      "code": "identity_access_denied",
+      "body_contains_shift": false
+    },
+    {
+      "name": "other-tenant-register",
+      "status": 404,
+      "code": "finance_resource_not_found",
+      "body_contains_shift": false
+    },
+    {
+      "name": "no-shift",
+      "status": 200,
+      "fixture": "absent"
+    },
+    {
+      "name": "open",
+      "status": 200,
+      "fixture": "open"
+    }
+  ],
+  "runtime_demonstrated": false
+}

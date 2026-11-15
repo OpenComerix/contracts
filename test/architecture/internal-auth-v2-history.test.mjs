@@ -1,3 +1,4 @@
+import {operationalFiles,projectOperationalFile,projectOperationalDocument} from '../../scripts/identity/operational-context-history-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -14,7 +15,7 @@ import {
 const root=path.resolve(import.meta.dirname,'../..');
 const git=createGitReader(),base=git(root,reuseCandidateBase),old=git(root,reviewedCandidateRevision);
 const priorScopeFiles=[...new Set([...reuseCandidateFiles,...cashConsumerFiles])];
-const readableFiles=[...new Set([...priorScopeFiles,...preparationMetadata().keys()])];
+const readableFiles=[...new Set([...priorScopeFiles,...preparationMetadata().keys(),...operationalFiles])];
 const exactScopeFiles=[...new Set([...readableFiles,...preparationNewFiles])];
 const current=new Map(exactScopeFiles.map(file=>[file,fs.readFileSync(path.join(root,file))]));
 const read=file=>{assert(current.has(file),'Unexpected live path: '+file);return Buffer.from(current.get(file));};
@@ -88,13 +89,13 @@ test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
 
 test('historical scopes gain no candidate paths; partial selected admission is rejected',()=>{
   assert.deepEqual([...withReuseCandidateScope(['kept'],file=>file==='registry/contracts.json'?base(file):read(file))],['kept']);
-  const registry=projectPreparationDocument('registry/contracts.json',JSON.parse(read('registry/contracts.json')));
+  const registry=projectPreparationDocument('registry/contracts.json',projectOperationalDocument('registry/contracts.json',JSON.parse(read('registry/contracts.json'))));
   registry.contracts=registry.contracts.filter(row=>row.id!=='identity.internal-auth.v2');
   assert.throws(()=>withReuseCandidateScope([],file=>file==='registry/contracts.json'?Buffer.from(JSON.stringify(registry)):read(file)),/H1A_V2_SCOPE_REGISTRY/);
 });
 
 test('CI adds H1A checks to existing jobs without changing prior commands, dependencies or job count',()=>{
-  const file='.github/workflows/ci.yml',before=parse(base(file).toString('utf8')),after=parse(projectPreparationFile(file,read(file)).toString('utf8'));
+  const file='.github/workflows/ci.yml',before=parse(base(file).toString('utf8')),after=parse(projectPreparationFile(file,projectOperationalFile(file,read(file))).toString('utf8'));
   assert.equal(Object.keys(after.jobs).length,23);
   const job=after.jobs.validate_identity_catalog_contracts;
   const run=job.steps.find(step=>step.name==='Run original validation commands');

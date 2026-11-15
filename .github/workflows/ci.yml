@@ -561,6 +561,9 @@ jobs:
           node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
           node scripts/identity/validate-catalog-workload-profiles-v1.mjs
           node scripts/identity/validate-catalog-workload-profiles-v2.mjs
+          node scripts/identity/operational-context-v1.mjs verify
+          node scripts/identity/operational-context-v1.mjs openapi
+          node scripts/identity/operational-context-v1.mjs prepare .ci-artifacts/f1-14a-ci
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-internal-auth-v2.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-internal-auth-v2.yaml --dereferenced --ext json --output .ci-artifacts/identity-internal-auth-v2.bundle.json
           node scripts/identity/validate-internal-auth-v2.mjs .ci-artifacts/identity-internal-auth-v2.bundle.json
@@ -576,7 +579,7 @@ jobs:
         shell: bash
         run: |-
           paths=()
-          for path in .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/; do
+          for path in .ci-artifacts/f1-14a/ .ci-artifacts/f1-14a-ci/ .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/; do
             if [ -e "$path" ]; then paths+=("$path"); fi
           done
           if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
@@ -616,7 +619,8 @@ jobs:
           sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-history-permissions-v1
           jsonschema metaschema identity/http/shared/v2/identity-catalog-recovery-renewal-v2.schema.json --verbose
           sh scripts/catalog/validate-security-v1.sh .ci-artifacts/catalog-recovery-renewal-v2
-          sh scripts/identity/validate-internal-auth-v2.sh .ci-artifacts/identity-internal-auth-v2'
+          sh scripts/identity/validate-internal-auth-v2.sh .ci-artifacts/identity-internal-auth-v2
+          (cd .ci-artifacts/f1-14a-ci && sh gate.sh)'
   validate_catalog_asyncapi:
     name: validate:catalog-asyncapi
     needs: [validation_scope]

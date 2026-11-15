@@ -1,3 +1,4 @@
+import {operationalFiles,projectOperationalFile} from '../../scripts/identity/operational-context-history-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -51,7 +52,7 @@ test('historical projection preserves original assertions and never sanitizes ca
   }
   assert.deepEqual(salesHistoricalRegistry(expectedRegistry()),JSON.parse(source('registry/contracts.json')));
   const wrong=expectedRegistry();wrong.requiredConsumers.push('unapproved');assert.equal(salesHistoricalRegistry(wrong),wrong);
-  assert.deepEqual(read(historicalTest),historicalTestBytes());
+  assert.deepEqual(projectOperationalFile(historicalTest,read(historicalTest)),historicalTestBytes());
   for(const file of guardTransitionFiles){
     assert.deepEqual(captureHistoricalFile(file,read(file)),transitionBytes(file));
     assert.deepEqual(salesHistoricalFile(file,read(file)),source(file));
@@ -59,7 +60,7 @@ test('historical projection preserves original assertions and never sanitizes ca
   assert.deepEqual(salesHistoricalIndex(expectedIndex()),JSON.parse(source('registry/consumers/index.json')));
   const alteredIndex=expectedIndex();alteredIndex.consumers.pop();assert.equal(salesHistoricalIndex(alteredIndex),alteredIndex);
   const scope=withSalesAdmissionScope(['preserved-path']);assert(scope.has('preserved-path'));
-  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles])].sort());
+  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles,...operationalFiles])].sort());
   assert(!scope.has('scripts/unapproved.mjs'));
 });
 

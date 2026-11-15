@@ -1,0 +1,153 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-open-shift-v1.schema.json",
+  "title": "finance-open-shift-v1",
+  "$defs": {
+    "OpenShiftRef": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "cash_shift_id",
+        "version"
+      ],
+      "properties": {
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "OpenShift": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "cash_shift"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_shift": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/OpenShiftRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "HttpOpenShiftRef": {
+      "type": "object",
+      "required": [
+        "cash_shift_id",
+        "version"
+      ],
+      "properties": {
+        "cash_shift_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "version": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        }
+      }
+    },
+    "HttpOpenShift": {
+      "type": "object",
+      "required": [
+        "organization_id",
+        "branch_id",
+        "pos_id",
+        "cash_register_id",
+        "cash_shift"
+      ],
+      "properties": {
+        "organization_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "branch_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "pos_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "cash_register_id": {
+          "type": "string",
+          "format": "uuid",
+          "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+        },
+        "cash_shift": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/HttpOpenShiftRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      }
+    },
+    "Query": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [],
+      "properties": {}
+    },
+    "PrivateClientSignal": {
+      "type": "string",
+      "pattern": "^v1\\.[A-Za-z0-9_-]{42}[AEIMQUYcgkosw048]$"
+    },
+    "PrivateReadHeaders": {
+      "type": "object",
+      "description": "Canonical-name fixture projection only. HTTP header names remain case insensitive; duplicate raw fields are rejected before projection.",
+      "required": [
+        "X-OC-Client-Signal"
+      ],
+      "properties": {
+        "X-OC-Client-Signal": {
+          "$ref": "#/$defs/PrivateClientSignal"
+        }
+      }
+    }
+  }
+}

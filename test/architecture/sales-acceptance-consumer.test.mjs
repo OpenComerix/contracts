@@ -1,3 +1,4 @@
+import {projectOperationalFile} from '../../scripts/identity/operational-context-history-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -85,7 +86,7 @@ test('other consumers and contract registry remain at the exact immutable base',
     source('registry/consumers/index.json').toString().replaceAll('\r\n', '\n'));
   const paths = index.consumers.map(row => 'registry/consumers/' + row.file);
   for (const name of ['registry/contracts.json', ...paths.filter(name => name !== file)]) {
-    assert.equal(createHash('sha256').update(read(name).toString().replaceAll('\r\n', '\n')).digest('hex'),
+    assert.equal(createHash('sha256').update(projectOperationalFile(name,read(name)).toString().replaceAll('\r\n', '\n')).digest('hex'),
       createHash('sha256').update(source(name).toString().replaceAll('\r\n', '\n')).digest('hex'), name);
   }
 });

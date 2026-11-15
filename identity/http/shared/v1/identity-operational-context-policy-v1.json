@@ -1,0 +1,61 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "discovery": {
+    "operation_id": "listOperationalOptions",
+    "method": "GET",
+    "path": "/api/v1/tenancy/operational-options",
+    "authority": "Current active session/account/membership, MFA, proven approved device and current scopes. No sales permission, OWNER string, plan, preference or browser header grants discovery. Restricted/revoked sessions denied. Each later domain operation separately authorizes its own permission and resources.",
+    "eligibility": "Only active branch/POS pairs belonging to the active organization and current membership scopes, preserving branch-to-POS relation. Names/versions come from Identity. No activation, rotation, reservation or creation.",
+    "pagination": "Default limit 50, maximum 100; ascending (branch_id,pos_id) keyset. Cursor opaque authenticated HMAC with exclusive server key, expires <=300s, binds account/session/device/organization/membership/authority versions, limit and last pair. Omitted continuation limit uses bound limit; mismatch/forgery/expiry =>400 tenancy_invalid_cursor; authority loss=>403 identity_access_denied; invalid session=>401 identity_session_invalid_or_expired. Revalidate each page; no snapshot guarantee. No body or organization selector. Duplicate/unknown query keys rejected; no implicit defaults in canonical requests.",
+    "cardinality": "Zero items and next_cursor=null means no observed eligible pair. One item only proves observed uniqueness when next_cursor=null; incomplete pages never imply uniqueness. Resource changes require current backend revalidation; listing never grants authority."
+  },
+  "finance": {
+    "operation_id": "getOpenCashShift",
+    "method": "GET",
+    "path": "/api/v1/finance/cash-registers/{cash_register_id}/open-shift",
+    "permission": "finance.cash.read",
+    "canonicalization": "finance-request-v1; exactly canonicalization_version,operation_id,method,public path,query,body,idempotency_key; JCS SHA-256; query={}, body=null and idempotency_key=null. No headers/secrets/default expansion in hash.",
+    "delegation_operation": "createFinanceOperationalDelegation",
+    "authorization_operation": "checkFinanceOperationalAuthorization",
+    "authorization": "Existing Finance active-human checks and current branch/POS scopes. Finance verifies local register/shift tenant and relation; only the original responsible account/membership/device may recover an open shift. Another responsible gets generic403 identity_access_denied, without IDs/names/amounts. Missing/out-of-scope register uses same404 finance_resource_not_found. Valid register without open shift returns200 cash_shift=null. Multiple open rows are integrity failure500 platform_internal_error, never select first.",
+    "freshness": "Delegate ES256 <=60s with exact request hash and client signal; current decision <=2000ms from before network, including waits, no cache. Use existing fixed workload profiles and independent credentials. No fallback or audience selector. No cookie at Finance.",
+    "effects": "Read only; no reopening, responsible reassignment, funds, commercial events or reservation. Concurrent opening can make absence stale; opening retains its unique-register constraint. Follow getCashShift/getCashShiftExpected separately with fresh authorization.",
+    "client_signal_transport": "Required private X-OC-Client-Signal, gateway-derived after stripping browser copies, exactly the signal bound to delegation and sent as client_signal to Identity. No hash/header substitution; absence, duplicate raw fields including identical duplicates, joined or noncanonical values =>400 finance_invalid_request after workload authentication. Header names case insensitive; no logging/persistence or authority from this signal."
+  },
+  "profiles": {
+    "gateway_identity": {
+      "client_id": "gateway-bff",
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.gateway"
+    },
+    "gateway_finance": {
+      "client_id": "gateway-bff.finance",
+      "caller": "gateway-bff",
+      "audience": "finance.user-api"
+    },
+    "finance_identity": {
+      "client_id": "finance.finance-authority",
+      "caller": "finance",
+      "audience": "identity-tenancy.finance-authority"
+    },
+    "identity_delegate": {
+      "caller": "gateway-bff",
+      "audience": "identity-tenancy.user-api",
+      "maximum_seconds": 60
+    }
+  },
+  "limits": {
+    "gateway_ms": 10000,
+    "private_ms": 3000,
+    "authority_call_ms": 1000,
+    "decision_ms": 2000,
+    "response_bytes": 1048576
+  },
+  "privacy": "Cache-Control:no-store for every response/error. No tokens/cookies/client signals/PII in URLs or logs. Opaque cursors appear only in their contracted continuation query and are never logged; operational names only in authenticated response. Discovery never returns authorization grants. Browser receives no delegation or internal headers. GET has no CSRF mutation; exact-Origin/CORS and existing client-signal/rate-limit policy remain.",
+  "compatibility": "Producer strict; HTTP reader permits unknown optional response properties, retaining required fields, known shapes and version semantics. Unknown critical enums or malformed response fails closed. No alteration of H2 or Finance published bytes. Authority HttpDelegation/HttpAuthorization accept unknown optional top-level metadata, retaining all declared critical values and closed scope/version structures; those constraints and current authorization checks are unchanged. Unknown properties never grant rights.",
+  "recovery": "Navigate to operation opaque reference before Sales POST; only ID in URL, no cart/amounts/PII/credentials. Authenticated lookup after reload; reference grants no authority. Replay only original immutable body/key still in RAM. 404/timeout do not prove absence of effects; losing RAM never reconstructs a sale or silently permits substitute attempt. No business storage."
+}

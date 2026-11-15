@@ -1,3 +1,4 @@
+import {projectOperationalFile,projectOperationalDocument,withOperationalScope} from '../../scripts/identity/operational-context-history-v1.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
@@ -100,11 +101,13 @@ const reuseCandidateHashes = Object.freeze({
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
 export function projectReuseCandidateFile(file, bytes) {
+  bytes=projectOperationalFile(file,bytes);
   bytes=projectCashConsumerFile(file,bytes);
   if (!reuseProjectionFiles.has(file) || textHash(bytes) !== reuseCandidateHashes[file]) return bytes;
   return Buffer.from(source(reuseCandidateBase)(file));
 }
 export function withReuseCandidateScope(paths, read) {
+  return withOperationalScope(paths,read,(paths,read)=>{
   // A synchronous invocation reads each current input once. Neither these
   // bytes nor successful checks survive this call or become cached approval.
   const suppliedRead=read,live=new Map();
@@ -133,6 +136,7 @@ export function withReuseCandidateScope(paths, read) {
     assert.equal(textHash(bytes), reuseCandidateHashes[file], 'H1A_V2_SCOPE_BYTES:' + file);
   }
   return new Set([...paths, ...reuseCandidateFiles]);
+  });
 }
 function isReuseCandidateDocument(file, value) {
   value=projectCashConsumerDocument(file,value);
@@ -144,6 +148,7 @@ function isReuseCandidateDocument(file, value) {
   } catch { return false; }
 }
 export function projectReuseCandidateDocument(file, value) {
+  value=projectOperationalDocument(file,value);
   value=projectCashConsumerDocument(file,value);
   return isReuseCandidateDocument(file, value) ? JSON.parse(source(reuseCandidateBase)(file)) : value;
 }
@@ -217,6 +222,7 @@ export function isReviewedDocument(revision,file,value) {
   return metadata.has(file)&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(source(revision)(file)));
 }
 export function projectReviewedDocument(revision,file,value) {
+  value=projectOperationalDocument(file,value);
   const cash=projectCashConsumerDocument(file,value);
   if(cash!==value&&metadata.has(file)&&canProject(cashConsumerBase,revision))return JSON.parse(source(revision)(file));
   if (!metadata.has(file) || !file.endsWith('.json')) return value;
@@ -231,6 +237,7 @@ export function projectReviewedDocument(revision,file,value) {
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
 const toolingPaths = Object.freeze([
+  'scripts/identity/operational-context-history-v1.mjs',
   'tools/architecture/graph.mjs', 'tools/architecture/git-source.mjs', 'tools/architecture/README.md',
   'scripts/catalog/catalog-foundation-v1-registry.mjs', 'scripts/catalog/catalog-lifecycle-v1-registry.mjs',
   'scripts/catalog/catalog-runtime-v1-registry.mjs', 'scripts/inventory/candidate-v1.mjs',
@@ -260,7 +267,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '29e490634f0eeb2921702ae13464f7577bde0036bfa27d68db4dfa54cc37bd71';
+const toolingReferenceSha256 = 'b45ef75baa8dc297f493417e488c2c9930d3084b6ed1d97279d17d8c524a4f44';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

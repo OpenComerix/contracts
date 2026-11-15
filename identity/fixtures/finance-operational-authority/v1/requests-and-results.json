@@ -1,0 +1,73 @@
+{
+  "DelegationRequest": {
+    "request": {
+      "canonicalization_version": "finance-request-v1",
+      "operation_id": "getOpenCashShift",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-registers/01991a22-0000-7000-8000-000000000001/open-shift",
+      "query": {},
+      "body": null,
+      "idempotency_key": null
+    },
+    "client_signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+  },
+  "Delegation": {
+    "organization_id": "01991a22-0000-7000-8000-000000000001",
+    "operation_id": "getOpenCashShift",
+    "request_hash": "992f9458d4079392a2e8b70da90fa5df4914a85dd268db2a70520faf95e6cd7a",
+    "canonicalization_version": "finance-request-v1",
+    "delegation_id": "01991a22-0000-7000-8000-000000000001",
+    "delegation_jwt": "synthetic-not-a-signed-token",
+    "caller": "gateway-bff",
+    "audience": "finance.user-api",
+    "issued_at": "2026-11-15T00:00:00Z",
+    "expires_at": "2026-11-15T00:01:00Z"
+  },
+  "AuthorizationRequest": {
+    "request": {
+      "canonicalization_version": "finance-request-v1",
+      "operation_id": "getOpenCashShift",
+      "method": "GET",
+      "path": "/api/v1/finance/cash-registers/01991a22-0000-7000-8000-000000000001/open-shift",
+      "query": {},
+      "body": null,
+      "idempotency_key": null
+    },
+    "client_signal": "v1.AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+    "delegation_jwt": "synthetic-not-a-signed-token"
+  },
+  "Authorization": {
+    "authorized": true,
+    "decision_ref": "synthetic-decision",
+    "account_ref": "synthetic-account",
+    "membership_ref": "synthetic-membership",
+    "session_ref": "synthetic-session",
+    "device_ref": "synthetic-device",
+    "organization_id": "01991a22-0000-7000-8000-000000000001",
+    "operation_id": "getOpenCashShift",
+    "permission": "finance.cash.read",
+    "canonicalization_version": "finance-request-v1",
+    "request_hash": "992f9458d4079392a2e8b70da90fa5df4914a85dd268db2a70520faf95e6cd7a",
+    "checked_at": "2026-11-15T00:00:01Z",
+    "valid_for_ms": 2000,
+    "scope": {
+      "organization_id": "01991a22-0000-7000-8000-000000000001",
+      "branch_ids": [
+        "01991a22-0000-7000-8000-000000000001"
+      ],
+      "pos_ids": [
+        "01991a22-0000-7000-8000-000000000001"
+      ]
+    },
+    "versions": {
+      "account": "1",
+      "session": "1",
+      "credential": "1",
+      "membership": "1",
+      "authorization": "1",
+      "device": "1",
+      "approval": "1"
+    },
+    "step_up_at": null
+  }
+}
