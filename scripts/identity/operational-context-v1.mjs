@@ -1,3 +1,4 @@
+import {withOperationalConsumersScope} from './operational-context-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -71,6 +72,9 @@ export function consumptionMap() {
 }
 
 export function verify(readFile=file=>fs.readFileSync(path.join(root,file))) {
+ return withOperationalConsumersScope([],readFile,(_paths,read)=>verifySource(read),'CONSUMER_OR_DEPENDENCY');
+}
+function verifySource(readFile) {
  const json=file=>JSON.parse(readFile(file));
  const p=json(files.policy),a=json(files.authority),o=json(files.options),s=json(files.shift);
  verifyAuthorityBinding(json(authorityExamples));

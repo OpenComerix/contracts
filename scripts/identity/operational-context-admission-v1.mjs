@@ -1,3 +1,4 @@
+import {projectOperationalConsumerFile,projectOperationalConsumerToolingFile,withOperationalConsumersScope} from './operational-context-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -130,15 +131,19 @@ for (const file of ['package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml'
   'identity/fixtures/operational-options/v1/authority-cases.json']) add(file);
 export const admissionInputPaths = Object.freeze([...inputs.keys()]);
 export function validateAdmissionInput(file, bytes) {
+  bytes=projectOperationalConsumerToolingFile(file,projectOperationalConsumerFile(file,bytes));
   assert(inputs.has(file), 'OPERATIONAL_ADMISSION_UNKNOWN_INPUT:' + file);
   assert.equal(text(bytes), text(inputs.get(file)), 'OPERATIONAL_ADMISSION_BYTES:' + file);
 }
 export function validateAdmission(read = admissionRead) {
+  return withOperationalConsumersScope([],read,(_paths,read)=>{
   for (const file of admissionInputPaths) validateAdmissionInput(file, read(file));
   return {admitted: 9, roots: 223, priorRoots: 214, planned: 2, consumers: 8,
     closureFiles: new Set([...closures.values()].flatMap(closure => closure.files.map(file => file.path))).size,
     runtimeDemonstrated: false};
+  },'OPERATIONAL_ADMISSION_BYTES');
 }
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   assert.equal(process.argv.length, 2, 'OPERATIONAL_ADMISSION_OPTIONS');
   console.log(JSON.stringify(validateAdmission()));

@@ -237,6 +237,10 @@ export function projectReviewedDocument(revision,file,value) {
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
 const toolingPaths = Object.freeze([
+  'scripts/identity/operational-context-consumers-v1.mjs',
+  'scripts/identity/operational-context-admission-v1.mjs',
+  'scripts/identity/operational-context-v1.mjs',
+  'test/identity/operational-context-consumers-v1.test.mjs',
   'scripts/identity/operational-context-history-v1.mjs',
   'tools/architecture/graph.mjs', 'tools/architecture/git-source.mjs', 'tools/architecture/README.md',
   'scripts/catalog/catalog-foundation-v1-registry.mjs', 'scripts/catalog/catalog-lifecycle-v1-registry.mjs',
@@ -267,7 +271,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '8d4f8071852c2ce127d8366b79f0a41057ca61a5893e87cb8a994b7e87aab4a1';
+const toolingReferenceSha256 = 'ac77c6eadde5d5b64143bc1c7affd542707b79dda9f0613075a3ff5b56739ecb';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

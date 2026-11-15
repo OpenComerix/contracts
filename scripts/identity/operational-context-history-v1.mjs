@@ -1,3 +1,4 @@
+import {projectOperationalConsumerFile,projectOperationalConsumerDocument,projectOperationalConsumerToolingFile,withOperationalConsumersScope} from './operational-context-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
@@ -64,10 +65,15 @@ export const operationalModified=Object.freeze([
 ]);
 export const operationalFiles=Object.freeze([...Object.keys(operationalHashes),'scripts/identity/operational-context-history-v1.mjs']);
 export function projectOperationalFile(file,bytes){
+ bytes=projectOperationalConsumerFile(file,bytes);
+ // Only A's frozen input inventory needs the tooling view. Later code guards
+ // still receive current bytes (notably the Finance cash tooling guard).
+ if(Object.hasOwn(operationalHashes,file))bytes=projectOperationalConsumerToolingFile(file,bytes);
  if(!operationalModified.includes(file)||hash(bytes)!==operationalHashes[file])return bytes;
  return source(file);
 }
 export function projectOperationalDocument(file,value){
+ value=projectOperationalConsumerDocument(file,value);
  if(!operationalModified.includes(file)||!file.endsWith('.json'))return value;
  try{const bytes=JSON.stringify(value,null,2)+'\n';if(!isDeepStrictEqual(value,JSON.parse(bytes))||hash(Buffer.from(bytes))!==operationalHashes[file])return value;return JSON.parse(source(file));}catch{return value;}
 }
@@ -83,9 +89,11 @@ export function withOperationalScope(paths,read,verify){
    assert(![...(value.planned??[]),...(value.contracts??[])].some(row=>row.materializeIn==='F1-14A'||/^(identity|finance)\.f1-14a\./.test(row.id)),'OPERATIONAL_PARTIAL_SCOPE');
    return verify(paths,read);
   }
-  for(const [file,expected]of Object.entries(operationalHashes))assert.equal(hash(raw(file)),expected,'OPERATIONAL_CURRENT_BYTES:'+file);
+  return withOperationalConsumersScope(paths,raw,(paths,read)=>{
+  for(const [file,expected]of Object.entries(operationalHashes))assert.equal(hash(projectOperationalConsumerToolingFile(file,read(file))),expected,'OPERATIONAL_CURRENT_BYTES:'+file);
   const helper='scripts/identity/operational-context-history-v1.mjs';assert.equal(hash(raw(helper)),tooling[helper],'OPERATIONAL_TOOLING_BYTES');
-  const result=verify([...paths,...operationalFiles],file=>projectOperationalFile(file,raw(file)));
+  const result=verify([...paths,...operationalFiles],file=>{assert(active,'OPERATIONAL_CONTEXT_CLOSED');return projectOperationalFile(file,read(file));});
   assert(!result||typeof result.then!=='function','OPERATIONAL_SYNCHRONOUS');return result;
+  },'OPERATIONAL_CURRENT_BYTES');
  }finally{active=false;current.clear();}
 }

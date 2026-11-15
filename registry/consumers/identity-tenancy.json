@@ -1,10 +1,10 @@
 {
   "formatVersion": 1,
-  "publication": "local-candidate",
+  "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "c206dc39c201a5ff57a946f073dd9e3cb9317b8a",
-  "manifestSha256": "652ca38885289f4210654c7c2d66ac00e52fff9f7e96431e8a734176fdf922eb",
-  "lockSha256": "597f002a19b1b2aee70adcf161448ea2e084424b8cf88ccd1da1bac45a471676",
+  "sourceCommit": "4f0604a066d96c3e0094a350fca1f0c0584c5842",
+  "manifestSha256": "6fc7ab8430069abf08808581553fab09666edb8c74067ed43c14c52a9072242f",
+  "lockSha256": "7e405d3a53f65d23746425bcd852a847ab74716e1071a6cb3dc358b63f1fd2f3",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -678,6 +678,152 @@
           "pnpm test:cov",
           "pnpm test:integration"
         ]
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createSalesDelegation",
+          "checkSalesAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A Identity Sales authority and fixed preparation workload profiles; no sale acceptance or business effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-10e.sales-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13A Identity Sales authority and fixed preparation workload profiles; no sale acceptance or business effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13A Identity Sales authority and fixed preparation workload profiles; no sale acceptance or business effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-13A Identity Sales authority and fixed preparation workload profiles; no sale acceptance or business effects.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.public.identity-operational-options-v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.private.identity-operational-options-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-options-v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.private.identity-finance-operational-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "createFinanceOperationalDelegation",
+          "checkFinanceOperationalAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-finance-operational-authority-v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14B: contexto operativo recuperable con autoridad actual y sin efectos comerciales.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:operational-context"
+        ]
       }
     ],
     "assets": [],
@@ -686,7 +832,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "652ca38885289f4210654c7c2d66ac00e52fff9f7e96431e8a734176fdf922eb",
+    "manifestSha256": "6fc7ab8430069abf08808581553fab09666edb8c74067ed43c14c52a9072242f",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -5345,6 +5491,1042 @@
         ],
         "selectionSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad",
         "runtimeSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad"
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+        "operations": [
+          "createSalesDelegation",
+          "checkSalesAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "sha256": "12dd660d0c139a140bf7d968e298d5885ceed2361de8b27b81be815dcd676bfe"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "6ce0e4c5bed3624df55e4c1cf37ea1f8298172fd04d769a090d6663dce5619a0"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1sales-authorizations/post",
+            "sha256": "32121ecd50e2ff1fa651fb26a2b9d05b91cb424427505a1fbe833900a7afe169"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1sales-delegations/post",
+            "sha256": "82536481957fe1d51fd1f0c77f3934c436fcb83f44a61a651f6f99e86228e631"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "54481e21e4088f160139c2e976db721b867d0c4b382da870242f5a68c1647b1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "7297dd94e1cc0eeb1e7b042e6173098aa4a508e713d84beb8018b53f6e618c2a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "9613ad9405c06317b125025e6ffbcefa9f193aa0e53a86c8a0490ae025155f18"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Delegation",
+            "sha256": "5b8b4c4b8ad6c8e97a21118a865615c6ccbe4df1e12d901ec43376866e217833"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationRequest",
+            "sha256": "221b1a93f71be07a44d7526163168688395e3a32e922ff1506f20fd763d08f3b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "6f097b72c1b86b457f94eb90a23f67d46149b622606fb9a65a23c4ef4f725034",
+        "runtimeSha256": "74e894e9bf75270e7a3941ec781159d35f540eeb9cfd89cf403dfdc8644f7476"
+      },
+      {
+        "id": "identity.f1-10e.sales-authority.schema.v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "07c1339b9b848e27199cc2b695de2ea175ed0ee77734b927800a8ac34de54cf6"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "9613ad9405c06317b125025e6ffbcefa9f193aa0e53a86c8a0490ae025155f18"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "f8f1b5d022f9eeabdcc03b054f988cf944f67b9784468fe91d52222ccef26ed0",
+        "runtimeSha256": "f8f1b5d022f9eeabdcc03b054f988cf944f67b9784468fe91d52222ccef26ed0"
+      },
+      {
+        "id": "identity.f1-10d.identity-sales-authority-policy-v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "sha256": "ea3c7fb9234c903aa56c0a5007bc427e7a0535336606185fa01ae49eb40d548b"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+            "pointer": "",
+            "sha256": "ef596bd34802c02fc64cd4b7a67acbad97515dfba3defbe19ba17dba2d4f9700"
+          }
+        ],
+        "selectionSha256": "ec9f6d9c44f7699acf9eb07c467f67e889eef75f55cb117e90118940a88e13d9",
+        "runtimeSha256": "ec9f6d9c44f7699acf9eb07c467f67e889eef75f55cb117e90118940a88e13d9"
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "semantic-owner",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "sha256": "199a7bbaa207f03794370cddeb5bdf3a240a912b4be07004a105ff5d255ea82a"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "",
+            "sha256": "ef5c7d3767580f229f1f2caffaaa4ca6a154c3992a8ff4360e554fdb885b22b0"
+          }
+        ],
+        "selectionSha256": "b52d087ce1fe74b0af354045eff0bfd8712ad071cc9b61a4f466dfc73dfb18ee",
+        "runtimeSha256": "b52d087ce1fe74b0af354045eff0bfd8712ad071cc9b61a4f466dfc73dfb18ee"
+      },
+      {
+        "id": "identity.f1-14a.public.identity-operational-options-v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/public/v1/identity-operational-options-v1.yaml",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "sha256": "af4446d3268f737df7569a1f36e9e0b423f0adec698d7a7c81e5321f1c5de1c3"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "sha256": "8edea46d9258f8e4a30d683ae68595e9a55f194840a7e67b1b8867eb1914dbc8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "sha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/invalid_cursor/problem",
+            "sha256": "d4f61f172ffe7544d9a21c691c78ea478d13b06a8cfada3216ff316cb4c84ec6"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_tenant_query/problem",
+            "sha256": "406e57a61bb925d0670d2a5572c369946ba65af528b0b7fe854904542318dc83"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/restricted/problem",
+            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/revoked/problem",
+            "sha256": "e2701fe0a61585c288b7a0ea7c66ebfc989e9af717240a5e926069686ee8cc12"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/incomplete",
+            "sha256": "cdfa4fbf5a27d0d097f59b22df189de6f13228081c16c0439f10fc682afc65af"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/multiple",
+            "sha256": "5a5efec392811451191244612bc0d0ab3d7d0c79163551037184979259f29747"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/one",
+            "sha256": "392f4a7f89e21cc97c58f87be797e207d245748cfdbd703dc032d25278dbe677"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/zero",
+            "sha256": "da56f80a61eb4a2f7087827a25c506a7cf950b842d7ee189c285b0fd0edca304"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "3c2a9e81ba32eeabc9a59b4967137acc27cdc9e2eab9de62707fa3fd20723c7e"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/paths/~1tenancy~1operational-options/get",
+            "sha256": "08059429e7696e17dc7a8f3259ee792effd3a97024fe48abe1038cc06affb388"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOption",
+            "sha256": "f9d1869e41e85270f7b93aa0ed543b0d725e6edb4feedcec214e5773c8ee8f8c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOptions",
+            "sha256": "777b668e8af02d78a161eeb89501e67828215fdd60f3b327eb43b8e8c8be3a9e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOption",
+            "sha256": "f5d5b71a9e751455b90c829d773204589c0939f5e007f8d4768a287a91f1504b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOptions",
+            "sha256": "669269ea94fccec7f646d2895a09e2fdc0e9afe0e4a807e4eb0af7b6a6bee6bd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "f1b943a9a3e534fa05335cef0b5bc69612ad09fd02df1f403ccc4ab857e503e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "a01ae997b73063ffd611a1d7711f3dfbb102745812ecc9ce5aed38bc36424f46",
+        "runtimeSha256": "7cc845d1621202bb7ca8238d09a28a2ce9ecc585dbb22af036f9e38c2e603a85"
+      },
+      {
+        "id": "identity.f1-14a.private.identity-operational-options-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-operational-options-v1.yaml",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "sha256": "af4446d3268f737df7569a1f36e9e0b423f0adec698d7a7c81e5321f1c5de1c3"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "sha256": "72ef698e2545aa922b46fcf4f2f36af9e927c49612754855df29ed3957811b39"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "sha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/invalid_cursor/problem",
+            "sha256": "d4f61f172ffe7544d9a21c691c78ea478d13b06a8cfada3216ff316cb4c84ec6"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_tenant_query/problem",
+            "sha256": "406e57a61bb925d0670d2a5572c369946ba65af528b0b7fe854904542318dc83"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/restricted/problem",
+            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/revoked/problem",
+            "sha256": "e2701fe0a61585c288b7a0ea7c66ebfc989e9af717240a5e926069686ee8cc12"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/incomplete",
+            "sha256": "cdfa4fbf5a27d0d097f59b22df189de6f13228081c16c0439f10fc682afc65af"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/multiple",
+            "sha256": "5a5efec392811451191244612bc0d0ab3d7d0c79163551037184979259f29747"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/one",
+            "sha256": "392f4a7f89e21cc97c58f87be797e207d245748cfdbd703dc032d25278dbe677"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/zero",
+            "sha256": "da56f80a61eb4a2f7087827a25c506a7cf950b842d7ee189c285b0fd0edca304"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/components/securitySchemes/delegatedBearer",
+            "sha256": "789490961445d3211348f54885580c789159c98348b7118c8836da55b9d6ce2a"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "3c2a9e81ba32eeabc9a59b4967137acc27cdc9e2eab9de62707fa3fd20723c7e"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/paths/~1tenancy~1operational-options/get",
+            "sha256": "b8bdcbc15bf500471d2bddddf05e2359c31e452d4ea102d7d6dfb60960347174"
+          },
+          {
+            "path": "identity/http/private/v1/identity-operational-options-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOption",
+            "sha256": "f9d1869e41e85270f7b93aa0ed543b0d725e6edb4feedcec214e5773c8ee8f8c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOptions",
+            "sha256": "777b668e8af02d78a161eeb89501e67828215fdd60f3b327eb43b8e8c8be3a9e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOption",
+            "sha256": "f5d5b71a9e751455b90c829d773204589c0939f5e007f8d4768a287a91f1504b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOptions",
+            "sha256": "669269ea94fccec7f646d2895a09e2fdc0e9afe0e4a807e4eb0af7b6a6bee6bd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "f1b943a9a3e534fa05335cef0b5bc69612ad09fd02df1f403ccc4ab857e503e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "57e598c1aa0598dbc9feb59c96b7fea5836b4ea4c310a928f73602cf697c7c71",
+        "runtimeSha256": "41f1e273ffbbe405fa996e43e4b4e2dc0279f7f3624014743374b602079d9e55"
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-options-v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "sha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "",
+            "sha256": "d33d18acd660459cd856e4d5146e823f3ce5386eb090c8233fc5391e89eb833d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOption",
+            "sha256": "f9d1869e41e85270f7b93aa0ed543b0d725e6edb4feedcec214e5773c8ee8f8c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOption",
+            "sha256": "f5d5b71a9e751455b90c829d773204589c0939f5e007f8d4768a287a91f1504b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "f1b943a9a3e534fa05335cef0b5bc69612ad09fd02df1f403ccc4ab857e503e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "d58161c268b9d923e17659c749a4e95b06f3c45ba99f83fcdb40dad95063958d",
+        "runtimeSha256": "d58161c268b9d923e17659c749a4e95b06f3c45ba99f83fcdb40dad95063958d"
+      },
+      {
+        "id": "identity.f1-14a.private.identity-finance-operational-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+        "operations": [
+          "createFinanceOperationalDelegation",
+          "checkFinanceOperationalAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/finance-operational-authority/v1/requests-and-results.json",
+            "sha256": "b4133cfe9d2e545bdb9c36b715ecf721f1902c24d1142acfcced2e61b4516d04"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "sha256": "ac139b6fee86a6202ba825b34d84cca667437bddea43cdabc43f41f6af5448b9"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "sha256": "046786af08440725626e5b8e7dcc04f3f1a6c6280b5fba5c146bde4d15a4f0e3"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/finance-operational-authority/v1/requests-and-results.json",
+            "pointer": "/Authorization",
+            "sha256": "c13dfb481d56147d656c6530d432b9ea7d119d43fc50b1b043065628fc9fe6fb"
+          },
+          {
+            "path": "identity/fixtures/finance-operational-authority/v1/requests-and-results.json",
+            "pointer": "/AuthorizationRequest",
+            "sha256": "afe933e08887283e759e554f43fe58637ce87a4da58392e9c2cae03a51cc8d9a"
+          },
+          {
+            "path": "identity/fixtures/finance-operational-authority/v1/requests-and-results.json",
+            "pointer": "/Delegation",
+            "sha256": "7814cea0f36efa53560558fb31a224dcad1752e12ddfd33793052912207ac0e2"
+          },
+          {
+            "path": "identity/fixtures/finance-operational-authority/v1/requests-and-results.json",
+            "pointer": "/DelegationRequest",
+            "sha256": "fbbe627b17e9fdc355f9c777b9f6feeda938607e67a0dc7714add58d8ed98664"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "16f9d13cf406b069cfce5435a7c3f49541497d21ba386f5790c60a5f8c592ea7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1finance-operational-authorizations/post",
+            "sha256": "d9094b3772912b603820403b6fc71e626a205370a550f5df0528716e40389056"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1finance-operational-delegations/post",
+            "sha256": "215624908c6dfdca33c4bb4b80819ae68a03d82c730cecf0f884030bdf5f20d7"
+          },
+          {
+            "path": "identity/http/private/v1/identity-finance-operational-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "f6fac9a577418d1ecbe4225cda52ad78e164f9e2294c85e7452f0705b42e99cc"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "4c368aedf5d1d23ecb8b4d92d37725b9fd527ea969eec78949ea40a944ba3f6e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "f542d23e157fda5f9103dae27da7d1c2b61e6e7370120f73cce00b6c753c1e77"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/Delegation",
+            "sha256": "fcb0cd49089cee935f44d87282a42d059de9cdb99983c67760f22bc1a234d110"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/DelegationRequest",
+            "sha256": "8a23e8aa851d0c50ba51a55e41bfee89841a5c18a2948148b3817405c8ed60fd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/HttpAuthorization",
+            "sha256": "39b1c8e7ac89f488f762e732649703769e3f766fcca0110652f4c983533dd8ee"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/HttpDelegation",
+            "sha256": "27a8a4cd86639f7e59d79ed56aece504a235c7b7be36840df135040f0587c97a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "278c5756bd7bcdf2084c6fd35200f44d4e3f912649162da0cad7fddd4db15588"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "40009498a973e02b1d7193309764e73b26f3d3f94c2f1fa1ce3bedd80454718d",
+        "runtimeSha256": "1a55662e233175b2e6ad12da49c58831d84a27215efde3d22be06bb7a4d8a552"
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-finance-operational-authority-v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "sha256": "046786af08440725626e5b8e7dcc04f3f1a6c6280b5fba5c146bde4d15a4f0e3"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "27f4125f87d58c91769c442fa208946a153c455666f6a8a22631cede1656bc54"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "f542d23e157fda5f9103dae27da7d1c2b61e6e7370120f73cce00b6c753c1e77"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "278c5756bd7bcdf2084c6fd35200f44d4e3f912649162da0cad7fddd4db15588"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-finance-operational-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "25b9fe202195cb468b619b29ed852666bee9952fd093ca284e37225a1099c2da",
+        "runtimeSha256": "25b9fe202195cb468b619b29ed852666bee9952fd093ca284e37225a1099c2da"
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+            "sha256": "0c2860ead95ac4a207d7cd1f5d36291256588c315e5e92931bad1f3c5e51dfc8"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+            "pointer": "",
+            "sha256": "88f8ce57a18e6332894163b8f1a4380926cf1bafee93dfb83536e01918e85a8c"
+          }
+        ],
+        "selectionSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343",
+        "runtimeSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343"
       }
     ],
     "assets": []

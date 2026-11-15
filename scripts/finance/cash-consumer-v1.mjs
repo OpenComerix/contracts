@@ -1,3 +1,4 @@
+import {projectOperationalConsumerFile,projectOperationalConsumerDocument,withOperationalConsumersScope} from '../identity/operational-context-consumers-v1.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync, writeFileSync, mkdirSync} from 'node:fs';
 import path from 'node:path';
@@ -87,17 +88,22 @@ export function cashConsumerMetadata(){ return new Map([...facts().metadata].map
 // Pure exact projections adapt older proofs without approving other live files.
 // Altered and partial supplied values are never repaired.
 export function projectCashConsumerFile(file,bytes){
+  bytes=projectOperationalConsumerFile(file,bytes);
   bytes=projectPaymentConsumerFile(file,bytes);
   if(!['registry/contracts.json','registry/consumers/index.json','finance/README.md'].includes(file)) return bytes;
   const expected=facts().metadata.get(file);
   return text(bytes)===text(expected)?source(file):bytes;
 }
 export function projectCashConsumerDocument(file,value){
+  value=projectOperationalConsumerDocument(file,value);
   value=projectPaymentConsumerDocument(file,value);
   if(!['registry/contracts.json','registry/consumers/index.json'].includes(file)) return value;
   return isDeepStrictEqual(value,JSON.parse(facts().metadata.get(file)))?JSON.parse(source(file)):value;
 }
 export function validateCashConsumer(read=native){
+  return withOperationalConsumersScope([],read,(_paths,read)=>validateCashConsumerSource(read),'CASH_METADATA');
+}
+function validateCashConsumerSource(read){
   const supplied=read;read=file=>projectPaymentConsumerFile(file,supplied(file));
   const model=facts();
   for(const [file,expected]of model.metadata) same(read(file),expected,'CASH_METADATA:'+file);
