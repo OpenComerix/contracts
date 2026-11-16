@@ -18458,6 +18458,30 @@
       "sha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "finance.f1-14d.public.finance-browser-reads-v1",
+      "domain": "finance",
+      "surface": "http-public",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.browser-operational-reads",
+      "purpose": "F1-14D selected admission of four browser-compatible operational GETs; no consumer migration or runtime activation.",
+      "reasonForChange": "Admit immutable source after full exact SHA/ref CI; optional Origin on reads only, with authority and mutations preserved.",
+      "retirement": "Incompatible changes require a successor and explicitly authorized migration; preserve published bytes.",
+      "version": "1.0.0",
+      "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+      "commit": "96d6e4909b08e7406c5bd0289e9cce1b04122349",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e",
+      "operations": [
+        "listCashRegisters",
+        "getCashShift",
+        "getCashShiftExpected",
+        "getOpenCashShift"
+      ],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -19422,22 +19446,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "finance.f1-14d.public.finance-browser-reads-v1",
-      "domain": "finance",
-      "owner": "finance",
-      "materializeIn": "F1-14D",
-      "status": "planned",
-      "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
-      "version": "1.0.0",
-      "operations": [
-        "listCashRegisters",
-        "getCashShift",
-        "getCashShiftExpected",
-        "getOpenCashShift"
-      ],
-      "constraint": "Selected source successor: optional Origin only for four operational GETs. Preserve published bytes and mutation Origin/CSRF. Audited publication, full exact SHA/ref CI and separate selected admission precede consumption; no runtime grant."
     }
   ],
   "requiredConsumers": [

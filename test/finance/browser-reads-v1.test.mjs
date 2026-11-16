@@ -6,6 +6,7 @@ import {syncBuiltinESMExports} from 'node:module';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {makeLock,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {projectBrowserReadsAdmissionFile} from '../../scripts/finance/browser-reads-admission-v1.mjs';
 import {
   browserReadsBase,browserReadsPath,browserReadsFixturesPath,browserReadsId,
   browserReadsFiles,browserReadsPreservedFiles,validateBrowserReads,validateBrowserReadsInput,
@@ -13,7 +14,8 @@ import {
 } from '../../scripts/finance/browser-reads-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
-const read = file => fs.readFileSync(path.join(root, file));
+// Source assertions retain their published snapshot; admission has its own gate.
+const read = file => projectBrowserReadsAdmissionFile(file, fs.readFileSync(path.join(root, file)));
 const old = createGitReader()(root, browserReadsBase);
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const registryPath = 'registry/contracts.json';

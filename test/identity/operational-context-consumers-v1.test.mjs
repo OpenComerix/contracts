@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {browserReadsFiles,browserReadsPreservedFiles} from '../../scripts/finance/browser-reads-v1.mjs';
+import {browserReadsAdmissionScopeFiles} from '../../scripts/finance/browser-reads-admission-v1.mjs';
 import {
   operationalConsumersBase,operationalConsumerFiles,operationalConsumerToolingFiles,
   validateOperationalConsumers,projectOperationalConsumerFile,
@@ -92,10 +93,10 @@ test('one synchronous context reads each live input once regardless of projectio
   for(const count of [1,10,100]){
     const visits=new Map();
     withOperationalConsumersScope([],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
-      assert.deepEqual(paths,[...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles]);
+      assert.deepEqual(paths,[...new Set([...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles])]);
       for(let i=0;i<count;i++)for(const file of operationalConsumerFiles)assert.deepEqual(historical(file),old(file));
     });
-    assert.equal(visits.size,operationalConsumerFiles.length+browserReadsFiles.length+2);
+    assert.equal(visits.size,new Set([...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles]).size);
     assert([...visits.values()].every(n=>n===1));
   }
 });

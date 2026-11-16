@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectBrowserReadsAdmissionFile,projectBrowserReadsAdmissionDocument,withBrowserReadsAdmissionScope} from './browser-reads-admission-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const browserReadsBase = '02365abfe474a49afcfa1a35322e77489c7eced6';
@@ -105,27 +106,35 @@ export const browserReadsCandidate = () => new Map([...inputs].map(([file, bytes
 
 // Pure exact-value projections: no live I/O, recursive gates or remembered approval.
 export function projectBrowserReadsFile(file, bytes) {
+  bytes = projectBrowserReadsAdmissionFile(file, bytes);
   const expected = metadata.get(file);
   if (!expected) return bytes;
   try {return text(bytes) === text(expected) ? source(file) : bytes;} catch {return bytes;}
 }
 export function projectBrowserReadsDocument(file, value) {
+  value = projectBrowserReadsAdmissionDocument(file, value);
   const expected = metadata.get(file);
   if (!expected || !file.endsWith('.json')) return value;
   return isDeepStrictEqual(value, JSON.parse(expected)) ? JSON.parse(source(file)) : value;
 }
 export function validateBrowserReadsInput(file, bytes) {
+  bytes = projectBrowserReadsAdmissionFile(file, bytes);
   assert(inputs.has(file), 'BROWSER_READS_UNKNOWN_INPUT:' + file);
   assert.equal(text(bytes), text(inputs.get(file)), 'BROWSER_READS_BYTES:' + file);
 }
 export function validateBrowserReads(read = native) {
+  return withBrowserReadsAdmissionScope([], read, (_paths, read) => {
   for (const file of browserReadsFiles) validateBrowserReadsInput(file, read(file));
   for (const file of predecessors) assert.equal(text(read(file)), text(source(file)), 'BROWSER_READS_PREDECESSOR:' + file);
   return {operations: 4, planned: 1, admitted: 0, runtimeDemonstrated: false};
+  }, 'BROWSER_READS_BYTES');
 }
 // One bounded context validates the new delta once. Older owner gates receive
 // their exact historical inputs; caller drift and partial metadata never project.
 export function withBrowserReadsScope(paths, read, verify, label = 'BROWSER_READS_BYTES') {
+  return withBrowserReadsAdmissionScope(paths, read, (paths, read) => withSourceScope(paths, read, verify, label), label);
+}
+function withSourceScope(paths, read, verify, label) {
   let active = true;
   const live = new Map();
   const raw = file => {
