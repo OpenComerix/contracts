@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/gateway-bff",
-  "sourceCommit": "1bac15076e7e9338b1176996c3a417d7e7b21802",
-  "manifestSha256": "4b4d0fda604cc701b3e4571d936a4c3df91e034b42c6c9283d1bb03f1be50107",
-  "lockSha256": "d9df550ab39be3d5feb002c4a2c92ce7d64c75076e120423815eb07b416a5962",
+  "sourceCommit": "ef12752e68b761b9c84a8f62588e334d0d754f93",
+  "manifestSha256": "8399825378a6399f66415efbcb58de88d40f6cdd9c87418181810a0e05a302bc",
+  "lockSha256": "964b27e4c1ff9802be312f3d8e919d6712835a1f430e7a228d54d97b59887cf7",
   "manifest": {
     "formatVersion": 1,
     "service": "gateway-bff",
@@ -445,13 +445,10 @@
         "version": "1.0.0",
         "operations": [
           "createPosCashRegister",
-          "listCashRegisters",
-          "openCashShift",
-          "getCashShift",
-          "getCashShiftExpected"
+          "openCashShift"
         ],
         "pointers": [],
-        "purpose": "F1-14C selected operational HTTP ingress; no historical sessions or owner business logic.",
+        "purpose": "F1-14D original Finance public mutations; retain mandatory Origin/CSRF and authority.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm contract:gate",
@@ -649,21 +646,6 @@
         ]
       },
       {
-        "id": "finance.f1-14a.public.finance-open-shift-v1",
-        "role": "consumer",
-        "version": "1.0.0",
-        "operations": [
-          "getOpenCashShift"
-        ],
-        "pointers": [],
-        "purpose": "F1-14C selected operational HTTP ingress; no historical sessions or owner business logic.",
-        "gates": [
-          "pnpm contracts:metadata",
-          "pnpm contract:gate",
-          "pnpm test:e2e"
-        ]
-      },
-      {
         "id": "finance.f1-14a.private.finance-open-shift-v1",
         "role": "consumer",
         "version": "1.0.0",
@@ -687,6 +669,24 @@
         ],
         "pointers": [],
         "purpose": "F1-14C selected operational HTTP ingress; no historical sessions or owner business logic.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:e2e"
+        ]
+      },
+      {
+        "id": "finance.f1-14d.public.finance-browser-reads-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "listCashRegisters",
+          "getCashShift",
+          "getCashShiftExpected",
+          "getOpenCashShift"
+        ],
+        "pointers": [],
+        "purpose": "F1-14D four browser-compatible Finance GETs; optional Origin never grants authority.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm contract:gate",
@@ -1921,28 +1921,21 @@
         "purpose": "runtime"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "finance/fixtures/open-shift/v1/responses.json",
         "destination": ".contracts/operational/finance/finance/fixtures/open-shift/v1/responses.json",
         "representation": "exact",
         "purpose": "validation"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
-        "sourcePath": "finance/http/public/v1/finance-open-shift-v1.yaml",
-        "destination": "src/modules/finance-gateway/transport/contracts/finance/http/public/v1/finance-open-shift-v1.yaml",
-        "representation": "exact",
-        "purpose": "runtime"
-      },
-      {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
         "destination": "src/modules/finance-gateway/transport/contracts/finance/http/shared/v1/finance-open-shift-v1.schema.json",
         "representation": "exact",
         "purpose": "runtime"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "identity/fixtures/operational-options/v1/problems.json",
         "destination": ".contracts/operational/finance/identity/fixtures/operational-options/v1/problems.json",
         "representation": "exact",
@@ -2080,6 +2073,13 @@
         "destination": "src/modules/identity-gateway/transport/operational-contracts/identity/http/private/v1/identity-operational-options-v1.yaml",
         "representation": "exact",
         "purpose": "runtime"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "destination": "src/modules/finance-gateway/transport/contracts/finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime"
       }
     ],
     "bindings": [
@@ -2120,7 +2120,7 @@
       },
       {
         "kind": "gateway-operation-registry",
-        "path": "src/modules/finance-gateway/transport/operations.ts",
+        "path": "src/modules/finance-gateway/transport/mutation-operations.ts",
         "contractId": "finance.http.public.v1"
       },
       {
@@ -2132,11 +2132,6 @@
         "kind": "gateway-operation-registry",
         "path": "src/modules/finance-gateway/transport/authority-operation.ts",
         "contractId": "identity.finance-authority.http.v1"
-      },
-      {
-        "kind": "gateway-operation-registry",
-        "path": "src/modules/finance-gateway/transport/open-shift-operation.ts",
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1"
       },
       {
         "kind": "gateway-operation-registry",
@@ -2172,13 +2167,18 @@
         "kind": "gateway-operation-registry",
         "path": "src/modules/identity-gateway/transport/operational-options-operation.ts",
         "contractId": "identity.f1-14a.private.identity-operational-options-v1"
+      },
+      {
+        "kind": "gateway-operation-registry",
+        "path": "src/modules/finance-gateway/transport/browser-read-operations.ts",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1"
       }
     ]
   },
   "lock": {
     "formatVersion": 1,
     "service": "gateway-bff",
-    "manifestSha256": "4b4d0fda604cc701b3e4571d936a4c3df91e034b42c6c9283d1bb03f1be50107",
+    "manifestSha256": "8399825378a6399f66415efbcb58de88d40f6cdd9c87418181810a0e05a302bc",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -8016,10 +8016,7 @@
         "root": "finance/http/public/v1/finance-v1.yaml",
         "operations": [
           "createPosCashRegister",
-          "listCashRegisters",
-          "openCashShift",
-          "getCashShift",
-          "getCashShiftExpected"
+          "openCashShift"
         ],
         "pointers": [],
         "files": [
@@ -8069,11 +8066,6 @@
           },
           {
             "path": "finance/http/public/v1/finance-v1.yaml",
-            "pointer": "/paths/~1finance~1cash-registers/get",
-            "sha256": "7afad97118a9798a025a0a9a2c2d310853393b0f8c90d7b68113ec5c9312e971"
-          },
-          {
-            "path": "finance/http/public/v1/finance-v1.yaml",
             "pointer": "/paths/~1finance~1cash-registers/post",
             "sha256": "246fb520a6d1f216e503dbd35c967144bc63555215bbb381c64d39a1cc658298"
           },
@@ -8081,16 +8073,6 @@
             "path": "finance/http/public/v1/finance-v1.yaml",
             "pointer": "/paths/~1finance~1cash-shifts/post",
             "sha256": "4028713bfd4284e25473cc6afc38035828dcfc0f3081f8b94fe4ab58bdf07f5d"
-          },
-          {
-            "path": "finance/http/public/v1/finance-v1.yaml",
-            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}/get",
-            "sha256": "f2e2a2563a24e4dfa7fc2abab86d4e7384c7c32c6c5d3d44a2b0014b68294d7c"
-          },
-          {
-            "path": "finance/http/public/v1/finance-v1.yaml",
-            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}~1expected/get",
-            "sha256": "93195b57f401b32219dd326c6bf3cae2bb9dc386d383de02c1dc2a5adf834e74"
           },
           {
             "path": "finance/http/public/v1/finance-v1.yaml",
@@ -8114,18 +8096,8 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
-            "pointer": "/$defs/CashRegisters",
-            "sha256": "ccb87c1d5074e3080972be4d75bf4c1a36c49f4d70cfb6a962406ea7bdad1799"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/CashShift",
             "sha256": "00aeb264412685067aa10a81bf2793dd686ca156114870f1dd252dea16aec870"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
-            "pointer": "/$defs/Expected",
-            "sha256": "43c8f38888449c2ff0766356b5bfe0363dd90a7920dab2504c4494a5f28caf6c"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -8134,18 +8106,8 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
-            "pointer": "/$defs/HttpCashRegisters",
-            "sha256": "bc9a7174530e716d57dae802ea0e9587527c656c21871c7d1397e27f467232c3"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$defs/HttpCashShift",
             "sha256": "373537083dec789734ed698801989e0da4e439f3d5a648ddf2a4515039f1471d"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
-            "pointer": "/$defs/HttpExpected",
-            "sha256": "7495042afbc97a1ae72da2de49fefc76b8181c30e679a32067f5c20a77279ac0"
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
@@ -8159,11 +8121,6 @@
           },
           {
             "path": "finance/http/shared/v1/finance-types-v1.schema.json",
-            "pointer": "/$defs/Page",
-            "sha256": "61b3e902590a844cc723a425818c66ec9e3536b342852efdb35db623989a24e7"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
             "pointer": "/$id",
             "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
           },
@@ -8173,8 +8130,8 @@
             "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
           }
         ],
-        "selectionSha256": "4a1e5006aeee30efb056b618ff041ba23a0581500dfba2d9f6b4b40a6d6aac18",
-        "runtimeSha256": "3c6473b5d08523a98e9e378e3e0b8c5b67edd5820cf36b922cc67816f37a432b"
+        "selectionSha256": "984e40a8d9a8ab65b6e6fbbeeaf6d046d196b1fb0942e53549a1418f3247e6e2",
+        "runtimeSha256": "d2c1e7118bffc4c70ab146744bcc6d1d01ad0275ee2baa40bdd7c3b7464f1f3b"
       },
       {
         "id": "finance.http.private.v1",
@@ -9931,141 +9888,6 @@
         "runtimeSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343"
       },
       {
-        "id": "finance.f1-14a.public.finance-open-shift-v1",
-        "role": "consumer",
-        "version": "1.0.0",
-        "sourceRepository": "opencomerix/contracts",
-        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
-        "tag": null,
-        "tagObject": null,
-        "root": "finance/http/public/v1/finance-open-shift-v1.yaml",
-        "operations": [
-          "getOpenCashShift"
-        ],
-        "pointers": [],
-        "files": [
-          {
-            "path": "common/http/shared/v3/problem-details-v3.schema.json",
-            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
-          },
-          {
-            "path": "finance/fixtures/open-shift/v1/responses.json",
-            "sha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "sha256": "efbfaa3fe913e9ecce6e4ca0ae804e704ff302e25ab7a15db429b4a4d92105b5"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "sha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648"
-          },
-          {
-            "path": "identity/fixtures/operational-options/v1/problems.json",
-            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
-          }
-        ],
-        "units": [
-          {
-            "path": "common/http/shared/v3/problem-details-v3.schema.json",
-            "pointer": "",
-            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
-          },
-          {
-            "path": "common/http/shared/v3/problem-details-v3.schema.json",
-            "pointer": "/$id",
-            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
-          },
-          {
-            "path": "common/http/shared/v3/problem-details-v3.schema.json",
-            "pointer": "/$schema",
-            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
-          },
-          {
-            "path": "finance/fixtures/open-shift/v1/responses.json",
-            "pointer": "/absent",
-            "sha256": "8b689b7c5fc800198885a63f26797845e4a956c6cf8a1b90000e19ee996f702b"
-          },
-          {
-            "path": "finance/fixtures/open-shift/v1/responses.json",
-            "pointer": "/open",
-            "sha256": "f266fae1f8ae0c173e248e0f3c6cc9b9ebed16cc007b0f61a83825180b3bf942"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/components/securitySchemes/session",
-            "sha256": "7d505c15d55458d7d6d62f0e5bcc7461e0d29b1a503ec92b16074a634c1ab484"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/jsonSchemaDialect",
-            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/openapi",
-            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/paths/~1finance~1cash-registers~1{cash_register_id}~1open-shift/get",
-            "sha256": "29da72b4af7d095b0446d754315bdc5aba9e715360825704ec7f255aa61c4414"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/security",
-            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
-          },
-          {
-            "path": "finance/http/public/v1/finance-open-shift-v1.yaml",
-            "pointer": "/servers",
-            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$defs/HttpOpenShift",
-            "sha256": "7465fa3c5f2af2c0f682f70dcd28cf11070bcd48c7cb9fced0d29deedf85dbb8"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$defs/HttpOpenShiftRef",
-            "sha256": "6d20ae440a3990c19baa10235aba3d67f8dcb630e5f027273c9b5bda4b40527c"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$defs/OpenShift",
-            "sha256": "e0ed51cea5adc3eeb45e506b5a2eb0542e22fac469a7ac98363f1601a131d286"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$defs/OpenShiftRef",
-            "sha256": "e2515b54d2c584f53f8322bf57b966f3dcd8a51698445e9165a6781050e580f9"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$id",
-            "sha256": "59d9ff741a7bd8fc468df1b7c449c9ec1d7a141f62071ab6b1960592a9e4412f"
-          },
-          {
-            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
-            "pointer": "/$schema",
-            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
-          },
-          {
-            "path": "identity/fixtures/operational-options/v1/problems.json",
-            "pointer": "/other_responsible/problem",
-            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
-          },
-          {
-            "path": "identity/fixtures/operational-options/v1/problems.json",
-            "pointer": "/other_tenant_register/problem",
-            "sha256": "58794c6b748bde28c7c65c0ebf0b129281454c5695e8fb4d65ddd1b3bc3dee40"
-          }
-        ],
-        "selectionSha256": "4aaa44435e603d25039dbc2d8be869d8854db1dd7c5e9f427f079c007e7062ff",
-        "runtimeSha256": "11fb4d23065537f98266b0e572c89d8063f2a1b54ed4d9ac70c9e32c14c4457d"
-      },
-      {
         "id": "finance.f1-14a.private.finance-open-shift-v1",
         "role": "consumer",
         "version": "1.0.0",
@@ -10330,6 +10152,218 @@
         ],
         "selectionSha256": "3586aa42e620de691e04c959de026ef51ad4c273ae1bf320b7c1a96622d0b1cf",
         "runtimeSha256": "5bd09ad52d58fecdaef539faa91798334a081d6048b581104ae64097fa9b58e9"
+      },
+      {
+        "id": "finance.f1-14d.public.finance-browser-reads-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "96d6e4909b08e7406c5bd0289e9cce1b04122349",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "operations": [
+          "listCashRegisters",
+          "getCashShift",
+          "getCashShiftExpected",
+          "getOpenCashShift"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "sha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "sha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "sha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "pointer": "/absent",
+            "sha256": "8b689b7c5fc800198885a63f26797845e4a956c6cf8a1b90000e19ee996f702b"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "pointer": "/open",
+            "sha256": "f266fae1f8ae0c173e248e0f3c6cc9b9ebed16cc007b0f61a83825180b3bf942"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "7d505c15d55458d7d6d62f0e5bcc7461e0d29b1a503ec92b16074a634c1ab484"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-registers/get",
+            "sha256": "54175d77804ff153380e35546f758713f1652318aa52bf7fe13213c43ba9956a"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-registers~1{cash_register_id}~1open-shift/get",
+            "sha256": "b567c69967477807a7e1d99c3e8438d0a1bebd74d0f15bf991060f0db2639b99"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}/get",
+            "sha256": "a2151f7127353c157b69e352b5dd14b8fb60dead7643315bc8227e5922ee6da8"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}~1expected/get",
+            "sha256": "8a5ab52af6a4c8d98608c1c1e669347e7339017ee563a9a65a76c63f9ffc0006"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/HttpOpenShift",
+            "sha256": "7465fa3c5f2af2c0f682f70dcd28cf11070bcd48c7cb9fced0d29deedf85dbb8"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/HttpOpenShiftRef",
+            "sha256": "6d20ae440a3990c19baa10235aba3d67f8dcb630e5f027273c9b5bda4b40527c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/OpenShift",
+            "sha256": "e0ed51cea5adc3eeb45e506b5a2eb0542e22fac469a7ac98363f1601a131d286"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/OpenShiftRef",
+            "sha256": "e2515b54d2c584f53f8322bf57b966f3dcd8a51698445e9165a6781050e580f9"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "59d9ff741a7bd8fc468df1b7c449c9ec1d7a141f62071ab6b1960592a9e4412f"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegister",
+            "sha256": "0edde33434ae5eef2c77953a477235c03185fca3df82100d0f6949d051664bd2"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegisters",
+            "sha256": "ccb87c1d5074e3080972be4d75bf4c1a36c49f4d70cfb6a962406ea7bdad1799"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashShift",
+            "sha256": "00aeb264412685067aa10a81bf2793dd686ca156114870f1dd252dea16aec870"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Expected",
+            "sha256": "43c8f38888449c2ff0766356b5bfe0363dd90a7920dab2504c4494a5f28caf6c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashRegisters",
+            "sha256": "bc9a7174530e716d57dae802ea0e9587527c656c21871c7d1397e27f467232c3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashShift",
+            "sha256": "373537083dec789734ed698801989e0da4e439f3d5a648ddf2a4515039f1471d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpExpected",
+            "sha256": "7495042afbc97a1ae72da2de49fefc76b8181c30e679a32067f5c20a77279ac0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "61b3e902590a844cc723a425818c66ec9e3536b342852efdb35db623989a24e7"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_responsible/problem",
+            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_tenant_register/problem",
+            "sha256": "58794c6b748bde28c7c65c0ebf0b129281454c5695e8fb4d65ddd1b3bc3dee40"
+          }
+        ],
+        "selectionSha256": "6a6974bd343cb4a4eb384c9e5e734bc64bf246c419da756bd4854b580c398dbf",
+        "runtimeSha256": "1e947930662f9db3bf5c4e860e4db5e5e37e074b3f6ed412fa3cc65fa10684aa"
       }
     ],
     "assets": [
@@ -12084,7 +12118,7 @@
         "localSha256": "985dec8308d4f7a8553c4663a1f94f9295846276986ed3ac61d4b372276cb36b"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "finance/fixtures/open-shift/v1/responses.json",
         "destination": ".contracts/operational/finance/finance/fixtures/open-shift/v1/responses.json",
         "representation": "exact",
@@ -12094,17 +12128,7 @@
         "localSha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
-        "sourcePath": "finance/http/public/v1/finance-open-shift-v1.yaml",
-        "destination": "src/modules/finance-gateway/transport/contracts/finance/http/public/v1/finance-open-shift-v1.yaml",
-        "representation": "exact",
-        "purpose": "runtime",
-        "sourceSha256": "efbfaa3fe913e9ecce6e4ca0ae804e704ff302e25ab7a15db429b4a4d92105b5",
-        "semanticSha256": null,
-        "localSha256": "efbfaa3fe913e9ecce6e4ca0ae804e704ff302e25ab7a15db429b4a4d92105b5"
-      },
-      {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
         "destination": "src/modules/finance-gateway/transport/contracts/finance/http/shared/v1/finance-open-shift-v1.schema.json",
         "representation": "exact",
@@ -12114,7 +12138,7 @@
         "localSha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648"
       },
       {
-        "contractId": "finance.f1-14a.public.finance-open-shift-v1",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
         "sourcePath": "identity/fixtures/operational-options/v1/problems.json",
         "destination": ".contracts/operational/finance/identity/fixtures/operational-options/v1/problems.json",
         "representation": "exact",
@@ -12312,6 +12336,16 @@
         "sourceSha256": "72ef698e2545aa922b46fcf4f2f36af9e927c49612754855df29ed3957811b39",
         "semanticSha256": null,
         "localSha256": "72ef698e2545aa922b46fcf4f2f36af9e927c49612754855df29ed3957811b39"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "destination": "src/modules/finance-gateway/transport/contracts/finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "representation": "exact",
+        "purpose": "runtime",
+        "sourceSha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e",
+        "semanticSha256": null,
+        "localSha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e"
       }
     ]
   }

@@ -7,6 +7,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectPreparationConsumerFile,projectPreparationConsumerDocument,withPreparationConsumersScope} from '../identity/preparation-consumers-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const browserReadsAdmissionSourceRevision = '96d6e4909b08e7406c5bd0289e9cce1b04122349';
@@ -82,21 +83,26 @@ for (const file of [
 ]) if (!inputs.has(file)) inputs.set(file, browserReadsAdmissionSource(file));
 export const browserReadsAdmissionInputPaths = Object.freeze([...inputs.keys()]);
 export function validateBrowserReadsAdmissionInput(file, bytes) {
+  bytes = projectPreparationConsumerFile(file, bytes);
   assert(inputs.has(file), 'BROWSER_ADMISSION_UNKNOWN_INPUT:' + file);
   assert.equal(text(bytes), text(inputs.get(file)), 'BROWSER_ADMISSION_BYTES:' + file);
 }
 export function validateBrowserReadsAdmission(read = native) {
+  return withPreparationConsumersScope([], read, (_paths, read) => {
   for (const file of browserReadsAdmissionInputPaths) validateBrowserReadsAdmissionInput(file, read(file));
   return {admitted:1, roots:224, priorRoots:223, planned:2, consumers:8, closureFiles:6, runtimeDemonstrated:false};
+  });
 }
 
 // Pure exact-value projections. They prove only the supplied value, not a live tree.
 export function projectBrowserReadsAdmissionFile(file, bytes) {
+  bytes = projectPreparationConsumerFile(file, bytes);
   const expected = metadata.get(file);
   if (!expected) return bytes;
   try {return text(bytes) === text(expected) ? browserReadsAdmissionSource(file) : bytes;} catch {return bytes;}
 }
 export function projectBrowserReadsAdmissionDocument(file, value) {
+  value = projectPreparationConsumerDocument(file, value);
   const expected = metadata.get(file);
   if (!expected || !file.endsWith('.json')) return value;
   return isDeepStrictEqual(value, JSON.parse(expected)) ? JSON.parse(browserReadsAdmissionSource(file)) : value;
@@ -121,12 +127,14 @@ export function withBrowserReadsAdmissionScope(paths, read, verify, label = 'BRO
       assert(!result || typeof result.then !== 'function', 'BROWSER_ADMISSION_SYNCHRONOUS');
       return result;
     }
-    for (const [file, expected] of delta)
-      assert.equal(text(raw(file)), text(expected), label + ':' + file);
-    const result = verify([...new Set([...paths, ...browserReadsAdmissionScopeFiles])],
-      file => projectBrowserReadsAdmissionFile(file, raw(file)));
-    assert(!result || typeof result.then !== 'function', 'BROWSER_ADMISSION_SYNCHRONOUS');
-    return result;
+    return withPreparationConsumersScope(paths, raw, (paths, prepared) => {
+      for (const [file, expected] of delta)
+        assert.equal(text(prepared(file)), text(expected), label + ':' + file);
+      const result = verify([...new Set([...paths, ...browserReadsAdmissionScopeFiles])],
+        file => projectBrowserReadsAdmissionFile(file, prepared(file)));
+      assert(!result || typeof result.then !== 'function', 'BROWSER_ADMISSION_SYNCHRONOUS');
+      return result;
+    });
   } finally {active = false; current.clear();}
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

@@ -5,6 +5,7 @@ import path from 'node:path';
 import {syncBuiltinESMExports} from 'node:module';
 import {makeLock,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {preparationConsumerFiles,projectPreparationConsumerFile} from '../../scripts/identity/preparation-consumers-v1.mjs';
 import {validateBrowserReads,projectBrowserReadsFile,withBrowserReadsScope} from '../../scripts/finance/browser-reads-v1.mjs';
 import {
   browserReadsAdmissionSourceRevision,browserReadsAdmissionSource,browserReadsAdmissionId,
@@ -31,7 +32,7 @@ test('one exact admission preserves every previous descriptor, intention and con
   assert.deepEqual(value.requiredConsumers, before.requiredConsumers);
   assert.deepEqual(value.planned, before.planned.filter(row => row.id !== browserReadsAdmissionId));
   for (const owner of before.requiredConsumers)
-    assert.equal(text(read('registry/consumers/'+owner+'.json')), text(browserReadsAdmissionSource('registry/consumers/'+owner+'.json')));
+    assert.equal(text(projectPreparationConsumerFile('registry/consumers/'+owner+'.json',read('registry/consumers/'+owner+'.json'))), text(browserReadsAdmissionSource('registry/consumers/'+owner+'.json')));
   assert.deepEqual(validateBrowserReads(), {operations:4,planned:1,admitted:0,runtimeDemonstrated:false});
 });
 
@@ -104,10 +105,10 @@ test('delta contexts read each current input once for 1, 10 or 100 projections a
   for(const count of [1,10,100]) {
     const visits=new Map();
     withBrowserReadsAdmissionScope([],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
-      assert.deepEqual(paths,browserReadsAdmissionScopeFiles);
+      assert.deepEqual(paths,[...preparationConsumerFiles,...browserReadsAdmissionScopeFiles]);
       for(let i=0;i<count;i++)assert.deepEqual(historical(registryPath),browserReadsAdmissionSource(registryPath));
     });
-    assert.equal(visits.size,browserReadsAdmissionScopeFiles.length);
+    assert.equal(visits.size,new Set([...preparationConsumerFiles,...browserReadsAdmissionScopeFiles]).size);
     assert([...visits.values()].every(value=>value===1));
   }
   for(const file of browserReadsAdmissionScopeFiles) {

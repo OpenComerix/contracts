@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/web-pos",
-  "sourceCommit": "c58a967e250ccac0137aa25af0ef9b89f85de06a",
-  "manifestSha256": "796668ced6f9b1563c7edb3932296e78af45e21e049a1b8178430f0a17023ad9",
-  "lockSha256": "4086b90bbefaeb1f57df5ae5600ac8d1b1cf2903b2e17612046e1274166d78da",
+  "sourceCommit": "dc9c2291ce8227c4f357fa266fd88b5d7442c3df",
+  "manifestSha256": "7045f69b5e45a648035d350d9ae580112dd8f59713a6df84de24fe4b108546a0",
+  "lockSha256": "0cae1795dfe453504fb5b145b97350c293ec99f8e12292cb404f488694af52cf",
   "manifest": {
     "formatVersion": 1,
     "service": "web-pos",
@@ -232,6 +232,94 @@
           "/public_security"
         ],
         "purpose": "F1-09A selected catalog preparation only; no runtime, H2 migration or exceptional recovery authority.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.public.identity-operational-options-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "purpose": "F1-14D public preparation through Gateway; current owner authorization on every request.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "inventory.http.public.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "createInitialWarehouse",
+          "listInventoryPositions",
+          "getInventoryPosition",
+          "adjustInventoryStock",
+          "getInventoryAdjustment"
+        ],
+        "pointers": [],
+        "purpose": "F1-14D public preparation through Gateway; current owner authorization on every request.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "finance.http.public.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "createPosCashRegister",
+          "openCashShift"
+        ],
+        "pointers": [],
+        "purpose": "F1-14D public preparation through Gateway; current owner authorization on every request.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "finance.f1-14d.public.finance-browser-reads-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "listCashRegisters",
+          "getOpenCashShift",
+          "getCashShift",
+          "getCashShiftExpected"
+        ],
+        "pointers": [],
+        "purpose": "F1-14D public preparation through Gateway; current owner authorization on every request.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "role": "validation",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14D observed cardinality, current authorization and recovery boundaries.",
         "gates": [
           "pnpm contracts:metadata",
           "pnpm contract:gate"
@@ -966,6 +1054,118 @@
         "destination": ".contracts/catalog/reference/catalog/http/shared/v1/catalog-security-policy-v1.json",
         "representation": "exact",
         "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "public/contracts/preparation/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/fixtures/operational-options/v1/problems.json",
+        "destination": "public/contracts/preparation/identity/fixtures/operational-options/v1/problems.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/fixtures/operational-options/v1/responses.json",
+        "destination": "public/contracts/preparation/identity/fixtures/operational-options/v1/responses.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/http/public/v1/identity-operational-options-v1.yaml",
+        "destination": "public/contracts/preparation/identity/http/public/v1/identity-operational-options-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+        "destination": "public/contracts/preparation/identity/http/shared/v1/identity-operational-options-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "inventory/http/public/v1/inventory-v1.yaml",
+        "destination": "public/contracts/preparation/inventory/http/public/v1/inventory-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "destination": "public/contracts/preparation/inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "finance.http.public.v1",
+        "sourcePath": "finance/http/public/v1/finance-v1.yaml",
+        "destination": "public/contracts/preparation/finance/http/public/v1/finance-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "finance.http.public.v1",
+        "sourcePath": "finance/http/shared/v1/finance-types-v1.schema.json",
+        "destination": "public/contracts/preparation/finance/http/shared/v1/finance-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/fixtures/open-shift/v1/responses.json",
+        "destination": "public/contracts/preparation/finance/fixtures/open-shift/v1/responses.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "destination": "public/contracts/preparation/finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+        "destination": "public/contracts/preparation/finance/http/shared/v1/finance-open-shift-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "sourcePath": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "destination": "public/contracts/preparation/identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "representation": "exact",
+        "purpose": "validation"
       }
     ],
     "bindings": [
@@ -978,13 +1178,33 @@
         "kind": "web-operation-matrix",
         "path": ".contracts/catalog/operations.mjs",
         "contractId": "catalog.http.public.v1"
+      },
+      {
+        "kind": "web-operation-matrix",
+        "path": "src/app/features/preparation/integration/context-operations.ts",
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1"
+      },
+      {
+        "kind": "web-operation-matrix",
+        "path": "src/app/features/preparation/integration/inventory-operations.ts",
+        "contractId": "inventory.http.public.v1"
+      },
+      {
+        "kind": "web-operation-matrix",
+        "path": "src/app/features/preparation/integration/cash-mutation-operations.ts",
+        "contractId": "finance.http.public.v1"
+      },
+      {
+        "kind": "web-operation-matrix",
+        "path": "src/app/features/preparation/integration/cash-read-operations.ts",
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1"
       }
     ]
   },
   "lock": {
     "formatVersion": 1,
     "service": "web-pos",
-    "manifestSha256": "796668ced6f9b1563c7edb3932296e78af45e21e049a1b8178430f0a17023ad9",
+    "manifestSha256": "7045f69b5e45a648035d350d9ae580112dd8f59713a6df84de24fe4b108546a0",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -3765,6 +3985,785 @@
         ],
         "selectionSha256": "8781b162c9b1120e3cd5acfb8770d3c76633e19fd0cf7cb69bd68d9653c9d557",
         "runtimeSha256": "8781b162c9b1120e3cd5acfb8770d3c76633e19fd0cf7cb69bd68d9653c9d557"
+      },
+      {
+        "id": "identity.f1-14a.public.identity-operational-options-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/public/v1/identity-operational-options-v1.yaml",
+        "operations": [
+          "listOperationalOptions"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "sha256": "af4446d3268f737df7569a1f36e9e0b423f0adec698d7a7c81e5321f1c5de1c3"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "sha256": "8edea46d9258f8e4a30d683ae68595e9a55f194840a7e67b1b8867eb1914dbc8"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "sha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/invalid_cursor/problem",
+            "sha256": "d4f61f172ffe7544d9a21c691c78ea478d13b06a8cfada3216ff316cb4c84ec6"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_tenant_query/problem",
+            "sha256": "406e57a61bb925d0670d2a5572c369946ba65af528b0b7fe854904542318dc83"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/restricted/problem",
+            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/revoked/problem",
+            "sha256": "e2701fe0a61585c288b7a0ea7c66ebfc989e9af717240a5e926069686ee8cc12"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/incomplete",
+            "sha256": "cdfa4fbf5a27d0d097f59b22df189de6f13228081c16c0439f10fc682afc65af"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/multiple",
+            "sha256": "5a5efec392811451191244612bc0d0ab3d7d0c79163551037184979259f29747"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/one",
+            "sha256": "392f4a7f89e21cc97c58f87be797e207d245748cfdbd703dc032d25278dbe677"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/responses.json",
+            "pointer": "/zero",
+            "sha256": "da56f80a61eb4a2f7087827a25c506a7cf950b842d7ee189c285b0fd0edca304"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "3c2a9e81ba32eeabc9a59b4967137acc27cdc9e2eab9de62707fa3fd20723c7e"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/paths/~1tenancy~1operational-options/get",
+            "sha256": "08059429e7696e17dc7a8f3259ee792effd3a97024fe48abe1038cc06affb388"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "identity/http/public/v1/identity-operational-options-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOption",
+            "sha256": "f9d1869e41e85270f7b93aa0ed543b0d725e6edb4feedcec214e5773c8ee8f8c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/HttpOperationalOptions",
+            "sha256": "777b668e8af02d78a161eeb89501e67828215fdd60f3b327eb43b8e8c8be3a9e"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOption",
+            "sha256": "f5d5b71a9e751455b90c829d773204589c0939f5e007f8d4768a287a91f1504b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$defs/OperationalOptions",
+            "sha256": "669269ea94fccec7f646d2895a09e2fdc0e9afe0e4a807e4eb0af7b6a6bee6bd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "f1b943a9a3e534fa05335cef0b5bc69612ad09fd02df1f403ccc4ab857e503e1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "a01ae997b73063ffd611a1d7711f3dfbb102745812ecc9ce5aed38bc36424f46",
+        "runtimeSha256": "7cc845d1621202bb7ca8238d09a28a2ce9ecc585dbb22af036f9e38c2e603a85"
+      },
+      {
+        "id": "inventory.http.public.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/public/v1/inventory-v1.yaml",
+        "operations": [
+          "listInventoryWarehouses",
+          "getInventoryWarehouse",
+          "createInitialWarehouse",
+          "listInventoryPositions",
+          "getInventoryPosition",
+          "adjustInventoryStock",
+          "getInventoryAdjustment"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "sha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "sha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "sha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/ConversionFactor",
+            "sha256": "0bb57ecf5adf4f2b4ff6586f20a92a8d22a795e75e9802e5ee24d852f0351d22"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Cursor",
+            "sha256": "3e8cf106d4c34f689c631fc34ec9281742a6cf4c67cef01717328109694aec7d"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "d726a233984c293af96ca72d825c2edeac4edbc240c8f89a5e338067e94c1f74"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PageLimit",
+            "sha256": "23162b456d1acb4165ce4f53650cc1718624202d07be52b243c4637f13a5c36b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/UnitCode",
+            "sha256": "e662e1f19d60e966e9f3ade6763c91e59b0f8431b2182b32bf580990c8694c38"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/PositiveQuantity",
+            "sha256": "6671041b456135a55f0062462b81d79e6bb2633dfc6c3da6af9873b85037eb63"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$defs/PhysicalSnapshot",
+            "sha256": "e62a1d7b15f51d46c126d1aa505b73e6fbfe658a8ec75f0b2a763976102e50f6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "c3c775749a598a49bf36f47d1b3a2edcf53e13adae413e9c22375fc510bcca9a"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "cfa9fe622ceda9fedca646d0101c7475a78cb3051c1ce795c8f733651738c6b2"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments/post",
+            "sha256": "8e8b818542690fc858e4445314c8f8a7e38fbe1723b58c6a272ac115fb1be2eb"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1adjustments~1{adjustment_id}/get",
+            "sha256": "581f4c21b9b00735ba92bc018f05bec55fbd2ff11b0c9eea8f276b480dec8a9e"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions/get",
+            "sha256": "41d14bf3c360035c3584e55da4e365fd14dde373993bce64ef0ee7b82ebe9531"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1positions~1{position_id}/get",
+            "sha256": "dfe8f1afca9f6f6960a307459f902ddfba40d5d00c8bf833a35acc59fd815e59"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/get",
+            "sha256": "240fb42d4e22469888b9be263532e3bcf789835d935c84b8800c620294e52597"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses/post",
+            "sha256": "74a761c92df71035715eeb20a6d92ee2f12c630411416faf120cf8005e21bae5"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/paths/~1inventory~1warehouses~1{warehouse_id}/get",
+            "sha256": "a506aa8fac6f2d3735f848976ce8a16a8aed71f5af1749067d35762132e34ba4"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "inventory/http/public/v1/inventory-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "a7ff76fcfb99ca4f56100c99c0fb5f4bede82bbd38bb9f2b28972eb278bc464c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/AdjustmentRequest",
+            "sha256": "35240ab2ca528f43e3932350b2787f5893eb2eee278276f235ba1e71778feae9"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpAdjustment",
+            "sha256": "73d4da655e31efd85df1a85f6003a2b2fcc16d734efb329d8518ff000da839fc"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPosition",
+            "sha256": "2c2c681179edd8ad70fa5be4e92e7e1dea5ec9e947f1be797626b78464f9078e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpPositions",
+            "sha256": "95f4817cde9aa39c579031fb629092970157149cb17abca9af1c83b7d349804c"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouse",
+            "sha256": "506b58e1b4239cd88fa52863e5028ee9d1224b78654fe6082c7b83e5cceb2080"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/HttpWarehouses",
+            "sha256": "e542f9b719fdd7b915b30d7c99810db52e786edc3b05fe8c471f735c1250334f"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Movement",
+            "sha256": "5c802e1e584e10dd79ba453245a555c9331edeb8774df8a99ecbde18f5f7d04d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Position",
+            "sha256": "c28974e2f9c0458f24ed7fd6e5d890c03e41a893bec85087f925f2d1fd4a3e0d"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/Warehouse",
+            "sha256": "76c1e95a3f32648ad783f679a0c8d29ea723f4a85b6c2a177de10fba3afdab4e"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$defs/WarehouseCreate",
+            "sha256": "df8076eaa6d7ab85c995c7e0a5032c35ab35b6c254f2fece277e4a8c749743df"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e8ce97d414479f1ac6418c217c3a664d2641feb9f3dd9acbf6729705bad44150"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "2b6015bb6d66ef339e4629df2c9e936372f30cfd80e4c9797ebbe339de64b084",
+        "runtimeSha256": "0b1ef7d8b4b1ee694144e1c4a6261ac44fb736d6e14d75a9772f0e1acc1d62de"
+      },
+      {
+        "id": "finance.http.public.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "7cd2b548fb909c5eff47d0319c162c498ee68e92",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/http/public/v1/finance-v1.yaml",
+        "operations": [
+          "createPosCashRegister",
+          "openCashShift"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "sha256": "935af3e0c532e6c97451480b3476da4d46c32b17bc2bc4b046263f747ded262f"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "7d505c15d55458d7d6d62f0e5bcc7461e0d29b1a503ec92b16074a634c1ab484"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-registers/post",
+            "sha256": "246fb520a6d1f216e503dbd35c967144bc63555215bbb381c64d39a1cc658298"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-shifts/post",
+            "sha256": "4028713bfd4284e25473cc6afc38035828dcfc0f3081f8b94fe4ab58bdf07f5d"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "finance/http/public/v1/finance-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegister",
+            "sha256": "0edde33434ae5eef2c77953a477235c03185fca3df82100d0f6949d051664bd2"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegisterCreate",
+            "sha256": "9615a1fcf458b3204cbcf9af8f7d123bfbea92fbeffc7d96c1646b1ea148f9a9"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashShift",
+            "sha256": "00aeb264412685067aa10a81bf2793dd686ca156114870f1dd252dea16aec870"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashRegister",
+            "sha256": "55d8b78d09f353e4e14ba9385903eeaaf690692a3eff93150467c63a0fbc9ad3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashShift",
+            "sha256": "373537083dec789734ed698801989e0da4e439f3d5a648ddf2a4515039f1471d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OpenShiftRequest",
+            "sha256": "824b50e5ec518669ed566f6c426728651c4ddbae05d311db5cc2d5952c1cfc71"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "984e40a8d9a8ab65b6e6fbbeeaf6d046d196b1fb0942e53549a1418f3247e6e2",
+        "runtimeSha256": "d2c1e7118bffc4c70ab146744bcc6d1d01ad0275ee2baa40bdd7c3b7464f1f3b"
+      },
+      {
+        "id": "finance.f1-14d.public.finance-browser-reads-v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "96d6e4909b08e7406c5bd0289e9cce1b04122349",
+        "tag": null,
+        "tagObject": null,
+        "root": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "operations": [
+          "listCashRegisters",
+          "getOpenCashShift",
+          "getCashShift",
+          "getCashShiftExpected"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "sha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "sha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "sha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "sha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "sha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "pointer": "/absent",
+            "sha256": "8b689b7c5fc800198885a63f26797845e4a956c6cf8a1b90000e19ee996f702b"
+          },
+          {
+            "path": "finance/fixtures/open-shift/v1/responses.json",
+            "pointer": "/open",
+            "sha256": "f266fae1f8ae0c173e248e0f3c6cc9b9ebed16cc007b0f61a83825180b3bf942"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "7d505c15d55458d7d6d62f0e5bcc7461e0d29b1a503ec92b16074a634c1ab484"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-registers/get",
+            "sha256": "54175d77804ff153380e35546f758713f1652318aa52bf7fe13213c43ba9956a"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-registers~1{cash_register_id}~1open-shift/get",
+            "sha256": "b567c69967477807a7e1d99c3e8438d0a1bebd74d0f15bf991060f0db2639b99"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}/get",
+            "sha256": "a2151f7127353c157b69e352b5dd14b8fb60dead7643315bc8227e5922ee6da8"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/paths/~1finance~1cash-shifts~1{cash_shift_id}~1expected/get",
+            "sha256": "8a5ab52af6a4c8d98608c1c1e669347e7339017ee563a9a65a76c63f9ffc0006"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/HttpOpenShift",
+            "sha256": "7465fa3c5f2af2c0f682f70dcd28cf11070bcd48c7cb9fced0d29deedf85dbb8"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/HttpOpenShiftRef",
+            "sha256": "6d20ae440a3990c19baa10235aba3d67f8dcb630e5f027273c9b5bda4b40527c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/OpenShift",
+            "sha256": "e0ed51cea5adc3eeb45e506b5a2eb0542e22fac469a7ac98363f1601a131d286"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$defs/OpenShiftRef",
+            "sha256": "e2515b54d2c584f53f8322bf57b966f3dcd8a51698445e9165a6781050e580f9"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "59d9ff741a7bd8fc468df1b7c449c9ec1d7a141f62071ab6b1960592a9e4412f"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegister",
+            "sha256": "0edde33434ae5eef2c77953a477235c03185fca3df82100d0f6949d051664bd2"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashRegisters",
+            "sha256": "ccb87c1d5074e3080972be4d75bf4c1a36c49f4d70cfb6a962406ea7bdad1799"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/CashShift",
+            "sha256": "00aeb264412685067aa10a81bf2793dd686ca156114870f1dd252dea16aec870"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Expected",
+            "sha256": "43c8f38888449c2ff0766356b5bfe0363dd90a7920dab2504c4494a5f28caf6c"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashRegisters",
+            "sha256": "bc9a7174530e716d57dae802ea0e9587527c656c21871c7d1397e27f467232c3"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpCashShift",
+            "sha256": "373537083dec789734ed698801989e0da4e439f3d5a648ddf2a4515039f1471d"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/HttpExpected",
+            "sha256": "7495042afbc97a1ae72da2de49fefc76b8181c30e679a32067f5c20a77279ac0"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b268f886761516f77cee3c0ffd76cfde464412d1c3f379bd9b70d0347763a845"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$defs/Page",
+            "sha256": "61b3e902590a844cc723a425818c66ec9e3536b342852efdb35db623989a24e7"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "508f5049ed4d3a06ee00faaac27d41b6963572e735f8ef249b54b2a919ba94a6"
+          },
+          {
+            "path": "finance/http/shared/v1/finance-types-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_responsible/problem",
+            "sha256": "6372a9fe0aa067fd0e80c24da49003f96e4fda0577eabe7b0df88040ead2267d"
+          },
+          {
+            "path": "identity/fixtures/operational-options/v1/problems.json",
+            "pointer": "/other_tenant_register/problem",
+            "sha256": "58794c6b748bde28c7c65c0ebf0b129281454c5695e8fb4d65ddd1b3bc3dee40"
+          }
+        ],
+        "selectionSha256": "6a6974bd343cb4a4eb384c9e5e734bc64bf246c419da756bd4854b580c398dbf",
+        "runtimeSha256": "1e947930662f9db3bf5c4e860e4db5e5e37e074b3f6ed412fa3cc65fa10684aa"
+      },
+      {
+        "id": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "role": "validation",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "362d9fc3ee816d08bc541a0f93fe2907f2f8d764",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+            "sha256": "0c2860ead95ac4a207d7cd1f5d36291256588c315e5e92931bad1f3c5e51dfc8"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+            "pointer": "",
+            "sha256": "88f8ce57a18e6332894163b8f1a4380926cf1bafee93dfb83536e01918e85a8c"
+          }
+        ],
+        "selectionSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343",
+        "runtimeSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343"
       }
     ],
     "assets": [
@@ -4807,6 +5806,166 @@
         "sourceSha256": "77175590a18ef062cbd4427f6977069d0b8375a8e1cf2c49f4bb49d59822c4af",
         "semanticSha256": null,
         "localSha256": "77175590a18ef062cbd4427f6977069d0b8375a8e1cf2c49f4bb49d59822c4af"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "public/contracts/preparation/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b",
+        "semanticSha256": null,
+        "localSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/fixtures/operational-options/v1/problems.json",
+        "destination": "public/contracts/preparation/identity/fixtures/operational-options/v1/problems.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4",
+        "semanticSha256": null,
+        "localSha256": "8e90eb7712c5cf2a9c4d2f9dd18fcf3e7ecdcc6b6b2c0d88e06f08b18d87e0e4"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/fixtures/operational-options/v1/responses.json",
+        "destination": "public/contracts/preparation/identity/fixtures/operational-options/v1/responses.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "af4446d3268f737df7569a1f36e9e0b423f0adec698d7a7c81e5321f1c5de1c3",
+        "semanticSha256": null,
+        "localSha256": "af4446d3268f737df7569a1f36e9e0b423f0adec698d7a7c81e5321f1c5de1c3"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/http/public/v1/identity-operational-options-v1.yaml",
+        "destination": "public/contracts/preparation/identity/http/public/v1/identity-operational-options-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8edea46d9258f8e4a30d683ae68595e9a55f194840a7e67b1b8867eb1914dbc8",
+        "semanticSha256": null,
+        "localSha256": "8edea46d9258f8e4a30d683ae68595e9a55f194840a7e67b1b8867eb1914dbc8"
+      },
+      {
+        "contractId": "identity.f1-14a.public.identity-operational-options-v1",
+        "sourcePath": "identity/http/shared/v1/identity-operational-options-v1.schema.json",
+        "destination": "public/contracts/preparation/identity/http/shared/v1/identity-operational-options-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03",
+        "semanticSha256": null,
+        "localSha256": "5849d2a2bd3e836776607209b3660fc4b48b876085e0c5eb9ec3547b6486cb03"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-common-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4",
+        "semanticSha256": null,
+        "localSha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24",
+        "semanticSha256": null,
+        "localSha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "destination": "public/contracts/preparation/catalog/http/shared/v1/catalog-inventory-capture-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f",
+        "semanticSha256": null,
+        "localSha256": "f433dbceeceff8843002f00b42f5368308059ed02166265f6bae56a93d28947f"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "inventory/http/public/v1/inventory-v1.yaml",
+        "destination": "public/contracts/preparation/inventory/http/public/v1/inventory-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2",
+        "semanticSha256": null,
+        "localSha256": "066f28a8cbfa7d36201215384338dc32266973c2110ee0568eb306bb39e5fcd2"
+      },
+      {
+        "contractId": "inventory.http.public.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "destination": "public/contracts/preparation/inventory/http/shared/v1/inventory-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823",
+        "semanticSha256": null,
+        "localSha256": "8d3d2f442c87c5df77cc70344fdb3965b5816aab8a470320bc404cf93d25c823"
+      },
+      {
+        "contractId": "finance.http.public.v1",
+        "sourcePath": "finance/http/public/v1/finance-v1.yaml",
+        "destination": "public/contracts/preparation/finance/http/public/v1/finance-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "935af3e0c532e6c97451480b3476da4d46c32b17bc2bc4b046263f747ded262f",
+        "semanticSha256": null,
+        "localSha256": "935af3e0c532e6c97451480b3476da4d46c32b17bc2bc4b046263f747ded262f"
+      },
+      {
+        "contractId": "finance.http.public.v1",
+        "sourcePath": "finance/http/shared/v1/finance-types-v1.schema.json",
+        "destination": "public/contracts/preparation/finance/http/shared/v1/finance-types-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051",
+        "semanticSha256": null,
+        "localSha256": "b203212284d596137b47caa36a35b6a8a4fd5ea36c0eb9aeedc887e9c2925051"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/fixtures/open-shift/v1/responses.json",
+        "destination": "public/contracts/preparation/finance/fixtures/open-shift/v1/responses.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937",
+        "semanticSha256": null,
+        "localSha256": "b1a3dde4eac7ba074115ce107690f34d37188ab39d0654fc85547c489e9b6937"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "destination": "public/contracts/preparation/finance/http/public/v1/finance-browser-reads-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e",
+        "semanticSha256": null,
+        "localSha256": "2f8303221aecdec4a36c42e4009d2cbc14a02da95e52265516758da508e8eb6e"
+      },
+      {
+        "contractId": "finance.f1-14d.public.finance-browser-reads-v1",
+        "sourcePath": "finance/http/shared/v1/finance-open-shift-v1.schema.json",
+        "destination": "public/contracts/preparation/finance/http/shared/v1/finance-open-shift-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648",
+        "semanticSha256": null,
+        "localSha256": "7a16878bcd79486bafca62dfd9e211d8340fca3dead1d7114f49adfc5125b648"
+      },
+      {
+        "contractId": "identity.f1-14a.shared.identity-operational-context-policy-v1",
+        "sourcePath": "identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "destination": "public/contracts/preparation/identity/http/shared/v1/identity-operational-context-policy-v1.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "0c2860ead95ac4a207d7cd1f5d36291256588c315e5e92931bad1f3c5e51dfc8",
+        "semanticSha256": null,
+        "localSha256": "0c2860ead95ac4a207d7cd1f5d36291256588c315e5e92931bad1f3c5e51dfc8"
       }
     ]
   }

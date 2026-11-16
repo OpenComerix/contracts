@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { makeLock, parseSource } from '../../tools/architecture/graph.mjs';
+import {preparationConsumerFiles} from '../../scripts/identity/preparation-consumers-v1.mjs';
 import {
   root, source, actual, hash, originalPath, successorPath, fixturePath, packagePath,
   validateSuccessorPackage, successorDocument, successorRegistry, successorCI,
@@ -72,7 +73,8 @@ test('historical projection checks the package first and never repairs mutated c
   const scope = withSuccessorScope(caller);
   assert.deepEqual(caller, new Set(['caller-owned-path']));
   assert(scope.has('caller-owned-path'));
-  for (const forbidden of ['src/main.ts', 'registry/consumers/web-pos.json', 'pnpm-lock.yaml', 'test/identity/unapproved.mjs'])
+  for (const file of preparationConsumerFiles) assert(scope.has(file));
+  for (const forbidden of ['src/main.ts', 'registry/consumers/unapproved.json', 'pnpm-lock.yaml', 'test/identity/unapproved.mjs'])
     assert(!scope.has(forbidden));
 });
 test('400 fixtures keep required Problem fields and exercise status, code, UUID, missing/extra field and type negatives', () => {

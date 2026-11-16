@@ -2,6 +2,7 @@ import {operationalFiles,projectOperationalFile} from '../../scripts/identity/op
 import {operationalConsumerFiles} from '../../scripts/identity/operational-context-consumers-v1.mjs';
 import {browserReadsFiles,browserReadsPreservedFiles} from '../../scripts/finance/browser-reads-v1.mjs';
 import {browserReadsAdmissionScopeFiles} from '../../scripts/finance/browser-reads-admission-v1.mjs';
+import {preparationConsumerFiles} from '../../scripts/identity/preparation-consumers-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -63,7 +64,7 @@ test('historical projection preserves original assertions and never sanitizes ca
   assert.deepEqual(salesHistoricalIndex(expectedIndex()),JSON.parse(source('registry/consumers/index.json')));
   const alteredIndex=expectedIndex();alteredIndex.consumers.pop();assert.equal(salesHistoricalIndex(alteredIndex),alteredIndex);
   const scope=withSalesAdmissionScope(['preserved-path']);assert(scope.has('preserved-path'));
-  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles,...operationalFiles,...operationalConsumerFiles,...browserReadsFiles,...browserReadsPreservedFiles,...browserReadsAdmissionScopeFiles])].sort());
+  assert.deepEqual([...scope].sort(),[...new Set(['preserved-path',...admissionScope,...reuseCandidateFiles,...cashConsumerFiles,...preparationMetadata().keys(),...preparationNewFiles,...operationalFiles,...operationalConsumerFiles,...browserReadsFiles,...browserReadsPreservedFiles,...browserReadsAdmissionScopeFiles,...preparationConsumerFiles])].sort());
   assert(!scope.has('scripts/unapproved.mjs'));
 });
 

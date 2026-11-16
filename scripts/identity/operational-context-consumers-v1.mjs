@@ -107,7 +107,7 @@ function validateSnapshot(file,bytes,label){
   return {service:owner,previousPins:pin.pins,registryPreviousPins:pin.registryPins,carriedSelections:pin.pins-pin.registryPins,additions:6,assets:value.lock.assets.length,publication:value.publication};
 }
 export function validateOperationalConsumers(read=native,label='OPERATIONAL_CONSUMER_BYTES'){
-  return operationalConsumerFiles.map(file=>validateSnapshot(file,read(file),label));
+  return operationalConsumerFiles.map(file=>validateSnapshot(file,projectBrowserReadsFile(file,read(file)),label));
 }
 // A supplied value proves only itself. These projections never read live files,
 // validate another input, or turn an altered/partial value into a historical one.
