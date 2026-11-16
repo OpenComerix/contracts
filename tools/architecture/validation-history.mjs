@@ -100,7 +100,14 @@ const reuseCandidateHashes = Object.freeze({
 });
 // END H1A V2 CANDIDATE HASHES
 const textHash = bytes => createHash('sha256').update(text(bytes)).digest('hex');
+// Adapt only this reviewed test; frozen H1A expectations remain unchanged.
+const admissionTest = 'test/inventory/capture-authority-v2-admission.test.mjs';
+function projectAdmissionTest(file, bytes) {
+  if (file !== admissionTest || textHash(bytes) !== toolingHashes[file]) return bytes;
+  return source('00ab063c7772901036d16856000c2a055c385786')(file);
+}
 export function projectReuseCandidateFile(file, bytes) {
+  bytes=projectAdmissionTest(file,bytes);
   bytes=projectOperationalFile(file,bytes);
   bytes=projectCashConsumerFile(file,bytes);
   if (!reuseProjectionFiles.has(file) || textHash(bytes) !== reuseCandidateHashes[file]) return bytes;
@@ -121,7 +128,7 @@ export function withReuseCandidateScope(paths, read) {
   paths=[...withCashConsumerScope(paths,rawRead)];
   if(cashApplied)for(const file of ['scripts/finance/cash-consumer-v1.mjs','test/finance/cash-consumer-v1.test.mjs'])
     assert.equal(toolingFingerprint(file,rawRead(file)),toolingHashes[file],'CASH_SCOPE_TOOLING:'+file);
-  read=file=>projectCashConsumerFile(file,rawRead(file));
+  read=file=>projectAdmissionTest(file,projectCashConsumerFile(file,rawRead(file)));
   const registry = read('registry/contracts.json');
   if (textHash(registry) !== reuseCandidateHashes['registry/contracts.json']) {
     const value = JSON.parse(text(registry));
@@ -238,6 +245,7 @@ export function projectReviewedDocument(revision,file,value) {
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
 const toolingPaths = Object.freeze([
+  'test/inventory/capture-authority-v2-admission.test.mjs',
   'scripts/finance/browser-reads-v1.mjs',
   'test/finance/browser-reads-v1.test.mjs',
   'test/identity/operational-context-admission-v1.test.mjs',
@@ -278,7 +286,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '9641efbeefd6fb4fa4223ba7e045f1e7fdd9db94f3af1620700f053ee2e89f42';
+const toolingReferenceSha256 = '9e058dec10c60b70c2554b9d85af46994df8dbf143cee969b8ce78768e40ff56';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

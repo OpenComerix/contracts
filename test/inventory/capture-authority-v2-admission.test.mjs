@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { makeLock, resolveSelection } from '../../tools/architecture/graph.mjs';
+import { projectReuseCandidateFile, validateValidationTooling } from '../../tools/architecture/validation-history.mjs';
 import { readRepositoryFile as read } from '../../scripts/ci/retired-gitlab-v1.mjs';
 import { captureConsumerReadView, captureConsumerFiles } from '../../scripts/inventory/capture-consumers-v1.mjs';
 import { root, validateCaptureSource, captureHistoricalFile, captureHistoricalRegistry,
@@ -19,6 +20,14 @@ const mutateRegistry = change => {
   const value = JSON.parse(read(registryPath)); change(value);
   return file => file === registryPath ? encode(value) : read(file);
 };
+test('reviewed admission test adaptation preserves drift and validates current bytes', () => {
+  const file = 'test/inventory/capture-authority-v2-admission.test.mjs', bytes = read(file);
+  assert.notDeepEqual(projectReuseCandidateFile(file, bytes), bytes);
+  const drift = Buffer.concat([bytes, Buffer.from('\nUnapproved')]);
+  assert.equal(projectReuseCandidateFile(file, drift), drift);
+  assert.throws(() => validateValidationTooling(name => name === file ? drift : read(name)), /VALIDATION_TOOLING_DRIFT/);
+  assert.throws(() => validateValidationTooling(name => { if (name === file) throw Error('Synthetic missing test'); return read(name); }), /Synthetic missing test/);
+});
 test('two exact admissions preserve previous descriptors, unrelated intentions and all consumers', () => {
   assert.deepEqual(validateAdmission(), { admitted: 2, roots: 202, priorRoots: 200,
     preserved: 236, planned: 2, consumers: 6, closureFiles: 3, runtimeDemonstrated: false });
@@ -92,7 +101,11 @@ for (const [label, change] of [
   ['schema missing', value => { value.contracts = value.contracts.filter(row => row.id !== admissionIds[1]); }],
   ['both missing', value => { value.contracts = value.contracts.filter(row => !admissionIds.includes(row.id)); }],
   ['intention retained', value => { value.planned = before().planned; }],
-  ['unrelated intention removed', value => { value.planned.pop(); }],
+  ['unrelated intention removed', value => {
+    const index = value.planned.findIndex(row => row.id === 'common.data-lifecycle-policy.v1');
+    assert(index >= 0, 'Historical unrelated intention required before mutation');
+    value.planned.splice(index, 1);
+  }],
   ['prior descriptor changed', value => { value.contracts[0].purpose = 'Unreviewed'; }],
   ['new consumer', value => { value.requiredConsumers.push('unapproved'); }],
 ]) test('partial or foreign transition fails closed: ' + label, () => {
