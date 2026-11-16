@@ -934,6 +934,7 @@ jobs:
           node scripts/sales/schema-v2.mjs .ci-artifacts/sales-v2-ci
           node scripts/sales/preparation-v1.mjs openapi
           node scripts/sales/preparation-v1.mjs prepare .ci-artifacts/sales-v2-preparation-ci
+          node scripts/sales/online-source-v1.mjs openapi
         env:
           GIT_CONFIG_COUNT: "1"
           GIT_CONFIG_KEY_0: safe.directory
@@ -981,6 +982,8 @@ jobs:
         run: docker run --rm --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-v2.sh .ci-artifacts/sales-v2-ci'
       - name: Validate sale preparation schemas and vectors
         run: docker run --rm --user "$(id -u):$(id -g)" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-preparation-v1.sh .ci-artifacts/sales-v2-preparation-ci'
+      - name: Validate F1-14E source schemas and vectors
+        run: docker run --rm --user "$(id -u):$(id -g)" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-online-source-v1.sh .ci-artifacts/sales-v2-online-source'
   validate_sale_flow_integration:
     name: validate:sale-flow-integration
     needs: [validation_scope]

@@ -1,3 +1,4 @@
+import {projectOnlineFile} from '../../scripts/sales/online-source-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ import {
 } from '../../scripts/finance/browser-reads-admission-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
-const read = file => fs.readFileSync(path.join(root, file));
+const read = file => projectOnlineFile(file,fs.readFileSync(path.join(root, file)));
 const registryPath = 'registry/contracts.json';
 const encode = value => Buffer.from(JSON.stringify(value, null, 2) + '\n');
 const text = bytes => bytes.toString('utf8').replaceAll('\r\n', '\n');

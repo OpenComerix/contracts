@@ -1,3 +1,4 @@
+import {projectOnlineFile,projectOnlineDocument,withOnlineSourceScope} from '../sales/online-source-v1.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
@@ -78,16 +79,21 @@ export function validatePreparationConsumers(read=native){
 }
 // Pure single-value transforms: no live reads, no complete validator per file.
 export function projectPreparationConsumerFile(file,bytes){
+  bytes=projectOnlineFile(file,bytes);
   if(!pins.has(file))return bytes;
   try{return hash(bytes)===pins.get(file).snapshot?source(file):bytes;}catch{return bytes;}
 }
 export function projectPreparationConsumerDocument(file,value){
+  value=projectOnlineDocument(file,value);
   if(!pins.has(file))return value;
   try{const bytes=encode(value);return isDeepStrictEqual(value,JSON.parse(bytes))&&hash(bytes)===pins.get(file).snapshot?JSON.parse(source(file)):value;}catch{return value;}
 }
 // Historical callers may supply the complete old pair. Mixed, altered or omitted
 // exports never project. Current standalone validation requires the new pair.
 export function withPreparationConsumersScope(paths,read,verify){
+  return withOnlineSourceScope(paths,read,(paths,read)=>withPreparedSourceScope(paths,read,verify));
+}
+function withPreparedSourceScope(paths,read,verify){
   let active=true;const live=new Map();
   const raw=file=>{
     assert(active,'PREPARATION_CONSUMER_CONTEXT_CLOSED');

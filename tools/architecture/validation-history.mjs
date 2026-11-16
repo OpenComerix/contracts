@@ -245,6 +245,9 @@ export function projectReviewedDocument(revision,file,value) {
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
 const toolingPaths = Object.freeze([
+  'scripts/sales/online-source-v1.mjs',
+  'scripts/sales/validate-online-source-v1.sh',
+  'test/sales/online-source-v1.test.mjs',
   'test/identity/inventory-authority-v1-1.test.mjs',
   'scripts/identity/preparation-consumers-v1.mjs',
   'test/identity/preparation-consumers-v1.test.mjs',
@@ -291,7 +294,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '7468fd3981ae2314030bf4c5f1464ac1b4b51ff5e339d0832597f3dfe767ddfa';
+const toolingReferenceSha256 = 'e3d8da2b9cf57078b61ddb00f97eb4ad287630312aee8e73a24ce28b66e97720';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

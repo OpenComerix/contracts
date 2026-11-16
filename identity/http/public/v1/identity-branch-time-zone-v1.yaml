@@ -1,0 +1,960 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "Identity branch time zone public v1",
+    "version": "1.0.0",
+    "description": "F1-14E source candidate; explicit versioned branch configuration, no runtime or functional admission.",
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    },
+    "contact": {
+      "name": "OpenComerix"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.opencomerix.example/api/v1",
+      "description": "Illustrative TLS host."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Identity",
+      "description": "Authorized operational reads."
+    }
+  ],
+  "security": [
+    {
+      "session": []
+    }
+  ],
+  "paths": {
+    "/tenancy/branches/{branch_id}/time-zone": {
+      "get": {
+        "tags": [
+          "Identity"
+        ],
+        "operationId": "getBranchTimeZone",
+        "summary": "Read the current branch time zone",
+        "description": "Current active session/account/membership, proven approved device, MFA and current branch scope in the active organization. No organization selector, query or GET body. Missing, inactive, foreign or out-of-scope branch yields the same 403 identity_access_denied without disclosing existence. Configuration null explicitly means no zone is configured; no inferred defaults or backfill. checked_at is a server observation, never an authorization grant.",
+        "parameters": [
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "description": "Opaque branch reference within the current organization."
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "description": "GET may omit Origin. If present require one exact allowed origin; reject null, foreign, malformed or duplicate values. Absence grants no authority. PUT always requires exact allowed Origin and CSRF."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current zone or exact stored configuration result.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/identity-branch-time-zone-v1.schema.json#/$defs/HttpBranchTimeZone"
+                },
+                "x-producer-schema": {
+                  "$ref": "../../shared/v1/identity-branch-time-zone-v1.schema.json#/$defs/BranchTimeZone"
+                },
+                "examples": {
+                  "configured": {
+                    "externalValue": "../../../fixtures/branch-time-zone/v1/responses.json#/configured"
+                  },
+                  "absent": {
+                    "externalValue": "../../../fixtures/branch-time-zone/v1/responses.json#/absent"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_session_invalid_or_expired"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_access_denied",
+                            "identity_reauthentication_required",
+                            "gateway_csrf_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_dependency_unavailable",
+                            "platform_capacity_exhausted"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 504
+                        },
+                        "code": {
+                          "enum": [
+                            "gateway_deadline_exceeded"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "Identity"
+        ],
+        "operationId": "configureBranchTimeZone",
+        "summary": "Configure the branch time zone explicitly",
+        "description": "Current active session/account/membership, proven approved device, MFA and current branch scope in the active organization. No organization selector, query or GET body. Missing, inactive, foreign or out-of-scope branch yields the same 403 identity_access_denied without disclosing existence. Configuration null explicitly means no zone is configured; no inferred defaults or backfill. checked_at is a server observation, never an authorization grant. Requires tenant.branch.time-zone.manage as a current backend capability, not a role string. Initial OWNER capability assignment only; this operation cannot assign permissions. Require expected_version and Idempotency-Key UUIDv7. Local transaction atomically checks version, increments branch version, writes configuration and restricted audit, and stores exact replay. Replay requires current authority and returns its original response before version checks; conflicting key/body returns 409. Concurrent writes return 409 without effects. No update to existing commercial facts. Idempotency retention seven days; expired keys are not automatically safe to repeat. No step-up beyond the active MFA requirement.",
+        "parameters": [
+          {
+            "name": "branch_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "description": "Opaque branch reference within the current organization."
+          },
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2048
+            },
+            "description": "GET may omit Origin. If present require one exact allowed origin; reject null, foreign, malformed or duplicate values. Absence grants no authority. PUT always requires exact allowed Origin and CSRF."
+          },
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+            },
+            "description": "Immutable UUIDv7 for exact request replay."
+          }
+        ],
+        "security": [
+          {
+            "session": [],
+            "csrfToken": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/identity-branch-time-zone-v1.schema.json#/$defs/Configure"
+              }
+            }
+          }
+        },
+        "x-permission": "tenant.branch.time-zone.manage",
+        "responses": {
+          "200": {
+            "description": "Current zone or exact stored configuration result.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              },
+              "Idempotency-Replayed": {
+                "description": "True only when returning the stored response.",
+                "required": true,
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "../../shared/v1/identity-branch-time-zone-v1.schema.json#/$defs/HttpBranchTimeZone"
+                },
+                "x-producer-schema": {
+                  "$ref": "../../shared/v1/identity-branch-time-zone-v1.schema.json#/$defs/BranchTimeZone"
+                },
+                "examples": {
+                  "configured": {
+                    "externalValue": "../../../fixtures/branch-time-zone/v1/responses.json#/configured"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 400
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_invalid_request"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_session_invalid_or_expired"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 403
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_access_denied",
+                            "identity_reauthentication_required",
+                            "gateway_csrf_invalid"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 406
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_not_acceptable"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 409
+                        },
+                        "code": {
+                          "enum": [
+                            "identity_state_or_version_conflict",
+                            "identity_idempotency_key_reused",
+                            "identity_idempotency_request_in_progress"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_payload_too_large"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_unsupported_media_type"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_rate_limited"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_internal_error"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "enum": [
+                            "platform_dependency_unavailable",
+                            "platform_capacity_exhausted"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Stable Problem Details; no cross-tenant resource disclosure.",
+            "headers": {
+              "Cache-Control": {
+                "description": "Private authenticated response; never cached.",
+                "required": true,
+                "schema": {
+                  "const": "no-store"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+                    },
+                    {
+                      "properties": {
+                        "status": {
+                          "const": 504
+                        },
+                        "code": {
+                          "enum": [
+                            "gateway_deadline_exceeded"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "session": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-oc_session",
+        "description": "Current active opaque session; never sent beyond Identity."
+      },
+      "csrfToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token",
+        "description": "Session-bound CSRF token; validated with exact allowed Origin for every mutation."
+      }
+    }
+  },
+  "x-status": "candidate",
+  "x-runtime-demonstrated": false,
+  "x-policy": "../../shared/v1/identity-branch-time-zone-policy-v1.json",
+  "x-error-catalog": "../../../../common/errors/v11/error-catalog-v11.json"
+}

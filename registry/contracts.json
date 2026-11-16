@@ -19446,6 +19446,121 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "identity.f1-14e.shared.identity-branch-time-zone-v1.schema",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.public.identity-branch-time-zone-v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+      "version": "1.0.0",
+      "operations": [
+        "getBranchTimeZone",
+        "configureBranchTimeZone"
+      ],
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.private.identity-branch-time-zone-v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/private/v1/identity-branch-time-zone-v1.yaml",
+      "version": "1.0.0",
+      "operations": [
+        "getBranchTimeZone",
+        "configureBranchTimeZone"
+      ],
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.shared.identity-branch-time-zone-policy-v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/shared/v1/identity-branch-time-zone-policy-v1.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.fixtures.responses",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.shared.identity-sales-temporal-authority-v1.schema",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "identity.f1-14e.private.identity-sales-temporal-authority-v1",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+      "version": "1.0.0",
+      "operations": [
+        "checkSalesTemporalAuthorization"
+      ],
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "sales.f1-14e.public.sales-browser-reads-v2",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "sales/http/public/v2/sales-browser-reads-v2.yaml",
+      "version": "2.0.0",
+      "operations": [
+        "getSaleFinalization",
+        "getCompletedSale"
+      ],
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "sales.f1-14e.shared.sales-operating-date-policy-v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "sales/http/shared/v1/sales-operating-date-policy-v1.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
+    },
+    {
+      "id": "sales.f1-14e.fixtures.cases",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "path": "sales/fixtures/operating-date/v1/cases.json",
+      "version": "1.0.0",
+      "constraint": "Source candidate only. Explicit branch IANA zone and Sales server-date validation, or selected browser GET successor. Audited publication, exact SHA/ref full CI and selected admission precede runtime/consumer changes. Preserve published transports and existing locks."
     }
   ],
   "requiredConsumers": [

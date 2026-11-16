@@ -1,3 +1,4 @@
+import {projectOnlineFile} from '../../scripts/sales/online-source-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -13,7 +14,7 @@ import {
 } from '../../scripts/identity/preparation-consumers-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
-const read=file=>fs.readFileSync(path.join(root,file));
+const read=file=>projectOnlineFile(file,fs.readFileSync(path.join(root,file)));
 const old=createGitReader()(root,preparationConsumersBase);
 const encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');
@@ -68,7 +69,7 @@ test('one bounded current context reads each export once for 1, 10 and 100 histo
       assert.deepEqual(paths,preparationConsumerFiles);
       for(let i=0;i<count;i++)for(const file of paths)assert.deepEqual(historical(file),old(file));
     });
-    assert.deepEqual([...visits.values()],[1,1]);
+    assert.deepEqual([...visits.keys()].sort(),['registry/contracts.json',...preparationConsumerFiles].sort());assert([...visits.values()].every(count=>count===1));
   }
 });
 test('projections perform no live reads, preserve unknown input and do not share returned objects',()=>{

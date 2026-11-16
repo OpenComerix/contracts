@@ -1,0 +1,43 @@
+{
+  "policy_version": 1,
+  "id": "sales-branch-local-day-v1",
+  "status": "candidate",
+  "owner": "sales-pos",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "source": {
+    "zone": "Identity persisted branch zone/version from checkSalesTemporalAuthorization, scoped and bound to exact finalize request; never browser, shift, fixture or server deployment zone.",
+    "instant": "First server received_at of the new acceptance invocation, captured once as UTC before external calls. occurred_at remains the separately observed client instant, never authority for operating_date.",
+    "date": "Civil Gregorian year-month-day of received_at in the configured named IANA zone using timezone rules at that instant. No offset arithmetic, UTC substring, shift opening date or local host timezone.",
+    "policy": "sales-branch-local-day-v1; snapshot exact zone/business_date/policy with immutable intention. Retain Identity zone version and bound source evidence in restricted origin audit."
+  },
+  "validation": {
+    "order": "Validate request and current human authority before accepted lookup/replay; accepted original response wins before new source/date validation. For a new intention, validate bound zone/source freshness and compute date; compare all three submitted operating_date fields. No mutation of the immutable body or key.",
+    "unconfigured": {
+      "status": 409,
+      "code": "sales_state_conflict",
+      "effects": false
+    },
+    "mismatch": {
+      "status": 409,
+      "code": "sales_version_conflict",
+      "effects": false
+    },
+    "dependency": {
+      "status": 503,
+      "code": "platform_dependency_unavailable",
+      "effects": false
+    },
+    "midnight": "If observed day is stale when received, explicit conflict without acceptance/effects; show new date for review. No body edits under an uncertain/accepted key. Only a definitive no-effect response permits an explicitly reviewed new intention.",
+    "replay": "Exact accepted response and intention across midnight, DST, timezone/policy changes and process restart. Current authority still required. Resume retains original intention/date. Unknown/404/timeout never permits substitution or recomputation."
+  },
+  "browser": "Read authorized branch zone/server checked_at as an observation and show operative context. Preview date/policy is never authoritative; backend validates at receipt. A missing zone requires explicit authorized setup once, without plan-based UI. Re-read context after change; discard late responses and drafts on authority/context loss. No business WebStorage.",
+  "out_of_scope": [
+    "general settings editor",
+    "Finance shift-date changes",
+    "historical fact rewrites",
+    "offline",
+    "fiscal issuance",
+    "new workload audience"
+  ]
+}

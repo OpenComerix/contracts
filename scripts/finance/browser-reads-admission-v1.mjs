@@ -1,3 +1,4 @@
+import {withOnlineSourceScope} from '../sales/online-source-v1.mjs';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import path from 'node:path';
@@ -110,6 +111,9 @@ export function projectBrowserReadsAdmissionDocument(file, value) {
 // Old owner gates already check preservation. Their context checks this delta
 // once, never the whole admission validator for each historical file/fixture.
 export function withBrowserReadsAdmissionScope(paths, read, verify, label = 'BROWSER_ADMISSION_BYTES') {
+  return withOnlineSourceScope(paths,read,(paths,read)=>withAdmissionSourceScope(paths,read,verify,label),label);
+}
+function withAdmissionSourceScope(paths,read,verify,label) {
   let active = true;
   const current = new Map();
   const raw = file => {

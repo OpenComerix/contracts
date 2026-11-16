@@ -1,0 +1,38 @@
+{
+  "policy_version": 1,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "read": {
+    "operation_id": "getBranchTimeZone",
+    "authority": "Current active session/account/membership, proven approved device, MFA and current branch scope in the active organization. No organization selector, query or GET body. Missing, inactive, foreign or out-of-scope branch yields the same 403 identity_access_denied without disclosing existence. Configuration null explicitly means no zone is configured; no inferred defaults or backfill. checked_at is a server observation, never an authorization grant."
+  },
+  "configure": {
+    "operation_id": "configureBranchTimeZone",
+    "permission": "tenant.branch.time-zone.manage",
+    "transaction": "Current authority, expected branch version, zone validation, branch update/version increment, restricted audit and idempotent original response commit atomically in Identity only. No automatic migration/backfill. Persist named supported IANA zone, not fixed offset.",
+    "replay": "Current authority before lookup; exact original response and payload binding for seven days. A replay never mutates branch or re-evaluates expected_version. Changed payload/key conflict 409. No online or offline automatic retry after uncertainty.",
+    "csrf": "Exact allowed Origin plus current session-bound X-CSRF-Token; private user delegate and original session plus gateway-derived signal. No service-only write."
+  },
+  "delegation": {
+    "request_operation": "createGatewayUserDelegation",
+    "type": "delegated",
+    "caller": "gateway-bff",
+    "audience": "identity-tenancy.user-api",
+    "maximum_seconds": 60,
+    "workload": "gateway-bff",
+    "workload_audience": "identity-tenancy.gateway",
+    "client_signal": "Required on both private operations; current cookie reaches Identity only. Bind actual HTTP method/path and revalidate session, branch relation and scope in backend. Existing H2 byte/matrix selections remain unchanged."
+  },
+  "privacy": "Cache-Control:no-store on every response/error. No payload, names, identifiers, cookies, CSRF, delegation or signals in logs. Configuration/version and actor/change evidence in restricted transactional audit; never overwrite commercial/fiscal snapshots.",
+  "limits": {
+    "gateway_ms": 10000,
+    "private_ms": 3000,
+    "authority_call_ms": 1000,
+    "decision_ms": 2000,
+    "body_bytes": 4096,
+    "response_bytes": 65536
+  },
+  "compatibility": "Additive separate endpoints; published options/bootstrap/authority transports untouched. Strict producer/request, HTTP reader tolerates optional metadata but never missing or malformed critical fields. No configuration is a visible setup requirement, never an implied Argentina default."
+}

@@ -1,0 +1,112 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+  "title": "identity-sales-temporal-authority-v1.schema.json",
+  "$defs": {
+    "Result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authorization",
+        "branch_time_zone"
+      ],
+      "properties": {
+        "authorization": {
+          "$ref": "identity-sales-authority-v1.schema.json#/$defs/Authorization"
+        },
+        "branch_time_zone": {
+          "oneOf": [
+            {
+              "$ref": "identity-branch-time-zone-v1.schema.json#/$defs/Snapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorization": {
+                "properties": {
+                  "operation_id": {
+                    "not": {
+                      "const": "finalizeOnlineSale"
+                    }
+                  }
+                },
+                "required": [
+                  "operation_id"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          },
+          "then": {
+            "properties": {
+              "branch_time_zone": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    "HttpResult": {
+      "type": "object",
+      "required": [
+        "authorization",
+        "branch_time_zone"
+      ],
+      "properties": {
+        "authorization": {
+          "$ref": "identity-sales-authority-v1.schema.json#/$defs/Authorization"
+        },
+        "branch_time_zone": {
+          "oneOf": [
+            {
+              "$ref": "identity-branch-time-zone-v1.schema.json#/$defs/HttpSnapshot"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "authorization": {
+                "properties": {
+                  "operation_id": {
+                    "not": {
+                      "const": "finalizeOnlineSale"
+                    }
+                  }
+                },
+                "required": [
+                  "operation_id"
+                ]
+              }
+            },
+            "required": [
+              "authorization"
+            ]
+          },
+          "then": {
+            "properties": {
+              "branch_time_zone": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
