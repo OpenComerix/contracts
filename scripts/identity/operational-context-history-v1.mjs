@@ -83,7 +83,7 @@ export function withOperationalScope(paths,read,verify){
  let active=true;
  const current=new Map();const raw=file=>{assert(active,'OPERATIONAL_CONTEXT_CLOSED');if(!current.has(file))current.set(file,read(file));return Buffer.from(current.get(file));};
  try{
-  const registry=raw('registry/contracts.json');
+  const registry=projectOperationalConsumerFile('registry/contracts.json',raw('registry/contracts.json'));
   if(hash(registry)!==operationalHashes['registry/contracts.json']){
    const value=JSON.parse(text(registry));
    assert(![...(value.planned??[]),...(value.contracts??[])].some(row=>row.materializeIn==='F1-14A'||/^(identity|finance)\.f1-14a\./.test(row.id)),'OPERATIONAL_PARTIAL_SCOPE');

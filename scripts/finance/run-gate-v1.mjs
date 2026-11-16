@@ -5,7 +5,7 @@ import {spawnSync} from 'node:child_process';
 import {randomUUID,createHash} from 'node:crypto';
 import {prepare,root,read,resolveSchema} from './schema-v1.mjs';
 
-export const openapis=['finance/http/public/v1/finance-v1.yaml','finance/http/private/v1/finance-internal-v1.yaml','identity/http/private/v1/identity-finance-authority-v1.yaml','sales/http/private/v1/sales-finance-step-authority-v1.yaml'];
+export const openapis=['finance/http/public/v1/finance-browser-reads-v1.yaml','finance/http/public/v1/finance-v1.yaml','finance/http/private/v1/finance-internal-v1.yaml','identity/http/private/v1/identity-finance-authority-v1.yaml','sales/http/private/v1/sales-finance-step-authority-v1.yaml'];
 const [mode,...options]=process.argv.slice(2);assert(['schema','openapi','asyncapi','impact'].includes(mode),'C_GATE_MODE');assert(options.every(x=>x==='--offline')&&options.length<=1,'C_GATE_OPTIONS');
 const output='.ci-artifacts/finance-v1-'+randomUUID();
 function execute(file,args,name,shell=false){const r=spawnSync(file,args,{cwd:root,encoding:'utf8',maxBuffer:64*1024*1024,shell,env:{...process.env,REDOCLY_TELEMETRY:'off',REDOCLY_SUPPRESS_UPDATE_NOTICE:'true'}});fs.mkdirSync(path.join(root,output),{recursive:true});fs.writeFileSync(path.join(root,output,name+'.log'),JSON.stringify({exit:r.status,error:r.error?.message??null,stdout:r.stdout??'',stderr:r.stderr??''})+'\n');if(r.stderr)process.stderr.write(r.stderr);if(r.error)throw r.error;if(r.status!==0){if(r.stdout)process.stdout.write(r.stdout);throw Error('C_GATE_FAILED:'+name+':'+r.status);}return r.stdout;}

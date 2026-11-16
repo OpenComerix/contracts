@@ -1,5 +1,6 @@
 import {operationalFiles,projectOperationalFile,projectOperationalDocument} from '../../scripts/identity/operational-context-history-v1.mjs';
 import {operationalConsumerFiles} from '../../scripts/identity/operational-context-consumers-v1.mjs';
+import {browserReadsFiles,browserReadsPreservedFiles} from '../../scripts/finance/browser-reads-v1.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -16,7 +17,7 @@ import {
 const root=path.resolve(import.meta.dirname,'../..');
 const git=createGitReader(),base=git(root,reuseCandidateBase),old=git(root,reviewedCandidateRevision);
 const priorScopeFiles=[...new Set([...reuseCandidateFiles,...cashConsumerFiles])];
-const readableFiles=[...new Set([...priorScopeFiles,...preparationMetadata().keys(),...operationalFiles,...operationalConsumerFiles])];
+const readableFiles=[...new Set([...priorScopeFiles,...preparationMetadata().keys(),...operationalFiles,...operationalConsumerFiles,...browserReadsFiles,...browserReadsPreservedFiles])];
 const exactScopeFiles=[...new Set([...readableFiles,...preparationNewFiles])];
 const current=new Map(exactScopeFiles.map(file=>[file,fs.readFileSync(path.join(root,file))]));
 const read=file=>{assert(current.has(file),'Unexpected live path: '+file);return Buffer.from(current.get(file));};
@@ -50,7 +51,7 @@ test('historical registry projection is exact, isolated and rejects non-JSON add
   candidateView.planned.pop();
   assert.deepEqual(projectReuseCandidateDocument(file,input),JSON.parse(base(file)));
   for(const mutate of [value=>value.extra=undefined,value=>value.extra=NaN,value=>value.extra=1n,
-    value=>value.planned.pop(),value=>value.contracts[0].owner='unapproved']){
+    value=>value.planned.shift(),value=>value.contracts[0].owner='unapproved']){
     const invalid=structuredClone(input);mutate(invalid);
     assert.equal(projectReviewedRegistry(reviewedCandidateRevision,invalid),invalid);
     assert.equal(projectReuseCandidateDocument(file,invalid),invalid);

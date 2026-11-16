@@ -4,6 +4,7 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {makeLock} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectBrowserReadsDocument} from '../../scripts/finance/browser-reads-v1.mjs';
 import {admissionSourceRevision, admissionSource, admissionRead, admissionIds, admittedRegistry,
   admissionClosures, admissionMetadata, admissionInputPaths, validateAdmissionRegistry,
   validateAdmissionInput, validateAdmission} from '../../scripts/identity/operational-context-admission-v1.mjs';
@@ -27,7 +28,7 @@ test('nine exact admissions retain prior roots, other intentions and every live 
   assert.deepEqual(after.planned, before.planned.filter(row => !admissionIds.includes(row.id)));
   assert.deepEqual(after.preservedFiles, before.preservedFiles);
   for (const domain of ['identity', 'finance'])
-    assert.deepEqual(JSON.parse(admissionRead(domain + '/index.json')), domainIndex(after, domain));
+    assert.deepEqual(projectBrowserReadsDocument(domain + '/index.json', JSON.parse(admissionRead(domain + '/index.json'))), domainIndex(after, domain));
 });
 
 test('all nine roots resolve a functional lock at the exact immutable source without consumer migration', () => {

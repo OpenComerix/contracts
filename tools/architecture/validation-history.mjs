@@ -153,6 +153,7 @@ export function projectReuseCandidateDocument(file, value) {
   return isReuseCandidateDocument(file, value) ? JSON.parse(source(reuseCandidateBase)(file)) : value;
 }
 const metadata = new Set([
+  'scripts/finance/run-gate-v1.mjs',
   'registry/contracts.json', 'registry/consumers/index.json',
   ...['gateway-bff', 'identity-tenancy', 'notifications', 'web-pos', 'catalog-pricing', 'sales-pos', 'inventory']
     .map(service => 'registry/consumers/' + service + '.json'),
@@ -237,6 +238,9 @@ export function projectReviewedDocument(revision,file,value) {
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
 const toolingPaths = Object.freeze([
+  'scripts/finance/browser-reads-v1.mjs',
+  'test/finance/browser-reads-v1.test.mjs',
+  'test/identity/operational-context-admission-v1.test.mjs',
   'scripts/identity/operational-context-consumers-v1.mjs',
   'scripts/identity/operational-context-admission-v1.mjs',
   'scripts/identity/operational-context-v1.mjs',
@@ -274,7 +278,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = '3e8e490b71f604d28494818e1018ba6321dd996ebe2a184447a220ebf86b76c8';
+const toolingReferenceSha256 = '9641efbeefd6fb4fa4223ba7e045f1e7fdd9db94f3af1620700f053ee2e89f42';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

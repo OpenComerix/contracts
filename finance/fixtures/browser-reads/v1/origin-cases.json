@@ -1,0 +1,83 @@
+{
+  "format_version": 1,
+  "status": "candidate",
+  "runtime_demonstrated": false,
+  "operations": [
+    "listCashRegisters",
+    "getCashShift",
+    "getCashShiftExpected",
+    "getOpenCashShift"
+  ],
+  "allowed_origin": "https://pos.opencomerix.example",
+  "cases": [
+    {
+      "id": "same-origin-browser",
+      "origins": [],
+      "origin_check": "continue-to-authority"
+    },
+    {
+      "id": "explicit-allowed",
+      "origins": [
+        "https://pos.opencomerix.example"
+      ],
+      "origin_check": "continue-to-authority"
+    },
+    {
+      "id": "foreign",
+      "origins": [
+        "https://foreign.example"
+      ],
+      "origin_check": "reject"
+    },
+    {
+      "id": "opaque",
+      "origins": [
+        "null"
+      ],
+      "origin_check": "reject"
+    },
+    {
+      "id": "empty",
+      "origins": [
+        ""
+      ],
+      "origin_check": "reject"
+    },
+    {
+      "id": "malformed",
+      "origins": [
+        "not-an-origin"
+      ],
+      "origin_check": "reject"
+    },
+    {
+      "id": "duplicate-allowed",
+      "origins": [
+        "https://pos.opencomerix.example",
+        "https://pos.opencomerix.example"
+      ],
+      "origin_check": "reject"
+    },
+    {
+      "id": "allowed-and-foreign",
+      "origins": [
+        "https://pos.opencomerix.example",
+        "https://foreign.example"
+      ],
+      "origin_check": "reject"
+    }
+  ],
+  "authority_controls": [
+    "invalid-session",
+    "unapproved-device",
+    "missing-mfa",
+    "inactive-membership",
+    "missing-permission",
+    "foreign-tenant",
+    "out-of-scope-branch",
+    "out-of-scope-pos",
+    "foreign-resource",
+    "open-shift-other-responsible"
+  ],
+  "constraints": "Fixtures specify acceptance cases, not runtime authorization evidence. Missing Origin must never bypass authority. Browser/Gateway and owner integration tests are required at consumer admission. No changes to mutations or history."
+}

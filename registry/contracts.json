@@ -19422,6 +19422,22 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "finance.f1-14d.public.finance-browser-reads-v1",
+      "domain": "finance",
+      "owner": "finance",
+      "materializeIn": "F1-14D",
+      "status": "planned",
+      "path": "finance/http/public/v1/finance-browser-reads-v1.yaml",
+      "version": "1.0.0",
+      "operations": [
+        "listCashRegisters",
+        "getCashShift",
+        "getCashShiftExpected",
+        "getOpenCashShift"
+      ],
+      "constraint": "Selected source successor: optional Origin only for four operational GETs. Preserve published bytes and mutation Origin/CSRF. Audited publication, full exact SHA/ref CI and separate selected admission precede consumption; no runtime grant."
     }
   ],
   "requiredConsumers": [

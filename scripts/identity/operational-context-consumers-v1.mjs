@@ -6,6 +6,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import tooling from '../../tools/architecture/validation-tooling.json' with {type:'json'};
+import {projectBrowserReadsFile,projectBrowserReadsDocument,withBrowserReadsScope} from '../finance/browser-reads-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 export const operationalConsumersBase='c7364039f0b770f046c05eaaaca56661961dfb47';
@@ -111,14 +112,17 @@ export function validateOperationalConsumers(read=native,label='OPERATIONAL_CONS
 // A supplied value proves only itself. These projections never read live files,
 // validate another input, or turn an altered/partial value into a historical one.
 export function projectOperationalConsumerFile(file,bytes){
+  bytes=projectBrowserReadsFile(file,bytes);
   const owner=ownerFor(file);if(!owner)return bytes;
   try{return hash(bytes)===published[owner].snapshot?source(file):bytes;}catch{return bytes;}
 }
 export function projectOperationalConsumerDocument(file,value){
+  value=projectBrowserReadsDocument(file,value);
   const owner=ownerFor(file);if(!owner)return value;
   try{const bytes=encode(value);return isDeepStrictEqual(value,JSON.parse(bytes))&&hash(bytes)===published[owner].snapshot?JSON.parse(source(file)):value;}catch{return value;}
 }
 const changedTooling=Object.freeze([
+  'test/identity/operational-context-admission-v1.test.mjs',
   'scripts/identity/operational-context-admission-v1.mjs',
   'scripts/identity/operational-context-v1.mjs',
   'scripts/identity/operational-context-history-v1.mjs',
@@ -134,6 +138,9 @@ export function projectOperationalConsumerToolingFile(file,bytes){
 }
 // One explicit synchronous current context; no approval survives this invocation.
 export function withOperationalConsumersScope(paths,read,verify,label='OPERATIONAL_CONSUMER_BYTES'){
+  return withBrowserReadsScope(paths,read,(paths,read)=>withConsumerScope(paths,read,verify,label),label);
+}
+function withConsumerScope(paths,read,verify,label){
   let active=true;const live=new Map();
   const raw=file=>{assert(active,'OPERATIONAL_CONSUMER_CONTEXT_CLOSED');if(!live.has(file))live.set(file,Buffer.from(read(file)));return Buffer.from(live.get(file));};
   try{
