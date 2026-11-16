@@ -5,6 +5,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import {root,files,openapis,read,verify,operations,prepare,authorityExamples,verifyAuthorityBinding} from '../../scripts/identity/operational-context-v1.mjs';
 import {operationalFiles,projectOperationalFile,withOperationalScope} from '../../scripts/identity/operational-context-history-v1.mjs';
+import {operationalConsumerFiles} from '../../scripts/identity/operational-context-consumers-v1.mjs';
 
 test('exact operation selection preserves published transports and every consumer admission',()=>{
  assert.deepEqual(verify().operations,20);
@@ -46,7 +47,7 @@ test('CLI rejects artifact escapes and shell metacharacters before invoking nati
 test('the current candidate proof reads each declared input once and rejects drift after warmup',()=>{
  const native=file=>fs.readFileSync(path.join(root,file));
  const visits=[];const invoke=reader=>withOperationalScope([],reader,(paths,read)=>{read('registry/contracts.json');return new Set(paths);});
- const scope=invoke(file=>{visits.push(file);return native(file);});assert.equal(new Set(visits).size,visits.length);assert.deepEqual([...scope].sort(),[...operationalFiles].sort());
+ const scope=invoke(file=>{visits.push(file);return native(file);});assert.equal(new Set(visits).size,visits.length);assert.deepEqual([...scope].sort(),[...new Set([...operationalFiles,...operationalConsumerFiles])].sort());
  const file='identity/http/shared/v1/identity-operational-options-v1.schema.json';
  assert.throws(()=>invoke(name=>name===file?Buffer.concat([native(name),Buffer.from('\nDrift')]):native(name)),/OPERATIONAL_CURRENT_BYTES/);
  assert.throws(()=>invoke(name=>{if(name===file)throw Error('synthetic missing candidate');return native(name);}),/synthetic missing candidate/);

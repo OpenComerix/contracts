@@ -241,6 +241,9 @@ const toolingPaths = Object.freeze([
   'scripts/identity/operational-context-admission-v1.mjs',
   'scripts/identity/operational-context-v1.mjs',
   'test/identity/operational-context-consumers-v1.test.mjs',
+  'test/architecture/internal-auth-v2-history.test.mjs',
+  'test/identity/operational-context-v1.test.mjs',
+  'test/sales/inventory-step-consumer-v1.test.mjs',
   'scripts/identity/operational-context-history-v1.mjs',
   'tools/architecture/graph.mjs', 'tools/architecture/git-source.mjs', 'tools/architecture/README.md',
   'scripts/catalog/catalog-foundation-v1-registry.mjs', 'scripts/catalog/catalog-lifecycle-v1-registry.mjs',
@@ -271,7 +274,7 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
 ]);
-const toolingReferenceSha256 = 'ac77c6eadde5d5b64143bc1c7affd542707b79dda9f0613075a3ff5b56739ecb';
+const toolingReferenceSha256 = '3e8e490b71f604d28494818e1018ba6321dd996ebe2a184447a220ebf86b76c8';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

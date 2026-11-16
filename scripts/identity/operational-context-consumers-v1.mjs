@@ -30,6 +30,13 @@ const published=Object.freeze({
     previousRevision:'9a483dafee6363658e6e1c3e4deadd6a665de327',
     previousManifest:'b8462b9b6044059c58a0f446728e495834bbf7141eb0e28741758c43bc1ba431',
     previousLock:'747ecc0ddbb97b8f27e791748f4a03fc820ae4ec29c6ea297e10517cee6fcd6d'}),
+  'gateway-bff':Object.freeze({revision:'1bac15076e7e9338b1176996c3a417d7e7b21802',
+    snapshot:'1fbf91e07ae2cf71daaf7d0376e0e8fb38a0955181d01b7ab466ecfb50036b88',
+    manifest:'4b4d0fda604cc701b3e4571d936a4c3df91e034b42c6c9283d1bb03f1be50107',
+    lock:'d9df550ab39be3d5feb002c4a2c92ce7d64c75076e120423815eb07b416a5962',pins:17,assets:160,registryPins:17,registryAssets:160,
+    previousRevision:'08a3f340c03e0463f0b94627e1a7249d17ae476c',
+    previousManifest:'cf969de4c3e99a53729355b14a087f1c8135793371d8b43b383fdc5b78731dd7',
+    previousLock:'72ed16de6aaf3bdb60aa353a985dccba6a04211b75cb4aea0e382fe524db2c41'}),
 });
 export const operationalConsumerFiles=Object.freeze(Object.keys(published).map(owner=>'registry/consumers/'+owner+'.json'));
 const ownerFor=file=>operationalConsumerFiles.includes(file)?path.posix.basename(file,'.json'):undefined;
@@ -72,6 +79,19 @@ function validateSnapshot(file,bytes,label){
   assert.deepEqual(value.lock.entries.slice(0,pin.registryPins),old.lock.entries,label+':PREVIOUS_PINS');
   assert.deepEqual(value.manifest.assets.slice(0,pin.registryAssets),old.manifest.assets,label+':PREVIOUS_ASSETS');
   assert.deepEqual(value.lock.assets.slice(0,pin.registryAssets),old.lock.assets,label+':PREVIOUS_ASSET_HASHES');
+  if(owner==='gateway-bff'){
+    // C's complete published snapshot is pinned above. Preserve the admitted
+    // H2/Catalog prefix while recognizing only its 21 selections and 38 copies.
+    assert.equal(old.sourceCommit,pin.previousRevision,label+':BASE_REVISION');
+    assert.equal(old.manifestSha256,pin.previousManifest,label+':BASE_MANIFEST');
+    assert.equal(old.lockSha256,pin.previousLock,label+':BASE_LOCK');
+    assert.equal(value.lock.entries.length,38,label+':ADDITIONS');
+    assert.equal(value.manifest.assets.length,198,label+':ASSETS');
+    assert.equal(value.lock.assets.length,198,label+':ASSET_ADMISSION');
+    assert.deepEqual(value.manifest.bindings.slice(0,old.manifest.bindings.length),old.manifest.bindings,label+':PREVIOUS_BINDINGS');
+    assert.equal(value.manifest.bindings.length,18,label+':BINDINGS');
+    return {service:owner,previousPins:17,registryPreviousPins:17,carriedSelections:0,additions:21,assets:198,publication:value.publication};
+  }
   // The registry lagged the already published pre-B producers by four/three
   // selections. Preserve that complete producer baseline as well as A's prefix.
   const priorManifest={...value.manifest,contracts:value.manifest.contracts.slice(0,pin.pins),assets:value.manifest.assets.slice(0,pin.assets)};
@@ -103,6 +123,9 @@ const changedTooling=Object.freeze([
   'scripts/identity/operational-context-v1.mjs',
   'scripts/identity/operational-context-history-v1.mjs',
   'scripts/finance/cash-consumer-v1.mjs',
+  'test/architecture/internal-auth-v2-history.test.mjs',
+  'test/identity/operational-context-v1.test.mjs',
+  'test/sales/inventory-step-consumer-v1.test.mjs',
 ]);
 export const operationalConsumerToolingFiles=Object.freeze([...changedTooling,'scripts/identity/operational-context-consumers-v1.mjs']);
 export function projectOperationalConsumerToolingFile(file,bytes){
@@ -117,7 +140,7 @@ export function withOperationalConsumersScope(paths,read,verify,label='OPERATION
     validateOperationalConsumers(raw,label);
     // Code integrity belongs to validateValidationTooling and the existing
     // capability guards. Metadata scopes must not widen older readers to code.
-    const result=verify(paths,file=>projectOperationalConsumerFile(file,raw(file)));
+    const result=verify([...new Set([...paths,...operationalConsumerFiles])],file=>projectOperationalConsumerFile(file,raw(file)));
     assert(!result||typeof result.then!=='function','OPERATIONAL_CONSUMER_SYNCHRONOUS');return result;
   }finally{active=false;live.clear();}
 }

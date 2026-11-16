@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import {syncBuiltinESMExports} from 'node:module';
+import {createHash} from 'node:crypto';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {
@@ -17,10 +18,11 @@ const read=file=>fs.readFileSync(path.join(root,file));
 const old=createGitReader()(root,operationalConsumersBase);
 const encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
 
-test('published B adds exactly six selections per owner and preserves the admitted prefix',()=>{
+test('published B and C preserve admitted prefixes and recognize only the three exact exports',()=>{
   assert.deepEqual(validateOperationalConsumers(read),[
     {service:'identity-tenancy',previousPins:45,registryPreviousPins:41,carriedSelections:4,additions:6,assets:0,publication:'published'},
     {service:'finance',previousPins:20,registryPreviousPins:17,carriedSelections:3,additions:6,assets:42,publication:'published'},
+    {service:'gateway-bff',previousPins:17,registryPreviousPins:17,carriedSelections:0,additions:21,assets:198,publication:'published'},
   ]);
   for(const file of operationalConsumerFiles){
     const value=JSON.parse(read(file)),prior=JSON.parse(old(file));
@@ -41,9 +43,26 @@ const mutations={
   owner:value=>value.sourceRepository='opencomerix/foreign',
   unknown:value=>value.unapproved=true,
 };
-for(const [name,mutate]of Object.entries(mutations))test('rejects '+name+' in either export without repairing it',()=>{
+for(const [name,mutate]of Object.entries(mutations))test('rejects '+name+' in each export without repairing it',()=>{
   for(const file of operationalConsumerFiles){
     const value=JSON.parse(read(file));mutate(value);const bytes=encode(value);
+    assert.throws(()=>validateOperationalConsumers(p=>p===file?bytes:read(p)),/OPERATIONAL_CONSUMER_BYTES/);
+    assert.strictEqual(projectOperationalConsumerFile(file,bytes),bytes);
+    assert.strictEqual(projectOperationalConsumerDocument(file,value),value);
+  }
+});
+test('Gateway C rejects changed prior/runtime copies, bindings and undeclared selection even with self-consistent metadata hashes',()=>{
+  const file='registry/consumers/gateway-bff.json';
+  const hash=value=>createHash('sha256').update(encode(value)).digest('hex');
+  for(const mutate of [
+    value=>value.manifest.assets[0].destination='foreign/prior.json',
+    value=>value.lock.assets[160].localSha256='0'.repeat(64),
+    value=>value.manifest.bindings[0].path='foreign/prior.ts',
+    value=>value.manifest.contracts.at(-1).operations.push('unapproved'),
+  ]){
+    const value=JSON.parse(read(file));mutate(value);
+    value.manifestSha256=hash(value.manifest);value.lock.manifestSha256=value.manifestSha256;value.lockSha256=hash(value.lock);
+    const bytes=encode(value);
     assert.throws(()=>validateOperationalConsumers(p=>p===file?bytes:read(p)),/OPERATIONAL_CONSUMER_BYTES/);
     assert.strictEqual(projectOperationalConsumerFile(file,bytes),bytes);
     assert.strictEqual(projectOperationalConsumerDocument(file,value),value);
@@ -71,7 +90,8 @@ test('projections do not read another live input even for 1, 10 or 100 supplied 
 test('one synchronous context reads each live input once regardless of projection count',()=>{
   for(const count of [1,10,100]){
     const visits=new Map();
-    withOperationalConsumersScope([],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(_paths,historical)=>{
+    withOperationalConsumersScope([],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
+      assert.deepEqual(paths,operationalConsumerFiles);
       for(let i=0;i<count;i++)for(const file of operationalConsumerFiles)assert.deepEqual(historical(file),old(file));
     });
     assert.equal(visits.size,operationalConsumerFiles.length);
@@ -86,8 +106,8 @@ test('fresh contexts reject drift, partial rollback and omission after a success
       return Buffer.concat([read(p),Buffer.from('\nunapproved')]);
     },()=>assert.fail('invalid scope accepted')));
   }
-  for(const file of operationalConsumerFiles)assert.throws(()=>withOperationalConsumersScope([],p=>p===file?old(p):read(p),()=>assert.fail('partial B accepted')));
-  assert.throws(()=>withOperationalConsumersScope([],p=>operationalConsumerFiles.includes(p)?old(p):read(p),()=>assert.fail('complete B rollback accepted')));
+  for(const file of operationalConsumerFiles)assert.throws(()=>withOperationalConsumersScope([],p=>p===file?old(p):read(p),()=>assert.fail('partial B/C accepted')));
+  assert.throws(()=>withOperationalConsumersScope([],p=>operationalConsumerFiles.includes(p)?old(p):read(p),()=>assert.fail('complete B/C rollback accepted')));
   withOperationalConsumersScope([],read,()=>true);
 });
 test('the existing tooling owner retains freshness and omission checks for the modified/new code',()=>{
