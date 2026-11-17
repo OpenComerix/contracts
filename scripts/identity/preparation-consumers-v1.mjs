@@ -74,7 +74,7 @@ export function validatePreparationConsumers(read=native){
   }
   const index=JSON.parse(source('registry/consumers/index.json'));
   for(const file of ['registry/consumers/index.json',...index.consumers.map(row=>'registry/consumers/'+row.file)])
-    if(!pins.has(file))assert.equal(text(read(file)),text(source(file)),'PREPARATION_CONSUMER_PRESERVATION:'+file);
+    if(!pins.has(file))assert.equal(text(projectOnlineFile(file,read(file))),text(source(file)),'PREPARATION_CONSUMER_PRESERVATION:'+file);
   return results;
 }
 // Pure single-value transforms: no live reads, no complete validator per file.

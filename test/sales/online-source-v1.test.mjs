@@ -88,6 +88,18 @@ test('ten planned roots preserve active sources, consumers and dependency bytes 
   assert(closure.files.length>1);assert(closure.units.some(u=>u.path===row.path&&u.pointer.includes('/paths/')));
  }
 });
+test('standalone source preservation accepts only the exact published temporal Identity export',()=>{
+ const file='registry/consumers/identity-tenancy.json',current=json(file),counts=new Map();
+ assert.equal(current.sourceCommit,'ebe6e8e7dffa75f01774fdfff844a85819ee2085');assert.equal(current.lock.entries.length,58);
+ validatePreservation(name=>{counts.set(name,(counts.get(name)??0)+1);return read(name);});
+ assert([...counts.values()].every(count=>count===1));
+ for(const change of [value=>value.sourceCommit='0'.repeat(40),value=>value.lock.entries.at(-1).commit='0'.repeat(40),value=>value.manifest.contracts.pop()]){
+  const changed=structuredClone(current);change(changed);
+  assert.throws(()=>validatePreservation(name=>name===file?encode(changed):read(name)),/ONLINE_SOURCE_PRESERVATION/);
+ }
+ const other='registry/consumers/sales-pos.json';
+ assert.throws(()=>validatePreservation(name=>name===other?Buffer.concat([read(name),Buffer.from('Drift')]):read(name)),/ONLINE_SOURCE_PRESERVATION/);
+});
 test('source scope reads each mutable input once for repeated historical lookups and caches no approval',()=>{
  for(const count of [1,10,100]){
   const visits=new Map();

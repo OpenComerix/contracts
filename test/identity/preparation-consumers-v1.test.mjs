@@ -93,6 +93,22 @@ test('the unchanged six consumers and index remain guarded',()=>{
   for(const file of ['registry/consumers/index.json',...index.consumers.map(row=>'registry/consumers/'+row.file)].filter(file=>!preparationConsumerFiles.includes(file)))
     assert.throws(()=>validatePreparationConsumers(p=>p===file?Buffer.concat([read(p),Buffer.from('drift')]):read(p)),/PRESERVATION/);
 });
+
+test('standalone preservation recognizes only the exact temporal Identity export and never repairs altered metadata',()=>{
+  const native=file=>fs.readFileSync(path.join(root,file));
+  const file='registry/consumers/identity-tenancy.json';
+  const current=JSON.parse(native(file));
+  assert.equal(current.sourceCommit,'ebe6e8e7dffa75f01774fdfff844a85819ee2085');
+  assert.equal(current.lock.entries.length,58);
+  const counts=new Map();
+  validatePreparationConsumers(name=>{counts.set(name,(counts.get(name)??0)+1);return native(name);});
+  assert([...counts.values()].every(count=>count===1));
+  for(const change of [value=>value.sourceCommit='0'.repeat(40),value=>value.lock.entries.at(-1).commit='0'.repeat(40),value=>value.manifest.contracts.pop()]){
+    const changed=structuredClone(current);change(changed);
+    changed.manifestSha256=digest(encode(changed.manifest));changed.lock.manifestSha256=changed.manifestSha256;changed.lockSha256=digest(encode(changed.lock));
+    assert.throws(()=>validatePreparationConsumers(name=>name===file?encode(changed):native(name)),/PREPARATION_CONSUMER_PRESERVATION/);
+  }
+});
 test('scope readers close on success/failure and reject asynchronous callbacks',()=>{
   let escaped;
   withPreparationConsumersScope([],read,(_paths,historical)=>{escaped=historical;});

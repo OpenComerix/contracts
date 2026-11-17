@@ -31,7 +31,7 @@ test('one selected admission preserves 234 descriptors, v1, historical artifacts
  assert.deepEqual(value.contracts.slice(234).map(row=>row.id),[privateZoneAdmissionId]);
  assert.equal(value.contracts.find(row=>row.id==='identity.f1-14e.private.identity-branch-time-zone-v1').status,'active');
  for(const file of ['package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',
-  ...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])assert.equal(text(read(file)),text(privateZoneAdmissionSource(file)));
+  ...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])assert.equal(text(projectPrivateZoneAdmissionFile(file,read(file))),text(privateZoneAdmissionSource(file)));
 });
 
 test('exact immutable source, two operations and four-file closure resolve with zero external URI mappings',()=>{
@@ -83,7 +83,7 @@ test('one bounded context reads each current delta input once and rechecks chang
   const visits=new Map();withPrivateZoneAdmissionScope(['prior'],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
    assert.deepEqual(paths,['prior',...privateZoneAdmissionScopeFiles]);
    for(let i=0;i<count;i++)assert.deepEqual(historical(registryPath),privateZoneAdmissionSource(registryPath));
-  });assert.equal(visits.size,8);assert([...visits.values()].every(n=>n===1));
+  });assert.equal(visits.size,privateZoneAdmissionScopeFiles.length);assert([...visits.values()].every(n=>n===1));
  }
  for(const file of privateZoneAdmissionScopeFiles)for(const missing of [false,true]){
   let reached=false;assert.throws(()=>withPrivateZoneAdmissionScope([],name=>{

@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {onlineTemporalConsumerFiles,projectOnlineTemporalFile,projectOnlineTemporalDocument,withOnlineTemporalConsumerScope} from './online-temporal-consumer-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 export const privateZoneAdmissionRevision='14a265e024a68887a9a1314c35d29b632258ed97';
@@ -71,25 +72,30 @@ const metadata=new Map([[registryPath,encode(registry)],
 export const privateZoneAdmissionMetadata=()=>new Map([...metadata].map(([file,bytes])=>[file,Buffer.from(bytes)]));
 const delta=new Map(metadata);
 for(const file of closure.files)delta.set(file.path,privateZoneAdmissionSource(file.path));
-export const privateZoneAdmissionScopeFiles=Object.freeze([...delta.keys()]);
+export const privateZoneAdmissionScopeFiles=Object.freeze([...new Set([...delta.keys(),...onlineTemporalConsumerFiles])]);
 const inputPaths=new Set([...delta.keys(),...[...before.contracts,...before.preservedFiles].map(row=>row.path),
  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',
  ...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')]);
 export const privateZoneAdmissionInputPaths=Object.freeze([...inputPaths]);
 export function validatePrivateZoneAdmissionInput(file,bytes){
+ bytes=projectOnlineTemporalFile(file,bytes);
  assert(inputPaths.has(file),'PRIVATE_ZONE_ADMISSION_UNKNOWN_INPUT:'+file);
  assert.equal(text(bytes),text(delta.get(file)??privateZoneAdmissionSource(file)),'PRIVATE_ZONE_ADMISSION_BYTES:'+file);
 }
 export function validatePrivateZoneAdmission(read=native){
+ return withOnlineTemporalConsumerScope([],read,(_paths,read)=>{
  for(const file of privateZoneAdmissionInputPaths)validatePrivateZoneAdmissionInput(file,read(file));
  return {admitted:1,roots:235,priorRoots:234,planned:2,consumers:8,closureFiles:4,closureUnits:18,runtimeDemonstrated:false};
+ });
 }
 // Exact supplied-value projections; no other current input is read or approved.
 export function projectPrivateZoneAdmissionFile(file,bytes){
+ bytes=projectOnlineTemporalFile(file,bytes);
  const expected=metadata.get(file);if(!expected)return bytes;
  try{return text(bytes)===text(expected)?privateZoneAdmissionSource(file):bytes;}catch{return bytes;}
 }
 export function projectPrivateZoneAdmissionDocument(file,value){
+ value=projectOnlineTemporalDocument(file,value);
  const expected=metadata.get(file);if(!expected||!file.endsWith('.json'))return value;
  return isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(privateZoneAdmissionSource(file)):value;
 }
@@ -104,9 +110,11 @@ export function withPrivateZoneAdmissionScope(paths,read,verify,label='PRIVATE_Z
    assert(!value.contracts?.some(row=>row.id===privateZoneAdmissionId),'PRIVATE_ZONE_ADMISSION_PARTIAL_SCOPE');
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','PRIVATE_ZONE_ADMISSION_SYNCHRONOUS');return result;
   }
-  for(const file of privateZoneAdmissionScopeFiles)validatePrivateZoneAdmissionInput(file,raw(file));
-  const result=verify([...new Set([...paths,...privateZoneAdmissionScopeFiles])],file=>projectPrivateZoneAdmissionFile(file,raw(file)));
-  assert(!result||typeof result.then!=='function','PRIVATE_ZONE_ADMISSION_SYNCHRONOUS');return result;
+  return withOnlineTemporalConsumerScope([...new Set([...paths,...privateZoneAdmissionScopeFiles])],raw,(paths,read)=>{
+   for(const file of privateZoneAdmissionScopeFiles)validatePrivateZoneAdmissionInput(file,read(file));
+   const result=verify([...new Set([...paths,...privateZoneAdmissionScopeFiles])],file=>projectPrivateZoneAdmissionFile(file,read(file)));
+   assert(!result||typeof result.then!=='function','PRIVATE_ZONE_ADMISSION_SYNCHRONOUS');return result;
+  });
  }finally{active=false;current.clear();}
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){

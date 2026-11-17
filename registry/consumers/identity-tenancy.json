@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/identity-tenancy",
-  "sourceCommit": "4f0604a066d96c3e0094a350fca1f0c0584c5842",
-  "manifestSha256": "6fc7ab8430069abf08808581553fab09666edb8c74067ed43c14c52a9072242f",
-  "lockSha256": "7e405d3a53f65d23746425bcd852a847ab74716e1071a6cb3dc358b63f1fd2f3",
+  "sourceCommit": "ebe6e8e7dffa75f01774fdfff844a85819ee2085",
+  "manifestSha256": "f6510198ed68b3e906108127b73d02522efe7e462b9cf380abc07242bbde33b6",
+  "lockSha256": "dbecd51eacb996ca283cada3dcda4c8ef87d45080e589ef55b199d0705f9da3d",
   "manifest": {
     "formatVersion": 1,
     "service": "identity-tenancy",
@@ -824,6 +824,113 @@
           "pnpm contracts:metadata",
           "pnpm test:operational-context"
         ]
+      },
+      {
+        "id": "identity.f1-14e.private.identity-sales-temporal-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "checkSalesTemporalAuthorization"
+        ],
+        "pointers": [],
+        "purpose": "F1-14E Identity temporal authority with a branch configuration snapshot from the same transaction; no Sales business effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-sales-temporal-authority-v1.schema",
+        "role": "validation",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14E Identity temporal authority with a branch configuration snapshot from the same transaction; no Sales business effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-branch-time-zone-v1.schema",
+        "role": "validation",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14E Identity temporal authority with a branch configuration snapshot from the same transaction; no Sales business effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.public.identity-branch-time-zone-v1",
+        "role": "documentation",
+        "version": "1.0.0",
+        "operations": [
+          "getBranchTimeZone",
+          "configureBranchTimeZone"
+        ],
+        "pointers": [],
+        "purpose": "F1-14E branch time-zone configuration and atomic restricted audit/replay; browser Origin/CSRF owned by Gateway.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.private.identity-branch-time-zone-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "getBranchTimeZone",
+          "configureBranchTimeZone"
+        ],
+        "pointers": [],
+        "purpose": "F1-14E branch time-zone configuration and atomic restricted audit/replay; browser Origin/CSRF owned by Gateway.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-branch-time-zone-policy-v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14E branch time-zone configuration and atomic restricted audit/replay; browser Origin/CSRF owned by Gateway.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
+      },
+      {
+        "id": "identity.f1-14e.fixtures.responses",
+        "role": "validation",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-14E branch time-zone configuration and atomic restricted audit/replay; browser Origin/CSRF owned by Gateway.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:all",
+          "pnpm test:sales-authority-runtime"
+        ]
       }
     ],
     "assets": [],
@@ -832,7 +939,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "identity-tenancy",
-    "manifestSha256": "6fc7ab8430069abf08808581553fab09666edb8c74067ed43c14c52a9072242f",
+    "manifestSha256": "f6510198ed68b3e906108127b73d02522efe7e462b9cf380abc07242bbde33b6",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -6527,6 +6634,695 @@
         ],
         "selectionSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343",
         "runtimeSha256": "ac14918e9153e1760a1359e96c6ff116715702c0134d31f4137dabd956999343"
+      },
+      {
+        "id": "identity.f1-14e.private.identity-sales-temporal-authority-v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+        "operations": [
+          "checkSalesTemporalAuthorization"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "sha256": "4784e607671f090bf701d5f5bbedf87f5c658aa77562e8cb90fa44e359c74df4"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "sha256": "501a9f509edc765afa1bf2e5a112cf13dba71596d7b67544b93da3b049660c24"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "sha256": "e04940c30b5484ff1996dfceaed5e8da74d4c6a5d5ea959a62dd12e60924b9a3"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "sha256": "b45609d377fc2efa1e539b4c4628e1f1702c16011216fe56d638892cfbc4623d"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "sha256": "470e1168751c4cf4426b7fa0111a8f5efad5ad6c81ae924436de6cfbaffd1dfd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "sha256": "87222f8e1b7df115a66b789d226360e362e566de0f22e93feb8a7c8cf2b202b1"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "sha256": "74aff886ebff321c07d963a124b23060eda6fc52a0eb49f265faa6089af20833"
+          }
+        ],
+        "units": [
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/PriceDecimal",
+            "sha256": "77b628299a28c7c5527866227c4a321dea60b2fd3d83985d0dcca80188fedf65"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$defs/QuantityDecimal",
+            "sha256": "db5209c8639a290aff3ea548240f91c73bc69de060104d9a8c1e24c545ed5e7b"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "00798d0bb587f228b92253c4ff035dd1092ab9c9ff74adc675b4bb0ff9fdd329"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-common-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$defs/TaxCode",
+            "sha256": "5c452204213aa7b3076a5b080d1c7da9be5c8feabfcb60ce7aa3d7f0cac00476"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "a8d82890391e595dfe7bcc47f0c594e2b237c9ff83d62feec3489135cfb0f723"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$defs/Reference",
+            "sha256": "894c01e5719a7ae434ef165230323c5f7fb17900ad3d988be70473958d3709a6"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "be88c80c7a10c2894aaa5bb5cbdb1d3ffe2e95663b3f9255039994bbc5e3de69"
+          },
+          {
+            "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "e9d1a7e57dae884db73f0ed577ace8ba662aa9170bde055f11019d42b2210e37"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1identity~1sales-temporal-authorizations/post",
+            "sha256": "dcd908c00c85f778df9abbd3ef7ad652a4fd56d8fbf94e98e1abe0c345232226"
+          },
+          {
+            "path": "identity/http/private/v1/identity-sales-temporal-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/HttpSnapshot",
+            "sha256": "2c6acd591126692bc240e821eb95a6e9adaf9fa28aae88678f5563fd6bcdffbc"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/Snapshot",
+            "sha256": "69c42e59d1871dd09f27c3315f645842c87e819eb4f949825ff865c25bcd0e14"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "590072bbac83d27cfc6e3e1ba1fb53b49923dadbb0dec8eb30213c0ed0573bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "54481e21e4088f160139c2e976db721b867d0c4b382da870242f5a68c1647b1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/AuthorizationRequest",
+            "sha256": "7297dd94e1cc0eeb1e7b042e6173098aa4a508e713d84beb8018b53f6e618c2a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/CanonicalRequest",
+            "sha256": "9613ad9405c06317b125025e6ffbcefa9f193aa0e53a86c8a0490ae025155f18"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/ClientSignal",
+            "sha256": "f88086f9ff0fdd7b28ae03628f4f33d507eeb36dd325120955fc395658577f0b"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$defs/HttpResult",
+            "sha256": "374fc0505c9da29858eb5c1d4dd2d5f23a5f31239c13ef521e37fa54c5e4aaa5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$defs/Result",
+            "sha256": "b59108f6a8a3b0261429d37dc5b5c37ca9aca8bcbaec4bb457de199a9383b309"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5622232146237151ce4e9f9afaf736ba2324eeffd0a75aabd5f1494b36fdea1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Finalize",
+            "sha256": "466489b4b2778b823074b872ad7137f97dc3c2dc2cedf2d1123b8324e083bf65"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/FinalizeLine",
+            "sha256": "d9a5e781e57cfd96e7866de342a86c29b6eaa1ed6a72cd15c356435fafb2575e"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/HistoryRequest",
+            "sha256": "b075de74395e0297ede93c4f23ed9221c2df992fc232e0a8353f081a7a388c57"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/OperatingDate",
+            "sha256": "b52b342b936b8e3cc535b14d254f693e4f0597638a400966dacc4901dc563ccb"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/RequestContext",
+            "sha256": "b6f7c2da2601351941e796d4f966d5b5ecdb35d950ef1ac91117cc2d89117c26"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$defs/Resume",
+            "sha256": "18e52f5d3635486b0d9841f756b814cc943b3ca8603011d212d9da026720a244"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$id",
+            "sha256": "caf2b7747cd804e195d6f88041c4c8303daf7f3452d305859a16c3ef2a3c1c8c"
+          },
+          {
+            "path": "sales/http/shared/v2/sales-types-v2.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "10acfc9f745c4651d9291729b5920b93a4d0717f6433065792901c8a5afc8de3",
+        "runtimeSha256": "c1ea6766dc4a0ea072ab2f7e6b301b5a7c05f43649acb14109301e6c5fac4b38"
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-sales-temporal-authority-v1.schema",
+        "role": "validation",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "sha256": "470e1168751c4cf4426b7fa0111a8f5efad5ad6c81ae924436de6cfbaffd1dfd"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "sha256": "347a212d558e7054aed87358b09cee62b2aaf7f3a8ba617eb4ca0344205af860"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "sha256": "87222f8e1b7df115a66b789d226360e362e566de0f22e93feb8a7c8cf2b202b1"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/HttpSnapshot",
+            "sha256": "2c6acd591126692bc240e821eb95a6e9adaf9fa28aae88678f5563fd6bcdffbc"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/Snapshot",
+            "sha256": "69c42e59d1871dd09f27c3315f645842c87e819eb4f949825ff865c25bcd0e14"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "590072bbac83d27cfc6e3e1ba1fb53b49923dadbb0dec8eb30213c0ed0573bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$defs/Authorization",
+            "sha256": "54481e21e4088f160139c2e976db721b867d0c4b382da870242f5a68c1647b1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "b852500ace8def973c801e14e233d858aca53d36eca1e2de055cc4b89b3dc772"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "",
+            "sha256": "c9e13b27f5a4a3dcd67b5476d6ec690f5ebd636a1439546ff5ceb4e5a3298c0f"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "5622232146237151ce4e9f9afaf736ba2324eeffd0a75aabd5f1494b36fdea1c"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sales-temporal-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "a77dae2f01bbeaea88be33f738e9167df1edda848675cf46a916a8b40b72e9e0",
+        "runtimeSha256": "a77dae2f01bbeaea88be33f738e9167df1edda848675cf46a916a8b40b72e9e0"
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-branch-time-zone-v1.schema",
+        "role": "validation",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "sha256": "470e1168751c4cf4426b7fa0111a8f5efad5ad6c81ae924436de6cfbaffd1dfd"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "",
+            "sha256": "e68729f4b316f59b775fe08a7be594a4153ee34debdc42a9fc67f6d58e81ad0a"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "590072bbac83d27cfc6e3e1ba1fb53b49923dadbb0dec8eb30213c0ed0573bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "cecd10654b2d2452842b6c1de87a67a7866cb2bc579a06dc83d5ad73372ac789",
+        "runtimeSha256": "cecd10654b2d2452842b6c1de87a67a7866cb2bc579a06dc83d5ad73372ac789"
+      },
+      {
+        "id": "identity.f1-14e.public.identity-branch-time-zone-v1",
+        "role": "documentation",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+        "operations": [
+          "getBranchTimeZone",
+          "configureBranchTimeZone"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "sha256": "c7733184b627295d7c75d1bab08d8b8214eedec87a14d265c984a327e8a41736"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "sha256": "dd7575210c2740a99d40faf4d8f77c1389be5b37e81b0abad078f5214cddfeaf"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "sha256": "470e1168751c4cf4426b7fa0111a8f5efad5ad6c81ae924436de6cfbaffd1dfd"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "pointer": "/absent",
+            "sha256": "21d2bc8c7276e7994d158a31ee17176c31761bcf1d0d2193ad5f70d49f5cbd9f"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "pointer": "/configured",
+            "sha256": "1d4953fe86798a1cd21906c5e1c937ab75a16f84da2d32ccd5a2aed908fd4559"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/components/securitySchemes/csrfToken",
+            "sha256": "ffaffb31854aaa13ba18b09fb91c3a21c384c629bf4e18efb50f41a93adb0802"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/components/securitySchemes/session",
+            "sha256": "3c2a9e81ba32eeabc9a59b4967137acc27cdc9e2eab9de62707fa3fd20723c7e"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/paths/~1tenancy~1branches~1{branch_id}~1time-zone/get",
+            "sha256": "d6f5bbc54a2fb14d07c2e6527a19454ee6d5ea6ff524ea670069b5669d09b7f7"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/paths/~1tenancy~1branches~1{branch_id}~1time-zone/put",
+            "sha256": "c10844f05a7156e7fc16003dedf95bf222a6693432595e3264a334a1e46ced28"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/security",
+            "sha256": "002d2a139dc9243fa790a9aa6fc6d92197e20df3ad3305d0d9f689c8529b38be"
+          },
+          {
+            "path": "identity/http/public/v1/identity-branch-time-zone-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "22e60f3dded22f072f233752b8b29d956d6bcfcffeb7230b9ff5cf5f7f096001"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/BranchTimeZone",
+            "sha256": "32408c7318e32a9906110296db4a553c9e210995c7b88f5bcd1da180fc1c0bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/Configure",
+            "sha256": "be407a55a07ce63f528ff27126d294c003dfa13d32247a0a6c67afe22bf06eb3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/HttpBranchTimeZone",
+            "sha256": "96020d5619cb86826bbe067c7a480f47ea69f48be0256fc1946d38e6e52487c5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "590072bbac83d27cfc6e3e1ba1fb53b49923dadbb0dec8eb30213c0ed0573bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "c532982cbbab1b69aaa8260d77e3b9c939ffe6687387ceb854d3a09ce2070525",
+        "runtimeSha256": "086a7e78800e6a92a4d8a9aedb61fce754528163686d9f101850353b2068fca3"
+      },
+      {
+        "id": "identity.f1-14e.private.identity-branch-time-zone-v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "14a265e024a68887a9a1314c35d29b632258ed97",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+        "operations": [
+          "getBranchTimeZone",
+          "configureBranchTimeZone"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "sha256": "c7733184b627295d7c75d1bab08d8b8214eedec87a14d265c984a327e8a41736"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "sha256": "00e01037888ea190497da8aa1c021cd975b8148b323cbbc8138d622626fbc794"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "sha256": "470e1168751c4cf4426b7fa0111a8f5efad5ad6c81ae924436de6cfbaffd1dfd"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "pointer": "/absent",
+            "sha256": "21d2bc8c7276e7994d158a31ee17176c31761bcf1d0d2193ad5f70d49f5cbd9f"
+          },
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "pointer": "/configured",
+            "sha256": "1d4953fe86798a1cd21906c5e1c937ab75a16f84da2d32ccd5a2aed908fd4559"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/components/securitySchemes/delegatedBearer",
+            "sha256": "789490961445d3211348f54885580c789159c98348b7118c8836da55b9d6ce2a"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/components/securitySchemes/originSession",
+            "sha256": "3c2a9e81ba32eeabc9a59b4967137acc27cdc9e2eab9de62707fa3fd20723c7e"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/paths/~1tenancy~1branches~1{branch_id}~1time-zone/get",
+            "sha256": "fc40e4be9e9abf8420398a10808ed8eb7e5791e0877911e8e6b04f0cad225c23"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/paths/~1tenancy~1branches~1{branch_id}~1time-zone/put",
+            "sha256": "aa635a1a1284c20ddd287aa81382e1f044fa89e4b6a8ea82923631a5d39cdb0c"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/security",
+            "sha256": "23d4886f70d0768136603a377b92fac1bef40a12a7622c87e92137ef74e9059d"
+          },
+          {
+            "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "20c8200500a010bc4ce144688aac1259b8c32b6893fc07b0a8e55108b89016a3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/BranchTimeZone",
+            "sha256": "32408c7318e32a9906110296db4a553c9e210995c7b88f5bcd1da180fc1c0bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/Configure",
+            "sha256": "be407a55a07ce63f528ff27126d294c003dfa13d32247a0a6c67afe22bf06eb3"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$defs/HttpBranchTimeZone",
+            "sha256": "96020d5619cb86826bbe067c7a480f47ea69f48be0256fc1946d38e6e52487c5"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "590072bbac83d27cfc6e3e1ba1fb53b49923dadbb0dec8eb30213c0ed0573bd1"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "4ee72a9b542022d4ab80887c91468f38e55735474d4ebe05f7830fd32f65a393",
+        "runtimeSha256": "adc5622b2cbb516ca1db004b2711e125a9bcd960052c489525132875eb2cb79f"
+      },
+      {
+        "id": "identity.f1-14e.shared.identity-branch-time-zone-policy-v1",
+        "role": "semantic-owner",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-branch-time-zone-policy-v1.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-policy-v1.json",
+            "sha256": "77037e9256e2b19d8de3d1d12a486f790fd47611bc7cae93546e68caa0a1be4e"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-branch-time-zone-policy-v1.json",
+            "pointer": "",
+            "sha256": "db12bccf9cda366f0975996f66882a0182f18e9298ad28c3a707dafb4a4485ff"
+          }
+        ],
+        "selectionSha256": "2fc7570d391aa1bb24d460cedb3cae8fd287ba08729056b11648701576aaf0ae",
+        "runtimeSha256": "2fc7570d391aa1bb24d460cedb3cae8fd287ba08729056b11648701576aaf0ae"
+      },
+      {
+        "id": "identity.f1-14e.fixtures.responses",
+        "role": "validation",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "5ed0f79a0012b9dd2b8df85977f252ed0da99e78",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/fixtures/branch-time-zone/v1/responses.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "sha256": "c7733184b627295d7c75d1bab08d8b8214eedec87a14d265c984a327e8a41736"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/fixtures/branch-time-zone/v1/responses.json",
+            "pointer": "",
+            "sha256": "1436a57b37f328d078f1e3d5261da71c3e1441373b721e0a6168d88ff77d46de"
+          }
+        ],
+        "selectionSha256": "4f2aec48b353605bae2638cc0de69286a44e550a3975f6b3cc462c9801ba7f1c",
+        "runtimeSha256": "4f2aec48b353605bae2638cc0de69286a44e550a3975f6b3cc462c9801ba7f1c"
       }
     ],
     "assets": []

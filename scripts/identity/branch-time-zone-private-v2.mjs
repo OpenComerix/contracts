@@ -83,6 +83,7 @@ export const privateZoneProtectedPaths=Object.freeze([...new Set([
 ])]);
 const protectedPaths=new Set(privateZoneProtectedPaths);
 export function validatePrivateZonePreservedInput(file,bytes){
+ bytes=projectPrivateZoneAdmissionFile(file,bytes);
  assert(protectedPaths.has(file),'PRIVATE_ZONE_UNKNOWN_PROTECTED_INPUT:'+file);
  assert.equal(text(bytes),text(privateZoneSource(file)),'PRIVATE_ZONE_PRESERVATION:'+file);
 }

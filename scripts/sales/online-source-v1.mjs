@@ -75,7 +75,7 @@ export function validatePreservation(read=native){
  const paths=new Set([...previousRegistry.contracts,...previousRegistry.preservedFiles].map(row=>row.path));
  for(const row of previousRegistry.requiredConsumers)paths.add('registry/consumers/'+row+'.json');
  for(const file of ['registry/consumers/index.json','package.json','pnpm-lock.yaml'])paths.add(file);
- for(const file of paths)assert.equal(text(read(file)),text(original(file)),'ONLINE_SOURCE_PRESERVATION:'+file);
+ for(const file of paths)assert.equal(text(projectOnlineFile(file,read(file))),text(original(file)),'ONLINE_SOURCE_PRESERVATION:'+file);
  return {files:paths.size,consumerMigrations:0};
 }
 // Older callers receive historical metadata plus the complete proved source
