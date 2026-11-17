@@ -7,6 +7,7 @@ import {createHash} from 'node:crypto';
 import {makeLock,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {withOnlineSourceScope,onlineScopeFiles,validateSource} from '../../scripts/sales/online-source-v1.mjs';
+import {projectPrivateZoneFile} from '../../scripts/identity/branch-time-zone-private-v2.mjs';
 import {
  onlineAdmissionRevision,onlineAdmissionSource,onlineAdmissionIds,onlineAdmittedRegistry,
  onlineAdmissionClosures,onlineAdmissionMetadata,onlineAdmissionScopeFiles,onlineAdmissionInputPaths,
@@ -24,13 +25,13 @@ const select=row=>({version:row.version,operations:row.operations,pointers:row.o
 
 test('ten selected admissions preserve every previous descriptor, consumer and unrelated intention',()=>{
  assert.deepEqual(validateOnlineAdmission(),expected);
- const value=JSON.parse(read(registryPath));assert.deepEqual(value,onlineAdmittedRegistry());
+ const value=JSON.parse(projectPrivateZoneFile(registryPath,read(registryPath)));assert.deepEqual(value,onlineAdmittedRegistry());
  assert.deepEqual(value.contracts.slice(0,224),before.contracts);
  assert.deepEqual(value.preservedFiles,before.preservedFiles);assert.deepEqual(value.requiredConsumers,before.requiredConsumers);
  assert.deepEqual(value.planned,before.planned.filter(row=>!onlineAdmissionIds.includes(row.id)));
  assert.deepEqual(value.contracts.slice(224).map(row=>row.id),onlineAdmissionIds);
  for(const file of ['registry/consumers/index.json',...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json'),
-  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml'])assert.equal(text(read(file)),text(onlineAdmissionSource(file)),file);
+  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml'])assert.equal(text(projectPrivateZoneFile(file,read(file))),text(onlineAdmissionSource(file)),file);
  assert.deepEqual(validateSource(),{planned:10,admitted:0,openapis:4,runtimeDemonstrated:false},'source gate retains its published view');
 });
 

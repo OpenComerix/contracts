@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {privateZoneScopeFiles,projectPrivateZoneFile,projectPrivateZoneDocument,withPrivateZoneScope} from '../identity/branch-time-zone-private-v2.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 export const onlineAdmissionRevision='5ed0f79a0012b9dd2b8df85977f252ed0da99e78';
@@ -80,7 +81,7 @@ export const onlineAdmissionMetadata=()=>new Map([...metadata].map(([file,bytes]
 const delta=new Map(metadata);
 for(const row of rows)if(!delta.has(row.path))delta.set(row.path,onlineAdmissionSource(row.path));
 for(const closure of closures.values())for(const file of closure.files)if(!delta.has(file.path))delta.set(file.path,onlineAdmissionSource(file.path));
-export const onlineAdmissionScopeFiles=Object.freeze([...delta.keys()]);
+export const onlineAdmissionScopeFiles=Object.freeze([...new Set([...privateZoneScopeFiles,...delta.keys()])]);
 const inputs=new Map(delta);
 for(const file of [...[...before.contracts,...before.preservedFiles].map(row=>row.path),
  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',
@@ -88,6 +89,7 @@ for(const file of [...[...before.contracts,...before.preservedFiles].map(row=>ro
  if(!inputs.has(file))inputs.set(file,onlineAdmissionSource(file));
 export const onlineAdmissionInputPaths=Object.freeze([...inputs.keys()]);
 export function validateOnlineAdmissionInput(file,bytes){
+ bytes=projectPrivateZoneFile(file,bytes);
  assert(inputs.has(file),'ONLINE_ADMISSION_UNKNOWN_INPUT:'+file);
  assert.equal(text(bytes),text(inputs.get(file)),'ONLINE_ADMISSION_BYTES:'+file);
 }
@@ -98,15 +100,20 @@ export function validateOnlineAdmission(read=native){
 }
 // Single supplied value only: no live reads, gates or cached approvals.
 export function projectOnlineAdmissionFile(file,bytes){
+ bytes=projectPrivateZoneFile(file,bytes);
  const expected=metadata.get(file);if(!expected)return bytes;
  try{return text(bytes)===text(expected)?onlineAdmissionSource(file):bytes;}catch{return bytes;}
 }
 export function projectOnlineAdmissionDocument(file,value){
+ value=projectPrivateZoneDocument(file,value);
  const expected=metadata.get(file);if(!expected||!file.endsWith('.json'))return value;
  return isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(onlineAdmissionSource(file)):value;
 }
 // Check only the current delta here; older owners retain their own preservation gates.
 export function withOnlineAdmissionScope(paths,read,verify,label='ONLINE_ADMISSION_BYTES'){
+ return withPrivateZoneScope(paths,read,(paths,read)=>withAdmissionScope(paths,read,verify,label),label);
+}
+function withAdmissionScope(paths,read,verify,label){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'ONLINE_ADMISSION_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{
@@ -116,7 +123,7 @@ export function withOnlineAdmissionScope(paths,read,verify,label='ONLINE_ADMISSI
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','ONLINE_ADMISSION_SYNCHRONOUS');return result;
   }
   for(const [file,expected]of delta)assert.equal(text(raw(file)),text(expected),label+':'+file);
-  const result=verify([...new Set([...paths,...onlineAdmissionScopeFiles])],file=>projectOnlineAdmissionFile(file,raw(file)));
+  const result=verify([...new Set([...paths,...delta.keys()])],file=>projectOnlineAdmissionFile(file,raw(file)));
   assert(!result||typeof result.then!=='function','ONLINE_ADMISSION_SYNCHRONOUS');return result;
  }finally{active=false;current.clear();}
 }

@@ -8,6 +8,7 @@ import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {resolveSelection,makeLock} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {projectOnlineAdmissionFile} from '../../scripts/sales/online-admission-v1.mjs';
+import {projectPrivateZoneFile} from '../../scripts/identity/branch-time-zone-private-v2.mjs';
 import {root,base,sourceFiles,onlineScopeFiles,metadataFiles,openapis,validateSource,validateSourceInput,validatePreservation,projectOnlineFile,projectOnlineDocument,withOnlineSourceScope,operatingDate,verifyTemporalBinding} from '../../scripts/sales/online-source-v1.mjs';
 const read=f=>fs.readFileSync(path.join(root,f));
 const json=f=>JSON.parse(read(f));
@@ -115,7 +116,7 @@ test('contexts close on success/failure and reject deferred verification',()=>{
  assert.throws(()=>withOnlineSourceScope([],read,()=>Promise.resolve(true)),/SYNCHRONOUS/);
 });
 test('CI adds one source bundle/schema pass in existing Sales jobs without changing prior commands or adding jobs',()=>{
- const current=parse(read('.github/workflows/ci.yml').toString()),before=parse(old('.github/workflows/ci.yml').toString());
+ const current=parse(projectPrivateZoneFile('.github/workflows/ci.yml',read('.github/workflows/ci.yml')).toString()),before=parse(old('.github/workflows/ci.yml').toString());
  assert.deepEqual(Object.keys(current.jobs),Object.keys(before.jobs));
  const contract=current.jobs.validate_sales_contracts.steps.find(s=>s.name==='Run original validation commands');
  assert.equal(contract.run.split('node scripts/sales/online-source-v1.mjs openapi').length,2);

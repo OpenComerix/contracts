@@ -561,6 +561,8 @@ jobs:
           node scripts/identity/validate-catalog-history-permissions-v1.mjs .ci-artifacts/catalog-history-permissions-v1 .ci-artifacts/catalog-history-permissions-v1.bundle.json
           node scripts/identity/validate-catalog-workload-profiles-v1.mjs
           node scripts/identity/validate-catalog-workload-profiles-v2.mjs
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-branch-time-zone-v2.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-branch-time-zone-v2.yaml --dereferenced --ext json --output .ci-artifacts/branch-time-zone-private-v2.bundle.json
           node scripts/identity/operational-context-v1.mjs verify
           node scripts/identity/operational-context-v1.mjs openapi
           node scripts/identity/operational-context-v1.mjs prepare .ci-artifacts/f1-14a-ci
@@ -579,7 +581,7 @@ jobs:
         shell: bash
         run: |-
           paths=()
-          for path in .ci-artifacts/f1-14a/ .ci-artifacts/f1-14a-ci/ .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/; do
+          for path in .ci-artifacts/f1-14a/ .ci-artifacts/f1-14a-ci/ .ci-artifacts/branch-time-zone-private-v2.bundle.json .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/; do
             if [ -e "$path" ]; then paths+=("$path"); fi
           done
           if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi

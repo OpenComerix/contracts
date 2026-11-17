@@ -19694,6 +19694,20 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "identity.f1-14e.private.identity-branch-time-zone-v2",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E",
+      "status": "planned",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+      "operations": [
+        "getBranchTimeZone",
+        "configureBranchTimeZone"
+      ],
+      "constraint": "Private v2 source only: browser Origin/CSRF remains exclusively in Gateway under public v1; Identity retains delegated user/session/signal and current backend authority. Preserve all published sources and consumer pins. Publication, exact full CI and separate admission precede consumption; no runtime or functional admission."
     }
   ],
   "requiredConsumers": [
