@@ -1,4 +1,4 @@
-import {sourceFiles as onlineSourceFiles} from '../../scripts/sales/online-source-v1.mjs';
+import {onlineScopeFiles as onlineSourceFiles} from '../../scripts/sales/online-source-v1.mjs';
 import {operationalFiles,projectOperationalFile,projectOperationalDocument} from '../../scripts/identity/operational-context-history-v1.mjs';
 import {operationalConsumerFiles} from '../../scripts/identity/operational-context-consumers-v1.mjs';
 import {browserReadsFiles,browserReadsPreservedFiles} from '../../scripts/finance/browser-reads-v1.mjs';

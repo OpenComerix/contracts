@@ -1,4 +1,4 @@
-import {sourceFiles as onlineSourceFiles} from '../../scripts/sales/online-source-v1.mjs';
+import {onlineScopeFiles as onlineSourceFiles} from '../../scripts/sales/online-source-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';

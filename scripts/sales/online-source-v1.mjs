@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {resolveSchema} from './schema-v2.mjs';
+import {onlineAdmissionScopeFiles,projectOnlineAdmissionFile,projectOnlineAdmissionDocument,withOnlineAdmissionScope} from './online-admission-v1.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const base='9a24c38ca1088893c1f5bc890f6342c625d931d3';
@@ -36,6 +37,7 @@ export const sourceHashes=Object.freeze({
 });
 export const metadataFiles=Object.freeze(['registry/contracts.json','identity/index.json','sales/index.json','identity/README.md','sales/README.md','.github/workflows/ci.yml']);
 export const sourceFiles=Object.freeze(Object.keys(sourceHashes));
+export const onlineScopeFiles=Object.freeze([...new Set([...onlineAdmissionScopeFiles,...sourceFiles])]);
 export const openapis=Object.freeze([
  'sales/http/public/v2/sales-browser-reads-v2.yaml',
  'identity/http/public/v1/identity-branch-time-zone-v1.yaml',
@@ -45,21 +47,24 @@ export const openapis=Object.freeze([
 const registryPath='registry/contracts.json';
 const previousRegistry=json(registryPath,original);
 export function validateSourceInput(file,bytes){
+ bytes=projectOnlineAdmissionFile(file,bytes);
  assert(Object.hasOwn(sourceHashes,file),'ONLINE_SOURCE_UNKNOWN:'+file);
  assert.equal(hash(bytes),sourceHashes[file],'ONLINE_SOURCE_BYTES:'+file);
 }
 // Pure single-value transforms. No live reads, nested gates or global approval cache.
 export function projectOnlineFile(file,bytes){
+ bytes=projectOnlineAdmissionFile(file,bytes);
  if(!metadataFiles.includes(file))return bytes;
  try{return hash(bytes)===sourceHashes[file]?original(file):bytes;}catch{return bytes;}
 }
 export function projectOnlineDocument(file,value){
+ value=projectOnlineAdmissionDocument(file,value);
  if(!metadataFiles.includes(file)||!file.endsWith('.json'))return value;
  try{const encoded=JSON.stringify(value,null,2)+'\n';return isDeepStrictEqual(value,JSON.parse(encoded))&&hash(Buffer.from(encoded))===sourceHashes[file]?json(file,original):value;}catch{return value;}
 }
 export function validateSource(read=native){
  for(const file of sourceFiles)validateSourceInput(file,read(file));
- const registry=json(registryPath,read);
+ const registry=JSON.parse(projectOnlineAdmissionFile(registryPath,read(registryPath)));
  assert.deepEqual(registry.contracts,previousRegistry.contracts,'ONLINE_SOURCE_ADMISSION_CHANGED');
  assert.deepEqual(registry.preservedFiles,previousRegistry.preservedFiles);
  assert.deepEqual(registry.planned.slice(0,previousRegistry.planned.length),previousRegistry.planned);
@@ -76,6 +81,9 @@ export function validatePreservation(read=native){
 // Older callers receive historical metadata plus the complete proved source
 // inventory. No unverified new path is exempted from their preservation guards.
 export function withOnlineSourceScope(paths,read,verify,label='ONLINE_SOURCE_BYTES'){
+ return withOnlineAdmissionScope(paths,read,(paths,read)=>withSourceScope(paths,read,verify,label),label);
+}
+function withSourceScope(paths,read,verify,label){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'ONLINE_SOURCE_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{

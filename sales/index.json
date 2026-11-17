@@ -24,7 +24,10 @@
     "sales.f1-10e.lifecycle-policy.schema.v2",
     "sales.context-check-authority.http.v1",
     "sales.context-check-authority.schema.v1",
-    "sales.preparation.fixtures.v1"
+    "sales.preparation.fixtures.v1",
+    "sales.f1-14e.public.sales-browser-reads-v2",
+    "sales.f1-14e.shared.sales-operating-date-policy-v1",
+    "sales.f1-14e.fixtures.cases"
   ],
   "surfaces": [
     {
@@ -115,6 +118,23 @@
           "version": "2.0.0",
           "path": "sales/http/public/v2/pos-sales-v2.yaml",
           "status": "active"
+        },
+        {
+          "id": "sales.f1-14e.public.sales-browser-reads-v2",
+          "version": "2.0.0",
+          "path": "sales/http/public/v2/sales-browser-reads-v2.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-shared",
+      "versions": [
+        {
+          "id": "sales.f1-14e.shared.sales-operating-date-policy-v1",
+          "version": "1.0.0",
+          "path": "sales/http/shared/v1/sales-operating-date-policy-v1.json",
+          "status": "active"
         }
       ]
     },
@@ -196,13 +216,15 @@
           "version": "v1",
           "path": "sales/fixtures/preparation/v1/contexts.json",
           "status": "active"
+        },
+        {
+          "id": "sales.f1-14e.fixtures.cases",
+          "version": "1.0.0",
+          "path": "sales/fixtures/operating-date/v1/cases.json",
+          "status": "active"
         }
       ]
     }
   ],
-  "planned": [
-    "sales.f1-14e.public.sales-browser-reads-v2",
-    "sales.f1-14e.shared.sales-operating-date-policy-v1",
-    "sales.f1-14e.fixtures.cases"
-  ]
+  "planned": []
 }

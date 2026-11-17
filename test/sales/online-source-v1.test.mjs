@@ -7,7 +7,8 @@ import {parse} from 'yaml';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {resolveSelection,makeLock} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
-import {root,base,sourceFiles,metadataFiles,openapis,validateSource,validateSourceInput,validatePreservation,projectOnlineFile,projectOnlineDocument,withOnlineSourceScope,operatingDate,verifyTemporalBinding} from '../../scripts/sales/online-source-v1.mjs';
+import {projectOnlineAdmissionFile} from '../../scripts/sales/online-admission-v1.mjs';
+import {root,base,sourceFiles,onlineScopeFiles,metadataFiles,openapis,validateSource,validateSourceInput,validatePreservation,projectOnlineFile,projectOnlineDocument,withOnlineSourceScope,operatingDate,verifyTemporalBinding} from '../../scripts/sales/online-source-v1.mjs';
 const read=f=>fs.readFileSync(path.join(root,f));
 const json=f=>JSON.parse(read(f));
 const old=createGitReader()(root,base);
@@ -73,7 +74,7 @@ test('date vectors use branch IANA civil day at receipt across midnight, leap da
 });
 test('ten planned roots preserve active sources, consumers and dependency bytes and remain unavailable to makeLock',()=>{
  assert.deepEqual(validateSource(),{planned:10,admitted:0,openapis:4,runtimeDemonstrated:false});assert(validatePreservation().files>224);
- const registry=json('registry/contracts.json'),before=JSON.parse(old('registry/contracts.json'));
+ const registry=JSON.parse(projectOnlineAdmissionFile('registry/contracts.json',read('registry/contracts.json'))),before=JSON.parse(old('registry/contracts.json'));
  assert.deepEqual(registry.requiredConsumers,before.requiredConsumers);assert.equal(registry.planned.length,before.planned.length+10);
  const selected=registry.planned.filter(r=>r.materializeIn==='F1-14E');assert.equal(selected.length,10);
  for(const row of selected){assert.equal(row.status,'planned');assert(!Object.hasOwn(row,'commit'));assert(!Object.hasOwn(row,'sha256'));}
@@ -90,9 +91,9 @@ test('source scope reads each mutable input once for repeated historical lookups
  for(const count of [1,10,100]){
   const visits=new Map();
   withOnlineSourceScope(['historical-scope'],f=>{visits.set(f,(visits.get(f)??0)+1);return read(f);},(paths,historical)=>{
-   assert.deepEqual(paths,['historical-scope',...sourceFiles]);for(let i=0;i<count;i++)assert.deepEqual(historical('registry/contracts.json'),old('registry/contracts.json'));
+   assert.deepEqual(paths,['historical-scope',...onlineScopeFiles]);for(let i=0;i<count;i++)assert.deepEqual(historical('registry/contracts.json'),old('registry/contracts.json'));
   });
-  assert.equal(visits.size,sourceFiles.length);assert([...visits.values()].every(n=>n===1));
+  assert.equal(visits.size,onlineScopeFiles.length);assert([...visits.values()].every(n=>n===1));
  }
  for(const f of sourceFiles){
   assert.throws(()=>withOnlineSourceScope([],n=>n===f?Buffer.concat([read(n),Buffer.from('\nDrift')]):read(n),()=>assert.fail('changed source accepted')));
