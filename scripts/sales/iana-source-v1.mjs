@@ -5,6 +5,7 @@ import {fileURLToPath} from 'node:url';
 import {isDeepStrictEqual} from 'node:util';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {ianaAdmissionScopeFiles,projectIanaAdmissionFile,projectIanaAdmissionDocument,withIanaAdmissionScope} from './iana-admission-v1.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const ianaBase='28ba8fce7f14fcaa668374756b140341f4bd6a6a';
@@ -102,11 +103,15 @@ workflow=workflow.replace(schemaAnchor,schemaAnchor+"\n      - name: Validate IA
 metadata.set('.github/workflows/ci.yml',Buffer.from(workflow));
 const delta=new Map([...documents,...metadata]);
 export const ianaSourceFiles=Object.freeze([...delta.keys()]);
+export const ianaScopeFiles=Object.freeze([...new Set([...ianaAdmissionScopeFiles,...ianaSourceFiles])]);
 export const ianaSourceDocuments=()=>new Map([...delta].map(([file,bytes])=>[file,Buffer.from(bytes)]));
-export function projectIanaFile(file,bytes){const expected=metadata.get(file);return expected&&text(bytes)===text(expected)?Buffer.from(source(file)):bytes;}
-export function projectIanaDocument(file,value){const expected=metadata.get(file);return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(source(file)):value;}
-export function validateIanaInput(file,bytes){assert(delta.has(file),'IANA_UNKNOWN:'+file);assert.equal(text(bytes),text(delta.get(file)),'IANA_SOURCE_BYTES:'+file);}
+export function projectIanaFile(file,bytes){bytes=projectIanaAdmissionFile(file,bytes);const expected=metadata.get(file);return expected&&text(bytes)===text(expected)?Buffer.from(source(file)):bytes;}
+export function projectIanaDocument(file,value){value=projectIanaAdmissionDocument(file,value);const expected=metadata.get(file);return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(source(file)):value;}
+export function validateIanaInput(file,bytes){bytes=projectIanaAdmissionFile(file,bytes);assert(delta.has(file),'IANA_UNKNOWN:'+file);assert.equal(text(bytes),text(delta.get(file)),'IANA_SOURCE_BYTES:'+file);}
 export function withIanaScope(paths,read,verify,label='IANA_PARTIAL_SCOPE'){
+ return withIanaAdmissionScope(paths,read,(paths,read)=>withIanaSourceScope(paths,read,verify,label),label);
+}
+function withIanaSourceScope(paths,read,verify,label){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'IANA_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{
@@ -121,12 +126,14 @@ export function withIanaScope(paths,read,verify,label='IANA_PARTIAL_SCOPE'){
  }finally{active=false;current.clear();}
 }
 export function validateIanaSource(read=native){
+ return withIanaAdmissionScope([],read,(_paths,read)=>{
  for(const file of ianaSourceFiles)validateIanaInput(file,read(file));
  const protectedFiles=new Set([...previous.contracts,...previous.preservedFiles].map(row=>row.path));
  for(const owner of previous.requiredConsumers)protectedFiles.add('registry/consumers/'+owner+'.json');
  for(const file of ['package.json','pnpm-lock.yaml','registry/consumers/index.json'])protectedFiles.add(file);
  for(const file of protectedFiles)assert.equal(text(read(file)),text(source(file)),'IANA_PRESERVATION:'+file);
  return {successors:9,planned:10,admitted:0,preservedFiles:protectedFiles.size,runtimeDemonstrated:false};
+ });
 }
 if(process.argv[1]&&path.resolve(process.argv[1])===fileURLToPath(import.meta.url)){
  assert.equal(process.argv.length,2,'IANA_OPTIONS');console.log(JSON.stringify(validateIanaSource()));

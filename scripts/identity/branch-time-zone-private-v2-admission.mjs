@@ -7,7 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
-import {withIanaScope,ianaSourceFiles} from '../sales/iana-source-v1.mjs';
+import {withIanaScope,ianaScopeFiles} from '../sales/iana-source-v1.mjs';
 import {onlineTemporalConsumerFiles,projectOnlineTemporalFile,projectOnlineTemporalDocument,withOnlineTemporalConsumerScope} from './online-temporal-consumer-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
@@ -74,7 +74,7 @@ export const privateZoneAdmissionMetadata=()=>new Map([...metadata].map(([file,b
 const delta=new Map(metadata);
 for(const file of closure.files)delta.set(file.path,privateZoneAdmissionSource(file.path));
 const ownScopeFiles=Object.freeze([...new Set([...delta.keys(),...onlineTemporalConsumerFiles])]);
-export const privateZoneAdmissionScopeFiles=Object.freeze([...new Set([...ianaSourceFiles,...ownScopeFiles])]);
+export const privateZoneAdmissionScopeFiles=Object.freeze([...new Set([...ianaScopeFiles,...ownScopeFiles])]);
 const inputPaths=new Set([...delta.keys(),...[...before.contracts,...before.preservedFiles].map(row=>row.path),
  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',
  ...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')]);

@@ -18752,6 +18752,297 @@
         "configureBranchTimeZone"
       ],
       "uriMappings": []
+    },
+    {
+      "id": "sales.f1-14e.iana.http-shared.sales-types-v3",
+      "domain": "sales",
+      "surface": "schema",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.sales-types-v3",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "3.0.0",
+      "path": "sales/http/shared/v3/sales-types-v3.schema.json",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "9e0a728a9da726e934e91362726a2b8ca5406bdab940016b2efb3ed91699965c",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-14e.iana.http-private.pos-sales-internal-v3",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.pos-sales-internal-v3",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "3.0.0",
+      "path": "sales/http/private/v3/pos-sales-internal-v3.yaml",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "cb95603d0c140a979aa0fca03481df65b77b59e722d81cac8ad753560a9ce112",
+      "operations": [
+        "finalizeOnlineSale",
+        "getSaleFinalization",
+        "getCompletedSale",
+        "resumeSaleFinalization",
+        "createSalesHistoryReadSession",
+        "readSalesHistoryFacts"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-14e.iana.http-shared.identity-sales-authority-v2",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.identity-sales-authority-v2",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "2.0.0",
+      "path": "identity/http/shared/v2/identity-sales-authority-v2.schema.json",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "e91b4422886e6b0712969a05afde56a901f75b912ea5ebd319f6c0a85cfcf728",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v3/sales-types-v3.schema.json",
+          "path": "sales/http/shared/v3/sales-types-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-14e.iana.http-private.identity-sales-authority-v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.identity-sales-authority-v2",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-sales-authority-v2.yaml",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "73a80297aa9922cf564e85b5b3d9b7a26067a1ecb5175fc5c1c25fdd9f0abac1",
+      "operations": [
+        "createSalesDelegation",
+        "checkSalesAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v3/sales-types-v3.schema.json",
+          "path": "sales/http/shared/v3/sales-types-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.identity-sales-temporal-authority-v2",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-sales-temporal-authority-v2.yaml",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1bf7a255bdab2db1320a73c1c5c49819cfe9ec9ce98d09687aa8ccb6bae6b745",
+      "operations": [
+        "checkSalesTemporalAuthorization"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-sales-authority-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-sales-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/identity/http/shared/v1/identity-branch-time-zone-v1.schema.json",
+          "path": "identity/http/shared/v1/identity-branch-time-zone-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v3/sales-types-v3.schema.json",
+          "path": "sales/http/shared/v3/sales-types-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-14e.iana.events.sales.sale.completed.v3",
+      "domain": "sales",
+      "surface": "events",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.sales.sale.completed.v3",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "3.0.0",
+      "path": "sales/events/v3/sales.sale.completed.v3.schema.json",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "11e420e72bd346d7cbfaf9a04161e4fd59c2a3348d66b92619ea6fa66a7cfdb1",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v3/sales-types-v3.schema.json",
+          "path": "sales/http/shared/v3/sales-types-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-14e.iana.events.sales-flow-v3.asyncapi",
+      "domain": "sales",
+      "surface": "documentation",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.sales-flow-v3.asyncapi",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "3.0.0",
+      "path": "sales/events/v3/sales-flow-v3.asyncapi.yaml",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "9032298d40e38c354033e489d8dcb5dba36e089a548b5e2ae2df074d60499864",
+      "operations": [],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/events/event-envelope-v1.schema.json",
+          "path": "events/event-envelope-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v3/sales-types-v3.schema.json",
+          "path": "sales/http/shared/v3/sales-types-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.f1-14e.iana.fixtures.cases",
+      "domain": "sales",
+      "surface": "validation",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.cases",
+      "purpose": "Selected IANA and completed.v3 source admission for Identity/Sales; Gateway public surfaces and consumer/runtime migration remain separate.",
+      "reasonForChange": "Audited immutable source019a75d with full CI44189146644 Passed23/23 and exact dev SHA/ref; preserve published sources, prior descriptors and consumer pins.",
+      "retirement": "Preserve published v2/v3 bytes and historical facts/replay; no implicit replacement or double publication. Consumer migration requires its authorized cut.",
+      "version": "1.0.0",
+      "path": "sales/fixtures/iana-time-zones/v1/cases.json",
+      "commit": "019a75d86fd12df53b433aebdc269e85a4064f73",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ba6c6a7ce8bb4d1e7a67fab96cebcb82be714b3d97e17758ce902e9ab2cf8a50",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -19718,17 +20009,6 @@
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
     },
     {
-      "id": "sales.f1-14e.iana.http-shared.sales-types-v3",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "3.0.0",
-      "path": "sales/http/shared/v3/sales-types-v3.schema.json",
-      "operations": [],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
       "id": "sales.f1-14e.iana.http-public.pos-sales-v3",
       "domain": "sales",
       "owner": "gateway-bff",
@@ -19736,24 +20016,6 @@
       "status": "planned",
       "version": "3.0.0",
       "path": "sales/http/public/v3/pos-sales-v3.yaml",
-      "operations": [
-        "finalizeOnlineSale",
-        "getSaleFinalization",
-        "getCompletedSale",
-        "resumeSaleFinalization",
-        "createSalesHistoryReadSession",
-        "readSalesHistoryFacts"
-      ],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "sales.f1-14e.iana.http-private.pos-sales-internal-v3",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "3.0.0",
-      "path": "sales/http/private/v3/pos-sales-internal-v3.yaml",
       "operations": [
         "finalizeOnlineSale",
         "getSaleFinalization",
@@ -19776,79 +20038,6 @@
         "getSaleFinalization",
         "getCompletedSale"
       ],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "identity.f1-14e.iana.http-shared.identity-sales-authority-v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "2.0.0",
-      "path": "identity/http/shared/v2/identity-sales-authority-v2.schema.json",
-      "operations": [],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "identity.f1-14e.iana.http-private.identity-sales-authority-v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "2.0.0",
-      "path": "identity/http/private/v2/identity-sales-authority-v2.yaml",
-      "operations": [
-        "createSalesDelegation",
-        "checkSalesAuthorization"
-      ],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "2.0.0",
-      "path": "identity/http/private/v2/identity-sales-temporal-authority-v2.yaml",
-      "operations": [
-        "checkSalesTemporalAuthorization"
-      ],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "sales.f1-14e.iana.events.sales.sale.completed.v3",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "3.0.0",
-      "path": "sales/events/v3/sales.sale.completed.v3.schema.json",
-      "operations": [],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "sales.f1-14e.iana.events.sales-flow-v3.asyncapi",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "3.0.0",
-      "path": "sales/events/v3/sales-flow-v3.asyncapi.yaml",
-      "operations": [
-        "sendCompleted"
-      ],
-      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
-    },
-    {
-      "id": "sales.f1-14e.iana.fixtures.cases",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "materializeIn": "F1-14E-IANA",
-      "status": "planned",
-      "version": "1.0.0",
-      "path": "sales/fixtures/iana-time-zones/v1/cases.json",
-      "operations": [],
       "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
     }
   ],

@@ -6,7 +6,8 @@ import {parse} from 'yaml';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {root,ianaBase,ianaPattern,ianaSuccessors,ianaFixtures,ianaSourceFiles,ianaSourceDocuments,validateIanaSource,validateIanaInput,projectIanaFile,projectIanaDocument,withIanaScope} from '../../scripts/sales/iana-source-v1.mjs';
 import {nativeIanaCases} from '../../scripts/sales/iana-native-v1.mjs';
-const read=file=>fs.readFileSync(path.join(root,file)),source=createGitReader()(root,ianaBase);
+import {projectIanaAdmissionFile} from '../../scripts/sales/iana-admission-v1.mjs';
+const read=file=>projectIanaAdmissionFile(file,fs.readFileSync(path.join(root,file))),source=createGitReader()(root,ianaBase);
 test('IANA successor package preserves every published source/admission and consumer pin',()=>{
  assert.deepEqual({...validateIanaSource(),preservedFiles:0},{successors:9,planned:10,admitted:0,preservedFiles:0,runtimeDemonstrated:false});
  const before=JSON.parse(source('registry/contracts.json')),after=JSON.parse(read('registry/contracts.json'));

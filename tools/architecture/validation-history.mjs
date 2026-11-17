@@ -304,11 +304,13 @@ const toolingPaths = Object.freeze([
   'scripts/sales/recovery-consumer-v1.mjs',
   'test/architecture/sales-recovery-consumer.test.mjs',
   'scripts/sales/iana-source-v1.mjs',
+  'scripts/sales/iana-admission-v1.mjs',
+  'test/sales/iana-admission-v1.test.mjs',
   'scripts/sales/iana-native-v1.mjs',
   'scripts/sales/validate-iana-v1.sh',
   'test/sales/iana-source-v1.test.mjs',
 ]);
-const toolingReferenceSha256 = '373b1a41e0601164e427cad1cbb1af009dc4589c9aeb95cab30df014b49eeab6';
+const toolingReferenceSha256 = 'e6f5bf84ed8c8d98eca2409f4a57e9963aafe6047ec76942eae516789e04cab1';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
