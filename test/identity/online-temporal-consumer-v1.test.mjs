@@ -7,6 +7,7 @@ import {syncBuiltinESMExports} from 'node:module';
 import {createHash} from 'node:crypto';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {projectIanaFile} from '../../scripts/sales/iana-source-v1.mjs';
 import {
  onlineTemporalConsumerBase,onlineTemporalProducerRevision,onlineTemporalConsumerPath,
  onlineTemporalConsumerFiles,onlineTemporalConsumerDocuments,onlineTemporalPreservedFiles,
@@ -16,7 +17,7 @@ import {
 } from '../../scripts/identity/online-temporal-consumer-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
-const read=file=>fs.readFileSync(path.join(root,file));
+const read=file=>projectIanaFile(file,fs.readFileSync(path.join(root,file)));
 const source=createGitReader()(root,onlineTemporalConsumerBase);
 const encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
 const digest=bytes=>createHash('sha256').update(bytes).digest('hex');

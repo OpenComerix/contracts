@@ -67,7 +67,7 @@ test('one planned source preserves 234 admitted roots, 236 artifacts and eight c
 });
 
 test('CI adds one lint/bundle for the new OpenAPI in the existing Identity job and preserves all other commands/jobs',()=>{
- const current=parse(read('.github/workflows/ci.yml').toString()),before=parse(privateZoneSource('.github/workflows/ci.yml').toString());
+ const current=parse(projectPrivateZoneAdmissionFile('.github/workflows/ci.yml',read('.github/workflows/ci.yml')).toString()),before=parse(privateZoneSource('.github/workflows/ci.yml').toString());
  const steps=current.jobs.validate_identity_catalog_contracts.steps;
  const run=steps.find(step=>step.name==='Run original validation commands');
  const lint='node scripts/validate-redocly-no-warnings.mjs '+privateZonePath;

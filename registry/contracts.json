@@ -19716,6 +19716,140 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "sales.f1-14e.iana.http-shared.sales-types-v3",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/http/shared/v3/sales-types-v3.schema.json",
+      "operations": [],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.http-public.pos-sales-v3",
+      "domain": "sales",
+      "owner": "gateway-bff",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/http/public/v3/pos-sales-v3.yaml",
+      "operations": [
+        "finalizeOnlineSale",
+        "getSaleFinalization",
+        "getCompletedSale",
+        "resumeSaleFinalization",
+        "createSalesHistoryReadSession",
+        "readSalesHistoryFacts"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.http-private.pos-sales-internal-v3",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/http/private/v3/pos-sales-internal-v3.yaml",
+      "operations": [
+        "finalizeOnlineSale",
+        "getSaleFinalization",
+        "getCompletedSale",
+        "resumeSaleFinalization",
+        "createSalesHistoryReadSession",
+        "readSalesHistoryFacts"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.http-public.sales-browser-reads-v3",
+      "domain": "sales",
+      "owner": "gateway-bff",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/http/public/v3/sales-browser-reads-v3.yaml",
+      "operations": [
+        "getSaleFinalization",
+        "getCompletedSale"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "identity.f1-14e.iana.http-shared.identity-sales-authority-v2",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "2.0.0",
+      "path": "identity/http/shared/v2/identity-sales-authority-v2.schema.json",
+      "operations": [],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "identity.f1-14e.iana.http-private.identity-sales-authority-v2",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-sales-authority-v2.yaml",
+      "operations": [
+        "createSalesDelegation",
+        "checkSalesAuthorization"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2",
+      "domain": "identity",
+      "owner": "identity-tenancy",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-sales-temporal-authority-v2.yaml",
+      "operations": [
+        "checkSalesTemporalAuthorization"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.events.sales.sale.completed.v3",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/events/v3/sales.sale.completed.v3.schema.json",
+      "operations": [],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.events.sales-flow-v3.asyncapi",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "3.0.0",
+      "path": "sales/events/v3/sales-flow-v3.asyncapi.yaml",
+      "operations": [
+        "sendCompleted"
+      ],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
+    },
+    {
+      "id": "sales.f1-14e.iana.fixtures.cases",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "materializeIn": "F1-14E-IANA",
+      "status": "planned",
+      "version": "1.0.0",
+      "path": "sales/fixtures/iana-time-zones/v1/cases.json",
+      "operations": [],
+      "constraint": "IANA digit-zone successor source only; preserve all published bytes, admissions, consumers and pins. Publish, verify full CI and admit the exact source before consumption. Runtime validators and end-to-end codec/authority proof remain required."
     }
   ],
   "requiredConsumers": [

@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {syncBuiltinESMExports} from 'node:module';
 import {makeLock,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {projectIanaFile} from '../../scripts/sales/iana-source-v1.mjs';
 import {
  privateZoneAdmissionRevision,privateZoneAdmissionSource,privateZoneAdmissionId,
  privateZoneAdmittedRegistry,privateZoneAdmissionClosure,privateZoneAdmissionMetadata,
@@ -24,7 +25,7 @@ const selection={version:'2.0.0',operations:['getBranchTimeZone','configureBranc
 
 test('one selected admission preserves 234 descriptors, v1, historical artifacts, consumers and unrelated intentions',()=>{
  assert.deepEqual(validatePrivateZoneAdmission(),expected);
- const value=JSON.parse(read(registryPath));assert.deepEqual(value,privateZoneAdmittedRegistry());
+ const value=JSON.parse(projectIanaFile(registryPath,read(registryPath)));assert.deepEqual(value,privateZoneAdmittedRegistry());
  assert.deepEqual(value.contracts.slice(0,234),before.contracts);
  assert.deepEqual(value.preservedFiles,before.preservedFiles);assert.deepEqual(value.requiredConsumers,before.requiredConsumers);
  assert.deepEqual(value.planned,before.planned.filter(row=>row.id!==privateZoneAdmissionId));

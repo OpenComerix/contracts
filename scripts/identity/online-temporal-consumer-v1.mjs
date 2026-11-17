@@ -5,6 +5,7 @@ import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
+import {projectIanaFile,projectIanaDocument} from '../sales/iana-source-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 export const onlineTemporalConsumerBase='cc897778740b06bb254af21f3dfe9c8a3c89af98';
@@ -144,6 +145,7 @@ export function validateOnlineTemporalSnapshot(bytes,label='ONLINE_TEMPORAL_CONS
 }
 
 export function validateOnlineTemporalInput(file,bytes){
+ bytes=projectIanaFile(file,bytes);
  assert(expectedHashes.has(file),'ONLINE_TEMPORAL_UNKNOWN_INPUT:'+file);
  assert.equal(hash(bytes),expectedHashes.get(file),'ONLINE_TEMPORAL_INPUT:'+file);
  if(file===onlineTemporalConsumerPath)validateOnlineTemporalSnapshot(bytes);
@@ -151,10 +153,12 @@ export function validateOnlineTemporalInput(file,bytes){
 
 // These supplied-value projections never read another live file or approve a tree.
 export function projectOnlineTemporalFile(file,bytes){
+ bytes=projectIanaFile(file,bytes);
  const expected=expectedHashes.get(file);if(!expected)return bytes;
  try{return hash(bytes)===expected?Buffer.from(base.get(file)):bytes;}catch{return bytes;}
 }
 export function projectOnlineTemporalDocument(file,value){
+ value=projectIanaDocument(file,value);
  if(!expectedHashes.has(file)||!file.endsWith('.json'))return value;
  try{
   const bytes=encode(value);
@@ -172,7 +176,7 @@ export function withOnlineTemporalConsumerScope(paths,read,verify){
   const legacy=hash(snapshot)===hash(base.get(onlineTemporalConsumerPath));
   if(!legacy)validateOnlineTemporalSnapshot(snapshot);
   for(const file of onlineTemporalConsumerFiles){
-   const bytes=raw(file);
+   const bytes=projectIanaFile(file,raw(file));
    if(legacy)assert.equal(text(bytes),text(base.get(file)),'ONLINE_TEMPORAL_PARTIAL_SCOPE:'+file);
    else assert.equal(hash(bytes),expectedHashes.get(file),'ONLINE_TEMPORAL_INPUT:'+file);
   }
@@ -190,6 +194,7 @@ export const onlineTemporalPreservedFiles=Object.freeze([...new Set([
 ])]);
 const protectedPaths=new Set(onlineTemporalPreservedFiles);
 export function validateOnlineTemporalPreservedInput(file,bytes){
+ bytes=projectIanaFile(file,bytes);
  assert(protectedPaths.has(file),'ONLINE_TEMPORAL_UNKNOWN_PROTECTED:'+file);
  assert.equal(text(bytes),text(source(file)),'ONLINE_TEMPORAL_PRESERVATION:'+file);
 }

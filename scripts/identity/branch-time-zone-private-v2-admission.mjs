@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {withIanaScope,ianaSourceFiles} from '../sales/iana-source-v1.mjs';
 import {onlineTemporalConsumerFiles,projectOnlineTemporalFile,projectOnlineTemporalDocument,withOnlineTemporalConsumerScope} from './online-temporal-consumer-v1.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
@@ -72,7 +73,8 @@ const metadata=new Map([[registryPath,encode(registry)],
 export const privateZoneAdmissionMetadata=()=>new Map([...metadata].map(([file,bytes])=>[file,Buffer.from(bytes)]));
 const delta=new Map(metadata);
 for(const file of closure.files)delta.set(file.path,privateZoneAdmissionSource(file.path));
-export const privateZoneAdmissionScopeFiles=Object.freeze([...new Set([...delta.keys(),...onlineTemporalConsumerFiles])]);
+const ownScopeFiles=Object.freeze([...new Set([...delta.keys(),...onlineTemporalConsumerFiles])]);
+export const privateZoneAdmissionScopeFiles=Object.freeze([...new Set([...ianaSourceFiles,...ownScopeFiles])]);
 const inputPaths=new Set([...delta.keys(),...[...before.contracts,...before.preservedFiles].map(row=>row.path),
  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',
  ...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')]);
@@ -102,6 +104,9 @@ export function projectPrivateZoneAdmissionDocument(file,value){
 // Only the eight current delta inputs are proved here. Existing owners keep
 // their own preservation gates; no historical full gate is nested per input.
 export function withPrivateZoneAdmissionScope(paths,read,verify,label='PRIVATE_ZONE_ADMISSION_BYTES'){
+ return withIanaScope(paths,read,(paths,read)=>withPrivateZoneAdmissionCore(paths,read,verify,label),label);
+}
+function withPrivateZoneAdmissionCore(paths,read,verify,label){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'PRIVATE_ZONE_ADMISSION_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{
@@ -110,9 +115,9 @@ export function withPrivateZoneAdmissionScope(paths,read,verify,label='PRIVATE_Z
    assert(!value.contracts?.some(row=>row.id===privateZoneAdmissionId),'PRIVATE_ZONE_ADMISSION_PARTIAL_SCOPE');
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','PRIVATE_ZONE_ADMISSION_SYNCHRONOUS');return result;
   }
-  return withOnlineTemporalConsumerScope([...new Set([...paths,...privateZoneAdmissionScopeFiles])],raw,(paths,read)=>{
-   for(const file of privateZoneAdmissionScopeFiles)validatePrivateZoneAdmissionInput(file,read(file));
-   const result=verify([...new Set([...paths,...privateZoneAdmissionScopeFiles])],file=>projectPrivateZoneAdmissionFile(file,read(file)));
+  return withOnlineTemporalConsumerScope([...new Set([...paths,...ownScopeFiles])],raw,(paths,read)=>{
+   for(const file of ownScopeFiles)validatePrivateZoneAdmissionInput(file,read(file));
+   const result=verify([...new Set([...paths,...ownScopeFiles])],file=>projectPrivateZoneAdmissionFile(file,read(file)));
    assert(!result||typeof result.then!=='function','PRIVATE_ZONE_ADMISSION_SYNCHRONOUS');return result;
   });
  }finally{active=false;current.clear();}
