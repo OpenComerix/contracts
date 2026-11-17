@@ -937,7 +937,7 @@ jobs:
           node scripts/sales/preparation-v1.mjs openapi
           node scripts/sales/preparation-v1.mjs prepare .ci-artifacts/sales-v2-preparation-ci
           node scripts/sales/online-source-v1.mjs openapi
-          node scripts/sales/iana-native-v1.mjs
+          node scripts/sales/iana-native-v1.mjs prepare
         env:
           GIT_CONFIG_COUNT: "1"
           GIT_CONFIG_KEY_0: safe.directory
@@ -987,6 +987,8 @@ jobs:
         run: docker run --rm --user "$(id -u):$(id -g)" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-preparation-v1.sh .ci-artifacts/sales-v2-preparation-ci'
       - name: Validate F1-14E source schemas and vectors
         run: docker run --rm --user "$(id -u):$(id -g)" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v "$PWD:/workspace" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-online-source-v1.sh .ci-artifacts/sales-v2-online-source'
+      - name: Validate IANA successor schemas and vectors
+        run: docker run --rm --user "$(id -u):$(id -g)" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh --mount "type=bind,source=$PWD,target=/workspace,readonly" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-iana-v1.sh .ci-artifacts/sales-v2-iana-source-ci'
   validate_sale_flow_integration:
     name: validate:sale-flow-integration
     needs: [validation_scope]

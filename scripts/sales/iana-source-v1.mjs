@@ -95,7 +95,10 @@ const metadata=new Map([
 let workflow=text(source('.github/workflows/ci.yml'));
 const anchor='          node scripts/sales/online-source-v1.mjs openapi';
 assert.equal(workflow.split(anchor).length,2,'IANA_WORKFLOW_ANCHOR');
-workflow=workflow.replace(anchor,anchor+'\n          node scripts/sales/iana-native-v1.mjs');
+workflow=workflow.replace(anchor,anchor+'\n          node scripts/sales/iana-native-v1.mjs prepare');
+const schemaAnchor="      - name: Validate F1-14E source schemas and vectors\n        run: docker run --rm --user \"$(id -u):$(id -g)\" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh -v \"$PWD:/workspace\" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-online-source-v1.sh .ci-artifacts/sales-v2-online-source'";
+assert.equal(workflow.split(schemaAnchor).length,2,'IANA_SCHEMA_WORKFLOW_ANCHOR');
+workflow=workflow.replace(schemaAnchor,schemaAnchor+"\n      - name: Validate IANA successor schemas and vectors\n        run: docker run --rm --user \"$(id -u):$(id -g)\" --network none --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint /bin/sh --mount \"type=bind,source=$PWD,target=/workspace,readonly\" -w /workspace ghcr.io/sourcemeta/jsonschema:v16.10.0 -ec 'sh scripts/sales/validate-iana-v1.sh .ci-artifacts/sales-v2-iana-source-ci'");
 metadata.set('.github/workflows/ci.yml',Buffer.from(workflow));
 const delta=new Map([...documents,...metadata]);
 export const ianaSourceFiles=Object.freeze([...delta.keys()]);

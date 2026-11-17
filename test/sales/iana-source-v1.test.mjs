@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
+import {parse} from 'yaml';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {root,ianaBase,ianaPattern,ianaSuccessors,ianaFixtures,ianaSourceFiles,ianaSourceDocuments,validateIanaSource,validateIanaInput,projectIanaFile,projectIanaDocument,withIanaScope} from '../../scripts/sales/iana-source-v1.mjs';
 import {nativeIanaCases} from '../../scripts/sales/iana-native-v1.mjs';
@@ -65,4 +66,22 @@ test('materialization is exact and complete, not a cache of a previous live appr
  const docs=ianaSourceDocuments();assert.equal(docs.size,ianaSourceFiles.length);
  for(const [file,bytes]of docs){assert.deepEqual(read(file),bytes);validateIanaInput(file,bytes);}
  const file=ianaSuccessors[0][1];assert.throws(()=>withIanaScope([],name=>name===file?Buffer.from('{}'):read(name),()=>{}),/SOURCE_BYTES/);
+});
+test('IANA CI prepares inside Node and validates transferred artifacts in the existing host schema job',()=>{
+ const file='.github/workflows/ci.yml',workflow=parse(read(file).toString('utf8'));
+ const previous=parse(createGitReader()(root,'4843c21741b62889f27bfe1e48ae79705089a534')(file).toString('utf8'));
+ const contracts=workflow.jobs.validate_sales_contracts,schema=workflow.jobs.validate_sales_schema;
+ assert.equal(contracts.container.image,'node:24.21.0-bookworm-slim');assert.equal(schema.container,undefined);
+ const commands=contracts.steps.find(step=>step.name==='Run original validation commands');
+ assert(commands.run.endsWith('node scripts/sales/iana-native-v1.mjs prepare'));assert(!commands.run.includes('docker'));
+ const validation=schema.steps.at(-1);
+ assert.equal(validation.name,'Validate IANA successor schemas and vectors');
+ assert(validation.run.includes('ghcr.io/sourcemeta/jsonschema:v16.10.0'));
+ for(const restriction of ['--network none','--read-only','--cap-drop ALL','--security-opt no-new-privileges','target=/workspace,readonly'])assert(validation.run.includes(restriction));
+ assert(validation.run.includes('sh scripts/sales/validate-iana-v1.sh .ci-artifacts/sales-v2-iana-source-ci'));
+ assert(schema.needs.includes('validate_sales_contracts'));
+ assert(contracts.steps.find(step=>step.name==='Package original artifact paths').run.includes('.ci-artifacts/sales-v2-*/'));
+ // No job, permission, dependency, prior command or artifact edge changes accompany the fix.
+ commands.run=commands.run.replace('node scripts/sales/iana-native-v1.mjs prepare','node scripts/sales/iana-native-v1.mjs');
+ schema.steps.pop();assert.deepEqual(workflow,previous);
 });

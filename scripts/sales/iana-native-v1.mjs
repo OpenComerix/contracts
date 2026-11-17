@@ -38,13 +38,14 @@ export function nativeIanaCases(){
  return {schema:{$schema:'https://json-schema.org/draft/2020-12/schema',type:'array',items:false,minItems:instances.length,maxItems:instances.length,prefixItems,$defs:definitions},instances,positive:vectors.positive.length,negative:vectors.negative_shape.length};
 }
 async function run(){
- const offline=process.argv.slice(2);assert(offline.length===0||(offline.length===1&&offline[0]==='--offline'),'IANA_NATIVE_OPTIONS');
+ const offline=process.argv.slice(2),prepare=offline[0]==='prepare';if(prepare)offline.shift();
+ assert(offline.length===0||(offline.length===1&&offline[0]==='--offline'),'IANA_NATIVE_OPTIONS');
  validateIanaSource();
- const directory=path.join(root,'.ci-artifacts/sales-v2-iana-source',randomUUID());fs.mkdirSync(directory,{recursive:true});
+ const directory=prepare?path.join(root,'.ci-artifacts/sales-v2-iana-source-ci'):path.join(root,'.ci-artifacts/sales-v2-iana-source',randomUUID());fs.mkdirSync(directory,{recursive:true});
  const execute=(command,args,name,expected=0)=>{
   const result=spawnSync(command,args,{cwd:root,encoding:'utf8',windowsHide:true,maxBuffer:16*1024*1024,env:{...process.env,REDOCLY_TELEMETRY:'off',REDOCLY_SUPPRESS_UPDATE_NOTICE:'true'}});
   fs.writeFileSync(path.join(directory,name+'.log'),JSON.stringify({status:result.status,error:result.error?.message,stdout:result.stdout,stderr:result.stderr})+'\n');
-  if(result.error||result.status!==expected){process.stderr.write(result.stderr??'');throw Error('IANA_NATIVE_FAILED:'+name+':'+result.status);}
+  if(result.error||result.status!==expected){process.stderr.write(result.stderr??'');throw Error('IANA_NATIVE_FAILED:'+name+':'+(result.error?.code??result.status));}
   return (result.stdout??'')+(result.stderr??'');
  };
  const openapis=ianaSuccessors.filter(([,file])=>file.endsWith('.yaml')&&JSON.parse(fs.readFileSync(path.join(root,file))).openapi);
@@ -65,6 +66,8 @@ async function run(){
  assert(parsed.document&&parsed.diagnostics.every(item=>item.severity>1),'IANA_ASYNCAPI_INVALID');
  const {schema,instances,positive,negative}=nativeIanaCases();
  for(const [file,value]of Object.entries({'schema.json':schema,'instances.json':instances,'invalid.json':[]}))fs.writeFileSync(path.join(directory,file),JSON.stringify(value));
+ // The Node CI container prepares artifacts; the existing host schema job runs Sourcemeta.
+ if(prepare){console.log(JSON.stringify({prepared:true,output:path.relative(root,directory).replaceAll('\\','/'),openapis:openapis.length,asyncapis:1,asyncapiDiagnostics:parsed.diagnostics.map(({code,severity})=>({code,severity})),batchInstances:instances.length,nativeValidated:false,runtimeDemonstrated:false}));return;}
  const docker=['run','--rm','--network','none','--read-only','--cap-drop','ALL','--security-opt','no-new-privileges','--mount',`type=bind,source=${directory},target=/data,readonly`,'ghcr.io/sourcemeta/jsonschema:v16.10.0'];
  assert.equal(execute('docker',[...docker,'--version'],'version').trim(),'16.10.0');
  execute('docker',[...docker,'metaschema','/data/schema.json'],'metaschema');
