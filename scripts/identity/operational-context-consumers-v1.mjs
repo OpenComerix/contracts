@@ -128,6 +128,7 @@ const changedTooling=Object.freeze([
   'scripts/identity/operational-context-history-v1.mjs',
   'scripts/finance/cash-consumer-v1.mjs',
   'test/architecture/internal-auth-v2-history.test.mjs',
+  'test/architecture/sales-recovery-consumer.test.mjs',
   'test/identity/operational-context-v1.test.mjs',
   'test/sales/inventory-step-consumer-v1.test.mjs',
 ]);

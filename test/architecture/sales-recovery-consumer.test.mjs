@@ -1,3 +1,4 @@
+import {projectOnlineFile} from '../../scripts/sales/online-source-v1.mjs';
 import {projectOperationalFile} from '../../scripts/identity/operational-context-history-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
@@ -85,7 +86,7 @@ test('D preserves registry, indexes, transports and other consumers, with one ap
   for (const name of ['registry/contracts.json', 'registry/consumers/index.json',
     ...index.consumers.filter(row => row.service !== 'sales-pos').map(row => 'registry/consumers/' + row.file)])
     assert.equal(projectOperationalFile(name,read(name)).toString().replaceAll('\r\n', '\n'), source(name).toString().replaceAll('\r\n', '\n'), name);
-  assert.equal(read('sales/README.md').toString().replaceAll('\r\n', '\n'),
+  assert.equal(projectOnlineFile('sales/README.md',read('sales/README.md')).toString().replaceAll('\r\n', '\n'),
     source('sales/README.md').toString().replaceAll('\r\n', '\n') + recoveryReadmeSection);
   for (const target of ['contracts.manifest.json', 'contracts.lock.json'])
     assert.throws(() => validateRecoverySalesSource(name => name === target ? Buffer.from('changed')

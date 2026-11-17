@@ -1,3 +1,4 @@
+import {sourceFiles as onlineSourceFiles} from '../../scripts/sales/online-source-v1.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -94,10 +95,10 @@ test('one synchronous context reads each live input once regardless of projectio
   for(const count of [1,10,100]){
     const visits=new Map();
     withOperationalConsumersScope([],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
-      assert.deepEqual(paths,[...new Set([...preparationConsumerFiles,...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles])]);
+      assert.deepEqual(paths,[...new Set([...onlineSourceFiles,...preparationConsumerFiles,...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles])]);
       for(let i=0;i<count;i++)for(const file of operationalConsumerFiles)assert.deepEqual(historical(file),old(file));
     });
-    assert.equal(visits.size,new Set([...preparationConsumerFiles,...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles]).size);
+    assert.equal(visits.size,new Set([...onlineSourceFiles,...preparationConsumerFiles,...browserReadsAdmissionScopeFiles,...browserReadsFiles,...browserReadsPreservedFiles,...operationalConsumerFiles]).size);
     assert([...visits.values()].every(n=>n===1));
   }
 });
