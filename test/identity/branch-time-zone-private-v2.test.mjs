@@ -7,8 +7,9 @@ import {parse} from 'yaml';
 import {makeLock} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {withOnlineAdmissionScope} from '../../scripts/sales/online-admission-v1.mjs';
+import {projectPrivateZoneAdmissionFile} from '../../scripts/identity/branch-time-zone-private-v2-admission.mjs';
 import {root,privateZoneSource,privateZonePath,privateZonePreviousPath,privateZoneId,
- privateZoneRegistry,privateZoneMetadata,privateZoneScopeFiles,privateZoneProtectedPaths,
+ privateZoneRegistry,privateZoneMetadata,privateZoneSourceFiles,privateZoneScopeFiles,privateZoneProtectedPaths,
  validatePrivateZoneInput,validatePrivateZonePreservedInput,validatePrivateZone,
  projectPrivateZoneFile,projectPrivateZoneDocument,withPrivateZoneScope,
 } from '../../scripts/identity/branch-time-zone-private-v2.mjs';
@@ -54,7 +55,7 @@ test('one planned source preserves 234 admitted roots, 236 artifacts and eight c
  const result=validatePrivateZone();assert.equal(result.roots,234);assert.equal(result.planned,3);
  assert.equal(result.added,1);assert.equal(result.consumers,8);assert.equal(result.functionalAdmission,false);
  assert.equal(result.runtimeDemonstrated,false);assert.equal(result.protectedFiles,privateZoneProtectedPaths.length);
- const before=JSON.parse(privateZoneSource(registryPath)),registry=JSON.parse(read(registryPath));
+ const before=JSON.parse(privateZoneSource(registryPath)),registry=JSON.parse(projectPrivateZoneAdmissionFile(registryPath,read(registryPath)));
  assert.deepEqual(registry,privateZoneRegistry());assert.deepEqual(registry.contracts,before.contracts);
  assert.deepEqual(registry.preservedFiles,before.preservedFiles);assert.deepEqual(registry.planned.slice(0,2),before.planned);
  const row=registry.planned.at(-1);assert.equal(row.id,privateZoneId);assert.equal(row.path,privateZonePath);
@@ -78,7 +79,7 @@ test('CI adds one lint/bundle for the new OpenAPI in the existing Identity job a
 });
 
 test('bounded scope rejects modified/missing delta, partial registry and stale approval without full preservation per input',()=>{
- for(const file of privateZoneScopeFiles){
+ for(const file of privateZoneSourceFiles){
   validatePrivateZoneInput(file,read(file));
   assert.throws(()=>validatePrivateZoneInput(file,Buffer.concat([read(file),Buffer.from('drift')])),/PRIVATE_ZONE_BYTES/);
   for(const missing of [false,true])assert.throws(()=>withPrivateZoneScope([],name=>{

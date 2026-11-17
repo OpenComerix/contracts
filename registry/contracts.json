@@ -18730,6 +18730,28 @@
       "sha256": "7242204efbeb60d3713c0cb9abf246918b3a69c4f0427a3fb7b0407bcc512d11",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "identity.f1-14e.private.identity-branch-time-zone-v2",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.identity-branch-time-zone-v2",
+      "purpose": "Private branch time-zone contract with browser Origin/CSRF owned by Gateway and current delegated human authority retained by Identity.",
+      "reasonForChange": "Audited immutable source with exact full CI 44071517687 Passed23/23; selected admission only, preserving all published sources and consumer pins.",
+      "retirement": "Preserve published v1/v2 bytes; incompatible changes require a successor and an explicitly authorized consumer migration.",
+      "version": "2.0.0",
+      "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
+      "commit": "14a265e024a68887a9a1314c35d29b632258ed97",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "00e01037888ea190497da8aa1c021cd975b8148b323cbbc8138d622626fbc794",
+      "operations": [
+        "getBranchTimeZone",
+        "configureBranchTimeZone"
+      ],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -19694,20 +19716,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "identity.f1-14e.private.identity-branch-time-zone-v2",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "F1-14E",
-      "status": "planned",
-      "version": "2.0.0",
-      "path": "identity/http/private/v2/identity-branch-time-zone-v2.yaml",
-      "operations": [
-        "getBranchTimeZone",
-        "configureBranchTimeZone"
-      ],
-      "constraint": "Private v2 source only: browser Origin/CSRF remains exclusively in Gateway under public v1; Identity retains delegated user/session/signal and current backend authority. Preserve all published sources and consumer pins. Publication, exact full CI and separate admission precede consumption; no runtime or functional admission."
     }
   ],
   "requiredConsumers": [

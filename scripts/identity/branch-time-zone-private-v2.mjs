@@ -5,6 +5,7 @@ import {isDeepStrictEqual} from 'node:util';
 import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {privateZoneAdmissionScopeFiles,projectPrivateZoneAdmissionFile,projectPrivateZoneAdmissionDocument,withPrivateZoneAdmissionScope} from './branch-time-zone-private-v2-admission.mjs';
 
 export const root=path.resolve(import.meta.dirname,'../..');
 export const privateZoneBase='714a5b33035c45ba4b1eeb01d1488e8674dc364c';
@@ -66,9 +67,11 @@ const metadata=new Map([[registryPath,encode(privateZoneRegistry())],
  ['identity/README.md',Buffer.from(text(privateZoneSource('identity/README.md'))+suffix)],
  ['.github/workflows/ci.yml',workflow()]]);
 const delta=new Map([...metadata,[privateZonePath,encode(privateZoneDocument())]]);
-export const privateZoneScopeFiles=Object.freeze([...delta.keys()]);
+export const privateZoneSourceFiles=Object.freeze([...delta.keys()]);
+export const privateZoneScopeFiles=Object.freeze([...new Set([...privateZoneAdmissionScopeFiles,...privateZoneSourceFiles])]);
 export const privateZoneMetadata=()=>new Map([...delta].map(([file,bytes])=>[file,Buffer.from(bytes)]));
 export function validatePrivateZoneInput(file,bytes){
+ bytes=projectPrivateZoneAdmissionFile(file,bytes);
  assert(delta.has(file),'PRIVATE_ZONE_UNKNOWN_INPUT:'+file);
  assert.equal(text(bytes),text(delta.get(file)),'PRIVATE_ZONE_BYTES:'+file);
 }
@@ -84,21 +87,26 @@ export function validatePrivateZonePreservedInput(file,bytes){
  assert.equal(text(bytes),text(privateZoneSource(file)),'PRIVATE_ZONE_PRESERVATION:'+file);
 }
 export function validatePrivateZone(read=native){
- for(const file of privateZoneScopeFiles)validatePrivateZoneInput(file,read(file));
+ for(const file of privateZoneSourceFiles)validatePrivateZoneInput(file,read(file));
  for(const file of protectedPaths)validatePrivateZonePreservedInput(file,read(file));
  return {roots:234,planned:3,added:1,consumers:8,protectedFiles:protectedPaths.size,functionalAdmission:false,runtimeDemonstrated:false};
 }
 // Pure exact-value projection; does not read or authorize other live inputs.
 export function projectPrivateZoneFile(file,bytes){
+ bytes=projectPrivateZoneAdmissionFile(file,bytes);
  const expected=metadata.get(file);if(!expected)return bytes;
  try{return text(bytes)===text(expected)?privateZoneSource(file):bytes;}catch{return bytes;}
 }
 export function projectPrivateZoneDocument(file,value){
+ value=projectPrivateZoneAdmissionDocument(file,value);
  const expected=metadata.get(file);if(!expected||!file.endsWith('.json'))return value;
  return isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(privateZoneSource(file)):value;
 }
 // One bounded current delta per invocation; no historical full gate per input.
 export function withPrivateZoneScope(paths,read,verify,label='PRIVATE_ZONE_BYTES'){
+ return withPrivateZoneAdmissionScope(paths,read,(paths,read)=>withSourceScope(paths,read,verify,label),label);
+}
+function withSourceScope(paths,read,verify,label){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'PRIVATE_ZONE_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{
@@ -107,8 +115,8 @@ export function withPrivateZoneScope(paths,read,verify,label='PRIVATE_ZONE_BYTES
    assert(![...(value.planned??[]),...(value.contracts??[])].some(row=>row.id===privateZoneId),'PRIVATE_ZONE_PARTIAL_SCOPE');
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','PRIVATE_ZONE_SYNCHRONOUS');return result;
   }
-  for(const file of privateZoneScopeFiles)validatePrivateZoneInput(file,raw(file));
-  const result=verify([...new Set([...paths,...privateZoneScopeFiles])],file=>projectPrivateZoneFile(file,raw(file)));
+  for(const file of privateZoneSourceFiles)validatePrivateZoneInput(file,raw(file));
+  const result=verify([...new Set([...paths,...privateZoneSourceFiles])],file=>projectPrivateZoneFile(file,raw(file)));
   assert(!result||typeof result.then!=='function','PRIVATE_ZONE_SYNCHRONOUS');return result;
  }finally{active=false;current.clear();}
 }
