@@ -3,6 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
+import { projectIanaPublicAdmissionFile } from '../../scripts/sales/iana-admission-v1.mjs';
 import {
   consumerExportBase,
   consumerExportPaths,
@@ -34,7 +35,7 @@ test('exports the two published owners and preserves six other snapshots and the
     .filter(file => !consumerExportPaths.includes(file));
   assert.equal(unchanged.length, 6);
   for (const file of [...unchanged, index, 'registry/contracts.json', 'identity/index.json', 'sales/index.json']) {
-    assert.equal(text(read(file)), text(before(file)), file);
+    assert.equal(text(projectIanaPublicAdmissionFile(file, read(file))), text(before(file)), file);
   }
 });
 

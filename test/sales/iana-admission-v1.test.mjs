@@ -10,6 +10,8 @@ import {
  ianaAdmissionRevision,ianaAdmissionSource,ianaAdmissionIds,ianaAdmittedRegistry,ianaAdmissionClosures,
  ianaAdmissionMetadata,ianaAdmissionScopeFiles,ianaAdmissionInputPaths,validateIanaAdmissionInput,
  validateIanaAdmission,projectIanaAdmissionFile,projectIanaAdmissionDocument,withIanaAdmissionScope,
+ ianaPublicAdmissionIds,ianaPublicAdmissionMetadata,ianaPublicAdmissionClosures,
+ ianaPublicAdmissionScopeFiles,projectIanaPublicAdmissionFile,
 } from '../../scripts/sales/iana-admission-v1.mjs';
 const root=path.resolve(import.meta.dirname,'../..'),registryPath='registry/contracts.json';
 const read=file=>fs.readFileSync(path.join(root,file)),encode=value=>Buffer.from(JSON.stringify(value,null,2)+'\n');
@@ -19,7 +21,7 @@ const selection=row=>({version:row.version,operations:row.operations,pointers:ro
 
 test('eight selected admissions preserve old descriptors, published sources, consumers and Gateway intentions',()=>{
  assert.deepEqual(validateIanaAdmission(),{admitted:8,roots:243,priorRoots:235,planned:4,consumers:8,closureFiles:16,runtimeDemonstrated:false});
- const current=JSON.parse(read(registryPath));assert.deepEqual(current,ianaAdmittedRegistry());
+ const current=JSON.parse(projectIanaPublicAdmissionFile(registryPath,read(registryPath)));assert.deepEqual(current,ianaAdmittedRegistry());
  assert.deepEqual(current.contracts.slice(0,235),before.contracts);assert.deepEqual(current.preservedFiles,before.preservedFiles);
  assert.deepEqual(current.requiredConsumers,before.requiredConsumers);
  assert.deepEqual(current.contracts.slice(235).map(row=>row.id),ianaAdmissionIds);
@@ -68,14 +70,61 @@ test('all protected inputs reject drift and source metadata cannot grant a parti
 });
 
 test('bounded scope reads every delta once and changed or missing bytes cannot inherit approval',()=>{
+ const scope=ianaPublicAdmissionScopeFiles;
  for(const count of [1,100]){
   const visits=new Map();withIanaAdmissionScope(['prior'],file=>{visits.set(file,(visits.get(file)??0)+1);return read(file);},(paths,historical)=>{
-   assert.deepEqual(paths,['prior',...ianaAdmissionScopeFiles]);for(let index=0;index<count;index++)assert.deepEqual(historical(registryPath),ianaAdmissionSource(registryPath));
-  });assert.equal(visits.size,ianaAdmissionScopeFiles.length);assert([...visits.values()].every(value=>value===1));
+   assert.deepEqual(paths,['prior',...scope]);for(let index=0;index<count;index++)assert.deepEqual(historical(registryPath),ianaAdmissionSource(registryPath));
+  });assert.equal(visits.size,scope.length);assert([...visits.values()].every(value=>value===1));
  }
- for(const file of ianaAdmissionScopeFiles)for(const missing of [false,true]){
+ for(const file of scope)for(const missing of [false,true]){
   let reached=false;assert.throws(()=>withIanaAdmissionScope([],name=>{if(name!==file)return read(name);if(missing)throw Error('missing delta');return Buffer.concat([read(name),Buffer.from('drift')]);},()=>{reached=true;}));assert.equal(reached,false);
  }
+});
+
+test('public admission adds only two Gateway roots to the qualified registry',()=>{
+ const prior=ianaAdmittedRegistry(),current=JSON.parse(read(registryPath));
+ assert.equal(current.contracts.length,245);
+ assert.deepEqual(current.contracts.slice(0,243),prior.contracts);
+ assert.deepEqual(current.preservedFiles,prior.preservedFiles);
+ assert.deepEqual(current.requiredConsumers,prior.requiredConsumers);
+ assert.deepEqual(current.planned,prior.planned.filter(row=>!ianaPublicAdmissionIds.includes(row.id)));
+ for(const [file,bytes]of ianaPublicAdmissionMetadata()){
+  assert(text(read(file))===text(bytes),file);
+  assert.deepEqual(projectIanaPublicAdmissionFile(file,bytes),ianaAdmissionMetadata().get(file));
+  assert.deepEqual(projectIanaAdmissionDocument(file,JSON.parse(bytes)),JSON.parse(ianaAdmissionSource(file)));
+ }
+ assert(ianaAdmissionScopeFiles.every(file=>ianaPublicAdmissionScopeFiles.includes(file)));
+ const rows=current.contracts.slice(243),closures=ianaPublicAdmissionClosures();
+ assert.deepEqual(rows.map(row=>row.id),ianaPublicAdmissionIds);
+ assert.deepEqual(rows.map(row=>row.operations.length),[6,2]);
+ assert.deepEqual(rows[1].operations,['getSaleFinalization','getCompletedSale']);
+ for(const [index,row]of rows.entries()){
+  assert.equal(row.owner,'gateway-bff');assert.equal(row.surface,'http-public');assert.equal(row.status,'active');
+  assert.equal(row.version,'3.0.0');assert.equal(row.commit,ianaAdmissionRevision);
+  assert.equal(row.sha256,createHash('sha256').update(ianaAdmissionSource(row.path)).digest('hex'));
+  const {id,...closure}=closures[index];assert.equal(id,row.id);
+  assert.equal(closure.files.length,6);
+  assert(closure.files.some(file=>file.path==='sales/http/shared/v3/sales-types-v3.schema.json'));
+  const manifest={service:'iana-public-admission-proof',contracts:[{id,role:index===0?'producer':'consumer',...selection(row)}],assets:[]};
+  const lock=makeLock(root,manifest,encode(manifest),current);
+  assert.equal(lock.entries[0].commit,ianaAdmissionRevision);assert.deepEqual(lock.entries[0].files,closure.files);
+  assert.throws(()=>makeLock(root,manifest,encode(manifest),prior),/Unknown\/unmaterialized/);
+ }
+});
+
+test('a mixed public admission or an old consumer export cannot enter the new scope',()=>{
+ for(const file of [registryPath,'sales/index.json']){
+  const old=ianaAdmissionMetadata().get(file);
+  const mixed=name=>name===file?old:read(name);
+  assert.throws(()=>validateIanaAdmission(mixed),/PARTIAL_SCOPE/);
+  assert.throws(()=>withIanaAdmissionScope([],mixed,()=>assert.fail('mixed admission accepted')),/ADMISSION_BYTES/);
+ }
+ const identity='registry/consumers/identity-tenancy.json';
+ assert.throws(()=>withIanaAdmissionScope([],file=>file===identity?ianaAdmissionSource(file):read(file),
+  ()=>assert.fail('old export accepted')),/IANA_CONSUMER_EXPORT_BYTES/);
+ const partial=JSON.parse(read(registryPath));partial.contracts.pop();
+ assert.throws(()=>withIanaAdmissionScope([],file=>file===registryPath?encode(partial):read(file),
+  ()=>assert.fail('partial public admission accepted')),/PARTIAL_SCOPE/);
 });
 
 test('projection is supplied-value-only and returned metadata or closures cannot change expectations',()=>{
