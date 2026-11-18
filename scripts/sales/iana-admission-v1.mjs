@@ -129,7 +129,7 @@ export function validateIanaAdmission(read=native){
  const isPublic=file=>text(stage.get(file))===text(publicMetadata.get(file));
  const publicStage=isPublic(registryPath);
  assert.equal(isPublic('sales/index.json'),publicStage,'IANA_ADMISSION_PARTIAL_SCOPE');
- validateIanaConsumerExports(read,{allowPrevious:!publicStage});
+ validateIanaConsumerExports(read,{allowPrevious:!publicStage,allowPreviousFrontend:true});
  for(const file of ianaAdmissionInputPaths)validateIanaAdmissionInput(file,stage.get(file)??read(file));
  return {admitted:8,roots:243,priorRoots:235,planned:4,consumers:8,closureFiles:new Set([...closures.values()].flatMap(closure=>closure.files.map(file=>file.path))).size,runtimeDemonstrated:false};
 }
@@ -151,7 +151,7 @@ export function withIanaAdmissionScope(paths,read,verify,label='IANA_ADMISSION_B
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','IANA_ADMISSION_SYNCHRONOUS');return result;
   }
   for(const [file,expected]of publicStage?publicDelta:delta)assert(text(raw(file))===text(expected),label+':'+file);
-  validateIanaConsumerExports(raw,{allowPrevious:!publicStage});
+  validateIanaConsumerExports(raw,{allowPrevious:!publicStage,allowPreviousFrontend:true});
   const scopeFiles=publicStage?ianaPublicAdmissionScopeFiles:ianaAdmissionScopeFiles;
   const result=verify([...new Set([...paths,...scopeFiles])],
    file=>projectIanaConsumerHistoricalTest(file,projectIanaAdmissionFile(file,raw(file))));

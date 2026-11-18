@@ -25,8 +25,25 @@ const exportsByPath = new Map([
     selections: 57,
     assets: 74,
   }],
+  ['registry/consumers/gateway-bff.json', {
+    owner: 'gateway-bff',
+    commit: '6ffc18debbd588f2a88582d41f2b3d1c5b970ea1',
+    digest: '18da79ebf51916cb4ac2158699b5107adb559d3393ba3d33694ea351ad9c1791',
+    selections: 44,
+    assets: 207,
+    bindings: 22,
+  }],
+  ['registry/consumers/web-pos.json', {
+    owner: 'web-pos',
+    commit: '90dd482652644ee548ac6d48d7f95673c3d215c4',
+    digest: '83844f528c10b17e5cebd46b3b1f817087a1bf7937ae2528212057f39026e338',
+    selections: 19,
+    assets: 131,
+    bindings: 9,
+  }],
 ]);
 export const consumerExportPaths = Object.freeze([...exportsByPath.keys()]);
+const frontendPaths = new Set(consumerExportPaths.filter(file => exportsByPath.get(file).bindings !== undefined));
 
 const acceptanceTest = 'test/architecture/sales-acceptance-consumer.test.mjs';
 const acceptanceTestDigest = 'f71b8e6bd3bf558c243f89ddd00e2e98ce555ae3f23d45814b7fa37d7ac18ce6';
@@ -84,11 +101,16 @@ export function projectIanaConsumerExportDocument(file, value) {
   }
 }
 
-export function validateIanaConsumerExports(read, { allowPrevious = false } = {}) {
+export function validateIanaConsumerExports(read, { allowPrevious = false, allowPreviousFrontend = false } = {}) {
   const inputs = consumerExportPaths.map(file => ({ file, bytes: read(file) }));
   if (allowPrevious && inputs.every(({ file, bytes }) => text(bytes) === text(previous(file))))
     return [];
-  return inputs.map(({ file, bytes }) => {
+  // A historical scope can contain the entire pre-export frontend pair.
+  // A mixture of the prior and current pairs must always reach the exact check.
+  const priorFrontend = allowPreviousFrontend && inputs
+    .filter(({ file }) => frontendPaths.has(file))
+    .every(({ file, bytes }) => text(bytes) === text(previous(file)));
+  return inputs.filter(({ file }) => !priorFrontend || !frontendPaths.has(file)).map(({ file, bytes }) => {
     assert(isPublishedExport(file, bytes), 'IANA_CONSUMER_EXPORT_BYTES:' + file);
     const expected = exportsByPath.get(file);
     const snapshot = JSON.parse(bytes);
@@ -113,7 +135,8 @@ export function validateIanaConsumerExports(read, { allowPrevious = false } = {}
     ]) {
       assert.deepEqual(current.slice(0, before.length), before, expected.owner + ': ' + key);
     }
-    assert.deepEqual(snapshot.manifest.bindings, prior.manifest.bindings);
+    assert.equal(snapshot.manifest.bindings.length, expected.bindings ?? prior.manifest.bindings.length);
+    assert.deepEqual(snapshot.manifest.bindings.slice(0, prior.manifest.bindings.length), prior.manifest.bindings);
     return { owner: expected.owner, commit: expected.commit, selections: expected.selections, assets: expected.assets };
   });
 }

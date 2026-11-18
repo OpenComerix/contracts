@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {isDeepStrictEqual} from 'node:util';
 import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
+import {projectIanaConsumerExportFile} from '../sales/iana-consumer-exports.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..');
 export const preparationConsumersBase='dc37eaadc16e411a9729960ba7b977b9e7a896ab';
@@ -36,9 +37,14 @@ export function validatePreparationConsumerInput(file,bytes){
   assert.equal(hash(bytes),pins.get(file).snapshot,'PREPARATION_CONSUMER_BYTES:'+file);
 }
 export function validatePreparationConsumers(read=native){
+  const snapshots=preparationConsumerFiles.map(file=>{
+    const current=read(file),bytes=projectIanaConsumerExportFile(file,current);
+    return {file,bytes,projected:bytes!==current};
+  });
+  assert(snapshots.every(row=>row.projected===snapshots[0].projected),'PREPARATION_CONSUMER_PARTIAL_SCOPE');
   const results=[];
-  for(const file of preparationConsumerFiles){
-    const bytes=read(file);validatePreparationConsumerInput(file,bytes);
+  for(const {file,bytes} of snapshots){
+    validatePreparationConsumerInput(file,bytes);
     const value=JSON.parse(text(bytes)),old=JSON.parse(source(file)),pin=pins.get(file);
     assert.equal(value.publication,'published');assert.equal(value.sourceCommit,pin.revision);
     assert.equal(value.sourceRepository,'opencomerix/'+value.manifest.service);

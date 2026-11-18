@@ -29,6 +29,12 @@ test('D admits only the two published exports, preserving prior selections and a
     assert.deepEqual(projectPreparationConsumerDocument(file,JSON.parse(read(file))),JSON.parse(old(file)));
   }
 });
+test('standalone D preservation rejects a mixture of its snapshots and the later F1-14E exports',()=>{
+  const prior=createGitReader()(root,'dd6d588e8baff00015fdb097088576930001addd');
+  for(const file of preparationConsumerFiles)
+    assert.throws(()=>validatePreparationConsumers(candidate=>candidate===file
+      ? prior(candidate) : fs.readFileSync(path.join(root,candidate))),/PREPARATION_CONSUMER_PARTIAL_SCOPE/);
+});
 const mutations={
   revision:value=>value.sourceCommit='0'.repeat(40),
   lifecycle:value=>value.publication='local-candidate',
