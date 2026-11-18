@@ -172,7 +172,7 @@ export function withOnlineTemporalConsumerScope(paths,read,verify){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'ONLINE_TEMPORAL_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
  try{
-  const snapshot=raw(onlineTemporalConsumerPath);
+  const snapshot=projectIanaFile(onlineTemporalConsumerPath,raw(onlineTemporalConsumerPath));
   const legacy=hash(snapshot)===hash(base.get(onlineTemporalConsumerPath));
   if(!legacy)validateOnlineTemporalSnapshot(snapshot);
   for(const file of onlineTemporalConsumerFiles){
@@ -199,7 +199,7 @@ export function validateOnlineTemporalPreservedInput(file,bytes){
  assert.equal(text(bytes),text(source(file)),'ONLINE_TEMPORAL_PRESERVATION:'+file);
 }
 export function validateOnlineTemporalConsumer(read=native){
- const result=validateOnlineTemporalSnapshot(read(onlineTemporalConsumerPath));
+ const result=validateOnlineTemporalSnapshot(projectIanaFile(onlineTemporalConsumerPath,read(onlineTemporalConsumerPath)));
  for(const file of onlineTemporalConsumerFiles.slice(1))validateOnlineTemporalInput(file,read(file));
  // One explicit preservation pass, never nested in a per-file projection/context.
  for(const file of onlineTemporalPreservedFiles)validateOnlineTemporalPreservedInput(file,read(file));

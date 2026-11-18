@@ -26,7 +26,7 @@ test('eight selected admissions preserve old descriptors, published sources, con
  assert.deepEqual(current.planned,before.planned.filter(row=>!ianaAdmissionIds.includes(row.id)));
  assert.equal(current.planned.filter(row=>row.owner==='gateway-bff'&&row.materializeIn==='F1-14E-IANA').length,2);
  assert.equal(new Set([...current.contracts,...current.planned].map(row=>row.id)).size,current.contracts.length+current.planned.length);
- for(const file of ['package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])assert.equal(text(read(file)),text(ianaAdmissionSource(file)),file);
+ for(const file of ['package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])validateIanaAdmissionInput(file,read(file));
 });
 
 test('all new descriptors and actual locks pin exact operations, hashes, immutable closures and minimal URI mappings',()=>{
@@ -100,4 +100,12 @@ test('contexts close on success/failure, reject asynchronous approval and leave 
 
 test('new admission verifier and test are pinned by the existing tooling owner',()=>{
  validateValidationTooling(read);for(const file of ['scripts/sales/iana-admission-v1.mjs','test/sales/iana-admission-v1.test.mjs'])assert.throws(()=>validateValidationTooling(name=>name===file?Buffer.concat([read(name),Buffer.from('drift')]):read(name)),/VALIDATION_TOOLING_DRIFT/);
+});
+
+test('historical acceptance tooling is projected only inside a validated admission context',()=>{
+ const file='test/architecture/sales-acceptance-consumer.test.mjs', current=read(file);
+ assert.strictEqual(projectIanaAdmissionFile(file,current),current);
+ withIanaAdmissionScope([],read,(_paths,historical)=>{
+  assert.deepEqual(historical(file),ianaAdmissionSource(file));
+ });
 });

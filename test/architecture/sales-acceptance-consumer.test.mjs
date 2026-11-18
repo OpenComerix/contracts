@@ -11,10 +11,11 @@ import { acceptanceConsumerPath as file, acceptanceConsumerBase, acceptanceConsu
 import { projectPreparationFile, projectPreparationDocument } from '../../scripts/sales/preparation-history-v1.mjs';
 import { validateValidationTooling, withReviewedValidationScope } from '../../tools/architecture/validation-history.mjs';
 import { readRepositoryFile } from '../../scripts/ci/retired-gitlab-v1.mjs';
+import { projectIanaConsumerExportFile } from '../../scripts/sales/iana-consumer-exports.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const read = file => fs.readFileSync(path.join(root, file));
-const bytes = read(file), snapshot = JSON.parse(bytes);
+const bytes = projectIanaConsumerExportFile(file, read(file)), snapshot = JSON.parse(bytes);
 const historical = createGitReader()(root, acceptanceConsumerBase)(file);
 
 test('B preserves the 29 published A pins and adds only six admitted selections with canonical closures', () => {

@@ -7,6 +7,13 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {
+ consumerExportPaths,
+ projectIanaConsumerExportDocument,
+ projectIanaConsumerExportFile,
+ projectIanaConsumerHistoricalTest,
+ validateIanaConsumerExports,
+} from './iana-consumer-exports.mjs';
 
 const root=path.resolve(import.meta.dirname,'../..'),registryPath='registry/contracts.json';
 export const ianaAdmissionRevision='019a75d86fd12df53b433aebdc269e85a4064f73';
@@ -81,19 +88,20 @@ export const ianaAdmissionMetadata=()=>new Map([...metadata].map(([file,bytes])=
 const delta=new Map(metadata);
 for(const row of descriptors)delta.set(row.path,ianaAdmissionSource(row.path));
 for(const closure of closures.values())for(const file of closure.files)if(!delta.has(file.path))delta.set(file.path,ianaAdmissionSource(file.path));
-export const ianaAdmissionScopeFiles=Object.freeze([...delta.keys()]);
+export const ianaAdmissionScopeFiles=Object.freeze([...delta.keys(),...consumerExportPaths]);
 const inputs=new Map(delta);
 for(const file of [...[...before.contracts,...before.preservedFiles,...before.planned.filter(row=>row.materializeIn==='F1-14E-IANA')].map(row=>row.path),
  'package.json','pnpm-lock.yaml','.github/workflows/ci.yml','registry/consumers/index.json',...before.requiredConsumers.map(owner=>'registry/consumers/'+owner+'.json')])
  if(!inputs.has(file))inputs.set(file,ianaAdmissionSource(file));
 export const ianaAdmissionInputPaths=Object.freeze([...inputs.keys()]);
-export function validateIanaAdmissionInput(file,bytes){assert(inputs.has(file),'IANA_ADMISSION_UNKNOWN:'+file);assert.equal(text(bytes),text(inputs.get(file)),'IANA_ADMISSION_BYTES:'+file);}
+export function validateIanaAdmissionInput(file,bytes){assert(inputs.has(file),'IANA_ADMISSION_UNKNOWN:'+file);assert.equal(text(projectIanaConsumerExportFile(file,bytes)),text(inputs.get(file)),'IANA_ADMISSION_BYTES:'+file);}
 export function validateIanaAdmission(read=native){
+ validateIanaConsumerExports(read,{allowPrevious:true});
  for(const file of ianaAdmissionInputPaths)validateIanaAdmissionInput(file,read(file));
  return {admitted:8,roots:243,priorRoots:235,planned:4,consumers:8,closureFiles:new Set([...closures.values()].flatMap(closure=>closure.files.map(file=>file.path))).size,runtimeDemonstrated:false};
 }
-export function projectIanaAdmissionFile(file,bytes){const expected=metadata.get(file);if(!expected)return bytes;try{return text(bytes)===text(expected)?ianaAdmissionSource(file):bytes;}catch{return bytes;}}
-export function projectIanaAdmissionDocument(file,value){const expected=metadata.get(file);return expected&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(ianaAdmissionSource(file)):value;}
+export function projectIanaAdmissionFile(file,bytes){const expected=metadata.get(file);if(!expected)return projectIanaConsumerExportFile(file,bytes);try{return text(bytes)===text(expected)?ianaAdmissionSource(file):bytes;}catch{return bytes;}}
+export function projectIanaAdmissionDocument(file,value){const expected=metadata.get(file);if(!expected)return projectIanaConsumerExportDocument(file,value);return file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(expected))?JSON.parse(ianaAdmissionSource(file)):value;}
 export function withIanaAdmissionScope(paths,read,verify,label='IANA_ADMISSION_BYTES'){
  let active=true;const current=new Map();
  const raw=file=>{assert(active,'IANA_ADMISSION_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
@@ -104,7 +112,9 @@ export function withIanaAdmissionScope(paths,read,verify,label='IANA_ADMISSION_B
    const result=verify(paths,raw);assert(!result||typeof result.then!=='function','IANA_ADMISSION_SYNCHRONOUS');return result;
   }
   for(const [file,expected]of delta)assert.equal(text(raw(file)),text(expected),label+':'+file);
-  const result=verify([...new Set([...paths,...ianaAdmissionScopeFiles])],file=>projectIanaAdmissionFile(file,raw(file)));
+  validateIanaConsumerExports(raw,{allowPrevious:true});
+  const result=verify([...new Set([...paths,...ianaAdmissionScopeFiles])],
+   file=>projectIanaConsumerHistoricalTest(file,projectIanaAdmissionFile(file,raw(file))));
   assert(!result||typeof result.then!=='function','IANA_ADMISSION_SYNCHRONOUS');return result;
  }finally{active=false;current.clear();}
 }
