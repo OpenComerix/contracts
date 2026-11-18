@@ -1,4 +1,5 @@
 import {projectOnlineFile} from '../../scripts/sales/online-source-v1.mjs';
+import {projectIanaConsumerExportFile} from '../../scripts/sales/iana-consumer-exports.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -97,7 +98,7 @@ test('the unchanged six consumers and index remain guarded',()=>{
 test('standalone preservation recognizes only the exact temporal Identity export and never repairs altered metadata',()=>{
   const native=file=>fs.readFileSync(path.join(root,file));
   const file='registry/consumers/identity-tenancy.json';
-  const current=JSON.parse(native(file));
+  const current=JSON.parse(projectIanaConsumerExportFile(file,native(file)));
   assert.equal(current.sourceCommit,'ebe6e8e7dffa75f01774fdfff844a85819ee2085');
   assert.equal(current.lock.entries.length,58);
   const counts=new Map();

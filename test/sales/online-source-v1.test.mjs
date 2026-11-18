@@ -8,6 +8,7 @@ import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {resolveSelection,makeLock} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
 import {projectOnlineAdmissionFile} from '../../scripts/sales/online-admission-v1.mjs';
+import {projectIanaConsumerExportFile} from '../../scripts/sales/iana-consumer-exports.mjs';
 import {projectPrivateZoneFile} from '../../scripts/identity/branch-time-zone-private-v2.mjs';
 import {root,base,sourceFiles,onlineScopeFiles,metadataFiles,openapis,validateSource,validateSourceInput,validatePreservation,projectOnlineFile,projectOnlineDocument,withOnlineSourceScope,operatingDate,verifyTemporalBinding} from '../../scripts/sales/online-source-v1.mjs';
 const read=f=>fs.readFileSync(path.join(root,f));
@@ -89,7 +90,7 @@ test('ten planned roots preserve active sources, consumers and dependency bytes 
  }
 });
 test('standalone source preservation accepts only the exact published temporal Identity export',()=>{
- const file='registry/consumers/identity-tenancy.json',current=json(file),counts=new Map();
+ const file='registry/consumers/identity-tenancy.json',current=JSON.parse(projectIanaConsumerExportFile(file,read(file))),counts=new Map();
  assert.equal(current.sourceCommit,'ebe6e8e7dffa75f01774fdfff844a85819ee2085');assert.equal(current.lock.entries.length,58);
  validatePreservation(name=>{counts.set(name,(counts.get(name)??0)+1);return read(name);});
  assert([...counts.values()].every(count=>count===1));

@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers, parseSource, resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectIanaConsumerHistoricalTest} from '../sales/iana-consumer-exports.mjs';
 
 export const admissionSourceRevision = '362d9fc3ee816d08bc541a0f93fe2907f2f8d764';
 const root = path.resolve(import.meta.dirname, '../..');
@@ -131,6 +132,7 @@ for (const file of ['package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml'
   'identity/fixtures/operational-options/v1/authority-cases.json']) add(file);
 export const admissionInputPaths = Object.freeze([...inputs.keys()]);
 export function validateAdmissionInput(file, bytes) {
+  bytes=projectIanaConsumerHistoricalTest(file,bytes);
   bytes=projectOperationalConsumerToolingFile(file,projectOperationalConsumerFile(file,bytes));
   assert(inputs.has(file), 'OPERATIONAL_ADMISSION_UNKNOWN_INPUT:' + file);
   assert.equal(text(bytes), text(inputs.get(file)), 'OPERATIONAL_ADMISSION_BYTES:' + file);
