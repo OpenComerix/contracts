@@ -192,10 +192,10 @@ export function transitionBytes(file) {
   } else throw Error('Unknown Sales guard transition');
   return Buffer.from(text);
 }
-export function withSalesAdmissionScope(paths) {
+export function withSalesAdmissionScope(paths, options = { repository: false }) {
   return withAuthorityConsumerContext(read, current => {
     validateSalesAdmission(current.read, current);
-    return withAuthorityConsumerScope([...paths,...admissionScope], current);
+    return withAuthorityConsumerScope([...paths,...admissionScope], current, options);
   });
 }
 export function salesHistoricalIndex(value) {

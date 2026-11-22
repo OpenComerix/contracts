@@ -75,14 +75,12 @@ function acceptsRegistryView(value) {
   try {
     const rows = new Set(pwaTelemetryDescriptors(value));
     if (!distinct([...value.contracts, ...value.planned].map(row => row.id)) ||
-        !distinct([...value.contracts, ...value.planned.filter(row => row.path !== undefined)].map(row => row.path)) ||
-        !distinct(value.requiredConsumers)) return false;
+        !distinct([...value.contracts, ...value.planned.filter(row => row.path !== undefined)].map(row => row.path))) return false;
     const prior = historicalRegistry();
     return isDeepStrictEqual({
       ...value,
       contracts: value.contracts.filter(row => !rows.has(row)).slice(0, prior.contracts.length),
       planned: value.planned.slice(0, prior.planned.length),
-      requiredConsumers: value.requiredConsumers.slice(0, prior.requiredConsumers.length),
     }, prior);
   } catch {
     return false;

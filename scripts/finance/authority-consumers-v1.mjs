@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
-import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withRepositoryValidationScope} from '../../tools/architecture/validation-history.mjs';
+import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withReuseCandidateScope,withRepositoryValidationScope} from '../../tools/architecture/validation-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const authorityConsumerBase = '74f63a87ac30d3ad6dc5f874b4b769c44cea3e55';
@@ -85,8 +85,8 @@ export function salesAuthorityContextSource(bytes) {
     throw cause;
   }
 }`);
-  source = replaceOnce(source, '  validateSalesAdmission();\n  return withAuthorityConsumerScope([...paths,...admissionScope]);',
-    '  return withAuthorityConsumerContext(read, current => {\n    validateSalesAdmission(current.read, current);\n    return withAuthorityConsumerScope([...paths,...admissionScope], current);\n  });');
+  source = replaceOnce(source, 'export function withSalesAdmissionScope(paths) {\n  validateSalesAdmission();\n  return withAuthorityConsumerScope([...paths,...admissionScope]);',
+    'export function withSalesAdmissionScope(paths, options = { repository: false }) {\n  return withAuthorityConsumerContext(read, current => {\n    validateSalesAdmission(current.read, current);\n    return withAuthorityConsumerScope([...paths,...admissionScope], current, options);\n  });');
   for (const [name, parameter] of [['salesHistoricalFile','file, bytes'],['salesHistoricalRegistry','value'],['salesHistoricalIndex','value']])
     source = replaceOnce(source, 'export function ' + name + '(' + parameter + ') {',
       'export function ' + name + '(' + parameter + ') {\n  return withAuthorityConsumerContext(read, current => {');
@@ -267,9 +267,10 @@ class AuthorityConsumerContext {
     if (projected !== value) this.validate();
     return projected;
   }
-  scope(paths) {
+  scope(paths, { repository = true } = {}) {
     this.validate();
-    return withRepositoryValidationScope([...paths,...authorityConsumerFiles],this.#rawRead);
+    const scope = repository ? withRepositoryValidationScope : withReuseCandidateScope;
+    return scope([...paths,...authorityConsumerFiles],this.#rawRead);
   }
   run(read, verify) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
@@ -291,9 +292,9 @@ export function withAuthorityConsumerContext(read, verify, context) {
   try { return current.run(read, verify); }
   finally { current.close(); }
 }
-export function withAuthorityConsumerScope(paths, context) {
+export function withAuthorityConsumerScope(paths, context, options) {
   return withAuthorityConsumerContext(context?.read ?? native, current => {
-    return current.scope(paths);
+    return current.scope(paths, options);
   }, context);
 }
 export function writeAuthorityConsumers() {

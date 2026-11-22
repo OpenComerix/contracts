@@ -93,7 +93,7 @@ export function validateSuccessorPackage(read = actual) {
   for (const file of ['package.json', 'pnpm-lock.yaml', 'registry/consumers/index.json',
     ...previous.requiredConsumers.map(owner => 'registry/consumers/' + owner + '.json')])
     assert.equal(hash(read(file)), hash(source(file)), 'IA11_CONSUMER_OR_DEPENDENCY:' + file);
-  const allowed = withSalesAdmissionScope([...changedPaths, packagePath, verifierPath, ...admissionFiles]);
+  const allowed = withSalesAdmissionScope([...changedPaths, packagePath, verifierPath, ...admissionFiles], { repository: true });
   for (const args of [['diff', '--name-only', base], ['diff', '--cached', '--name-only'], ['ls-files', '--others', '--exclude-standard']])
     for (const file of execFileSync('git', args, { cwd: root, encoding: 'utf8' }).trim().split(/\r?\n/).filter(Boolean))
       assert(allowed.has(file), 'IA11_UNDECLARED_PATH:' + file);
@@ -123,5 +123,5 @@ export function successorHistoricalRegistry(registry) {
 }
 export function withSuccessorScope(paths) {
   validateSuccessorPackage();
-  return withSalesAdmissionScope([...paths, ...changedPaths, packagePath, verifierPath, ...admissionFiles]);
+  return withSalesAdmissionScope([...paths, ...changedPaths, packagePath, verifierPath, ...admissionFiles], { repository: true });
 }

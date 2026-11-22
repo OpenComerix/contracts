@@ -72,7 +72,6 @@ function appendUnrelated(registry, sourceCommit = pwaTelemetrySource, sourceByte
     tag: null, tagObject: null, uriMappings: [] });
   registry.planned.push({ id: 'test.unrelated-plan.v1', domain: 'common', owner: 'platform-contracts',
     materializeIn: 'test-fixture', status: 'planned' });
-  registry.requiredConsumers.push('unrelated-consumer');
   return registry;
 }
 
@@ -146,6 +145,7 @@ test('historical readers accept append-only additions and still reject changes t
     registry => { pwaTelemetryDescriptors(registry)[0].owner = 'changed'; },
     registry => { registry.planned.push(registry.planned[0]); },
     registry => { registry.contracts.at(-1).path = registry.contracts[0].path; },
+    registry => { registry.requiredConsumers.push('unapproved'); },
   ]) {
     const changed = structuredClone(later);
     mutate(changed);
@@ -213,6 +213,7 @@ test('the Git gate proves the exact B transition and checks preservation in late
   add(unrelatedPath, unrelatedBytes);
   const unrelatedSource = commit(b);
   appendUnrelated(registry, unrelatedSource, unrelatedBytes);
+  registry.requiredConsumers.push('unrelated-consumer');
   saveRegistry();
   add('common/index.json', encode(domainIndex(registry, 'common')));
   const consumers = JSON.parse(previousSource('registry/consumers/index.json'));
@@ -243,7 +244,9 @@ test('the Inventory CI path gate accepts a later Git-backed root and rejects pat
     '.github/workflows/ci.yml',
     'observability/README.md',
     'scripts/finance/authority-consumers-v1.mjs',
+    'scripts/identity/inventory-authority-v1-1.mjs',
     'scripts/sales/iana-admission-v1.mjs',
+    'scripts/sales/inventory-step-consumer-v1.mjs',
     'scripts/observability/pwa-telemetry-admission-v1.mjs',
     'scripts/observability/pwa-telemetry-history-v1.mjs',
     'scripts/observability/validate-pwa-telemetry-v1.sh',
@@ -265,8 +268,6 @@ test('the Inventory CI path gate accepts a later Git-backed root and rejects pat
   const unrelatedSource = commit(b);
   registry.planned.pop();
   appendUnrelated(registry, unrelatedSource, unrelatedBytes);
-  // No consumer migration belongs to this fixture's source-scope check.
-  registry.requiredConsumers.pop();
   add(registryPath, encode(registry));
   add('common/index.json', encode(domainIndex(registry, 'common')));
   const c = commit(unrelatedSource);
@@ -276,7 +277,9 @@ test('the Inventory CI path gate accepts a later Git-backed root and rejects pat
     { encoding: 'utf8', windowsHide: true });
   git(['update-ref', '--stdin'], tagRefs);
   git(['checkout-index', '--all', '--force']);
-  symlinkSync(join(ownerDir, 'node_modules'), join(fixture, 'node_modules'),
+  const dependencies = join(fixture, 'node_modules');
+  mkdirSync(dependencies);
+  symlinkSync(realpathSync(join(ownerDir, 'node_modules', 'yaml')), join(dependencies, 'yaml'),
     process.platform === 'win32' ? 'junction' : 'dir');
 
   const exercise = `
