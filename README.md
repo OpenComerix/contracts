@@ -18,7 +18,7 @@ La organización por dominio, superficie y versión, los manifiestos/locks de co
 
 Los nuevos contratos se ubican físicamente en su dominio y se separan por transporte, superficie y versión mayor. Los artefactos publicados conservan sus rutas históricas. Convención y responsabilidades en [la guía contractual](../../docs/arquitectura/ARQUITECTURA_CONTRACTUAL.md#organización-física-de-contratos-nuevos--aprobada-el-2026-10-14).
 
-Mapas: [catalog](catalog/README.md), [identity](identity/README.md) y [common](common/README.md). Los README distinguen candidatos y contratos admitidos; los índices y locks conservan su procedencia. Fixtures por dominio/capacidad/versión; herramientas por capacidad bajo scripts y tests externos bajo test. El gate de layout y el discovery de referencias reutilizan el registro existente.
+Mapas: [catalog](catalog/README.md), [identity](identity/README.md), [common](common/README.md) y [observability](observability/README.md). Los README distinguen candidatos y contratos admitidos; los índices y locks conservan su procedencia. Fixtures por dominio/capacidad/versión; herramientas por capacidad bajo scripts y tests externos bajo test. El gate de layout y el discovery de referencias reutilizan el registro existente.
 
 ## F1-07B — Seguridad/base de catálogo (candidatos)
 

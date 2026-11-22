@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+  "title": "OpenComerix PWA telemetry batch v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "samples"
+  ],
+  "properties": {
+    "samples": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "metric",
+          "value"
+        ],
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "value": {
+            "type": "number"
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "metric"
+            ],
+            "properties": {
+              "metric": {
+                "enum": [
+                  "pos_ready",
+                  "catalog_search",
+                  "sale_confirmation",
+                  "web_lcp",
+                  "web_inp"
+                ]
+              },
+              "value": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 600000,
+                "description": "Duración en milisegundos enteros."
+              }
+            }
+          },
+          {
+            "required": [
+              "metric"
+            ],
+            "properties": {
+              "metric": {
+                "const": "web_cls"
+              },
+              "value": {
+                "minimum": 0,
+                "maximum": 10,
+                "description": "CLS adimensional."
+              }
+            }
+          },
+          {
+            "required": [
+              "metric"
+            ],
+            "properties": {
+              "metric": {
+                "enum": [
+                  "pos_load_failure",
+                  "pos_update_failure"
+                ]
+              },
+              "value": {
+                "const": 1,
+                "description": "Una ocurrencia de falla."
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

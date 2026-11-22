@@ -1,0 +1,386 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "OpenComerix PWA telemetry",
+    "version": "1.0.0",
+    "description": "Admisión del mismo origen para métricas de experiencia de Web-pos. Gateway es el productor HTTP.",
+    "contact": {
+      "name": "OpenComerix"
+    },
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    }
+  },
+  "servers": [
+    {
+      "url": "/api/v1",
+      "description": "Mismo origen HTTPS que sirve Web-pos."
+    }
+  ],
+  "tags": [
+    {
+      "name": "Observability",
+      "description": "Mediciones finitas de experiencia de la PWA."
+    }
+  ],
+  "paths": {
+    "/telemetry/pwa": {
+      "post": {
+        "operationId": "submitPwaTelemetry",
+        "tags": [
+          "Observability"
+        ],
+        "summary": "Admitir un lote de telemetría de Web-pos",
+        "description": "Gateway verifica una sesión vigente, Origin del mismo origen y X-CSRF-Token vinculado a esa sesión. La admisión usa un presupuesto aislado del tráfico comercial y rechaza temprano tipos y tamaños no admitidos. El máximo del cuerpo JSON es 8192 bytes UTF-8 en total, incluso sin Content-Length. El lote se valida completo antes de admitir muestras. Gateway fija servicio, ambiente y timestamp del servidor. Las muestras describen experiencia percibida. Las credenciales de ingestión pertenecen a Alloy y quedan fuera del protocolo del navegador.",
+        "security": [
+          {
+            "sessionCookie": [],
+            "csrfToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "Origin",
+            "in": "header",
+            "required": true,
+            "description": "Origen HTTPS exacto que sirve Web-pos.",
+            "schema": {
+              "type": "string",
+              "format": "uri"
+            }
+          }
+        ],
+        "x-observability-admission": {
+          "maxBodyBytes": 8192,
+          "maxSamples": 16,
+          "sessionBatchesPerMinute": 6,
+          "instanceBatchesPerMinute": 120
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "../../shared/v1/pwa-telemetry-batch-v1.schema.json"
+              },
+              "examples": {
+                "syntheticBatch": {
+                  "summary": "Mediciones sintéticas de Web-pos",
+                  "externalValue": "../../../fixtures/pwa-telemetry/v1/accepted.json"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "Lote válido admitido para el procesamiento diagnóstico acotado. La confirmación indica admisión local del lote.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            }
+          },
+          "400": {
+            "description": "JSON, estructura o muestras fuera del contrato. Respuesta genérica sin repetir valores o campos enviados.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../../shared/v1/pwa-telemetry-invalid-batch-v1.schema.json"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Sesión ausente, inválida o vencida.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              },
+              "WWW-Authenticate": {
+                "description": "Desafío de autenticación de sesión.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 401
+                        },
+                        "code": {
+                          "const": "identity_session_invalid_or_expired"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:identity_session_invalid_or_expired"
+                        },
+                        "retryable": {
+                          "const": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Origin o token CSRF ausente, inválido o ajeno a la sesión actual.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "../../../../openapi/csrf-v3-problem.schema.json"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "El cuerpo excede 8192 bytes.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 413
+                        },
+                        "code": {
+                          "const": "platform_payload_too_large"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:platform_payload_too_large"
+                        },
+                        "retryable": {
+                          "const": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "Tipo de contenido ajeno a application/json.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 415
+                        },
+                        "code": {
+                          "const": "platform_unsupported_media_type"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:platform_unsupported_media_type"
+                        },
+                        "retryable": {
+                          "const": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Presupuesto de telemetría por sesión o por instancia agotado.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 429
+                        },
+                        "code": {
+                          "const": "platform_rate_limited"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:platform_rate_limited"
+                        },
+                        "retryable": {
+                          "const": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Error interno genérico de admisión.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 500
+                        },
+                        "code": {
+                          "const": "platform_internal_error"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:platform_internal_error"
+                        },
+                        "retryable": {
+                          "const": false
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "La autoridad de sesión no puede verificarse temporalmente.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              },
+              "Retry-After": {
+                "$ref": "#/components/headers/RetryAfter"
+              }
+            },
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/Problem"
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "status": {
+                          "const": 503
+                        },
+                        "code": {
+                          "const": "platform_dependency_unavailable"
+                        },
+                        "type": {
+                          "const": "urn:opencomerix:problem:platform_dependency_unavailable"
+                        },
+                        "retryable": {
+                          "const": true
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "sessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "__Host-oc_session",
+        "description": "Sesión opaca vigente, Secure y HttpOnly."
+      },
+      "csrfToken": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-CSRF-Token",
+        "description": "Token opaco vinculado a la cookie de sesión vigente."
+      }
+    },
+    "headers": {
+      "NoStore": {
+        "description": "Respuesta de admisión sin caché.",
+        "required": true,
+        "schema": {
+          "type": "string",
+          "const": "no-store"
+        }
+      },
+      "RetryAfter": {
+        "description": "Espera mínima en segundos cuando el servidor puede estimarla. Web-pos descarta el lote en caso de rechazo.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "schemas": {
+      "Problem": {
+        "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+      }
+    }
+  }
+}

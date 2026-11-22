@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+  "title": "OpenComerix PWA telemetry invalid batch Problem Details v1",
+  "allOf": [
+    {
+      "$ref": "../../../../common/http/shared/v3/problem-details-v3.schema.json"
+    },
+    {
+      "type": "object",
+      "properties": {
+        "type": {
+          "const": "urn:opencomerix:problem:observability_invalid_batch"
+        },
+        "title": {
+          "const": "Lote de telemetría inválido"
+        },
+        "status": {
+          "const": 400
+        },
+        "code": {
+          "const": "observability_invalid_batch"
+        },
+        "retryable": {
+          "const": false
+        },
+        "detail": false,
+        "correlation_id": false,
+        "errors": false
+      }
+    }
+  ]
+}

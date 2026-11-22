@@ -1,0 +1,15 @@
+{
+  "target": "https://contracts.opencomerix.example/openapi/csrf-v3-problem.schema.json",
+  "tests": [
+    {
+      "description": "acepta el ejemplo publicado de rechazo CSRF",
+      "valid": true,
+      "dataPath": "../../../../openapi/examples/gateway-csrf-invalid-v3.json"
+    },
+    {
+      "description": "rechaza el ejemplo publicado con Origin en detail",
+      "valid": false,
+      "dataPath": "../../../../openapi/examples/gateway-csrf-invalid-with-detail-negative-v3.json"
+    }
+  ]
+}

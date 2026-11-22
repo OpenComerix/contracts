@@ -1,0 +1,336 @@
+{
+  "target": "https://contracts.opencomerix.example/observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+  "tests": [
+    {
+      "description": "acepta las ocho métricas del catálogo",
+      "valid": true,
+      "dataPath": "accepted.json"
+    },
+    {
+      "description": "acepta exactamente 16 muestras",
+      "valid": true,
+      "data": {
+        "samples": [
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "description": "acepta las fronteras numéricas",
+      "valid": true,
+      "data": {
+        "samples": [
+          {
+            "metric": "web_lcp",
+            "value": 0
+          },
+          {
+            "metric": "pos_ready",
+            "value": 600000
+          },
+          {
+            "metric": "web_cls",
+            "value": 0
+          },
+          {
+            "metric": "web_cls",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza lote vacío",
+      "valid": false,
+      "data": {
+        "samples": []
+      }
+    },
+    {
+      "description": "rechaza más de 16 muestras",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          },
+          {
+            "metric": "catalog_search",
+            "value": 10
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza métrica desconocida",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "custom_metric",
+            "value": 1
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza números en texto",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "web_cls",
+            "value": "0.1"
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza milisegundos fraccionarios",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "pos_ready",
+            "value": 1.2
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza duración negativa",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "catalog_search",
+            "value": -1
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza duración fuera del rango",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "sale_confirmation",
+            "value": 600001
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza CLS fuera del rango",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "web_cls",
+            "value": 10.01
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza un contador de fallas acumulado en el cliente",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "pos_load_failure",
+            "value": 2
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza URL de origen en una muestra",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "catalog_search",
+            "value": 20,
+            "url": "https://example.invalid"
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza identificadores y timestamp definidos por el cliente",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "web_lcp",
+            "value": 20
+          }
+        ],
+        "tenant_id": "synthetic",
+        "timestamp": 0
+      }
+    },
+    {
+      "description": "rechaza muestra nula",
+      "valid": false,
+      "data": {
+        "samples": [
+          null
+        ]
+      }
+    },
+    {
+      "description": "rechaza la falta del valor obligatorio",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "web_inp"
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza lote completo si una muestra es inválida",
+      "valid": false,
+      "data": {
+        "samples": [
+          {
+            "metric": "sale_confirmation",
+            "value": 20
+          },
+          {
+            "metric": "unknown",
+            "value": 1
+          }
+        ]
+      }
+    }
+  ]
+}

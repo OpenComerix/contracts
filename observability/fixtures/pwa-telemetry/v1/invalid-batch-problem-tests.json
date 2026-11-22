@@ -1,0 +1,78 @@
+{
+  "target": "https://contracts.opencomerix.example/observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+  "tests": [
+    {
+      "description": "acepta un rechazo genérico con referencia diagnóstica",
+      "valid": true,
+      "data": {
+        "type": "urn:opencomerix:problem:observability_invalid_batch",
+        "title": "Lote de telemetría inválido",
+        "status": 400,
+        "instance": "urn:uuid:01991a22-0000-7000-8000-000000000121",
+        "code": "observability_invalid_batch",
+        "trace_id": "018f0000-0000-7000-8000-000000000122",
+        "retryable": false
+      }
+    },
+    {
+      "description": "rechaza detalle que refleja el valor enviado",
+      "valid": false,
+      "data": {
+        "type": "urn:opencomerix:problem:observability_invalid_batch",
+        "title": "Lote de telemetría inválido",
+        "status": 400,
+        "instance": "urn:uuid:01991a22-0000-7000-8000-000000000121",
+        "code": "observability_invalid_batch",
+        "trace_id": "018f0000-0000-7000-8000-000000000122",
+        "retryable": false,
+        "detail": "valor enviado: marcador sintético"
+      }
+    },
+    {
+      "description": "rechaza rutas de campos recibidos",
+      "valid": false,
+      "data": {
+        "type": "urn:opencomerix:problem:observability_invalid_batch",
+        "title": "Lote de telemetría inválido",
+        "status": 400,
+        "instance": "urn:uuid:01991a22-0000-7000-8000-000000000121",
+        "code": "observability_invalid_batch",
+        "trace_id": "018f0000-0000-7000-8000-000000000122",
+        "retryable": false,
+        "errors": [
+          {
+            "path": "/samples/0/campo_sintetico",
+            "code": "observability_invalid_batch"
+          }
+        ]
+      }
+    },
+    {
+      "description": "rechaza títulos distintos del texto genérico",
+      "valid": false,
+      "data": {
+        "type": "urn:opencomerix:problem:observability_invalid_batch",
+        "title": "Lote inválido: marcador sintético",
+        "status": 400,
+        "instance": "urn:uuid:01991a22-0000-7000-8000-000000000121",
+        "code": "observability_invalid_batch",
+        "trace_id": "018f0000-0000-7000-8000-000000000122",
+        "retryable": false
+      }
+    },
+    {
+      "description": "rechaza correlación adicional en la respuesta",
+      "valid": false,
+      "data": {
+        "type": "urn:opencomerix:problem:observability_invalid_batch",
+        "title": "Lote de telemetría inválido",
+        "status": 400,
+        "instance": "urn:uuid:01991a22-0000-7000-8000-000000000121",
+        "code": "observability_invalid_batch",
+        "trace_id": "018f0000-0000-7000-8000-000000000122",
+        "retryable": false,
+        "correlation_id": "018f0000-0000-7000-8000-000000000123"
+      }
+    }
+  ]
+}
