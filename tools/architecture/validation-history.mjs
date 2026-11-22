@@ -258,6 +258,7 @@ export function projectReviewedDocument(revision,file,value) {
 
 // The code owns the inventory and the reference pin; current JSON data can
 // neither extend the allowed paths nor replace the reviewed expectations.
+const salesAuthorityBridge = 'scripts/sales/inventory-step-consumer-v1.mjs';
 const toolingPaths = Object.freeze([
   'scripts/identity/online-temporal-consumer-v1.mjs',
   'test/identity/online-temporal-consumer-v1.test.mjs',
@@ -294,6 +295,7 @@ const toolingPaths = Object.freeze([
   'scripts/catalog/catalog-runtime-v1-registry.mjs', 'scripts/inventory/candidate-v1.mjs',
   'scripts/identity/catalog-workload-consumers-v2-registry.mjs',
   'scripts/identity/catalog-workload-profiles-v2-registry.mjs', 'scripts/finance/authority-consumers-v1.mjs',
+  salesAuthorityBridge,
   'scripts/finance/reviewed-package-v1.mjs', 'scripts/sales/reviewed-package-v2.mjs',
   'scripts/sales/release-v1.mjs', 'scripts/identity/inventory-authority-v1-1.mjs',
   'test/architecture/immutable-closure.test.mjs', 'test/architecture/validation-history.test.mjs',
@@ -328,7 +330,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = 'd2309ff184519fbcf524a5f46a6c6acd8124140ab56c475de2c9dcea65a35743';
+const toolingReferenceSha256 = 'f697dce692157c9a565b8b6523ceed50fef11d31bb3567feb9b029c81ce0df05';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
@@ -350,11 +352,16 @@ function toolingFingerprint(file, bytes) {
   }
   return digest(value);
 }
-export function projectValidationTooling(file, bytes) {
+function projectPinnedTooling(file, bytes) {
   const expected = toolingHashes[file];
   if (!expected) return bytes;
   const actual = toolingFingerprint(file, bytes);
   return actual === expected ? optional(source(reviewedValidationRevision),file) ?? bytes : bytes;
+}
+export function projectValidationTooling(file, bytes) {
+  // Finance validates this live bridge and owns its projection for earlier
+  // readers. Only the repository scope below needs the reviewed snapshot.
+  return file === salesAuthorityBridge ? bytes : projectPinnedTooling(file, bytes);
 }
 export function validateValidationTooling(read) {
   assert.equal(text(read(toolingReference)), toolingReferenceText, 'VALIDATION_TOOLING_REFERENCE_DRIFT');
@@ -372,7 +379,7 @@ export function withReviewedValidationScope(paths,read) {
     .toString('utf8').split('\0').filter(Boolean);
   validateValidationTooling(read);
   for(const file of scopeFiles)
-    assert.equal(text(projectValidationTooling(file,projectReuseCandidateFile(file,read(file)))),text(source(reviewedValidationRevision)(file)),
+    assert.equal(text(projectPinnedTooling(file,projectReuseCandidateFile(file,read(file)))),text(source(reviewedValidationRevision)(file)),
       'VALIDATION_SCOPE_DRIFT:'+file);
   assert.equal(text(read('.gitlab-ci.yml')),text(source('4ebc146e7be83713f39a72384bd0dfb7a1575616')('.gitlab-ci.yml')),
     'VALIDATION_RETIRED_CI_DRIFT');
