@@ -9,6 +9,7 @@ import reviewedTooling from './validation-tooling.json' with { type: 'json' };
 import {cashConsumerBase,projectCashConsumerFile,projectCashConsumerDocument,withCashConsumerScope} from '../../scripts/finance/cash-consumer-v1.mjs';
 import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.mjs';
 import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
+import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -107,11 +108,22 @@ function projectAdmissionTest(file, bytes) {
   return source('00ab063c7772901036d16856000c2a055c385786')(file);
 }
 export function projectReuseCandidateFile(file, bytes) {
+  bytes=projectPwaTelemetryFile(file,bytes);
   bytes=projectAdmissionTest(file,bytes);
   bytes=projectOperationalFile(file,bytes);
   bytes=projectCashConsumerFile(file,bytes);
   if (!reuseProjectionFiles.has(file) || textHash(bytes) !== reuseCandidateHashes[file]) return bytes;
   return Buffer.from(source(reuseCandidateBase)(file));
+}
+// Only callers checking repository paths need the additions to the live tree.
+export function withRepositoryValidationScope(paths, read) {
+  const registryFile = 'registry/contracts.json';
+  const registry = read(registryFile);
+  const pwaPaths = pwaTelemetryHistoricalPaths(registry);
+  const allowed = withReuseCandidateScope([...paths, ...pwaPaths],
+    file => file === registryFile ? registry : read(file));
+  if (pwaPaths.length) includeLaterAdmissionPaths(allowed, registry);
+  return allowed;
 }
 export function withReuseCandidateScope(paths, read) {
   return withOperationalScope(paths,read,(paths,read)=>{
@@ -155,6 +167,7 @@ function isReuseCandidateDocument(file, value) {
   } catch { return false; }
 }
 export function projectReuseCandidateDocument(file, value) {
+  value=projectPwaTelemetryDocument(file,value);
   value=projectOperationalDocument(file,value);
   value=projectCashConsumerDocument(file,value);
   return isReuseCandidateDocument(file, value) ? JSON.parse(source(reuseCandidateBase)(file)) : value;
@@ -230,6 +243,7 @@ export function isReviewedDocument(revision,file,value) {
   return metadata.has(file)&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(source(revision)(file)));
 }
 export function projectReviewedDocument(revision,file,value) {
+  value=projectPwaTelemetryDocument(file,value);
   value=projectOperationalDocument(file,value);
   const cash=projectCashConsumerDocument(file,value);
   if(cash!==value&&metadata.has(file)&&canProject(cashConsumerBase,revision))return JSON.parse(source(revision)(file));
@@ -311,8 +325,10 @@ const toolingPaths = Object.freeze([
   'scripts/sales/iana-native-v1.mjs',
   'scripts/sales/validate-iana-v1.sh',
   'test/sales/iana-source-v1.test.mjs',
+  'scripts/observability/pwa-telemetry-admission-v1.mjs',
+  'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '1a5c33837b6a48d69e5a79d112d78371efeeade5b8b41f9807e5c20423275bf2';
+const toolingReferenceSha256 = '58683216dd2b4a64b26d8da579498d065eb579e44b6596a0b0f4f8c26cbd1d0a';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
@@ -360,5 +376,5 @@ export function withReviewedValidationScope(paths,read) {
       'VALIDATION_SCOPE_DRIFT:'+file);
   assert.equal(text(read('.gitlab-ci.yml')),text(source('4ebc146e7be83713f39a72384bd0dfb7a1575616')('.gitlab-ci.yml')),
     'VALIDATION_RETIRED_CI_DRIFT');
-  return withReuseCandidateScope([...paths,...scopeFiles,...validationToolingFiles,'.gitlab-ci.yml'],read);
+  return withRepositoryValidationScope([...paths,...scopeFiles,...validationToolingFiles,'.gitlab-ci.yml'],read);
 }

@@ -1,6 +1,6 @@
 # Observabilidad
 
-## F1-OBS-PWA-CONTRATO — Fuente candidata
+## F1-OBS-PWA-CONTRATO — Ingestión PWA v1
 
 [OpenAPI](http/public/v1/pwa-telemetry-v1.yaml) · [Schema del lote](http/shared/v1/pwa-telemetry-batch-v1.schema.json) · [Catálogo de errores](errors/v1/pwa-telemetry-errors-v1.json) · [Fixtures](fixtures/pwa-telemetry/v1/batch-tests.json)
 
@@ -29,4 +29,4 @@ jsonschema test observability/fixtures/pwa-telemetry/v1/*-problem-tests.json --r
 node --test test/observability/pwa-telemetry-v1.test.mjs
 ```
 
-La fuente queda `planned`. La admisión B usará el commit inmutable de A y una CI completa de B. Sus dependencias semánticas incluyen el [catálogo común v11](../common/errors/v11/error-catalog-v11.json), las suites nativas y los ejemplos CSRF publicados que estas leen. La prueba de navegador conectado, la validación efectiva de sesión, los límites en bytes y los presupuestos temporales pertenecen al corte runtime.
+La admisión registra las tres raíces como `active` y las fija al commit inmutable de la fuente A. El consumo requiere verificar la CI completa de la revisión conjunta por SHA y ref exactos. Las dependencias semánticas incluyen el [catálogo común v11](../common/errors/v11/error-catalog-v11.json), las suites nativas y los ejemplos CSRF publicados que estas leen. La prueba de navegador conectado, la validación efectiva de sesión, los límites en bytes y los presupuestos temporales pertenecen al corte runtime.

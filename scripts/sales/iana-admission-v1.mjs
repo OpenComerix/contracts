@@ -7,6 +7,7 @@ import {fileURLToPath} from 'node:url';
 import {createGitReader} from '../../tools/architecture/git-source.mjs';
 import {operationPointers,parseSource,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {domainIndex} from '../../tools/architecture/registry.mjs';
+import {projectPwaTelemetryDocument,projectPwaTelemetryFile} from '../observability/pwa-telemetry-history-v1.mjs';
 import {
  consumerExportPaths,
  projectIanaConsumerExportDocument,
@@ -116,6 +117,7 @@ for(const file of [...[...before.contracts,...before.preservedFiles,...before.pl
  if(!inputs.has(file))inputs.set(file,ianaAdmissionSource(file));
 export const ianaAdmissionInputPaths=Object.freeze([...inputs.keys()]);
 export function projectIanaPublicAdmissionFile(file,bytes){
+ bytes=projectPwaTelemetryFile(file,bytes);
  const expected=publicMetadata.get(file);
  if(!expected)return bytes;
  try{return text(bytes)===text(expected)?Buffer.from(metadata.get(file)):bytes;}catch{return bytes;}
@@ -125,7 +127,7 @@ export function validateIanaAdmissionInput(file,bytes){
  assert(text(projectIanaConsumerExportFile(file,projectIanaPublicAdmissionFile(file,bytes)))===text(inputs.get(file)),'IANA_ADMISSION_BYTES:'+file);
 }
 export function validateIanaAdmission(read=native){
- const stage=new Map([...publicMetadata.keys()].map(file=>[file,read(file)]));
+ const stage=new Map([...publicMetadata.keys()].map(file=>[file,projectPwaTelemetryFile(file,read(file))]));
  const isPublic=file=>text(stage.get(file))===text(publicMetadata.get(file));
  const publicStage=isPublic(registryPath);
  assert.equal(isPublic('sales/index.json'),publicStage,'IANA_ADMISSION_PARTIAL_SCOPE');
@@ -135,6 +137,7 @@ export function validateIanaAdmission(read=native){
 }
 export function projectIanaAdmissionFile(file,bytes){bytes=projectIanaPublicAdmissionFile(file,bytes);const expected=metadata.get(file);if(!expected)return projectIanaConsumerExportFile(file,bytes);try{return text(bytes)===text(expected)?ianaAdmissionSource(file):bytes;}catch{return bytes;}}
 export function projectIanaAdmissionDocument(file,value){
+ value=projectPwaTelemetryDocument(file,value);
  const admitted=publicDocuments.get(file);
  if(admitted&&isDeepStrictEqual(value,admitted))return JSON.parse(ianaAdmissionSource(file));
  const expected=metadata.get(file);if(!expected)return projectIanaConsumerExportDocument(file,value);
@@ -142,7 +145,7 @@ export function projectIanaAdmissionDocument(file,value){
 }
 export function withIanaAdmissionScope(paths,read,verify,label='IANA_ADMISSION_BYTES'){
  let active=true;const current=new Map();
- const raw=file=>{assert(active,'IANA_ADMISSION_CONTEXT_CLOSED');if(!current.has(file))current.set(file,Buffer.from(read(file)));return Buffer.from(current.get(file));};
+ const raw=file=>{assert(active,'IANA_ADMISSION_CONTEXT_CLOSED');if(!current.has(file))current.set(file,projectPwaTelemetryFile(file,Buffer.from(read(file))));return Buffer.from(current.get(file));};
  try{
   const bytes=raw(registryPath);let value;try{value=JSON.parse(bytes);}catch{throw Error(label+':'+registryPath);}
   const publicStage=value?.contracts?.length===publicRegistry.contracts.length&&isDeepStrictEqual(value,publicRegistry);

@@ -19117,6 +19117,70 @@
           "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
         }
       ]
+    },
+    {
+      "id": "observability.pwa-telemetry.http.v1",
+      "domain": "observability",
+      "surface": "http-public",
+      "owner": "gateway-bff",
+      "status": "active",
+      "capability": "observability.pwa-telemetry",
+      "purpose": "Ingestión por el mismo origen de lotes de telemetría PWA con sesión, Origin y CSRF.",
+      "reasonForChange": "Admisión de la fuente A de F1-OBS-PWA-CONTRATO. El consumo requiere CI completa de la revisión conjunta.",
+      "retirement": "Preservar los bytes y el cierre de referencias; los cambios incompatibles requieren sucesor y migración aprobados.",
+      "version": "1.0.0",
+      "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+      "commit": "eed8606cccc61f7c139c673b4bd256b4481dd4a3",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ffbe601c5b787849e25ebbe0980cdf2de2aa30bd0b3c92520768ecfc0c1d63ed",
+      "operations": [
+        "submitPwaTelemetry"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "observability.pwa-telemetry.batch.schema.v1",
+      "domain": "observability",
+      "surface": "schema",
+      "owner": "gateway-bff",
+      "status": "active",
+      "capability": "observability.pwa-telemetry",
+      "purpose": "Catálogo finito, unidades y límites del lote público de telemetría PWA.",
+      "reasonForChange": "Admisión de la fuente A de F1-OBS-PWA-CONTRATO. El consumo requiere CI completa de la revisión conjunta.",
+      "retirement": "Preservar los bytes y el cierre de referencias; los cambios incompatibles requieren sucesor y migración aprobados.",
+      "version": "1.0.0",
+      "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+      "commit": "eed8606cccc61f7c139c673b4bd256b4481dd4a3",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "73db3bd18a3659f4302d6db0f6f80679456827ccd6a877fac4b5d46ddae3a07a",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "observability.pwa-telemetry.errors.v1",
+      "domain": "observability",
+      "surface": "errors",
+      "owner": "gateway-bff",
+      "status": "active",
+      "capability": "observability.pwa-telemetry",
+      "purpose": "Catálogo de errores de ingestión de telemetría PWA.",
+      "reasonForChange": "Admisión de la fuente A de F1-OBS-PWA-CONTRATO. El consumo requiere CI completa de la revisión conjunta.",
+      "retirement": "Preservar los bytes y el cierre de referencias; los cambios incompatibles requieren sucesor y migración aprobados.",
+      "version": "1.0.0",
+      "path": "observability/errors/v1/pwa-telemetry-errors-v1.json",
+      "commit": "eed8606cccc61f7c139c673b4bd256b4481dd4a3",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ce248084a5d49a0919879c3a59a8808344b2146356a1ab2a9907af1ea069a075",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -20081,39 +20145,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "observability.pwa-telemetry.http.v1",
-      "domain": "observability",
-      "owner": "gateway-bff",
-      "materializeIn": "F1-OBS-PWA-CONTRATO",
-      "status": "planned",
-      "version": "1.0.0",
-      "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
-      "operations": [
-        "submitPwaTelemetry"
-      ],
-      "constraint": "Fuente A para entrega conjunta. La admisión y CI completa preceden el consumo por Gateway y Web-pos."
-    },
-    {
-      "id": "observability.pwa-telemetry.batch.schema.v1",
-      "domain": "observability",
-      "owner": "gateway-bff",
-      "materializeIn": "F1-OBS-PWA-CONTRATO",
-      "status": "planned",
-      "version": "1.0.0",
-      "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
-      "operations": []
-    },
-    {
-      "id": "observability.pwa-telemetry.errors.v1",
-      "domain": "observability",
-      "owner": "gateway-bff",
-      "materializeIn": "F1-OBS-PWA-CONTRATO",
-      "status": "planned",
-      "version": "1.0.0",
-      "path": "observability/errors/v1/pwa-telemetry-errors-v1.json",
-      "operations": []
     }
   ],
   "requiredConsumers": [

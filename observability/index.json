@@ -2,11 +2,45 @@
   "formatVersion": 1,
   "domain": "observability",
   "registry": "../registry/contracts.json",
-  "contracts": [],
-  "surfaces": [],
-  "planned": [
+  "contracts": [
     "observability.pwa-telemetry.http.v1",
     "observability.pwa-telemetry.batch.schema.v1",
     "observability.pwa-telemetry.errors.v1"
-  ]
+  ],
+  "surfaces": [
+    {
+      "surface": "errors",
+      "versions": [
+        {
+          "id": "observability.pwa-telemetry.errors.v1",
+          "version": "1.0.0",
+          "path": "observability/errors/v1/pwa-telemetry-errors-v1.json",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "http-public",
+      "versions": [
+        {
+          "id": "observability.pwa-telemetry.http.v1",
+          "version": "1.0.0",
+          "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+          "status": "active"
+        }
+      ]
+    },
+    {
+      "surface": "schema",
+      "versions": [
+        {
+          "id": "observability.pwa-telemetry.batch.schema.v1",
+          "version": "1.0.0",
+          "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+          "status": "active"
+        }
+      ]
+    }
+  ],
+  "planned": []
 }

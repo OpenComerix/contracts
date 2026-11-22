@@ -114,6 +114,7 @@ jobs:
         run: |-
           npx --yes @redocly/cli@2.53.3 lint openapi/pos-sales-v1.yaml openapi/pos-sync-v1.json
           node scripts/validate-redocly-no-warnings.mjs
+          node scripts/validate-redocly-no-warnings.mjs observability/http/public/v1/pwa-telemetry-v1.yaml
           npx --yes @redocly/cli@2.53.3 bundle openapi/identity-onboarding-v1.yaml --dereferenced --ext json --output /tmp/identity-onboarding-v1.bundle.json
           node scripts/prepare-identity-rest-fixtures.mjs /tmp/identity-onboarding-v1.bundle.json .ci-artifacts/identity-rest-fixtures --self-test
           node scripts/validate-redocly-no-warnings.mjs openapi/identity-onboarding-v2.yaml
@@ -205,7 +206,8 @@ jobs:
           sh scripts/validate-membership-pagination-v2.sh
           sh scripts/validate-session-rotation-replay-v5.sh .ci-artifacts/session-rotation-replay-v5
           sh scripts/validate-session-step-up-v1.sh .ci-artifacts/session-step-up-v1
-          sh scripts/validate-owner-session-flow-v1.sh .ci-artifacts/owner-session-flow-v1'
+          sh scripts/validate-owner-session-flow-v1.sh .ci-artifacts/owner-session-flow-v1
+          sh scripts/observability/validate-pwa-telemetry-v1.sh'
   validate_internal_auth_schema:
     name: validate:internal-auth-schema
     if: needs.validation_scope.outputs.mode == 'full'
@@ -326,6 +328,8 @@ jobs:
         run: |-
           node --test --test-concurrency=2 test/architecture/*.test.mjs
           node --test --test-reporter=tap test/ci/*.test.mjs
+          node --test test/observability/pwa-telemetry-v1.test.mjs
+          node scripts/observability/pwa-telemetry-admission-v1.mjs --revision "$GITHUB_SHA"
           pnpm registry:check
           pnpm contracts:consumers
           pnpm contracts:impact --output .ci-artifacts/contract-impact.json

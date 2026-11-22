@@ -8,7 +8,7 @@ import { domainIndex } from './registry.mjs';
 // Called once by the capacity's admission verifier, never by a per-file projection.
 // Coverage remains a real owner test of workflow commands/inputs, not a boolean here.
 export function verifyJointDelivery({ root, sourceCommit, admittedIds,
-  finalRevision = null, readCurrent, semanticPaths = [] }) {
+  finalRevision = null, readCurrent, semanticPaths = [], registrySha256 = null }) {
   const git = args => execFileSync('git', ['-C', root, ...args], { windowsHide: true }).toString().trim();
   const sha = value => assert(/^[a-f0-9]{40}$/.test(value ?? ''), 'JOINT_UNRESOLVED_REVISION');
   sha(sourceCommit);
@@ -27,7 +27,9 @@ export function verifyJointDelivery({ root, sourceCommit, admittedIds,
   };
   const json = (from, file) => JSON.parse(from(file));
   const before = json(source, 'registry/contracts.json');
-  const after = json(read, 'registry/contracts.json');
+  const registryBytes = read('registry/contracts.json');
+  if (registrySha256 !== null) assert.equal(sha256(registryBytes), registrySha256, 'JOINT_REGISTRY_HASH');
+  const after = JSON.parse(registryBytes);
   assert(Array.isArray(admittedIds) && admittedIds.length > 0 &&
     new Set(admittedIds).size === admittedIds.length, 'JOINT_IDS');
   const selected = new Set(admittedIds);

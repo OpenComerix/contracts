@@ -4,7 +4,7 @@ import path from 'node:path';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
-import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withReuseCandidateScope} from '../../tools/architecture/validation-history.mjs';
+import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withRepositoryValidationScope} from '../../tools/architecture/validation-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const authorityConsumerBase = '74f63a87ac30d3ad6dc5f874b4b769c44cea3e55';
@@ -269,7 +269,7 @@ class AuthorityConsumerContext {
   }
   scope(paths) {
     this.validate();
-    return withReuseCandidateScope([...paths,...authorityConsumerFiles],this.#rawRead);
+    return withRepositoryValidationScope([...paths,...authorityConsumerFiles],this.#rawRead);
   }
   run(read, verify) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');

@@ -6,6 +6,7 @@ import {createHash} from 'node:crypto';
 import {syncBuiltinESMExports} from 'node:module';
 import {makeLock,resolveSelection} from '../../tools/architecture/graph.mjs';
 import {validateValidationTooling} from '../../tools/architecture/validation-history.mjs';
+import {projectPwaTelemetryFile} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 import {
  ianaAdmissionRevision,ianaAdmissionSource,ianaAdmissionIds,ianaAdmittedRegistry,ianaAdmissionClosures,
  ianaAdmissionMetadata,ianaAdmissionScopeFiles,ianaAdmissionInputPaths,validateIanaAdmissionInput,
@@ -82,14 +83,14 @@ test('bounded scope reads every delta once and changed or missing bytes cannot i
 });
 
 test('public admission adds only two Gateway roots to the qualified registry',()=>{
- const prior=ianaAdmittedRegistry(),current=JSON.parse(read(registryPath));
+ const prior=ianaAdmittedRegistry(),current=JSON.parse(projectPwaTelemetryFile(registryPath,read(registryPath)));
  assert.equal(current.contracts.length,245);
  assert.deepEqual(current.contracts.slice(0,243),prior.contracts);
  assert.deepEqual(current.preservedFiles,prior.preservedFiles);
  assert.deepEqual(current.requiredConsumers,prior.requiredConsumers);
  assert.deepEqual(current.planned,prior.planned.filter(row=>!ianaPublicAdmissionIds.includes(row.id)));
  for(const [file,bytes]of ianaPublicAdmissionMetadata()){
-  assert(text(read(file))===text(bytes),file);
+  assert(text(projectPwaTelemetryFile(file,read(file)))===text(bytes),file);
   assert.deepEqual(projectIanaPublicAdmissionFile(file,bytes),ianaAdmissionMetadata().get(file));
   assert.deepEqual(projectIanaAdmissionDocument(file,JSON.parse(bytes)),JSON.parse(ianaAdmissionSource(file)));
  }
