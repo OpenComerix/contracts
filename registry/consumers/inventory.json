@@ -1,10 +1,10 @@
 {
   "formatVersion": 1,
-  "publication": "local-candidate",
+  "publication": "published",
   "sourceRepository": "opencomerix/inventory",
-  "sourceCommit": "d67430d466c5efbcc69badf7debc3c7be4ae1887",
-  "manifestSha256": "c14c014297a820d72632323bd9515168080103c29aa476a7072df8e351e3f7e2",
-  "lockSha256": "932000ec25f45fcea8e5a154b6e6457e5447e33171d4f9226119e46cc0689322",
+  "sourceCommit": "92a9cac9cc73a317fafd362f9df93ffcabf77e0a",
+  "manifestSha256": "13a9b305a8c601328d41cafe5b52efc0bd0ed93e5dcba35f86abdaa4a4c8cf90",
+  "lockSha256": "6964f97536eeaebb88aadf60cdd5e884447fec3d1b719bcf30cdb2380630ff30",
   "manifest": {
     "formatVersion": 1,
     "service": "inventory",
@@ -575,15 +575,99 @@
           "pnpm test:cov",
           "pnpm test:integration"
         ]
+      },
+      {
+        "id": "inventory.sale-context.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A read-only Inventory sale-context preparation, fixed workload profiles and fresh Sales callback; no stock effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
+      },
+      {
+        "id": "sales.context-check-authority.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "purpose": "F1-13A read-only Inventory sale-context preparation, fixed workload profiles and fresh Sales callback; no stock effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "operations": [],
+        "pointers": [
+          "/profiles/0",
+          "/profiles/2",
+          "/issuance",
+          "/authority"
+        ],
+        "purpose": "F1-13A read-only Inventory sale-context preparation, fixed workload profiles and fresh Sales callback; no stock effect.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
       }
     ],
-    "assets": [],
+    "assets": [
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "test/contract/sale-context/contracts/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "destination": "test/contract/sale-context/contracts/inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "destination": "test/contract/sale-context/contracts/inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "destination": "test/contract/sale-context/contracts/sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "destination": "test/contract/sale-context/contracts/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
+      }
+    ],
     "bindings": []
   },
   "lock": {
     "formatVersion": 1,
     "service": "inventory",
-    "manifestSha256": "c14c014297a820d72632323bd9515168080103c29aa476a7072df8e351e3f7e2",
+    "manifestSha256": "13a9b305a8c601328d41cafe5b52efc0bd0ed93e5dcba35f86abdaa4a4c8cf90",
     "entries": [
       {
         "id": "catalog.inventory-capture.http.v1",
@@ -5059,8 +5143,300 @@
         ],
         "selectionSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad",
         "runtimeSha256": "4b53cc7ced9f248f0f12c393ed6e2de67b5cd90ed26d6826b4299b746e4f7fad"
+      },
+      {
+        "id": "inventory.sale-context.http.v1",
+        "role": "producer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "sha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "sha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/paths/~1internal~1inventory~1sale-context-checks/post",
+            "sha256": "1abc183c5f64bfb85cea54469061450ec2b8cb5b26db4bde99bf934e667e1ad3"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "7ed16c884371887999d23ae22d26e14749726c5341018bbedddd08f1a228ac07"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Result",
+            "sha256": "a4cb38f34d7fef68adc23514ea1099e0adc392bd8ae7d20a5cdcdf80d02630e8"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "40bce3083e18076d7a59f059b2fa5f7afd6aa49a33e80f1c8307368f16e7d3e2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "56dc7b178b27ceff4c0a6d1a0223b2933bef55d33ed619be8a67865375434833",
+        "runtimeSha256": "7e433c56b42700fd66e9694e002b7698b6a76d37cf527b1a6b11c6dd0359346a"
+      },
+      {
+        "id": "sales.context-check-authority.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "sha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "sha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/paths/~1internal~1sales~1context-check-authorizations/post",
+            "sha256": "853b27f6513e394b672844afe6d35477b89d0de06daad7130730d5dc774fa010"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "a782fdb895832404cd677c10636d75f65d4add3209411b4c8ba93995b086ec3a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "9025b7fd7d839730ea151d4bd049b3a8b97ea8b9ceef9d47bba88471f615ad6b"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e03bfa78146f1842bde11e93ddb8e24abcc1e8f533154711d6d7f2a2520e08f4"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "79c31b36656a1ca84e3d2d02e0328746c1b2add2c82e95197a20640cfde986c5",
+        "runtimeSha256": "6b1d3283fd6c6a16a9c24d7ebe8aff13c4433fe3e32c4894721e8f1e89dcdfc1"
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v1",
+        "role": "consumer",
+        "version": "v1",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "748cb69b9301243a32c169b01e2c340b7102f020",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+        "operations": [],
+        "pointers": [
+          "/profiles/0",
+          "/profiles/2",
+          "/issuance",
+          "/authority"
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "sha256": "199a7bbaa207f03794370cddeb5bdf3a240a912b4be07004a105ff5d255ea82a"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "/authority",
+            "sha256": "bb9a4097bd9eefde3620a0e381b052ceda78daf36e29c9e940bd107aa4398871"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "/issuance",
+            "sha256": "c8bca9b2051aaf981ce5870573c11b0f225688d7bd81c7b3be906d09b3bfdf60"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "/profiles/0",
+            "sha256": "c81236a151f9914b1c2f6d36bb366b1a184f9e6e492f44af631267c9eacec3c4"
+          },
+          {
+            "path": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+            "pointer": "/profiles/2",
+            "sha256": "3f0e5d1b73b8e0f7fb1dab0435d586bd5562aafd097a1c9f95d7ddc38a245d9d"
+          }
+        ],
+        "selectionSha256": "5fadc2c4a4b99da815e7746d29f2f4cef7d3a82699d23f63fc27f4ef82186a03",
+        "runtimeSha256": "5fadc2c4a4b99da815e7746d29f2f4cef7d3a82699d23f63fc27f4ef82186a03"
       }
     ],
-    "assets": []
+    "assets": [
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "common/http/shared/v3/problem-details-v3.schema.json",
+        "destination": "test/contract/sale-context/contracts/common/http/shared/v3/problem-details-v3.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b",
+        "semanticSha256": null,
+        "localSha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "destination": "test/contract/sale-context/contracts/inventory/http/private/v1/inventory-sale-context-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808",
+        "semanticSha256": null,
+        "localSha256": "e56df44a28dfcfed1055413221e5b8e1981bad45f392e1a729da534f659d8808"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v1",
+        "sourcePath": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "destination": "test/contract/sale-context/contracts/inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c",
+        "semanticSha256": null,
+        "localSha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "destination": "test/contract/sale-context/contracts/sales/http/private/v1/sales-context-check-authority-v1.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc",
+        "semanticSha256": null,
+        "localSha256": "a1184552318ebf0147612635a29846d6113d79076cf2b43e8c8784cc16e654cc"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v1",
+        "sourcePath": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "destination": "test/contract/sale-context/contracts/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934",
+        "semanticSha256": null,
+        "localSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+      }
+    ]
   }
 }

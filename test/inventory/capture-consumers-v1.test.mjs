@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import { captureConsumerMetadata, captureConsumerManifests, validateCaptureConsumers,
   captureConsumerHistoricalFile, captureConsumerHistoricalRegistry, captureConsumerHistoricalSnapshot, captureConsumerHistoricalIndex, withCaptureConsumers } from '../../scripts/inventory/capture-consumers-v1.mjs';
@@ -34,10 +35,15 @@ test('caller mutations are passed through rather than repaired by historical pro
 });
 
 test('direct historical snapshot readers admit only the fully verified new Catalog export', () => {
-  const current = JSON.parse(readRepositoryFile('registry/consumers/catalog-pricing.json'));
+  const file = 'registry/consumers/catalog-pricing.json';
+  const current = JSON.parse(readRepositoryFile(file));
+  assert.equal(current.manifest.contracts.length, 59);
   const before = structuredClone(current);
   const historical = captureConsumerHistoricalSnapshot(current);
-  assert.equal(historical.manifest.contracts.length, current.manifest.contracts.length - 5);
+  const expected = JSON.parse(execFileSync('git', ['show', 'bcb2d3cfb7296441c13a1cf4e2e32fed9aa59b75:' + file],
+    { cwd: new URL('../../', import.meta.url), windowsHide: true, maxBuffer: 2 * 1024 * 1024 }));
+  assert.equal(expected.manifest.contracts.length, 49);
+  assert.deepEqual(historical, expected);
   assert.deepEqual(current, before);
   for (const change of [s => s.manifest.contracts.pop(), s => {s.lock.entries[0].commit = 'a'.repeat(40);}, s => {s.publication = 'local-candidate';}, s => {s.sourceCommit = 'a'.repeat(40);}]) {
     const altered = structuredClone(current); change(altered);

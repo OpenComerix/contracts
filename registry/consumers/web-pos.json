@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/web-pos",
-  "sourceCommit": "90dd482652644ee548ac6d48d7f95673c3d215c4",
-  "manifestSha256": "3391a70ebb077c3bb392d1d747c3a7b77ff79f15d87bd18f0d33a9206f435e0e",
-  "lockSha256": "0d4639f9d1eaf206bbdeb5fbd48ca1770f155d6f8ad7c33d7f7899ae2ff2eacf",
+  "sourceCommit": "443927931ac766fd2e8aefef57e065faf193c879",
+  "manifestSha256": "67531c3b33f1980b96f708151270e8b6190429f2f83ff0a26f5706b67f1efe2e",
+  "lockSha256": "751091e489555a5210244ee829b74b5ac721784018159c429f4fe950fe90097c",
   "manifest": {
     "formatVersion": 1,
     "service": "web-pos",
@@ -372,6 +372,36 @@
         "gates": [
           "pnpm contracts:metadata",
           "pnpm contract:gate",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "observability.pwa-telemetry.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "operations": [
+          "submitPwaTelemetry"
+        ],
+        "pointers": [],
+        "purpose": "F1-OBS-PWA same-origin telemetry admission.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:unit",
+          "pnpm test:e2e:ci"
+        ]
+      },
+      {
+        "id": "observability.pwa-telemetry.batch.schema.v1",
+        "role": "validation",
+        "version": "1.0.0",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "F1-OBS-PWA closed catalogue and batch validation.",
+        "gates": [
+          "pnpm contracts:metadata",
           "pnpm test:unit",
           "pnpm test:e2e:ci"
         ]
@@ -1294,6 +1324,13 @@
         "destination": ".contracts/sales/reference/sales/fixtures/vectors/v2/decimal.json",
         "representation": "exact",
         "purpose": "validation"
+      },
+      {
+        "contractId": "observability.pwa-telemetry.batch.schema.v1",
+        "sourcePath": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+        "destination": ".contracts/pwa-telemetry/pwa-telemetry-batch-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation"
       }
     ],
     "bindings": [
@@ -1347,7 +1384,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "web-pos",
-    "manifestSha256": "3391a70ebb077c3bb392d1d747c3a7b77ff79f15d87bd18f0d33a9206f435e0e",
+    "manifestSha256": "67531c3b33f1980b96f708151270e8b6190429f2f83ff0a26f5706b67f1efe2e",
     "entries": [
       {
         "id": "identity.onboarding.v2",
@@ -5559,6 +5596,199 @@
         ],
         "selectionSha256": "c532982cbbab1b69aaa8260d77e3b9c939ffe6687387ceb854d3a09ce2070525",
         "runtimeSha256": "086a7e78800e6a92a4d8a9aedb61fce754528163686d9f101850353b2068fca3"
+      },
+      {
+        "id": "observability.pwa-telemetry.http.v1",
+        "role": "consumer",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "eed8606cccc61f7c139c673b4bd256b4481dd4a3",
+        "tag": null,
+        "tagObject": null,
+        "root": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+        "operations": [
+          "submitPwaTelemetry"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "observability/fixtures/pwa-telemetry/v1/accepted.json",
+            "sha256": "1439e7638abb3902636a70249f720aad469a9c4dfccba436bb63f4eafea1d688"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "sha256": "ffbe601c5b787849e25ebbe0980cdf2de2aa30bd0b3c92520768ecfc0c1d63ed"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "sha256": "73db3bd18a3659f4302d6db0f6f80679456827ccd6a877fac4b5d46ddae3a07a"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+            "sha256": "6772e0f9de025fe1e13e52869a295448c3d4b7874ae7a72b3028ff1042099d50"
+          },
+          {
+            "path": "openapi/csrf-v3-problem.schema.json",
+            "sha256": "81c4bfca554277d86b35d00802219cc19b5b9a71088221695b201d3dab9c4723"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "observability/fixtures/pwa-telemetry/v1/accepted.json",
+            "pointer": "",
+            "sha256": "2a21c2d0d24af6948746c120d8ff3935ef9a23ed3393bdc5ecbdcc18bfa62ddf"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "b3dfc2bec675f8277befe1017eedc27dc6fe7b8b2eb6b1b13700ee9a6cd1e880"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/components/headers/RetryAfter",
+            "sha256": "f40f6a40e08f58d154c23569ed15e704cbb5b6a596dd05d7788c14330e3183fc"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/components/schemas/Problem",
+            "sha256": "3520027dd6ce1de04dd81e3d69941c4953b8b89ab2a293f34c1ab30707c417a1"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/components/securitySchemes/csrfToken",
+            "sha256": "7ff0d1ca39ddbced4a79aadd3111e48b4b3abda331f6e15290ca125961791065"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/components/securitySchemes/sessionCookie",
+            "sha256": "60b5a44a84e4d284e0ac252ccbd536aee4b9d6500fae3509d909b4a924ee90eb"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/paths/~1telemetry~1pwa/post",
+            "sha256": "6561296596c217484b3fd0bcfe9cc925852e4c641968f923d938b7a2d009e88c"
+          },
+          {
+            "path": "observability/http/public/v1/pwa-telemetry-v1.yaml",
+            "pointer": "/servers",
+            "sha256": "8167bff125ed6853c368899085eff6f2353de8b2d59cd9cc50c0c96d24a37276"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "",
+            "sha256": "8d01097d5bb9616b5aa55e5f9d398cd554e7ef2b231332179dfbc1827bef5b17"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "2b968fb4cf65839d64b8c23f9a8459158747f688a7d2937a3b8b9f73028e703f"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+            "pointer": "",
+            "sha256": "5f117f3a53376c4885e495758d0ec0fc8ea89bf761f4a25950a3b9ca6f5d8c56"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "48e8b5e1b786fa95f8e925d58e0dd0b4ff4e186f70f2dc6c00708c619a022046"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "openapi/csrf-v3-problem.schema.json",
+            "pointer": "",
+            "sha256": "1cef20157dd786de5ca152ff37676278fa51e8bcee088b6477d76d62da1769c9"
+          },
+          {
+            "path": "openapi/csrf-v3-problem.schema.json",
+            "pointer": "/$id",
+            "sha256": "7b1444b7dc6fd6944d386385beacc6e353dcd002df19987b8c0e1a139cc075b3"
+          },
+          {
+            "path": "openapi/csrf-v3-problem.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "0145e53acd83a14edd16cc428c52abe237d36c8df1367cf205e1c0e1eb2ed08e",
+        "runtimeSha256": "e56896e66a5e115618f4bdcd8a8e8be188bad26c3dd9769c6718bc1fd786ff37"
+      },
+      {
+        "id": "observability.pwa-telemetry.batch.schema.v1",
+        "role": "validation",
+        "version": "1.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "eed8606cccc61f7c139c673b4bd256b4481dd4a3",
+        "tag": null,
+        "tagObject": null,
+        "root": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "sha256": "73db3bd18a3659f4302d6db0f6f80679456827ccd6a877fac4b5d46ddae3a07a"
+          }
+        ],
+        "units": [
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "",
+            "sha256": "8d01097d5bb9616b5aa55e5f9d398cd554e7ef2b231332179dfbc1827bef5b17"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "2b968fb4cf65839d64b8c23f9a8459158747f688a7d2937a3b8b9f73028e703f"
+          },
+          {
+            "path": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "64b4ddf87ca040c0f0b897805d23a5c716f1ec7e9e7d15ab13199013e1609626",
+        "runtimeSha256": "64b4ddf87ca040c0f0b897805d23a5c716f1ec7e9e7d15ab13199013e1609626"
       }
     ],
     "assets": [
@@ -6871,6 +7101,16 @@
         "sourceSha256": "3658b2621e8e0c0b8b3b862eb7e975f6c3efa13fefa61ad0d77145afcd129f06",
         "semanticSha256": null,
         "localSha256": "3658b2621e8e0c0b8b3b862eb7e975f6c3efa13fefa61ad0d77145afcd129f06"
+      },
+      {
+        "contractId": "observability.pwa-telemetry.batch.schema.v1",
+        "sourcePath": "observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json",
+        "destination": ".contracts/pwa-telemetry/pwa-telemetry-batch-v1.schema.json",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "73db3bd18a3659f4302d6db0f6f80679456827ccd6a877fac4b5d46ddae3a07a",
+        "semanticSha256": null,
+        "localSha256": "73db3bd18a3659f4302d6db0f6f80679456827ccd6a877fac4b5d46ddae3a07a"
       }
     ]
   }

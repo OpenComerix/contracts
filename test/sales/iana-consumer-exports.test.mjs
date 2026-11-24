@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import test from 'node:test';
@@ -6,6 +7,9 @@ import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { projectIanaPublicAdmissionFile } from '../../scripts/sales/iana-admission-v1.mjs';
 import {
   consumerExportBase,
+  beforeReconciliation,
+  beforeReconciliationDocument,
+  reconciliationPaths,
   consumerExportPaths,
   projectIanaConsumerExportDocument,
   projectIanaConsumerExportFile,
@@ -17,20 +21,55 @@ const root = path.resolve(import.meta.dirname, '../..');
 const read = file => fs.readFileSync(path.join(root, file));
 const before = createGitReader()(root, consumerExportBase);
 const text = bytes => bytes.toString('utf8').replaceAll('\r\n', '\n');
+const priorExports = new Map(['gateway-bff', 'web-pos', 'catalog-pricing', 'inventory'].map(owner => {
+  const file = 'registry/consumers/' + owner + '.json';
+  const revision = '3b4ba133274089a65a28fbea93d9d60ae0c74f6d';
+  const bytes = execFileSync('git', ['-C', root, 'show', revision + ':' + file],
+    { windowsHide: true, maxBuffer: 2 * 1024 * 1024 });
+  return [file, bytes];
+}));
+
+test('the four reconciled exports match their reviewed publications and isolate historical reads', () => {
+  assert.deepEqual(new Set(reconciliationPaths), new Set(priorExports.keys()));
+  for (const [file, prior] of priorExports) {
+    const live = read(file);
+    const projected = beforeReconciliation(file, live);
+    assert.notEqual(projected, live, file);
+    assert(projected.equals(prior), file);
+    projected.fill(0);
+    assert(beforeReconciliation(file, live).equals(prior), file);
+    const value = JSON.parse(live);
+    assert.equal(value.publication, 'published');
+    assert.deepEqual(beforeReconciliationDocument(file, value), JSON.parse(prior));
+    const windows = Buffer.from(text(live).replaceAll('\n', '\r\n'));
+    assert(beforeReconciliation(file, windows).equals(prior));
+    const prefixed = Buffer.concat([Buffer.from([0xef, 0xbb, 0xbf]), windows]);
+    assert.equal(beforeReconciliation(file, prefixed), prefixed);
+    value.lock.entries.pop();
+    const drift = Buffer.from(JSON.stringify(value, null, 2) + '\n');
+    assert.equal(beforeReconciliation(file, drift), drift);
+    assert.equal(beforeReconciliationDocument(file, value), value);
+    assert.equal(beforeReconciliation(file, prior), prior);
+  }
+});
 
 test('exports the four published owners and preserves four other snapshots and the admitted registry', () => {
-  const reads = new Map();
+  const reads = [];
   const result = validateIanaConsumerExports(file => {
-    reads.set(file, (reads.get(file) ?? 0) + 1);
-    return read(file);
+    const live = read(file);
+    const { service, contracts } = JSON.parse(live).manifest;
+    reads.push([service, contracts.length]);
+    return live;
   });
+  assert.deepEqual(reads, [
+    ['identity-tenancy', 61], ['sales-pos', 57], ['gateway-bff', 47], ['web-pos', 21],
+  ]);
   assert.deepEqual(result.map(({ owner, selections, assets }) => [owner, selections, assets]), [
     ['identity-tenancy', 61, 0],
     ['sales-pos', 57, 74],
     ['gateway-bff', 44, 207],
     ['web-pos', 19, 131],
   ]);
-  assert.deepEqual([...reads.values()], [1, 1, 1, 1]);
   const index = 'registry/consumers/index.json';
   const unchanged = JSON.parse(before(index)).consumers
     .map(({ file }) => 'registry/consumers/' + file)
@@ -52,8 +91,8 @@ test('Gateway and PWA exports pin the same six public operations and can only mo
       { allowPreviousFrontend: true }), /IANA_CONSUMER_EXPORT_BYTES/);
 
   const prior = JSON.parse(admitted(web));
-  const locks = JSON.parse(read(gateway)).lock.entries;
-  const next = JSON.parse(read(web)).lock.entries.slice(prior.lock.entries.length);
+  const locks = JSON.parse(priorExports.get(gateway)).lock.entries;
+  const next = JSON.parse(priorExports.get(web)).lock.entries.slice(prior.lock.entries.length);
   assert.equal(next.length, 3);
   assert.deepEqual(next.flatMap(pin => pin.operations).sort(), [
     'configureBranchTimeZone', 'finalizeOnlineSale', 'getBranchTimeZone',
@@ -85,6 +124,11 @@ test('projects only exact supplied values and rejects mixed, changed and missing
     assert.deepEqual(projectIanaConsumerExportFile(file, original), before(file));
     const value = JSON.parse(original);
     assert.deepEqual(projectIanaConsumerExportDocument(file, value), JSON.parse(before(file)));
+    const altered = structuredClone(value);
+    altered.lock.entries.pop();
+    const alteredBytes = Buffer.from(JSON.stringify(altered, null, 2) + '\n');
+    assert.throws(() => validateIanaConsumerExports(input => input === file ? alteredBytes : read(input)),
+      /IANA_CONSUMER_EXPORT_BYTES/);
     value.sourceCommit = '0'.repeat(40);
     assert.equal(projectIanaConsumerExportDocument(file, value), value);
     const drift = Buffer.from(JSON.stringify(value, null, 2) + '\n');

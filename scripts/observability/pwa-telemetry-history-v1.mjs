@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { readJSON, readLocal, safePath, sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { validateContractPaths } from '../../tools/architecture/layout.mjs';
+import { beforeReconciliation, beforeReconciliationDocument } from '../sales/iana-consumer-exports.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { pwaTelemetryDescriptors, pwaTelemetryInitialRegistryHash, pwaTelemetrySource } from './pwa-telemetry-admission-v1.mjs';
 
@@ -45,6 +46,7 @@ const distinct = values => values.every(value => typeof value === 'string' && va
 // Only the known README and workflow deltas belong to this historical view.
 // Changes to either input remain visible to the existing exact historical checks.
 export function projectPwaTelemetryFile(file, bytes) {
+  bytes = beforeReconciliation(file, bytes);
   const expected = reviewedText.get(file);
   if (file !== registry && !expected) return bytes;
   try {
@@ -88,6 +90,7 @@ function acceptsRegistryView(value) {
 }
 
 export function projectPwaTelemetryDocument(file, value) {
+  value = beforeReconciliationDocument(file, value);
   return file === registry && acceptsRegistryView(value) ? structuredClone(historicalRegistry()) : value;
 }
 
