@@ -9,6 +9,7 @@ import { compileFromFile } from 'json-schema-to-typescript';
 import { parse } from 'yaml';
 import { gitReader, resolveSelection } from '../../tools/architecture/graph.mjs';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
+import { buildH5Types } from './h5-types.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const schemaPath = 'sales/events/v3/sales.sale.completed.v3.schema.json';
@@ -109,7 +110,7 @@ export function checkTypesWorkflow(bytes) {
   'COMPLETED_TYPES_CI_ORDER');
 }
 
-function checkTypes(declaration, directory) {
+function checkTypes(declaration, directory, h5Fixture) {
   const valid = JSON.parse(readLocal('sales/fixtures/completion/v2/pending.json'));
   const zones = JSON.parse(readLocal('sales/fixtures/iana-time-zones/v1/cases.json'));
   valid.event_type = 'sales.sale.completed.v3';
@@ -132,7 +133,8 @@ function checkTypes(declaration, directory) {
   writeFileSync(path.join(directory, declarationName), declaration);
   writeFileSync(path.join(directory, 'fixture.ts'), fixture + '\n');
   execFileSync(process.execPath, [require.resolve('typescript/lib/tsc.js'), '--strict', '--noEmit',
-    '--pretty', 'false', path.join(directory, 'fixture.ts')], { cwd: directory, stdio: 'inherit', windowsHide: true });
+    '--pretty', 'false', path.join(directory, 'fixture.ts'), path.join(directory, h5Fixture)],
+    { cwd: directory, stdio: 'inherit', windowsHide: true });
 }
 
 async function main(args) {
@@ -151,9 +153,11 @@ async function main(args) {
     }
     checkDeclaration(readLocal(declarationPath), declaration);
     checkTypesWorkflow(readLocal(workflowPath));
-    checkTypes(declaration, directory);
+    const h5 = await buildH5Types({ directory });
+    checkTypes(declaration, directory, h5.fixture);
     console.log(JSON.stringify({ contractId, revision, sources: sources.size,
-      bytes: declaration.length, sha256: sha256(declaration), fixtures: 5 }));
+      bytes: declaration.length, sha256: sha256(declaration), fixtures: 5,
+      h5: { declarations: h5.files, operations: h5.operations, fixtures: h5.fixtures } }));
   } finally {
     assert(directory.startsWith(path.resolve(tmpdir()) + path.sep + 'oc-completed-v3-types-'));
     rmSync(directory, { recursive: true, force: true });

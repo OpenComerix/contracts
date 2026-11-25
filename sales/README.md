@@ -196,3 +196,7 @@ Ocho raíces Identity/Sales desde `019a75d86fd12df53b433aebdc269e85a4064f73`, co
 `SalesSaleCompletedV3` proyecta la forma del evento, los literales y los campos requeridos desde los seis archivos del pin de Sales POS. [Declaración generada](events/v3/generated/sales.sale.completed.v3.d.ts).
 
 El sobre cerrado, la cardinalidad, los formatos y las reglas condicionales se validan con el [JSON Schema canónico](events/v3/sales.sale.completed.v3.schema.json). `pnpm contracts:types:check` regenera en temporal, compara los bytes y compila los vectores con TypeScript estricto. Para reproducir la declaración en un archivo, ejecutar `node scripts/sales/completed-v3-types.mjs --print` con las dependencias instaladas desde el lockfile. Conservar el archivo en UTF-8 con finales LF. [Generador y gate](../scripts/sales/completed-v3-types.mjs).
+
+## Tipos del recorrido de H5
+
+El mismo gate verifica la selección de primera venta y recuperación fijada en los locks de los propietarios. Cada mapa HTTP exporta los `operationId` seleccionados con parámetros, cuerpo, respuestas por estado y contenido por media type. Los tipos de mensajería conservan las variantes de productor, consumidor y resultado. Las restricciones de runtime se verifican con OpenAPI y JSON Schema. Para regenerar las declaraciones de la selección ejecutar `node scripts/sales/h5-types.mjs --write`. [Selectores](../tools/architecture/h5-type-selections.json) · [Declaraciones](../tools/architecture/h5-type-artifacts.json).

@@ -1,0 +1,174 @@
+[
+  {
+    "family": "Alta, correo, sesión, MFA y dispositivo",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"identity.onboarding.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["registerGlobalAccount","verifyEmail","createSession","getCurrentSession","beginTotpEnrollment","confirmTotpEnrollment","createSessionStepUpChallenge","completeSessionStepUp","createDeviceRegistrationChallenge","registerWebDevice","createRegisteredDeviceAuthenticationChallenge","createInitialOrganization"]},
+      {"owner":"identity-tenancy","role":"semantic-owner","id":"identity.onboarding.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["registerGlobalAccount","verifyEmail","createSession","getCurrentSession","beginTotpEnrollment","confirmTotpEnrollment","createSessionStepUpChallenge","completeSessionStepUp","createDeviceRegistrationChallenge","registerWebDevice","createRegisteredDeviceAuthenticationChallenge","createInitialOrganization"]},
+      {"owner":"web-pos","role":"consumer","id":"identity.onboarding.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["registerGlobalAccount","verifyEmail","createSession","getCurrentSession","beginTotpEnrollment","confirmTotpEnrollment","createSessionStepUpChallenge","completeSessionStepUp","createDeviceRegistrationChallenge","registerWebDevice","createRegisteredDeviceAuthenticationChallenge","createInitialOrganization"]}
+    ]
+  },
+  {
+    "family": "Contexto operativo y zona IANA",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14a.public.identity-operational-options-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["listOperationalOptions"]},
+      {"owner":"identity-tenancy","role":"semantic-owner","id":"identity.f1-14a.public.identity-operational-options-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["listOperationalOptions"]},
+      {"owner":"web-pos","role":"consumer","id":"identity.f1-14a.public.identity-operational-options-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["listOperationalOptions"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14e.public.identity-branch-time-zone-v1","sourceCommit":"5ed0f79a0012b9dd2b8df85977f252ed0da99e78","operations":["getBranchTimeZone","configureBranchTimeZone"]},
+      {"owner":"web-pos","role":"consumer","id":"identity.f1-14e.public.identity-branch-time-zone-v1","sourceCommit":"5ed0f79a0012b9dd2b8df85977f252ed0da99e78","operations":["getBranchTimeZone","configureBranchTimeZone"]}
+    ]
+  },
+  {
+    "family": "Catálogo, presentación y precio",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"catalog.http.public.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["listCatalogUnits","createCatalogCategory","createCatalogProduct","transitionCatalogPresentation","transitionCatalogProduct","createPresentationPrice","listCatalogProducts","listCatalogProductPresentations","getDefaultPriceList","getPresentationCurrentPrice"]},
+      {"owner":"web-pos","role":"consumer","id":"catalog.http.public.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["listCatalogUnits","createCatalogCategory","createCatalogProduct","transitionCatalogPresentation","transitionCatalogProduct","createPresentationPrice","listCatalogProducts","listCatalogProductPresentations","getDefaultPriceList","getPresentationCurrentPrice"]},
+      {"owner":"gateway-bff","role":"consumer","id":"catalog.http.private.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["listCatalogUnits","createCatalogCategory","createCatalogProduct","transitionCatalogPresentation","transitionCatalogProduct","createPresentationPrice","listCatalogProducts","listCatalogProductPresentations","getDefaultPriceList","getPresentationCurrentPrice"]},
+      {"owner":"catalog-pricing","role":"producer","id":"catalog.http.private.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["listCatalogUnits","createCatalogCategory","createCatalogProduct","transitionCatalogPresentation","transitionCatalogProduct","createPresentationPrice","listCatalogProducts","listCatalogProductPresentations","getDefaultPriceList","getPresentationCurrentPrice"]}
+    ]
+  },
+  {
+    "family": "Depósito, ajuste, existencias y conciliación",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"inventory.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createInitialWarehouse","listInventoryWarehouses","getInventoryWarehouse","adjustInventoryStock","getInventoryAdjustment","listInventoryPositions","getInventoryReconciliation"]},
+      {"owner":"web-pos","role":"consumer","id":"inventory.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createInitialWarehouse","listInventoryWarehouses","getInventoryWarehouse","adjustInventoryStock","getInventoryAdjustment","listInventoryPositions"]},
+      {"owner":"inventory","role":"semantic-owner","id":"inventory.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createInitialWarehouse","listInventoryWarehouses","getInventoryWarehouse","adjustInventoryStock","getInventoryAdjustment","listInventoryPositions","getInventoryReconciliation"]},
+      {"owner":"gateway-bff","role":"consumer","id":"inventory.http.private.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createInitialWarehouse","listInventoryWarehouses","getInventoryWarehouse","adjustInventoryStock","getInventoryAdjustment","listInventoryPositions","getInventoryReconciliation"]},
+      {"owner":"inventory","role":"producer","id":"inventory.http.private.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createInitialWarehouse","listInventoryWarehouses","getInventoryWarehouse","adjustInventoryStock","getInventoryAdjustment","listInventoryPositions","getInventoryReconciliation"]}
+    ]
+  },
+  {
+    "family": "Caja, turno y saldo",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"finance.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createPosCashRegister","openCashShift"]},
+      {"owner":"web-pos","role":"consumer","id":"finance.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createPosCashRegister","openCashShift"]},
+      {"owner":"finance","role":"semantic-owner","id":"finance.http.public.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createPosCashRegister","openCashShift"]},
+      {"owner":"gateway-bff","role":"consumer","id":"finance.f1-14d.public.finance-browser-reads-v1","sourceCommit":"96d6e4909b08e7406c5bd0289e9cce1b04122349","operations":["listCashRegisters","getOpenCashShift","getCashShift","getCashShiftExpected"]},
+      {"owner":"web-pos","role":"consumer","id":"finance.f1-14d.public.finance-browser-reads-v1","sourceCommit":"96d6e4909b08e7406c5bd0289e9cce1b04122349","operations":["listCashRegisters","getOpenCashShift","getCashShift","getCashShiftExpected"]},
+      {"owner":"gateway-bff","role":"consumer","id":"finance.http.private.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createPosCashRegister","openCashShift","listCashRegisters","getCashShift","getCashShiftExpected"]},
+      {"owner":"finance","role":"producer","id":"finance.http.private.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createPosCashRegister","openCashShift","listCashRegisters","getCashShift","getCashShiftExpected"]},
+      {"owner":"gateway-bff","role":"consumer","id":"finance.f1-14a.private.finance-open-shift-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["getOpenCashShift"]},
+      {"owner":"finance","role":"producer","id":"finance.f1-14a.private.finance-open-shift-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["getOpenCashShift"]}
+    ]
+  },
+  {
+    "family": "Aceptación, seguimiento, documento y reanudación de venta",
+    "selections": [
+      {"owner":"gateway-bff","role":"producer","id":"sales.f1-14e.iana.http-public.pos-sales-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["finalizeOnlineSale","resumeSaleFinalization"]},
+      {"owner":"web-pos","role":"consumer","id":"sales.f1-14e.iana.http-public.pos-sales-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["finalizeOnlineSale","resumeSaleFinalization"]},
+      {"owner":"gateway-bff","role":"producer","id":"sales.f1-14e.iana.http-public.sales-browser-reads-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["getSaleFinalization","getCompletedSale"]},
+      {"owner":"web-pos","role":"consumer","id":"sales.f1-14e.iana.http-public.sales-browser-reads-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["getSaleFinalization","getCompletedSale"]},
+      {"owner":"gateway-bff","role":"consumer","id":"sales.f1-14e.iana.http-private.pos-sales-internal-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["finalizeOnlineSale","resumeSaleFinalization","getSaleFinalization","getCompletedSale"]},
+      {"owner":"sales-pos","role":"producer","id":"sales.f1-14e.iana.http-private.pos-sales-internal-v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["finalizeOnlineSale","resumeSaleFinalization","getSaleFinalization","getCompletedSale"]}
+    ]
+  },
+  {
+    "family": "Delegación, autorización y contexto privado",
+    "selections": [
+      {"owner":"gateway-bff","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"notifications","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"catalog-pricing","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"sales-pos","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"inventory","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"finance","role":"consumer","id":"identity.internal-auth.v1","sourceCommit":"26e8c5b50d04508adec5d1a56f38660944faa27c","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.internal-auth.v2","sourceCommit":"af6e8b3f5115d51f56a1ef94a36ae9f33cce3337","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"sales-pos","role":"consumer","id":"identity.internal-auth.v2","sourceCommit":"af6e8b3f5115d51f56a1ef94a36ae9f33cce3337","operations":["issueInternalServiceToken"]},
+      {"owner":"inventory","role":"consumer","id":"identity.internal-auth.v2","sourceCommit":"af6e8b3f5115d51f56a1ef94a36ae9f33cce3337","operations":["issueInternalServiceToken","getInternalIdentityJwks"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.gateway-delegation.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["createGatewayUserDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.gateway-delegation.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["createGatewayUserDelegation"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.catalog-authority.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["createCatalogDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.catalog-authority.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["createCatalogDelegation","checkCatalogAuthorization"]},
+      {"owner":"catalog-pricing","role":"consumer","id":"identity.catalog-authority.v1","sourceCommit":"68d923e903b6341eedb980af3586890c0eab7d5e","operations":["checkCatalogAuthorization"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.inventory-authority.http.v1-1","sourceCommit":"0bff3a242784599c400875f37e1c2d3ef64f4538","operations":["createInventoryDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.inventory-authority.http.v1-1","sourceCommit":"0bff3a242784599c400875f37e1c2d3ef64f4538","operations":["createInventoryDelegation","checkInventoryAuthorization"]},
+      {"owner":"inventory","role":"consumer","id":"identity.inventory-authority.http.v1-1","sourceCommit":"0bff3a242784599c400875f37e1c2d3ef64f4538","operations":["checkInventoryAuthorization"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.finance-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createFinanceDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.finance-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["createFinanceDelegation","checkFinanceAuthorization"]},
+      {"owner":"finance","role":"consumer","id":"identity.finance-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["checkFinanceAuthorization"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14a.private.identity-finance-operational-authority-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["createFinanceOperationalDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.f1-14a.private.identity-finance-operational-authority-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["createFinanceOperationalDelegation","checkFinanceOperationalAuthorization"]},
+      {"owner":"finance","role":"consumer","id":"identity.f1-14a.private.identity-finance-operational-authority-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["checkFinanceOperationalAuthorization"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14a.private.identity-operational-options-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["listOperationalOptions"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.f1-14a.private.identity-operational-options-v1","sourceCommit":"362d9fc3ee816d08bc541a0f93fe2907f2f8d764","operations":["listOperationalOptions"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14e.private.identity-branch-time-zone-v2","sourceCommit":"14a265e024a68887a9a1314c35d29b632258ed97","operations":["getBranchTimeZone","configureBranchTimeZone"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.f1-14e.private.identity-branch-time-zone-v2","sourceCommit":"14a265e024a68887a9a1314c35d29b632258ed97","operations":["getBranchTimeZone","configureBranchTimeZone"]},
+      {"owner":"gateway-bff","role":"consumer","id":"identity.f1-14e.iana.http-private.identity-sales-authority-v2","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["createSalesDelegation"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.f1-14e.iana.http-private.identity-sales-authority-v2","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["createSalesDelegation","checkSalesAuthorization"]},
+      {"owner":"sales-pos","role":"consumer","id":"identity.f1-14e.iana.http-private.identity-sales-authority-v2","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["checkSalesAuthorization"]},
+      {"owner":"identity-tenancy","role":"producer","id":"identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["checkSalesTemporalAuthorization"]},
+      {"owner":"sales-pos","role":"consumer","id":"identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","operations":["checkSalesTemporalAuthorization"]}
+    ]
+  },
+  {
+    "family": "Capturas, contexto de venta y autoridad de pasos",
+    "selections": [
+      {"owner":"catalog-pricing","role":"producer","id":"catalog.inventory-capture.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["captureInventoryCatalog"]},
+      {"owner":"inventory","role":"consumer","id":"catalog.inventory-capture.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["captureInventoryCatalog"]},
+      {"owner":"catalog-pricing","role":"consumer","id":"inventory.catalog-capture-authority.http.v2","sourceCommit":"f08aae6f1fdd062c36e09853d24e0eb8395f9e88","operations":["authorizeInventoryCatalogCapture"]},
+      {"owner":"inventory","role":"producer","id":"inventory.catalog-capture-authority.http.v2","sourceCommit":"f08aae6f1fdd062c36e09853d24e0eb8395f9e88","operations":["authorizeInventoryCatalogCapture"]},
+      {"owner":"catalog-pricing","role":"producer","id":"catalog.f1-10d.catalog-sale-capture-v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["captureSaleCatalog"]},
+      {"owner":"sales-pos","role":"consumer","id":"catalog.f1-10d.catalog-sale-capture-v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["captureSaleCatalog"]},
+      {"owner":"catalog-pricing","role":"consumer","id":"sales.f1-10d.sales-catalog-capture-authority-v2","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleCatalogCapture"]},
+      {"owner":"sales-pos","role":"producer","id":"sales.f1-10d.sales-catalog-capture-authority-v2","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleCatalogCapture"]},
+      {"owner":"sales-pos","role":"consumer","id":"inventory.sale-context.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["checkInventorySaleContext"]},
+      {"owner":"inventory","role":"producer","id":"inventory.sale-context.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["checkInventorySaleContext"]},
+      {"owner":"sales-pos","role":"consumer","id":"finance.sale-context.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["checkFinanceSaleContext"]},
+      {"owner":"finance","role":"producer","id":"finance.sale-context.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["checkFinanceSaleContext"]},
+      {"owner":"sales-pos","role":"producer","id":"sales.context-check-authority.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["authorizeSaleContextCheck"]},
+      {"owner":"inventory","role":"consumer","id":"sales.context-check-authority.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["authorizeSaleContextCheck"]},
+      {"owner":"finance","role":"consumer","id":"sales.context-check-authority.http.v1","sourceCommit":"748cb69b9301243a32c169b01e2c340b7102f020","operations":["authorizeSaleContextCheck"]},
+      {"owner":"sales-pos","role":"producer","id":"sales.inventory-step-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleProcessStep"]},
+      {"owner":"inventory","role":"consumer","id":"sales.inventory-step-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleProcessStep"]},
+      {"owner":"sales-pos","role":"producer","id":"sales.finance-step-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleProcessStep"]},
+      {"owner":"finance","role":"consumer","id":"sales.finance-step-authority.http.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","operations":["authorizeSaleProcessStep"]}
+    ]
+  },
+  {
+    "family": "Material de verificación de correo",
+    "selections": [
+      {"owner":"notifications","role":"consumer","id":"identity.onboarding.v1","sourceCommit":"7533def9d85ea26ca032c83b704901e0b2b4325b","operations":["getEmailVerificationDeliveryMaterial"]},
+      {"owner":"identity-tenancy","role":"semantic-owner","id":"identity.onboarding.v2","sourceCommit":"4ec41110d2c4c68139101e0a13109f6fd1cdfcba","operations":["getEmailVerificationDeliveryMaterial"]}
+    ]
+  },
+  {
+    "family": "Comando de correo y acuse local",
+    "selections": [
+      {"owner":"identity-tenancy","role":"producer","id":"notifications.send-email-verification.v1","sourceCommit":"7533def9d85ea26ca032c83b704901e0b2b4325b","pointers":[""]},
+      {"owner":"notifications","role":"consumer","id":"notifications.send-email-verification.v1","sourceCommit":"7533def9d85ea26ca032c83b704901e0b2b4325b","pointers":[""]},
+      {"owner":"notifications","role":"consumer","id":"common.command-envelope.v1","sourceCommit":"7533def9d85ea26ca032c83b704901e0b2b4325b","pointers":[""]},
+      {"owner":"notifications","role":"local-result","id":"notifications.send-email-verification.result.v1","sourceCommit":"7533def9d85ea26ca032c83b704901e0b2b4325b","pointers":[""]}
+    ]
+  },
+  {
+    "family": "Salida y compensación de stock",
+    "selections": [
+      {"owner":"sales-pos","role":"producer","id":"inventory.post-sale-stock.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"consumer","id":"inventory.post-sale-stock.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"producer","id":"inventory.post-sale-stock.result.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"sales-pos","role":"consumer","id":"inventory.post-sale-stock.result.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"sales-pos","role":"producer","id":"inventory.compensate-sale-stock.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"consumer","id":"inventory.compensate-sale-stock.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"producer","id":"inventory.compensate-sale-stock.result.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"sales-pos","role":"consumer","id":"inventory.compensate-sale-stock.result.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"producer","id":"inventory.sale-stock.posted.v2","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"producer","id":"inventory.sale-stock.compensated.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"inventory","role":"producer","id":"inventory.reconciliation-required.v2","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]}
+    ]
+  },
+  {
+    "family": "Cobro en efectivo",
+    "selections": [
+      {"owner":"sales-pos","role":"producer","id":"finance.record-sale-cash.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"finance","role":"consumer","id":"finance.record-sale-cash.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"finance","role":"producer","id":"finance.record-sale-cash.result.v1","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"sales-pos","role":"consumer","id":"finance.record-sale-cash.result.v1.consumer","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]},
+      {"owner":"finance","role":"producer","id":"finance.sale-payment.recorded.v2","sourceCommit":"7cd2b548fb909c5eff47d0319c162c498ee68e92","pointers":[""]}
+    ]
+  },
+  {
+    "family": "Hecho de venta nueva",
+    "selections": [
+      {"owner":"sales-pos","role":"producer","id":"sales.f1-14e.iana.events.sales.sale.completed.v3","sourceCommit":"019a75d86fd12df53b433aebdc269e85a4064f73","pointers":[""]}
+    ]
+  }
+]
