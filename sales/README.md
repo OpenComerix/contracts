@@ -190,3 +190,9 @@ Sales types v3 y superficies pública/privada/lecturas v3 aceptan el mismo nombr
 ## F1-14E — Admisión seleccionada IANA y completed.v3
 
 Ocho raíces Identity/Sales desde `019a75d86fd12df53b433aebdc269e85a4064f73`, con [CI fuente completa Passed23/23](https://github.com/OpenComerix/contracts/actions/runs/44189146644) verificada por SHA/ref dev exactos. 243 raíces registradas; los 235 descriptores anteriores, 236 artefactos históricos y ocho snapshots/pins permanecen intactos. Cuatro planned se conservan: dos ajenos y las dos superficies públicas Gateway v3, pendientes de su corte. Versiones, operaciones, hashes Git y mappings mínimos se fijan a la fuente inmutable; transportes, schemas, fixtures, CI y dependencias no cambian. Las secciones fuente anteriores describen su snapshot publicado. [Verificador](../scripts/sales/iana-admission-v1.mjs) y [pruebas](../test/sales/iana-admission-v1.test.mjs). Candidato de admisión pendiente de auditoría/publicación y CI completa propias antes del consumo. No migra pins ni acredita runtime, SQL, codec/autoridad o compatibilidad ejecutada.
+
+## Declaración TypeScript de `sales.sale.completed.v3`
+
+`SalesSaleCompletedV3` proyecta la forma del evento, los literales y los campos requeridos desde los seis archivos del pin de Sales POS. [Declaración generada](events/v3/generated/sales.sale.completed.v3.d.ts).
+
+El sobre cerrado, la cardinalidad, los formatos y las reglas condicionales se validan con el [JSON Schema canónico](events/v3/sales.sale.completed.v3.schema.json). `pnpm contracts:types:check` regenera en temporal, compara los bytes y compila los vectores con TypeScript estricto. Para reproducir la declaración en un archivo, ejecutar `node scripts/sales/completed-v3-types.mjs --print` con las dependencias instaladas desde el lockfile. Conservar el archivo en UTF-8 con finales LF. [Generador y gate](../scripts/sales/completed-v3-types.mjs).

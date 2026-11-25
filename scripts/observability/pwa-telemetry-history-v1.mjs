@@ -7,6 +7,7 @@ import { readJSON, readLocal, safePath, sha256 } from '../../tools/architecture/
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { validateContractPaths } from '../../tools/architecture/layout.mjs';
 import { beforeReconciliation, beforeReconciliationDocument } from '../sales/iana-consumer-exports.mjs';
+import { projectCompletedTypesFile } from '../sales/completed-v3-types-history.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { pwaTelemetryDescriptors, pwaTelemetryInitialRegistryHash, pwaTelemetrySource } from './pwa-telemetry-admission-v1.mjs';
 
@@ -31,6 +32,7 @@ const addedPaths = Object.freeze([
   'observability/http/shared/v1/pwa-telemetry-batch-v1.schema.json',
   'observability/http/shared/v1/pwa-telemetry-invalid-batch-v1.schema.json',
   'observability/index.json',
+  'scripts/sales/completed-v3-types-history.mjs',
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
   'scripts/observability/validate-pwa-telemetry-v1.sh',
@@ -46,6 +48,7 @@ const distinct = values => values.every(value => typeof value === 'string' && va
 // Only the known README and workflow deltas belong to this historical view.
 // Changes to either input remain visible to the existing exact historical checks.
 export function projectPwaTelemetryFile(file, bytes) {
+  bytes = projectCompletedTypesFile(file, bytes);
   bytes = beforeReconciliation(file, bytes);
   const expected = reviewedText.get(file);
   if (file !== registry && !expected) return bytes;

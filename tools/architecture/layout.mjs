@@ -4,6 +4,7 @@ import path from "node:path";
 
 const legacyTransports = ["openapi", "events", "commands", "errors"];
 const domainTransports = ["http", "events", "commands", "errors"];
+const completedV3Declaration = "sales/events/v3/generated/sales.sale.completed.v3.d.ts";
 
 // Registry remains the only inventory of domains and preserved legacy paths.
 export function layoutRegistry(root) {
@@ -141,7 +142,8 @@ export function checkContractLayout(root) {
   }
   for (const domain of registry.domains)
     assert(presentDomains.has(domain), "LAYOUT_DOMAIN_UNAVAILABLE: " + domain);
-  validateContractPaths(files, registry);
+  // The declaration is checked by the Sales types gate. It is not a registry root.
+  validateContractPaths(files.filter(file => file !== completedV3Declaration), registry);
   return {
     files: files.length,
     domains: registry.domains.length,

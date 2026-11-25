@@ -10,6 +10,7 @@ import {cashConsumerBase,projectCashConsumerFile,projectCashConsumerDocument,wit
 import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.mjs';
 import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
+import {includeCompletedTypesPaths,projectCompletedTypesFile} from '../../scripts/sales/completed-v3-types-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -123,6 +124,7 @@ export function withRepositoryValidationScope(paths, read) {
   const allowed = withReuseCandidateScope([...paths, ...pwaPaths],
     file => file === registryFile ? registry : read(file));
   if (pwaPaths.length) includeLaterAdmissionPaths(allowed, registry);
+  includeCompletedTypesPaths(allowed, read);
   return allowed;
 }
 export function withReuseCandidateScope(paths, read) {
@@ -209,6 +211,9 @@ export function projectReviewedFile(revision, file, bytes) {
   const previous = optional(source(revision), file);
   if (previous && text(bytes) === text(previous)) return bytes;
   if (!previous) return undefined;
+  const beforeTypes = projectCompletedTypesFile(file, bytes);
+  if (beforeTypes !== bytes && text(beforeTypes) === text(previous)) return previous;
+  bytes = beforeTypes;
   if(metadata.has(file)&&projectCashConsumerFile(file,bytes)!==bytes&&canProject(cashConsumerBase,revision))return previous;
   if (metadata.has(file) && projectReuseCandidateFile(file, bytes) !== bytes &&
       canProject(reuseCandidateBase, revision)) return previous;
@@ -325,13 +330,14 @@ const toolingPaths = Object.freeze([
   'test/sales/iana-admission-v1.test.mjs',
   'test/sales/iana-consumer-exports.test.mjs',
   'scripts/sales/iana-consumer-exports.mjs',
+  'scripts/sales/completed-v3-types-history.mjs',
   'scripts/sales/iana-native-v1.mjs',
   'scripts/sales/validate-iana-v1.sh',
   'test/sales/iana-source-v1.test.mjs',
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '5ab67af9f226d03617a514c458723a549b923df762e68d8c4f5e0d12bd6c7942';
+const toolingReferenceSha256 = 'da758cdefcf6291282fed07b9a9724b4aa982b6f04bf0409c01c340ec5e246e2';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
