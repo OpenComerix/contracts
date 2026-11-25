@@ -4,6 +4,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { makeLock, parseSource } from '../../tools/architecture/graph.mjs';
 import {preparationConsumerFiles} from '../../scripts/identity/preparation-consumers-v1.mjs';
+import { includeCompletedTypesPaths } from '../../scripts/sales/completed-v3-types-history.mjs';
 import {
   root, source, actual, hash, originalPath, successorPath, fixturePath, packagePath,
   validateSuccessorPackage, successorDocument, successorRegistry, successorCI,
@@ -74,8 +75,22 @@ test('historical projection checks the package first and never repairs mutated c
   assert.deepEqual(caller, new Set(['caller-owned-path']));
   assert(scope.has('caller-owned-path'));
   for (const file of preparationConsumerFiles) assert(scope.has(file));
-  for (const forbidden of ['src/main.ts', 'registry/consumers/unapproved.json', 'pnpm-lock.yaml', 'test/identity/unapproved.mjs'])
+  assert(scope.has('pnpm-lock.yaml'));
+  for (const forbidden of ['src/main.ts', 'registry/consumers/unapproved.json', 'test/identity/unapproved.mjs'])
     assert(!scope.has(forbidden));
+});
+test('F1-15U repository scope rejects an altered or missing lockfile', () => {
+  const lock = 'pnpm-lock.yaml';
+  const read = file => fs.readFileSync(path.join(root, file));
+  const scope = new Set(['caller-owned-path']);
+  assert.throws(() => includeCompletedTypesPaths(scope, file => file === lock
+    ? Buffer.concat([read(file), Buffer.from('\nUnapproved')]) : read(file)),
+  /COMPLETED_TYPES_SCOPE:pnpm-lock\.yaml/);
+  assert.throws(() => includeCompletedTypesPaths(scope, file => {
+    if (file === lock) throw Object.assign(new Error('Missing lockfile'), { code: 'ENOENT' });
+    return read(file);
+  }), { code: 'ENOENT' });
+  assert.deepEqual(scope, new Set(['caller-owned-path']));
 });
 test('400 fixtures keep required Problem fields and exercise status, code, UUID, missing/extra field and type negatives', () => {
   const fixture = JSON.parse(actual(fixturePath));

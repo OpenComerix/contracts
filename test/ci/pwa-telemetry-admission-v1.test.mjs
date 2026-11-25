@@ -245,6 +245,7 @@ test('the Inventory CI path gate accepts a later Git-backed root and rejects pat
     'observability/README.md',
     'scripts/finance/authority-consumers-v1.mjs',
     'scripts/identity/inventory-authority-v1-1.mjs',
+    'test/identity/inventory-authority-v1-1.test.mjs',
     'test/inventory/capture-consumers-v1.test.mjs',
     'scripts/sales/completed-v3-types-history.mjs',
     'scripts/sales/iana-admission-v1.mjs',
