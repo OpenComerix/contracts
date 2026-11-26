@@ -249,22 +249,25 @@ function model() {
 }
 export const captureConsumerMetadata = () => new Map([...model().metadata].map(([file, bytes]) => [file, Buffer.from(bytes)]));
 export const captureConsumerManifests = () => new Map([...model().snapshots].map(([owner, snapshot]) => [owner, structuredClone(snapshot.manifest)]));
+const captureConsumersProof = Symbol('Capture consumers');
 export function validateCaptureConsumers(read = readRepositoryFile, diagnostic = 'ICC_LIVE_DRIFT', context) {
   return withAuthorityConsumerContext(read, current => {
-  read = current.read;
-  const expected = model();
-  let projected = false;
-  for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures]) {
-    const live = read(file), current = saleStockHistoricalFile(file, live);
-    if (current !== live) projected = true;
-    if (file === 'registry/consumers/inventory.json' && text(current) !== text(bytes)) {
-      // Preserve B's complete source checks. C's additional closure has its own validator;
-      // traversing it through a historical reader would recursively re-enter these projections.
-      assert.equal(text(current), text(stockConsumerCandidate()), diagnostic + ':' + file);
-    } else assert(text(current) === text(bytes), diagnostic + ':' + file);
-  }
-  for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'ICC_TOOL_MISSING:' + file);
-  if (projected) validateSaleStockConsumers(read, current);
+  current.verifyOnce(captureConsumersProof, () => {
+    const read = current.read;
+    const expected = model();
+    let projected = false;
+    for (const [file, bytes] of [...expected.metadata, ...expected.unchanged, ...expected.closures]) {
+      const live = read(file), current = saleStockHistoricalFile(file, live);
+      if (current !== live) projected = true;
+      if (file === 'registry/consumers/inventory.json' && text(current) !== text(bytes)) {
+        // Preserve B's complete source checks. C's additional closure has its own validator;
+        // traversing it through a historical reader would recursively re-enter these projections.
+        assert.equal(text(current), text(stockConsumerCandidate()), diagnostic + ':' + file);
+      } else assert(text(current) === text(bytes), diagnostic + ':' + file);
+    }
+    for (const file of [modulePath, testPath]) assert(read(file).length > 0, 'ICC_TOOL_MISSING:' + file);
+    if (projected) validateSaleStockConsumers(read, current);
+  });
   return { consumers: 7, roots: 202, preserved: 236, previousPinsPreserved: true, runtimeDemonstrated: false };
   }, context);
 }

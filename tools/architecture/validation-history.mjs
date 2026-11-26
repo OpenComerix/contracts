@@ -300,6 +300,7 @@ const toolingPaths = Object.freeze([
   'scripts/catalog/catalog-runtime-v1-registry.mjs', 'scripts/inventory/candidate-v1.mjs',
   'scripts/identity/catalog-workload-consumers-v2-registry.mjs',
   'scripts/identity/catalog-workload-profiles-v2-registry.mjs', 'scripts/finance/authority-consumers-v1.mjs',
+  'test/finance/authority-validation-context.test.mjs',
   salesAuthorityBridge,
   'scripts/finance/reviewed-package-v1.mjs', 'scripts/sales/reviewed-package-v2.mjs',
   'scripts/sales/release-v1.mjs', 'scripts/identity/inventory-authority-v1-1.mjs',
@@ -337,7 +338,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = 'e5800c5bb75d2d2b221770046810e7db39f84dc76ad677472e9c3982c085333f';
+const toolingReferenceSha256 = 'b0894a59d86d61ecd29af257c59a9213bc06328ca653cfd4b083e45437821ba3';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

@@ -288,6 +288,7 @@ function assertFunctionalAdmission(registry, dependency, files) {
   assert(!draft, 'New use of a draft is forbidden: ' + draft?.id);
 }
 export function makeLock(root, manifest, manifestBytes, registry, pins = []) {
+  const tagRevisions = new Map();
   const entries = manifest.contracts.map((dependency) => {
     const registered = registry.contracts.find((item) => item.id === dependency.id);
     assert(
@@ -308,18 +309,17 @@ export function makeLock(root, manifest, manifestBytes, registry, pins = []) {
         'Pinned root does not identify the registered contract',
       );
       if (pinned.tag !== null) {
-        assert.equal(
-          execFileSync('git', ['-C', root, 'rev-parse', pinned.tag + '^{commit}'])
-            .toString()
-            .trim(),
-          pinned.commit,
-          'Pinned tag commit drift',
-        );
-        assert.equal(
-          execFileSync('git', ['-C', root, 'rev-parse', pinned.tag]).toString().trim(),
-          pinned.tagObject,
-          'Pinned tag object drift',
-        );
+        if (!tagRevisions.has(pinned.tag)) {
+          const revisions = execFileSync('git', [
+            '-C', root, 'rev-parse', '--revs-only', '--end-of-options',
+            pinned.tag + '^{commit}', pinned.tag,
+          ]).toString().trim().split(/\r?\n/);
+          assert.equal(revisions.length, 2, 'Pinned tag commit drift');
+          tagRevisions.set(pinned.tag, revisions);
+        }
+        const [commit, tagObject] = tagRevisions.get(pinned.tag);
+        assert.equal(commit, pinned.commit, 'Pinned tag commit drift');
+        assert.equal(tagObject, pinned.tagObject, 'Pinned tag object drift');
       }
     }
     const descriptor = pinned

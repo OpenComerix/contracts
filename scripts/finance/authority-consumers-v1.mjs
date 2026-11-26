@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { createHash } from 'node:crypto';
-import { isDeepStrictEqual } from 'node:util';
+import { isDeepStrictEqual, types } from 'node:util';
 import { gitReader, makeLock } from '../../tools/architecture/graph.mjs';
 import {validationToolingFiles,projectValidationTooling,validateValidationTooling,projectReuseCandidateFile,projectReuseCandidateDocument,withReuseCandidateScope,withRepositoryValidationScope} from '../../tools/architecture/validation-history.mjs';
 
@@ -222,27 +222,65 @@ export function authorityConsumerHistoricalSnapshot(value) {
 export function authorityConsumerReadView(read = native) {
   return file => withAuthorityConsumerContext(read, context => context.read(file));
 }
+function copyValidationInput(value) {
+  if (Buffer.isBuffer(value)) return Buffer.from(value);
+  if (!ArrayBuffer.isView(value) && !types.isAnyArrayBuffer(value)) return value;
+  const copy = structuredClone(value);
+  const view = ArrayBuffer.isView(copy);
+  const buffer = view ? copy.buffer : copy;
+  if (!types.isSharedArrayBuffer(buffer)) return copy;
+  // Structured clone preserves the alias for shared memory. Take an independent copy.
+  const storage = buffer.slice(0);
+  if (!view) return storage;
+  return types.isDataView(copy)
+    ? new DataView(storage, copy.byteOffset, copy.byteLength)
+    : new copy.constructor(storage, copy.byteOffset, copy.length);
+}
+
 // One explicit context per synchronous validation and raw reader. Nested guards
-// share Finance's exact proof; live bytes and approvals never survive the call.
+// share the exact inputs and proofs; neither survives the call.
 const authorityContextKey = Symbol('Finance validation context');
 class AuthorityConsumerContext {
   #active = true;
   #checked = false;
   #rawRead;
+  #inputs = new Map();
+  #reading = new Set();
+  #proofs = new Set();
   constructor(read, key) {
     assert(key === authorityContextKey, 'FCA_CONTEXT_REQUIRED');
     this.#rawRead = read;
     this.read = file => {
       assert(this.#active, 'FCA_CONTEXT_CLOSED');
-      return this.project(file, this.#rawRead(file));
+      return this.project(file, this.#input(file, true));
     };
     Object.freeze(this);
+  }
+  #input = (file, preserveFirstReference = false) => {
+    if (this.#inputs.has(file)) return copyValidationInput(this.#inputs.get(file));
+    assert(!this.#reading.has(file), 'FCA_CONTEXT_REENTRANT_READ:' + file);
+    this.#reading.add(file);
+    try {
+      const bytes = this.#rawRead(file);
+      const snapshot = copyValidationInput(bytes);
+      this.#inputs.set(file, snapshot);
+      return preserveFirstReference === true ? bytes : snapshot;
+    } finally {
+      this.#reading.delete(file);
+    }
+  };
+  verifyOnce(proof, verify) {
+    assert(this.#active, 'FCA_CONTEXT_CLOSED');
+    if (this.#proofs.has(proof)) return;
+    const result = verify();
+    assert(!result || typeof result.then !== 'function', 'FCA_CONTEXT_SYNCHRONOUS');
+    this.#proofs.add(proof);
   }
   validate() {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
     if (!this.#checked) {
-      validateValidationTooling(this.#rawRead);
-      validateAuthorityConsumers(this.#rawRead);
+      validateValidationTooling(this.#input);
+      validateAuthorityConsumers(this.#input);
       this.#checked = true;
     }
   }
@@ -270,7 +308,7 @@ class AuthorityConsumerContext {
   scope(paths, { repository = true } = {}) {
     this.validate();
     const scope = repository ? withRepositoryValidationScope : withReuseCandidateScope;
-    return scope([...paths,...authorityConsumerFiles],this.#rawRead);
+    return scope([...paths,...authorityConsumerFiles],this.#input);
   }
   run(read, verify) {
     assert(this.#active, 'FCA_CONTEXT_CLOSED');
@@ -279,7 +317,11 @@ class AuthorityConsumerContext {
     assert(!result || typeof result.then !== 'function', 'FCA_CONTEXT_SYNCHRONOUS');
     return result;
   }
-  close() { this.#active = false; }
+  close() {
+    this.#active = false;
+    this.#inputs.clear();
+    this.#proofs.clear();
+  }
 }
 Object.freeze(AuthorityConsumerContext.prototype);
 Object.freeze(AuthorityConsumerContext);

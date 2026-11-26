@@ -23,14 +23,26 @@ test('Capture and Sales validate the exact Finance bridge once per complete invo
   }
 });
 
-test('a shared context retains no live bytes and cannot escape, change readers or run asynchronously', () => {
-  let saved, reads = 0;
-  const read = file => { reads++; return readRepositoryFile(file); };
+test('a shared context reads each source once and cannot escape, change readers or run asynchronously', () => {
+  let saved, reads = 0, snapshotReads = 0;
+  const read = file => {
+    reads++;
+    if (file === snapshot) snapshotReads++;
+    return readRepositoryFile(file);
+  };
   withAuthorityConsumerContext(read, context => {
     saved = context;
     const first = context.read(snapshot);
     first.fill(0);
     assert.notEqual(context.read(snapshot)[0], 0);
+    assert.equal(snapshotReads, 1);
+    const proof = Symbol();
+    assert.throws(() => context.verifyOnce(proof, () => { throw Error('invalid proof'); }), /invalid proof/);
+    assert.throws(() => context.verifyOnce(proof, async () => {}), /FCA_CONTEXT_SYNCHRONOUS/);
+    let verified = 0;
+    context.verifyOnce(proof, () => { verified++; });
+    context.verifyOnce(proof, () => assert.fail('proof repeated'));
+    assert.equal(verified, 1);
     assert.throws(() => withAuthorityConsumerContext(readRepositoryFile, () => true, context), /FCA_CONTEXT_READER/);
     assert.throws(() => withAuthorityConsumerContext(read, () => Promise.resolve(), context), /FCA_CONTEXT_SYNCHRONOUS/);
   });
@@ -41,6 +53,71 @@ test('a shared context retains no live bytes and cannot escape, change readers o
   assert.equal(reads, finishedReads, 'closed contexts cannot even read the live source');
   assert.throws(() => withAuthorityConsumerContext(read, () => true, saved), /FCA_CONTEXT_CLOSED/);
   assert.throws(() => withAuthorityConsumerContext(read, () => true, {}), /FCA_CONTEXT_REQUIRED/);
+});
+
+test('binary reader results cannot mutate the inputs already checked by Finance', () => {
+  const readers = [
+    bytes => Uint8Array.from(bytes),
+    bytes => {
+      const padded = new Uint8Array(bytes.length + 2);
+      padded.set(bytes, 1);
+      return new DataView(padded.buffer, 1, bytes.length);
+    },
+    bytes => Uint8Array.from(bytes).buffer,
+    bytes => {
+      const shared = new SharedArrayBuffer(bytes.length);
+      new Uint8Array(shared).set(bytes);
+      return shared;
+    },
+    bytes => {
+      const shared = new SharedArrayBuffer(bytes.length);
+      const view = new Uint8Array(shared);
+      view.set(bytes);
+      return view;
+    },
+  ];
+  const visible = input => ArrayBuffer.isView(input)
+    ? new Uint8Array(input.buffer, input.byteOffset, input.byteLength)
+    : new Uint8Array(input);
+  const original = readRepositoryFile(source);
+  for (const convert of readers) {
+    let reads = 0;
+    let supplied;
+    const read = file => {
+      if (file !== source) return readRepositoryFile(file);
+      reads++;
+      supplied = convert(original);
+      return supplied;
+    };
+    withAuthorityConsumerContext(read, current => {
+      current.validate();
+      visible(supplied)[0] = 0;
+      const first = current.read(source);
+      assert.equal(first.constructor, supplied.constructor);
+      assert.equal(Buffer.compare(visible(first), original), 0);
+      visible(first)[0] = 0;
+      current.validate();
+      assert.equal(Buffer.compare(visible(current.read(source)), original), 0);
+      assert.equal(reads, 1);
+    });
+  }
+});
+
+test('a reentrant reader cannot overwrite or reuse a Finance approval', () => {
+  let context;
+  let pending = true;
+  const read = file => {
+    const bytes = readRepositoryFile(file);
+    if (file !== source || !pending) return bytes;
+    pending = false;
+    assert.throws(() => context.validate(), /FCA_CONTEXT_REENTRANT_READ/);
+    return Buffer.concat([bytes, Buffer.from('synthetic drift')]);
+  };
+  withAuthorityConsumerContext(read, current => {
+    context = current;
+    assert.match(current.read(source).toString(), /synthetic drift/);
+    assert.throws(() => current.validate(), /FCA_SOURCE_DRIFT/);
+  });
 });
 
 test('the same public Finance view rejects source drift and omission after successful projection', () => {

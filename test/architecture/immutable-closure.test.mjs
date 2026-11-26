@@ -67,7 +67,22 @@ test('cached immutable closures never bypass live tag commit and tag-object chec
   const pin={...descriptor,id:'example',role:'validation',root:descriptor.path,tag:'admitted',tagObject:git(['rev-parse','admitted'])};
   const registry={contracts:[{...descriptor,domain:'fixture',status:'active'}]}, manifest={service:'fixture',contracts:[dependency],assets:[]};
   const bytes=Buffer.from(JSON.stringify(manifest));
-  makeLock(root,manifest,bytes,registry,[pin]);
+  const combined = { ...manifest, contracts: [dependency, { ...dependency, role: 'consumer' }] };
+  const combinedBytes = Buffer.from(JSON.stringify(combined));
+  const execute = cp.execFileSync;
+  let tagLookups = 0;
+  t.mock.method(cp, 'execFileSync', (program, args, options) => {
+    if (program === 'git' && args.includes('rev-parse') && args.includes('admitted')) tagLookups++;
+    return execute(program, args, options);
+  });
+  syncBuiltinESMExports();
+  t.after(() => { t.mock.restoreAll(); syncBuiltinESMExports(); });
+  const lock = makeLock(root, combined, combinedBytes, registry, [pin, { ...pin, role: 'consumer' }]);
+  assert.equal(lock.entries.length, 2);
+  assert.equal(tagLookups, 1);
+  assert.throws(() => makeLock(root, combined, combinedBytes, registry, [
+    pin, { ...pin, role: 'consumer', tagObject: revision },
+  ]), /Pinned tag object drift/);
   write('number');commit();git(['tag','-f','-a','admitted','-m','Synthetic changed tag']);
   assert.throws(()=>makeLock(root,manifest,bytes,registry,[pin]),/Pinned tag commit drift/);
   git(['tag','-f','-a','admitted',revision,'-m','Different synthetic tag object']);
