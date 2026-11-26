@@ -11,6 +11,7 @@ import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.m
 import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 import {includeCompletedTypesPaths,projectCompletedTypesFile} from '../../scripts/sales/completed-v3-types-history.mjs';
+import {includeInternalAuthV3Paths} from '../../scripts/identity/internal-auth-v3-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -125,6 +126,7 @@ export function withRepositoryValidationScope(paths, read) {
     file => file === registryFile ? registry : read(file));
   if (pwaPaths.length) includeLaterAdmissionPaths(allowed, registry);
   includeCompletedTypesPaths(allowed, read);
+  includeInternalAuthV3Paths(allowed, registry, read);
   return allowed;
 }
 export function withReuseCandidateScope(paths, read) {
@@ -335,13 +337,14 @@ const toolingPaths = Object.freeze([
   'test/sales/iana-consumer-exports.test.mjs',
   'scripts/sales/iana-consumer-exports.mjs',
   'scripts/sales/completed-v3-types-history.mjs',
+  'scripts/identity/internal-auth-v3-history.mjs',
   'scripts/sales/iana-native-v1.mjs',
   'scripts/sales/validate-iana-v1.sh',
   'test/sales/iana-source-v1.test.mjs',
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '4f0b649fc8ff386d1e7809353c034c40373634f0e32b92fff531b2dd7036ea11';
+const toolingReferenceSha256 = '05275cbb1b068fe447e906032a01654eabae144c788995c625fcd6b98559ef2f';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

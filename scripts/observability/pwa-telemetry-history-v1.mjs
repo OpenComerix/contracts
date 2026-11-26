@@ -8,6 +8,7 @@ import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { validateContractPaths } from '../../tools/architecture/layout.mjs';
 import { beforeReconciliation, beforeReconciliationDocument } from '../sales/iana-consumer-exports.mjs';
 import { projectCompletedTypesFile } from '../sales/completed-v3-types-history.mjs';
+import { beforeInternalAuthV3Document } from '../identity/internal-auth-v3-history.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
 import { pwaTelemetryDescriptors, pwaTelemetryInitialRegistryHash, pwaTelemetrySource } from './pwa-telemetry-admission-v1.mjs';
 
@@ -93,6 +94,7 @@ function acceptsRegistryView(value) {
 }
 
 export function projectPwaTelemetryDocument(file, value) {
+  value = beforeInternalAuthV3Document(file, value);
   value = beforeReconciliationDocument(file, value);
   return file === registry && acceptsRegistryView(value) ? structuredClone(historicalRegistry()) : value;
 }

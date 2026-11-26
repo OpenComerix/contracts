@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import path from 'node:path';
+import { beforeInternalAuthV3 } from '../identity/internal-auth-v3-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const base = '93c0a0d9249d15301554c1687ca33876ed7e5205';
@@ -33,6 +34,7 @@ const prior = new Map();
 // Only the exact tooling additions are projected. Current verification keeps
 // the real workflow, declaration and pin outside this historical view.
 export function projectCompletedTypesFile(file, bytes) {
+  bytes = beforeInternalAuthV3(file, bytes);
   const expected = metadata.get(file);
   if (!expected || textDigest(bytes) !== expected) return bytes;
   if (!prior.has(file)) {
@@ -48,7 +50,7 @@ export function includeCompletedTypesPaths(allowed, read) {
   const artifactBytes = read(h5Artifacts);
   for (const [file, hash] of [...metadata, ...additions]) {
     const bytes = file === 'package.json' ? packageBytes : file === h5Artifacts ? artifactBytes : read(file);
-    assert.equal(textDigest(bytes), hash, 'COMPLETED_TYPES_SCOPE:' + file);
+    assert.equal(textDigest(beforeInternalAuthV3(file, bytes)), hash, 'COMPLETED_TYPES_SCOPE:' + file);
   }
   assert.equal(digest(read(declaration)), declarationDigest, 'COMPLETED_TYPES_SCOPE:' + declaration);
   const artifacts = JSON.parse(artifactBytes);
