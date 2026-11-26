@@ -44,14 +44,28 @@ for (const role of ['producer', 'consumer', 'semantic-owner', 'validation']) {
     assert.throws(() => makeLock(root, manifest, Buffer.from(JSON.stringify(manifest)), r), /Unknown\/unmaterialized contract/);
   });
 }
+// Only the injected-reader matrix shares setup for unchanged inputs.
+// Immutable strings supply a fresh, byte-identical Buffer on every read.
+const fixtureInputs = new Map();
+function readFixture(file) {
+  if (!fixtureInputs.has(file)) fixtureInputs.set(file, actual(file).toString('latin1'));
+  const bytes = fixtureInputs.get(file);
+  return Buffer.alloc(bytes.length, bytes, 'latin1');
+}
+
 for (const file of [...changedPaths, originalPath, 'identity/http/shared/v1/identity-inventory-authority-v1.schema.json',
   'identity/http/shared/v1/identity-inventory-authority-policy-v1.json', 'registry/consumers/identity-tenancy.json', 'pnpm-lock.yaml']) {
   test('package refuses changed or missing bytes: ' + file, () => {
-    assert.throws(() => validateSuccessorPackage(name => name === file ? Buffer.concat([actual(name), Buffer.from('\nUnapproved')]) : actual(name)),
-      /IA11_PACKAGE_BYTES|IA11_PUBLISHED_BYTES|IA11_CONSUMER_OR_DEPENDENCY/);
+    let visits = 0;
+    assert.throws(() => validateSuccessorPackage(name => {
+      if (name !== file) return readFixture(name);
+      visits++;
+      return Buffer.concat([actual(name), Buffer.from('\nUnapproved')]);
+    }), /IA11_PACKAGE_BYTES|IA11_PUBLISHED_BYTES|IA11_CONSUMER_OR_DEPENDENCY/);
+    assert(visits > 0, 'The package reads the altered input');
     assert.throws(() => validateSuccessorPackage(name => {
       if (name === file) throw new Error('Synthetic missing successor input');
-      return actual(name);
+      return readFixture(name);
     }), /Synthetic missing successor input/);
   });
 }

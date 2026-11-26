@@ -341,7 +341,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '886c5085b38e03beca0171ad82b3acb5a0a7f322bc95616fcb158cd3a23623fd';
+const toolingReferenceSha256 = '4f0b649fc8ff386d1e7809353c034c40373634f0e32b92fff531b2dd7036ea11';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

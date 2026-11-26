@@ -83,14 +83,24 @@ test('candidate scope checks every exact path once and grants no folder exemptio
   assert(!scope.has('registry/consumers/unapproved.json'));
 });
 
+let warmedScope=false;
 for(const file of historicalReadableFiles)for(const mutation of ['changed','missing'])
 test('scope rereads and rejects '+file+' after warmup: '+mutation,()=>{
-  withReuseCandidateScope([],read);
+  if(!warmedScope){
+    withReuseCandidateScope([],read);
+    warmedScope=true;
+  }
+  let visits=0;
   const altered=name=>{
-    if(name===file){if(mutation==='missing')throw Error('Synthetic missing candidate');return changed(read(name));}
+    if(name===file){
+      visits++;
+      if(mutation==='missing')throw Error('Synthetic missing candidate');
+      return changed(read(name));
+    }
     return read(name);
   };
   assert.throws(()=>withReuseCandidateScope([],altered));
+  assert(visits>0,'The scope reads the altered input');
   assert.equal(withReuseCandidateScope([],read).size,exactScopeFiles.length);
 });
 
