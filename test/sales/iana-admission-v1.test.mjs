@@ -123,7 +123,12 @@ test('a mixed public admission or an old consumer export cannot enter the new sc
  const identity='registry/consumers/identity-tenancy.json';
  assert.throws(()=>withIanaAdmissionScope([],file=>file===identity?ianaAdmissionSource(file):read(file),
   ()=>assert.fail('old export accepted')),/IANA_CONSUMER_EXPORT_BYTES/);
- const partial=JSON.parse(read(registryPath));partial.contracts.pop();
+ const partial = JSON.parse(ianaPublicAdmissionMetadata().get(registryPath));
+ const omitted = 'sales.f1-14e.iana.http-public.sales-browser-reads-v3';
+ assert(ianaPublicAdmissionIds.includes(omitted));
+ const completeCount = partial.contracts.length;
+ partial.contracts = partial.contracts.filter(row => row.id !== omitted);
+ assert.equal(partial.contracts.length, completeCount - 1);
  assert.throws(()=>withIanaAdmissionScope([],file=>file===registryPath?encode(partial):read(file),
   ()=>assert.fail('partial public admission accepted')),/PARTIAL_SCOPE/);
 });
