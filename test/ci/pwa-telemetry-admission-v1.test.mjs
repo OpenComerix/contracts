@@ -258,6 +258,15 @@ test('the Inventory CI path gate accepts a later Git-backed root and rejects pat
     'test/sales/iana-admission-v1.test.mjs',
     'test/sales/iana-consumer-exports.test.mjs',
     'tools/architecture/joint-delivery.mjs',
+    // Overlay the reviewed tooling used by the live validation inventory.
+    'scripts/inventory/capture-consumers-v1.mjs',
+    'test/architecture/git-source.test.mjs',
+    'test/architecture/immutable-closure.test.mjs',
+    'test/ci/pipeline-v1.test.mjs',
+    'test/finance/authority-validation-context.test.mjs',
+    'test/inventory/capture-authority-v2-admission.test.mjs',
+    'tools/architecture/git-source.mjs',
+    'tools/architecture/graph.mjs',
     'tools/architecture/validation-history.mjs',
     'tools/architecture/validation-tooling.json',
   ]) add(file, readFileSync(new URL(file, root)));

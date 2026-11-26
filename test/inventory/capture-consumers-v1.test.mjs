@@ -67,17 +67,25 @@ const paths = [...captureConsumerMetadata().keys(),
   'catalog/http/private/v1/catalog-inventory-capture-v1.yaml',
   'identity/http/shared/v1/identity-inventory-authority-policy-v1.json',
 ];
+let warmedCapture = false;
 for (const file of paths) for (const mutation of ['changed', 'missing']) {
   test(`warmed guards reject ${mutation}: ${file}`, t => {
     const metadata = captureConsumerMetadata(), registry = metadata.get(registryPath), object = JSON.parse(registry);
     const index = JSON.parse(metadata.get('registry/consumers/index.json'));
     const snapshot = JSON.parse(metadata.get('registry/consumers/catalog-pricing.json'));
-    validateCaptureConsumers(); validateAdmission(); validateCaptureSource();
+    if (!warmedCapture) {
+      validateCaptureConsumers();
+      validateAdmission();
+      validateCaptureSource();
+      warmedCapture = true;
+    }
     const original = fs.readFileSync;
     const affected = new URL('../../' + file, import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1').replaceAll('/', '\\');
+    let reads = 0;
     const stub = t.mock.method(fs, 'readFileSync', function (target, ...args) {
       const supplied = String(target).replaceAll('/', '\\');
       if (supplied === affected) {
+        reads++;
         if (mutation === 'missing') throw Object.assign(new Error('synthetic missing source'), { code: 'ENOENT' });
         const bytes = original.call(this, target, ...args);
         return Buffer.concat([Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes), Buffer.from('\nsynthetic drift')]);
@@ -85,16 +93,23 @@ for (const file of paths) for (const mutation of ['changed', 'missing']) {
       return original.call(this, target, ...args);
     });
     t.after(() => stub.mock.restore());
-    assert.throws(() => validateCaptureConsumers());
-    assert.throws(() => validateAdmission());
-    assert.throws(() => validateCaptureSource());
-    assert.throws(() => withCaptureConsumers(readRepositoryFile, () => true));
-    assert.throws(() => captureConsumerHistoricalFile(registryPath, registry));
-    assert.throws(() => captureConsumerHistoricalRegistry(object));
-    assert.throws(() => captureConsumerHistoricalIndex(index));
-    assert.throws(() => salesHistoricalIndex(index));
-    assert.throws(() => captureConsumerHistoricalSnapshot(snapshot));
-    assert.throws(() => admissionHistoricalFile(registryPath, registry));
-    assert.throws(() => admissionHistoricalRegistry(object));
+    const guards = [
+      validateCaptureConsumers,
+      validateAdmission,
+      validateCaptureSource,
+      () => withCaptureConsumers(readRepositoryFile, () => true),
+      () => captureConsumerHistoricalFile(registryPath, registry),
+      () => captureConsumerHistoricalRegistry(object),
+      () => captureConsumerHistoricalIndex(index),
+      () => salesHistoricalIndex(index),
+      () => captureConsumerHistoricalSnapshot(snapshot),
+      () => admissionHistoricalFile(registryPath, registry),
+      () => admissionHistoricalRegistry(object),
+    ];
+    for (const guard of guards) {
+      const previousReads = reads;
+      assert.throws(guard);
+      assert(reads > previousReads, 'Every historical guard reads the mutated input after warmup');
+    }
   });
 }

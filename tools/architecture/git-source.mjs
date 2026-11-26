@@ -8,8 +8,10 @@ const FILE_LIMIT = 8 * MiB;
 const PREFETCH_LIMIT = 16 * MiB;
 const CACHE_LIMIT = 64 * MiB;
 const TREE_LIMIT = 4 * MiB;
+const REVISION_LIMIT = 128;
 const decoder = new TextDecoder('utf-8', { fatal: true });
 const immutableReaders = new WeakMap();
+const nativeReaders = new WeakMap();
 
 // Private identity, never inferred from properties supplied by a caller.
 export const gitSourceIdentity = read => immutableReaders.get(read);
@@ -17,10 +19,23 @@ export const gitSourceIdentity = read => immutableReaders.get(read);
 // Only Git objects identified by an exact commit are cached. Never cache a
 // worktree read, a tag lookup, a caller's reader or a successful validation.
 export function createGitReader(execute = execFileSync) {
+  if (execute !== execFileSync) return createReader(execute);
+  if (!nativeReaders.has(execute)) nativeReaders.set(execute, createReader(execute));
+  return nativeReaders.get(execute);
+}
+
+// A dedicated backing store isolates both cached bytes and returned blobs.
+function copyBlob(bytes) {
+  const copy = Buffer.alloc(bytes.length);
+  bytes.copy(copy);
+  return copy;
+}
+
+function createReader(execute) {
   const revisions = new Map();
   const blobs = new Map();
   let cacheBytes = 0;
-  const git = (root, args, options = {}) => execute('git', ['-C', root, ...args], {
+  const git = (root, args, options = {}) => execute('git', ['-C', root, '--no-replace-objects', ...args], {
     windowsHide: true, maxBuffer: TREE_LIMIT, ...options,
   });
   const cacheKey = (root, oid) => root + ':' + oid;
@@ -32,7 +47,7 @@ export function createGitReader(execute = execFileSync) {
       cacheBytes -= blobs.get(oldest).length;
       blobs.delete(oldest);
     }
-    blobs.set(key, Buffer.from(bytes));
+    blobs.set(key, copyBlob(bytes));
     cacheBytes += bytes.length;
   };
   const getBlob = (root, oid) => {
@@ -87,12 +102,15 @@ export function createGitReader(execute = execFileSync) {
     assert(typeof revision === 'string' && /^[a-f0-9]{40}$/.test(revision),
       'Source revision must be a resolved commit');
     const root = realpathSync(directory), identity = root + ':' + revision;
-    if (!revisions.has(identity)) {
+    let state = revisions.get(identity);
+    if (state) revisions.delete(identity);
+    else {
       const resolved = git(root, ['rev-parse', revision + '^{commit}']).toString().trim();
       assert.equal(resolved, revision, 'Source commit did not resolve exactly');
-      revisions.set(identity, { files: undefined, prefetched: false });
+      if (revisions.size >= REVISION_LIMIT) revisions.delete(revisions.keys().next().value);
+      state = { files: undefined, prefetched: false };
     }
-    const state = revisions.get(identity);
+    revisions.set(identity, state);
     const read = file => {
       safePath(root, file);
       state.files ??= loadTree(root, revision);
@@ -114,7 +132,7 @@ export function createGitReader(execute = execFileSync) {
       }
       if (!getBlob(root, entry.oid)) loadBlobs(root, [entry]);
       // Callers can mutate their Buffer without poisoning historical evidence.
-      return Buffer.from(getBlob(root, entry.oid));
+      return copyBlob(getBlob(root, entry.oid));
     };
     if (execute === execFileSync) immutableReaders.set(read, Object.freeze({ root, revision }));
     return read;

@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
+import cp, { execFileSync } from 'node:child_process';
+import { syncBuiltinESMExports } from 'node:module';
 import { mkdtempSync, mkdirSync, writeFileSync, realpathSync, rmSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -56,6 +57,28 @@ test('many historical files use one bounded batch and retain exact binary bytes'
   assert.equal(calls.filter(call => call.args.includes('cat-file')).length, 1);
 });
 
+test('native reader factories share one exact Git read and ignore replacement refs', t => {
+  const { root, revision, commit, git } = fixture(t, { 'a.json': 'original' });
+  writeFileSync(path.join(root, 'a.json'), 'replacement');
+  git(['replace', revision, commit()]);
+  const calls = [], execute = cp.execFileSync;
+  t.mock.method(cp, 'execFileSync', (program, args, options) => {
+    calls.push(args);
+    return execute(program, args, options);
+  });
+  syncBuiltinESMExports();
+  t.after(() => { t.mock.restoreAll(); syncBuiltinESMExports(); });
+  for (let i = 0; i < 3; i++)
+    assert.equal(createGitReader()(root, revision)('a.json').toString(), 'original');
+  assert.equal(calls.length, 3, 'one exact commit resolution, tree and object batch across factories');
+
+  const first = observed(), second = observed();
+  assert.equal(first.read(root, revision)('a.json').toString(), 'original');
+  assert.equal(second.read(root, revision)('a.json').toString(), 'original');
+  assert.equal(first.calls.length, 3);
+  assert.equal(second.calls.length, 3, 'injected executors still operate independently');
+});
+
 test('returned buffers cannot mutate another file, reader or cached historical source', t => {
   const { root, revision } = fixture(t, { 'a.json': 'same', 'b.json': 'same' });
   const { read } = observed(), source = read(root, revision);
@@ -63,6 +86,23 @@ test('returned buffers cannot mutate another file, reader or cached historical s
   assert.equal(source('a.json').toString(), 'same');
   assert.equal(source('b.json').toString(), 'same');
   assert.equal(read(root, revision)('a.json').toString(), 'same');
+});
+
+test('native readers return blobs with independent backing memory', t => {
+  const { root, revision, git } = fixture(t, { 'a.json': 'first blob', 'b.json': 'second blob' });
+  const firstReader = createGitReader()(root, revision);
+  const secondReader = createGitReader()(root, revision);
+  const first = firstReader('a.json');
+  const second = secondReader('a.json');
+
+  assert.equal(first.byteOffset, 0);
+  assert.equal(first.buffer.byteLength, first.byteLength);
+  assert.notEqual(first.buffer, second.buffer);
+  new Uint8Array(first.buffer).fill(0);
+
+  assert.deepEqual(second, git(['show', revision + ':a.json']));
+  assert.deepEqual(secondReader('a.json'), second);
+  assert.deepEqual(secondReader('b.json'), git(['show', revision + ':b.json']));
 });
 
 test('prefetch stays bounded and omitted blobs remain available on demand', t => {
@@ -167,14 +207,18 @@ test('historical graph projection accepts only the exact optimized delta', () =>
   assert.equal(captureHistoricalFile(file, changed), changed);
 });
 
+let warmedCaptureProjections = false;
 for (const file of ['tools/architecture/graph.mjs', 'tools/architecture/git-source.mjs',
   'test/architecture/git-source.test.mjs', 'tools/architecture/README.md'])
   for (const change of ['changed', 'missing'])
     test('warm validation and both projections reject optimized-file drift: ' + file + '/' + change, t => {
       const registryBytes = actual('registry/contracts.json'), registry = JSON.parse(registryBytes);
-      validateCaptureSource();
-      captureHistoricalFile('registry/contracts.json', registryBytes);
-      captureHistoricalRegistry(registry);
+      if (!warmedCaptureProjections) {
+        validateCaptureSource();
+        captureHistoricalFile('registry/contracts.json', registryBytes);
+        captureHistoricalRegistry(registry);
+        warmedCaptureProjections = true;
+      }
       const original = fs.readFileSync.bind(fs), target = path.join(contractRoot, file);
       let reads = 0;
       t.mock.method(fs, 'readFileSync', (name, ...options) => {

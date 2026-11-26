@@ -123,15 +123,25 @@ const protectedFiles = [...admissionMetadata().keys(), httpPath, schemaPath,
   'scripts/ci/retired-gitlab-v1.mjs', 'scripts/sales/inventory-step-consumer-v1.mjs',
   'package.json', 'pnpm-lock.yaml', '.github/workflows/ci.yml', '.gitignore',
   'registry/consumers/index.json', ...before().requiredConsumers.map(owner => 'registry/consumers/' + owner + '.json')];
+let warmedAdmissionView;
+function warmAdmissionView(registryBytes, registry) {
+  if (warmedAdmissionView) return warmedAdmissionView;
+  const view = admissionReadView();
+  validateAdmission();
+  view('inventory/index.json');
+  admissionHistoricalFile('inventory/index.json', read('inventory/index.json'));
+  admissionHistoricalRegistry(registry);
+  validateCaptureSource();
+  captureHistoricalFile(registryPath, registryBytes);
+  captureHistoricalRegistry(registry);
+  warmedAdmissionView = view;
+  return view;
+}
 for (const file of protectedFiles)
   for (const mutation of ['changed', 'missing'])
     test('warmed validation, source and both projections reject ' + mutation + ': ' + file, t => {
       const registryBytes = read(registryPath), registry = JSON.parse(registryBytes);
-      const view = admissionReadView();
-      validateAdmission(); view('inventory/index.json');
-      admissionHistoricalFile('inventory/index.json', read('inventory/index.json'));
-      admissionHistoricalRegistry(registry);
-      validateCaptureSource(); captureHistoricalFile(registryPath, registryBytes); captureHistoricalRegistry(registry);
+      const view = warmAdmissionView(registryBytes, registry);
       const original = fs.readFileSync.bind(fs), target = path.resolve(root, file);
       let reads = 0;
       t.mock.method(fs, 'readFileSync', (name, ...options) => {
@@ -142,14 +152,20 @@ for (const file of protectedFiles)
         }
         return original(name, ...options);
       });
-      assert.throws(() => validateAdmission());
-      assert.throws(() => view('inventory/index.json'));
-      assert.throws(() => admissionHistoricalFile(registryPath, registryBytes));
-      assert.throws(() => admissionHistoricalRegistry(registry));
-      assert.throws(() => validateCaptureSource());
-      assert.throws(() => captureHistoricalFile(registryPath, registryBytes));
-      assert.throws(() => captureHistoricalRegistry(registry));
-      assert(reads >= 7, 'Every public validation/projection rereads current inputs after warmup');
+      const guards = [
+        validateAdmission,
+        () => view('inventory/index.json'),
+        () => admissionHistoricalFile(registryPath, registryBytes),
+        () => admissionHistoricalRegistry(registry),
+        validateCaptureSource,
+        () => captureHistoricalFile(registryPath, registryBytes),
+        () => captureHistoricalRegistry(registry),
+      ];
+      for (const guard of guards) {
+        const previousReads = reads;
+        assert.throws(guard);
+        assert(reads > previousReads, 'Every public validation/projection rereads the mutated input after warmup');
+      }
     });
 
 test('injected readers also reject omissions/drift and historical projections never repair callers', () => {

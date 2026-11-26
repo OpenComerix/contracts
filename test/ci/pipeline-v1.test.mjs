@@ -107,14 +107,18 @@ for (const [name, mutate] of [
   assert.equal(captureHistoricalFile('.gitlab-ci.yml', wrong), wrong);
 });
 
+let warmedPreparationProjections = false;
 for (const file of ['scripts/ci/pipeline-v1.mjs', 'test/ci/pipeline-v1.test.mjs', '.gitignore', 'test/catalog/history-protection-v1.test.mjs',
   'tools/architecture/layout.mjs', 'test/ci/tool-cache-layout.test.mjs'])
   for (const change of ['changed', 'missing'])
     test('warm projections still validate the preparation sources: ' + file + '/' + change, t => {
       const registryBytes = actual('registry/contracts.json'), registry = JSON.parse(registryBytes);
-      validateCaptureSource();
-      captureHistoricalFile('registry/contracts.json', registryBytes);
-      captureHistoricalRegistry(registry);
+      if (!warmedPreparationProjections) {
+        validateCaptureSource();
+        captureHistoricalFile('registry/contracts.json', registryBytes);
+        captureHistoricalRegistry(registry);
+        warmedPreparationProjections = true;
+      }
       const original = fs.readFileSync.bind(fs), target = path.join(root, file);
       let reads = 0;
       t.mock.method(fs, 'readFileSync', (name, ...options) => {

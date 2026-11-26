@@ -265,6 +265,9 @@ export function projectReviewedDocument(revision,file,value) {
 // neither extend the allowed paths nor replace the reviewed expectations.
 const salesAuthorityBridge = 'scripts/sales/inventory-step-consumer-v1.mjs';
 const toolingPaths = Object.freeze([
+  'test/architecture/git-source.test.mjs',
+  'test/ci/pipeline-v1.test.mjs',
+  'test/ci/pwa-telemetry-admission-v1.test.mjs',
   'scripts/identity/online-temporal-consumer-v1.mjs',
   'test/identity/online-temporal-consumer-v1.test.mjs',
   'tools/architecture/joint-delivery.mjs',
@@ -338,7 +341,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = 'b0894a59d86d61ecd29af257c59a9213bc06328ca653cfd4b083e45437821ba3';
+const toolingReferenceSha256 = '886c5085b38e03beca0171ad82b3acb5a0a7f322bc95616fcb158cd3a23623fd';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
