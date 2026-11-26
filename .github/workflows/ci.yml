@@ -576,6 +576,7 @@ jobs:
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v3/identity-internal-auth-v3.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v3/identity-internal-auth-v3.yaml --dereferenced --ext json --output .ci-artifacts/identity-internal-auth-v3.bundle.json
           node scripts/identity/prepare-internal-auth-v3.mjs .ci-artifacts/identity-internal-auth-v3.bundle.json .ci-artifacts/identity-internal-auth-v3.tests.json
+          node scripts/identity/internal-auth-v3-admission.mjs --revision "$GITHUB_SHA"
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
           node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json

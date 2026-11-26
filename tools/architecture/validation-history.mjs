@@ -11,7 +11,7 @@ import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.m
 import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 import {includeCompletedTypesPaths,projectCompletedTypesFile} from '../../scripts/sales/completed-v3-types-history.mjs';
-import {includeInternalAuthV3Paths} from '../../scripts/identity/internal-auth-v3-history.mjs';
+import {includeInternalAuthV3Paths,projectExtendedIdentityIndex} from '../../scripts/identity/internal-auth-v3-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -122,11 +122,16 @@ export function withRepositoryValidationScope(paths, read) {
   const registryFile = 'registry/contracts.json';
   const registry = read(registryFile);
   const pwaPaths = pwaTelemetryHistoricalPaths(registry);
-  const allowed = withReuseCandidateScope([...paths, ...pwaPaths],
-    file => file === registryFile ? registry : read(file));
+  const candidates = new Set([...paths, ...pwaPaths]);
+  const extendedRegistry = includeInternalAuthV3Paths(candidates, registry, read);
+  const allowed = withReuseCandidateScope(candidates, file => {
+    if (file === registryFile) return registry;
+    const bytes = read(file);
+    return file === 'identity/index.json' && extendedRegistry
+      ? projectExtendedIdentityIndex(bytes, extendedRegistry) : bytes;
+  });
   if (pwaPaths.length) includeLaterAdmissionPaths(allowed, registry);
   includeCompletedTypesPaths(allowed, read);
-  includeInternalAuthV3Paths(allowed, registry, read);
   return allowed;
 }
 export function withReuseCandidateScope(paths, read) {
@@ -344,7 +349,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '05275cbb1b068fe447e906032a01654eabae144c788995c625fcd6b98559ef2f';
+const toolingReferenceSha256 = 'c8138e302bee0307a9dc3a509138be120eb9ebd7246c48af00761286028eb603';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

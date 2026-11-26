@@ -19181,6 +19181,85 @@
       "sha256": "ce248084a5d49a0919879c3a59a8808344b2146356a1ab2a9907af1ea069a075",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "identity.internal-auth.v3",
+      "domain": "identity",
+      "surface": "http-private",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "H1A v3 bounded workload reuse, adding the fixed Sales-to-Identity authority profile.",
+      "reasonForChange": "Admit the ID-02 source and preserve a fresh human decision on every authority request.",
+      "retirement": "Preserve earlier H1A admissions and require explicit migration for future successors.",
+      "version": "3.0.0",
+      "path": "identity/http/private/v3/identity-internal-auth-v3.yaml",
+      "commit": "1b39f102ba453b2040dffccf030096fb8679d705",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "3c9332409d6c5f88f4eb608415b4aff88598b473a7cc39cfc5d0d936c148c85b",
+      "operations": [
+        "issueInternalServiceToken",
+        "getInternalIdentityJwks"
+      ],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.workload-token-reuse.policy.v3",
+      "domain": "identity",
+      "surface": "policy",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "H1A v3 bounded workload reuse, adding the fixed Sales-to-Identity authority profile.",
+      "reasonForChange": "Admit the ID-02 source and preserve a fresh human decision on every authority request.",
+      "retirement": "Preserve earlier H1A admissions and require explicit migration for future successors.",
+      "version": "v3",
+      "path": "identity/http/shared/v3/identity-workload-token-reuse-policy-v3.json",
+      "commit": "1b39f102ba453b2040dffccf030096fb8679d705",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1a62ffb77790e26a93ee3982ffec9ded3e946ef78c5750983abbe4b1e2109429",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.workload-token-reuse.schema.v3",
+      "domain": "identity",
+      "surface": "schema",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "H1A v3 bounded workload reuse, adding the fixed Sales-to-Identity authority profile.",
+      "reasonForChange": "Admit the ID-02 source and preserve a fresh human decision on every authority request.",
+      "retirement": "Preserve earlier H1A admissions and require explicit migration for future successors.",
+      "version": "v3",
+      "path": "identity/http/shared/v3/identity-workload-token-reuse-policy-v3.schema.json",
+      "commit": "1b39f102ba453b2040dffccf030096fb8679d705",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "ed25ba091971cf133879209de3606c321d4641171fb931f1eb628b299ae06026",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "identity.internal-auth.fixtures.v3",
+      "domain": "identity",
+      "surface": "validation",
+      "owner": "identity-tenancy",
+      "status": "active",
+      "capability": "identity.workload-token-reuse",
+      "purpose": "H1A v3 bounded workload reuse, adding the fixed Sales-to-Identity authority profile.",
+      "reasonForChange": "Admit the ID-02 source and preserve a fresh human decision on every authority request.",
+      "retirement": "Preserve earlier H1A admissions and require explicit migration for future successors.",
+      "version": "v3",
+      "path": "identity/fixtures/internal-auth/v3/policy-cases-v3.json",
+      "commit": "1b39f102ba453b2040dffccf030096fb8679d705",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "57f1ff3fdc49a8226fc518cfa7ecd3c3a2ec20d837c9ac8ae45e949c7aaf79fc",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -20145,53 +20224,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "identity.internal-auth.v3",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "ID-02",
-      "status": "planned",
-      "version": "3.0.0",
-      "path": "identity/http/private/v3/identity-internal-auth-v3.yaml",
-      "operations": [
-        "issueInternalServiceToken",
-        "getInternalIdentityJwks"
-      ],
-      "constraint": "Fuente A de ID-02. La adopción requiere admisión y CI completa sobre la revisión final."
-    },
-    {
-      "id": "identity.workload-token-reuse.policy.v3",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "ID-02",
-      "status": "planned",
-      "version": "v3",
-      "path": "identity/http/shared/v3/identity-workload-token-reuse-policy-v3.json",
-      "operations": [],
-      "constraint": "Fuente A de ID-02. La adopción requiere admisión y CI completa sobre la revisión final."
-    },
-    {
-      "id": "identity.workload-token-reuse.schema.v3",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "ID-02",
-      "status": "planned",
-      "version": "v3",
-      "path": "identity/http/shared/v3/identity-workload-token-reuse-policy-v3.schema.json",
-      "operations": [],
-      "constraint": "Fuente A de ID-02. La adopción requiere admisión y CI completa sobre la revisión final."
-    },
-    {
-      "id": "identity.internal-auth.fixtures.v3",
-      "domain": "identity",
-      "owner": "identity-tenancy",
-      "materializeIn": "ID-02",
-      "status": "planned",
-      "version": "v3",
-      "path": "identity/fixtures/internal-auth/v3/policy-cases-v3.json",
-      "operations": [],
-      "constraint": "Fuente A de ID-02. La adopción requiere admisión y CI completa sobre la revisión final."
     }
   ],
   "requiredConsumers": [
