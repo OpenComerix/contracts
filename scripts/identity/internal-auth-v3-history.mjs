@@ -130,7 +130,7 @@ export function includeInternalAuthV3Paths(allowed, registry, read) {
       'ID02_SOURCE_SCOPE:' + file);
   }
   for (const [file] of checks) allowed.add(file);
-  if (current) includeId03Paths(allowed, current, actual, read);
+  if (current) includeId03Paths(allowed, current, actual, file => projectPreparationWindowFile(file, read(file)));
   if (current && actual !== admittedMetadata.get('registry/contracts.json')) return current;
 }
 

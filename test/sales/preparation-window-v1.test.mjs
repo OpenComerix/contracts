@@ -76,8 +76,10 @@ test('ID-04 historical view projects only exact supplied metadata', () => {
   const file = 'inventory/index.json';
   const value = JSON.parse(read(file));
   const previous = projectPreparationWindowDocument(file, value);
-  assert(value.planned.includes('inventory.sale-context.http.v2'));
-  assert.deepEqual(previous.planned, value.planned.filter(id => id !== 'inventory.sale-context.http.v2'));
+  const successor = 'inventory.sale-context.http.v2';
+  assert.notEqual(value.planned.includes(successor), value.contracts.includes(successor));
+  assert.deepEqual(previous.planned, value.planned.filter(id => id !== successor));
+  assert.deepEqual(previous.contracts, value.contracts.filter(id => id !== successor));
   const changed = { ...value, planned: [...value.planned, 'inventory.foreign.intent'] };
   assert.equal(projectPreparationWindowDocument(file, changed), changed);
   const bytes = Buffer.concat([read(file), Buffer.from(' ')]);

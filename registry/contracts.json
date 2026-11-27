@@ -19358,6 +19358,202 @@
       "sha256": "cfe35918d848d6037e0890ab545895116a3294b6aeeb87a8e4f9e69776ce455b",
       "operations": [],
       "uriMappings": []
+    },
+    {
+      "id": "sales.catalog-capture-authority.http.v3",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "3.0.0",
+      "path": "sales/http/private/v3/sales-catalog-capture-authority-v3.yaml",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f3da831f8e33bc6d3d1dc56d8fea162e31fbba380c9793d13a68738e330fe813",
+      "operations": [
+        "authorizeSaleCatalogCapture"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json",
+          "path": "sales/http/shared/v2/sales-catalog-capture-authority-v2.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.context-check-authority.http.v2",
+      "domain": "sales",
+      "surface": "http-private",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.context-check-authority",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "2.0.0",
+      "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "0b4c6135b36147969ba660aa58548553d7bf7f2342dbb19f3112225d0370958d",
+      "operations": [
+        "authorizeSaleContextCheck"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+          "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "catalog.sale-capture.http.v2",
+      "domain": "catalog",
+      "surface": "http-private",
+      "owner": "catalog-pricing",
+      "status": "active",
+      "capability": "catalog.online-sale-f1",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "2.0.0",
+      "path": "catalog/http/private/v2/catalog-sale-capture-v2.yaml",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "f7d1d7989505bb7976b67b65ce93ec8596dfffb1267bc7d98c758eb2a7e1370b",
+      "operations": [
+        "captureSaleCatalog"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-common-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-common-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-entities-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-entities-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/catalog/http/shared/v1/catalog-sale-capture-v1.schema.json",
+          "path": "catalog/http/shared/v1/catalog-sale-capture-v1.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "inventory.sale-context.http.v2",
+      "domain": "inventory",
+      "surface": "http-private",
+      "owner": "inventory",
+      "status": "active",
+      "capability": "inventory.sale-context",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "2.0.0",
+      "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "6bcfb35c2700c486e4b0d5c1c4a1230bd8df92144027fe31c5ddd181ecddb527",
+      "operations": [
+        "checkInventorySaleContext"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+          "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "finance.sale-context.http.v2",
+      "domain": "finance",
+      "surface": "http-private",
+      "owner": "finance",
+      "status": "active",
+      "capability": "finance.sale-context",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "2.0.0",
+      "path": "finance/http/private/v2/finance-sale-context-v2.yaml",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "aaa1af7ea62f24800236ce6673041324383943be9e96607a94c4f1fb18b2066c",
+      "operations": [
+        "checkFinanceSaleContext"
+      ],
+      "uriMappings": [
+        {
+          "uri": "https://contracts.opencomerix.example/finance/http/shared/v1/finance-sale-context-v1.schema.json",
+          "path": "finance/http/shared/v1/finance-sale-context-v1.schema.json"
+        },
+        {
+          "uri": "https://contracts.opencomerix.example/common/http/shared/v3/problem-details-v3.schema.json",
+          "path": "common/http/shared/v3/problem-details-v3.schema.json"
+        }
+      ]
+    },
+    {
+      "id": "sales.protocol-policy.v3",
+      "domain": "sales",
+      "surface": "policy",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.online-sale-f1",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "v3",
+      "path": "sales/http/shared/v3/sales-protocol-policy-v3.json",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "1d15373393160c85b653f752bbd0b4c5e8c4a013e82146978d045c548e6d6483",
+      "operations": [],
+      "uriMappings": []
+    },
+    {
+      "id": "sales.preparation-window.fixtures.v1",
+      "domain": "sales",
+      "surface": "validation",
+      "owner": "sales-pos",
+      "status": "active",
+      "capability": "sales.preparation-window",
+      "purpose": "Contractual source for the bounded read window and fresh acceptance decision in online sales.",
+      "reasonForChange": "Admit the reviewed ID-04 source. Consumer activation requires the complete CI of the admission revision.",
+      "retirement": "Preserve predecessor bytes and migrate the four preparation owners as a compatible cohort.",
+      "version": "v1",
+      "path": "sales/fixtures/preparation-window/v1/scenarios.json",
+      "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+      "tag": null,
+      "tagObject": null,
+      "sha256": "03c1ed8d436875f6dfda487be5c6ebd37d673556ad10571e8205993c4366f576",
+      "operations": [],
+      "uriMappings": []
     }
   ],
   "preservedFiles": [
@@ -20322,93 +20518,6 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
-    },
-    {
-      "id": "sales.catalog-capture-authority.http.v3",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "path": "sales/http/private/v3/sales-catalog-capture-authority-v3.yaml",
-      "version": "3.0.0",
-      "operations": [
-        "authorizeSaleCatalogCapture"
-      ],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "sales.context-check-authority.http.v2",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
-      "version": "2.0.0",
-      "operations": [
-        "authorizeSaleContextCheck"
-      ],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "catalog.sale-capture.http.v2",
-      "domain": "catalog",
-      "owner": "catalog-pricing",
-      "path": "catalog/http/private/v2/catalog-sale-capture-v2.yaml",
-      "version": "2.0.0",
-      "operations": [
-        "captureSaleCatalog"
-      ],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "inventory.sale-context.http.v2",
-      "domain": "inventory",
-      "owner": "inventory",
-      "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
-      "version": "2.0.0",
-      "operations": [
-        "checkInventorySaleContext"
-      ],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "finance.sale-context.http.v2",
-      "domain": "finance",
-      "owner": "finance",
-      "path": "finance/http/private/v2/finance-sale-context-v2.yaml",
-      "version": "2.0.0",
-      "operations": [
-        "checkFinanceSaleContext"
-      ],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "sales.protocol-policy.v3",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "path": "sales/http/shared/v3/sales-protocol-policy-v3.json",
-      "version": "v3",
-      "operations": [],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
-    },
-    {
-      "id": "sales.preparation-window.fixtures.v1",
-      "domain": "sales",
-      "owner": "sales-pos",
-      "path": "sales/fixtures/preparation-window/v1/scenarios.json",
-      "version": "v1",
-      "operations": [],
-      "materializeIn": "ID-04",
-      "status": "planned",
-      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
     }
   ],
   "requiredConsumers": [

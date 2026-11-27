@@ -31,6 +31,20 @@ const source = Object.freeze({
   "scripts/sales/validate-preparation-window-v1.sh": "d938795b8667cd1ff252f3692f78d592c28b34011eb21ee10f8ff0fe924054f9",
   "test/sales/preparation-window-v1.test.mjs": "f74fe0e99780f87e1b3a83dab32712d40a29ae56b71a5cbd12bf37b2b0e32894"
 });
+const admissionMetadata = Object.freeze({
+  ".github/workflows/ci.yml": "683ea00f8da55d6a1ca7dd3b11dea257b9a76e74cad2aa34b118b108b009a458",
+  "registry/contracts.json": "2e92a337146a7fe626e4a23aaebf3f03ca328800b2bf3b549002394de7b78e00",
+  "catalog/index.json": "7a4ac61266a90f429b0516f91bce59de62766ac84be2f82d77482e09c4f78afc",
+  "finance/index.json": "2f2a54fb2a0247fac2fb44ff6bf6f16f13e41b95f6c1c24f5b2d1e830c10e2f0",
+  "inventory/index.json": "02a7d53850bb7301cf27f461657f3dab3c0d5694058afdd89b6ee89d318299eb",
+  "sales/index.json": "dc1ad9b32d707fbf631b8339f9c68bca2c41f9e0d29ede7ca532e7b480f134dd",
+  "sales/README.md": "0141cbb028b79a0b205d4081469d75e25dbce1451865fd40f4aecd1ca09a3db8"
+});
+const admissionFiles = Object.freeze({
+  "scripts/sales/preparation-window-admission-v1.mjs": "f5a3bc3cfff03b15161229a7ba8b9d3e9c56195a084bc8e84180bbbdecfdb0b4",
+  "test/sales/preparation-window-admission-v1.test.mjs": "9c0ae2e3610f289bfcceecd17bec2f01cd63f0713d4444ced9406bcbdafcc2f9",
+  "test/sales/preparation-window-v1.test.mjs": "cf3d124fb741c17c26c40b3188a918da3496b78d073b6a0e42ca02116e1ed80a"
+});
 // Preserve a UTF-8 BOM in the decoded input so only line endings are normalized.
 const decoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 const digest = bytes => createHash('sha256').update(decoder.decode(bytes).replaceAll('\r\n', '\n')).digest('hex');
@@ -38,12 +52,13 @@ const digest = bytes => createHash('sha256').update(decoder.decode(bytes).replac
 // Older gates receive their exact previous inputs only for this closed delta.
 // Current registry and source checks use the actual checkout.
 export function projectPreparationWindowFile(file, bytes) {
-  const expected = metadata[file];
-  return expected && digest(bytes) === expected ? base(file) : bytes;
+  if (!Object.hasOwn(metadata, file) && !Object.hasOwn(admissionMetadata, file)) return bytes;
+  const actual = digest(bytes);
+  return actual === metadata[file] || actual === admissionMetadata[file] ? base(file) : bytes;
 }
 
 export function projectPreparationWindowDocument(file, value) {
-  if (!file.endsWith('.json') || !metadata[file]) return value;
+  if (!file.endsWith('.json') || (!Object.hasOwn(metadata, file) && !Object.hasOwn(admissionMetadata, file))) return value;
   const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n');
   if (!isDeepStrictEqual(value, JSON.parse(bytes))) return value;
   const previous = projectPreparationWindowFile(file, bytes);
@@ -52,8 +67,12 @@ export function projectPreparationWindowDocument(file, value) {
 
 export function includePreparationWindowPaths(allowed, registry, read) {
   const actual = JSON.parse(registry);
-  if (!actual.planned.some(row => row.materializeIn === 'ID-04' || Object.hasOwn(source, row.path))) return;
-  for (const [file, expected] of Object.entries({ ...metadata, ...source })) {
+  const planned = actual.planned.some(row => row.materializeIn === 'ID-04' || Object.hasOwn(source, row.path));
+  const admitted = actual.contracts.some(row => Object.hasOwn(source, row.path));
+  if (!planned && !admitted) return;
+  assert(!(planned && admitted), 'ID04_MIXED_SCOPE');
+  const scope = admitted ? { ...metadata, ...source, ...admissionMetadata, ...admissionFiles } : { ...metadata, ...source };
+  for (const [file, expected] of Object.entries(scope)) {
     const bytes = file === registryPath ? registry : read(file);
     assert.equal(digest(bytes), expected, 'ID04_SOURCE_SCOPE:' + file);
     allowed.add(file);

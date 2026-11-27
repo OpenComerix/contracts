@@ -34,7 +34,11 @@
     "sales.f1-14e.iana.events.sales-flow-v3.asyncapi",
     "sales.f1-14e.iana.fixtures.cases",
     "sales.f1-14e.iana.http-public.pos-sales-v3",
-    "sales.f1-14e.iana.http-public.sales-browser-reads-v3"
+    "sales.f1-14e.iana.http-public.sales-browser-reads-v3",
+    "sales.catalog-capture-authority.http.v3",
+    "sales.context-check-authority.http.v2",
+    "sales.protocol-policy.v3",
+    "sales.preparation-window.fixtures.v1"
   ],
   "surfaces": [
     {
@@ -132,6 +136,18 @@
           "version": "3.0.0",
           "path": "sales/http/private/v3/pos-sales-internal-v3.yaml",
           "status": "active"
+        },
+        {
+          "id": "sales.catalog-capture-authority.http.v3",
+          "version": "3.0.0",
+          "path": "sales/http/private/v3/sales-catalog-capture-authority-v3.yaml",
+          "status": "active"
+        },
+        {
+          "id": "sales.context-check-authority.http.v2",
+          "version": "2.0.0",
+          "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+          "status": "active"
         }
       ]
     },
@@ -188,6 +204,12 @@
           "id": "sales.f1-10d.sales-protocol-policy-v2",
           "version": "v2",
           "path": "sales/http/shared/v2/sales-protocol-policy-v2.json",
+          "status": "active"
+        },
+        {
+          "id": "sales.protocol-policy.v3",
+          "version": "v3",
+          "path": "sales/http/shared/v3/sales-protocol-policy-v3.json",
           "status": "active"
         }
       ]
@@ -271,14 +293,15 @@
           "version": "1.0.0",
           "path": "sales/fixtures/iana-time-zones/v1/cases.json",
           "status": "active"
+        },
+        {
+          "id": "sales.preparation-window.fixtures.v1",
+          "version": "v1",
+          "path": "sales/fixtures/preparation-window/v1/scenarios.json",
+          "status": "active"
         }
       ]
     }
   ],
-  "planned": [
-    "sales.catalog-capture-authority.http.v3",
-    "sales.context-check-authority.http.v2",
-    "sales.protocol-policy.v3",
-    "sales.preparation-window.fixtures.v1"
-  ]
+  "planned": []
 }
