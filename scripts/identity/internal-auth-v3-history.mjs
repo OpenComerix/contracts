@@ -5,6 +5,7 @@ import { resolve } from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { canonical, sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { includePreparationWindowPaths, projectPreparationWindowDocument, projectPreparationWindowFile } from '../sales/preparation-window-history-v1.mjs';
 
 const root = resolve(import.meta.dirname, '../..');
 const base = '910130c668c6e2f47afb9d33be79e36926cb5721';
@@ -88,6 +89,7 @@ const original = file => {
 
 // The same historical view recognizes exact metadata from ID-02 and ID-03.
 export function beforeInternalAuthV3(file, bytes) {
+  bytes = projectPreparationWindowFile(file, bytes);
   const expected = metadata.get(file);
   if (!expected) return bytes;
   const actual = digest(bytes);
@@ -97,6 +99,7 @@ export function beforeInternalAuthV3(file, bytes) {
 }
 
 export function beforeInternalAuthV3Document(file, value) {
+  value = projectPreparationWindowDocument(file, value);
   if (file !== 'identity/index.json' ||
     !(value?.planned?.includes('identity.internal-auth.v3') || value?.contracts?.includes('identity.internal-auth.v3'))) return value;
   try {
@@ -109,6 +112,7 @@ export function beforeInternalAuthV3Document(file, value) {
 }
 
 export function includeInternalAuthV3Paths(allowed, registry, read) {
+  includePreparationWindowPaths(allowed, registry, read);
   const actual = digest(registry);
   const sourceCandidate = actual === metadata.get('registry/contracts.json');
   let current;

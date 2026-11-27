@@ -20322,6 +20322,93 @@
       "materializeIn": "F1-08C",
       "status": "planned",
       "constraint": "Candidate metadata only; admission requires a separate reviewed publication cut. No runtime, purge, R2-R4 protocol or consumer migration."
+    },
+    {
+      "id": "sales.catalog-capture-authority.http.v3",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "path": "sales/http/private/v3/sales-catalog-capture-authority-v3.yaml",
+      "version": "3.0.0",
+      "operations": [
+        "authorizeSaleCatalogCapture"
+      ],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "sales.context-check-authority.http.v2",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+      "version": "2.0.0",
+      "operations": [
+        "authorizeSaleContextCheck"
+      ],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "catalog.sale-capture.http.v2",
+      "domain": "catalog",
+      "owner": "catalog-pricing",
+      "path": "catalog/http/private/v2/catalog-sale-capture-v2.yaml",
+      "version": "2.0.0",
+      "operations": [
+        "captureSaleCatalog"
+      ],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "inventory.sale-context.http.v2",
+      "domain": "inventory",
+      "owner": "inventory",
+      "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+      "version": "2.0.0",
+      "operations": [
+        "checkInventorySaleContext"
+      ],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "finance.sale-context.http.v2",
+      "domain": "finance",
+      "owner": "finance",
+      "path": "finance/http/private/v2/finance-sale-context-v2.yaml",
+      "version": "2.0.0",
+      "operations": [
+        "checkFinanceSaleContext"
+      ],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "sales.protocol-policy.v3",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "path": "sales/http/shared/v3/sales-protocol-policy-v3.json",
+      "version": "v3",
+      "operations": [],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
+    },
+    {
+      "id": "sales.preparation-window.fixtures.v1",
+      "domain": "sales",
+      "owner": "sales-pos",
+      "path": "sales/fixtures/preparation-window/v1/scenarios.json",
+      "version": "v1",
+      "operations": [],
+      "materializeIn": "ID-04",
+      "status": "planned",
+      "constraint": "Joint delivery source candidate. Exact admission and full CI precede version-coherent consumption. No consumer or runtime changes."
     }
   ],
   "requiredConsumers": [

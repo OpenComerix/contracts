@@ -134,3 +134,7 @@ Una intención planned, sin admisión ni cambios de consumidores/locks. Auditor�
 Una raíz pública Finance, cuatro GET, desde `96d6e4909b08e7406c5bd0289e9cce1b04122349`, con [CI fuente completa Passed23/23](https://github.com/OpenComerix/contracts/actions/runs/43881646970) verificada por SHA/ref exactos. El descriptor fija versión, operaciones y hash Git; cierre de seis archivos, sin mappings URI innecesarios. 224 raíces, dos planned ajenas y ocho consumidores/locks intactos. Transportes, fixtures, autoridad y mutaciones publicados se preservan; las secciones candidatas anteriores describen su snapshot.
 
 [Verificador](../scripts/finance/browser-reads-admission-v1.mjs) y [pruebas](../test/finance/browser-reads-admission-v1.test.mjs): `node scripts/finance/browser-reads-admission-v1.mjs`; `node --test test/finance/browser-reads-admission-v1.test.mjs`. Candidato de admisión pendiente de auditoría, publicación y CI completa propias antes de consumo o gitlink. No activa Gateway/PWA ni demuestra autorización ejecutada, SQL o navegador.
+
+## ID-04 — Preparación de venta (fuente candidata)
+
+[Lectura de caja y turno v2](http/private/v2/finance-sale-context-v2.yaml) para la ventana de preparación de venta. Conserva verificación de turno, responsable y vigencia aplicada por el dueño. [Alcance y validación](../sales/README.md#id-04--preparación-de-venta-fuente-candidata).

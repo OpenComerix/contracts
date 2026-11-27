@@ -200,3 +200,9 @@ El sobre cerrado, la cardinalidad, los formatos y las reglas condicionales se va
 ## Tipos del recorrido de H5
 
 El mismo gate verifica la selección de primera venta y recuperación fijada en los locks de los propietarios. Cada mapa HTTP exporta los `operationId` seleccionados con parámetros, cuerpo, respuestas por estado y contenido por media type. Los tipos de mensajería conservan las variantes de productor, consumidor y resultado. Las restricciones de runtime se verifican con OpenAPI y JSON Schema. Para regenerar las declaraciones de la selección ejecutar `node scripts/sales/h5-types.mjs --write`. [Selectores](../tools/architecture/h5-type-selections.json) · [Declaraciones](../tools/architecture/h5-type-artifacts.json).
+
+## ID-04 — Preparación de venta (fuente candidata)
+
+[Callback de catálogo v3](http/private/v3/sales-catalog-capture-authority-v3.yaml), [callback de contexto v2](http/private/v2/sales-context-check-authority-v2.yaml) y [política de venta v3](http/shared/v3/sales-protocol-policy-v3.json). Los sucesores conservan el transporte y aplican la ventana aprobada de ADR-063 para el intento exacto. La activación futura requiere una cohorte compatible de Sales, Catálogo, Inventory y Finance.
+
+[Escenarios sintéticos](fixtures/preparation-window/v1/scenarios.json), [validación](../scripts/sales/preparation-window-v1.mjs) y [pruebas](../test/sales/preparation-window-v1.test.mjs). Redocly prepara los esquemas efectivos de los cinco puertos y Sourcemeta valida sus casos de transporte. La admisión y la CI completa de la revisión final preceden al consumo. La evidencia local es contractual.

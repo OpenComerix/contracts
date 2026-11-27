@@ -113,7 +113,7 @@ test('source scope reads each mutable input once for repeated historical lookups
   assert.throws(()=>withOnlineSourceScope([],n=>n===f?Buffer.concat([read(n),Buffer.from('\nDrift')]):read(n),()=>assert.fail('changed source accepted')));
   assert.throws(()=>withOnlineSourceScope([],n=>{if(n===f)throw Error('synthetic source missing');return read(n);},()=>assert.fail('missing source accepted')),/synthetic source missing/);
  }
- const partial=json('registry/contracts.json');partial.planned.at(-1).path='other.json';
+ const partial=json('registry/contracts.json');partial.planned.find(row=>row.id==='catalog.history-policy.v1').path='other.json';
  assert.throws(()=>withOnlineSourceScope([],f=>f==='registry/contracts.json'?encode(partial):read(f),()=>assert.fail('partial accepted')),/PARTIAL_SCOPE/);
 });
 test('pure projections never read another live input and cannot conceal changed metadata',()=>{

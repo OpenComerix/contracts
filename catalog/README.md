@@ -319,3 +319,7 @@ El export registra los metadatos de 48 selecciones publicados en [catalog-pricin
 [HTTP](http/private/v1/catalog-sale-capture-v1.yaml), [schema](http/shared/v1/catalog-sale-capture-v1.schema.json) y [fixture](fixtures/sale-capture/v1/capture.json): captureSaleCatalog, POST /api/v1/internal/catalog/sale-captures; solo sales-pos y audiencia catalog-pricing.sale-capture. Lee todo el grupo consistentemente con producto/variante/presentación/unidades/factor/fraccionamiento, descripción/SKU/barcode utilizado, clasificación/definición y lista/precio/vigencia/versiones ARS impuestos incluidos. Rechaza versiones/importes/barcode observados divergentes antes de aceptar, sin reservas, costo, autoridad del navegador ni perfil tributario resuelto.
 
 Callback Sales verifica preparación de 60s ligada a tenant/operación/request hash y huella JCS del request exacto, con autoridad humana actual; delegado solo RAM. Ventas revalida antes de aceptar y no recaptura un replay ya aceptado desde maestros nuevos. No modifica captura física B ni las 25 operaciones anteriores; fuente planned, sin admisiones/consumidores/runtime. [Gates D](../sales/README.md#f1-10d--paquete-candidato-de-venta-autosuficiente).
+
+## ID-04 — Preparación de venta (fuente candidata)
+
+[Captura de catálogo v2](http/private/v2/catalog-sale-capture-v2.yaml) para la ventana de preparación de venta. El dueño comprueba la autorización del callback de Sales y su plazo antes de devolver la lectura local. [Alcance y validación](../sales/README.md#id-04--preparación-de-venta-fuente-candidata).
