@@ -35,6 +35,27 @@ const id03SourcePaths = new Map([
   ['scripts/identity/prepare-internal-auth-v4.mjs', '2dac111972795cbf6644c453feb21dc1e1e7c4c6b642ff7a1e8c13c579a59ec2'],
   ['test/identity/internal-auth-v4.test.mjs', '847e043a2e6a687df879e7711115acbce7a2ab69fa2fe19692520464e68c9f4e'],
 ]);
+const id03AdmissionMetadata = new Map([
+  ['.github/workflows/ci.yml', '91662db2352c4ea26e90a594324d62a15eca7eced9ee8b6be4dc3f62287ec781'],
+  ['identity/README.md', '47fef7f3ba2a82d2a0b0b21db0570b50fd6b11406e0f6008b9f9a0a3a1bc3f4f'],
+  ['identity/index.json', '294bd38f635c7088b6b934f9ec0d48588349973d7844c4f17f3d8a75f191fafd'],
+  ['registry/contracts.json', '1c7e0be2d69f2dcc933463a7fde1e11e93269da017165f5873ed9503ec148712'],
+]);
+const id03AdmissionPaths = new Map([
+  ['scripts/identity/internal-auth-v4-admission.mjs', '86ed711fa07416f05a60c19e9af8b2046f5814aabff2c5e89b62676322cd08e2'],
+  ['test/identity/internal-auth-v4-admission.test.mjs', 'd238c2b11755f891f3f9e7cda3ae97482733d24be3107f87b96604c0eac1eb07'],
+]);
+const id03Ids = new Set([
+  'identity.internal-auth.v4',
+  'identity.workload-token-reuse.policy.v4',
+  'identity.workload-token-reuse.schema.v4',
+  'identity.internal-auth.fixtures.v4',
+  'identity.sale-preparation-workloads.policy.v2',
+]);
+const id03DescriptorHash = '6ef47f5754282df03f95ba57b725329f1f09433aa21960c3814eacc46ae4ec54';
+const belongsToId03 = row => id03Ids.has(row.id) || id03SourcePaths.has(row.path) || row.materializeIn === 'ID-03';
+const registryPath = 'registry/contracts.json';
+const indexPath = 'identity/index.json';
 const id02AdmissionTest = 'test/identity/internal-auth-v3-admission.test.mjs';
 const id02AdmissionTestPinned = 'dc4c3f73793e2583bd642cb7408e686995c4cbad11ef067dcde2320499e6e4e7';
 const additions = new Map([
@@ -65,13 +86,13 @@ const original = file => {
   return Buffer.from(before.get(file));
 };
 
-// The same historical view recognizes exact metadata from ID-02 and ID-03 A.
+// The same historical view recognizes exact metadata from ID-02 and ID-03.
 export function beforeInternalAuthV3(file, bytes) {
   const expected = metadata.get(file);
   if (!expected) return bytes;
   const actual = digest(bytes);
   if (actual !== expected && actual !== admittedMetadata.get(file) &&
-      actual !== id03SourceMetadata.get(file)) return bytes;
+      actual !== id03SourceMetadata.get(file) && actual !== id03AdmissionMetadata.get(file)) return bytes;
   return original(file);
 }
 
@@ -105,21 +126,41 @@ export function includeInternalAuthV3Paths(allowed, registry, read) {
       'ID02_SOURCE_SCOPE:' + file);
   }
   for (const [file] of checks) allowed.add(file);
-  if (current?.planned.some(row => row.materializeIn === 'ID-03')) {
-    for (const [file, hash] of [...id03SourceMetadata, ...id03SourcePaths]) {
-      const bytes = file === 'registry/contracts.json' ? registry : read(file);
-      assert.equal(digest(bytes), hash, 'ID03_SOURCE_SCOPE:' + file);
-      allowed.add(file);
-    }
-  }
+  if (current) includeId03Paths(allowed, current, actual, read);
   if (current && actual !== admittedMetadata.get('registry/contracts.json')) return current;
+}
+
+function includeId03Paths(allowed, current, registryHash, read) {
+  const descriptors = current.contracts.filter(belongsToId03);
+  const planned = current.planned.some(belongsToId03);
+  if (!planned && descriptors.length === 0) return;
+  const admitted = descriptors.length > 0;
+  const metadata = admitted ? id03AdmissionMetadata : id03SourceMetadata;
+  const extended = admitted && registryHash !== metadata.get(registryPath);
+  if (extended) {
+    assert(!planned && sha256(canonical(descriptors)) === id03DescriptorHash, 'ID03_DESCRIPTOR_SCOPE');
+    assertCurrentIdentityIndex(read(indexPath), current, 'ID03_CURRENT_INDEX');
+  }
+  const label = admitted ? 'ID03_ADMISSION_SCOPE:' : 'ID03_SOURCE_SCOPE:';
+  const scope = [...metadata, ...id03SourcePaths, ...(admitted ? id03AdmissionPaths : [])];
+  for (const [file, hash] of scope) {
+    if (!(extended && (file === registryPath || file === indexPath))) {
+      const actual = file === registryPath ? registryHash : digest(read(file));
+      assert.equal(actual, hash, label + file);
+    }
+    allowed.add(file);
+  }
+}
+
+function assertCurrentIdentityIndex(bytes, registry, label) {
+  const expected = Buffer.from(JSON.stringify(domainIndex(registry, 'identity'), null, 2) + '\n');
+  assert.equal(digest(bytes), digest(expected), label);
 }
 
 // Historical readers of the Identity index still require every pre-ID-02 entry.
 // Prove derivation from the supplied registry before hiding later additions.
 export function projectExtendedIdentityIndex(bytes, registry) {
-  const expected = Buffer.from(JSON.stringify(domainIndex(registry, 'identity'), null, 2) + '\n');
-  assert.equal(digest(bytes), digest(expected), 'ID02_CURRENT_INDEX');
+  assertCurrentIdentityIndex(bytes, registry, 'ID02_CURRENT_INDEX');
   const previous = original('identity/index.json');
   const index = JSON.parse(previous);
   const knownContracts = new Set(index.contracts);

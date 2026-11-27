@@ -577,6 +577,10 @@ jobs:
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v3/identity-internal-auth-v3.yaml --dereferenced --ext json --output .ci-artifacts/identity-internal-auth-v3.bundle.json
           node scripts/identity/prepare-internal-auth-v3.mjs .ci-artifacts/identity-internal-auth-v3.bundle.json .ci-artifacts/identity-internal-auth-v3.tests.json
           node scripts/identity/internal-auth-v3-admission.mjs --revision "$GITHUB_SHA"
+          node scripts/validate-redocly-no-warnings.mjs identity/http/private/v4/identity-internal-auth-v4.yaml
+          npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v4/identity-internal-auth-v4.yaml --dereferenced --ext json --output .ci-artifacts/identity-internal-auth-v4.bundle.json
+          node scripts/identity/prepare-internal-auth-v4.mjs .ci-artifacts/identity-internal-auth-v4.bundle.json .ci-artifacts/identity-internal-auth-v4.tests.json
+          node scripts/identity/internal-auth-v4-admission.mjs --revision "$GITHUB_SHA"
           node scripts/validate-redocly-no-warnings.mjs identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml
           npx --yes @redocly/cli@2.53.3 bundle identity/http/private/v2/identity-catalog-recovery-renewal-v2.yaml --dereferenced --ext json --output .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
           node scripts/identity/validate-catalog-recovery-renewal-v2.mjs .ci-artifacts/catalog-recovery-renewal-v2 .ci-artifacts/catalog-recovery-renewal-v2.bundle.json
@@ -589,7 +593,7 @@ jobs:
         shell: bash
         run: |-
           paths=()
-          for path in .ci-artifacts/f1-14a/ .ci-artifacts/f1-14a-ci/ .ci-artifacts/branch-time-zone-private-v2.bundle.json .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/ .ci-artifacts/identity-internal-auth-v3.tests.json; do
+          for path in .ci-artifacts/f1-14a/ .ci-artifacts/f1-14a-ci/ .ci-artifacts/branch-time-zone-private-v2.bundle.json .ci-artifacts/catalog-history-permissions-v1.bundle.json .ci-artifacts/catalog-history-permissions-v1/ .ci-artifacts/catalog-recovery-renewal-v2.bundle.json .ci-artifacts/catalog-recovery-renewal-v2/ .ci-artifacts/identity-internal-auth-v2.bundle.json .ci-artifacts/identity-internal-auth-v2/ .ci-artifacts/identity-internal-auth-v3.tests.json .ci-artifacts/identity-internal-auth-v4.tests.json; do
             if [ -e "$path" ]; then paths+=("$path"); fi
           done
           if [ "${#paths[@]}" -eq 0 ]; then echo '::warning::No matching original artifact paths'; fi
@@ -632,6 +636,8 @@ jobs:
           sh scripts/identity/validate-internal-auth-v2.sh .ci-artifacts/identity-internal-auth-v2
           jsonschema metaschema identity/http/shared/v3/identity-workload-token-reuse-policy-v3.schema.json
           jsonschema test .ci-artifacts/identity-internal-auth-v3.tests.json --resolve identity/http/shared/v3/identity-workload-token-reuse-policy-v3.schema.json
+          jsonschema metaschema identity/http/shared/v4/identity-workload-token-reuse-policy-v4.schema.json
+          jsonschema test .ci-artifacts/identity-internal-auth-v4.tests.json --resolve identity/http/shared/v4/identity-workload-token-reuse-policy-v4.schema.json
           (cd .ci-artifacts/f1-14a-ci && sh gate.sh)'
   validate_catalog_asyncapi:
     name: validate:catalog-asyncapi

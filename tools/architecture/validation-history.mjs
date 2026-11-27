@@ -124,11 +124,12 @@ export function withRepositoryValidationScope(paths, read) {
   const pwaPaths = pwaTelemetryHistoricalPaths(registry);
   const candidates = new Set([...paths, ...pwaPaths]);
   const extendedRegistry = includeInternalAuthV3Paths(candidates, registry, read);
-  const id03Source = extendedRegistry?.planned.some(row => row.materializeIn === 'ID-03');
+  const id03 = extendedRegistry && (extendedRegistry.planned.some(row => row.materializeIn === 'ID-03') ||
+    extendedRegistry.contracts.some(row => row.id === 'identity.internal-auth.v4'));
   const allowed = withReuseCandidateScope(candidates, file => {
     if (file === registryFile) return registry;
     const bytes = read(file);
-    if (id03Source && file === 'identity/README.md') return beforeInternalAuthV3(file, bytes);
+    if (id03 && file === 'identity/README.md') return beforeInternalAuthV3(file, bytes);
     return file === 'identity/index.json' && extendedRegistry
       ? projectExtendedIdentityIndex(bytes, extendedRegistry) : bytes;
   });
@@ -351,7 +352,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = 'adf3e48491994d690f22c146d7fc6363060dc1ee6e9ed238485c4db6374b5c0d';
+const toolingReferenceSha256 = '75196b3882aa72daa3977552df55621d5629698e41c978069f1ea5a450396e9a';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
