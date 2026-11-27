@@ -5,6 +5,7 @@ import path from 'node:path';
 import test from 'node:test';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { projectIanaPublicAdmissionFile } from '../../scripts/sales/iana-admission-v1.mjs';
+import { projectPreparationWindowConsumerFile } from '../../scripts/sales/preparation-window-consumer-exports.mjs';
 import {
   consumerExportBase,
   beforeReconciliation,
@@ -57,7 +58,7 @@ test('exports the four published owners and preserves four other snapshots and t
   const reads = [];
   const result = validateIanaConsumerExports(file => {
     const live = read(file);
-    const { service, contracts } = JSON.parse(live).manifest;
+    const { service, contracts } = JSON.parse(projectPreparationWindowConsumerFile(file, live)).manifest;
     reads.push([service, contracts.length]);
     return live;
   });

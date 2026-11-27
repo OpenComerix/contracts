@@ -3,6 +3,7 @@ import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { isDeepStrictEqual } from 'node:util';
 import path from 'node:path';
+import { projectPreparationWindowConsumerDocument, projectPreparationWindowConsumerFile } from './preparation-window-consumer-exports.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 export const consumerExportBase = '41b3ef9bf096122d22d9c1ece51843ebb8168991';
@@ -34,6 +35,7 @@ const reconciledExports = new Map([
 export const reconciliationPaths = Object.freeze([...reconciledExports.keys()]);
 const priorExports = new Map();
 export function beforeReconciliation(file, bytes) {
+  bytes = projectPreparationWindowConsumerFile(file, bytes);
   const expected = reconciledExports.get(file);
   if (!expected) return bytes;
   const buffer = Buffer.isBuffer(bytes) ? bytes : Buffer.from(bytes);
@@ -52,6 +54,7 @@ export function beforeReconciliation(file, bytes) {
 }
 
 export function beforeReconciliationDocument(file, value) {
+  value = projectPreparationWindowConsumerDocument(file, value);
   const expected = reconciledExports.get(file);
   if (!expected || value?.sourceCommit !== expected.commit) return value;
   let bytes;

@@ -2,9 +2,9 @@
   "formatVersion": 1,
   "publication": "published",
   "sourceRepository": "opencomerix/inventory",
-  "sourceCommit": "92a9cac9cc73a317fafd362f9df93ffcabf77e0a",
-  "manifestSha256": "13a9b305a8c601328d41cafe5b52efc0bd0ed93e5dcba35f86abdaa4a4c8cf90",
-  "lockSha256": "6964f97536eeaebb88aadf60cdd5e884447fec3d1b719bcf30cdb2380630ff30",
+  "sourceCommit": "578e664690c51a495e70242842e684ee846f5db6",
+  "manifestSha256": "87351772375acabd6f6d06622c41357bb12e2f128c5b6f38ef1771aa013e4b74",
+  "lockSha256": "5776bd0184505b725c470765b90f7bb871adf2ede4482894293faf88d7e1972a",
   "manifest": {
     "formatVersion": 1,
     "service": "inventory",
@@ -623,6 +623,79 @@
           "pnpm test:cov",
           "pnpm test:sale-context"
         ]
+      },
+      {
+        "id": "identity.internal-auth.v4",
+        "role": "consumer",
+        "version": "4.0.0",
+        "operations": [
+          "issueInternalServiceToken"
+        ],
+        "pointers": [],
+        "purpose": "ID-03 OAuth and bounded per-instance reuse for the dedicated Inventory context callback profile.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
+      },
+      {
+        "id": "identity.workload-token-reuse.policy.v4",
+        "role": "consumer",
+        "version": "v4",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "ID-03 OAuth and bounded per-instance reuse for the dedicated Inventory context callback profile.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "purpose": "ID-03 OAuth and bounded per-instance reuse for the dedicated Inventory context callback profile.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:cov",
+          "pnpm test:sale-context"
+        ]
+      },
+      {
+        "id": "inventory.sale-context.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "purpose": "inventory.sale-context.http.v2 — Return read-only Inventory context within the bound entry decision.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:sale-context:contracts"
+        ]
+      },
+      {
+        "id": "sales.context-check-authority.http.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "purpose": "sales.context-check-authority.http.v2 — Verify Sales authority and its remaining budget before reading Inventory context.",
+        "gates": [
+          "pnpm contracts:metadata",
+          "pnpm test:sale-context:contracts"
+        ]
       }
     ],
     "assets": [
@@ -660,6 +733,20 @@
         "destination": "test/contract/sale-context/contracts/sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
         "representation": "exact",
         "purpose": "validation"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v2",
+        "sourcePath": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+        "destination": "test/contract/id-04/contracts/inventory/http/private/v2/inventory-sale-context-v2.yaml",
+        "representation": "exact",
+        "purpose": "validation"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v2",
+        "sourcePath": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+        "destination": "test/contract/id-04/contracts/sales/http/private/v2/sales-context-check-authority-v2.yaml",
+        "representation": "exact",
+        "purpose": "validation"
       }
     ],
     "bindings": []
@@ -667,7 +754,7 @@
   "lock": {
     "formatVersion": 1,
     "service": "inventory",
-    "manifestSha256": "13a9b305a8c601328d41cafe5b52efc0bd0ed93e5dcba35f86abdaa4a4c8cf90",
+    "manifestSha256": "87351772375acabd6f6d06622c41357bb12e2f128c5b6f38ef1771aa013e4b74",
     "entries": [
       {
         "id": "catalog.inventory-capture.http.v1",
@@ -5384,6 +5471,390 @@
         ],
         "selectionSha256": "5fadc2c4a4b99da815e7746d29f2f4cef7d3a82699d23f63fc27f4ef82186a03",
         "runtimeSha256": "5fadc2c4a4b99da815e7746d29f2f4cef7d3a82699d23f63fc27f4ef82186a03"
+      },
+      {
+        "id": "identity.internal-auth.v4",
+        "role": "consumer",
+        "version": "4.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56b861d13c483eafdfa69a08b5f7b58a9dd788eb",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+        "operations": [
+          "issueInternalServiceToken"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "sha256": "88bcf108d0743abd76f5be9d1dcad3fa9d651f3c65d44c41e04702d28c01a27c"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "sha256": "1a5fa4bbfc9f445a56bd9d33f4a9b93d7d53d26f5ab947172e91ebca1fd98a3f"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "sha256": "2a77bb3fbb64052e95568069f1891ce6b43b5da9328476b890d78bda9c169166"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "sha256": "bd8676729435dc64354407b4ffd02a136b93cf9d1b54a41ffdf833d9e567ce84"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "sha256": "b187c9dd08c0d8051d8105e43db70ec2abe454f78e833fcd67c6e2342ba587e0"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "sha256": "52125fd2bb0535499d0ac5eae6f9788babf29d437847cff2677956bf1fed0713"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "sha256": "0f5b088c764ef9c34f5ba52eefa49870de065724256fa8fc39011b7036162527"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "sha256": "fa532bd7b24744d5d8e24e21cf091a20961dc675b08c6cf9dc0cba433b0e3e6e"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/headers/NoCache",
+            "sha256": "18ca9d07efe39b854719a51cda6f176517206f878009eb761e7395fb903697ab"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/headers/NoStore",
+            "sha256": "6bc94bd6751038e23d0821bdc4f1c3759e2fe27078949693a046501adbf7202d"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/schemas/ClientCredentialsRequest",
+            "sha256": "1d64c1f6534e77b5bf5c9266cf1091b8effce588f996046ade3a3c5a04817e78"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/schemas/OAuthError",
+            "sha256": "07e7e90a0843664b8afdb93544ce89562878ef982f5175fa80cb650d5b447249"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/schemas/TokenResponse",
+            "sha256": "9b57e994565bf3250ade89239dddbf2e0a956a7103c653d0b0e3505a1e17de52"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/components/securitySchemes/workloadBasic",
+            "sha256": "82612b0e2110574247e733bd5151bd5b14694c48daf299c769bc5f6c7c49359f"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/paths/~1internal~1identity~1oauth~1token/post",
+            "sha256": "fa6f8dded1cce38f1fd5b6ae69526b01e2ce03021f5f6c5426f49ef5946947c5"
+          },
+          {
+            "path": "identity/http/private/v4/identity-internal-auth-v4.yaml",
+            "pointer": "/servers",
+            "sha256": "cdd2192ae50db22dd36ac27fbebc19ae7df673d11950ef97b56aeda3b313b600"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-client.json",
+            "pointer": "",
+            "sha256": "7fea647e5f15c86fbce494e086e2c9487a3a9e06954e405b82055b6cecfc124b"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-invalid-request.json",
+            "pointer": "",
+            "sha256": "52977cef16ffb1e7392b602fc98ae422b15b03d9403f17ac43ad8e59b51c8782"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-server-error.json",
+            "pointer": "",
+            "sha256": "74d505516733379dbb4a80024e593d63d739abb6cbb4fb89ce3cd780c1bcfa27"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-temporarily-unavailable.json",
+            "pointer": "",
+            "sha256": "0856809ec8a314e173b301e35291ac07d38ea0ae468b01d086832ccb9fa29dad"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-error-unsupported-grant-type.json",
+            "pointer": "",
+            "sha256": "326a51086889d002cb57fbc397555a9f885b18b36ba814cd3c5ef4262aca794c"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-request-client-credentials.json",
+            "pointer": "",
+            "sha256": "46333dc00fd2301169f9c46a93be801e6d5010877877b0a20706596580df89f9"
+          },
+          {
+            "path": "openapi/examples/identity-internal-auth-v1/token-response-success.json",
+            "pointer": "",
+            "sha256": "c54597bd437f04f97971559ab0989bef8538afc0cd633dafb485962a698f28e6"
+          }
+        ],
+        "selectionSha256": "d0f14337becbad1f8d73f7ec88a49368e05c995472eed5ee0f8bab63fc0d5448",
+        "runtimeSha256": "ba83dc187fe69ad41bebab4061ca392b2ba62cbd5dd39ac524a86fcf73a43c88"
+      },
+      {
+        "id": "identity.workload-token-reuse.policy.v4",
+        "role": "consumer",
+        "version": "v4",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56b861d13c483eafdfa69a08b5f7b58a9dd788eb",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json",
+            "sha256": "2bc4ed5f59a05cb2e9996a88caa793de97dc97cdf019b84698e523492dbc2207"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json",
+            "pointer": "",
+            "sha256": "2fcd9ac04b57346fbd6042a69d900bdaca2929a364c9a1946d97e34eacf44c62"
+          }
+        ],
+        "selectionSha256": "f9e0ec9aabb30f2707b825f6a9eef087cb470613225621d87c7c694b20c982a0",
+        "runtimeSha256": "f9e0ec9aabb30f2707b825f6a9eef087cb470613225621d87c7c694b20c982a0"
+      },
+      {
+        "id": "identity.sale-preparation-workloads.policy.v2",
+        "role": "consumer",
+        "version": "v2",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "56b861d13c483eafdfa69a08b5f7b58a9dd788eb",
+        "tag": null,
+        "tagObject": null,
+        "root": "identity/http/shared/v2/identity-sale-preparation-workloads-v2.json",
+        "operations": [],
+        "pointers": [
+          ""
+        ],
+        "files": [
+          {
+            "path": "identity/http/shared/v2/identity-sale-preparation-workloads-v2.json",
+            "sha256": "cfe35918d848d6037e0890ab545895116a3294b6aeeb87a8e4f9e69776ce455b"
+          }
+        ],
+        "units": [
+          {
+            "path": "identity/http/shared/v2/identity-sale-preparation-workloads-v2.json",
+            "pointer": "",
+            "sha256": "fc7577e672d80b2aa6e339fce8f124fbaf97309f727197763ea0300345dfd1c4"
+          }
+        ],
+        "selectionSha256": "1a88dfe59bfdf24043983bcea393d373e0cfa35bcbaad41f15d33a9f7040154d",
+        "runtimeSha256": "1a88dfe59bfdf24043983bcea393d373e0cfa35bcbaad41f15d33a9f7040154d"
+      },
+      {
+        "id": "inventory.sale-context.http.v2",
+        "role": "producer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+        "tag": null,
+        "tagObject": null,
+        "root": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+        "operations": [
+          "checkInventorySaleContext"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "sha256": "6bcfb35c2700c486e4b0d5c1c4a1230bd8df92144027fe31c5ddd181ecddb527"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "sha256": "0d0879b7475d6390f73b5b30589904a976544bb241f6e396b7e8f2af61b7d24c"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/paths/~1internal~1inventory~1sale-context-checks/post",
+            "sha256": "eb0444b55bba3a76208d97b9a40b12dfa5854f71c560e53b851cf43da04fe7eb"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "7ed16c884371887999d23ae22d26e14749726c5341018bbedddd08f1a228ac07"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$defs/Result",
+            "sha256": "a4cb38f34d7fef68adc23514ea1099e0adc392bd8ae7d20a5cdcdf80d02630e8"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "40bce3083e18076d7a59f059b2fa5f7afd6aa49a33e80f1c8307368f16e7d3e2"
+          },
+          {
+            "path": "inventory/http/shared/v1/inventory-sale-context-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "7d87fd8beacadac31dd04ca2ead189103a27f4c123a2f36172328dd9e7a9fe75",
+        "runtimeSha256": "751bee19126b9de95769575ec075081b3e9a54b78fb5df5e18a97da2fe052d03"
+      },
+      {
+        "id": "sales.context-check-authority.http.v2",
+        "role": "consumer",
+        "version": "2.0.0",
+        "sourceRepository": "opencomerix/contracts",
+        "commit": "58da655b33cbb0d83b10ba5be6dd5fe4917f1031",
+        "tag": null,
+        "tagObject": null,
+        "root": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+        "operations": [
+          "authorizeSaleContextCheck"
+        ],
+        "pointers": [],
+        "files": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "sha256": "483fbb6a968903cc038fd5f46322daa5a4dc053c7add50772cca98e737da8d3b"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "sha256": "0b4c6135b36147969ba660aa58548553d7bf7f2342dbb19f3112225d0370958d"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "sha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+          }
+        ],
+        "units": [
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "",
+            "sha256": "579114db9b319c285958c1655f605f8e96fb666234155c887edadde11f92653b"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$id",
+            "sha256": "1091f451ad2cd705658e6477f777bbfe9976e969ee5727e08dfca6648b25d9aa"
+          },
+          {
+            "path": "common/http/shared/v3/problem-details-v3.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/components/securitySchemes/workload",
+            "sha256": "938ba193c038a9c0fda918b516139a62928da52642d02b1c87db15c511239cab"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/jsonSchemaDialect",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/openapi",
+            "sha256": "536c8d78e8a0acbef96c0881c0b313c1dc7090176417df5982b2c7c82423ca16"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/paths/~1internal~1sales~1context-check-authorizations/post",
+            "sha256": "27e8195a3b04261e2e5f64b9fe7e2c55ee74a10f4e89d030c5657b8116fd4f76"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/security",
+            "sha256": "829b6e8804bab205ee2937ee50e402005b7eeceb0c85ba55116f664856994a8a"
+          },
+          {
+            "path": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+            "pointer": "/servers",
+            "sha256": "2515af3044495d2dab0e88a2bd593c78be0ae784826aa0d24e48f7aa1249c5da"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Decision",
+            "sha256": "a782fdb895832404cd677c10636d75f65d4add3209411b4c8ba93995b086ec3a"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$defs/Request",
+            "sha256": "9025b7fd7d839730ea151d4bd049b3a8b97ea8b9ceef9d47bba88471f615ad6b"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$id",
+            "sha256": "e03bfa78146f1842bde11e93ddb8e24abcc1e8f533154711d6d7f2a2520e08f4"
+          },
+          {
+            "path": "sales/http/shared/v1/sales-context-check-authority-v1.schema.json",
+            "pointer": "/$schema",
+            "sha256": "d421ef34c3980655c5e6d2f56234eec5435061d7aaa499cf1728b94c35d10875"
+          }
+        ],
+        "selectionSha256": "45266aedafe5ec0e8688750e68c290b4078a6b8bc9d31a4ea2ef1ef8f61e7da5",
+        "runtimeSha256": "6ea341f41dbb11471ea189bcaa082bb5dd1089357c024d2a0de8e61c795f8c94"
       }
     ],
     "assets": [
@@ -5436,6 +5907,26 @@
         "sourceSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934",
         "semanticSha256": null,
         "localSha256": "a8777e4cb6926976e8a439d0eddd1ee41afe15c8b5c94de5407c39104a194934"
+      },
+      {
+        "contractId": "inventory.sale-context.http.v2",
+        "sourcePath": "inventory/http/private/v2/inventory-sale-context-v2.yaml",
+        "destination": "test/contract/id-04/contracts/inventory/http/private/v2/inventory-sale-context-v2.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "6bcfb35c2700c486e4b0d5c1c4a1230bd8df92144027fe31c5ddd181ecddb527",
+        "semanticSha256": null,
+        "localSha256": "6bcfb35c2700c486e4b0d5c1c4a1230bd8df92144027fe31c5ddd181ecddb527"
+      },
+      {
+        "contractId": "sales.context-check-authority.http.v2",
+        "sourcePath": "sales/http/private/v2/sales-context-check-authority-v2.yaml",
+        "destination": "test/contract/id-04/contracts/sales/http/private/v2/sales-context-check-authority-v2.yaml",
+        "representation": "exact",
+        "purpose": "validation",
+        "sourceSha256": "0b4c6135b36147969ba660aa58548553d7bf7f2342dbb19f3112225d0370958d",
+        "semanticSha256": null,
+        "localSha256": "0b4c6135b36147969ba660aa58548553d7bf7f2342dbb19f3112225d0370958d"
       }
     ]
   }

@@ -4,6 +4,7 @@ import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
+import { consumerExportHashes } from './preparation-window-consumer-exports.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const base = createGitReader()(root, 'b0c742ca4cebdf70afffd2bf8b6dbb485c059186');
@@ -45,6 +46,14 @@ const admissionFiles = Object.freeze({
   "test/sales/preparation-window-admission-v1.test.mjs": "9c0ae2e3610f289bfcceecd17bec2f01cd63f0713d4444ced9406bcbdafcc2f9",
   "test/sales/preparation-window-v1.test.mjs": "cf3d124fb741c17c26c40b3188a918da3496b78d073b6a0e42ca02116e1ed80a"
 });
+const validationScript = 'scripts/sales/preparation-window-v1.mjs';
+const consumerExportScope = Object.freeze({
+  ...consumerExportHashes,
+  [validationScript]: 'e4682514ff72e258b3a41826e508affaa29e75eb597b86db044d012d1ddea8b6',
+  'scripts/sales/preparation-window-admission-v1.mjs': '59d106603e38f94a77ffd2e63d52d94e7fd6e0b4dd7bbb98716fbe5f11318aed',
+  'scripts/sales/preparation-window-consumer-exports.mjs': '0e2f397ea7d4eb49eca59066b70ae34089566166e5ced1c5cc1b989bf6d9dfc1',
+  'test/sales/preparation-window-consumer-exports.test.mjs': 'a7a98d59cdc5feb84a383760892480b086225a4b8b151a142956e7bb41126833',
+});
 // Preserve a UTF-8 BOM in the decoded input so only line endings are normalized.
 const decoder = new TextDecoder('utf-8', { fatal: true, ignoreBOM: true });
 const digest = bytes => createHash('sha256').update(decoder.decode(bytes).replaceAll('\r\n', '\n')).digest('hex');
@@ -78,8 +87,10 @@ export function includePreparationWindowPaths(allowed, registry, read) {
   if (!planned && !admitted) return;
   assert(!(planned && admitted), 'ID04_MIXED_SCOPE');
   const scope = admitted ? { ...metadata, ...source, ...admissionMetadata, ...admissionFiles } : { ...metadata, ...source };
+  const script = read(validationScript);
+  if (admitted && digest(script) === consumerExportScope[validationScript]) Object.assign(scope, consumerExportScope);
   for (const [file, expected] of Object.entries(scope)) {
-    const bytes = file === registryPath ? registry : read(file);
+    const bytes = file === registryPath ? registry : file === validationScript ? script : read(file);
     assert.equal(digest(bytes), expected, 'ID04_SOURCE_SCOPE:' + file);
     allowed.add(file);
   }

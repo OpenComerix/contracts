@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { projectPreparationWindowConsumerFile } from './preparation-window-consumer-exports.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 const base = 'b0c742ca4cebdf70afffd2bf8b6dbb485c059186';
@@ -109,7 +110,7 @@ export function verifyMetadata(current = read) {
     assert.deepEqual(json(current, `${domain}/index.json`), domainIndex(currentRegistry, domain), `ID04_INDEX:${domain}`);
   }
   for (const file of ['index', ...baseline.requiredConsumers].map(name => `registry/consumers/${name}.json`)) {
-    assert(current(file).equals(original(file)), `ID04_CONSUMER_PRESERVATION:${file}`);
+    assert(projectPreparationWindowConsumerFile(file, current(file)).equals(original(file)), `ID04_CONSUMER_PRESERVATION:${file}`);
   }
 }
 

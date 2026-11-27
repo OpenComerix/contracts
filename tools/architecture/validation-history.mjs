@@ -12,6 +12,7 @@ import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 import {includeCompletedTypesPaths,projectCompletedTypesFile} from '../../scripts/sales/completed-v3-types-history.mjs';
 import {beforeInternalAuthV3,includeInternalAuthV3Paths,projectExtendedIdentityIndex} from '../../scripts/identity/internal-auth-v3-history.mjs';
+import {consumerExportBase,consumerExportHashes,projectPreparationWindowConsumerDocument,projectPreparationWindowConsumerFile} from '../../scripts/sales/preparation-window-consumer-exports.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -218,6 +219,7 @@ function optional(read, file) {
 // A metadata projection proves this one supplied value, never another file or
 // the state of the checkout. Unchanged historical bytes need no adaptation.
 export function projectReviewedFile(revision, file, bytes) {
+  if (Object.hasOwn(consumerExportHashes,file)&&canProject(consumerExportBase,revision)) bytes=projectPreparationWindowConsumerFile(file,bytes);
   const previous = optional(source(revision), file);
   if (previous && text(bytes) === text(previous)) return bytes;
   if (!previous) return undefined;
@@ -239,6 +241,11 @@ export function projectReviewedSnapshot(revision, snapshot) {
   if (typeof service !== 'string' || !/^[a-z-]+$/.test(service)) return snapshot;
   const file = 'registry/consumers/' + service + '.json';
   if (!metadata.has(file)) return snapshot;
+  if (Object.hasOwn(consumerExportHashes,file)&&canProject(consumerExportBase,revision) &&
+      projectPreparationWindowConsumerDocument(file,snapshot)!==snapshot) {
+    const previous=optional(source(revision),file);
+    if (previous) return JSON.parse(previous);
+  }
   if (isReuseCandidateDocument(file,snapshot) && canProject(reuseCandidateBase,revision))
     return JSON.parse(source(revision)(file));
   for (const from of reviewedInputs) {
@@ -258,6 +265,7 @@ export function isReviewedDocument(revision,file,value) {
   return metadata.has(file)&&file.endsWith('.json')&&isDeepStrictEqual(value,JSON.parse(source(revision)(file)));
 }
 export function projectReviewedDocument(revision,file,value) {
+  if (Object.hasOwn(consumerExportHashes,file)&&canProject(consumerExportBase,revision)) value=projectPreparationWindowConsumerDocument(file,value);
   value=projectPwaTelemetryDocument(file,value);
   value=projectOperationalDocument(file,value);
   const cash=projectCashConsumerDocument(file,value);
@@ -347,13 +355,14 @@ const toolingPaths = Object.freeze([
   'scripts/sales/completed-v3-types-history.mjs',
   'scripts/identity/internal-auth-v3-history.mjs',
   'scripts/sales/preparation-window-history-v1.mjs',
+  'scripts/sales/preparation-window-consumer-exports.mjs',
   'scripts/sales/iana-native-v1.mjs',
   'scripts/sales/validate-iana-v1.sh',
   'test/sales/iana-source-v1.test.mjs',
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '896445b3ffcbee91986e58e9f41846e3af006fc2ee8873a1ed0802f98220a9f8';
+const toolingReferenceSha256 = '739bb2f8b92f77a618cf9d6befd06b1882e2d98acb9b82c53e613099091b5be4';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';

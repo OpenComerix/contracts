@@ -37,7 +37,12 @@ test('caller mutations are passed through rather than repaired by historical pro
 test('direct historical snapshot readers admit only the fully verified new Catalog export', () => {
   const file = 'registry/consumers/catalog-pricing.json';
   const current = JSON.parse(readRepositoryFile(file));
-  assert.equal(current.manifest.contracts.length, 59);
+  const previous = JSON.parse(execFileSync('git', ['show', 'b216e4961b9b23e5ef893dbe3499ee3774dd22a9:' + file],
+    { cwd: new URL('../../', import.meta.url), windowsHide: true, maxBuffer: 2 * 1024 * 1024 }));
+  const previousSelections = previous.manifest.contracts;
+  assert.equal(previousSelections.length, 59);
+  assert.deepEqual(current.manifest.contracts.slice(0, previousSelections.length), previousSelections);
+  assert.equal(current.manifest.contracts.length, previousSelections.length + 4);
   const before = structuredClone(current);
   const historical = captureConsumerHistoricalSnapshot(current);
   const expected = JSON.parse(execFileSync('git', ['show', 'bcb2d3cfb7296441c13a1cf4e2e32fed9aa59b75:' + file],

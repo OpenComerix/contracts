@@ -5,8 +5,10 @@ import { fileURLToPath } from 'node:url';
 
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
-import { resolveSelection } from '../../tools/architecture/graph.mjs';
+import { resolveSelection, worktreeReader } from '../../tools/architecture/graph.mjs';
 import { verifyJointDelivery } from '../../tools/architecture/joint-delivery.mjs';
+import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { consumerExportBase, consumerExportHashes, verifyPreparationWindowConsumerExports } from './preparation-window-consumer-exports.mjs';
 import { contracts } from './preparation-window-v1.mjs';
 
 export const sourceCommit = '58da655b33cbb0d83b10ba5be6dd5fe4917f1031';
@@ -58,6 +60,8 @@ const semanticOperations = [
   ['identity.f1-14e.iana.http-private.identity-sales-temporal-authority-v2', ['checkSalesTemporalAuthorization']],
   ['identity.internal-auth.v4', ['issueInternalServiceToken', 'getInternalIdentityJwks']],
 ];
+const adaptedValidationScript = 'scripts/sales/preparation-window-v1.mjs';
+const adaptedValidationHash = 'e4682514ff72e258b3a41826e508affaa29e75eb597b86db044d012d1ddea8b6';
 
 export function admissionRegistry(source) {
   const registry = JSON.parse(source(registryPath));
@@ -94,8 +98,14 @@ export function admissionRegistry(source) {
 export function verifyPreparationWindowAdmission(root, finalRevision = null, readCurrent) {
   const git = (...args) => execFileSync('git', ['-C', root, '--no-replace-objects', ...args],
     { encoding: 'utf8', windowsHide: true }).trim();
+  const head = finalRevision ?? git('rev-parse', 'HEAD');
+  assert(fullSha.test(head), 'ID04_FINAL_REVISION');
+  const consumerExports = head !== sourceCommit &&
+    (finalRevision === null || head !== consumerExportBase) &&
+    git('merge-base', consumerExportBase, head) === consumerExportBase;
+  if (finalRevision !== null) assert(!readCurrent, 'JOINT_MIXED_READERS');
   if (finalRevision === null) {
-    assert.equal(git('rev-parse', 'HEAD'), sourceCommit, 'ID04_LOCAL_BASE');
+    assert(head === sourceCommit || consumerExports, 'ID04_LOCAL_BASE');
   } else {
     assert(fullSha.test(finalRevision) && finalRevision !== sourceCommit, 'ID04_FINAL_REVISION');
     const [initial] = git('rev-list', '--first-parent', '--ancestry-path', '--reverse',
@@ -113,8 +123,42 @@ export function verifyPreparationWindowAdmission(root, finalRevision = null, rea
     const selection = { version: descriptor.version, operations, pointers: [] };
     for (const file of resolveSelection(source, descriptor, selection, registry).files) dependencies.add(file.path);
   }
-  return verifyJointDelivery({ root, sourceCommit, finalRevision, readCurrent, admittedIds,
-    semanticPaths: dependencies, registrySha256 });
+  const options = { root, sourceCommit, admittedIds, semanticPaths: dependencies, registrySha256 };
+  if (!consumerExports) return verifyJointDelivery({ ...options, finalRevision, readCurrent });
+
+  // The original admission must still pass without projecting a single input.
+  verifyJointDelivery({ ...options, finalRevision: consumerExportBase });
+  const current = finalRevision === null ? (readCurrent ?? worktreeReader(root)) : gitReader(root, finalRevision);
+  const read = file => finalRevision === null
+    ? Buffer.from(current(file).toString('latin1').replaceAll('\r\n', '\n'), 'latin1')
+    : current(file);
+  assert.equal(sha256(read(registryPath)), registrySha256, 'ID04_EXPORT_REGISTRY');
+  verifyPreparationWindowConsumerExports(read);
+  const indexPath = 'registry/consumers/index.json';
+  const index = JSON.parse(source(indexPath));
+  for (const file of [indexPath, ...index.consumers.map(row => 'registry/consumers/' + row.file)]) {
+    if (!Object.hasOwn(consumerExportHashes, file)) {
+      assert(read(file).equals(source(file)), 'ID04_EXPORT_UNRELATED:' + file);
+    }
+  }
+  for (const entry of registry.contracts.filter(inScope)) {
+    const selection = { version: entry.version, operations: [], pointers: [''] };
+    for (const file of resolveSelection(source, entry, selection, registry).files) dependencies.add(file.path);
+  }
+  for (const file of dependencies) {
+    const bytes = read(file);
+    if (file === adaptedValidationScript) {
+      assert.equal(sha256(bytes), adaptedValidationHash, 'ID04_EXPORT_VALIDATION_SCRIPT');
+    } else {
+      assert(bytes.equals(source(file)), 'ID04_EXPORT_CLOSURE:' + file);
+    }
+  }
+  for (const domain of new Set([...registry.contracts, ...registry.planned].map(row => row.domain))) {
+    assert.deepEqual(JSON.parse(read(domain + '/index.json')), domainIndex(registry, domain), 'ID04_EXPORT_INDEX');
+  }
+  return { sourceCommit, checkedCommit: finalRevision, admissionRevision: consumerExportBase,
+    publication: 'unverified', evidence: finalRevision === null ? 'local-candidate' : 'preserved-admission',
+    admittedIds, closureFiles: dependencies.size, consumerExports: Object.keys(consumerExportHashes) };
 }
 
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
