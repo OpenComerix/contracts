@@ -21,6 +21,22 @@ const admittedMetadata = new Map([
   ['identity/index.json', 'a3f859998fefda81d973f320275490308cd2bc7aa2b8ec223e37d12638196d75'],
   ['registry/contracts.json', '3ff594289a1f3bb176036a790933f1c3f6da57a1e483b48154cd4fed0574cb55'],
 ]);
+const id03SourceMetadata = new Map([
+  ['identity/README.md', '2a5cc0fee0a335f99d8de34c1c39460f41d8d3b96cef9c00c409332e4d65205a'],
+  ['identity/index.json', '47d485ae47e77dfe12f85627d07abb0edf237b49df8d74b156d93d72beb7e9d0'],
+  ['registry/contracts.json', '6bf709a5f014c92bb8c443ae19743ad602294d764e819a54059fcaf8d127872d'],
+]);
+const id03SourcePaths = new Map([
+  ['identity/http/private/v4/identity-internal-auth-v4.yaml', '88bcf108d0743abd76f5be9d1dcad3fa9d651f3c65d44c41e04702d28c01a27c'],
+  ['identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json', '2bc4ed5f59a05cb2e9996a88caa793de97dc97cdf019b84698e523492dbc2207'],
+  ['identity/http/shared/v4/identity-workload-token-reuse-policy-v4.schema.json', '7603828c74b1d5c286dff42da7cf11e97c994d892c182edc538bbeac9a339e10'],
+  ['identity/fixtures/internal-auth/v4/policy-cases-v4.json', '6240918617a83d8542be0c0c28ef4f3ae38c196dbe57144f979a78506371bc3e'],
+  ['identity/http/shared/v2/identity-sale-preparation-workloads-v2.json', 'cfe35918d848d6037e0890ab545895116a3294b6aeeb87a8e4f9e69776ce455b'],
+  ['scripts/identity/prepare-internal-auth-v4.mjs', '2dac111972795cbf6644c453feb21dc1e1e7c4c6b642ff7a1e8c13c579a59ec2'],
+  ['test/identity/internal-auth-v4.test.mjs', '847e043a2e6a687df879e7711115acbce7a2ab69fa2fe19692520464e68c9f4e'],
+]);
+const id02AdmissionTest = 'test/identity/internal-auth-v3-admission.test.mjs';
+const id02AdmissionTestPinned = 'dc4c3f73793e2583bd642cb7408e686995c4cbad11ef067dcde2320499e6e4e7';
 const additions = new Map([
   ['identity/http/private/v3/identity-internal-auth-v3.yaml', '3c9332409d6c5f88f4eb608415b4aff88598b473a7cc39cfc5d0d936c148c85b'],
   ['identity/http/shared/v3/identity-workload-token-reuse-policy-v3.json', '1a62ffb77790e26a93ee3982ffec9ded3e946ef78c5750983abbe4b1e2109429'],
@@ -31,7 +47,7 @@ const additions = new Map([
 ]);
 const admissionAdditions = new Map([
   ['scripts/identity/internal-auth-v3-admission.mjs', '1cb2b2fa77c14eeb34054c0d9c31400f28fa0617d397ad8f39b0932adf8597a3'],
-  ['test/identity/internal-auth-v3-admission.test.mjs', '336d086819c3abb6b60aaaf31bb630b9281d1f3ee386a1ba8bd855e44e57395a'],
+  [id02AdmissionTest, '336d086819c3abb6b60aaaf31bb630b9281d1f3ee386a1ba8bd855e44e57395a'],
 ]);
 const admittedIds = new Set([
   'identity.internal-auth.v3',
@@ -49,12 +65,13 @@ const original = file => {
   return Buffer.from(before.get(file));
 };
 
-// Older gates receive the predecessor only for an exact supplied ID-02 input.
+// The same historical view recognizes exact metadata from ID-02 and ID-03 A.
 export function beforeInternalAuthV3(file, bytes) {
   const expected = metadata.get(file);
   if (!expected) return bytes;
   const actual = digest(bytes);
-  if (actual !== expected && actual !== admittedMetadata.get(file)) return bytes;
+  if (actual !== expected && actual !== admittedMetadata.get(file) &&
+      actual !== id03SourceMetadata.get(file)) return bytes;
   return original(file);
 }
 
@@ -82,8 +99,19 @@ export function includeInternalAuthV3Paths(allowed, registry, read) {
     assert(!planned.some(belongsToAdmission) && sha256(canonical(descriptors)) === descriptorHash, 'ID02_DESCRIPTOR_SCOPE');
   }
   const checks = sourceCandidate ? additions : [...additions, ...admissionAdditions];
-  for (const [file, hash] of checks) assert.equal(digest(read(file)), hash, 'ID02_SOURCE_SCOPE:' + file);
+  for (const [file, hash] of checks) {
+    const actual = digest(read(file));
+    assert(actual === hash || (file === id02AdmissionTest && actual === id02AdmissionTestPinned),
+      'ID02_SOURCE_SCOPE:' + file);
+  }
   for (const [file] of checks) allowed.add(file);
+  if (current?.planned.some(row => row.materializeIn === 'ID-03')) {
+    for (const [file, hash] of [...id03SourceMetadata, ...id03SourcePaths]) {
+      const bytes = file === 'registry/contracts.json' ? registry : read(file);
+      assert.equal(digest(bytes), hash, 'ID03_SOURCE_SCOPE:' + file);
+      allowed.add(file);
+    }
+  }
   if (current && actual !== admittedMetadata.get('registry/contracts.json')) return current;
 }
 

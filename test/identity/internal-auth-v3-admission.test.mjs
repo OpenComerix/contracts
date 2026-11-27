@@ -151,13 +151,14 @@ test('initial B comes from Git A and descendants can extend the registry and con
 });
 
 test('the historical repository gate retains verified ID-02 tooling after an unrelated intention', () => {
+  const readAdmission = createGitReader()(root, 'c6739731d8f94916014039bc98f3b736af79a594');
   const registry = admissionRegistry(readA);
   const initialIndex = encode(domainIndex(registry, 'identity'));
   registry.planned.push(laterIntention);
   const registryBytes = encode(registry);
   const indexBytes = encode(domainIndex(registry, 'identity'));
   const source = file => file === registryPath ? registryBytes
-    : file === indexPath ? indexBytes : read(file);
+    : file === indexPath ? indexBytes : readAdmission(file);
   const allowed = withRepositoryValidationScope([], source);
   const tooling = [
     'scripts/identity/prepare-internal-auth-v3.mjs', 'scripts/identity/internal-auth-v3-admission.mjs',

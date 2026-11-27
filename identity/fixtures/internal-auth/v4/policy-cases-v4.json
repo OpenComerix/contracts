@@ -1,0 +1,255 @@
+{
+  "format_version": 1,
+  "runtime_demonstrated": false,
+  "positive": "identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json",
+  "negative_mutations": [
+    {
+      "id": "no-tenth-profile",
+      "pointer": "/profiles/9",
+      "value": {
+        "client_id": "gateway-bff",
+        "caller": "gateway-bff",
+        "audience": "identity-tenancy.gateway"
+      }
+    },
+    {
+      "id": "no-cross-purpose-audience",
+      "pointer": "/profiles/0/audience",
+      "value": "inventory.process-results"
+    },
+    {
+      "id": "no-human-profile",
+      "pointer": "/profiles/0/caller",
+      "value": "gateway-bff"
+    },
+    {
+      "id": "no-shared-cache",
+      "pointer": "/storage/location",
+      "value": "shared_cache"
+    },
+    {
+      "id": "no-http-cache",
+      "pointer": "/storage/http_cache",
+      "value": true
+    },
+    {
+      "id": "no-persistence",
+      "pointer": "/storage/persistence",
+      "value": true
+    },
+    {
+      "id": "no-tenant-map",
+      "pointer": "/storage/tenant_or_session_keyed",
+      "value": true
+    },
+    {
+      "id": "bounded-lifetime",
+      "pointer": "/lifetime/maximum_seconds",
+      "value": 301
+    },
+    {
+      "id": "bounded-reuse-threshold",
+      "pointer": "/lifetime/reuse_min_remaining_ms_exclusive",
+      "value": 0
+    },
+    {
+      "id": "no-sliding-expiry",
+      "pointer": "/lifetime/sliding_expiry",
+      "value": true
+    },
+    {
+      "id": "no-refresh-timer",
+      "pointer": "/acquisition/proactive_refresh",
+      "value": true
+    },
+    {
+      "id": "verify-every-use",
+      "pointer": "/authorization/verify_credential_each_use",
+      "value": false
+    },
+    {
+      "id": "no-human-authority-cache",
+      "pointer": "/authorization/cache_human_authority",
+      "value": true
+    },
+    {
+      "id": "no-step-authority-cache",
+      "pointer": "/authorization/cache_step_authority",
+      "value": true
+    },
+    {
+      "id": "no-timeout-extension",
+      "pointer": "/authorization/inventory_authority_http_timeout_ms",
+      "value": 2000
+    },
+    {
+      "id": "no-expired-fallback",
+      "pointer": "/errors/expired_fallback",
+      "value": true
+    },
+    {
+      "id": "no-operation-retry",
+      "pointer": "/errors/automatic_operation_retry",
+      "value": true
+    },
+    {
+      "id": "no-immediate-revocation-claim",
+      "pointer": "/retirement/secret_removal",
+      "value": "revokes_existing_tokens_immediately"
+    },
+    {
+      "id": "closed-policy-fields",
+      "pointer": "/unexpected",
+      "value": true
+    },
+    {
+      "id": "fixed-sales-audience",
+      "pointer": "/profiles/2/audience",
+      "value": "inventory.process-results"
+    },
+    {
+      "id": "fixed-sales-caller",
+      "pointer": "/profiles/2/caller",
+      "value": "gateway-bff"
+    },
+    {
+      "id": "six-human-checks",
+      "pointer": "/sales_authority/new_sale_post_human_checks",
+      "value": 5
+    },
+    {
+      "id": "fresh-per-invocation",
+      "pointer": "/sales_authority/check",
+      "value": "reuse_human_decision"
+    },
+    {
+      "id": "total-decision-budget",
+      "pointer": "/sales_authority/decision_budget_ms",
+      "value": 2001
+    },
+    {
+      "id": "one-flight",
+      "pointer": "/storage/acquisitions_in_flight_per_profile_generation",
+      "value": 2
+    },
+    {
+      "id": "retired-flight",
+      "pointer": "/acquisition/late_retired_generation",
+      "value": "retain"
+    },
+    {
+      "id": "authentication-rejection",
+      "pointer": "/errors/authentication_rejection",
+      "value": "retry"
+    },
+    {
+      "id": "domain-denial",
+      "pointer": "/errors/domain_denial",
+      "value": "renew"
+    },
+    {
+      "id": "no-token-telemetry",
+      "pointer": "/sales_authority/sensitive_telemetry",
+      "value": true
+    },
+    {
+      "id": "fixed-audience-sales-pos.catalog-capture",
+      "pointer": "/profiles/3/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "fixed-audience-catalog-pricing.sales-capture-authority",
+      "pointer": "/profiles/4/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "fixed-audience-sales-pos.inventory-context",
+      "pointer": "/profiles/5/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "fixed-audience-sales-pos.finance-context",
+      "pointer": "/profiles/6/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "fixed-audience-inventory.sales-context-authority",
+      "pointer": "/profiles/7/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "fixed-audience-finance.sales-context-authority",
+      "pointer": "/profiles/8/audience",
+      "value": "sales-pos.user-api"
+    },
+    {
+      "id": "gateway-sales-not-admitted",
+      "pointer": "/profiles/9",
+      "value": {
+        "client_id": "gateway-bff.sales",
+        "caller": "gateway-bff",
+        "audience": "sales-pos.user-api"
+      }
+    },
+    {
+      "id": "distinct-context-callers",
+      "pointer": "/profiles/8/caller",
+      "value": "inventory"
+    },
+    {
+      "id": "no-delegation-reuse",
+      "pointer": "/sale_preparation/human_delegation",
+      "value": "reusable"
+    },
+    {
+      "id": "fresh-preparation-decisions",
+      "pointer": "/sale_preparation/human_decisions",
+      "value": "reusable"
+    },
+    {
+      "id": "gateway-fresh-issuance",
+      "pointer": "/sale_preparation/gateway_issuance",
+      "value": "reusable"
+    },
+    {
+      "id": "bound-callback",
+      "pointer": "/sale_preparation/callback_binding",
+      "value": "caller_only"
+    },
+    {
+      "id": "no-cross-instance-sharing",
+      "pointer": "/sale_preparation/credential_and_acquisition_scope",
+      "value": "shared_per_process_profile_audience_and_configuration_generation"
+    },
+    {
+      "id": "no-retained-entry-after-shutdown",
+      "pointer": "/sale_preparation/instance_shutdown",
+      "value": "retain_entry_until_expiration"
+    },
+    {
+      "id": "no-late-acquisition-after-shutdown",
+      "pointer": "/sale_preparation/instance_shutdown",
+      "value": "discard_entry_and_accept_late_results"
+    },
+    {
+      "id": "bounded-preparation",
+      "pointer": "/sale_preparation/preparation_maximum_seconds",
+      "value": 61
+    },
+    {
+      "id": "bounded-decision",
+      "pointer": "/sale_preparation/decision_budget_ms",
+      "value": 2001
+    },
+    {
+      "id": "budget-includes-acquisition",
+      "pointer": "/sale_preparation/decision_budget_anchor",
+      "value": "after_credential_wait"
+    },
+    {
+      "id": "retirement-cap",
+      "pointer": "/retirement/maximum_issued_token_seconds",
+      "value": 301
+    }
+  ]
+}

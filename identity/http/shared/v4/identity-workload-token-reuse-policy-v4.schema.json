@@ -1,0 +1,385 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://contracts.opencomerix.example/identity/http/shared/v4/identity-workload-token-reuse-policy-v4.schema.json",
+  "title": "H1A v4 bounded private workload credential reuse policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "policy_version",
+    "status",
+    "owner",
+    "runtime_demonstrated",
+    "production_enabled",
+    "contract",
+    "supersedes",
+    "profiles",
+    "storage",
+    "lifetime",
+    "acquisition",
+    "authorization",
+    "retirement",
+    "errors",
+    "activation",
+    "sales_authority",
+    "sale_preparation"
+  ],
+  "properties": {
+    "policy_version": {
+      "const": 4
+    },
+    "status": {
+      "const": "candidate"
+    },
+    "owner": {
+      "const": "identity-tenancy"
+    },
+    "runtime_demonstrated": {
+      "const": false
+    },
+    "production_enabled": {
+      "const": false
+    },
+    "contract": {
+      "const": "identity/http/private/v4/identity-internal-auth-v4.yaml"
+    },
+    "supersedes": {
+      "const": "identity/http/private/v3/identity-internal-auth-v3.yaml"
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "client_id",
+            "caller",
+            "audience"
+          ],
+          "properties": {
+            "client_id": {
+              "const": "inventory.sales-process-authority"
+            },
+            "caller": {
+              "const": "inventory"
+            },
+            "audience": {
+              "const": "sales-pos.process-authority"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "client_id",
+            "caller",
+            "audience"
+          ],
+          "properties": {
+            "client_id": {
+              "const": "sales-pos.inventory-results"
+            },
+            "caller": {
+              "const": "sales-pos"
+            },
+            "audience": {
+              "const": "inventory.process-results"
+            }
+          }
+        },
+        {
+          "const": {
+            "client_id": "sales-pos.sales-authority",
+            "caller": "sales-pos",
+            "audience": "identity-tenancy.sales-authority"
+          }
+        },
+        {
+          "const": {
+            "client_id": "sales-pos.catalog-capture",
+            "caller": "sales-pos",
+            "audience": "catalog-pricing.sale-capture"
+          }
+        },
+        {
+          "const": {
+            "client_id": "catalog-pricing.sales-capture-authority",
+            "caller": "catalog-pricing",
+            "audience": "sales-pos.catalog-capture-authority"
+          }
+        },
+        {
+          "const": {
+            "client_id": "sales-pos.inventory-context",
+            "caller": "sales-pos",
+            "audience": "inventory.sale-context"
+          }
+        },
+        {
+          "const": {
+            "client_id": "sales-pos.finance-context",
+            "caller": "sales-pos",
+            "audience": "finance.sale-context"
+          }
+        },
+        {
+          "const": {
+            "client_id": "inventory.sales-context-authority",
+            "caller": "inventory",
+            "audience": "sales-pos.context-check-authority"
+          }
+        },
+        {
+          "const": {
+            "client_id": "finance.sales-context-authority",
+            "caller": "finance",
+            "audience": "sales-pos.context-check-authority"
+          }
+        }
+      ],
+      "items": false
+    },
+    "storage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "location",
+        "entries_per_profile_generation",
+        "acquisitions_in_flight_per_profile_generation",
+        "http_cache",
+        "persistence",
+        "logs_or_events",
+        "tenant_or_session_keyed"
+      ],
+      "properties": {
+        "location": {
+          "const": "private_process_ram"
+        },
+        "entries_per_profile_generation": {
+          "const": 1
+        },
+        "acquisitions_in_flight_per_profile_generation": {
+          "const": 1
+        },
+        "http_cache": {
+          "const": false
+        },
+        "persistence": {
+          "const": false
+        },
+        "logs_or_events": {
+          "const": false
+        },
+        "tenant_or_session_keyed": {
+          "const": false
+        }
+      }
+    },
+    "lifetime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "maximum_seconds",
+        "reuse_min_remaining_ms_exclusive",
+        "expires_in_anchor",
+        "effective_expiry",
+        "sliding_expiry",
+        "short_token",
+        "clock_rollback"
+      ],
+      "properties": {
+        "maximum_seconds": {
+          "const": 300
+        },
+        "reuse_min_remaining_ms_exclusive": {
+          "const": 2000
+        },
+        "expires_in_anchor": {
+          "const": "before_request"
+        },
+        "effective_expiry": {
+          "const": "earliest_verified_exp_wall_and_monotonic_expires_in"
+        },
+        "sliding_expiry": {
+          "const": false
+        },
+        "short_token": {
+          "const": "use_once_with_remaining_budget"
+        },
+        "clock_rollback": {
+          "const": "discard"
+        }
+      }
+    },
+    "acquisition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trigger",
+        "proactive_refresh",
+        "shared_per_profile_generation",
+        "waiter_deadlines",
+        "shared_deadline",
+        "waiter_cancel",
+        "late_retired_generation",
+        "restart"
+      ],
+      "properties": {
+        "trigger": {
+          "const": "on_demand"
+        },
+        "proactive_refresh": {
+          "const": false
+        },
+        "shared_per_profile_generation": {
+          "const": true
+        },
+        "waiter_deadlines": {
+          "const": "independent"
+        },
+        "shared_deadline": {
+          "const": "fixed_never_extended_by_followers"
+        },
+        "waiter_cancel": {
+          "const": "does_not_cancel_others"
+        },
+        "late_retired_generation": {
+          "const": "discard"
+        },
+        "restart": {
+          "const": "empty"
+        }
+      }
+    },
+    "authorization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "verify_credential_each_use",
+        "verify_at_receiver",
+        "cache_human_authority",
+        "cache_step_authority",
+        "step_authority",
+        "inventory_authority_http_timeout_ms",
+        "sales_result_total_budget_ms"
+      ],
+      "properties": {
+        "verify_credential_each_use": {
+          "const": true
+        },
+        "verify_at_receiver": {
+          "const": true
+        },
+        "cache_human_authority": {
+          "const": false
+        },
+        "cache_step_authority": {
+          "const": false
+        },
+        "step_authority": {
+          "const": "fresh_per_attempt"
+        },
+        "inventory_authority_http_timeout_ms": {
+          "const": 1000
+        },
+        "sales_result_total_budget_ms": {
+          "const": 2000
+        }
+      }
+    },
+    "retirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "secret_removal",
+        "maximum_issued_token_seconds",
+        "existing_token",
+        "key_retirement",
+        "jwks_freshness",
+        "reconfiguration"
+      ],
+      "properties": {
+        "secret_removal": {
+          "const": "blocks_new_issuance_only"
+        },
+        "maximum_issued_token_seconds": {
+          "const": 300
+        },
+        "existing_token": {
+          "const": "may_remain_usable_until_effective_expiry_subject_to_receiver_keys"
+        },
+        "key_retirement": {
+          "const": "receiver_policy_unchanged"
+        },
+        "jwks_freshness": {
+          "const": "existing_inventory_max_30_seconds_less_age_not_a_universal_revocation_guarantee"
+        },
+        "reconfiguration": {
+          "const": "discard_local_entry_and_in_flight_generation"
+        }
+      }
+    },
+    "errors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expired_fallback",
+        "automatic_operation_retry",
+        "authentication_rejection",
+        "domain_denial"
+      ],
+      "properties": {
+        "expired_fallback": {
+          "const": false
+        },
+        "automatic_operation_retry": {
+          "const": false
+        },
+        "authentication_rejection": {
+          "const": "discard_and_propagate"
+        },
+        "domain_denial": {
+          "const": "propagate_without_oauth_retry"
+        }
+      }
+    },
+    "activation": {
+      "const": "Candidate only. Consumption requires admission, full CI on the final revision and owner tests."
+    },
+    "sales_authority": {
+      "const": {
+        "operations": [
+          "checkSalesAuthorization",
+          "checkSalesTemporalAuthorization"
+        ],
+        "credential_scope": "private_per_sales_instance_profile_audience_and_configuration_generation",
+        "check": "fresh_human_decision_per_invocation",
+        "new_sale_post_human_checks": 6,
+        "decision_budget_ms": 2000,
+        "budget_anchor": "before_network_including_credential_wait",
+        "reuse_requires_sufficient_call_budget": true,
+        "unavailable": "valid_credential_only_and_fail_closed_without_current_decision",
+        "instance_shutdown": "discard_entry_and_in_flight_generation",
+        "sensitive_telemetry": false
+      }
+    },
+    "sale_preparation": {
+      "const": {
+        "context_workload_policy": "identity/http/shared/v2/identity-sale-preparation-workloads-v2.json",
+        "scope": "technical_authentication_only_for_sale_preparation",
+        "credential_and_acquisition_scope": "private_per_instance_profile_audience_and_configuration_generation",
+        "instance_shutdown": "discard_entry_retire_in_flight_generation_and_discard_late_results",
+        "gateway_issuance": "fresh_per_request",
+        "human_delegation": "fresh_per_request",
+        "human_decisions": "fresh_per_invocation",
+        "callback_binding": "exact_caller_purpose_organization_operation_preparation_request_hash_and_owner_fingerprint",
+        "preparation_maximum_seconds": 60,
+        "decision_budget_ms": 2000,
+        "decision_budget_anchor": "before_network_including_credential_wait"
+      }
+    }
+  }
+}

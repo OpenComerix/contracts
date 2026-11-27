@@ -1,0 +1,50 @@
+{
+  "policy_version": 2,
+  "status": "candidate",
+  "owner": "identity-tenancy",
+  "runtime_demonstrated": false,
+  "production_enabled": false,
+  "profiles": [
+    {
+      "client_id": "sales-pos.inventory-context",
+      "caller": "sales-pos",
+      "audience": "inventory.sale-context",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": true
+    },
+    {
+      "client_id": "sales-pos.finance-context",
+      "caller": "sales-pos",
+      "audience": "finance.sale-context",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": true
+    },
+    {
+      "client_id": "inventory.sales-context-authority",
+      "caller": "inventory",
+      "audience": "sales-pos.context-check-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": true
+    },
+    {
+      "client_id": "finance.sales-context-authority",
+      "caller": "finance",
+      "audience": "sales-pos.context-check-authority",
+      "type": "service",
+      "algorithm": "ES256",
+      "maximum_seconds": 300,
+      "reuse": true
+    }
+  ],
+  "issuance": "H1A HTTP Basic grant_type=client_credentials with a distinct secret per fixed client_id. Reuse is limited to the listed profiles under the referenced H1A v4 policy. No audience selector or shared-secret fallback.",
+  "authority": "Service tokens authenticate caller only. Each owner requires current Sales preparation callback bound to the exact request; no delegated human material leaves Sales RAM.",
+  "supersedes": "identity/http/shared/v1/identity-sale-preparation-workloads-v1.json",
+  "extends_without_changing": "identity/http/shared/v1/identity-sales-authority-policy-v1.json",
+  "reuse_policy": "identity/http/shared/v4/identity-workload-token-reuse-policy-v4.json"
+}

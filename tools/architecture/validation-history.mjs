@@ -11,7 +11,7 @@ import {withPreparationScope} from '../../scripts/sales/preparation-history-v1.m
 import {withRecoveryScope} from '../../scripts/sales/recovery-consumer-v1.mjs';
 import {projectPwaTelemetryFile,projectPwaTelemetryDocument,pwaTelemetryHistoricalPaths,includeLaterAdmissionPaths} from '../../scripts/observability/pwa-telemetry-history-v1.mjs';
 import {includeCompletedTypesPaths,projectCompletedTypesFile} from '../../scripts/sales/completed-v3-types-history.mjs';
-import {includeInternalAuthV3Paths,projectExtendedIdentityIndex} from '../../scripts/identity/internal-auth-v3-history.mjs';
+import {beforeInternalAuthV3,includeInternalAuthV3Paths,projectExtendedIdentityIndex} from '../../scripts/identity/internal-auth-v3-history.mjs';
 
 const root = path.resolve(import.meta.dirname, '../..');
 // Reviewed inputs, independent of the mutable checkout and future commits.
@@ -124,9 +124,11 @@ export function withRepositoryValidationScope(paths, read) {
   const pwaPaths = pwaTelemetryHistoricalPaths(registry);
   const candidates = new Set([...paths, ...pwaPaths]);
   const extendedRegistry = includeInternalAuthV3Paths(candidates, registry, read);
+  const id03Source = extendedRegistry?.planned.some(row => row.materializeIn === 'ID-03');
   const allowed = withReuseCandidateScope(candidates, file => {
     if (file === registryFile) return registry;
     const bytes = read(file);
+    if (id03Source && file === 'identity/README.md') return beforeInternalAuthV3(file, bytes);
     return file === 'identity/index.json' && extendedRegistry
       ? projectExtendedIdentityIndex(bytes, extendedRegistry) : bytes;
   });
@@ -349,7 +351,7 @@ const toolingPaths = Object.freeze([
   'scripts/observability/pwa-telemetry-admission-v1.mjs',
   'scripts/observability/pwa-telemetry-history-v1.mjs',
 ]);
-const toolingReferenceSha256 = '1d48e5227a3102d889508efc75421e7cc9d41ae1aeb13ecdfefdfa5090466cd8';
+const toolingReferenceSha256 = 'adf3e48491994d690f22c146d7fc6363060dc1ee6e9ed238485c4db6374b5c0d';
 const toolingHashes = Object.freeze({ ...reviewedTooling });
 const toolingReference = 'tools/architecture/validation-tooling.json';
 const toolingReferenceText = JSON.stringify(toolingHashes, null, 2) + '\n';
