@@ -59,8 +59,14 @@ export function projectPreparationWindowFile(file, bytes) {
 
 export function projectPreparationWindowDocument(file, value) {
   if (!file.endsWith('.json') || (!Object.hasOwn(metadata, file) && !Object.hasOwn(admissionMetadata, file))) return value;
-  const bytes = Buffer.from(JSON.stringify(value, null, 2) + '\n');
-  if (!isDeepStrictEqual(value, JSON.parse(bytes))) return value;
+  let encoded;
+  try {
+    encoded = JSON.stringify(value, null, 2);
+  } catch {
+    return value;
+  }
+  if (encoded === undefined || !isDeepStrictEqual(value, JSON.parse(encoded))) return value;
+  const bytes = Buffer.from(encoded + '\n');
   const previous = projectPreparationWindowFile(file, bytes);
   return previous === bytes ? value : JSON.parse(previous);
 }

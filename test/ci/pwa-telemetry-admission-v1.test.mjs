@@ -9,6 +9,7 @@ import { parse } from 'yaml';
 import { sha256 } from '../../tools/architecture/consumer-gate.mjs';
 import { createGitReader } from '../../tools/architecture/git-source.mjs';
 import { domainIndex } from '../../tools/architecture/registry.mjs';
+import { validationToolingFiles } from '../../tools/architecture/validation-history.mjs';
 import { withIanaAdmissionScope } from '../../scripts/sales/iana-admission-v1.mjs';
 import {
   pwaTelemetryDescriptors,
@@ -240,38 +241,13 @@ test('the Git gate proves the exact B transition and checks preservation in late
 test('the Inventory CI path gate accepts a later Git-backed root and rejects paths without proof', t => {
   const { fixture, git, add, commit, ownerDir } = gitFixture(t);
   const registry = deliveryRegistry();
-  for (const file of [
+  const fixtureFiles = new Set([
     '.github/workflows/ci.yml',
     'observability/README.md',
-    'scripts/finance/authority-consumers-v1.mjs',
-    'scripts/identity/inventory-authority-v1-1.mjs',
-    'test/identity/inventory-authority-v1-1.test.mjs',
-    'test/inventory/capture-consumers-v1.test.mjs',
-    'scripts/sales/completed-v3-types-history.mjs',
-    'scripts/identity/internal-auth-v3-history.mjs',
-    'scripts/sales/iana-admission-v1.mjs',
-    'scripts/sales/iana-consumer-exports.mjs',
-    'scripts/sales/inventory-step-consumer-v1.mjs',
-    'scripts/observability/pwa-telemetry-admission-v1.mjs',
-    'scripts/observability/pwa-telemetry-history-v1.mjs',
     'scripts/observability/validate-pwa-telemetry-v1.sh',
-    'test/ci/pwa-telemetry-admission-v1.test.mjs',
-    'test/sales/iana-admission-v1.test.mjs',
-    'test/sales/iana-consumer-exports.test.mjs',
-    'tools/architecture/joint-delivery.mjs',
-    // Overlay the reviewed tooling used by the live validation inventory.
-    'scripts/inventory/capture-consumers-v1.mjs',
-    'test/architecture/git-source.test.mjs',
-    'test/architecture/immutable-closure.test.mjs',
-    'test/architecture/internal-auth-v2-history.test.mjs',
-    'test/ci/pipeline-v1.test.mjs',
-    'test/finance/authority-validation-context.test.mjs',
-    'test/inventory/capture-authority-v2-admission.test.mjs',
-    'tools/architecture/git-source.mjs',
-    'tools/architecture/graph.mjs',
-    'tools/architecture/validation-history.mjs',
-    'tools/architecture/validation-tooling.json',
-  ]) add(file, readFileSync(new URL(file, root)));
+    ...validationToolingFiles,
+  ]);
+  for (const file of fixtureFiles) add(file, readFileSync(new URL(file, root)));
   add(registryPath, encode(registry));
   add('observability/index.json', encode(domainIndex(registry, 'observability')));
   const b = commit(pwaTelemetrySource);
